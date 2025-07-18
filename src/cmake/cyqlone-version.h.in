@@ -1,0 +1,22 @@
+#pragma once
+
+// NOLINTBEGIN(*-macro-to-enum)
+#define CYQLONE_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define CYQLONE_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define CYQLONE_VERSION_PATCH @PROJECT_VERSION_PATCH@
+#define CYQLONE_VERSION_SUFFIX "@PY_VERSION_SUFFIX@"
+#define CYQLONE_VERSION "@PROJECT_VERSION@"
+#define CYQLONE_VERSION_FULL "@PROJECT_VERSION@@PY_VERSION_SUFFIX@"
+#define CYQLONE_BUILD_TIME cyqlone_build_time
+#define CYQLONE_COMMIT_HASH cyqlone_commit_hash
+// NOLINTEND(*-macro-to-enum)
+
+#include <cyqlone/export.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+extern CYQLONE_EXPORT const char *const cyqlone_build_time;
+extern CYQLONE_EXPORT const char *const cyqlone_commit_hash;
+#ifdef __cplusplus
+}
+#endif

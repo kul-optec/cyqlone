@@ -7,40 +7,32 @@ from conan.tools.files import save
 from conan.tools.scm import Git
 
 
-class BatmatRecipe(ConanFile):
-    name = "batmat"
+class CyqloneRecipe(ConanFile):
+    name = "cyqlone"
     version = "1.0.0"
 
     # Optional metadata
     license = "LGPLv3"
     author = "Pieter P <pieter.p.dev@outlook.com>"
-    url = "https://github.com/tttapa/batmat"
-    description = "Linear solvers and adapters for solving KKT systems."
+    url = "https://github.com/kul-optec/cyqlone"
+    description = "Parallel solver for systems with optimal control structure."
     topics = "scientific software"
 
     # Binary configuration
     package_type = "library"
     settings = "os", "compiler", "build_type", "arch"
-    bool_batmat_options = {
-        "with_openblas": True,
-        "with_mkl": False,
-        "with_openmp": False,
+    bool_cyqlone_options = {
         "with_benchmarks": False,
-        "with_cpu_time": False,
-        "with_gsi_hpc_simd": False,
         "with_blasfeo": False,
-        "with_single": False,
     }
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "dense_index_type": ["int", "long", "long long"],
-    } | {k: [True, False] for k in bool_batmat_options}
+    } | {k: [True, False] for k in bool_cyqlone_options}
     default_options = {
         "shared": False,
         "fPIC": True,
-        "dense_index_type": "long long",
-    } | bool_batmat_options
+    } | bool_cyqlone_options
 
     # Sources are located in the same place as this recipe, copy them to the recipe
     exports_sources = (
@@ -65,20 +57,14 @@ class BatmatRecipe(ConanFile):
     generators = ("CMakeDeps",)
 
     def requirements(self):
-        self.requires("guanaqo/1.0.0-alpha.15", transitive_headers=True, transitive_libs=True, override=True)
-        if self.options.get_safe("with_openblas"):
-            self.requires("openblas/0.3.27")
+        self.requires("guanaqo/1.0.0-alpha.15", transitive_headers=True, transitive_libs=True, force=True)
+        self.requires("batmat/1.0.0", transitive_headers=True, transitive_libs=True, force=True)
         if self.options.get_safe("with_blasfeo"):
             self.requires("blasfeo/0.1.4.1")
         if self.options.get_safe("with_benchmarks"):
             self.requires("benchmark/1.8.4")
             self.requires("hyhound/1.0.0")
-        self.test_requires("eigen/tttapa.20240516", force=True)
         self.test_requires("gtest/1.15.0")
-        if self.options.get_safe("with_openmp") and self.settings.compiler == "clang":
-            self.requires(f"llvm-openmp/[~{self.settings.compiler.version}]")
-        if self.options.get_safe("with_gsi_hpc_simd"):
-            self.requires("gsi-hpc-simd/tttapa.20250625", transitive_headers=True)
 
     def config_options(self):
         if self.settings.get_safe("os") == "Windows":
@@ -101,13 +87,13 @@ class BatmatRecipe(ConanFile):
     def generate(self):
         tc = CMakeToolchain(self)
         index_t = self.options.get_safe("dense_index_type", default="int")
-        tc.variables["BATMAT_DENSE_INDEX_TYPE"] = index_t
-        for k in self.bool_batmat_options:
+        tc.variables["CYQLONE_DENSE_INDEX_TYPE"] = index_t
+        for k in self.bool_cyqlone_options:
             value = getattr(self.options, k, None)
             if value is not None and value.value is not None:
-                tc.variables["BATMAT_" + k.upper()] = bool(value)
+                tc.variables["CYQLONE_" + k.upper()] = bool(value)
         if can_run(self):
-            tc.variables["BATMAT_FORCE_TEST_DISCOVERY"] = True
+            tc.variables["CYQLONE_FORCE_TEST_DISCOVERY"] = True
         tc.generate()
 
     def build(self):
@@ -122,4 +108,4 @@ class BatmatRecipe(ConanFile):
 
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "none")
-        self.cpp_info.builddirs.append(os.path.join("lib", "cmake", "batmat"))
+        self.cpp_info.builddirs.append(os.path.join("lib", "cmake", "cyqlone"))

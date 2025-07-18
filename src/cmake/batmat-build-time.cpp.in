@@ -1,4 +1,0 @@
-#include <batmat-version.h>
-
-const char *const batmat_build_time = "@BATMAT_BUILD_TIME@";
-const char *const batmat_commit_hash = "@BATMAT_COMMIT_HASH@";

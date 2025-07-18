@@ -1,14 +1,15 @@
 find_package(benchmark REQUIRED)
+find_package(hyhound REQUIRED COMPONENTS OCP)
 
-# TODO: port benchmarks
-add_library(benchmark-main "benchmark-main.cpp")
-target_link_libraries(benchmark-main PUBLIC batmat::batmat benchmark::benchmark
-                      -static-libstdc++ -static-libgcc)
-add_executable(benchmark-gemm "gemm.cpp")
-target_link_libraries(benchmark-gemm PRIVATE benchmark-main batmat::warnings)
-add_executable(benchmark-trtri "trtri.cpp")
-target_link_libraries(benchmark-trtri PRIVATE benchmark-main batmat::warnings)
-add_executable(benchmark-potrf "potrf.cpp")
-target_link_libraries(benchmark-potrf PRIVATE benchmark-main batmat::warnings)
+add_executable(benchmark-ocp-solve ocp-solve.cpp)
+target_link_libraries(benchmark-ocp-solve PRIVATE
+    benchmark::benchmark
+    cyqlone::cyqlone hyhound::ocp
+    cyqlone::warnings)
 
-add_subdirectory(ocp-solve)
+if (CYQLONE_WITH_BLASFEO)
+    find_package(blasfeo REQUIRED)
+    target_sources(benchmark-ocp-solve PRIVATE "riccati-blasfeo-factor.cpp")
+    target_link_libraries(benchmark-ocp-solve PRIVATE blasfeo)
+    target_compile_definitions(benchmark-ocp-solve PRIVATE WITH_BLASFEO)
+endif()

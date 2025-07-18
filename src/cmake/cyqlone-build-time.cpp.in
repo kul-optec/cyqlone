@@ -1,0 +1,4 @@
+#include <cyqlone-version.h>
+
+const char *const cyqlone_build_time = "@CYQLONE_BUILD_TIME@";
+const char *const cyqlone_commit_hash = "@CYQLONE_COMMIT_HASH@";

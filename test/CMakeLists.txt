@@ -1,47 +1,33 @@
 cmake_minimum_required(VERSION 3.21)
-project(batmat-test CXX)
+project(cyqlone-test CXX)
 enable_testing()
 include(GoogleTest)
 
 # Dependencies
 find_package(GTest REQUIRED)
-find_package(Eigen3 REQUIRED)
 find_package(guanaqo REQUIRED)
-if (NOT TARGET batmat::batmat)
-    find_package(batmat REQUIRED COMPONENTS Extra) # TODO
+if (NOT TARGET cyqlone::cyqlone)
+    find_package(cyqlone REQUIRED COMPONENTS Extra) # TODO
 endif()
 
 add_executable(tests
-    "ops/test-rotate.cpp"
-    "matrix/test-view.cpp"
-    "linalg/test-compress.cpp"
-    "linalg/test-copy.cpp"
-    "linalg/test-gemm.cpp"
-    "linalg/test-gemm-diag.cpp"
-    "linalg/test-trsm.cpp"
-    "linalg/test-potrf.cpp"
-    "linalg/test-trtri.cpp"
-    "cyclocp/test-cyclocp.cpp"
+    "cyqlone/test-cyqlone.cpp"
 )
-target_compile_definitions(tests PRIVATE
-    $<$<BOOL:${BATMAT_EXTENSIVE_TESTS}>:BATMAT_EXTENSIVE_TESTS>)
 target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(tests PRIVATE _CRT_SECURE_NO_WARNINGS)
 target_link_libraries(tests PRIVATE
-    batmat::batmat batmat::warnings
-    cyclocp
-    GTest::gtest_main GTest::gmock
-    Eigen3::Eigen)
+    cyqlone::cyqlone cyqlone::warnings
+    GTest::gtest_main)
 if (MSVC)
     target_compile_definitions(tests PRIVATE __PRETTY_FUNCTION__=__FUNCSIG__)
 endif()
 
-option(BATMAT_FORCE_TEST_DISCOVERY
+option(CYQLONE_FORCE_TEST_DISCOVERY
     "Query the test executable even when cross-compiling" Off)
-if (NOT CMAKE_CROSSCOMPILING OR BATMAT_FORCE_TEST_DISCOVERY)
+if (NOT CMAKE_CROSSCOMPILING OR CYQLONE_FORCE_TEST_DISCOVERY)
     gtest_discover_tests(tests DISCOVERY_TIMEOUT 60)
 endif()
-add_executable(batmat::tests ALIAS tests)
+add_executable(cyqlone::tests ALIAS tests)
 
 if (${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.21)
     # Copy DLLs for test executable

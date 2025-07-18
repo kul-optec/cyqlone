@@ -73,7 +73,7 @@ ForEachMacros:
   - UNROLL_FOR_A_COLS
 IncludeBlocks:   Preserve
 IncludeCategories:
-  - Regex:           '^<batmat/.*'
+  - Regex:           '^<cyqlone/.*'
     Priority:        10
   - Regex:           '^".*'
     Priority:        20
