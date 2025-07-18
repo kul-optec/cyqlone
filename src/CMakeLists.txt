@@ -36,7 +36,7 @@ if (CYQLONE_WITH_QPALM)
     add_library(qpalm
         "qpalm/src/qpalm.cpp"
         "qpalm/src/status.cpp"
-        "qpalm/src/ocp-backend-cyclic.cpp"
+        "qpalm/src/ocp-backend-cyqlone.cpp"
     )
     target_sources(qpalm PUBLIC FILE_SET HEADERS
         BASE_DIRS "qpalm/include"
@@ -45,8 +45,8 @@ if (CYQLONE_WITH_QPALM)
               "qpalm/include/cyqlone/qpalm/solver.hpp"
               "qpalm/include/cyqlone/qpalm/detailed-stats.hpp"
               "qpalm/include/cyqlone/qpalm/settings.hpp"
-              "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyclic.hpp"
-              "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyclic.tpp"
+              "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp"
+              "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp"
               "qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp"
               "qpalm/include/cyqlone/qpalm/implementation/solver.tpp"
     )

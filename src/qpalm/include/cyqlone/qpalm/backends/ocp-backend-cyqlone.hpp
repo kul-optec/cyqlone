@@ -48,7 +48,7 @@ struct detail::backend_type<unique_CyclOCPBackend<VL>> {
 };
 
 template <index_t VL>
-unique_CyclOCPBackend<VL> make_qpalm_cyclocp_backend(const CyqloneStorage<real_t> &ocp,
+unique_CyclOCPBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<real_t> &ocp,
                                                      CyclOCPData data,
                                                      const CyclOCPBackendSettings &settings);
 

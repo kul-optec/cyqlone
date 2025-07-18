@@ -5,7 +5,7 @@
 #include <guanaqo/print.hpp>
 #include <fstream>
 
-#include <cyqlone/qpalm/backends/ocp-backend-cyclic.hpp>
+#include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/example-problems/csv.hpp>
 #include <cyqlone/qpalm/example-problems/platooning.hpp>
 #include <cyqlone/qpalm/solver.hpp>
@@ -22,7 +22,7 @@ TEST(QPALM, cyqlone) {
     auto grad      = qp::reference_to_gradient(ocp.ocp, ocp.ref);
     auto cocp      = cyqlone::CyqloneStorage<>::build(ocp.ocp, grad, ocp.rhs_eq, ocp.rhs_ineq_lb,
                                                       ocp.rhs_ineq_ub);
-    auto &&backend = qp::make_qpalm_cyclocp_backend<4>(
+    auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
         cocp, {}, {.log_processors = 3, .print_residuals = true, .pcg_print_resid = true});
     qp::Solver<qp::CyclOCPBackend<4> *> qpalm{
         backend.get(),
@@ -49,11 +49,11 @@ TEST(QPALM, cyqlone) {
     guanaqo::print_csv(solution, std::span{y});
 }
 
-TEST(QPALM, cyclocpSpringsMasses) try {
+TEST(QPALM, cyqloneSpringsMasses) try {
     auto ocp       = qp::problems::load_from_csv("test/data/springs-masses", "masses=20-horiz=120");
     auto cocp      = cyqlone::CyqloneStorage<>::build(ocp.ocp, ocp.qr, ocp.rhs_eq, ocp.rhs_ineq_lb,
                                                       ocp.rhs_ineq_ub);
-    auto &&backend = qp::make_qpalm_cyclocp_backend<4>(
+    auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
         cocp, {}, {.log_processors = 2, .print_residuals = true, .pcg_print_resid = true});
     qp::Solver<qp::CyclOCPBackend<4> *> qpalm{
         backend.get(),
@@ -77,7 +77,7 @@ TEST(QPALM, cyclocpSpringsMasses) try {
 }
 
 #if 0 // TODO: support elimination of x0 using LinearOCPSparseQP
-#include <cyqlone/qpalm/backends/ocp-backend-cyclic.tpp>
+#include <cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp>
 
 #include <guanaqo/eigen/span.hpp>
 #include <guanaqo/eigen/view.hpp>
@@ -105,7 +105,7 @@ TEST(QPALM, ocpBackend) {
     auto q_grad    = qp::reference_to_gradient(ocp.ocp, ocp.ref);
     auto cocp      = cyqlone::CyqloneStorage<>::build(ocp.ocp, q_grad, ocp.rhs_eq, ocp.rhs_ineq_lb,
                                                       ocp.rhs_ineq_ub);
-    auto &&backend = qp::make_qpalm_cyclocp_backend<4>(
+    auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
         cocp, {}, {.log_processors = 3, .print_residuals = true, .pcg_print_resid = true});
 
     // Build quadratic program

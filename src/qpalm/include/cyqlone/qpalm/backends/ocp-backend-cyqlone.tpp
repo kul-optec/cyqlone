@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cyqlone/cyqlone.hpp>
-#include <cyqlone/qpalm/backends/ocp-backend-cyclic.hpp>
+#include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/linalg/copy.hpp>
 #include <batmat/linalg/simdify.hpp>
@@ -529,7 +529,7 @@ template <index_t VL>
 unique_CyclOCPBackend<VL>::~unique_CyclOCPBackend() = default;
 
 template <index_t VL>
-unique_CyclOCPBackend<VL> make_qpalm_cyclocp_backend(const CyqloneStorage<> &ocp, CyclOCPData data,
+unique_CyclOCPBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<> &ocp, CyclOCPData data,
                                                      const CyclOCPBackendSettings &settings) {
     return {std::make_unique<CyclOCPBackend<VL>>(ocp, data, settings)};
 }
