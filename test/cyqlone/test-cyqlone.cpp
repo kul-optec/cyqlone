@@ -47,7 +47,7 @@ TEST(Cyqlone, factor) {
     std::ranges::generate(b_eq_lin, [&] { return uni(rng); });
     std::ranges::generate(b_lb_lin, [&] { return uni(rng); });
     std::ranges::generate(b_ub_lin, [&] { return uni(rng); });
-    auto cocp     = CyclicOCPStorage<real_t>::build(ocp, qr_lin, b_eq_lin, b_lb_lin, b_ub_lin);
+    auto cocp     = CyqloneStorage<real_t>::build(ocp, qr_lin, b_eq_lin, b_lb_lin, b_ub_lin);
     Solver solver = Solver::build(cocp, lP);
 
     const index_t nyM = std::max(ny, ny_0 + ny_N);

@@ -5,7 +5,7 @@
 namespace cyqlone {
 
 template <class T>
-void CyclicOCPStorage<T>::reconstruct_ineq_multipliers(const LinearOCPStorage &ocp,
+void CyqloneStorage<T>::reconstruct_ineq_multipliers(const LinearOCPStorage &ocp,
                                                        std::span<const value_type> y_compressed,
                                                        std::span<value_type> y) {
     const auto [N, nx, nu, ny, ny_N] = ocp.dim;
@@ -27,8 +27,8 @@ void CyclicOCPStorage<T>::reconstruct_ineq_multipliers(const LinearOCPStorage &o
 }
 
 template <class T>
-CyclicOCPStorage<T>
-CyclicOCPStorage<T>::build(const LinearOCPStorage &ocp, std::span<const value_type> qr,
+CyqloneStorage<T>
+CyqloneStorage<T>::build(const LinearOCPStorage &ocp, std::span<const value_type> qr,
                            std::span<const value_type> b_eq, std::span<const value_type> b_lb,
                            std::span<const value_type> b_ub) {
     using vw                         = guanaqo::MatrixView<const value_type, index_t>;
@@ -41,7 +41,7 @@ CyclicOCPStorage<T>::build(const LinearOCPStorage &ocp, std::span<const value_ty
             if (ocp.D(0)(r, c) != 0)
                 Ju0[r] = true;
     const auto ny_0 = static_cast<index_t>(std::ranges::count(Ju0, true));
-    CyclicOCPStorage<T> res{.N_horiz = N, .nx = nx, .nu = nu, .ny = ny, .ny_0 = ny_0, .ny_N = ny_N};
+    CyqloneStorage<T> res{.N_horiz = N, .nx = nx, .nu = nu, .ny = ny, .ny_0 = ny_0, .ny_N = ny_N};
     // H₀ = [ R₀ 0 ]
     //      [ 0  Qₙ]
     res.data_H(0).top_left(nu, nu)     = ocp.R(0);
@@ -99,9 +99,9 @@ CyclicOCPStorage<T>::build(const LinearOCPStorage &ocp, std::span<const value_ty
     return res;
 }
 
-template struct CyclicOCPStorage<double>;
+template struct CyqloneStorage<double>;
 #if BATMAT_WITH_SINGLE
-template struct CyclicOCPStorage<float>;
+template struct CyqloneStorage<float>;
 #endif
 
 } // namespace cyqlone

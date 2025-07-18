@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cyqlone/cyqlone-storage.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 #include <batmat/matrix/layout.hpp>
@@ -7,7 +8,6 @@
 #include <batmat/openmp.h>
 #include <batmat/simd.hpp>
 #include <batmat/timing.hpp>
-#include <cyqlone/cyqlone-storage.hpp>
 #include <guanaqo/trace.hpp>
 
 #include "compact.hpp" // TODO
@@ -85,12 +85,11 @@ struct CyqloneSolver {
 
     static constexpr auto default_order = DefaultOrder;
 
-    using compact_blas =
-        cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>,
-                                             StorageOrder::ColMajor>; // TODO
+    using compact_blas = cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>,
+                                                       StorageOrder::ColMajor>; // TODO
     using compact_blas_default =
         cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>,
-                                             default_order>; // TODO
+                                      default_order>; // TODO
 
     bool alt                      = true;
     bool use_stair_preconditioner = true;
@@ -232,10 +231,10 @@ struct CyqloneSolver {
     ///
     /// Since ocp.D(0) and ocp.C(N) will be merged, the top ny₀ rows of ocp.C(N)
     /// should be zero.
-    static CyqloneSolver build(const CyclicOCPStorage<value_type> &ocp, index_t lP);
-    void initialize_rhs(const CyclicOCPStorage<value_type> &ocp, mut_view<> rhs) const;
-    void initialize_gradient(const CyclicOCPStorage<value_type> &ocp, mut_view<> grad) const;
-    void initialize_bounds(const CyclicOCPStorage<value_type> &ocp, mut_view<> b_min,
+    static CyqloneSolver build(const CyqloneStorage<value_type> &ocp, index_t lP);
+    void initialize_rhs(const CyqloneStorage<value_type> &ocp, mut_view<> rhs) const;
+    void initialize_gradient(const CyqloneStorage<value_type> &ocp, mut_view<> grad) const;
+    void initialize_bounds(const CyqloneStorage<value_type> &ocp, mut_view<> b_min,
                            mut_view<> b_max) const;
     void pack_variables(std::span<const value_type> ux_lin, mut_view<> ux) const;
     void unpack_variables(view<> ux, std::span<value_type> ux_lin) const;
@@ -245,9 +244,11 @@ struct CyqloneSolver {
                           value_type fill = 0) const;
     void unpack_constraints(view<> y, std::span<value_type> y_lin) const;
 
-    index_t num_variables() const { return N_horiz * (nu + nx); }
-    index_t num_dynamics_constraints() const { return N_horiz * nx; }
-    index_t num_general_constraints() const { return (N_horiz - 1) * ny + ny_0 + ny_N; }
+    [[nodiscard]] index_t num_variables() const { return N_horiz * (nu + nx); }
+    [[nodiscard]] index_t num_dynamics_constraints() const { return N_horiz * nx; }
+    [[nodiscard]] index_t num_general_constraints() const {
+        return (N_horiz - 1) * ny + ny_0 + ny_N;
+    }
 
     matrix<> initialize_variables() const {
         return matrix<>{{.depth = ceil_N, .rows = nu + nx, .cols = 1}};
@@ -356,7 +357,7 @@ struct CyqloneSolver {
     void update_riccati(index_t ti, view<> Σ);
 
     std::vector<std::tuple<index_t, index_t, value_type>>
-    build_sparse(const CyclicOCPStorage<value_type> &ocp, std::span<const value_type> Σ) const;
+    build_sparse(const CyqloneStorage<value_type> &ocp, std::span<const value_type> Σ) const;
     std::vector<value_type> build_rhs(view<> ux, view<> λ) const;
     std::vector<std::tuple<index_t, index_t, value_type>> build_sparse_factor() const;
     std::vector<std::tuple<index_t, index_t, value_type>> build_sparse_diag() const;

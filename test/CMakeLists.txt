@@ -7,7 +7,7 @@ include(GoogleTest)
 find_package(GTest REQUIRED)
 find_package(guanaqo REQUIRED)
 if (NOT TARGET cyqlone::cyqlone)
-    find_package(cyqlone REQUIRED COMPONENTS Extra) # TODO
+    find_package(cyqlone REQUIRED OPTIONAL_COMPONENTS QPALM) # TODO
 endif()
 
 add_executable(tests
@@ -20,6 +20,16 @@ target_link_libraries(tests PRIVATE
     GTest::gtest_main)
 if (MSVC)
     target_compile_definitions(tests PRIVATE __PRETTY_FUNCTION__=__FUNCSIG__)
+endif()
+
+if (CYQLONE_WITH_QPALM AND CYQLONE_WITH_EXAMPLE_PROBLEMS)
+    target_sources(tests PRIVATE "qpalm/test-qpalm-ocp.cpp")
+    target_link_libraries(tests PRIVATE cyqlone::qpalm cyqlone::example-problems)
+    find_package(QPALM QUIET OPTIONAL_COMPONENTS cxx)
+    if (TARGET QPALM::qpalm_cxx)
+        target_sources(tests PRIVATE "test-qpalm-ben.cpp")
+        target_link_libraries(tests PRIVATE QPALM::qpalm_cxx)
+    endif()
 endif()
 
 option(CYQLONE_FORCE_TEST_DISCOVERY

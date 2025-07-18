@@ -23,7 +23,11 @@ class CyqloneRecipe(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     bool_cyqlone_options = {
         "with_benchmarks": False,
+        "with_qpalm": True,
+        "with_ladel": False,
+        "with_example_problems": True,
         "with_blasfeo": False,
+        "with_python": False,
     }
     options = {
         "shared": [True, False],
@@ -57,8 +61,18 @@ class CyqloneRecipe(ConanFile):
     generators = ("CMakeDeps",)
 
     def requirements(self):
-        self.requires("guanaqo/1.0.0-alpha.15", transitive_headers=True, transitive_libs=True, force=True)
+        self.requires("guanaqo/1.0.0-alpha.16", transitive_headers=True, transitive_libs=True, force=True)
         self.requires("batmat/1.0.0", transitive_headers=True, transitive_libs=True, force=True)
+        if self.options.with_ladel:
+            self.requires("ladel/tttapa.20241118", transitive_headers=True)
+        if (
+            self.options.with_python
+            or self.options.with_example_problems
+            or self.options.with_ladel
+        ):
+            self.requires("eigen/tttapa.20250506", transitive_headers=True)
+        else:
+            self.test_requires("eigen/tttapa.20250506")
         if self.options.get_safe("with_blasfeo"):
             self.requires("blasfeo/0.1.4.1")
         if self.options.get_safe("with_benchmarks"):
@@ -71,10 +85,14 @@ class CyqloneRecipe(ConanFile):
             self.options.rm_safe("fPIC")
 
     def configure(self):
-        # There is currently no 64-bit indices option for OpenBLAS using Conan
+        if not self.options.get_safe("with_qpalm"):
+            self.options.rm_safe("with_ladel")
+            self.options.rm_safe("with_example_problems")
+            self.options.rm_safe("with_python")
         if not self.options.get_safe("with_benchmarks"):
             self.options.rm_safe("with_mkl")
             self.options.rm_safe("with_openblas")
+        # There is currently no 64-bit indices option for OpenBLAS using Conan
         if self.options.get_safe("with_openblas"):
             self.options.rm_safe("dense_index_type")
         self.options["guanaqo/*"].with_blas = True

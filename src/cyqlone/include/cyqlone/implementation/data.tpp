@@ -11,7 +11,7 @@ using batmat::linalg::simdify;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 CyqloneSolver<VL, T, DefaultOrder>
-CyqloneSolver<VL, T, DefaultOrder>::build(const CyclicOCPStorage<value_type> &ocp, index_t lP) {
+CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp, index_t lP) {
     CyqloneSolver<VL, T, DefaultOrder> res{
         .N_horiz = ocp.N_horiz,
         .nx      = ocp.nx,
@@ -54,7 +54,7 @@ CyqloneSolver<VL, T, DefaultOrder>::build(const CyclicOCPStorage<value_type> &oc
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyclicOCPStorage<value_type> &ocp,
+void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<value_type> &ocp,
                                                           mut_view<> rhs) const {
     BATMAT_ASSERT(rhs.depth() == ceil_N);
     BATMAT_ASSERT(rhs.rows() == nx);
@@ -81,7 +81,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyclicOCPStorage<v
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(
-    const CyclicOCPStorage<value_type> &ocp, mut_view<> grad) const {
+    const CyqloneStorage<value_type> &ocp, mut_view<> grad) const {
     BATMAT_ASSERT(grad.depth() == ceil_N);
     BATMAT_ASSERT(grad.rows() == nu + nx);
     BATMAT_ASSERT(grad.cols() == 1);
@@ -106,7 +106,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(
-    const CyclicOCPStorage<value_type> &ocp, mut_view<> b_min, mut_view<> b_max) const {
+    const CyqloneStorage<value_type> &ocp, mut_view<> b_min, mut_view<> b_max) const {
     const index_t nyM = std::max(ny, ny_0 + ny_N);
     BATMAT_ASSERT(b_min.depth() == ceil_N);
     BATMAT_ASSERT(b_min.rows() == nyM);

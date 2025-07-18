@@ -104,7 +104,7 @@ auto build_cyqlone_solver(const OCPDataRiccati &ocp_ric, index_t lP) {
     using Solver       = CyqloneSolver<VL, real_t, StorageOrder::ColMajor>;
     std::vector<real_t> qr_lin(nux * N + nx), b_eq_lin(nux * (N + 1)), b_lb_lin(ny * N + ny_N),
         b_ub_lin(ny * N + ny_N);
-    auto cocp = CyclicOCPStorage<real_t>::build(ocp, qr_lin, b_eq_lin, b_lb_lin, b_ub_lin);
+    auto cocp = CyqloneStorage<real_t>::build(ocp, qr_lin, b_eq_lin, b_lb_lin, b_ub_lin);
     return Solver::build(cocp, lP + Solver::lvl);
 }
 

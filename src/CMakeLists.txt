@@ -3,13 +3,15 @@ find_package(guanaqo REQUIRED COMPONENTS BLAS)
 find_package(batmat REQUIRED)
 
 # Main library
+# ------------------------------------------------------------------------------
 add_library(cyqlone
     "cyqlone/src/cyqlone.cpp"
     "cyqlone/src/cyqlone-storage.cpp"
 )
 target_sources(cyqlone PUBLIC FILE_SET headers TYPE HEADERS
     BASE_DIRS "cyqlone/include"
-    FILES "cyqlone/include/cyqlone/cyqlone.hpp"
+    FILES "cyqlone/include/cyqlone/config.hpp"
+          "cyqlone/include/cyqlone/cyqlone.hpp"
           "cyqlone/include/cyqlone/cyqlone-storage.hpp"
           "cyqlone/include/cyqlone/ocp.hpp"
           "cyqlone/include/cyqlone/implementation/data.tpp"
@@ -20,8 +22,67 @@ target_sources(cyqlone PUBLIC FILE_SET headers TYPE HEADERS
           "cyqlone/include/cyqlone/implementation/update.tpp"
           "cyqlone/include/cyqlone/implementation/pcg.tpp"
           "cyqlone/include/cyqlone/implementation/solve.tpp")
-target_link_libraries(cyqlone PUBLIC batmat::batmat guanaqo::blas PRIVATE cyqlone::warnings)
+target_link_libraries(cyqlone PUBLIC batmat::batmat guanaqo::guanaqo guanaqo::blas PRIVATE cyqlone::warnings)
 cyqlone_configure_library(cyqlone)
+
+# QPALM solver
+# ------------------------------------------------------------------------------
+if (CYQLONE_WITH_QPALM)
+    add_library(qpalm
+        "qpalm/src/qpalm.cpp"
+        "qpalm/src/status.cpp"
+        "qpalm/src/ocp-backend-cyclic.cpp"
+    )
+    target_sources(qpalm PUBLIC FILE_SET HEADERS
+        BASE_DIRS "qpalm/include"
+        FILES "qpalm/include/cyqlone/qpalm/qpalm.hpp"
+              "qpalm/include/cyqlone/qpalm/status.hpp"
+              "qpalm/include/cyqlone/qpalm/solver.hpp"
+              "qpalm/include/cyqlone/qpalm/detailed-stats.hpp"
+              "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyclic.hpp"
+              "qpalm/include/cyqlone/qpalm/settings.hpp"
+              "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyclic.tpp"
+              "qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp"
+              "qpalm/include/cyqlone/qpalm/implementation/solver.tpp"
+    )
+    target_link_libraries(qpalm PUBLIC cyqlone::cyqlone)
+    cyqlone_configure_library(qpalm EXPORT_PREFIX cyqlone)
+
+    # LADEL backends
+    if (CYQLONE_WITH_LADEL)
+        find_package(LADEL REQUIRED)
+        find_package(Eigen3 REQUIRED)
+        add_library(ladel-backend
+            "qpalm/src/ladel-schur-backend.cpp"
+        )
+        target_sources(ladel-backend PUBLIC FILE_SET HEADERS
+            BASE_DIRS "qpalm/include"
+            FILES "qpalm/include/cyqlone/qpalm/backends/ladel/ladel-schur-backend.tpp"
+        )
+        target_link_libraries(ladel-backend PUBLIC qpalm PRIVATE LADEL::ladel Eigen3::Eigen)
+        cyqlone_qpalm_configure_library(ladel-backend EXPORT_PREFIX cyqlone)
+    endif()
+
+    # Example problems
+    if (CYQLONE_WITH_EXAMPLE_PROBLEMS)
+        find_package(Eigen3 REQUIRED)
+        add_library(example-problems
+            "example-problems/src/conversion.cpp"
+            "example-problems/src/csv.cpp"
+            "example-problems/src/platooning.cpp"
+        )
+        target_sources(example-problems PUBLIC FILE_SET HEADERS
+            BASE_DIRS "example-problems/include"
+            FILES     "example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp"
+                      "example-problems/include/cyqlone/qpalm/example-problems/zoh.hpp"
+                      "example-problems/include/cyqlone/qpalm/example-problems/csv.hpp"
+                      "example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp"
+        )
+        target_link_libraries(example-problems
+            PUBLIC cyqlone::cyqlone Eigen3::Eigen guanaqo::guanaqo guanaqo::blas)
+        cyqlone_configure_library(example-problems EXPORT_PREFIX cyqlone)
+    endif()
+endif()
 
 # ==============================================================================
 
