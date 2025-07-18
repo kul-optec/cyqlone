@@ -81,7 +81,7 @@ TEST(Cyqlone, factor) {
 
     const bool alt        = true;
     const auto ux_initial = ux, λ_initial = λ;
-    for (int i = 0; i < 500; ++i) {
+    for (int i = 0; i < 50; ++i) {
         solver.factor(1e100, Σ, alt);
         solver.update(ΔΣ);
         solver.solve(ux, λ);

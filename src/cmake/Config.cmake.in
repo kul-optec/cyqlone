@@ -2,7 +2,7 @@
 
 include(CMakeFindDependencyMacro)
 
-set(CYQLONE_AVAILABLE_COMPONENTS "Core")
+set(CYQLONE_AVAILABLE_COMPONENTS "Core" "QPALM" "Extra")
 # Always require "Core"
 list(PREPEND cyqlone_FIND_COMPONENTS "Core")
 if (cyqlone_FIND_REQUIRED)

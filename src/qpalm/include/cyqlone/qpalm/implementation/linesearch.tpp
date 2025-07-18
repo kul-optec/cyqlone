@@ -5,7 +5,6 @@
 #include <guanaqo/trace.hpp>
 #include <algorithm>
 #include <cmath>
-#include <execution>
 #include <numeric>
 #include <ranges>
 #include <span>

@@ -10,14 +10,14 @@
 namespace cyqlone::qpalm {
 
 template <index_t VL>
-struct CyclOCPBackend;
+struct CyqloneBackend;
 
-struct CyclOCPData {
+struct CyqloneData {
     std::span<const real_t> initial_variables = {}, initial_inequality_multipliers = {},
                             initial_equality_multipliers = {};
 };
 
-struct CyclOCPBackendSettings {
+struct CyqloneBackendSettings {
     index_t log_processors = 3;
     bool print_residuals   = false;
     int print_precision    = 3;
@@ -33,23 +33,23 @@ struct CyclOCPBackendSettings {
 };
 
 template <index_t VL>
-struct unique_CyclOCPBackend : std::unique_ptr<CyclOCPBackend<VL>> {
-    unique_CyclOCPBackend()                                             = default;
-    unique_CyclOCPBackend(unique_CyclOCPBackend &&) noexcept            = default;
-    unique_CyclOCPBackend &operator=(unique_CyclOCPBackend &&) noexcept = default;
-    ~unique_CyclOCPBackend();
-    unique_CyclOCPBackend(std::unique_ptr<CyclOCPBackend<VL>> &&o) noexcept
-        : std::unique_ptr<CyclOCPBackend<VL>>{std::move(o)} {}
+struct unique_CyqloneBackend : std::unique_ptr<CyqloneBackend<VL>> {
+    unique_CyqloneBackend()                                             = default;
+    unique_CyqloneBackend(unique_CyqloneBackend &&) noexcept            = default;
+    unique_CyqloneBackend &operator=(unique_CyqloneBackend &&) noexcept = default;
+    ~unique_CyqloneBackend();
+    unique_CyqloneBackend(std::unique_ptr<CyqloneBackend<VL>> &&o) noexcept
+        : std::unique_ptr<CyqloneBackend<VL>>{std::move(o)} {}
 };
 
 template <index_t VL>
-struct detail::backend_type<unique_CyclOCPBackend<VL>> {
-    using type = CyclOCPBackend<VL>;
+struct detail::backend_type<unique_CyqloneBackend<VL>> {
+    using type = CyqloneBackend<VL>;
 };
 
 template <index_t VL>
-unique_CyclOCPBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<real_t> &ocp,
-                                                     CyclOCPData data,
-                                                     const CyclOCPBackendSettings &settings);
+unique_CyqloneBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<real_t> &ocp,
+                                                     CyqloneData data,
+                                                     const CyqloneBackendSettings &settings);
 
 } // namespace cyqlone::qpalm

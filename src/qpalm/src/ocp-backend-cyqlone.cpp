@@ -3,18 +3,17 @@
 
 namespace cyqlone::qpalm {
 
-#define KOQKATOO_INSTANTIATE_QPALM_CyclOCP(vl)                                                     \
+#define CYQLONE_INSTANTIATE_QPALM_Cyqlone(vl)                                                     \
                                                                                                    \
-    template class Solver<CyclOCPBackend<vl> *>;                                                   \
-    template class Solver<unique_CyclOCPBackend<vl>>;                                              \
-    template struct unique_CyclOCPBackend<vl>;                                                     \
+    template class Solver<CyqloneBackend<vl> *>;                                                   \
+    template class Solver<unique_CyqloneBackend<vl>>;                                              \
+    template struct unique_CyqloneBackend<vl>;                                                     \
                                                                                                    \
-    template unique_CyclOCPBackend<vl> make_qpalm_cyqlone_backend<vl>(                             \
-        const CyqloneStorage<> &ocp, CyclOCPData data, const CyclOCPBackendSettings &settings)
+    template unique_CyqloneBackend<vl> make_qpalm_cyqlone_backend<vl>(                             \
+        const CyqloneStorage<> &ocp, CyqloneData data, const CyqloneBackendSettings &settings)
 
-KOQKATOO_INSTANTIATE_QPALM_CyclOCP(8);
-KOQKATOO_INSTANTIATE_QPALM_CyclOCP(4);
-KOQKATOO_INSTANTIATE_QPALM_CyclOCP(2);
-KOQKATOO_INSTANTIATE_QPALM_CyclOCP(1);
+CYQLONE_INSTANTIATE_QPALM_Cyqlone(8);
+CYQLONE_INSTANTIATE_QPALM_Cyqlone(4);
+CYQLONE_INSTANTIATE_QPALM_Cyqlone(1);
 
 } // namespace cyqlone::qpalm

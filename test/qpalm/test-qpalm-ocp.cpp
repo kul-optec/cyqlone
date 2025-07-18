@@ -24,7 +24,7 @@ TEST(QPALM, cyqlone) {
                                                       ocp.rhs_ineq_ub);
     auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
         cocp, {}, {.log_processors = 3, .print_residuals = true, .pcg_print_resid = true});
-    qp::Solver<qp::CyclOCPBackend<4> *> qpalm{
+    qp::Solver<qp::CyqloneBackend<4> *> qpalm{
         backend.get(),
         {.max_outer_iter                 = 400,
          .max_total_inner_iter           = 400,
@@ -55,7 +55,7 @@ TEST(QPALM, cyqloneSpringsMasses) try {
                                                       ocp.rhs_ineq_ub);
     auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
         cocp, {}, {.log_processors = 2, .print_residuals = true, .pcg_print_resid = true});
-    qp::Solver<qp::CyclOCPBackend<4> *> qpalm{
+    qp::Solver<qp::CyqloneBackend<4> *> qpalm{
         backend.get(),
         {.max_outer_iter = 500, .max_total_inner_iter = 1000, .verbose = true},
     };

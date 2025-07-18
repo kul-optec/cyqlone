@@ -81,7 +81,7 @@ endif()
 set(CYQLONE_QPALM_TARGETS)
 cyqlone_add_if_target_exists(CYQLONE_QPALM_TARGETS "qpalm")
 if (CYQLONE_QPALM_TARGETS)
-    install(TARGETS warnings common_options ${CYQLONE_QPALM_TARGETS}
+    install(TARGETS ${CYQLONE_QPALM_TARGETS}
         EXPORT cyqloneQPALMTargets
         RUNTIME DESTINATION "${CYQLONE_INSTALL_BINDIR}"
             COMPONENT lib
@@ -102,7 +102,7 @@ endif()
 set(CYQLONE_EXTRA_TARGETS)
 cyqlone_add_if_target_exists(CYQLONE_EXTRA_TARGETS "example-problems")
 if (CYQLONE_EXTRA_TARGETS)
-    install(TARGETS warnings common_options ${CYQLONE_EXTRA_TARGETS}
+    install(TARGETS ${CYQLONE_EXTRA_TARGETS}
         EXPORT cyqloneExtraTargets
         RUNTIME DESTINATION "${CYQLONE_INSTALL_BINDIR}"
             COMPONENT lib

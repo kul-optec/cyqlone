@@ -543,7 +543,7 @@ def visualize_scheduling(
 
 project_dir = Path(__file__).parent.parent.parent
 data_to_plot = {
-    "CyclOCP": (
+    "Cyqlone": (
         (
             "traces/36ea2dd026325546f1eaaa99ff01457e79f50034/nx=68-nu=20-ny=50-N=256-thr=8-vl=16-pcg=stair-alt-rm/factor_cyclic_new.csv",
             "traces/36ea2dd026325546f1eaaa99ff01457e79f50034/nx=68-nu=20-ny=50-N=256-thr=4-vl=16-pcg=stair-alt-rm/factor_cyclic_new.csv",

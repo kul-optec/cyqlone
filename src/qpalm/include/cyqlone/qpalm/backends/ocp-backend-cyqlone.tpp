@@ -33,20 +33,20 @@ using batmat::linalg::simdify;
 namespace datapar = batmat::datapar;
 
 template <index_t VL>
-struct CyclOCPBackend {
+struct CyqloneBackend {
     using OCP_t          = cyqlone::CyqloneSolver<VL>;
     using storage_t      = typename OCP_t::template matrix<>;
     using mask_storage_t = typename OCP_t::template mask_matrix<>;
     using simd           = typename OCP_t::compact_blas::simd;
     // clang-format off
-    struct var_vec_t         : storage_t { friend CyclOCPBackend; var_vec_t() = default;         private: var_vec_t(storage_t &&o)         : storage_t{std::move(o)} {} friend auto simdify(var_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const var_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
-    struct eq_constr_vec_t   : storage_t { friend CyclOCPBackend; eq_constr_vec_t() = default;   private: eq_constr_vec_t(storage_t &&o)   : storage_t{std::move(o)} {} friend auto simdify(eq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const eq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
-    struct ineq_constr_vec_t : storage_t { friend CyclOCPBackend; ineq_constr_vec_t() = default; private: ineq_constr_vec_t(storage_t &&o) : storage_t{std::move(o)} {} friend auto simdify(ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
-    struct active_set_t      : storage_t { friend CyclOCPBackend; active_set_t() = default;      private: active_set_t(storage_t &&o)      : storage_t{std::move(o)} {} friend auto simdify(active_set_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const active_set_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
+    struct var_vec_t         : storage_t { friend CyqloneBackend; var_vec_t() = default;         private: var_vec_t(storage_t &&o)         : storage_t{std::move(o)} {} friend auto simdify(var_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const var_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
+    struct eq_constr_vec_t   : storage_t { friend CyqloneBackend; eq_constr_vec_t() = default;   private: eq_constr_vec_t(storage_t &&o)   : storage_t{std::move(o)} {} friend auto simdify(eq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const eq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
+    struct ineq_constr_vec_t : storage_t { friend CyqloneBackend; ineq_constr_vec_t() = default; private: ineq_constr_vec_t(storage_t &&o) : storage_t{std::move(o)} {} friend auto simdify(ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
+    struct active_set_t      : storage_t { friend CyqloneBackend; active_set_t() = default;      private: active_set_t(storage_t &&o)      : storage_t{std::move(o)} {} friend auto simdify(active_set_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const active_set_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
     // clang-format on
 
     OCP_t ocp;
-    CyclOCPBackendSettings settings;
+    CyqloneBackendSettings settings;
     ineq_constr_vec_t b_min_strided, b_max_strided;
     eq_constr_vec_t b_eq_strided;
     var_vec_t grad_strided;
@@ -59,8 +59,8 @@ struct CyclOCPBackend {
     index_t num_updates      = 0;
     std::unique_ptr<typename OCP_t::Timings> ocp_timings;
 
-    CyclOCPBackend(const CyqloneStorage<> &ocp, CyclOCPData data,
-                   const CyclOCPBackendSettings &settings)
+    CyqloneBackend(const CyqloneStorage<> &ocp, CyqloneData data,
+                   const CyqloneBackendSettings &settings)
         : ocp{OCP_t::build(ocp, settings.log_processors)}, settings{settings} {
         this->ocp.alt                      = settings.factor_alt;
         this->ocp.pcg_max_iter             = settings.pcg_max_iter;
@@ -526,12 +526,12 @@ struct CyclOCPBackend {
 };
 
 template <index_t VL>
-unique_CyclOCPBackend<VL>::~unique_CyclOCPBackend() = default;
+unique_CyqloneBackend<VL>::~unique_CyqloneBackend() = default;
 
 template <index_t VL>
-unique_CyclOCPBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<> &ocp, CyclOCPData data,
-                                                     const CyclOCPBackendSettings &settings) {
-    return {std::make_unique<CyclOCPBackend<VL>>(ocp, data, settings)};
+unique_CyqloneBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<> &ocp, CyqloneData data,
+                                                     const CyqloneBackendSettings &settings) {
+    return {std::make_unique<CyqloneBackend<VL>>(ocp, data, settings)};
 }
 
 } // namespace cyqlone::qpalm

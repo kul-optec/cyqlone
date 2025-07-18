@@ -22,7 +22,7 @@ if (MSVC)
     target_compile_definitions(tests PRIVATE __PRETTY_FUNCTION__=__FUNCSIG__)
 endif()
 
-if (CYQLONE_WITH_QPALM AND CYQLONE_WITH_EXAMPLE_PROBLEMS)
+if (TARGET cyqlone::qpalm AND TARGET cyqlone::example-problems)
     find_package(Eigen3 REQUIRED)
     target_sources(tests PRIVATE "qpalm/test-qpalm-ocp.cpp")
     target_link_libraries(tests PRIVATE cyqlone::qpalm cyqlone::example-problems Eigen3::Eigen)
