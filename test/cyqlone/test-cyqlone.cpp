@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 
+#include <cyqlone/cyqlone.hpp>
+#include <cyqlone/random-ocp.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <batmat/loop.hpp>
 #include <batmat/openmp.h>
 #include <batmat/thread-pool.hpp>
-#include <cyqlone/cyqlone.hpp>
-#include <cyqlone/random-ocp.hpp>
 #include <guanaqo/print.hpp>
 #include <guanaqo/trace.hpp>
 #include <batmat-version.h>

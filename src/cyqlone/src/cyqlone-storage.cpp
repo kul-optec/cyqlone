@@ -6,8 +6,8 @@ namespace cyqlone {
 
 template <class T>
 void CyqloneStorage<T>::reconstruct_ineq_multipliers(const LinearOCPStorage &ocp,
-                                                       std::span<const value_type> y_compressed,
-                                                       std::span<value_type> y) {
+                                                     std::span<const value_type> y_compressed,
+                                                     std::span<value_type> y) {
     const auto [N, nx, nu, ny, ny_N] = ocp.dim;
     // Count the number of input constraints in the first stage
     std::vector<bool> Ju0(ny);
@@ -29,8 +29,8 @@ void CyqloneStorage<T>::reconstruct_ineq_multipliers(const LinearOCPStorage &ocp
 template <class T>
 CyqloneStorage<T>
 CyqloneStorage<T>::build(const LinearOCPStorage &ocp, std::span<const value_type> qr,
-                           std::span<const value_type> b_eq, std::span<const value_type> b_lb,
-                           std::span<const value_type> b_ub) {
+                         std::span<const value_type> b_eq, std::span<const value_type> b_lb,
+                         std::span<const value_type> b_ub) {
     using vw                         = guanaqo::MatrixView<const value_type, index_t>;
     const auto [N, nx, nu, ny, ny_N] = ocp.dim;
     const auto nux                   = nu + nx;

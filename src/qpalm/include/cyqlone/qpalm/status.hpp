@@ -33,7 +33,6 @@ inline const char *enum_name(SolverStatus s) {
     throw std::out_of_range("invalid value for qpalm::SolverStatus");
 }
 
-CYQLONE_QPALM_EXPORT std::ostream &operator<<(std::ostream &os,
-                                               SolverStatus s);
+CYQLONE_QPALM_EXPORT std::ostream &operator<<(std::ostream &os, SolverStatus s);
 
 } // namespace cyqlone::qpalm

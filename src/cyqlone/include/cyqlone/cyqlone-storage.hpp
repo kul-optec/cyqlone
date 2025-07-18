@@ -1,7 +1,7 @@
 #pragma once
 
-#include <batmat/matrix/matrix.hpp>
 #include <cyqlone/ocp.hpp>
+#include <batmat/matrix/matrix.hpp>
 #include <span>
 #include <vector>
 
@@ -60,9 +60,8 @@ struct CyqloneStorage {
     std::vector<index_t> indices_G0 = std::vector<index_t>(ny_0);
 
     static CyqloneStorage build(const LinearOCPStorage &ocp, std::span<const value_type> qr,
-                                  std::span<const value_type> b_eq,
-                                  std::span<const value_type> b_lb,
-                                  std::span<const value_type> b_ub);
+                                std::span<const value_type> b_eq, std::span<const value_type> b_lb,
+                                std::span<const value_type> b_ub);
     static void reconstruct_ineq_multipliers(const LinearOCPStorage &ocp,
                                              std::span<const value_type> y_compressed,
                                              std::span<value_type> y);

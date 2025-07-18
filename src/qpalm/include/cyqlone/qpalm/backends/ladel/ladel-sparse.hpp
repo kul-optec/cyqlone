@@ -50,9 +50,8 @@ using ladel_symbolics_ptr = std::unique_ptr< //
 /// @warning  Immutable pointers will be `const_cast`’ed to mutable pointers.
 ///           It is the responsibility of the user to treat the returned matrix
 ///           as immutable.
-ladel_sparse_matrix
-sparse_to_ladel_view(sparse_csc_t mat,
-                     std::span<const ladel_double> values = {});
+ladel_sparse_matrix sparse_to_ladel_view(sparse_csc_t mat,
+                                         std::span<const ladel_double> values = {});
 
 /// Create an LADEL sparse matrix of the given dimensions.
 /// @param  rows        Number of rows.
@@ -62,18 +61,16 @@ sparse_to_ladel_view(sparse_csc_t mat,
 /// @param  values      Whether to allocate the array of nonzero values.
 /// @param  nonzeros    Whether to allocate the array of nonzero counts.
 /// @see ladel_sparse_alloc
-ladel_sparse_matrix_ptr ladel_sparse_create(index_t rows, index_t cols,
-                                            index_t nnz, ladel_int symmetry,
-                                            bool values   = true,
+ladel_sparse_matrix_ptr ladel_sparse_create(index_t rows, index_t cols, index_t nnz,
+                                            ladel_int symmetry, bool values = true,
                                             bool nonzeros = false);
 
 /// Similar to @ref sparse_to_ladel_view, but creates a copy of all data, in
 /// such a way that the returned matrix is completely decoupled from @p mat, and
 /// such that it can be reallocated and deallocated by the @c ladel_sparse_free
 /// and similar functions.
-ladel_sparse_matrix_ptr
-sparse_to_ladel_copy(sparse_csc_t mat,
-                     std::span<const ladel_double> values = {});
+ladel_sparse_matrix_ptr sparse_to_ladel_copy(sparse_csc_t mat,
+                                             std::span<const ladel_double> values = {});
 
 /// @see ladel_workspace_allocate
 ladel_work_ptr ladel_workspace_create(ladel_int ncol);

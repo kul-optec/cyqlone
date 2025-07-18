@@ -62,7 +62,9 @@ class CyqloneRecipe(ConanFile):
     generators = ("CMakeDeps",)
 
     def requirements(self):
-        self.requires("guanaqo/1.0.0-alpha.16", transitive_headers=True, transitive_libs=True, force=True)
+        self.requires(
+            "guanaqo/1.0.0-alpha.16", transitive_headers=True, transitive_libs=True, force=True
+        )
         self.requires("batmat/1.0.0", transitive_headers=True, transitive_libs=True, force=True)
         if self.options.with_ladel:
             self.requires("ladel/tttapa.20241118", transitive_headers=True)

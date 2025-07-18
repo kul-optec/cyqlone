@@ -3,8 +3,6 @@
 
 namespace cyqlone::qpalm {
 
-std::ostream &operator<<(std::ostream &os, SolverStatus s) {
-    return os << enum_name(s);
-}
+std::ostream &operator<<(std::ostream &os, SolverStatus s) { return os << enum_name(s); }
 
 } // namespace cyqlone::qpalm

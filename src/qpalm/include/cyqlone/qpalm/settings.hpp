@@ -39,9 +39,9 @@ struct CYQLONE_QPALM_EXPORT Settings {
     bool force_linesearch_if_no_set_change = true;
     bool force_linesearch_if_dir_deriv_pos = false;
     bool detailed_stats                    = false;
-    bool scale_newton_step       = false; // TODO: can probably be removed
-    bool print_directional_deriv = false;
-    bool print_linesearch_inputs = false;
+    bool scale_newton_step                 = false; // TODO: can probably be removed
+    bool print_directional_deriv           = false;
+    bool print_linesearch_inputs           = false;
 
     // TODO
     bool operator==(const Settings &) const { return false; }

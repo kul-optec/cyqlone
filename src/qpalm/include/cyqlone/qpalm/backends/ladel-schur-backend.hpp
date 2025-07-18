@@ -1,7 +1,7 @@
 #pragma once
 
-#include <guanaqo/linalg/sparsity.hpp>
 #include <cyqlone/qpalm/solver.hpp>
+#include <guanaqo/linalg/sparsity.hpp>
 
 #include <memory>
 #include <span>
@@ -20,10 +20,9 @@ struct QPData {
 struct LadelSchurBackendSettings {};
 
 struct unique_LadelSchurBackend : std::unique_ptr<LadelSchurBackend> {
-    unique_LadelSchurBackend()                                     = default;
-    unique_LadelSchurBackend(unique_LadelSchurBackend &&) noexcept = default;
-    unique_LadelSchurBackend &
-    operator=(unique_LadelSchurBackend &&) noexcept = default;
+    unique_LadelSchurBackend()                                                = default;
+    unique_LadelSchurBackend(unique_LadelSchurBackend &&) noexcept            = default;
+    unique_LadelSchurBackend &operator=(unique_LadelSchurBackend &&) noexcept = default;
     ~unique_LadelSchurBackend();
     unique_LadelSchurBackend(std::unique_ptr<LadelSchurBackend> &&o) noexcept;
 };
@@ -33,8 +32,7 @@ struct detail::backend_type<unique_LadelSchurBackend> {
     using type = LadelSchurBackend;
 };
 
-unique_LadelSchurBackend
-make_qpalm_ladel_schur_backend(QPData data,
-                               const LadelSchurBackendSettings &settings);
+unique_LadelSchurBackend make_qpalm_ladel_schur_backend(QPData data,
+                                                        const LadelSchurBackendSettings &settings);
 
 } // namespace cyqlone::qpalm

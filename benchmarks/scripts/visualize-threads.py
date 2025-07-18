@@ -288,7 +288,6 @@ colors = {
     "Riccati QRS": "#4abdea",
     "Riccati update AB": "#4abdea",
     "Riccati last": "#4abdea",
-
     "Invert Q": "navajowhite",
     "Compute first U": "navajowhite",
     "Compute first Y": "navajowhite",
@@ -316,9 +315,7 @@ def map_thread_ids(df: pd.DataFrame):
     """
     included_thread_ids = df["name"] == "thread_id"
     if included_thread_ids.any():
-        thread_map = {
-            d["thread_id"]: d["instance"] for _, d in df[included_thread_ids].iterrows()
-        }
+        thread_map = {d["thread_id"]: d["instance"] for _, d in df[included_thread_ids].iterrows()}
         df.drop(df[included_thread_ids].index, inplace=True)
         pass
     else:
@@ -414,11 +411,7 @@ def visualize_scheduling(
         ]
     for task_name, v in bar_data.items():
         color = colors.get(task_name, "gray")
-        color = (
-            "rgba("
-            + ",".join(map(str, 255 * np.array(mcolors.to_rgb(color))))
-            + ",0.6)"
-        )
+        color = "rgba(" + ",".join(map(str, 255 * np.array(mcolors.to_rgb(color)))) + ",0.6)"
         label = labels.get(task_name, task_name)
         # Add rectangle to the subplot
         bar = go.Bar(
@@ -490,10 +483,11 @@ def visualize_scheduling(
     #         marker=dict(color=color, line=dict(color="black", width=0.5)),
     #     )
     #     fig.add_trace(bar, row=row, col=col)
-    map_gflops_color = (
-        lambda gflops: f"rgba({255 - int(255 * gflops / 20)}, {int(255 * gflops / 20)}, 0, 0.9)"
-    )
-    map_gflops_color = lambda gflops: f"hsla({120 * gflops / 20:.2f},100,45,0.9)"
+
+    # map_gflops_color = (
+    #     lambda gflops: f"rgba({255 - int(255 * gflops / 20)}, {int(255 * gflops / 20)}, 0, 0.9)"
+    # )
+    # map_gflops_color = lambda gflops: f"hsla({120 * gflops / 20:.2f},100,45,0.9)"
 
     def map_gflops_color(gflops):
         r, g, b, _ = plt.cm.RdYlGn(gflops / 20)
@@ -504,9 +498,7 @@ def visualize_scheduling(
         for _, td in task_data[task_data["flop_count"] > 0].iterrows()
     ]
     durations = task_data[task_data["flop_count"] > 0]["duration"] / 1000
-    start_times = (
-        task_data[task_data["flop_count"] > 0]["start_time"] - first_time
-    ) / 1000
+    start_times = (task_data[task_data["flop_count"] > 0]["start_time"] - first_time) / 1000
     thread_ids = task_data[task_data["flop_count"] > 0]["thread_id"] - 0.5
 
     bar = go.Bar(
@@ -550,13 +542,17 @@ def visualize_scheduling(
 
 
 project_dir = Path(__file__).parent.parent.parent
-data_to_plot= {
+data_to_plot = {
     "CyclOCP": (
         (
             "traces/36ea2dd026325546f1eaaa99ff01457e79f50034/nx=68-nu=20-ny=50-N=256-thr=8-vl=16-pcg=stair-alt-rm/factor_cyclic_new.csv",
             "traces/36ea2dd026325546f1eaaa99ff01457e79f50034/nx=68-nu=20-ny=50-N=256-thr=4-vl=16-pcg=stair-alt-rm/factor_cyclic_new.csv",
         ),
-        dict(n_threads=4, xlim_margin=0.15, title="Thread-level execution traces of KKT factorization methods"),
+        dict(
+            n_threads=4,
+            xlim_margin=0.15,
+            title="Thread-level execution traces of KKT factorization methods",
+        ),
     )
 }
 
@@ -571,9 +567,13 @@ for name, opts in data_to_plot.items():
         data = {name: Path(name) if Path(name).is_absolute() else project_dir / name}
     if isinstance(opts, tuple):
         names, opts = opts
-        data = {name: Path(name) if Path(name).is_absolute() else project_dir / name for name in names}
+        data = {
+            name: Path(name) if Path(name).is_absolute() else project_dir / name for name in names
+        }
 
-    title = opts.pop("title", "Parallel execution traces for KKT factor, solve and update algorithms")
+    title = opts.pop(
+        "title", "Parallel execution traces for KKT factor, solve and update algorithms"
+    )
 
     num_threads = 4
 
@@ -583,13 +583,11 @@ for name, opts in data_to_plot.items():
         cols=1,
         shared_xaxes=True,
         shared_yaxes=True,
-        subplot_titles=list(map(lambda l: subtitles.get(l, l), data)),
+        subplot_titles=list(map(lambda lbl: subtitles.get(lbl, lbl), data)),
         vertical_spacing=0.1,
-        figure=go.Figure(layout=go.Layout(font=dict(
-            family="Fira Sans Light",
-            size=24,
-            color="black"
-        ))),
+        figure=go.Figure(
+            layout=go.Layout(font=dict(family="Fira Sans Light", size=24, color="black"))
+        ),
     )
     for i, (k, d) in enumerate(data.items()):
         visualize_scheduling(
@@ -632,8 +630,8 @@ for name, opts in data_to_plot.items():
         ),
         uniformtext=dict(minsize=4, mode="show"),
     )
-    for annotation in fig['layout']['annotations']:
-        annotation['font'] = dict(size=28, family="Fira Sans Light", color="black")
+    for annotation in fig["layout"]["annotations"]:
+        annotation["font"] = dict(size=28, family="Fira Sans Light", color="black")
     # fig.update_layout(showlegend=False)
     pdf_file = project_dir / "fig" / Path(name + ".pdf")
     pdf_file.parent.mkdir(parents=True, exist_ok=True)
