@@ -8,20 +8,25 @@ add_library(cyqlone
     "cyqlone/src/cyqlone.cpp"
     "cyqlone/src/cyqlone-storage.cpp"
 )
-target_sources(cyqlone PUBLIC FILE_SET headers TYPE HEADERS
+target_sources(cyqlone PUBLIC FILE_SET HEADERS
     BASE_DIRS "cyqlone/include"
     FILES "cyqlone/include/cyqlone/config.hpp"
+          "cyqlone/include/cyqlone/compact.hpp"
+          "cyqlone/include/cyqlone/ocp.hpp"
+          "cyqlone/include/cyqlone/random-ocp.hpp"
           "cyqlone/include/cyqlone/cyqlone.hpp"
           "cyqlone/include/cyqlone/cyqlone-storage.hpp"
-          "cyqlone/include/cyqlone/ocp.hpp"
+          "cyqlone/include/cyqlone/compact/elementwise.tpp"
+          "cyqlone/include/cyqlone/compact/pack.tpp"
           "cyqlone/include/cyqlone/implementation/data.tpp"
           "cyqlone/include/cyqlone/implementation/factor.tpp"
-          "cyqlone/include/cyqlone/implementation/mat-vec.tpp"
           "cyqlone/include/cyqlone/implementation/indexing.tpp"
+          "cyqlone/include/cyqlone/implementation/mat-vec.tpp"
+          "cyqlone/include/cyqlone/implementation/pcg.tpp"
+          "cyqlone/include/cyqlone/implementation/solve.tpp"
           "cyqlone/include/cyqlone/implementation/sparse.tpp"
           "cyqlone/include/cyqlone/implementation/update.tpp"
-          "cyqlone/include/cyqlone/implementation/pcg.tpp"
-          "cyqlone/include/cyqlone/implementation/solve.tpp")
+)
 target_link_libraries(cyqlone PUBLIC batmat::batmat guanaqo::guanaqo guanaqo::blas PRIVATE cyqlone::warnings)
 cyqlone_configure_library(cyqlone)
 
@@ -39,8 +44,8 @@ if (CYQLONE_WITH_QPALM)
               "qpalm/include/cyqlone/qpalm/status.hpp"
               "qpalm/include/cyqlone/qpalm/solver.hpp"
               "qpalm/include/cyqlone/qpalm/detailed-stats.hpp"
-              "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyclic.hpp"
               "qpalm/include/cyqlone/qpalm/settings.hpp"
+              "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyclic.hpp"
               "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyclic.tpp"
               "qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp"
               "qpalm/include/cyqlone/qpalm/implementation/solver.tpp"
@@ -57,10 +62,11 @@ if (CYQLONE_WITH_QPALM)
         )
         target_sources(ladel-backend PUBLIC FILE_SET HEADERS
             BASE_DIRS "qpalm/include"
-            FILES "qpalm/include/cyqlone/qpalm/backends/ladel/ladel-schur-backend.tpp"
+            FILES "qpalm/include/cyqlone/qpalm/backends/ladel-schur-backend.hpp"
+                  "qpalm/include/cyqlone/qpalm/backends/ladel/ladel-schur-backend.tpp"
         )
         target_link_libraries(ladel-backend PUBLIC qpalm PRIVATE LADEL::ladel Eigen3::Eigen)
-        cyqlone_qpalm_configure_library(ladel-backend EXPORT_PREFIX cyqlone)
+        cyqlone_configure_library(ladel-backend EXPORT_PREFIX cyqlone)
     endif()
 
     # Example problems
@@ -89,7 +95,7 @@ endif()
 # Save the project version to a generated file
 configure_file("cmake/cyqlone-version.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/cyqlone-version.h" @ONLY)
-target_sources(cyqlone PUBLIC FILE_SET headers TYPE HEADERS
+target_sources(cyqlone PUBLIC FILE_SET HEADERS
     BASE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/include"
     FILES "${CMAKE_CURRENT_BINARY_DIR}/include/cyqlone-version.h"
 )

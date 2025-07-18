@@ -24,6 +24,7 @@ class CyqloneRecipe(ConanFile):
     bool_cyqlone_options = {
         "with_benchmarks": False,
         "with_qpalm": True,
+        "with_general_qpalm": False,
         "with_ladel": False,
         "with_example_problems": True,
         "with_blasfeo": False,
@@ -75,6 +76,8 @@ class CyqloneRecipe(ConanFile):
             self.test_requires("eigen/tttapa.20250506")
         if self.options.get_safe("with_blasfeo"):
             self.requires("blasfeo/0.1.4.1")
+        if self.options.get_safe("with_general_qpalm"):
+            self.requires("qpalm/1.2.5")
         if self.options.get_safe("with_benchmarks"):
             self.requires("benchmark/1.8.4")
             self.requires("hyhound/1.0.0")

@@ -6,11 +6,11 @@
 #include <vector>
 using guanaqo::as_span;
 
-#include <koqkatoo/ocp/conversion.hpp>
-#include <koqkatoo-qpalm/example-problems/csv.hpp>
-#include <koqkatoo-qpalm/example-problems/platooning.hpp>
-using koqkatoo::index_t;
-using koqkatoo::real_t;
+#include <cyqlone/qpalm/example-problems/conversion.hpp>
+#include <cyqlone/qpalm/example-problems/csv.hpp>
+#include <cyqlone/qpalm/example-problems/platooning.hpp>
+using cyqlone::index_t;
+using cyqlone::real_t;
 namespace qp = cyqlone::qpalm;
 
 #include <qpalm.hpp>
@@ -20,10 +20,10 @@ namespace qp = cyqlone::qpalm;
 TEST(QPALMBen, ocp) {
     // auto ocp = qp::problems::platooning({.Ts = 1.2 * 8, .N_horiz = 15});
     auto ocp  = qp::problems::platooning({.Ts = 1.2, .N_horiz = 127});
-    auto grad = reference_to_gradient(ocp.ocp, ocp.ref);
+    auto grad = qp::reference_to_gradient(ocp.ocp, ocp.ref);
 
     // Quadratic program
-    auto oqp          = koqkatoo::ocp::LinearOCPSparseQP::build(ocp.ocp);
+    auto oqp          = qp::LinearOCPSparseQP::build(ocp.ocp);
     qpalm::Data data  = {oqp.n, oqp.m_eq + oqp.m_ineq};
     auto to_eigen_idx = [](const auto v) {
         using std::begin;
@@ -51,18 +51,15 @@ TEST(QPALMBen, ocp) {
         oqp.A_values.data(),
     });
     data.c = 0;
-    data.q = qpalm::const_borrowed_vec_t{
-        grad.data(), static_cast<Eigen::Index>(grad.size())};
+    data.q = qpalm::const_borrowed_vec_t{grad.data(), static_cast<Eigen::Index>(grad.size())};
     data.bmin.topRows(oqp.m_eq) = qpalm::const_borrowed_vec_t{
         ocp.rhs_eq.data(), static_cast<Eigen::Index>(ocp.rhs_eq.size())};
     data.bmax.topRows(oqp.m_eq) = qpalm::const_borrowed_vec_t{
         ocp.rhs_eq.data(), static_cast<Eigen::Index>(ocp.rhs_eq.size())};
     data.bmin.bottomRows(oqp.m_ineq) = qpalm::const_borrowed_vec_t{
-        ocp.rhs_ineq_lb.data(),
-        static_cast<Eigen::Index>(ocp.rhs_ineq_lb.size())};
+        ocp.rhs_ineq_lb.data(), static_cast<Eigen::Index>(ocp.rhs_ineq_lb.size())};
     data.bmax.bottomRows(oqp.m_ineq) = qpalm::const_borrowed_vec_t{
-        ocp.rhs_ineq_ub.data(),
-        static_cast<Eigen::Index>(ocp.rhs_ineq_ub.size())};
+        ocp.rhs_ineq_ub.data(), static_cast<Eigen::Index>(ocp.rhs_ineq_ub.size())};
 
     {
         std::ofstream f("platooning-A-sparse.csv");
@@ -100,7 +97,7 @@ TEST(QPALMBen, ocp) {
     // Configure the solver
     // --------------------
     qpalm::Settings settings;
-    settings.eps_abs     = 1e-8;
+    settings.eps_abs     = 1e-7;
     settings.eps_rel     = 0;
     settings.max_iter    = 5000;
     qpalm::Solver solver = {data, settings};

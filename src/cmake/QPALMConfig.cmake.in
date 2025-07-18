@@ -1,0 +1,11 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+if (@CYQLONE_WITH_LADEL@)
+        find_dependency(LADEL)
+        find_dependency(Eigen3)
+endif()
+include("${CMAKE_CURRENT_LIST_DIR}/cyqloneQPALMTargets.cmake")
+
+check_required_components(cyqloneQPALM)

@@ -69,16 +69,38 @@ if (CYQLONE_CORE_TARGETS)
             NAMELINK_COMPONENT dev
         ARCHIVE DESTINATION "${CYQLONE_INSTALL_LIBDIR}"
             COMPONENT dev
-        FILE_SET headers DESTINATION "${CYQLONE_INSTALL_INCLUDEDIR}"
+        FILE_SET HEADERS DESTINATION "${CYQLONE_INSTALL_INCLUDEDIR}"
             COMPONENT dev)
     cyqlone_install_config(Core dev)
     list(JOIN CYQLONE_CORE_TARGETS ", " TGTS)
-    string(APPEND CYQLONE_INSTALLED_TARGETS_MSG " * Core:  ${TGTS}\n")
+    string(APPEND CYQLONE_INSTALLED_TARGETS_MSG " * Core:   ${TGTS}\n")
     list(APPEND CYQLONE_INSTALL_TARGETS ${CYQLONE_CORE_TARGETS})
+endif()
+
+# Install the QPALM targets
+set(CYQLONE_QPALM_TARGETS)
+cyqlone_add_if_target_exists(CYQLONE_QPALM_TARGETS "qpalm" "ladel-backend")
+if (CYQLONE_QPALM_TARGETS)
+    install(TARGETS warnings common_options ${CYQLONE_QPALM_TARGETS}
+        EXPORT cyqloneQPALMTargets
+        RUNTIME DESTINATION "${CYQLONE_INSTALL_BINDIR}"
+            COMPONENT lib
+        LIBRARY DESTINATION "${CYQLONE_INSTALL_LIBDIR}"
+            COMPONENT lib
+            NAMELINK_COMPONENT dev
+        ARCHIVE DESTINATION "${CYQLONE_INSTALL_LIBDIR}"
+            COMPONENT dev
+        FILE_SET HEADERS DESTINATION "${CYQLONE_INSTALL_INCLUDEDIR}"
+            COMPONENT dev)
+    cyqlone_install_config(QPALM dev)
+    list(JOIN CYQLONE_QPALM_TARGETS ", " TGTS)
+    string(APPEND CYQLONE_INSTALLED_TARGETS_MSG " * QPALM:  ${TGTS}\n")
+    list(APPEND CYQLONE_INSTALL_TARGETS ${CYQLONE_QPALM_TARGETS})
 endif()
 
 # Install the extra targets
 set(CYQLONE_EXTRA_TARGETS)
+cyqlone_add_if_target_exists(CYQLONE_EXTRA_TARGETS "example-problems")
 if (CYQLONE_EXTRA_TARGETS)
     install(TARGETS warnings common_options ${CYQLONE_EXTRA_TARGETS}
         EXPORT cyqloneExtraTargets
@@ -89,7 +111,7 @@ if (CYQLONE_EXTRA_TARGETS)
             NAMELINK_COMPONENT dev
         ARCHIVE DESTINATION "${CYQLONE_INSTALL_LIBDIR}"
             COMPONENT dev
-        FILE_SET headers DESTINATION "${CYQLONE_INSTALL_INCLUDEDIR}"
+        FILE_SET HEADERS DESTINATION "${CYQLONE_INSTALL_INCLUDEDIR}"
             COMPONENT dev)
     cyqlone_install_config(Extra dev)
     list(JOIN CYQLONE_EXTRA_TARGETS ", " TGTS)

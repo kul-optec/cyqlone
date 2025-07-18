@@ -32,7 +32,7 @@ function(cyqlone_configure_library tgt)
     set_property(TARGET ${tgt} PROPERTY OUTPUT_NAME "${name_prefix}${tgt}")
     generate_export_header(${tgt} BASE_NAME "${name_prefix}${tgt}"
         EXPORT_FILE_NAME export/${export_path}/${tgt}/export.h)
-    target_sources(${tgt} PUBLIC FILE_SET headers TYPE HEADERS
+    target_sources(${tgt} PUBLIC FILE_SET HEADERS
         BASE_DIRS   ${CMAKE_CURRENT_BINARY_DIR}/export
         FILES       ${CMAKE_CURRENT_BINARY_DIR}/export/${export_path}/${tgt}/export.h)
     set_target_properties(${tgt} PROPERTIES SOVERSION ${PROJECT_VERSION})
