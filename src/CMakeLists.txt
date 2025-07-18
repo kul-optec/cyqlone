@@ -53,22 +53,6 @@ if (CYQLONE_WITH_QPALM)
     target_link_libraries(qpalm PUBLIC cyqlone::cyqlone)
     cyqlone_configure_library(qpalm EXPORT_PREFIX cyqlone)
 
-    # LADEL backends
-    if (CYQLONE_WITH_LADEL)
-        find_package(LADEL REQUIRED)
-        find_package(Eigen3 REQUIRED)
-        add_library(ladel-backend
-            "qpalm/src/ladel-schur-backend.cpp"
-        )
-        target_sources(ladel-backend PUBLIC FILE_SET HEADERS
-            BASE_DIRS "qpalm/include"
-            FILES "qpalm/include/cyqlone/qpalm/backends/ladel-schur-backend.hpp"
-                  "qpalm/include/cyqlone/qpalm/backends/ladel/ladel-schur-backend.tpp"
-        )
-        target_link_libraries(ladel-backend PUBLIC qpalm PRIVATE LADEL::ladel Eigen3::Eigen)
-        cyqlone_configure_library(ladel-backend EXPORT_PREFIX cyqlone)
-    endif()
-
     # Example problems
     if (CYQLONE_WITH_EXAMPLE_PROBLEMS)
         find_package(Eigen3 REQUIRED)

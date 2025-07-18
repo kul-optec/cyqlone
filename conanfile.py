@@ -25,7 +25,6 @@ class CyqloneRecipe(ConanFile):
         "with_benchmarks": False,
         "with_qpalm": True,
         "with_general_qpalm": False,
-        "with_ladel": False,
         "with_example_problems": True,
         "with_blasfeo": False,
         "with_python": False,
@@ -66,13 +65,7 @@ class CyqloneRecipe(ConanFile):
             "guanaqo/1.0.0-alpha.16", transitive_headers=True, transitive_libs=True, force=True
         )
         self.requires("batmat/1.0.0", transitive_headers=True, transitive_libs=True, force=True)
-        if self.options.with_ladel:
-            self.requires("ladel/tttapa.20241118", transitive_headers=True)
-        if (
-            self.options.with_python
-            or self.options.with_example_problems
-            or self.options.with_ladel
-        ):
+        if self.options.with_python or self.options.with_example_problems:
             self.requires("eigen/tttapa.20250506", transitive_headers=True)
         else:
             self.test_requires("eigen/tttapa.20250506")
@@ -91,7 +84,6 @@ class CyqloneRecipe(ConanFile):
 
     def configure(self):
         if not self.options.get_safe("with_qpalm"):
-            self.options.rm_safe("with_ladel")
             self.options.rm_safe("with_example_problems")
             self.options.rm_safe("with_python")
         if not self.options.get_safe("with_benchmarks"):

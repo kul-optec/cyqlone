@@ -79,7 +79,7 @@ endif()
 
 # Install the QPALM targets
 set(CYQLONE_QPALM_TARGETS)
-cyqlone_add_if_target_exists(CYQLONE_QPALM_TARGETS "qpalm" "ladel-backend")
+cyqlone_add_if_target_exists(CYQLONE_QPALM_TARGETS "qpalm")
 if (CYQLONE_QPALM_TARGETS)
     install(TARGETS warnings common_options ${CYQLONE_QPALM_TARGETS}
         EXPORT cyqloneQPALMTargets
