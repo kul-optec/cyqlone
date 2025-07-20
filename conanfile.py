@@ -66,9 +66,9 @@ class CyqloneRecipe(ConanFile):
         )
         self.requires("batmat/1.0.0", transitive_headers=True, transitive_libs=True, force=True)
         if self.options.with_python or self.options.with_example_problems:
-            self.requires("eigen/tttapa.20250506", transitive_headers=True)
+            self.requires("eigen/tttapa.20250504", transitive_headers=True)
         else:
-            self.test_requires("eigen/tttapa.20250506")
+            self.test_requires("eigen/tttapa.20250504")
         if self.options.get_safe("with_blasfeo"):
             self.requires("blasfeo/0.1.4.1")
         if self.options.get_safe("with_general_qpalm"):
@@ -104,7 +104,7 @@ class CyqloneRecipe(ConanFile):
         index_t = self.options.get_safe("dense_index_type", default="int")
         tc.variables["CYQLONE_DENSE_INDEX_TYPE"] = index_t
         for k in self.bool_cyqlone_options:
-            value = getattr(self.options, k, None)
+            value = self.options.get_safe(k, None)
             if value is not None and value.value is not None:
                 tc.variables["CYQLONE_" + k.upper()] = bool(value)
         if can_run(self):

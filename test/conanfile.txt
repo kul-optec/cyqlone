@@ -2,7 +2,7 @@
 cyqlone/1.0.0
 qpalm/1.2.5
 gtest/1.15.0
-eigen/tttapa.20250506
+eigen/tttapa.20250504
 [generators]
 CMakeDeps
 CMakeToolchain
