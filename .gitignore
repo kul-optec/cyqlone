@@ -8,6 +8,7 @@ build
 .*cache
 __pycache__
 /build-local
+.conan2
 
 # Virtual environments
 .venv*
