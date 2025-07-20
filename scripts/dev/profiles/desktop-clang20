@@ -1,4 +1,4 @@
-include({{ os.path.join(profile_dir, "clang19") }})
+include({{ os.path.join(profile_dir, "clang20") }})
 
 [settings]
 arch=x86_64

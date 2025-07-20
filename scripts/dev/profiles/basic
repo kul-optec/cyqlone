@@ -5,10 +5,22 @@ compiler.cppstd=gnu23
 compiler.libcxx=libstdc++11
 compiler.version=15
 os=Linux
+arch=x86_64
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja
+tools.build:exelinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
+tools.build:sharedlinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
+tools.build:cflags=["-march=skylake"]
+tools.build:cxxflags=["-march=skylake"]
+tools.build.cross_building:can_run=true
+
+[options]
+openblas/*:target=HASWELL
+blasfeo/*:target=X64_INTEL_HASWELL
 
 [tool_requires]
 tttapa-toolchains/1.1.0
-mold/2.32.1
 cmake/3.31.6
 ninja/1.12.1
 
@@ -18,13 +30,3 @@ eigen/*: eigen/tttapa.20250504
 [buildenv]
 MKLROOT={{ os.getenv("MKLROOT") or os.path.join(os.getenv("HOME"), "intel/oneapi/mkl/latest")}}
 VTUNE_PROFILER_DIR={{ os.getenv("VTUNE_PROFILER_DIR") or os.path.join(os.getenv("HOME"), "intel/oneapi/vtune/latest")}}
-
-[conf]
-tools.cmake.cmaketoolchain:generator=Ninja
-tools.build:exelinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
-tools.build:sharedlinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
-tools.build:exelinkflags+=["-fuse-ld=mold"]
-tools.build:sharedlinkflags+=["-fuse-ld=mold"]
-
-[options]
-batmat/*:with_openmp=True

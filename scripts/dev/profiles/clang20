@@ -20,9 +20,13 @@ MKLROOT={{ os.getenv("MKLROOT") or os.path.join(os.getenv("HOME"), "intel/oneapi
 VTUNE_PROFILER_DIR={{ os.getenv("VTUNE_PROFILER_DIR") or os.path.join(os.getenv("HOME"), "intel/oneapi/vtune/latest")}}
 
 [conf]
-tools.build:compiler_executables*={"c": "clang-20", "cpp": "clang++-20", "fortran": "flang-20"}
-tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
+tools.build:compiler_executables*={"c": "clang-20", "cpp": "clang++-20"}
+tools.cmake.cmaketoolchain:generator=Ninja
 tools.build:exelinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
 tools.build:sharedlinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
 tools.build:exelinkflags+=["-fuse-ld=mold"]
 tools.build:sharedlinkflags+=["-fuse-ld=mold"]
+
+[options]
+batmat/*:with_gsi_hpc_simd=True
+batmat/*:with_openmp=False
