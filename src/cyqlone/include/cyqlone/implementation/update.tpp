@@ -151,7 +151,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(index_t ti, view<> Σ) {
             if (ti == 0)
                 std::inclusive_scan(begin(nJs), end(nJs), begin(nJs));
             barrier();
-            const index_t j0 = bi_upd == 0 ? 0 : nJs[bi_upd - 1], j1 = nJs[bi_upd];
+            [[maybe_unused]] const index_t j0 = bi_upd == 0 ? 0 : nJs[bi_upd - 1], j1 = nJs[bi_upd];
             assert(nJi == j1 - j0);
             constexpr index_t wiA_table[]{0, 1, 0, 2};
             constexpr index_t wiI_table[]{2, 0, 1, 0};
