@@ -199,7 +199,7 @@ template <int VL>
 void bm_factor_cyqlone(benchmark::State &state) {
     using batmat::linalg::StorageOrder;
     auto [ocp, Σ]    = generate_ocp(state);
-    const index_t lP = state.range(4);
+    const auto lP = static_cast<index_t>(state.range(4));
     BATMAT_OMP_IF(omp_set_num_threads(1 << lP));
     batmat::pool_set_num_threads(1 << lP);
     GUANAQO_IF_ITT(batmat::foreach_thread(
