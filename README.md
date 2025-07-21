@@ -14,12 +14,14 @@ backend, with parallel factorization update routines to handle active set change
 Requirements: CMake, Conan 2, plenty of RAM for parallel builds.
 
 ```sh
-# Prepare environment
+# Prepare environment and dependencies
 python3 -m pip install -U conan
 export CONAN_HOME="$PWD/.conan2"
 conan profile detect ||:
 git clone https://github.com/tttapa/conan-recipes
 conan remote add tttapa-conan-recipes "$PWD/conan-recipes"
+git clone https://github.com/tttapa/batmat
+conan export batmat
 ```
 
 ```sh
