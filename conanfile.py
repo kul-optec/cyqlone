@@ -9,7 +9,7 @@ from conan.tools.scm import Git
 
 class CyqloneRecipe(ConanFile):
     name = "cyqlone"
-    version = "1.0.0"
+    version = "0.0.1"
 
     # Optional metadata
     license = "LGPLv3"
@@ -64,7 +64,7 @@ class CyqloneRecipe(ConanFile):
         self.requires(
             "guanaqo/1.0.0-alpha.16", transitive_headers=True, transitive_libs=True, force=True
         )
-        self.requires("batmat/1.0.0", transitive_headers=True, transitive_libs=True, force=True)
+        self.requires("batmat/0.0.1", transitive_headers=True, transitive_libs=True, force=True)
         if self.options.with_python or self.options.with_example_problems:
             self.requires("eigen/tttapa.20250504", transitive_headers=True)
         else:

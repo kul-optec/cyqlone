@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 project(cyqlone
-    VERSION 1.0.0
+    VERSION 0.0.1
     DESCRIPTION "Parallel solver for systems with optimal control structure."
     HOMEPAGE_URL "https://github.com/kul-optec/cyqlone"
     LANGUAGES CXX
