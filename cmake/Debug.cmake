@@ -1,5 +1,5 @@
 # Strip and install debug information
-function(batmat_install_debug_syms target component dest_lib dest_bin)
+function(cyqlone_install_debug_syms target component dest_lib dest_bin)
     if (MSVC)
         install(FILES "$<TARGET_PDB_FILE:${target}>"
             DESTINATION ${dest_bin}
