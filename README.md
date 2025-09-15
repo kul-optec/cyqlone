@@ -26,7 +26,7 @@ conan export batmat
 
 ```sh
 # Install dependencies (including GCC) and build from source
-conan build . --build=missing -pr scripts/dev/profiles/laptop -o \&:with_benchmarks=True -c tools.build:jobs=4
+conan build . --build=missing -pr scripts/dev/profiles/laptop -o \&:with_benchmarks=True -o \&:with_python=True -c tools.build:jobs=4
 ```
 
 Replace `laptop` by `desktop` if your hardware supports AVX-512.

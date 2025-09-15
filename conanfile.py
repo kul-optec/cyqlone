@@ -32,10 +32,12 @@ class CyqloneRecipe(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
+        "with_conan_python": [True, False],
     } | {k: [True, False] for k in bool_cyqlone_options}
     default_options = {
         "shared": False,
         "fPIC": True,
+        "with_conan_python": False,
     } | bool_cyqlone_options
 
     # Sources are located in the same place as this recipe, copy them to the recipe
@@ -63,6 +65,10 @@ class CyqloneRecipe(ConanFile):
     def requirements(self):
         self.requires("guanaqo/1.0.0-alpha.17", transitive_headers=True, transitive_libs=True)
         self.requires("batmat/0.0.2", transitive_headers=True, transitive_libs=True)
+        if self.options.with_python:
+            self.requires("pybind11/3.0.1")
+            if self.options.with_conan_python:
+                self.requires("tttapa-python-dev/3.13.7")
         if self.options.with_python or self.options.with_example_problems:
             self.requires("eigen/tttapa.20250504", transitive_headers=True)
         else:
@@ -88,6 +94,9 @@ class CyqloneRecipe(ConanFile):
         self.options["hyhound/*"].with_ocp = True
 
     def layout(self):
+        if self.folders.build_folder_vars is None:
+            if self.options.with_python:
+                self.folders.build_folder_vars = ["const.python"]
         cmake_layout(self)
         self.cpp.build.builddirs.append("")
 
@@ -100,7 +109,8 @@ class CyqloneRecipe(ConanFile):
             if value is not None and value.value is not None:
                 tc.variables["CYQLONE_" + k.upper()] = bool(value)
         if can_run(self):
-            tc.variables["CYQLONE_FORCE_TEST_DISCOVERY"] = True
+            tc.cache_variables["CYQLONE_FORCE_TEST_DISCOVERY"] = True
+            tc.cache_variables["CYQLONE_WITH_PY_STUBS"] = True
         tc.generate()
 
     def build(self):
@@ -112,6 +122,11 @@ class CyqloneRecipe(ConanFile):
     def package(self):
         cmake = CMake(self)
         cmake.install()
+        if self.options.with_python:
+            cmake.install(component="python_source")
+            cmake.install(component="python_modules")
+            cmake.install(component="python_stubs")
+
 
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "none")

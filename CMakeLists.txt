@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.24...4.1)
 project(cyqlone
     VERSION 0.0.1
     DESCRIPTION "Parallel solver for systems with optimal control structure."
@@ -21,6 +21,8 @@ option(CYQLONE_WITH_TESTS
     "Build the tests" ${BUILD_TESTING})
 option(CYQLONE_WITH_BENCHMARKS
     "Build the benchmarks" Off)
+option(CYQLONE_WITH_PYTHON
+    "Build the Python interface" Off)
 # Developer options
 option(CYQLONE_WARNINGS_AS_ERRORS
     "Enable -Werror or /WX" Off)
@@ -43,6 +45,8 @@ set(CYQLONE_INSTALL_BINDIR "${CMAKE_INSTALL_BINDIR}"
     CACHE PATH "Installation directory for binaries and DLLs")
 set(CYQLONE_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}"
     CACHE PATH "Installation directory for headers")
+set(CYQLONE_INSTALL_PYSTUBSDIR ""
+    CACHE PATH "Installation directory for Python stubs (relative to Python package)")
 option(CYQLONE_STANDALONE
     "Install with relative RPATH to locate its own shared libraries" On)
 
@@ -100,3 +104,5 @@ endif()
 if (CYQLONE_WITH_BENCHMARKS)
     add_subdirectory(benchmarks)
 endif()
+
+add_subdirectory(interfaces)
