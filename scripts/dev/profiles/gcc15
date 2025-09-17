@@ -7,7 +7,7 @@ compiler.version=15
 os=Linux
 
 [tool_requires]
-tttapa-toolchains/1.1.0
+tttapa-toolchains/1.2.0
 mold/2.32.1
 cmake/3.31.6
 ninja/1.12.1
