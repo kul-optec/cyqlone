@@ -61,10 +61,8 @@ class CyqloneRecipe(ConanFile):
     generators = ("CMakeDeps",)
 
     def requirements(self):
-        self.requires(
-            "guanaqo/1.0.0-alpha.16", transitive_headers=True, transitive_libs=True, force=True
-        )
-        self.requires("batmat/0.0.1", transitive_headers=True, transitive_libs=True, force=True)
+        self.requires("guanaqo/1.0.0-alpha.17", transitive_headers=True, transitive_libs=True)
+        self.requires("batmat/0.0.2", transitive_headers=True, transitive_libs=True)
         if self.options.with_python or self.options.with_example_problems:
             self.requires("eigen/tttapa.20250504", transitive_headers=True)
         else:
@@ -72,11 +70,11 @@ class CyqloneRecipe(ConanFile):
         if self.options.get_safe("with_blasfeo"):
             self.requires("blasfeo/0.1.4.1")
         if self.options.get_safe("with_general_qpalm"):
-            self.requires("qpalm/1.2.5")
+            self.requires("qpalm/1.2.6")
         if self.options.get_safe("with_benchmarks"):
-            self.requires("benchmark/1.8.4")
-            self.requires("hyhound/1.0.0")
-        self.test_requires("gtest/1.15.0")
+            self.requires("benchmark/1.9.4")
+            self.requires("hyhound/1.0.1")
+        self.test_requires("gtest/1.17.0")
 
     def config_options(self):
         if self.settings.get_safe("os") == "Windows":
@@ -86,12 +84,6 @@ class CyqloneRecipe(ConanFile):
         if not self.options.get_safe("with_qpalm"):
             self.options.rm_safe("with_example_problems")
             self.options.rm_safe("with_python")
-        if not self.options.get_safe("with_benchmarks"):
-            self.options.rm_safe("with_mkl")
-            self.options.rm_safe("with_openblas")
-        # There is currently no 64-bit indices option for OpenBLAS using Conan
-        if self.options.get_safe("with_openblas"):
-            self.options.rm_safe("dense_index_type")
         self.options["guanaqo/*"].with_blas = True
         self.options["hyhound/*"].with_ocp = True
 
@@ -101,7 +93,7 @@ class CyqloneRecipe(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        index_t = self.options.get_safe("dense_index_type", default="int")
+        index_t = self.dependencies["batmat"].options.get_safe("dense_index_type", default="int")
         tc.variables["CYQLONE_DENSE_INDEX_TYPE"] = index_t
         for k in self.bool_cyqlone_options:
             value = self.options.get_safe(k, None)
