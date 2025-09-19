@@ -298,7 +298,8 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                         η += dMᵀΔλ;
                         β += dMᵀλ;
                     }
-                    return linesearch(η, β, Σ, y, Ad, Ax, backend.Ax_min(), backend.Ax_max());
+                    return linesearch(backend, η, β, Σ, y, Ad, Ax, backend.Ax_min(),
+                                      backend.Ax_max());
                 });
 
             if (stats.detail) {

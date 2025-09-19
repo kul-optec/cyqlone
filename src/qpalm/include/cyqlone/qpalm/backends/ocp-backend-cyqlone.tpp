@@ -137,7 +137,7 @@ struct CyqloneBackend {
             case WarmStartingStrategy::ShiftNoInequality: {
                 auto &x0 = this->x0.emplace(var_vec());       // TODO: zero init is redundant
                 auto &λ0 = this->λ0.emplace(eq_constr_vec()); // TODO: zero init is redundant
-                auto &y0 = this->y0.emplace(y);
+                this->y0.emplace(y);
                 for (index_t i = 1; i < x0.depth(); ++i) // TODO: vectorize?
                     x0(i - 1) = x(i);
                 x0(x0.depth() - 1) = x(x0.depth() - 1);
@@ -344,6 +344,50 @@ struct CyqloneBackend {
         std::ignore = Σ_update_factors;
         if (!constr_changed.empty())
             reset_factorization = true;
+    }
+
+    template <class Breakpoint>
+    std::span<Breakpoint>
+    compute_breakpoints(std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
+                        const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
+                        const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
+                        const ineq_constr_vec_t &b_max) const {
+        GUANAQO_TRACE("linesearch breakpoints cyqlone", 0);
+        using std::sqrt;
+        // Allocate memory
+        const auto ny_M = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
+        const auto m    = ocp.ceil_N * ny_M;
+        breakpoints.resize(2 * m);
+        // Parallelization and vectorization
+        const index_t P          = 1 << (ocp.lP - ocp.lvl);
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        using simd               = batmat::datapar::deduced_simd<real_t, VL>;
+        // Compute break points t[i] and intermediate values α[i] and δ[i]
+        batmat::foreach_thread(P, [&](index_t ti, index_t) {
+            const index_t di0 = ti * num_stages;
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = di0 + i;
+                for (index_t r = 0; r < ny_M; ++r) {
+                    const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
+                               yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
+                               Adi = batmat::datapar::aligned_load<simd>(&Ad.batch(di)(0, r, 0)),
+                               Axi = batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
+                               li  = batmat::datapar::aligned_load<simd>(&b_min.batch(di)(0, r, 0)),
+                               ui  = batmat::datapar::aligned_load<simd>(&b_max.batch(di)(0, r, 0));
+                    const auto s   = sqrt(Σi);
+                    const auto δ2 = s * Adi, δ1 = -δ2;
+                    const auto α1 = (yi + Σi * (Axi - li)) / s, α2 = (Σi * (ui - Axi) - yi) / s;
+                    const auto t1 = α1 / δ1, t2 = α2 / δ2;
+                    BATMAT_FULLY_UNROLLED_FOR (index_t v = 0; v < VL; ++v) {
+                        const index_t l = (di * ny_M + r) * VL + v;
+                        BATMAT_ASSUME(l < m);
+                        breakpoints[l]     = {.t = t1[v], .δ = δ1[v], .α = α1[v]};
+                        breakpoints[m + l] = {.t = t2[v], .δ = δ2[v], .α = α2[v]};
+                    }
+                }
+            }
+        });
+        return std::span{breakpoints};
     }
 
     template <class T, class U>

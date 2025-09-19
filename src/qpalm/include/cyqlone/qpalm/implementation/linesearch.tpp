@@ -16,7 +16,7 @@
 
 namespace cyqlone::qpalm {
 
-struct Breakpoint {
+struct alignas(4 * sizeof(real_t)) Breakpoint {
     real_t t, δ, α;
 };
 
@@ -24,9 +24,9 @@ template <class Vec>
 struct LineSearch {
     using vec_t = Vec;
 
-    std::pair<real_t, size_t> operator()(real_t η, real_t β, const vec_t &Σ, const vec_t &y,
-                                         const vec_t &Ad, const vec_t &Ax, const vec_t &b_min,
-                                         const vec_t &b_max);
+    std::pair<real_t, size_t> operator()(auto &backend, real_t η, real_t β, const vec_t &Σ,
+                                         const vec_t &y, const vec_t &Ad, const vec_t &Ax,
+                                         const vec_t &b_min, const vec_t &b_max);
 
     std::span<Breakpoint> compute_breakpoints(const vec_t &Σ, const vec_t &y, const vec_t &Ad,
                                               const vec_t &Ax, const vec_t &b_min,
@@ -54,7 +54,7 @@ struct LineSearch {
 /// @return τ Optimal step size @f$ \tau_\star @f$
 template <class Vec>
 std::pair<real_t, size_t>
-LineSearch<Vec>::operator()(real_t η, ///< @f$ \eta = \inprod{d}{\xi} @f$
+LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}{\xi} @f$
                             real_t β, ///< @f$ \beta = \inprod{d}{\grad\tilde f_k(x^{k,\nu})} @f$
                             const vec_t &Σ,     ///< Penalty factor @f$ \Sigma_k @f$ (diagonal)
                             const vec_t &y,     ///< Lagrange multipliers @f$ y^k @f$
@@ -65,7 +65,15 @@ LineSearch<Vec>::operator()(real_t η, ///< @f$ \eta = \inprod{d}{\xi} @f$
 ) {
     using std::abs;
     // Compute breakpoints t[i] and intermediate values α[i] and δ[i]
-    auto breakpoints = compute_breakpoints(Σ, y, Ad, Ax, b_min, b_max);
+    auto breakpoints = [&] {
+        if constexpr (requires {
+                          backend.compute_breakpoints(this->breakpoints, Σ, y, Ad, Ax, b_min,
+                                                      b_max);
+                      })
+            return backend.compute_breakpoints(this->breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+        else
+            return compute_breakpoints(Σ, y, Ad, Ax, b_min, b_max);
+    }();
     // Isolate non-finite entries, and sort t[i] in ascending order. Then split
     // the arrays into a nonpositive and a positive part for t.
     const auto [neg_bp, pos_bp] = partition_breakpoints(breakpoints);
