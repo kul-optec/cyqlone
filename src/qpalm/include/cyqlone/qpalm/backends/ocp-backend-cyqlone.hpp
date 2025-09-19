@@ -17,6 +17,13 @@ struct CyqloneData {
                             initial_equality_multipliers = {};
 };
 
+enum class WarmStartingStrategy {
+    Zeros,
+    Copy,
+    Shift,
+    ShiftNoInequality,
+};
+
 struct CyqloneBackendSettings {
     index_t log_processors = 3;
     bool print_residuals   = false;
@@ -30,6 +37,7 @@ struct CyqloneBackendSettings {
     real_t pcg_tolerance          = std::numeric_limits<real_t>::epsilon() / 10;
     bool pcg_print_resid          = false;
     bool use_stair_preconditioner = true;
+    WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };
 
 template <index_t VL>
@@ -51,5 +59,13 @@ template <index_t VL>
 unique_CyqloneBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<real_t> &ocp,
                                                      CyqloneData data,
                                                      const CyqloneBackendSettings &settings);
+
+template <index_t VL>
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const CyqloneStorage<real_t> &ocp);
+
+template <index_t VL>
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp,
+                                  std::span<const real_t> qr, std::span<const real_t> b_eq,
+                                  std::span<const real_t> b_lb, std::span<const real_t> b_ub);
 
 } // namespace cyqlone::qpalm

@@ -3,6 +3,7 @@
 #include <cyqlone/qpalm/example-problems/platooning.hpp>
 #include <cyqlone/qpalm/settings.hpp>
 #include <cyqlone/qpalm/solver.hpp>
+#include <batmat/assume.hpp>
 #include <batmat/loop.hpp>
 #include <batmat/openmp.h>
 #if !BATMAT_WITH_OPENMP
@@ -391,22 +392,30 @@ void register_settings(py::module_ &m) {
         .def_readwrite("max_penalty", &cyqlone::qpalm::SolverStats::max_penalty)
         .def_readwrite("timings", &cyqlone::qpalm::SolverStats::timings)
         .def_readwrite("detail", &cyqlone::qpalm::SolverStats::detail);
+    py::enum_<cyqlone::qpalm::WarmStartingStrategy>(m, "WarmStartingStrategy")
+        .value("Zeros", cyqlone::qpalm::WarmStartingStrategy::Zeros)
+        .value("Copy", cyqlone::qpalm::WarmStartingStrategy::Copy)
+        .value("Shift", cyqlone::qpalm::WarmStartingStrategy::Shift)
+        .value("ShiftNoInequality", cyqlone::qpalm::WarmStartingStrategy::ShiftNoInequality);
     py::class_<cyqlone::qpalm::CyqloneBackendSettings>(m, "CyqloneBackendSettings")
         .def("__copy__", [](const cyqlone::qpalm::CyqloneBackendSettings &self) { return self; })
         .def(py::init())
         .def_readwrite("log_processors", &cyqlone::qpalm::CyqloneBackendSettings::log_processors)
         .def_readwrite("print_residuals", &cyqlone::qpalm::CyqloneBackendSettings::print_residuals)
         .def_readwrite("print_precision", &cyqlone::qpalm::CyqloneBackendSettings::print_precision)
+        .def_readwrite("factor_alt", &cyqlone::qpalm::CyqloneBackendSettings::factor_alt)
         .def_readwrite("changing_constr_factor",
                        &cyqlone::qpalm::CyqloneBackendSettings::changing_constr_factor)
         .def_readwrite("max_update_count",
                        &cyqlone::qpalm::CyqloneBackendSettings::max_update_count)
+        .def_readwrite("detailed_timings",
+                       &cyqlone::qpalm::CyqloneBackendSettings::detailed_timings)
         .def_readwrite("pcg_max_iter", &cyqlone::qpalm::CyqloneBackendSettings::pcg_max_iter)
         .def_readwrite("pcg_tolerance", &cyqlone::qpalm::CyqloneBackendSettings::pcg_tolerance)
         .def_readwrite("pcg_print_resid", &cyqlone::qpalm::CyqloneBackendSettings::pcg_print_resid)
-        .def_readwrite("factor_alt", &cyqlone::qpalm::CyqloneBackendSettings::factor_alt)
-        .def_readwrite("detailed_timings",
-                       &cyqlone::qpalm::CyqloneBackendSettings::detailed_timings);
+        .def_readwrite("use_stair_preconditioner",
+                       &cyqlone::qpalm::CyqloneBackendSettings::use_stair_preconditioner)
+        .def_readwrite("strategy", &cyqlone::qpalm::CyqloneBackendSettings::strategy);
     py::class_<cyqlone::qpalm::Settings>(m, "Settings")
         .def(py::init())
         .def("__copy__", [](const cyqlone::qpalm::Settings &self) { return self; })
@@ -494,7 +503,20 @@ void register_qpalm_solver(py::module_ &m, const char *name) {
                                })
         .def_property_readonly(
             "stats", py::cpp_function([](Solver &self) -> auto & { return self.solver.stats; },
-                                      py::return_value_policy::reference_internal));
+                                      py::return_value_policy::reference_internal))
+        .def("warm_start_solution", [](Solver &self) { return self.solver.warm_start_solution(); })
+        .def("update_data",
+             [](Solver &self, const PythonOCP &ocp) {
+                 BATMAT_ASSERT(self.solver.backend);
+                 return update_qpalm_cyqlone_backend(*self.solver.backend, ocp.ocp, ocp.qr,
+                                                     ocp.rhs_eq, ocp.rhs_lb, ocp.rhs_ub);
+             })
+        .def("set_b_eq",
+             [](Solver &self, crvec b_eq) { return self.solver.set_b_eq(guanaqo::as_span(b_eq)); })
+        .def("set_b_lb",
+             [](Solver &self, crvec b_lb) { return self.solver.set_b_lb(guanaqo::as_span(b_lb)); })
+        .def("set_b_ub",
+             [](Solver &self, crvec b_ub) { return self.solver.set_b_ub(guanaqo::as_span(b_ub)); });
 }
 
 template <index_t VL>

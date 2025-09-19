@@ -34,6 +34,7 @@ struct CyqloneStorage {
     using value_type = T;
     index_t N_horiz;
     index_t nx, nu, ny, ny_0, ny_N;
+    std::vector<bool> Ju0;
     /// Storage layout:         size                 offset
     ///     N × [ R  S ] = H    (nu+nx)²             0
     ///         [ Sᵀ Q ]
@@ -59,12 +60,19 @@ struct CyqloneStorage {
     matrix data_ub0N = [this] { return matrix{{.depth = 1, .rows = ny_0 + ny_N, .cols = 1}}; }();
     std::vector<index_t> indices_G0 = std::vector<index_t>(ny_0);
 
+    void update_impl(const LinearOCPStorage &ocp, std::span<const value_type> qr,
+                     std::span<const value_type> b_eq, std::span<const value_type> b_lb,
+                     std::span<const value_type> b_ub);
+    void update(const LinearOCPStorage &ocp, std::span<const value_type> qr,
+                std::span<const value_type> b_eq, std::span<const value_type> b_lb,
+                std::span<const value_type> b_ub);
     static CyqloneStorage build(const LinearOCPStorage &ocp, std::span<const value_type> qr,
                                 std::span<const value_type> b_eq, std::span<const value_type> b_lb,
-                                std::span<const value_type> b_ub);
+                                std::span<const value_type> b_ub, index_t ny_0 = -1);
     static void reconstruct_ineq_multipliers(const LinearOCPStorage &ocp,
                                              std::span<const value_type> y_compressed,
                                              std::span<value_type> y);
+    static index_t count_constr_0(const LinearOCPStorage &ocp, std::vector<bool> &Ju0);
 };
 
 } // namespace cyqlone

@@ -474,6 +474,23 @@ std::vector<real_t> Solver<Backend>::get_inequality_constraints() const {
     get_inequality_constraints(x);
     return x;
 }
+template <class Backend>
+void Solver<Backend>::warm_start_solution() {
+    assert(impl);
+    backend->warm_start(impl->x, impl->y, impl->λ);
+}
+template <class Backend>
+void Solver<Backend>::set_b_eq(std::span<const real_t> b_eq) {
+    backend->set_b_eq(b_eq);
+}
+template <class Backend>
+void Solver<Backend>::set_b_lb(std::span<const real_t> b_lb) {
+    backend->set_b_lb(b_lb);
+}
+template <class Backend>
+void Solver<Backend>::set_b_ub(std::span<const real_t> b_ub) {
+    backend->set_b_ub(b_ub);
+}
 // template <class Backend>
 // void Solver<Backend>::get_penalty_factors(std::span<real_t>) const {
 //     backend->unscale(...);

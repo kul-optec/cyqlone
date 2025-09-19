@@ -101,6 +101,10 @@ class Solver {
     [[nodiscard]] std::vector<real_t> get_inequality_constraints() const;
     void get_penalty_factors(std::span<real_t>) const;
     [[nodiscard]] std::vector<real_t> get_penalty_factors() const;
+    void warm_start_solution();
+    void set_b_eq(std::span<const real_t> b_eq);
+    void set_b_lb(std::span<const real_t> b_lb);
+    void set_b_ub(std::span<const real_t> b_ub);
 
     void stop() { stop_signal.stop(); }
 

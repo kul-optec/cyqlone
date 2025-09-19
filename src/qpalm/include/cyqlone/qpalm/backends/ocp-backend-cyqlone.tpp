@@ -91,6 +91,64 @@ struct CyqloneBackend {
             ocp_timings = std::make_unique<typename OCP_t::Timings>();
     }
 
+    void update_data(const CyqloneStorage<> &ocp) {
+        this->ocp.update_data(ocp);
+        this->ocp.initialize_rhs(ocp, b_eq_strided);
+        this->ocp.initialize_gradient(ocp, grad_strided);
+        this->ocp.initialize_bounds(ocp, b_min_strided, b_max_strided);
+    }
+
+    void set_b_eq(std::span<const real_t> b_eq) {
+        this->ocp.pack_dynamics(b_eq, b_eq_strided.view());
+    }
+    void set_b_lb(std::span<const real_t> b_lb) {
+        this->ocp.pack_constraints(b_lb, b_min_strided.view());
+    }
+    void set_b_ub(std::span<const real_t> b_ub) {
+        this->ocp.pack_constraints(b_ub, b_max_strided.view());
+    }
+
+    void warm_start(const var_vec_t &x, const ineq_constr_vec_t &y, const eq_constr_vec_t &λ) {
+        switch (settings.strategy) {
+            case WarmStartingStrategy::Zeros:
+                this->x0.reset();
+                this->λ0.reset();
+                this->y0.reset();
+                break;
+            case WarmStartingStrategy::Copy:
+                this->x0 = x;
+                this->λ0 = λ;
+                this->y0 = y;
+                break;
+            case WarmStartingStrategy::Shift: {
+                auto &x0 = this->x0.emplace(var_vec());         // TODO: zero init is redundant
+                auto &λ0 = this->λ0.emplace(eq_constr_vec());   // TODO: zero init is redundant
+                auto &y0 = this->y0.emplace(ineq_constr_vec()); // TODO: zero init is redundant
+                for (index_t i = 1; i < x0.depth(); ++i)        // TODO: vectorize?
+                    x0(i - 1) = x(i);
+                x0(x0.depth() - 1) = x(x0.depth() - 1);
+                for (index_t i = 1; i < y0.depth(); ++i) // TODO: vectorize?
+                    y0(i - 1) = y(i);
+                y0(y0.depth() - 1) = y(y0.depth() - 1);
+                for (index_t i = 1; i < λ0.depth(); ++i) // TODO: vectorize?
+                    λ0(i - 1) = λ(i);
+                λ0(λ0.depth() - 1) = λ(λ0.depth() - 1);
+            } break;
+            case WarmStartingStrategy::ShiftNoInequality: {
+                auto &x0 = this->x0.emplace(var_vec());       // TODO: zero init is redundant
+                auto &λ0 = this->λ0.emplace(eq_constr_vec()); // TODO: zero init is redundant
+                auto &y0 = this->y0.emplace(y);
+                for (index_t i = 1; i < x0.depth(); ++i) // TODO: vectorize?
+                    x0(i - 1) = x(i);
+                x0(x0.depth() - 1) = x(x0.depth() - 1);
+                for (index_t i = 1; i < λ0.depth(); ++i) // TODO: vectorize?
+                    λ0(i - 1) = λ(i);
+                λ0(λ0.depth() - 1) = λ(λ0.depth() - 1);
+            } break;
+            default: BATMAT_ASSERT(false);
+        }
+    }
+
     void reset() {
         num_updates         = 0;
         reset_factorization = true;
@@ -532,6 +590,19 @@ template <index_t VL>
 unique_CyqloneBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<> &ocp, CyqloneData data,
                                                      const CyqloneBackendSettings &settings) {
     return {std::make_unique<CyqloneBackend<VL>>(ocp, data, settings)};
+}
+
+template <index_t VL>
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const CyqloneStorage<real_t> &ocp) {
+    backend.update_data(ocp);
+}
+
+template <index_t VL>
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp,
+                                  std::span<const real_t> qr, std::span<const real_t> b_eq,
+                                  std::span<const real_t> b_lb, std::span<const real_t> b_ub) {
+    const auto cocp = cyqlone::CyqloneStorage<>::build(ocp, qr, b_eq, b_lb, b_ub, backend.ocp.ny_0);
+    update_qpalm_cyqlone_backend(backend, cocp);
 }
 
 } // namespace cyqlone::qpalm

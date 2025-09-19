@@ -21,41 +21,51 @@ CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp,
         .ny_N    = ocp.ny_N,
         .lP      = lP,
     };
-    const auto vstride       = res.ceil_N >> lvl;
-    const index_t num_stages = res.ceil_N >> lP; // number of stages per thread
+    res.update_data(ocp);
+    return res;
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::update_data(const CyqloneStorage<value_type> &ocp) {
+    BATMAT_ASSERT(ocp.N_horiz == N_horiz);
+    BATMAT_ASSERT(ocp.nx == nx);
+    BATMAT_ASSERT(ocp.nu == nu);
+    BATMAT_ASSERT(ocp.ny == ny);
+    BATMAT_ASSERT(ocp.ny_0 == ny_0);
+    BATMAT_ASSERT(ocp.ny_N == ny_N);
+    const auto vstride       = ceil_N >> lvl;
+    const index_t num_stages = ceil_N >> lP; // number of stages per thread
     for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
         const index_t k0  = ti * num_stages;
         const index_t di0 = ti * num_stages;
         for (index_t i = 0; i < num_stages; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k = res.sub_wrap_N(k0 + vi * vstride, i);
-                if (k < res.N_horiz) {
-                    detail::copy(ocp.data_F(k), res.data_BA.batch(di)(vi));
-                    detail::copy(ocp.data_H(k), res.data_RSQ.batch(di)(vi));
-                    if (k == 0) {
+                auto k = sub_wrap_N(k0 + vi * vstride, i);
+                if (k < N_horiz) {
+                    detail::copy(ocp.data_F(k), data_BA.batch(di)(vi));
+                    detail::copy(ocp.data_H(k), data_RSQ.batch(di)(vi));
+                    if (k == 0)
                         detail::copy(ocp.data_G0N(0).transposed(),
-                                     res.data_DCᵀ.batch(di)(vi).left_cols(res.ny_0 + res.ny_N));
-                    } else {
+                                     data_DCᵀ.batch(di)(vi).left_cols(ny_0 + ny_N));
+                    else
                         detail::copy(ocp.data_G(k - 1).transposed(),
-                                     res.data_DCᵀ.batch(di)(vi).left_cols(res.ny));
-                    }
+                                     data_DCᵀ.batch(di)(vi).left_cols(ny));
                 } else {
                     using std::pow;
                     const auto ε = pow(std::numeric_limits<value_type>::min(), value_type(0.25));
-                    res.data_RSQ.batch(di)(vi).top_left(res.nu, res.nu).add_to_diagonal(1);
-                    res.data_RSQ.batch(di)(vi).bottom_right(res.nx, res.nx).add_to_diagonal(ε);
-                    res.data_BA.batch(di)(vi).right_cols(res.nx).add_to_diagonal(1);
+                    data_RSQ.batch(di)(vi).top_left(nu, nu).add_to_diagonal(1);
+                    data_RSQ.batch(di)(vi).bottom_right(nx, nx).add_to_diagonal(ε);
+                    data_BA.batch(di)(vi).right_cols(nx).add_to_diagonal(1);
                 }
             }
         }
     }
-    return res;
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<value_type> &ocp,
-                                                          mut_view<> rhs) const {
+                                                        mut_view<> rhs) const {
     BATMAT_ASSERT(rhs.depth() == ceil_N);
     BATMAT_ASSERT(rhs.rows() == nx);
     BATMAT_ASSERT(rhs.cols() == 1);
@@ -80,8 +90,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<val
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(
-    const CyqloneStorage<value_type> &ocp, mut_view<> grad) const {
+void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(const CyqloneStorage<value_type> &ocp,
+                                                             mut_view<> grad) const {
     BATMAT_ASSERT(grad.depth() == ceil_N);
     BATMAT_ASSERT(grad.rows() == nu + nx);
     BATMAT_ASSERT(grad.cols() == 1);
@@ -105,8 +115,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(
-    const CyqloneStorage<value_type> &ocp, mut_view<> b_min, mut_view<> b_max) const {
+void CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(const CyqloneStorage<value_type> &ocp,
+                                                           mut_view<> b_min,
+                                                           mut_view<> b_max) const {
     const index_t nyM = std::max(ny, ny_0 + ny_N);
     BATMAT_ASSERT(b_min.depth() == ceil_N);
     BATMAT_ASSERT(b_min.rows() == nyM);
@@ -146,7 +157,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::pack_variables(std::span<const value_type> ux_lin,
-                                                          mut_view<> ux) const {
+                                                        mut_view<> ux) const {
     const index_t nux = nu + nx;
     BATMAT_ASSERT(static_cast<index_t>(ux_lin.size()) == nux * N_horiz);
     BATMAT_ASSERT(ux.depth() == ceil_N);
@@ -180,7 +191,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_variables(std::span<const value_ty
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::unpack_variables(view<> ux,
-                                                            std::span<value_type> ux_lin) const {
+                                                          std::span<value_type> ux_lin) const {
     const index_t nux = nu + nx;
     BATMAT_ASSERT(static_cast<index_t>(ux_lin.size()) == nux * N_horiz);
     BATMAT_ASSERT(ux.depth() == ceil_N);
@@ -212,7 +223,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_variables(view<> ux,
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::pack_dynamics(std::span<const value_type> λ_lin,
-                                                         mut_view<> λ) const {
+                                                       mut_view<> λ) const {
     const index_t nλ = nx;
     BATMAT_ASSERT(static_cast<index_t>(λ_lin.size()) == nλ * N_horiz);
     BATMAT_ASSERT(λ.depth() == ceil_N);
@@ -240,7 +251,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_dynamics(std::span<const value_typ
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::unpack_dynamics(view<> λ,
-                                                           std::span<value_type> λ_lin) const {
+                                                         std::span<value_type> λ_lin) const {
     const index_t nλ = nx;
     BATMAT_ASSERT(static_cast<index_t>(λ_lin.size()) == nλ * N_horiz);
     BATMAT_ASSERT(λ.depth() == ceil_N);
@@ -266,7 +277,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_dynamics(view<> λ,
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::pack_constraints(std::span<const value_type> y_lin,
-                                                            mut_view<> y, value_type fill) const {
+                                                          mut_view<> y, value_type fill) const {
     BATMAT_ASSERT(static_cast<index_t>(y_lin.size()) == ny * (N_horiz - 1) + ny_0 + ny_N);
     BATMAT_ASSERT(y.depth() == ceil_N);
     BATMAT_ASSERT(y.rows() == std::max(ny, ny_0 + ny_N));
@@ -302,7 +313,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_constraints(std::span<const value_
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y,
-                                                              std::span<value_type> y_lin) const {
+                                                            std::span<value_type> y_lin) const {
     BATMAT_ASSERT(static_cast<index_t>(y_lin.size()) == ny * (N_horiz - 1) + ny_0 + ny_N);
     BATMAT_ASSERT(y.depth() == ceil_N);
     BATMAT_ASSERT(y.rows() == std::max(ny, ny_0 + ny_N));

@@ -232,6 +232,7 @@ struct CyqloneSolver {
     /// Since ocp.D(0) and ocp.C(N) will be merged, the top ny₀ rows of ocp.C(N)
     /// should be zero.
     static CyqloneSolver build(const CyqloneStorage<value_type> &ocp, index_t lP);
+    void update_data(const CyqloneStorage<value_type> &ocp);
     void initialize_rhs(const CyqloneStorage<value_type> &ocp, mut_view<> rhs) const;
     void initialize_gradient(const CyqloneStorage<value_type> &ocp, mut_view<> grad) const;
     void initialize_bounds(const CyqloneStorage<value_type> &ocp, mut_view<> b_min,
