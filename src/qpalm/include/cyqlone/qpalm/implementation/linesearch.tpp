@@ -109,53 +109,13 @@ struct LineSearch {
     partition_breakpoints(std::span<Breakpoint> breakpoints);
     std::vector<Breakpoint> breakpoints;
 
-    std::pair<NSum, NSum> partial_sum_negative(real_t η, real_t β,
-                                               std::span<const Breakpoint> pos_bp,
-                                               std::span<const Breakpoint> neg_bp);
-
+    static std::pair<NSum, NSum> partial_sum_negative(real_t η, real_t β,
+                                                      std::span<const Breakpoint> pos_bp,
+                                                      std::span<const Breakpoint> neg_bp);
     static std::pair<real_t, size_t> find_stepsize_base(NSum a, NSum b, size_t i0,
-                                                        std::span<Breakpoint> pos_bp) {
-        using std::abs;
-        // Order all breakpoints by increasing ti
-        sort(pos_bp, [](Breakpoint b) { return b.t; });
-        // Find the first i for which ψʹ(t[i]) ≥ 0
-        for (size_t i = 0; i < pos_bp.size(); ++i) {
-            if (real_t ψʹ = pos_bp[i].t * a + b; ψʹ >= 0)
-                return {-b / a, i0 + i}; // linear interpolation
-            // Recursive update formula for a_j and b_j (see notes)
-            a += pos_bp[i].δ * abs(pos_bp[i].δ);
-            b -= pos_bp[i].α() * abs(pos_bp[i].δ);
-        }
-        // No positive entries, or solution lies above all breakpoints
-        return {-b / a, i0 + pos_bp.size()}; // extrapolate
-    }
-
+                                                        std::span<Breakpoint> pos_bp);
     static std::pair<real_t, size_t> find_stepsize(NSum a, NSum b, size_t i0,
-                                                   std::span<Breakpoint> pos_bp) {
-        using std::abs;
-        BATMAT_ASSERT(!pos_bp.empty());
-        if (pos_bp.size() < 8)
-            return find_stepsize_base(a, b, i0, pos_bp);
-        const auto i_mid = pos_bp.size() / 8;
-        const auto mid   = std::ranges::next(pos_bp.begin(), static_cast<std::ptrdiff_t>(i_mid));
-        std::ranges::nth_element(pos_bp, mid, std::less<>(), &Breakpoint::t);
-        // Note: both halves contain mid
-        auto left = pos_bp.first(i_mid + 1), right = pos_bp.subspan(i_mid);
-
-        // Recursive update formula for a_j and b_j (see notes)
-        NSum a_mid = a, b_mid = b;
-        for (auto bp : left.first(i_mid)) {
-            a_mid += bp.δ * abs(bp.δ);
-            b_mid -= bp.α() * abs(bp.δ);
-        }
-        // Check dir deriv at mid
-        const real_t ψʹ_mid = mid->t * a_mid + b_mid;
-        if (ψʹ_mid >= 0) { // zero crossing lies in the left half
-            return find_stepsize(a, b, i0, left);
-        } else { // zero crossing lies in the right half
-            return find_stepsize(a_mid, b_mid, i0 + i_mid, right);
-        }
-    }
+                                                   std::span<Breakpoint> pos_bp);
 
     template <class R, class F>
     static void sort(R &&range, F key) {
@@ -166,6 +126,13 @@ struct LineSearch {
         std::sort(std::ranges::begin(range), std::ranges::end(range),
                   [&](auto a, auto b) { return key(a) < key(b); });
 #endif
+    }
+
+    template <class R, class I, class F>
+    static void nth_element(R &&range, I mid, F key) {
+        GUANAQO_TRACE("nth_element", 0, std::ranges::ssize(range));
+        std::nth_element(std::ranges::begin(range), mid, std::ranges::end(range),
+                         [&](auto a, auto b) { return key(a) < key(b); });
     }
 };
 
@@ -186,6 +153,52 @@ std::pair<NSum, NSum> LineSearch<Vec>::partial_sum_negative(real_t η, real_t β
     NSum b_mins = std::transform_reduce(pos_bp.begin(), pos_bp.end(), NSum{}, std::plus{}, b_mins_);
     NSum b      = β - b_plus - b_mins;
     return {a, b};
+}
+
+template <class Vec>
+std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize_base(NSum a, NSum b, size_t i0,
+                                                              std::span<Breakpoint> pos_bp) {
+    using std::abs;
+    // Order all breakpoints by increasing ti
+    sort(pos_bp, [](Breakpoint b) { return b.t; });
+    // Find the first i for which ψʹ(t[i]) ≥ 0
+    for (size_t i = 0; i < pos_bp.size(); ++i) {
+        if (real_t ψʹ = pos_bp[i].t * a + b; ψʹ >= 0)
+            return {-b / a, i0 + i}; // linear interpolation
+        // Recursive update formula for a_j and b_j (see notes)
+        a += pos_bp[i].δ * abs(pos_bp[i].δ);
+        b -= pos_bp[i].α() * abs(pos_bp[i].δ);
+    }
+    // No positive entries, or solution lies above all breakpoints
+    return {-b / a, i0 + pos_bp.size()}; // extrapolate
+}
+
+template <class Vec>
+std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(NSum a, NSum b, size_t i0,
+                                                         std::span<Breakpoint> pos_bp) {
+    using std::abs;
+    BATMAT_ASSERT(!pos_bp.empty());
+    if (pos_bp.size() < 8)
+        return find_stepsize_base(a, b, i0, pos_bp);
+    const auto i_mid = pos_bp.size() / 8;
+    BATMAT_ASSERT(i_mid < pos_bp.size());
+    const auto mid = std::ranges::next(pos_bp.begin(), static_cast<std::ptrdiff_t>(i_mid));
+    nth_element(pos_bp, mid, [](Breakpoint b) { return b.t; });
+    auto left = pos_bp.first(i_mid + 1), right = pos_bp.subspan(i_mid); // Both halves contain mid
+
+    // Recursive update formula for a_j and b_j (see notes)
+    NSum a_mid = a, b_mid = b;
+    for (auto bp : left.first(i_mid)) {
+        a_mid += bp.δ * abs(bp.δ);
+        b_mid -= bp.α() * abs(bp.δ);
+    }
+    // Check dir deriv at mid
+    const real_t ψʹ_mid = mid->t * a_mid + b_mid;
+    if (ψʹ_mid >= 0) { // zero crossing lies in the left half
+        return find_stepsize(a, b, i0, left);
+    } else { // zero crossing lies in the right half
+        return find_stepsize(a_mid, b_mid, i0 + i_mid, right);
+    }
 }
 
 /// Perform an exact line search on the augmented Lagrangian.
@@ -237,6 +250,8 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
     // Otherwise, skip the first breakpoint, and perform an actual search.
     a += pos_bp[0].δ * abs(pos_bp[0].δ);
     b -= pos_bp[0].α() * abs(pos_bp[0].δ);
+
+    GUANAQO_TRACE("find stepsize", 0);
     auto step_size = find_stepsize(a, b, 1, pos_bp.subspan(1));
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
     BATMAT_ASSERT(abs(step_size.first - step_size_debug.first) <
