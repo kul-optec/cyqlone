@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.24...4.1)
+set(CMAKE_CXX_SCAN_FOR_MODULES Off)
 project(cyqlone
     VERSION 0.0.1
     DESCRIPTION "Parallel solver for systems with optimal control structure."
