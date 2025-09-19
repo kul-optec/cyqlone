@@ -24,6 +24,8 @@ option(CYQLONE_WITH_BENCHMARKS
     "Build the benchmarks" Off)
 option(CYQLONE_WITH_PYTHON
     "Build the Python interface" Off)
+option(CYQLONE_WITH_SKA_SORT
+    "Use the radix sort implementation provided by skarupke/ska_sort" Off)
 # Developer options
 option(CYQLONE_WARNINGS_AS_ERRORS
     "Enable -Werror or /WX" Off)

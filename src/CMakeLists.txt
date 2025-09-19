@@ -52,6 +52,11 @@ if (CYQLONE_WITH_QPALM)
     )
     target_link_libraries(qpalm PUBLIC cyqlone::cyqlone)
     cyqlone_configure_library(qpalm EXPORT_PREFIX cyqlone)
+    if (CYQLONE_WITH_SKA_SORT)
+        find_package(ska-sort REQUIRED)
+        target_link_libraries(qpalm PUBLIC ska-sort::ska-sort)
+        target_compile_definitions(qpalm PUBLIC CYQLONE_WITH_SKA_SORT)
+    endif()
 
     # Example problems
     if (CYQLONE_WITH_EXAMPLE_PROBLEMS)

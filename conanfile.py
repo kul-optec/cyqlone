@@ -28,6 +28,7 @@ class CyqloneRecipe(ConanFile):
         "with_example_problems": True,
         "with_blasfeo": False,
         "with_python": False,
+        "with_ska_sort": False,
     }
     options = {
         "shared": [True, False],
@@ -77,6 +78,8 @@ class CyqloneRecipe(ConanFile):
             self.requires("blasfeo/0.1.4.1")
         if self.options.get_safe("with_general_qpalm"):
             self.requires("qpalm/1.2.6")
+        if self.options.get_safe("with_ska_sort"):
+            self.requires("ska-sort/tttapa.20250919")
         if self.options.get_safe("with_benchmarks"):
             self.requires("benchmark/1.9.4")
             self.requires("hyhound/1.0.1")
