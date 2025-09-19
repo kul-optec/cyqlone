@@ -377,12 +377,11 @@ struct CyqloneBackend {
                     const auto s   = sqrt(Σi);
                     const auto δ2 = s * Adi, δ1 = -δ2;
                     const auto α1 = (yi + Σi * (Axi - li)) / s, α2 = (Σi * (ui - Axi) - yi) / s;
-                    const auto t1 = α1 / δ1, t2 = α2 / δ2;
                     BATMAT_FULLY_UNROLLED_FOR (index_t v = 0; v < VL; ++v) {
                         const index_t l = (di * ny_M + r) * VL + v;
                         BATMAT_ASSUME(l < m);
-                        breakpoints[l]     = {.t = t1[v], .δ = δ1[v], .α = α1[v]};
-                        breakpoints[m + l] = {.t = t2[v], .δ = δ2[v], .α = α2[v]};
+                        breakpoints[l]     = {.δ = δ1[v], .α = α1[v]};
+                        breakpoints[m + l] = {.δ = δ2[v], .α = α2[v]};
                     }
                 }
             }

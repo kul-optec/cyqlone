@@ -10,14 +10,25 @@
 #include <span>
 #include <utility>
 #include <vector>
-#if KOQKATOO_QPALM_WITH_SKA_SORT // TODO
-#include <ska_sort.hpp>
-#endif
 
 namespace cyqlone::qpalm {
 
-struct alignas(4 * sizeof(real_t)) Breakpoint {
-    real_t t, δ, α;
+struct Breakpoint {
+    // t = α/δ   <=>   α = t δ
+    real_t δ, α;
+
+    [[gnu::always_inline]] friend bool operator<(Breakpoint b1, Breakpoint b2) {
+#if 0
+        // t1 < t2  <=>  α1 / δ1 < α2 / δ2
+        return b1.δ * b2.δ > 0 ? b1.α * b2.δ < b2.α * b1.δ  // same sign δ
+                               : b1.α * b2.δ > b2.α * b1.δ; // different sign δ
+#else
+        real_t L = b1.α * b2.δ;
+        real_t R = b2.α * b1.δ;
+        real_t P = b1.δ * b2.δ;
+        return ((P > 0) & (L < R)) | ((P < 0) & (L > R)); // NOLINT(*-implicit-bool-conversion)
+#endif
+    }
 };
 
 template <class Vec>
@@ -35,17 +46,6 @@ struct LineSearch {
     static std::array<std::span<Breakpoint>, 2>
     partition_breakpoints(std::span<Breakpoint> breakpoints);
     std::vector<Breakpoint> breakpoints;
-
-    template <class R, class F>
-    static void sort(R &&range, F key) {
-        GUANAQO_TRACE("sort", 0, std::ranges::ssize(range));
-#if KOQKATOO_QPALM_WITH_SKA_SORT
-        ska_sort(std::ranges::begin(range), std::ranges::end(range), key);
-#else
-        std::sort(std::ranges::begin(range), std::ranges::end(range),
-                  [&](auto a, auto b) { return key(a) < key(b); });
-#endif
-    }
 };
 
 /// Perform an exact line search on the augmented Lagrangian.
@@ -98,15 +98,15 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
     // Handle the common case first: if the smallest t already has ψʹ ≥ 0, then
     // there's no need to sort all breakpoints.
     if (pos_bp.size() > 0) {
-        if (real_t ψʹ = pos_bp[0].t * a + b; ψʹ >= 0)
+        if (real_t ψʹ = pos_bp[0].α / pos_bp[0].δ * a + b; ψʹ >= 0)
             return {-b / a, 0};
         // Otherwise, we should sort the breakpoints (although in theory we
         // don't have to sort all of them, in practice this is easier).
-        sort(pos_bp, [](Breakpoint b) { return b.t; });
+        std::ranges::sort(pos_bp, std::less<>());
     }
     // Find the first i for which ψʹ(t[i]) ≥ 0
     for (size_t i = 0; i < pos_bp.size(); ++i) {
-        if (real_t ψʹ = pos_bp[i].t * a + b; ψʹ >= 0)
+        if (real_t ψʹ = pos_bp[i].α / pos_bp[i].δ * a + b; ψʹ >= 0)
             return {i == 0 ? 1 : -b / a, i}; // linear interpolation
         // Recursive update formula for a_j and b_j (see notes)
         a += pos_bp[i].δ * abs(pos_bp[i].δ);
@@ -135,8 +135,6 @@ auto LineSearch<Vec>::compute_breakpoints(const vec_t &Σ, const vec_t &y, const
         breakpoints[i].δ     = -breakpoints[m + i].δ;
         breakpoints[i].α     = (yi + Σi * (Axi - li)) / sqrt(Σi);
         breakpoints[m + i].α = (Σi * (ui - Axi) - yi) / sqrt(Σi);
-        breakpoints[i].t     = breakpoints[i].α / breakpoints[i].δ;
-        breakpoints[m + i].t = breakpoints[m + i].α / breakpoints[m + i].δ;
     }
     return std::span{breakpoints};
 }
@@ -151,17 +149,16 @@ auto LineSearch<Vec>::partition_breakpoints(std::span<Breakpoint> breakpoints)
     GUANAQO_TRACE("linesearch partition", 0);
     using std::isfinite;
     // Move all infinite t[i] to the back
-    const auto get_t     = [](Breakpoint b) { return b.t; };
-    const auto is_finite = [](real_t t) { return isfinite(t); };
-    const auto infinite  = std::ranges::partition(breakpoints, is_finite, get_t);
+    const auto is_finite = [](Breakpoint b) { return isfinite(b.α + b.δ) && b.δ != 0; };
+    const auto infinite  = std::ranges::partition(breakpoints, is_finite);
     const auto finite    = breakpoints.first(breakpoints.size() - infinite.size());
     // Move all nonpositive t[i] to the front
-    const auto le_zero   = [](real_t t) { return t <= 0; };
-    const auto positive  = std::ranges::partition(finite, le_zero, get_t);
+    const auto le_zero   = [](Breakpoint b) { return b.α * b.δ <= 0; };
+    const auto positive  = std::ranges::partition(finite, le_zero);
     const auto first_pos = finite.size() - positive.size();
     // Find the smallest positive t[i] and move it to the beginning of positive
     if (positive.size() > 0) {
-        const auto smallest     = std::ranges::min_element(positive, {}, get_t);
+        const auto smallest     = std::ranges::min_element(positive, std::less<>());
         const auto first_pos_it = std::ranges::begin(positive);
         if (first_pos_it != smallest)
             std::ranges::iter_swap(first_pos_it, smallest);
