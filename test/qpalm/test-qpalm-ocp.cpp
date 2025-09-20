@@ -1,14 +1,17 @@
 #include <gtest/gtest.h>
 
+#include <batmat/loop.hpp>
 #include <experimental/simd>
 #include <guanaqo/io/csv.hpp>
 #include <guanaqo/print.hpp>
+#include <guanaqo/trace.hpp>
 #include <fstream>
 
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/example-problems/csv.hpp>
 #include <cyqlone/qpalm/example-problems/platooning.hpp>
 #include <cyqlone/qpalm/solver.hpp>
+#include <cyqlone-version.h>
 
 #include <cyqlone/cyqlone-storage.hpp>
 #include <cyqlone/qpalm/example-problems/conversion.hpp>
@@ -54,13 +57,32 @@ TEST(QPALM, cyqloneSpringsMasses) try {
     auto cocp      = cyqlone::CyqloneStorage<>::build(ocp.ocp, ocp.qr, ocp.rhs_eq, ocp.rhs_ineq_lb,
                                                       ocp.rhs_ineq_ub);
     auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
-        cocp, {}, {.log_processors = 2, .print_residuals = true, .pcg_print_resid = true});
+        cocp, {}, {.log_processors = 4, .print_residuals = true, .pcg_print_resid = true});
     qp::Solver<qp::CyqloneBackend<4> *> qpalm{
         backend.get(),
         {.max_outer_iter = 500, .max_total_inner_iter = 1000, .verbose = true},
     };
+
+#if GUANAQO_WITH_TRACING
+    for (index_t i = 0; i < 10; ++i)
+        qpalm(); // warm up
+    guanaqo::trace_logger.reset();
+    batmat::foreach_thread([](index_t i, index_t) { GUANAQO_TRACE("thread_id", i); });
+#endif
+
     auto status = qpalm();
     EXPECT_EQ(status, qp::SolverStatus::Converged);
+
+#if GUANAQO_WITH_TRACING
+    std::filesystem::path out_dir{"traces"};
+    out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
+    std::filesystem::path out_file = out_dir / "test-QPALM-cyqlone.csv";
+    std::filesystem::create_directories(out_dir);
+    std::ofstream csv{out_file};
+    guanaqo::TraceLogger::write_column_headings(csv) << '\n';
+    for (const auto &log : guanaqo::trace_logger.get_logs())
+        csv << log << '\n';
+#endif
 
     std::cout << "inner:   " << qpalm.stats->inner_iter << "\n"
               << "outer:   " << qpalm.stats->outer_iter << "\n"
