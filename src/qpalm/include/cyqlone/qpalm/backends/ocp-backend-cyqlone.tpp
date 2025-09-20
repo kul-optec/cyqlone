@@ -2,6 +2,7 @@
 
 #include <cyqlone/cyqlone.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
+#include <cyqlone/qpalm/implementation/breakpoint.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/linalg/copy.hpp>
 #include <batmat/linalg/simdify.hpp>
@@ -54,7 +55,8 @@ struct CyqloneBackend {
     std::optional<var_vec_t> x0;
     std::optional<ineq_constr_vec_t> y0;
     std::optional<eq_constr_vec_t> λ0;
-    std::vector<index_t> thread_indices;
+    std::vector<std::array<size_t, 4>> thread_indices;
+    std::vector<Breakpoint> breakpoints_temp;
 
     bool reset_factorization = true;
     index_t num_updates      = 0;
@@ -347,27 +349,46 @@ struct CyqloneBackend {
             reset_factorization = true;
     }
 
-    template <class Breakpoint>
+    template <class T, size_t N>
+    static void merge_chunk(std::span<const T> chunk, size_t chunk_index,
+                            std::span<const std::array<size_t, N>> separators, std::span<T> out) {
+        size_t num_chunks = separators.size();
+        BATMAT_ASSUME(chunk_index < num_chunks);
+        std::array<size_t, N> offsets{};
+        for (size_t i = 0; i < N; ++i)
+            for (size_t c = 0; c < chunk_index; ++c)
+                offsets[i] += separators[c][i];
+        for (size_t i = 0; i < N - 1; ++i)
+            for (size_t c = chunk_index; c < num_chunks; ++c)
+                offsets[i + 1] += separators[c][i];
+        std::copy(chunk.begin(), chunk.begin() + separators[chunk_index][0],
+                  out.begin() + offsets[0]);
+        for (size_t i = 1; i < N; ++i)
+            std::copy(chunk.begin() + separators[chunk_index][i - 1],
+                      chunk.begin() + separators[chunk_index][i], out.begin() + offsets[i]);
+    }
+
     std::span<Breakpoint>
     compute_breakpoints(std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
                         const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
                         const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
-                        const ineq_constr_vec_t &b_max) const {
+                        const ineq_constr_vec_t &b_max) {
         using std::isfinite;
         using std::sqrt;
         // Allocate memory
         const auto ny_M = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
         const auto m    = ocp.ceil_N * ny_M;
         breakpoints.resize(2 * m);
+        breakpoints_temp.resize(2 * m);
         // Parallelization and vectorization
         const index_t P          = 1 << (ocp.lP - ocp.lvl);
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
         using simd               = batmat::datapar::deduced_simd<real_t, VL>;
-        thread_indices.resize(3 * P);
+        thread_indices.resize(P);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
         batmat::foreach_thread(P, [&](index_t ti, index_t) {
             GUANAQO_TRACE("linesearch breakpoints cyqlone", 0);
-            Breakpoint *const l_fin_0 = breakpoints.data() + 2 * ti * num_stages * ny_M * VL;
+            Breakpoint *const l_fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
             Breakpoint *const l_inf_0 = l_fin_0 + 2 * num_stages * ny_M * VL;
             Breakpoint *l_fin = l_fin_0, *l_inf = l_inf_0;
             for (index_t i = 0; i < num_stages; ++i) {
@@ -393,10 +414,13 @@ struct CyqloneBackend {
             // later on in the line search because of branch prediction.
             auto pos   = std::partition(l_fin_0, l_fin, [](Breakpoint b) { return b.t <= 0; });
             auto large = std::partition(pos, l_fin, [](Breakpoint b) { return b.t <= 1; });
-            // std::sort(pos, large, [](Breakpoint b1, Breakpoint b2) { return b1.t < b2.t; }); // TODO
-            thread_indices[ti]         = pos - l_fin_0;
-            thread_indices[ti + P]     = large - l_fin_0;
-            thread_indices[ti + 2 * P] = l_fin - l_fin_0;
+            thread_indices[ti][0] = pos - l_fin_0;
+            thread_indices[ti][1] = large - l_fin_0;
+            thread_indices[ti][2] = l_fin - l_fin_0;
+            thread_indices[ti][3] = l_inf_0 - l_fin_0;
+            ocp.barrier();
+            merge_chunk<Breakpoint, 4>(std::span{l_fin_0, l_inf_0}, ti, std::span{thread_indices},
+                                       std::span{breakpoints});
         });
         return std::span{breakpoints};
     }
