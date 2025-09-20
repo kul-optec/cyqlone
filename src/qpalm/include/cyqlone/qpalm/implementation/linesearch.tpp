@@ -114,8 +114,8 @@ struct LineSearch {
                                                       std::span<const Breakpoint> neg_bp);
     static std::pair<real_t, size_t> find_stepsize_base(NSum a, NSum b, size_t i0,
                                                         std::span<Breakpoint> pos_bp);
-    static std::pair<real_t, size_t> find_stepsize(NSum a, NSum b, size_t i0,
-                                                   std::span<Breakpoint> pos_bp);
+    static std::pair<real_t, size_t>
+    find_stepsize(NSum a, NSum b, size_t i0, std::span<Breakpoint> pos_bp, bool partition_1 = true);
 
     template <class R, class F>
     static void sort(R &&range, F key) {
@@ -133,6 +133,18 @@ struct LineSearch {
         GUANAQO_TRACE("nth_element", 0, std::ranges::ssize(range));
         std::nth_element(std::ranges::begin(range), mid, std::ranges::end(range),
                          [&](auto a, auto b) { return key(a) < key(b); });
+    }
+
+    template <class R, class F>
+    static decltype(auto) partition(R &&range, F key) {
+        GUANAQO_TRACE("partition", 0, std::ranges::ssize(range));
+        return std::ranges::partition(range, key);
+    }
+
+    template <class R, class F>
+    static decltype(auto) min_element(R &&range, F key) {
+        GUANAQO_TRACE("min_element", 0, std::ranges::ssize(range));
+        return std::ranges::min_element(range, {}, key);
     }
 };
 
@@ -175,15 +187,24 @@ std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize_base(NSum a, NSum b, si
 
 template <class Vec>
 std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(NSum a, NSum b, size_t i0,
-                                                         std::span<Breakpoint> pos_bp) {
+                                                         std::span<Breakpoint> pos_bp,
+                                                         bool partition_1) {
     using std::abs;
     BATMAT_ASSERT(!pos_bp.empty());
     if (pos_bp.size() < 8)
         return find_stepsize_base(a, b, i0, pos_bp);
-    const auto i_mid = pos_bp.size() / 8;
-    BATMAT_ASSERT(i_mid < pos_bp.size());
-    const auto mid = std::ranges::next(pos_bp.begin(), static_cast<std::ptrdiff_t>(i_mid));
-    nth_element(pos_bp, mid, [](Breakpoint b) { return b.t; });
+    const auto [i_mid, mid] = [&] {
+        if (partition_1) {
+            auto mid = std::ranges::begin(partition(pos_bp, [](Breakpoint b) { return b.t <= 1; }));
+            auto i_mid = static_cast<std::size_t>(mid - std::ranges::begin(pos_bp));
+            return std::make_pair(i_mid, mid);
+        } else {
+            auto i_mid = pos_bp.size() / 4;
+            auto mid   = std::ranges::next(pos_bp.begin(), static_cast<std::ptrdiff_t>(i_mid));
+            nth_element(pos_bp, mid, [](Breakpoint b) { return b.t; });
+            return std::make_pair(i_mid, mid);
+        }
+    }();
     auto left = pos_bp.first(i_mid + 1), right = pos_bp.subspan(i_mid); // Both halves contain mid
 
     // Recursive update formula for a_j and b_j (see notes)
@@ -195,9 +216,9 @@ std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(NSum a, NSum b, size_t 
     // Check dir deriv at mid
     const real_t ψʹ_mid = mid->t * a_mid + b_mid;
     if (ψʹ_mid >= 0) { // zero crossing lies in the left half
-        return find_stepsize(a, b, i0, left);
+        return find_stepsize(a, b, i0, left, false);
     } else { // zero crossing lies in the right half
-        return find_stepsize(a_mid, b_mid, i0 + i_mid, right);
+        return find_stepsize(a_mid, b_mid, i0 + i_mid, right, false);
     }
 }
 
@@ -251,7 +272,7 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
     a += pos_bp[0].δ * abs(pos_bp[0].δ);
     b -= pos_bp[0].α() * abs(pos_bp[0].δ);
 
-    GUANAQO_TRACE("find stepsize", 0);
+    GUANAQO_TRACE("linesearch find stepsize", 0);
     auto step_size = find_stepsize(a, b, 1, pos_bp.subspan(1));
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
     BATMAT_ASSERT(abs(step_size.first - step_size_debug.first) <
@@ -296,16 +317,15 @@ auto LineSearch<Vec>::partition_breakpoints(std::span<Breakpoint> breakpoints)
     using std::isfinite;
     // Move all infinite t[i] to the back
     const auto is_finite = [](Breakpoint b) { return isfinite(b.t); };
-    const auto infinite  = std::ranges::partition(breakpoints, is_finite);
+    const auto infinite  = partition(breakpoints, is_finite);
     const auto finite    = breakpoints.first(breakpoints.size() - infinite.size());
     // Move all nonpositive t[i] to the front
     const auto le_zero   = [](Breakpoint b) { return b.t <= 0; };
-    const auto positive  = std::ranges::partition(finite, le_zero);
+    const auto positive  = partition(finite, le_zero);
     const auto first_pos = finite.size() - positive.size();
     // Find the smallest positive t[i] and move it to the beginning of positive
     if (positive.size() > 0) {
-        const auto get_t        = [](Breakpoint b) { return b.t; };
-        const auto smallest     = std::ranges::min_element(positive, {}, get_t);
+        const auto smallest     = min_element(positive, [](Breakpoint b) { return b.t; });
         const auto first_pos_it = std::ranges::begin(positive);
         if (first_pos_it != smallest)
             std::ranges::iter_swap(first_pos_it, smallest);

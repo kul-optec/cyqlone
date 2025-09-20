@@ -54,6 +54,7 @@ struct CyqloneBackend {
     std::optional<var_vec_t> x0;
     std::optional<ineq_constr_vec_t> y0;
     std::optional<eq_constr_vec_t> λ0;
+    std::vector<index_t> thread_indices;
 
     bool reset_factorization = true;
     index_t num_updates      = 0;
@@ -352,7 +353,7 @@ struct CyqloneBackend {
                         const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
                         const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
                         const ineq_constr_vec_t &b_max) const {
-        GUANAQO_TRACE("linesearch breakpoints cyqlone", 0);
+        using std::isfinite;
         using std::sqrt;
         // Allocate memory
         const auto ny_M = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
@@ -362,11 +363,15 @@ struct CyqloneBackend {
         const index_t P          = 1 << (ocp.lP - ocp.lvl);
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
         using simd               = batmat::datapar::deduced_simd<real_t, VL>;
+        thread_indices.resize(3 * P);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
         batmat::foreach_thread(P, [&](index_t ti, index_t) {
-            const index_t di0 = ti * num_stages;
+            GUANAQO_TRACE("linesearch breakpoints cyqlone", 0);
+            Breakpoint *const l_fin_0 = breakpoints.data() + 2 * ti * num_stages * ny_M * VL;
+            Breakpoint *const l_inf_0 = l_fin_0 + 2 * num_stages * ny_M * VL;
+            Breakpoint *l_fin = l_fin_0, *l_inf = l_inf_0;
             for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = di0 + i;
+                const index_t di = ti * num_stages + i;
                 for (index_t r = 0; r < ny_M; ++r) {
                     const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
                                yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
@@ -379,13 +384,19 @@ struct CyqloneBackend {
                     const auto α1 = (yi + Σi * (Axi - li)) / s, α2 = (Σi * (ui - Axi) - yi) / s;
                     const auto t1 = α1 / δ1, t2 = α2 / δ2;
                     BATMAT_FULLY_UNROLLED_FOR (index_t v = 0; v < VL; ++v) {
-                        const index_t l = (di * ny_M + r) * VL + v;
-                        BATMAT_ASSUME(l < m);
-                        breakpoints[l]     = {.t = t1[v], .δ = δ1[v]};
-                        breakpoints[m + l] = {.t = t2[v], .δ = δ2[v]};
+                        *(isfinite(t1[v]) ? l_fin++ : --l_inf) = {.t = t1[v], .δ = δ1[v]};
+                        *(isfinite(t2[v]) ? l_fin++ : --l_inf) = {.t = t2[v], .δ = δ2[v]};
                     }
                 }
             }
+            // Partitioning the chunk of each thread separately improves partitioning performance
+            // later on in the line search because of branch prediction.
+            auto pos   = std::partition(l_fin_0, l_fin, [](Breakpoint b) { return b.t <= 0; });
+            auto large = std::partition(pos, l_fin, [](Breakpoint b) { return b.t <= 1; });
+            // std::sort(pos, large, [](Breakpoint b1, Breakpoint b2) { return b1.t < b2.t; }); // TODO
+            thread_indices[ti]         = pos - l_fin_0;
+            thread_indices[ti + P]     = large - l_fin_0;
+            thread_indices[ti + 2 * P] = l_fin - l_fin_0;
         });
         return std::span{breakpoints};
     }
