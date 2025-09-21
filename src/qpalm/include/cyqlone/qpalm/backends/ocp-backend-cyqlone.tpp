@@ -353,6 +353,7 @@ struct CyqloneBackend {
     template <class T, size_t N>
     void merge_chunk(std::span<const T> chunk, size_t chunk_index,
                      std::span<const std::array<size_t, N>> separators, std::span<T> out) {
+        GUANAQO_TRACE("merge_chunk", 0, chunk.size());
         size_t num_chunks = separators.size();
         BATMAT_ASSUME(chunk_index < num_chunks);
         std::array<size_t, N> offsets{};
@@ -369,7 +370,7 @@ struct CyqloneBackend {
                       chunk.begin() + separators[chunk_index][i], out.begin() + offsets[i]);
     }
 
-    PartitionedBreakpoints
+    BreakpointsResult
     compute_partition_breakpoints(std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
                                   const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
                                   const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
@@ -387,13 +388,15 @@ struct CyqloneBackend {
         thread_indices.resize(P);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
         std::span<Breakpoint> neg_bp, pos_bp;
+        std::atomic<real_t> a{}, b{};
         batmat::foreach_thread(P, [&](index_t ti, index_t) {
-            GUANAQO_TRACE("linesearch breakpoints cyqlone", 0);
-            Breakpoint *const l_fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
-            Breakpoint *const l_inf_0 = l_fin_0 + 2 * num_stages * ny_M * VL;
-            Breakpoint *l_fin = l_fin_0, *l_inf = l_inf_0;
+            Breakpoint *const fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
+            Breakpoint *const inf_0 = fin_0 + 2 * num_stages * ny_M * VL;
+            Breakpoint *fin = fin_0, *inf = inf_0;
+            const index_t di0 = ti * num_stages;
             for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
+                const index_t di = di0 + i;
+                GUANAQO_TRACE("linesearch breakpoints cyqlone", di);
                 for (index_t r = 0; r < ny_M; ++r) {
                     const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
                                yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
@@ -406,21 +409,34 @@ struct CyqloneBackend {
                     const auto α1 = (yi + Σi * (Axi - li)) / s, α2 = (Σi * (ui - Axi) - yi) / s;
                     const auto t1 = α1 / δ1, t2 = α2 / δ2;
                     BATMAT_FULLY_UNROLLED_FOR (index_t v = 0; v < VL; ++v) {
-                        *(isfinite(t1[v]) ? l_fin++ : --l_inf) = {.t = t1[v], .δ = δ1[v]};
-                        *(isfinite(t2[v]) ? l_fin++ : --l_inf) = {.t = t2[v], .δ = δ2[v]};
+                        *(isfinite(t1[v]) ? fin++ : --inf) = {.t = t1[v], .δ = δ1[v]};
+                        *(isfinite(t2[v]) ? fin++ : --inf) = {.t = t2[v], .δ = δ2[v]};
                     }
                 }
             }
             // Partitioning the chunk of each thread separately improves partitioning performance
             // later on in the line search because of branch prediction.
-            auto pos   = std::partition(l_fin_0, l_fin, [](Breakpoint b) { return b.t <= 0; });
-            auto large = std::partition(pos, l_fin, [](Breakpoint b) { return b.t <= 1; });
-            thread_indices[ti][0] = pos - l_fin_0;
-            thread_indices[ti][1] = large - l_fin_0;
-            thread_indices[ti][2] = l_fin - l_fin_0;
-            thread_indices[ti][3] = l_inf_0 - l_fin_0;
+            auto [pos, large] = [&] {
+                GUANAQO_TRACE("linesearch breakpoints cyqlone partition", di0);
+                auto pos   = partition(fin_0, fin, [](Breakpoint p) { return p.t <= 0; }).begin();
+                auto large = partition(pos, fin, [](Breakpoint p) { return p.t <= 1; }).begin();
+                return std::pair{pos, large};
+            }();
+            // Compute the partial sums
+            const auto [a_local, b_local] = partial_sum_negative(
+                {.neg_bp = std::span{fin_0, pos}, .pos_bp = std::span{pos, fin}});
+            a.fetch_add(a_local, std::memory_order_relaxed);
+            b.fetch_add(b_local, std::memory_order_relaxed);
+            // Store the separator indices
+            thread_indices[ti][0] = pos - fin_0;
+            thread_indices[ti][1] = large - fin_0;
+            thread_indices[ti][2] = fin - fin_0;
+            thread_indices[ti][3] = inf_0 - fin_0;
+            // Synchronize the separator indices for all threads
             ocp.barrier();
-            merge_chunk<Breakpoint, 4>(std::span{l_fin_0, l_inf_0}, ti, std::span{thread_indices},
+            // Merge all local partitions of all threads into a single partitioned array
+            GUANAQO_TRACE("linesearch breakpoints cyqlone merge", di0);
+            merge_chunk<Breakpoint, 4>(std::span{fin_0, inf_0}, ti, std::span{thread_indices},
                                        std::span{breakpoints});
             if (ti == 0) {
                 auto first_pos = std::accumulate(thread_indices.begin(), thread_indices.end(),
@@ -433,11 +449,13 @@ struct CyqloneBackend {
                 pos_bp         = std::span{first_pos, first_inf};
             }
         });
-        return {.neg_bp = neg_bp, .pos_bp = pos_bp};
+        return {.bp     = {.neg_bp = neg_bp, .pos_bp = pos_bp},
+                .ab_neg = {.a = a.load(std::memory_order_relaxed),
+                           .b = b.load(std::memory_order_relaxed)}};
     }
 
-    friend PartitionedBreakpoints
-    guanaqo_tag_invoke(guanaqo::tag_t<get_partitioned_breakpoints>, CyqloneBackend &backend,
+    friend BreakpointsResult
+    guanaqo_tag_invoke(guanaqo::tag_t<get_breakpoints>, CyqloneBackend &backend,
                        std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
                        const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
                        const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,

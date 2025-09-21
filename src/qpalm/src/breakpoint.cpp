@@ -27,15 +27,15 @@ ABSums partial_sum_negative(PartitionedBreakpoints breakpoints, real_t η, real_
     GUANAQO_TRACE("partial sum negative", 0);
     auto &neg_bp = breakpoints.neg_bp, &pos_bp = breakpoints.pos_bp;
     // Initialize a_j and b_j, where t_j is the first positive (see notes)
-    auto a_plus  = std::transform_reduce(neg_bp.begin(), neg_bp.end(), ABSum_t{}, std::plus{},
-                                         [](Breakpoint p) { return p.δ > 0 ? p.δ * p.δ : 0; });
-    auto a_minus = std::transform_reduce(pos_bp.begin(), pos_bp.end(), ABSum_t{}, std::plus{},
-                                         [](Breakpoint p) { return p.δ < 0 ? p.δ * p.δ : 0; });
+    auto a_plus  = qpalm::transform_reduce(neg_bp.begin(), neg_bp.end(), ABSum_t{}, std::plus{},
+                                           [](Breakpoint p) { return p.δ > 0 ? p.δ * p.δ : 0; });
+    auto a_minus = qpalm::transform_reduce(pos_bp.begin(), pos_bp.end(), ABSum_t{}, std::plus{},
+                                           [](Breakpoint p) { return p.δ < 0 ? p.δ * p.δ : 0; });
     auto a       = a_plus + a_minus + η;
-    auto b_plus  = std::transform_reduce(neg_bp.begin(), neg_bp.end(), ABSum_t{}, std::plus{},
-                                         [](Breakpoint p) { return p.δ > 0 ? p.δ * p.α() : 0; });
-    auto b_minus = std::transform_reduce(pos_bp.begin(), pos_bp.end(), ABSum_t{}, std::plus{},
-                                         [](Breakpoint p) { return p.δ < 0 ? p.δ * p.α() : 0; });
+    auto b_plus  = qpalm::transform_reduce(neg_bp.begin(), neg_bp.end(), ABSum_t{}, std::plus{},
+                                           [](Breakpoint p) { return p.δ > 0 ? p.δ * p.α() : 0; });
+    auto b_minus = qpalm::transform_reduce(pos_bp.begin(), pos_bp.end(), ABSum_t{}, std::plus{},
+                                           [](Breakpoint p) { return p.δ < 0 ? p.δ * p.α() : 0; });
     auto b       = b_plus + b_minus - β;
     return {.a = a, .b = b};
 }
