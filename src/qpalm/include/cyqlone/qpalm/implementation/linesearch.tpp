@@ -28,15 +28,19 @@ using NSum = NeumaierSum<real_t>;
 using NSum = real_t;
 #endif
 
+struct LineSearchSettings {
+    bool find_smallest_breakpoint_first = false;
+};
+
 template <class Vec>
 struct LineSearch {
     using vec_t = Vec;
+    LineSearchSettings settings;
+    std::vector<Breakpoint> breakpoints;
 
     std::pair<real_t, size_t> operator()(auto &backend, real_t η, real_t β, const vec_t &Σ,
                                          const vec_t &y, const vec_t &Ad, const vec_t &Ax,
                                          const vec_t &b_min, const vec_t &b_max);
-
-    std::vector<Breakpoint> breakpoints;
 
     static std::pair<real_t, size_t> find_stepsize_base(NSum a, NSum b, size_t i0,
                                                         std::span<Breakpoint> pos_bp);
@@ -121,6 +125,7 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
     auto [a, b]          = bp.ab_neg;
     a += η;
     b -= β;
+    index_t i = 0;
 
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
     std::vector<Breakpoint> pos_bp_debug(pos_bp.begin(), pos_bp.end());
@@ -135,18 +140,22 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
     // Optimization: check the first interval for an early return if there is no active set change.
     // If the smallest breakpoint already has ψʹ ≥ 0, then there's no need to sort all breakpoints.
     // Find the smallest positive t[i] and move it to the beginning of positive
-    const auto smallest     = min_element(pos_bp, [](Breakpoint b) { return b.t; });
-    const auto first_pos_it = std::ranges::begin(pos_bp);
-    if (first_pos_it != smallest)
-        std::ranges::iter_swap(first_pos_it, smallest);
-    if (real_t ψʹ0 = pos_bp[0].t * a - b; ψʹ0 >= 0)
-        return {1, 0};
-    // Otherwise, skip the first breakpoint, and perform an actual search.
-    a += pos_bp[0].δ * abs(pos_bp[0].δ);
-    b += pos_bp[0].α() * abs(pos_bp[0].δ);
+    if (settings.find_smallest_breakpoint_first) {
+        const auto smallest     = min_element(pos_bp, [](Breakpoint b) { return b.t; });
+        const auto first_pos_it = std::ranges::begin(pos_bp);
+        if (first_pos_it != smallest)
+            std::ranges::iter_swap(first_pos_it, smallest);
+        if (real_t ψʹ0 = pos_bp[0].t * a - b; ψʹ0 >= 0)
+            return {1, 0};
+        // Otherwise, skip the first breakpoint, and perform an actual search.
+        a += pos_bp[0].δ * abs(pos_bp[0].δ);
+        b += pos_bp[0].α() * abs(pos_bp[0].δ);
+        ++i;
+        pos_bp = pos_bp.subspan(1);
+    }
 
     GUANAQO_TRACE("linesearch find stepsize", 0);
-    auto step_size = find_stepsize(a, b, 1, pos_bp.subspan(1)); // TODO: could be empty!
+    auto step_size = find_stepsize(a, b, i, pos_bp);
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
     BATMAT_ASSERT(abs(step_size.first - step_size_debug.first) <
                   real_t(1e4) * std::numeric_limits<real_t>::epsilon());
