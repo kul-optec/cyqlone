@@ -14,6 +14,7 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cassert>
 #include <cmath>
 #include <functional>
@@ -350,8 +351,8 @@ struct CyqloneBackend {
     }
 
     template <class T, size_t N>
-    static void merge_chunk(std::span<const T> chunk, size_t chunk_index,
-                            std::span<const std::array<size_t, N>> separators, std::span<T> out) {
+    void merge_chunk(std::span<const T> chunk, size_t chunk_index,
+                     std::span<const std::array<size_t, N>> separators, std::span<T> out) {
         size_t num_chunks = separators.size();
         BATMAT_ASSUME(chunk_index < num_chunks);
         std::array<size_t, N> offsets{};
@@ -368,11 +369,11 @@ struct CyqloneBackend {
                       chunk.begin() + separators[chunk_index][i], out.begin() + offsets[i]);
     }
 
-    std::span<Breakpoint>
-    compute_breakpoints(std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
-                        const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
-                        const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
-                        const ineq_constr_vec_t &b_max) {
+    PartitionedBreakpoints
+    compute_partition_breakpoints(std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
+                                  const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
+                                  const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
+                                  const ineq_constr_vec_t &b_max) {
         using std::isfinite;
         using std::sqrt;
         // Allocate memory
@@ -383,9 +384,9 @@ struct CyqloneBackend {
         // Parallelization and vectorization
         const index_t P          = 1 << (ocp.lP - ocp.lvl);
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
-        using simd               = batmat::datapar::deduced_simd<real_t, VL>;
         thread_indices.resize(P);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
+        std::span<Breakpoint> neg_bp, pos_bp;
         batmat::foreach_thread(P, [&](index_t ti, index_t) {
             GUANAQO_TRACE("linesearch breakpoints cyqlone", 0);
             Breakpoint *const l_fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
@@ -421,13 +422,31 @@ struct CyqloneBackend {
             ocp.barrier();
             merge_chunk<Breakpoint, 4>(std::span{l_fin_0, l_inf_0}, ti, std::span{thread_indices},
                                        std::span{breakpoints});
+            if (ti == 0) {
+                auto first_pos = std::accumulate(thread_indices.begin(), thread_indices.end(),
+                                                 breakpoints.begin(),
+                                                 [](auto it, auto &i) { return it += i[0]; }),
+                     first_inf = std::accumulate(thread_indices.begin(), thread_indices.end(),
+                                                 breakpoints.begin(),
+                                                 [](auto it, auto &i) { return it += i[2]; });
+                neg_bp         = std::span{breakpoints.begin(), first_pos};
+                pos_bp         = std::span{first_pos, first_inf};
+            }
         });
-        return std::span{breakpoints};
+        return {.neg_bp = neg_bp, .pos_bp = pos_bp};
     }
 
     template <class T, class U>
-    static void xaxpy(real_t a, const T &x, U &y) {
-        OCP_t::compact_blas::xaxpy(a, simdify(x), simdify(y));
+    void xaxpy(real_t a, const T &x, U &y) {
+        const auto x_ = simdify(x), y_ = simdify(y);
+        const index_t P          = 1 << (ocp.lP - ocp.lvl);
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        batmat::foreach_thread(P, [&](index_t ti, index_t) {
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                OCP_t::compact_blas::xaxpy(a, x_.batch(di), y_.batch(di));
+            }
+        });
     }
 
     template <class T, class U>
@@ -478,33 +497,37 @@ struct CyqloneBackend {
                        const ineq_constr_vec_t &y, ineq_constr_vec_t &ŷ, var_vec_t &Aᵀŷ,
                        active_set_t &J) {
         using std::clamp;
-        auto count_J = [&] {
-            GUANAQO_TRACE("calc_ŷ_Aᵀŷ", 0);
-            return OCP_t::compact_blas::xreduce_enumerate(
-                index_t{0},
-                [&ŷ, &J](auto coord, auto accum, auto Axi, auto Σi, auto yi, auto li, auto ui) {
-                    auto [i, r, c] = coord;
-                    auto ζ         = Axi + yi / Σi;
-                    auto z         = clamp(ζ, li, ui);
-                    auto ŷi        = yi + Σi * (Axi - z);
-                    auto Ji        = z != ζ; // TODO: inclusive?
-                    if constexpr (std::is_same_v<decltype(ŷi), simd>) {
-                        datapar::aligned_store(ŷi, &ŷ(i, r, c));
-                        simd ΣJi{};
-                        where(Ji, ΣJi) = Σi;
-                        datapar::aligned_store(ΣJi, &J(i, r, c));
-                        return static_cast<index_t>(popcount(Ji)) + accum;
-                    } else {
-                        ŷ(i, r, c) = ŷi;
-                        J(i, r, c) = Ji ? Σi : 0;
-                        return static_cast<index_t>(Ji) + accum;
-                    }
-                },
-                std::identity{}, simdify(Ax), simdify(Σ), simdify(y), simdify(b_min_strided),
-                simdify(b_max_strided));
-        }();
+        std::atomic<index_t> count_J{};
+        const index_t P          = 1 << (ocp.lP - ocp.lvl);
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        batmat::foreach_thread(P, [&](index_t ti, index_t) {
+            index_t count_J_local = 0;
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                GUANAQO_TRACE("calc_ŷ_Aᵀŷ", di);
+                for (index_t r = 0; r < y.rows(); ++r) {
+                    const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
+                               yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
+                               Axi = batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
+                               li  = batmat::datapar::aligned_load<simd>(
+                                   &b_min_strided.batch(di)(0, r, 0)),
+                               ui = batmat::datapar::aligned_load<simd>(
+                                   &b_max_strided.batch(di)(0, r, 0));
+                    auto ζ  = Axi + yi / Σi;
+                    auto z  = clamp(ζ, li, ui);
+                    auto ŷi = yi + Σi * (Axi - z);
+                    auto Ji = z != ζ; // TODO: inclusive?
+                    datapar::aligned_store(ŷi, &ŷ.batch(di)(0, r, 0));
+                    simd ΣJi{};
+                    where(Ji, ΣJi) = Σi;
+                    datapar::aligned_store(ΣJi, &J.batch(di)(0, r, 0));
+                    count_J_local += static_cast<index_t>(popcount(Ji));
+                }
+            }
+            count_J.fetch_add(count_J_local, std::memory_order_relaxed);
+        });
         mat_vec_AT(ŷ, Aᵀŷ);
-        return count_J;
+        return count_J.load(std::memory_order_relaxed);
     }
 
     real_t unscaled_aug_lagr_norm(const var_vec_t &grad_f, const var_vec_t &Mᵀλ,

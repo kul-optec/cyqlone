@@ -177,18 +177,20 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
 ) {
     using std::abs;
     // Compute breakpoints t[i] and intermediate values α[i] and δ[i]
-    auto breakpoints = [&] {
+    const auto [neg_bp, pos_bp] = [&] {
         if constexpr (requires {
-                          backend.compute_breakpoints(this->breakpoints, Σ, y, Ad, Ax, b_min,
-                                                      b_max);
-                      })
-            return backend.compute_breakpoints(this->breakpoints, Σ, y, Ad, Ax, b_min, b_max);
-        else
-            return compute_breakpoints(Σ, y, Ad, Ax, b_min, b_max);
+                          backend.compute_partition_breakpoints(this->breakpoints, Σ, y, Ad, Ax,
+                                                                b_min, b_max);
+                      }) {
+            return backend.compute_partition_breakpoints(this->breakpoints, Σ, y, Ad, Ax, b_min,
+                                                         b_max);
+        } else {
+            auto breakpoints = compute_breakpoints(Σ, y, Ad, Ax, b_min, b_max);
+            // Isolate non-finite entries, and sort t[i] in ascending order. Then split
+            // the arrays into a nonpositive and a positive part for t.
+            return partition_breakpoints(breakpoints);
+        }
     }();
-    // Isolate non-finite entries, and sort t[i] in ascending order. Then split
-    // the arrays into a nonpositive and a positive part for t.
-    const auto [neg_bp, pos_bp] = partition_breakpoints(breakpoints);
     // Compute a0 and b0, summing over all negative breakpoints.
     auto [a, b] = partial_sum_negative(η, β, pos_bp, neg_bp);
 
@@ -204,6 +206,11 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
         return {1, 0};
     // Optimization: check the first interval for an early return if there is no active set change.
     // If the smallest breakpoint already has ψʹ ≥ 0, then there's no need to sort all breakpoints.
+    // Find the smallest positive t[i] and move it to the beginning of positive
+    const auto smallest     = min_element(pos_bp, [](Breakpoint b) { return b.t; });
+    const auto first_pos_it = std::ranges::begin(pos_bp);
+    if (first_pos_it != smallest)
+        std::ranges::iter_swap(first_pos_it, smallest);
     if (real_t ψʹ0 = pos_bp[0].t * a + b; ψʹ0 >= 0)
         return {1, 0};
     // Otherwise, skip the first breakpoint, and perform an actual search.
@@ -211,7 +218,7 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
     b -= pos_bp[0].α() * abs(pos_bp[0].δ);
 
     GUANAQO_TRACE("linesearch find stepsize", 0);
-    auto step_size = find_stepsize(a, b, 1, pos_bp.subspan(1));
+    auto step_size = find_stepsize(a, b, 1, pos_bp.subspan(1)); // TODO: could be empty!
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
     BATMAT_ASSERT(abs(step_size.first - step_size_debug.first) <
                   real_t(1e4) * std::numeric_limits<real_t>::epsilon());
@@ -245,9 +252,7 @@ auto LineSearch<Vec>::compute_breakpoints(const vec_t &Σ, const vec_t &y, const
 }
 
 /// Moves any non-finite elements in t to the end of the range, and all negative
-/// elements to the front. Finally, it moves the smallest positive element to
-/// the beginning of the positive partition. Returns the negative and positive
-/// partitions.
+/// elements to the front. Returns the negative and positive partitions.
 template <class Vec>
 auto LineSearch<Vec>::partition_breakpoints(std::span<Breakpoint> breakpoints)
     -> std::array<std::span<Breakpoint>, 2> {
@@ -261,13 +266,6 @@ auto LineSearch<Vec>::partition_breakpoints(std::span<Breakpoint> breakpoints)
     const auto le_zero   = [](Breakpoint b) { return b.t <= 0; };
     const auto positive  = partition(finite, le_zero);
     const auto first_pos = finite.size() - positive.size();
-    // Find the smallest positive t[i] and move it to the beginning of positive
-    if (positive.size() > 0) {
-        const auto smallest     = min_element(positive, [](Breakpoint b) { return b.t; });
-        const auto first_pos_it = std::ranges::begin(positive);
-        if (first_pos_it != smallest)
-            std::ranges::iter_swap(first_pos_it, smallest);
-    }
     // Return the negative and positive partitions.
     return {
         finite.first(first_pos),

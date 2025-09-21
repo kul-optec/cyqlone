@@ -322,15 +322,18 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
             }
             τ = std::clamp(τ, τ_min, τ_max);
 
-            // Apply step
-            backend.xaxpy(τ, d, x);
-            backend.xaxpy(τ, Δλ, λ);
+            { // Apply step
+                GUANAQO_TRACE("apply step", inner);
+                backend.xaxpy(τ, d, x);
+                backend.xaxpy(τ, Δλ, λ);
+            }
 
             // Optionally recompute Ax and ∇f
             if (settings.recompute_inner) {
                 timed(stats.timings.recompute_inner,
                       [&] { backend.recompute_inner(S, x_outer, x, λ, grad, Ax, Mᵀλ); });
             } else {
+                GUANAQO_TRACE("apply step derived", inner);
                 backend.xaxpy(τ, Ad, Ax);
                 backend.xaxpy(τ, MᵀΔλ, Mᵀλ);
                 backend.xaxpy(τ, ξ, grad);
