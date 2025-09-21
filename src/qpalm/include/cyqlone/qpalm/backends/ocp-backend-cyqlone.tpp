@@ -436,6 +436,15 @@ struct CyqloneBackend {
         return {.neg_bp = neg_bp, .pos_bp = pos_bp};
     }
 
+    friend PartitionedBreakpoints
+    guanaqo_tag_invoke(guanaqo::tag_t<get_partitioned_breakpoints>, CyqloneBackend &backend,
+                       std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
+                       const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
+                       const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
+                       const ineq_constr_vec_t &b_max) {
+        return backend.compute_partition_breakpoints(breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+    }
+
     template <class T, class U>
     void xaxpy(real_t a, const T &x, U &y) {
         const auto x_ = simdify(x), y_ = simdify(y);

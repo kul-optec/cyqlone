@@ -16,6 +16,7 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/random-ocp.hpp"
           "cyqlone/include/cyqlone/cyqlone.hpp"
           "cyqlone/include/cyqlone/cyqlone-storage.hpp"
+          "cyqlone/include/cyqlone/neumaier.hpp"
           "cyqlone/include/cyqlone/compact/elementwise.tpp"
           "cyqlone/include/cyqlone/compact/pack.tpp"
           "cyqlone/include/cyqlone/implementation/data.tpp"
@@ -34,6 +35,7 @@ cyqlone_configure_library(cyqlone)
 # ------------------------------------------------------------------------------
 if (CYQLONE_WITH_QPALM)
     add_library(qpalm
+        "qpalm/src/breakpoint.cpp"
         "qpalm/src/qpalm.cpp"
         "qpalm/src/status.cpp"
         "qpalm/src/ocp-backend-cyqlone.cpp"
@@ -47,6 +49,9 @@ if (CYQLONE_WITH_QPALM)
               "qpalm/include/cyqlone/qpalm/settings.hpp"
               "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp"
               "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp"
+              "qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp"
+              "qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp"
+              "qpalm/include/cyqlone/qpalm/implementation/breakpoint.tpp"
               "qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp"
               "qpalm/include/cyqlone/qpalm/implementation/solver.tpp"
     )
