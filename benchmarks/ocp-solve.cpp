@@ -7,6 +7,7 @@
 #include <guanaqo/eigen/span.hpp>
 #include <guanaqo/openmp.h>
 #include <batmat-version.h>
+#include <cyqlone-version.h>
 #include <guanaqo-version.h>
 #include <hyhound-version.h>
 #include <omp.h>
@@ -38,7 +39,7 @@ std::map<std::tuple<std::string, std::string>, std::filesystem::path> traces;
 void trace(auto &&fun, const auto &name, const auto &params) {
     std::string filename = std::format("{}.csv", name);
     std::filesystem::path out_dir{"traces"};
-    out_dir /= *batmat_commit_hash ? batmat_commit_hash : "unknown";
+    out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
     out_dir /= params;
     std::filesystem::path out_file = out_dir / filename;
     if (auto [_, ins] = traces.insert({{name, params}, out_file}); !ins)
@@ -198,7 +199,7 @@ void bm_update_schur(benchmark::State &state) {
 template <int VL>
 void bm_factor_cyqlone(benchmark::State &state) {
     using batmat::linalg::StorageOrder;
-    auto [ocp, Σ]    = generate_ocp(state);
+    auto [ocp, Σ] = generate_ocp(state);
     const auto lP = static_cast<index_t>(state.range(4));
     BATMAT_OMP_IF(omp_set_num_threads(1 << lP));
     batmat::pool_set_num_threads(1 << lP);
@@ -328,6 +329,8 @@ int main(int argc, char **argv) {
 #if BATMAT_WITH_OPENMP
     benchmark::AddCustomContext("OMP_NUM_THREADS", std::to_string(omp_get_max_threads()));
 #endif
+    benchmark::AddCustomContext("cyqlone_build_time", cyqlone_build_time);
+    benchmark::AddCustomContext("cyqlone_commit_hash", cyqlone_commit_hash);
     benchmark::AddCustomContext("batmat_build_time", batmat_build_time);
     benchmark::AddCustomContext("batmat_commit_hash", batmat_commit_hash);
     benchmark::AddCustomContext("hyhound_build_time", hyhound_build_time);
