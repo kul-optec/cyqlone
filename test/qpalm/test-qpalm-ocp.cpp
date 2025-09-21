@@ -20,13 +20,37 @@ using cyqlone::index_t;
 using cyqlone::real_t;
 namespace qp = cyqlone::qpalm;
 
+#if GUANAQO_WITH_TRACING
+static void init_trace() {
+    guanaqo::trace_logger.reset();
+    guanaqo::trace_logger.logs.resize(65565);
+    batmat::foreach_thread([](index_t i, index_t) { GUANAQO_TRACE("thread_id", i); });
+    GUANAQO_TRACE("init", 0);
+}
+static std::filesystem::path save_trace(const char *name) {
+    std::optional tr = guanaqo::trace_logger.trace("end", 0);
+    std::filesystem::path out_dir{"traces"};
+    out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
+    std::filesystem::path out_file = out_dir / name;
+    std::filesystem::create_directories(out_dir);
+    std::ofstream csv{out_file};
+    guanaqo::TraceLogger::write_column_headings(csv) << '\n';
+    tr.reset();
+    for (const auto &log : guanaqo::trace_logger.get_logs())
+        csv << log << '\n';
+    return out_file;
+}
+#endif
+
 TEST(QPALM, cyqlone) {
-    auto ocp       = qp::problems::platooning({.Ts = 1.2, .N_horiz = 128});
-    auto grad      = qp::reference_to_gradient(ocp.ocp, ocp.ref);
-    auto cocp      = cyqlone::CyqloneStorage<>::build(ocp.ocp, grad, ocp.rhs_eq, ocp.rhs_ineq_lb,
-                                                      ocp.rhs_ineq_ub);
-    auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
-        cocp, {}, {.log_processors = 3, .print_residuals = true, .pcg_print_resid = true});
+    auto ocp = qp::problems::platooning(
+        {.Ts = 1.2, .N_horiz = 256, .masses{100, 150, 130, 70, 180, 170, 169, 130}});
+    auto grad = qp::reference_to_gradient(ocp.ocp, ocp.ref);
+    auto cocp = cyqlone::CyqloneStorage<>::build(ocp.ocp, grad, ocp.rhs_eq, ocp.rhs_ineq_lb,
+                                                 ocp.rhs_ineq_ub);
+    const bool verbose = false;
+    auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(
+        cocp, {}, {.log_processors = 5, .print_residuals = verbose, .pcg_print_resid = verbose});
     qp::Solver<qp::CyqloneBackend<4> *> qpalm{
         backend.get(),
         {.max_outer_iter                 = 400,
@@ -34,11 +58,22 @@ TEST(QPALM, cyqlone) {
          .tolerance                      = 1e-8,
          .dual_tolerance                 = 1e-8,
          .max_penalty_y                  = 1e6,
-         .verbose                        = true,
+         .verbose                        = verbose,
          .linesearch_include_multipliers = true},
     };
+
+#if GUANAQO_WITH_TRACING
+    for (index_t i = 0; i < 50; ++i)
+        qpalm(); // warm up
+    init_trace();
+#endif
+
     auto status = qpalm();
     EXPECT_EQ(status, qp::SolverStatus::Converged);
+
+#if GUANAQO_WITH_TRACING
+    std::cout << save_trace("test-QPALM-cyqlone.csv") << "\n\n";
+#endif
 
     std::cout << "inner:   " << qpalm.stats->inner_iter << "\n"
               << "outer:   " << qpalm.stats->outer_iter << "\n"
@@ -53,35 +88,28 @@ TEST(QPALM, cyqlone) {
 }
 
 TEST(QPALM, cyqloneSpringsMasses) try {
-    auto ocp       = qp::problems::load_from_csv("test/data/springs-masses", "masses=20-horiz=120");
-    auto cocp      = cyqlone::CyqloneStorage<>::build(ocp.ocp, ocp.qr, ocp.rhs_eq, ocp.rhs_ineq_lb,
-                                                      ocp.rhs_ineq_ub);
-    auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
-        cocp, {}, {.log_processors = 4, .print_residuals = true, .pcg_print_resid = true});
+    auto ocp  = qp::problems::load_from_csv("test/data/springs-masses", "masses=20-horiz=120");
+    auto cocp = cyqlone::CyqloneStorage<>::build(ocp.ocp, ocp.qr, ocp.rhs_eq, ocp.rhs_ineq_lb,
+                                                 ocp.rhs_ineq_ub);
+    const bool verbose = false;
+    auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(
+        cocp, {}, {.log_processors = 4, .print_residuals = verbose, .pcg_print_resid = verbose});
     qp::Solver<qp::CyqloneBackend<4> *> qpalm{
         backend.get(),
-        {.max_outer_iter = 500, .max_total_inner_iter = 1000, .verbose = true},
+        {.max_outer_iter = 500, .max_total_inner_iter = 1000, .verbose = verbose},
     };
 
 #if GUANAQO_WITH_TRACING
-    for (index_t i = 0; i < 10; ++i)
+    for (index_t i = 0; i < 50; ++i)
         qpalm(); // warm up
-    guanaqo::trace_logger.reset();
-    batmat::foreach_thread([](index_t i, index_t) { GUANAQO_TRACE("thread_id", i); });
+    init_trace();
 #endif
 
     auto status = qpalm();
     EXPECT_EQ(status, qp::SolverStatus::Converged);
 
 #if GUANAQO_WITH_TRACING
-    std::filesystem::path out_dir{"traces"};
-    out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
-    std::filesystem::path out_file = out_dir / "test-QPALM-cyqlone.csv";
-    std::filesystem::create_directories(out_dir);
-    std::ofstream csv{out_file};
-    guanaqo::TraceLogger::write_column_headings(csv) << '\n';
-    for (const auto &log : guanaqo::trace_logger.get_logs())
-        csv << log << '\n';
+    std::cout << save_trace("test-QPALM-cyqlone.csv") << "\n\n";
 #endif
 
     std::cout << "inner:   " << qpalm.stats->inner_iter << "\n"
