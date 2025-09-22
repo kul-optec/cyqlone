@@ -38,8 +38,7 @@ struct SolverImplementation {
     }
 
     static index_t update_penalty_y(backend_type &backend, ineq_vec_t &Σ, const ineq_vec_t &e,
-                                    const ineq_vec_t &e_old, std::span<real_t> Σ_factors,
-                                    std::span<index_t> constr_changed, const Settings &settings) {
+                                    const ineq_vec_t &e_old, const Settings &settings) {
         GUANAQO_TRACE("update_penalty_y", 0);
         using std::abs;
         using std::fmax;
@@ -48,18 +47,13 @@ struct SolverImplementation {
         const real_t min_denom  = 1e-6;
         const real_t norm_inf_e = fmax(min_denom, backend.norm_inf(e));
         index_t num_changed     = 0;
-        auto indices            = std::views::iota(index_t{});
-        for (auto &&[i, ei, ei_old, Σi] : zip(indices, e, e_old, Σ)) {
+        for (auto &&[ei, ei_old, Σi] : zip(e, e_old, Σ)) {
             bool insufficient_progress = abs(ei) > settings.θ * abs(ei_old);
             if (insufficient_progress) {
                 real_t update_factor = settings.Δy * abs(ei) / norm_inf_e;
                 real_t Σ_new         = Σi * update_factor;
                 Σ_new                = fmax(Σi, fmin(Σ_new, settings.max_penalty_y));
-                update_factor        = Σ_new / Σi;
-                if (update_factor != 1) {
-                    Σ_factors[num_changed]        = update_factor;
-                    constr_changed[num_changed++] = i;
-                }
+                num_changed += Σ_new != Σi;
                 Σi = Σ_new;
             }
         }
@@ -77,8 +71,6 @@ struct SolverImplementation {
         backend.initialize_ineq_constr_vec(Σ, y, ŷ, e, e_old, Ax, Ad);
         backend.initialize_eq_constr_vec(Mxb, Δλ, λ);
         backend.initialize_var_vec(x, grad, Mᵀλ, Aᵀŷ, x_outer, MᵀΔλ, d, ξ);
-        Σ_update_factors.resize(Σ.size());
-        constr_changed.resize(Σ.size());
     }
 
     SolverStatus do_main_loop(backend_type &backend, const Settings &settings,
@@ -88,8 +80,6 @@ struct SolverImplementation {
     ineq_vec_t Σ, y, ŷ, e, e_old, Ax, Ad;
     eq_vec_t Mxb, Δλ, λ;
     var_vec_t x, grad, Mᵀλ, Aᵀŷ, x_outer, MᵀΔλ, d, ξ;
-    std::vector<real_t> Σ_update_factors;
-    std::vector<index_t> constr_changed;
 };
 
 template <class Backend>
@@ -396,14 +386,10 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
 
         // Update penalty factors
         if (ineq_constr_resid > settings.dual_tolerance) {
-            index_t num_Σ_changed =
-                update_penalty_y(backend, Σ, e, e_old, Σ_update_factors, constr_changed, settings);
+            index_t num_Σ_changed = update_penalty_y(backend, Σ, e, e_old, settings);
             if (num_Σ_changed > 0)
-                timed(stats.timings.update_penalty, [&] {
-                    backend.update_penalty_changed(Σ,
-                                                   std::span{Σ_update_factors}.first(num_Σ_changed),
-                                                   std::span{constr_changed}.first(num_Σ_changed));
-                });
+                timed(stats.timings.update_penalty,
+                      [&] { backend.update_penalty_changed(Σ, num_Σ_changed); });
         }
         // Update regularization
         real_t S_old = std::exchange(S, update_penalty_x(S, settings));

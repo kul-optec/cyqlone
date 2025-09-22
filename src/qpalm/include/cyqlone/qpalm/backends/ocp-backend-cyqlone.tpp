@@ -341,12 +341,9 @@ struct CyqloneBackend {
         return S_boost;
     }
 
-    void update_penalty_changed(const ineq_constr_vec_t &Σ,
-                                std::span<const real_t> Σ_update_factors,
-                                std::span<const index_t> constr_changed) {
+    void update_penalty_changed(const ineq_constr_vec_t &Σ, index_t num_Σ_changed) {
         std::ignore = Σ;
-        std::ignore = Σ_update_factors;
-        if (!constr_changed.empty())
+        if (num_Σ_changed > 0)
             reset_factorization = true;
     }
 
