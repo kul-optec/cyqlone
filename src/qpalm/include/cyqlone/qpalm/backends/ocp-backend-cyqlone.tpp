@@ -57,6 +57,7 @@ struct CyqloneBackend {
     std::optional<ineq_constr_vec_t> y0;
     std::optional<eq_constr_vec_t> λ0;
     std::vector<std::array<size_t, 4>> thread_indices;
+    std::vector<ABSum_t> thread_sums;
     std::vector<Breakpoint> breakpoints_temp;
 
     bool reset_factorization = true;
@@ -383,9 +384,10 @@ struct CyqloneBackend {
         const index_t P          = 1 << (ocp.lP - ocp.lvl);
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
         thread_indices.resize(P);
+        thread_sums.resize(2 * P);
+        auto as = std::span{thread_sums}.first(P), bs = std::span{thread_sums}.subspan(P);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
         std::span<Breakpoint> neg_bp, pos_bp;
-        std::atomic<real_t> a{}, b{};
         batmat::foreach_thread(P, [&](index_t ti, index_t) {
             Breakpoint *const fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
             Breakpoint *const inf_0 = fin_0 + 2 * num_stages * ny_M * VL;
@@ -420,10 +422,10 @@ struct CyqloneBackend {
                 return std::pair{pos, large};
             }();
             // Compute the partial sums
-            const auto [a_local, b_local] = partial_sum_negative(
+            auto ab = partial_sum_negative(
                 {.neg_bp = std::span{fin_0, pos}, .pos_bp = std::span{pos, fin}});
-            a.fetch_add(a_local, std::memory_order_relaxed);
-            b.fetch_add(b_local, std::memory_order_relaxed);
+            as[ti] = ab.a; // We don't use an atomic accumulator here for reproducibility (float
+            bs[ti] = ab.b; // addition is not associative, and thread order is nondeterministic)
             // Store the separator indices
             thread_indices[ti][0] = pos - fin_0;
             thread_indices[ti][1] = large - fin_0;
@@ -447,8 +449,8 @@ struct CyqloneBackend {
             }
         });
         return {.bp     = {.neg_bp = neg_bp, .pos_bp = pos_bp},
-                .ab_neg = {.a = a.load(std::memory_order_relaxed),
-                           .b = b.load(std::memory_order_relaxed)}};
+                .ab_neg = {.a = std::accumulate(begin(as), end(as), ABSum_t{}),
+                           .b = std::accumulate(begin(bs), end(bs), ABSum_t{})}};
     }
 
     friend BreakpointsResult
