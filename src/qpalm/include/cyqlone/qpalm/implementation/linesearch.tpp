@@ -22,12 +22,6 @@
 
 namespace cyqlone::qpalm {
 
-#if CYQLONE_COMPENSATE_SUM_LINE_SEARCH
-using NSum = NeumaierSum<real_t>;
-#else
-using NSum = real_t;
-#endif
-
 struct LineSearchSettings {
     bool find_smallest_breakpoint_first = false;
 };
@@ -42,19 +36,22 @@ struct LineSearch {
                                          const vec_t &y, const vec_t &Ad, const vec_t &Ax,
                                          const vec_t &b_min, const vec_t &b_max);
 
-    static std::pair<real_t, size_t> find_stepsize_base(NSum a, NSum b, size_t i0,
+    static std::pair<real_t, size_t> find_stepsize_base(ABSum_t a, ABSum_t b, size_t i0,
                                                         std::span<Breakpoint> pos_bp);
-    static std::pair<real_t, size_t>
-    find_stepsize(NSum a, NSum b, size_t i0, std::span<Breakpoint> pos_bp, bool partition_1 = true);
+    static std::pair<real_t, size_t> find_stepsize(ABSum_t a, ABSum_t b, size_t i0,
+                                                   std::span<Breakpoint> pos_bp,
+                                                   bool partition_1 = true);
 };
 
 template <class Vec>
-std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize_base(NSum a, NSum b, size_t i0,
+std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize_base(ABSum_t a, ABSum_t b, size_t i0,
                                                               std::span<Breakpoint> pos_bp) {
     using std::abs;
     // Order all breakpoints by increasing ti
     sort(pos_bp, [](Breakpoint b) { return b.t; });
     // Find the first i for which ψʹ(t[i]) ≥ 0
+    if (real_t ψʹ = pos_bp[0].t * a - b; i0 == 0 && ψʹ >= 0)
+        return {1, 0}; // linear interpolation
     for (size_t i = 0; i < pos_bp.size(); ++i) {
         if (real_t ψʹ = pos_bp[i].t * a - b; ψʹ >= 0)
             return {b / a, i0 + i}; // linear interpolation
@@ -67,7 +64,7 @@ std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize_base(NSum a, NSum b, si
 }
 
 template <class Vec>
-std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(NSum a, NSum b, size_t i0,
+std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(ABSum_t a, ABSum_t b, size_t i0,
                                                          std::span<Breakpoint> pos_bp,
                                                          bool partition_1) {
     using std::abs;
@@ -88,7 +85,7 @@ std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(NSum a, NSum b, size_t 
     auto left = pos_bp.first(i_mid + 1), right = pos_bp.subspan(i_mid); // Both halves contain mid
 
     // Recursive update formula for a_j and b_j (see notes)
-    NSum a_mid = a, b_mid = b;
+    ABSum_t a_mid = a, b_mid = b;
     for (auto bp : left.first(i_mid)) {
         a_mid += bp.δ * abs(bp.δ);
         b_mid += bp.α() * abs(bp.δ);
