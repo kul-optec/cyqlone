@@ -306,7 +306,8 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                                     : τ > τ_min      ? "\x1b[0;33m" /* yellow */
                                                      : "\x1b[0;31m" /* red */;
                 std::cout << "    inner " << std::setw(4) << inner << ": #J = " << std::setw(6)
-                          << nJ << ", stationarity=" << float_to_str(stationarity, prec)
+                          << nJ << ", #ΔJ = " << std::setw(6) << active_set_change
+                          << ", stationarity=" << float_to_str(stationarity, prec)
                           << ", eq constr resid=" << float_to_str(eq_resid, prec) << ", τ=" << color
                           << float_to_str(τ) << "\x1b[0m\n";
             }
