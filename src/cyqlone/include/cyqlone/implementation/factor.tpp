@@ -143,7 +143,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(const index_t ti) {
 // coupling equations + propagates the subdiagonal blocks to level l=1.
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(index_t ti, bool alt, value_type S,
-                                                          view<> Σ) {
+                                                        view<> Σ) {
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
     const index_t k0         = ti * num_stages; // stage index
@@ -199,8 +199,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(index_t ti, bool alt, va
             gemm(Âi, Bi, B̂_next);
             gemm(Âi, Ai, Â_next);
             // Riccati update
+            trmm(BAi.transposed(), tril(Q̂i), BAᵀi);
             auto R̂ŜQ̂_next = R̂ŜQ̂.middle_cols((i + 1) * nux, nux);
-            trmm(data_BA.batch(di_next).transposed(), tril(Q̂i), BAᵀi);
 #if 1
             // TODO: merge with next potrf
             syrk_add(BAᵀi, tril(data_RSQ.batch(di_next)), tril(R̂ŜQ̂_next));

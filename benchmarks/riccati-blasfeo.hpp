@@ -128,7 +128,7 @@ struct blasfeo_owning_xmat {
     blasfeo_owning_xmat(const blasfeo_owning_xmat &)            = delete;
     blasfeo_owning_xmat &operator=(const blasfeo_owning_xmat &) = delete;
     blasfeo_owning_xmat(blasfeo_owning_xmat &&o) noexcept { swap(*this, o); }
-    blasfeo_owning_xmat &operator=(blasfeo_owning_xmat &&o) {
+    blasfeo_owning_xmat &operator=(blasfeo_owning_xmat &&o) noexcept {
         swap(*this, o);
         return *this;
     }
