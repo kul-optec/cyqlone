@@ -14,6 +14,8 @@ option(CYQLONE_WITH_BLASFEO
     "Benchmarks comparing to BLASFEO Riccati recursion" Off)
 option(CYQLONE_WITH_QPALM
     "Build the QPALM solver" On)
+option(CYQLONE_COMPENSATE_SUM_LINE_SEARCH
+    "Use the Kahan–Babuška–Neumaier algorithm in the line search" Off)
 cmake_dependent_option(CYQLONE_WITH_EXAMPLE_PROBLEMS
     "Build the simple OCP example problems" ${BUILD_TESTING}
     CYQLONE_WITH_QPALM Off)

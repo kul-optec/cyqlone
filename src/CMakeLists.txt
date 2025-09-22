@@ -28,8 +28,11 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/implementation/sparse.tpp"
           "cyqlone/include/cyqlone/implementation/update.tpp"
 )
-target_link_libraries(cyqlone PUBLIC batmat::batmat guanaqo::guanaqo guanaqo::blas PRIVATE cyqlone::warnings)
+target_link_libraries(cyqlone PUBLIC batmat::batmat guanaqo::guanaqo guanaqo::blas
+                              PRIVATE cyqlone::warnings)
 cyqlone_configure_library(cyqlone)
+target_compile_definitions(cyqlone PUBLIC
+    $<$<BOOL:${CYQLONE_COMPENSATE_SUM_LINE_SEARCH}>:CYQLONE_COMPENSATE_SUM_LINE_SEARCH>)
 
 # QPALM solver
 # ------------------------------------------------------------------------------
