@@ -15,6 +15,9 @@
 
 #include <cyqlone/cyqlone-storage.hpp>
 #include <cyqlone/qpalm/example-problems/conversion.hpp>
+#if CYQLONE_WITH_MATIO
+#include <cyqlone/matio.hpp>
+#endif
 
 using cyqlone::index_t;
 using cyqlone::real_t;
@@ -43,27 +46,31 @@ static std::filesystem::path save_trace(const char *name) {
 #endif
 
 TEST(QPALM, cyqlone) {
-    auto ocp = qp::problems::platooning(
-        {.Ts = 1.2, .N_horiz = 256, .masses{100, 150, 130, 70, 180, 170, 169, 130}});
+    auto ocp =
+        qp::problems::platooning({.N_horiz = 128, .masses{100, 150, 130, 70, 180, 170, 169, 130}});
     auto grad = qp::reference_to_gradient(ocp.ocp, ocp.ref);
     auto cocp = cyqlone::CyqloneStorage<>::build(ocp.ocp, grad, ocp.rhs_eq, ocp.rhs_ineq_lb,
                                                  ocp.rhs_ineq_ub);
     const bool verbose = false;
-    auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(
-        cocp, {}, {.log_processors = 5, .print_residuals = verbose, .pcg_print_resid = verbose});
+    auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(cocp, {},
+                                                           {.log_processors  = 5,
+                                                            .print_residuals = verbose,
+                                                            .print_precision = 17,
+                                                            .pcg_print_resid = verbose});
     qp::Solver<qp::CyqloneBackend<4> *> qpalm{
         backend.get(),
         {.max_outer_iter                 = 400,
          .max_total_inner_iter           = 400,
          .tolerance                      = 1e-8,
          .dual_tolerance                 = 1e-8,
-         .max_penalty_y                  = 1e6,
+         .max_penalty_y                  = 1e7,
+         .initial_penalty_y              = 1e5,
          .verbose                        = verbose,
          .linesearch_include_multipliers = true},
     };
 
 #if GUANAQO_WITH_TRACING
-    for (index_t i = 0; i < 50; ++i)
+    for (index_t i = 0; !verbose && i < 50; ++i)
         qpalm(); // warm up
     init_trace();
 #endif
@@ -85,6 +92,10 @@ TEST(QPALM, cyqlone) {
     guanaqo::print_csv(solution, std::span{x});
     guanaqo::print_csv(solution, std::span{λ});
     guanaqo::print_csv(solution, std::span{y});
+
+#if CYQLONE_WITH_MATIO
+    cyqlone::ocp_dump_mat(ocp.ocp, "cyqlone-platooning.mat");
+#endif
 }
 
 TEST(QPALM, cyqloneSpringsMasses) try {
@@ -100,7 +111,7 @@ TEST(QPALM, cyqloneSpringsMasses) try {
     };
 
 #if GUANAQO_WITH_TRACING
-    for (index_t i = 0; i < 50; ++i)
+    for (index_t i = 0; !verbose && i < 50; ++i)
         qpalm(); // warm up
     init_trace();
 #endif
@@ -122,6 +133,10 @@ TEST(QPALM, cyqloneSpringsMasses) try {
     guanaqo::print_csv(solution, std::span{x});
     guanaqo::print_csv(solution, std::span{λ});
     guanaqo::print_csv(solution, std::span{y});
+
+#if CYQLONE_WITH_MATIO
+    cyqlone::ocp_dump_mat(ocp.ocp, "cyqlone-spring-masses.mat");
+#endif
 } catch (guanaqo::io::csv_read_error &e) {
     GTEST_SKIP() << e.what();
 }
