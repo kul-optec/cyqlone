@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/neumaier.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/implementation/breakpoint.hpp>
 #include <batmat/assume.hpp>
@@ -646,14 +647,20 @@ struct CyqloneBackend {
         OCP_t::compact_blas::xadd_neg_copy(simdify(d), simdify(grad), simdify(Mᵀλ), simdify(Aᵀŷ));
         OCP_t::compact_blas::xadd_neg_copy(simdify(Δλ), simdify(Mxb));
         if (settings.print_residuals) {
-            int prec             = settings.print_precision;
-            auto grad_norm_inf   = OCP_t::compact_blas::xnrminf(simdify(d));
-            auto grad_norm_sq    = OCP_t::compact_blas::xnrm2sq(simdify(d));
-            auto constr_norm_inf = OCP_t::compact_blas::xnrminf(simdify(Δλ));
-            auto constr_norm_sq  = OCP_t::compact_blas::xnrm2sq(simdify(Δλ));
+            int prec                      = settings.print_precision;
+            auto grad_norm_inf            = OCP_t::compact_blas::xnrminf(simdify(d));
+            auto grad_norm_sq             = OCP_t::compact_blas::xnrm2sq(simdify(d));
+            auto constr_norm_inf          = OCP_t::compact_blas::xnrminf(simdify(Δλ));
+            auto constr_norm_sq           = OCP_t::compact_blas::xnrm2sq(simdify(Δλ));
+            auto cost_grad_norm_sq        = OCP_t::compact_blas::xnrm2sq(simdify(grad));
+            auto eq_constr_grad_norm_sq   = OCP_t::compact_blas::xnrm2sq(simdify(Mᵀλ));
+            auto ineq_constr_grad_norm_sq = OCP_t::compact_blas::xnrm2sq(simdify(Aᵀŷ));
             std::cout << "                   gradient:    abs∞="
                       << guanaqo::float_to_str(grad_norm_inf, prec)
-                      << ",  abs₂=" << guanaqo::float_to_str(sqrt(grad_norm_sq), prec) << "\n"
+                      << ",  abs₂=" << guanaqo::float_to_str(sqrt(grad_norm_sq), prec)
+                      << "      {grad cost=" << guanaqo::float_to_str(sqrt(cost_grad_norm_sq))
+                      << ",  Mᵀλ=" << guanaqo::float_to_str(sqrt(eq_constr_grad_norm_sq))
+                      << ",  Aᵀŷ=" << guanaqo::float_to_str(sqrt(ineq_constr_grad_norm_sq)) << "}\n"
                       << "                constraints:    abs∞="
                       << guanaqo::float_to_str(constr_norm_inf, prec)
                       << ",  abs₂=" << guanaqo::float_to_str(sqrt(constr_norm_sq), prec) << "\n";
@@ -678,8 +685,8 @@ struct CyqloneBackend {
             mat_vec_AT(t, r);
             real_t r_norm_sq = 0, grad_norm_sq = 0, r_norm_inf = 0;
             for (auto &&[gradi, Mᵀλi, Aᵀŷi, MᵀΔλi, ξi, ri] : zip(grad, Mᵀλ, Aᵀŷ, MᵀΔλ, ξ, r)) {
-                real_t gi = gradi + Mᵀλi + Aᵀŷi;
-                ri += gi + MᵀΔλi + ξi;
+                auto gi    = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
+                ri         = gi + MᵀΔλi + ξi + ri;
                 r_norm_inf = max(r_norm_inf, abs(ri));
                 r_norm_sq += ri * ri;
                 grad_norm_sq += gi * gi;
