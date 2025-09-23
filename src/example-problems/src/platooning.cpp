@@ -28,7 +28,8 @@ PlatooningProblem platooning(PlatooningParams p) {
         A(2 * v + 1, 2 * v + 1) = -p.friction;     // Friction
         B(2 * v + 1, v)         = 1 / p.masses[v]; // Accel → velocity
     }
-    auto [Ad, Bd] = discretize_zoh(A, B, p.Ts);
+    auto Ts       = p.T_horiz / static_cast<real_t>(p.N_horiz);
+    auto [Ad, Bd] = discretize_zoh(A, B, Ts);
 
     // Constraints rhs
     std::vector<real_t> eq((N + 1) * nx), lb(N * ny + ny_N), ub(N * ny + ny_N);
@@ -57,8 +58,8 @@ PlatooningProblem platooning(PlatooningParams p) {
                 // p[v] - p[v-1] + Ts (v[k] - v[k-1]) ≤ -d
                 Ci(n_vehicle + v - 1, 2 * v)           = 1;
                 Ci(n_vehicle + v - 1, 2 * (v - 1))     = -1;
-                Ci(n_vehicle + v - 1, 2 * v + 1)       = p.Ts;
-                Ci(n_vehicle + v - 1, 2 * (v - 1) + 1) = -p.Ts;
+                Ci(n_vehicle + v - 1, 2 * v + 1)       = Ts;
+                Ci(n_vehicle + v - 1, 2 * (v - 1) + 1) = -Ts;
                 lbi(n_vehicle + v - 1, 0)              = -inf;
                 ubi(n_vehicle + v - 1, 0)              = -p.dist_min;
             }
@@ -78,8 +79,8 @@ PlatooningProblem platooning(PlatooningParams p) {
             // p[v] - p[v-1] + Ts (v[k] - v[k-1]) ≤ -d
             Ci(n_vehicle + v - 1, 2 * v)           = 1;
             Ci(n_vehicle + v - 1, 2 * (v - 1))     = -1;
-            Ci(n_vehicle + v - 1, 2 * v + 1)       = p.Ts;
-            Ci(n_vehicle + v - 1, 2 * (v - 1) + 1) = -p.Ts;
+            Ci(n_vehicle + v - 1, 2 * v + 1)       = Ts;
+            Ci(n_vehicle + v - 1, 2 * (v - 1) + 1) = -Ts;
             lbi(n_vehicle + v - 1, 0)              = -inf;
             ubi(n_vehicle + v - 1, 0)              = -p.dist_min;
         }
