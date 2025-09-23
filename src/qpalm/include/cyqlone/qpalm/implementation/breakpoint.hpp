@@ -5,6 +5,9 @@
 #include <guanaqo/tag-invoke.hpp>
 #include <span>
 #include <vector>
+#if CYQLONE_QUADRUPLE_SUM_LINE_SEARCH
+#include <stdfloat>
+#endif
 
 namespace cyqlone::qpalm {
 
@@ -14,7 +17,9 @@ struct Breakpoint {
     [[gnu::always_inline, nodiscard]] real_t α() const { return t * δ; }
 };
 
-#if CYQLONE_COMPENSATE_SUM_LINE_SEARCH
+#if CYQLONE_QUADRUPLE_SUM_LINE_SEARCH
+using ABSum_t = std::float128_t;
+#elif CYQLONE_COMPENSATE_SUM_LINE_SEARCH
 using ABSum_t = NeumaierSum<real_t>;
 #else
 using ABSum_t = real_t;

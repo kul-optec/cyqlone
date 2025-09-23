@@ -49,21 +49,21 @@ std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize_base(ABSum_t a, ABSum_t
     using std::abs;
     // Base case
     if (pos_bp.empty())
-        return {i0 == 0 ? 1 : b / a, i0};
+        return {i0 == 0 ? 1 : static_cast<real_t>(b / a), i0};
     // Order all breakpoints by increasing ti
     sort(pos_bp, [](Breakpoint b) { return b.t; });
     // Find the first i for which ψʹ(t[i]) ≥ 0
-    if (real_t ψʹ = pos_bp[0].t * a - b; i0 == 0 && ψʹ >= 0)
+    if (auto ψʹ = pos_bp[0].t * a - b; i0 == 0 && ψʹ >= 0)
         return {1, 0}; // linear interpolation
     for (size_t i = 0; i < pos_bp.size(); ++i) {
-        if (real_t ψʹ = pos_bp[i].t * a - b; ψʹ >= 0)
-            return {b / a, i0 + i}; // linear interpolation
+        if (auto ψʹ = pos_bp[i].t * a - b; ψʹ >= 0)
+            return {static_cast<real_t>(b / a), i0 + i}; // linear interpolation
         // Recursive update formula for a_j and b_j (see notes)
         a += pos_bp[i].δ * abs(pos_bp[i].δ);
         b += pos_bp[i].α() * abs(pos_bp[i].δ);
     }
     // No positive entries, or solution lies above all breakpoints
-    return {b / a, i0 + pos_bp.size()}; // extrapolate
+    return {static_cast<real_t>(b / a), i0 + pos_bp.size()}; // extrapolate
 }
 
 template <class Vec>
@@ -99,7 +99,7 @@ std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(ABSum_t a, ABSum_t b, s
         b_mid += bp.α() * abs(bp.δ);
     }
     // Check dir deriv at mid
-    const real_t ψʹ_mid = mid->t * a_mid - b_mid;
+    auto ψʹ_mid = mid->t * a_mid - b_mid;
     if (ψʹ_mid >= 0) { // zero crossing lies in the left half
         return find_stepsize(a, b, i0, left, false);
     } else { // zero crossing lies in the right half
@@ -150,7 +150,7 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
         const auto first_pos_it = std::ranges::begin(pos_bp);
         if (first_pos_it != smallest)
             std::ranges::iter_swap(first_pos_it, smallest);
-        if (real_t ψʹ0 = pos_bp[0].t * a - b; ψʹ0 >= 0)
+        if (auto ψʹ0 = pos_bp[0].t * a - b; ψʹ0 >= 0)
             return {1, 0};
         // Otherwise, skip the first breakpoint, and perform an actual search.
         a += pos_bp[0].δ * abs(pos_bp[0].δ);
