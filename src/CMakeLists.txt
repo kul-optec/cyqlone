@@ -32,7 +32,17 @@ target_link_libraries(cyqlone PUBLIC batmat::batmat guanaqo::guanaqo guanaqo::bl
                               PRIVATE cyqlone::warnings)
 cyqlone_configure_library(cyqlone)
 target_compile_definitions(cyqlone PUBLIC
-    $<$<BOOL:${CYQLONE_COMPENSATE_SUM_LINE_SEARCH}>:CYQLONE_COMPENSATE_SUM_LINE_SEARCH>)
+    $<$<BOOL:${CYQLONE_COMPENSATE_SUM_LINE_SEARCH}>:CYQLONE_COMPENSATE_SUM_LINE_SEARCH>
+    $<$<BOOL:${CYQLONE_QUADRUPLE_SUM_LINE_SEARCH}>:CYQLONE_QUADRUPLE_SUM_LINE_SEARCH>
+    $<$<BOOL:${CYQLONE_WITH_MATIO}>:CYQLONE_WITH_MATIO>)
+if (CYQLONE_WITH_MATIO)
+    find_package(matio REQUIRED)
+    target_sources(cyqlone PRIVATE "cyqlone/src/matio.cpp")
+    target_sources(cyqlone PUBLIC FILE_SET HEADERS
+        BASE_DIRS "cyqlone/include"
+        FILES "cyqlone/include/cyqlone/matio.hpp")
+    target_link_libraries(cyqlone PUBLIC matio::matio)
+endif()
 
 # QPALM solver
 # ------------------------------------------------------------------------------

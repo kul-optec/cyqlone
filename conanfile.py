@@ -12,7 +12,7 @@ class CyqloneRecipe(ConanFile):
     version = "0.0.1"
 
     # Optional metadata
-    license = "LGPLv3"
+    license = "LGPL-3.0-or-later"
     author = "Pieter P <pieter.p.dev@outlook.com>"
     url = "https://github.com/kul-optec/cyqlone"
     description = "Parallel solver for systems with optimal control structure."
@@ -29,6 +29,7 @@ class CyqloneRecipe(ConanFile):
         "with_blasfeo": False,
         "with_python": False,
         "with_ska_sort": False,
+        "with_matio": True,
     }
     options = {
         "shared": [True, False],
@@ -65,7 +66,7 @@ class CyqloneRecipe(ConanFile):
 
     def requirements(self):
         self.requires("guanaqo/1.0.0-alpha.17", transitive_headers=True, transitive_libs=True)
-        self.requires("batmat/0.0.2", transitive_headers=True, transitive_libs=True)
+        self.requires("batmat/0.0.3", transitive_headers=True, transitive_libs=True)
         if self.options.with_python:
             self.requires("pybind11/3.0.1")
             if self.options.with_conan_python:
@@ -80,6 +81,8 @@ class CyqloneRecipe(ConanFile):
             self.requires("qpalm/1.2.6")
         if self.options.get_safe("with_ska_sort"):
             self.requires("ska-sort/tttapa.20250919")
+        if self.options.get_safe("with_matio"):
+            self.requires("matio/1.5.27", transitive_headers=True)
         if self.options.get_safe("with_benchmarks"):
             self.requires("benchmark/1.9.4")
             self.requires("hyhound/1.0.1")

@@ -16,6 +16,8 @@ option(CYQLONE_WITH_QPALM
     "Build the QPALM solver" On)
 option(CYQLONE_COMPENSATE_SUM_LINE_SEARCH
     "Use the Kahan–Babuška–Neumaier algorithm in the line search" Off)
+option(CYQLONE_QUADRUPLE_SUM_LINE_SEARCH
+    "Use quadruple precision in the line search" Off)
 cmake_dependent_option(CYQLONE_WITH_EXAMPLE_PROBLEMS
     "Build the simple OCP example problems" ${BUILD_TESTING}
     CYQLONE_WITH_QPALM Off)
@@ -26,6 +28,8 @@ option(CYQLONE_WITH_BENCHMARKS
     "Build the benchmarks" Off)
 option(CYQLONE_WITH_PYTHON
     "Build the Python interface" Off)
+option(CYQLONE_WITH_MATIO
+    "Use the matio library to save OCPs to .mat files" Off)
 option(CYQLONE_WITH_SKA_SORT
     "Use the radix sort implementation provided by skarupke/ska_sort" Off)
 # Developer options
