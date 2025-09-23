@@ -32,8 +32,9 @@ struct SolverImplementation {
         using std::fmin;
         auto numer = fmax(1, abs(f0));
         auto denom = fmax(1, 0.5 * backend.norm_squared(e0));
-        auto Σ0    = settings.initial_penalty_y * numer / denom;
-        Σ0         = fmax(1e-4, fmin(Σ0, 1e4));
+        auto Σ0    = settings.initial_penalty_y;
+        if (settings.scale_initial_penalty_y)
+            Σ0 = fmax(1e-4, fmin(Σ0 * numer / denom, 1e4));
         backend.set_constant(Σ, Σ0);
     }
 
@@ -49,13 +50,12 @@ struct SolverImplementation {
         index_t num_changed     = 0;
         for (auto &&[ei, ei_old, Σi] : zip(e, e_old, Σ)) {
             bool insufficient_progress = abs(ei) > settings.θ * abs(ei_old);
-            if (insufficient_progress) {
-                real_t update_factor = settings.Δy * abs(ei) / norm_inf_e;
-                real_t Σ_new         = Σi * update_factor;
-                Σ_new                = fmax(Σi, fmin(Σ_new, settings.max_penalty_y));
-                num_changed += Σ_new != Σi;
-                Σi = Σ_new;
-            }
+            real_t update_factor = insufficient_progress ? settings.Δy * abs(ei) / norm_inf_e : 1;
+            update_factor *= settings.Δy_always;
+            real_t Σ_new = Σi * update_factor;
+            Σ_new        = fmax(Σi, fmin(Σ_new, settings.max_penalty_y));
+            num_changed += Σ_new != Σi;
+            Σi = Σ_new;
         }
         return num_changed;
     }

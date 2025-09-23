@@ -22,8 +22,10 @@ struct CYQLONE_QPALM_EXPORT Settings {
     real_t ρ                               = real_t(1e-1);
     real_t θ                               = 0.25;
     real_t Δy                              = 100;
+    real_t Δy_always                       = 1;
     real_t max_penalty_y                   = 1e9;
     real_t initial_penalty_y               = 20;
+    bool scale_initial_penalty_y           = false;
     real_t Δx                              = 10;
     real_t max_penalty_x                   = 1e7;
     real_t boost_penalty_x                 = 1e12;
