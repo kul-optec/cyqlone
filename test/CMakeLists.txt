@@ -21,7 +21,9 @@ target_link_libraries(tests PRIVATE
 if (MSVC)
     target_compile_definitions(tests PRIVATE __PRETTY_FUNCTION__=__FUNCSIG__)
 endif()
-
+if (TARGET cyqlone::qpalm)
+    target_sources(tests PRIVATE "test-partition.cpp")
+endif()
 if (TARGET cyqlone::qpalm AND TARGET cyqlone::example-problems)
     find_package(Eigen3 REQUIRED)
     target_sources(tests PRIVATE "qpalm/test-qpalm-ocp.cpp")

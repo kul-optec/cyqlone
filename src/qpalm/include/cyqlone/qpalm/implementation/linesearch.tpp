@@ -47,6 +47,9 @@ template <class Vec>
 std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize_base(ABSum_t a, ABSum_t b, size_t i0,
                                                               std::span<Breakpoint> pos_bp) {
     using std::abs;
+    // Base case
+    if (pos_bp.empty())
+        return {i0 == 0 ? 1 : b / a, i0};
     // Order all breakpoints by increasing ti
     sort(pos_bp, [](Breakpoint b) { return b.t; });
     // Find the first i for which ψʹ(t[i]) ≥ 0
@@ -72,7 +75,12 @@ std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(ABSum_t a, ABSum_t b, s
         return find_stepsize_base(a, b, i0, pos_bp);
     const auto [i_mid, mid] = [&] {
         if (partition_1) {
-            auto mid = std::ranges::begin(partition(pos_bp, [](Breakpoint b) { return b.t <= 1; }));
+            auto cmp  = [](Breakpoint p1, Breakpoint p2) { return p1.t < p2.t; };
+            auto gt_1 = partition_min(pos_bp, [](Breakpoint p) { return p.t <= 1; }, cmp);
+            auto mid  = std::ranges::begin(gt_1);
+#if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
+            BATMAT_ASSERT(mid == std::ranges::min_element(gt_1, cmp));
+#endif
             auto i_mid = static_cast<std::size_t>(mid - std::ranges::begin(pos_bp));
             return std::make_pair(i_mid, mid);
         } else {
@@ -154,9 +162,9 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
     GUANAQO_TRACE("linesearch find stepsize", 0);
     auto step_size = find_stepsize(a, b, i, pos_bp);
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
+    BATMAT_ASSERT(step_size.second == step_size_debug.second);
     BATMAT_ASSERT(abs(step_size.first - step_size_debug.first) <
                   real_t(1e4) * std::numeric_limits<real_t>::epsilon());
-    BATMAT_ASSERT(step_size.second == step_size_debug.second);
 #endif
     return step_size;
 }
