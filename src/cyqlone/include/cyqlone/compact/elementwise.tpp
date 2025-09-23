@@ -1,4 +1,5 @@
 #include <cyqlone/compact.hpp>
+#include <cyqlone/neumaier.hpp>
 
 #include <batmat/loop.hpp>
 #include <batmat/ops/rotate.hpp>
@@ -144,16 +145,17 @@ void CompactBLAS<T, Abi, O>::xadd_copy_impl(OutView out, View x1, Views... xs)
     for (i = 0; i <= static_cast<index_t>(x1.depth()) - Bs; i += Bs) {
         for (index_t c = 0; c < m; ++c) {
             BATMAT_UNROLLED_IVDEP_FOR (8, index_t r = 0; r < n; ++r) {
-                simd_types::aligned_store((rotr<Rot>(simd_types::aligned_load(&x1(i, r, c))) + ... +
-                                           simd_types::aligned_load(&xs(i, r, c))),
-                                          &out(i, r, c));
+                simd_types::aligned_store(
+                    (NeumaierSum(rotr<Rot>(simd_types::aligned_load(&x1(i, r, c)))) + ... +
+                     simd_types::aligned_load(&xs(i, r, c))),
+                    &out(i, r, c));
             }
         }
     }
     for (; i < static_cast<index_t>(x1.depth()); ++i)
         for (index_t c = 0; c < m; ++c)
             for (index_t r = 0; r < n; ++r)
-                out(i, r, c) = (x1(i, r, c) + ... + xs(i, r, c));
+                out(i, r, c) = (NeumaierSum(x1(i, r, c)) + ... + xs(i, r, c));
 }
 
 template <class T, class Abi, StorageOrder O>
@@ -179,7 +181,7 @@ void CompactBLAS<T, Abi, O>::xsub_copy_impl(OutView out, View x1, Views... xs)
     for (i = 0; i <= static_cast<index_t>(x1.depth()) - Bs; i += Bs) {
         for (index_t c = 0; c < m; ++c) {
             BATMAT_UNROLLED_IVDEP_FOR (8, index_t r = 0; r < n; ++r) {
-                simd_types::aligned_store(simd_types::aligned_load(&x1(i, r, c)) -
+                simd_types::aligned_store(NeumaierSum(simd_types::aligned_load(&x1(i, r, c))) -
                                               (... + simd_types::aligned_load(&xs(i, r, c))),
                                           &out(i, r, c));
             }
@@ -188,7 +190,7 @@ void CompactBLAS<T, Abi, O>::xsub_copy_impl(OutView out, View x1, Views... xs)
     for (; i < static_cast<index_t>(x1.depth()); ++i)
         for (index_t c = 0; c < m; ++c)
             for (index_t r = 0; r < n; ++r)
-                out(i, r, c) = x1(i, r, c) - (... + xs(i, r, c));
+                out(i, r, c) = NeumaierSum(x1(i, r, c)) - (... + xs(i, r, c));
 }
 
 template <class T, class Abi, StorageOrder O>
@@ -215,16 +217,17 @@ void CompactBLAS<T, Abi, O>::xadd_neg_copy_impl(OutView out, View x1, Views... x
     for (i = 0; i <= static_cast<index_t>(x1.depth()) - Bs; i += Bs) {
         for (index_t c = 0; c < m; ++c) {
             BATMAT_UNROLLED_IVDEP_FOR (8, index_t r = 0; r < n; ++r) {
-                simd_types::aligned_store(-(rotr<Rot>(simd_types::aligned_load(&x1(i, r, c))) +
-                                            ... + simd_types::aligned_load(&xs(i, r, c))),
-                                          &out(i, r, c));
+                simd_types::aligned_store(
+                    -(NeumaierSum(rotr<Rot>(simd_types::aligned_load(&x1(i, r, c)))) + ... +
+                      simd_types::aligned_load(&xs(i, r, c))),
+                    &out(i, r, c));
             }
         }
     }
     for (; i < static_cast<index_t>(x1.depth()); ++i)
         for (index_t c = 0; c < m; ++c)
             for (index_t r = 0; r < n; ++r)
-                out(i, r, c) = -(x1(i, r, c) + ... + xs(i, r, c));
+                out(i, r, c) = -(NeumaierSum(x1(i, r, c)) + ... + xs(i, r, c));
 }
 
 template <class T, class Abi, StorageOrder O>
@@ -233,8 +236,9 @@ auto CompactBLAS<T, Abi, O>::xdot(single_batch_view x, single_batch_view y) -> v
     using std::fma;
     // TODO: why does fma(xi, yi, accum) give such terrible code gen?
     return xreduce(
-        simd{0}, [](auto accum, auto xi, auto yi) { return xi * yi + accum; },
-        [](auto accum) { return reduce(accum); }, x, y);
+        NeumaierSum(simd{0}), [](auto accum, auto xi, auto yi) { return accum + xi * yi; },
+        [](auto accum) { return NeumaierSum(reduce(accum.sum), reduce(accum.compensation)); }, x,
+        y);
 }
 
 template <class T, class Abi, StorageOrder O>
@@ -242,8 +246,9 @@ auto CompactBLAS<T, Abi, O>::xdot(batch_view x, batch_view y) -> value_type {
     using std::fma;
     // TODO: why does fma(xi, yi, accum) give such terrible code gen?
     return xreduce(
-        simd{0}, [](auto accum, auto xi, auto yi) { return xi * yi + accum; },
-        [](auto accum) { return reduce(accum); }, x, y);
+        NeumaierSum(simd{0}), [](auto accum, auto xi, auto yi) { return accum + xi * yi; },
+        [](auto accum) { return NeumaierSum(reduce(accum.sum), reduce(accum.compensation)); }, x,
+        y);
 }
 
 template <class T, class Abi, StorageOrder O>
