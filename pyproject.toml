@@ -53,6 +53,7 @@ install_components = ["python_modules", "python_stubs"]
 args = [
     "--build=missing",
     "-o&:with_python=True",
+    "-o&:with_matio=False",
     "-c*:tools.build:skip_test=True",
     "-s",
     "compiler.cppstd=23",

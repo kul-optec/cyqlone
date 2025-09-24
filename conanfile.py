@@ -98,6 +98,8 @@ class CyqloneRecipe(ConanFile):
             self.options.rm_safe("with_python")
         self.options["guanaqo/*"].with_blas = True
         self.options["hyhound/*"].with_ocp = True
+        self.options["matio/*"].with_hdf5 = False
+        self.options["matio/*"].mat73 = False
 
     def layout(self):
         if self.folders.build_folder_vars is None:
