@@ -190,13 +190,13 @@ void register_ocp(py::module_ &m) {
     py::class_<cyqlone::qpalm::problems::PlatooningParams>(m, "PlatooningParams")
         .def(py::init<>())
         .def_readwrite("friction", &cyqlone::qpalm::problems::PlatooningParams::friction)
-        .def_readwrite("Ts", &cyqlone::qpalm::problems::PlatooningParams::Ts)
         .def_readwrite("F_max", &cyqlone::qpalm::problems::PlatooningParams::F_max)
         .def_readwrite("v_max", &cyqlone::qpalm::problems::PlatooningParams::v_max)
         .def_readwrite("dist_min", &cyqlone::qpalm::problems::PlatooningParams::dist_min)
         .def_readwrite("dist_init", &cyqlone::qpalm::problems::PlatooningParams::dist_init)
         .def_readwrite("p_target", &cyqlone::qpalm::problems::PlatooningParams::p_target)
         .def_readwrite("N_horiz", &cyqlone::qpalm::problems::PlatooningParams::N_horiz)
+        .def_readwrite("T_horiz", &cyqlone::qpalm::problems::PlatooningParams::T_horiz)
         .def_readwrite("masses", &cyqlone::qpalm::problems::PlatooningParams::masses);
     m.def(
         "create_platooning_problem",
