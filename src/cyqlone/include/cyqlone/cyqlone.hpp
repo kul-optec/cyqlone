@@ -219,8 +219,30 @@ struct CyqloneSolver {
     std::vector<index_t> nJs = std::vector<index_t>(1 << (lP - lvl));
 
     struct Timings {
-        using type = batmat::DefaultTimings;
-        type todo;
+        using type    = batmat::DefaultTimings;
+        using timed_t = guanaqo::Timed<type>;
+        type breakpoints{};
+        type calc_y_hat{};
+        type calc_y_hat_AT{};
+        type update_active_set_change{};
+        type update_factorization{};
+        type factor{};
+        type solve{};
+        type solve_MT{};
+        type solve_A{};
+        type solve_grad{};
+        type solve_resid{};
+        type recompute_outer_grad{};
+        type recompute_outer_A{};
+        type recompute_outer_AT{};
+        type recompute_outer_MT{};
+        type recompute_outer_norm{};
+        type recompute_inner_grad{};
+        type recompute_inner_A{};
+        type recompute_inner_MT{};
+        type ineq_constr_resid{};
+        type ineq_constr_viol{};
+        type ineq_constr_resid_al{};
     };
 
     /// Constraints on u(0) and x(N) should be independent.

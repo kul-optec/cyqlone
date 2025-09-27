@@ -218,6 +218,7 @@ struct CyqloneBackend {
 
     // e = Ax - clamp(Ax, b_min, b_max)
     void ineq_constr_resid(const ineq_constr_vec_t &Ax, ineq_constr_vec_t &e) const {
+        auto t = get_timed(&OCP_t::Timings::ineq_constr_resid);
         for (index_t i = 0; i < Ax.num_batches(); ++i)
             OCP_t::compact_blas::proj_diff(simdify(Ax.batch(i)), simdify(b_min_strided.batch(i)),
                                            simdify(b_max_strided.batch(i)), simdify(e.batch(i)));
@@ -243,6 +244,7 @@ struct CyqloneBackend {
 
     real_t ineq_constr_viol(const ineq_constr_vec_t &Ax) const {
         GUANAQO_TRACE("ineq_constr_viol", 0);
+        auto t = get_timed(&OCP_t::Timings::ineq_constr_viol);
         using std::clamp;
         using std::isfinite;
         auto [inf_nrm, l1_norm] = OCP_t::compact_blas::xreduce(
@@ -258,6 +260,7 @@ struct CyqloneBackend {
     real_t ineq_constr_resid_al(const ineq_constr_vec_t &y, const ineq_constr_vec_t &ŷ,
                                 const ineq_constr_vec_t &Σ, ineq_constr_vec_t &e) {
         GUANAQO_TRACE("ineq_constr_resid_al", 0);
+        auto t = get_timed(&OCP_t::Timings::ineq_constr_resid_al);
         using std::clamp;
         using std::isfinite;
         auto [inf_nrm, l1_norm] = OCP_t::compact_blas::xreduce_enumerate(
@@ -374,6 +377,7 @@ struct CyqloneBackend {
                                   const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
                                   const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
                                   const ineq_constr_vec_t &b_max) {
+        auto t = get_timed(&OCP_t::Timings::breakpoints);
         using std::isfinite;
         using std::sqrt;
         // Allocate memory
@@ -527,32 +531,37 @@ struct CyqloneBackend {
         std::atomic<index_t> count_J{};
         const index_t P          = 1 << (ocp.lP - ocp.lvl);
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
-        batmat::foreach_thread(P, [&](index_t ti, index_t) {
-            index_t count_J_local = 0;
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                GUANAQO_TRACE("calc_ŷ_Aᵀŷ", di);
-                for (index_t r = 0; r < y.rows(); ++r) {
-                    const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
-                               yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
-                               Axi = batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
-                               li  = batmat::datapar::aligned_load<simd>(
-                                   &b_min_strided.batch(di)(0, r, 0)),
-                               ui = batmat::datapar::aligned_load<simd>(
-                                   &b_max_strided.batch(di)(0, r, 0));
-                    auto ζ  = Axi + yi / Σi;
-                    auto z  = clamp(ζ, li, ui);
-                    auto ŷi = yi + Σi * (Axi - z);
-                    auto Ji = z != ζ; // TODO: inclusive?
-                    datapar::aligned_store(ŷi, &ŷ.batch(di)(0, r, 0));
-                    simd ΣJi{};
-                    where(Ji, ΣJi) = Σi;
-                    datapar::aligned_store(ΣJi, &J.batch(di)(0, r, 0));
-                    count_J_local += static_cast<index_t>(popcount(Ji));
+        {
+            auto t = get_timed(&OCP_t::Timings::calc_y_hat);
+            batmat::foreach_thread(P, [&](index_t ti, index_t) {
+                index_t count_J_local = 0;
+                for (index_t i = 0; i < num_stages; ++i) {
+                    const index_t di = ti * num_stages + i;
+                    GUANAQO_TRACE("calc_ŷ_Aᵀŷ", di);
+                    for (index_t r = 0; r < y.rows(); ++r) {
+                        const auto Σi = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
+                                   yi = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
+                                   Axi =
+                                       batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
+                                   li = batmat::datapar::aligned_load<simd>(
+                                       &b_min_strided.batch(di)(0, r, 0)),
+                                   ui = batmat::datapar::aligned_load<simd>(
+                                       &b_max_strided.batch(di)(0, r, 0));
+                        auto ζ  = Axi + yi / Σi;
+                        auto z  = clamp(ζ, li, ui);
+                        auto ŷi = yi + Σi * (Axi - z);
+                        auto Ji = z != ζ; // TODO: inclusive?
+                        datapar::aligned_store(ŷi, &ŷ.batch(di)(0, r, 0));
+                        simd ΣJi{};
+                        where(Ji, ΣJi) = Σi;
+                        datapar::aligned_store(ΣJi, &J.batch(di)(0, r, 0));
+                        count_J_local += static_cast<index_t>(popcount(Ji));
+                    }
                 }
-            }
-            count_J.fetch_add(count_J_local, std::memory_order_relaxed);
-        });
+                count_J.fetch_add(count_J_local, std::memory_order_relaxed);
+            });
+        }
+        auto t = get_timed(&OCP_t::Timings::calc_y_hat_AT);
         mat_vec_AT(ŷ, Aᵀŷ);
         return count_J.load(std::memory_order_relaxed);
     }
@@ -572,6 +581,16 @@ struct CyqloneBackend {
         return isfinite(l1_norm) ? inf_nrm : l1_norm;
     }
 
+    void scale_variables(std::span<const real_t> in, var_vec_t &out) const {
+        ocp.pack_variables(in, out);
+    }
+    void scale_ineq_constr(std::span<const real_t> in, ineq_constr_vec_t &out) const {
+        ocp.pack_constraints(in, out);
+    }
+    void scale_eq_constr(std::span<const real_t> in, eq_constr_vec_t &out) const {
+        ocp.pack_dynamics(in, out);
+    }
+
     void unscale_variables(const var_vec_t &in, std::span<real_t> out) const {
         ocp.unpack_variables(in, out);
     }
@@ -586,7 +605,7 @@ struct CyqloneBackend {
     }
 
     index_t active_set_change(real_t, [[maybe_unused]] const ineq_constr_vec_t &Σ,
-                              const active_set_t &J, const active_set_t &J_old) {
+                              const active_set_t &J, const active_set_t &J_old, index_t iter) {
         assert(std::ranges::size(J) == std::ranges::size(J_old));
         BATMAT_ASSERT(J.view().layer_stride() == J.rows());
         BATMAT_ASSERT(J.outer_stride() == J.rows());
@@ -595,6 +614,7 @@ struct CyqloneBackend {
         BATMAT_ASSERT(size_J == std::ranges::ssize(J));
         auto num_different = [&] {
             GUANAQO_TRACE("active_set_change", 0);
+            auto t = get_timed(&OCP_t::Timings::update_active_set_change);
             return std::inner_product(J.data(), J.data() + size_J, J_old.data(), index_t{0},
                                       std::plus<>{}, std::not_equal_to<>{});
         }();
@@ -611,6 +631,7 @@ struct CyqloneBackend {
         }
         // std::cout << "                                     -- Fact update\n";
         OCP_t::compact_blas::xsub_copy(simdify(ΔΣ), simdify(J), simdify(J_old));
+        auto t = get_timed(&OCP_t::Timings::update_factorization);
         ocp.update(ΔΣ);
         return num_different;
     }
@@ -618,19 +639,42 @@ struct CyqloneBackend {
     void recompute_inner(real_t S, const var_vec_t &x_outer, const var_vec_t &x,
                          const eq_constr_vec_t &λ, var_vec_t &grad, ineq_constr_vec_t &Ax,
                          var_vec_t &Mᵀλ) {
-        grad_f_regularized(S, x, x_outer, grad);
-        mat_vec_A(x, Ax);
-        mat_vec_MT(λ, Mᵀλ);
+        {
+            auto t = get_timed(&OCP_t::Timings::recompute_inner_grad);
+            grad_f_regularized(S, x, x_outer, grad);
+        }
+        {
+            auto t = get_timed(&OCP_t::Timings::recompute_inner_A);
+            mat_vec_A(x, Ax);
+        }
+        {
+            auto t = get_timed(&OCP_t::Timings::recompute_inner_MT);
+            mat_vec_MT(λ, Mᵀλ);
+        }
     }
 
     real_t recompute_outer(const var_vec_t &x, const ineq_constr_vec_t &ŷ, const eq_constr_vec_t &λ,
                            var_vec_t &grad, ineq_constr_vec_t &Ax, var_vec_t &Aᵀŷ, var_vec_t &Mᵀλ) {
-        grad_f(x, grad);    // ∇f = Q * x + q
-        mat_vec_A(x, Ax);   // Ax = A * x
-        mat_vec_AT(ŷ, Aᵀŷ); // Aᵀŷ = Aᵀ * ŷ
-        mat_vec_MT(λ, Mᵀλ); // Mᵀλ = Mᵀ * λ
-        auto stationarity = unscaled_aug_lagr_norm(grad, Mᵀλ, Aᵀŷ);
-        return stationarity;
+        {
+            auto t = get_timed(&OCP_t::Timings::recompute_outer_grad);
+            grad_f(x, grad); // ∇f = Q * x + q
+        }
+        {
+            auto t = get_timed(&OCP_t::Timings::recompute_outer_A);
+            mat_vec_A(x, Ax); // Ax = A * x
+        }
+        {
+            auto t = get_timed(&OCP_t::Timings::recompute_outer_AT);
+            mat_vec_AT(ŷ, Aᵀŷ); // Aᵀŷ = Aᵀ * ŷ
+        }
+        {
+            auto t = get_timed(&OCP_t::Timings::recompute_outer_MT);
+            mat_vec_MT(λ, Mᵀλ); // Mᵀλ = Mᵀ * λ
+        }
+        {
+            auto t = get_timed(&OCP_t::Timings::recompute_outer_norm);
+            return unscaled_aug_lagr_norm(grad, Mᵀλ, Aᵀŷ);
+        }
     }
 
     void solve([[maybe_unused]] const var_vec_t &x, const var_vec_t &grad, const var_vec_t &Mᵀλ,
@@ -641,6 +685,7 @@ struct CyqloneBackend {
                var_vec_t &MᵀΔλ) {
         if (std::exchange(reset_factorization, false)) {
             // std::cout << "                                     -- Fact reset\n";
+            auto t = get_timed(&OCP_t::Timings::factor);
             ocp.factor(S, J, settings.factor_alt);
             num_updates = 0;
         }
@@ -665,14 +710,27 @@ struct CyqloneBackend {
                       << guanaqo::float_to_str(constr_norm_inf, prec)
                       << ",  abs₂=" << guanaqo::float_to_str(sqrt(constr_norm_sq), prec) << "\n";
         }
-        ocp.solve(d, Δλ);
-        mat_vec_MT(Δλ, MᵀΔλ);
+        {
+            auto t = get_timed(&OCP_t::Timings::solve);
+            ocp.solve(d, Δλ);
+        }
+        {
+            auto t = get_timed(&OCP_t::Timings::solve_MT);
+            mat_vec_MT(Δλ, MᵀΔλ);
+        }
         // Ad ← A d
-        mat_vec_A(d, Ad);
+        {
+            auto t = get_timed(&OCP_t::Timings::solve_A);
+            mat_vec_A(d, Ad);
+        }
         // ξ ← Q d + S⁻¹ d
-        ocp.cost_gradient(d, 1 / S, d, 0, ξ);
+        {
+            auto t = get_timed(&OCP_t::Timings::solve_grad);
+            ocp.cost_gradient(d, 1 / S, d, 0, ξ);
+        }
 
         if (settings.print_residuals) {
+            auto tm  = get_timed(&OCP_t::Timings::solve_resid);
             int prec = settings.print_precision;
             using std::abs;
             using std::max;
@@ -708,12 +766,38 @@ struct CyqloneBackend {
         }
     }
 
-    std::map<std::string, batmat::DefaultTimings> clear_timings() {
+    auto get_timed(typename OCP_t::Timings::type OCP_t::Timings::*member) const {
+        return ocp_timings ? std::optional<typename OCP_t::Timings::timed_t>((*ocp_timings).*member)
+                           : std::nullopt;
+    }
+
+    std::map<std::string, typename OCP_t::Timings::type> clear_timings() {
         if (!ocp_timings)
             return {};
-        [[maybe_unused]] auto t = std::exchange(*ocp_timings, {});
+        const auto t = std::exchange(*ocp_timings, {});
         return {
-            // TODO
+            {"breakpoints", t.breakpoints},
+            {"calc_y_hat", t.calc_y_hat},
+            {"calc_y_hat_AT", t.calc_y_hat_AT},
+            {"update_active_set_change", t.update_active_set_change},
+            {"update_factorization", t.update_factorization},
+            {"factor", t.factor},
+            {"solve", t.solve},
+            {"solve_MT", t.solve_MT},
+            {"solve_A", t.solve_A},
+            {"solve_grad", t.solve_grad},
+            {"solve_resid", t.solve_resid},
+            {"recompute_outer_grad", t.recompute_outer_grad},
+            {"recompute_outer_A", t.recompute_outer_A},
+            {"recompute_outer_AT", t.recompute_outer_AT},
+            {"recompute_outer_MT", t.recompute_outer_MT},
+            {"recompute_outer_norm", t.recompute_outer_norm},
+            {"recompute_inner_grad", t.recompute_inner_grad},
+            {"recompute_inner_A", t.recompute_inner_A},
+            {"recompute_inner_MT", t.recompute_inner_MT},
+            {"ineq_constr_resid", t.ineq_constr_resid},
+            {"ineq_constr_viol", t.ineq_constr_viol},
+            {"ineq_constr_resid_al", t.ineq_constr_resid_al},
         };
     }
 };
