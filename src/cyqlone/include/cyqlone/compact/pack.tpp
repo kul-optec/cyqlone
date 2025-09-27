@@ -17,7 +17,7 @@ void CompactBLAS<T, Abi, O>::unpack(single_batch_view A, mut_single_batch_view_s
         return batmat::ops::transpose<simd_stride, R + 1, value_type>;
     });
     for (index_t c = 0; c < A.cols(); ++c)
-        foreach_chunked(
+        batmat::foreach_chunked(
             0, A.rows(), simd_stride,
             [&](index_t r) {
                 batmat::ops::transpose<simd_stride, simd_stride>(&A(0, r, c), simd_stride,
@@ -33,11 +33,11 @@ template <class T, class Abi, StorageOrder O>
 void CompactBLAS<T, Abi, O>::unpack(single_batch_view A, mut_batch_view_scalar B) {
     BATMAT_ASSERT(O == StorageOrder::ColMajor); // TODO: verify these routines for row major
     GUANAQO_TRACE("unpack", 0, A.rows() * A.cols() * A.depth());
-    static constexpr auto lut = make_1d_lut<simd_stride>([]<index_t R>(index_constant<R>) {
+    static constexpr auto lut = batmat::make_1d_lut<simd_stride>([]<index_t R>(index_constant<R>) {
         return batmat::ops::transpose_dyn<simd_stride, R + 1, value_type>;
     });
     for (index_t c = 0; c < A.cols(); ++c)
-        foreach_chunked(
+        batmat::foreach_chunked(
             0, A.rows(), simd_stride,
             [&](index_t r) {
                 batmat::ops::transpose_dyn<simd_stride, simd_stride>(
@@ -53,7 +53,7 @@ template <class T, class Abi, StorageOrder O>
 void CompactBLAS<T, Abi, O>::unpack(batch_view A, mut_batch_view_scalar B) {
     BATMAT_ASSERT(O == StorageOrder::ColMajor); // TODO: verify these routines for row major
     assert(A.depth() == B.depth());
-    foreach_chunked(
+    batmat::foreach_chunked(
         0, B.depth(), simd_stride,
         [&](index_t l) { unpack(A.batch(l / simd_stride), B.middle_layers(l, simd_stride)); },
         [&](index_t l, index_t nl) { unpack(A.batch(l / simd_stride), B.middle_layers(l, nl)); });
@@ -68,7 +68,7 @@ void CompactBLAS<T, Abi, O>::unpack_L(single_batch_view A, mut_single_batch_view
         return batmat::ops::transpose<simd_stride, R + 1, value_type>;
     });
     for (index_t c = 0; c < A.cols(); ++c)
-        foreach_chunked(
+        batmat::foreach_chunked(
             c, A.rows(), simd_stride,
             [&](index_t r) {
                 batmat::ops::transpose<simd_stride, simd_stride>(&A(0, r, c), simd_stride,
