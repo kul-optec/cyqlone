@@ -148,8 +148,6 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
         real_t stationarity           = std::numeric_limits<real_t>::infinity();
         real_t eq_resid               = std::numeric_limits<real_t>::infinity();
         for (unsigned inner = 0; true; ++inner) {
-            swap(active_set, active_set_old);
-
             // Compute gradient of augmented Lagrangian
             index_t nJ = timed(stats.timings.mat_vec_AT,
                                [&] { return backend.calc_ŷ_Aᵀŷ(Ax, Σ, y, ŷ, Aᵀŷ, active_set); });
@@ -214,6 +212,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
             auto active_set_change = timed(stats.timings.active_set_change, [&] {
                 return backend.active_set_change(S, Σ, active_set, active_set_old);
             });
+            swap(active_set, active_set_old);
             if (stats.detail)
                 stats.detail->entries.back().num_changing_constr = active_set_change;
             if (!active_set_change &&
@@ -240,7 +239,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
 
             // Solve the Newton system
             timed(stats.timings.solve, [&] {
-                backend.solve(x, grad, Mᵀλ, Aᵀŷ, Mxb, S, Σ, active_set, //
+                backend.solve(x, grad, Mᵀλ, Aᵀŷ, Mxb, S, Σ, active_set_old, //
                               d, ξ, Ad, Δλ, MᵀΔλ);
             });
             real_t scal_d = 1;
@@ -305,8 +304,9 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                                     : τ > τ_max      ? "\x1b[0;35m" /* pink */
                                     : τ > τ_min      ? "\x1b[0;33m" /* yellow */
                                                      : "\x1b[0;31m" /* red */;
-                std::cout << "    inner " << std::setw(4) << inner << ": #J = " << std::setw(6)
-                          << nJ << ", #ΔJ = " << std::setw(6) << active_set_change
+                std::cout << "    inner " << std::setw(4) << inner << " (" << std::setw(4)
+                          << (stats.inner_iter + inner) << "): #J = " << std::setw(6) << nJ
+                          << ", #ΔJ = " << std::setw(6) << active_set_change
                           << ", stationarity=" << float_to_str(stationarity, prec)
                           << ", eq constr resid=" << float_to_str(eq_resid, prec) << ", τ=" << color
                           << float_to_str(τ) << "\x1b[0m\n";
@@ -470,6 +470,7 @@ void Solver<Backend>::warm_start_solution() {
     assert(impl);
     backend->warm_start(impl->x, impl->y, impl->λ);
 }
+
 template <class Backend>
 void Solver<Backend>::set_b_eq(std::span<const real_t> b_eq) {
     backend->set_b_eq(b_eq);
