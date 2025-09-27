@@ -407,6 +407,18 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
 }
 
 template <class Backend>
+index_t Solver<Backend>::get_num_variables() const {
+    return backend->num_var();
+}
+template <class Backend>
+index_t Solver<Backend>::get_num_equality_constraints() const {
+    return backend->num_eq_constr();
+}
+template <class Backend>
+index_t Solver<Backend>::get_num_inequality_constraints() const {
+    return backend->num_ineq_constr();
+}
+template <class Backend>
 bool Solver<Backend>::has_result() const {
     return static_cast<bool>(impl);
 }
@@ -470,7 +482,29 @@ void Solver<Backend>::warm_start_solution() {
     assert(impl);
     backend->warm_start(impl->x, impl->y, impl->λ);
 }
-
+template <class Backend>
+void Solver<Backend>::set_initial_guess(std::span<const real_t> x, std::span<const real_t> y,
+                                        std::span<const real_t> λ) {
+    if (!backend->x0)
+        backend->x0.emplace(backend->var_vec());
+    backend->scale_variables(x, *(backend->x0));
+    if (!backend->y0)
+        backend->y0.emplace(backend->ineq_constr_vec());
+    backend->scale_ineq_constr(y, *(backend->y0));
+    if (!backend->λ0)
+        backend->λ0.emplace(backend->eq_constr_vec());
+    backend->scale_eq_constr(λ, *(backend->λ0));
+}
+template <class Backend>
+bool Solver<Backend>::get_initial_guess(std::span<real_t> x, std::span<real_t> y,
+                                        std::span<real_t> λ) {
+    if (!backend->x0 || !backend->y0 || !backend->λ0)
+        return false;
+    backend->unscale_variables(*(backend->x0), x);
+    backend->unscale_ineq_constr(*(backend->y0), y);
+    backend->unscale_eq_constr(*(backend->λ0), λ);
+    return true;
+}
 template <class Backend>
 void Solver<Backend>::set_b_eq(std::span<const real_t> b_eq) {
     backend->set_b_eq(b_eq);

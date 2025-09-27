@@ -88,6 +88,10 @@ class Solver {
     std::optional<SolverStats> stats = std::nullopt;
     guanaqo::AtomicStopSignal stop_signal{};
 
+    [[nodiscard]] index_t get_num_variables() const;
+    [[nodiscard]] index_t get_num_equality_constraints() const;
+    [[nodiscard]] index_t get_num_inequality_constraints() const;
+
     [[nodiscard]] bool has_result() const;
     void get_solution(std::span<real_t>) const;
     [[nodiscard]] std::vector<real_t> get_solution() const;
@@ -102,6 +106,9 @@ class Solver {
     void get_penalty_factors(std::span<real_t>) const;
     [[nodiscard]] std::vector<real_t> get_penalty_factors() const;
     void warm_start_solution();
+    void set_initial_guess(std::span<const real_t> x, std::span<const real_t> y,
+                           std::span<const real_t> λ);
+    bool get_initial_guess(std::span<real_t> x, std::span<real_t> y, std::span<real_t> λ);
     void set_b_eq(std::span<const real_t> b_eq);
     void set_b_lb(std::span<const real_t> b_lb);
     void set_b_ub(std::span<const real_t> b_ub);
