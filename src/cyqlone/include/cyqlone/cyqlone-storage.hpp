@@ -35,12 +35,6 @@ struct CyqloneStorage {
     index_t N_horiz;
     index_t nx, nu, ny, ny_0, ny_N;
     std::vector<bool> Ju0;
-    /// Storage layout:         size                 offset
-    ///     N × [ R  S ] = H    (nu+nx)²             0
-    ///         [ Sᵀ Q ]
-    ///     N × [ B  A ]        nx(nu+nx)            N (nu+nx)²
-    /// (N-1) × [ D  C ]        ny(nu+nx)            N (nu+nx)² + N nx(nu+nx)
-    ///     1 × [ D  C ]        (ny_0+ny_N)(nu+nx)   N (nu+nx)² + N nx(nu+nx) + (N-1)ny(nu+nx)
     using matrix  = batmat::matrix::Matrix<value_type, index_t>;
     matrix data_H = [this] {
         return matrix{{.depth = N_horiz, .rows = nu + nx, .cols = nu + nx}};
