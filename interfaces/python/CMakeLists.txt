@@ -15,6 +15,7 @@ if (CMAKE_CROSSCOMPILING AND NOT (APPLE AND "$ENV{CIBUILDWHEEL}" STREQUAL "1"))
 else()
     find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
 endif()
+set(PYBIND11_USE_CROSSCOMPILING On)
 find_package(pybind11 ${ARGN} REQUIRED CONFIG CMAKE_FIND_ROOT_PATH_BOTH)
 find_package(Eigen3 REQUIRED)
 

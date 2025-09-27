@@ -49,19 +49,20 @@ source_path = "."
 args = ["-Wdev"]
 build_type = "Release"
 install_components = ["python_modules", "python_stubs"]
+find_python3_build_artifacts_prefix = "_HOST"
 [tool.py-build-cmake.conan]
 args = [
     "--build=missing",
     "-o&:with_python=True",
-    "-o&:with_matio=False",
+    "-o&:with_matio=True",
     "-c*:tools.build:skip_test=True",
     "-s",
     "compiler.cppstd=23",
 ]
 [tool.py-build-cmake.linux.conan.cmake]
-generator = "Ninja Multi-Config"
+generator = "Ninja"
 [tool.py-build-cmake.mac.conan.cmake]
-generator = "Ninja Multi-Config"
+generator = "Ninja"
 
 [tool.py-build-cmake.editable]
 mode = "symlink"

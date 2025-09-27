@@ -1,3 +1,4 @@
+#include <cyqlone/matio.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/example-problems/conversion.hpp>
 #include <cyqlone/qpalm/example-problems/platooning.hpp>
@@ -25,12 +26,14 @@ using cyqlone::real_t;
 #include <pybind11/eigen/tensor.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl/filesystem.h>
 namespace py = pybind11;
 using namespace py::literals;
 using tensor3   = Eigen::Tensor<real_t, 3>;
 using cmtensor3 = Eigen::TensorMap<const tensor3>;
 using crmat     = Eigen::Ref<const Eigen::MatrixX<real_t>>;
 using crvec     = Eigen::Ref<const Eigen::VectorX<real_t>>;
+using rvec      = Eigen::Ref<Eigen::VectorX<real_t>>;
 using crbvec    = Eigen::Ref<const Eigen::VectorX<bool>>;
 using cmmat     = Eigen::Map<const Eigen::MatrixX<real_t>>;
 using cmvec     = Eigen::Map<const Eigen::VectorX<real_t>>;
@@ -145,22 +148,74 @@ struct PythonOCP {
             std::ranges::copy(*p_guess, this->p_guess.begin());
         }
     }
+
+    void dump_mat(const std::filesystem::path &filename) const {
+        using Mat  = guanaqo::MatrixView<const real_t, index_t>;
+        auto matfp = cyqlone::create_mat(filename);
+        add_to_mat(matfp.get(), ocp);
+        add_to_mat(matfp.get(), "qr", Mat::as_column(qr));
+        add_to_mat(matfp.get(), "rhs_eq", Mat::as_column(rhs_eq));
+        add_to_mat(matfp.get(), "rhs_lb", Mat::as_column(rhs_lb));
+        add_to_mat(matfp.get(), "rhs_ub", Mat::as_column(rhs_ub));
+    }
+
+    void load_mat(const std::filesystem::path &filename) {
+        auto matfp = cyqlone::open_mat(filename);
+        read_from_mat(matfp.get(), ocp);
+        auto [N, nx, nu, ny, ny_N] = ocp.dim;
+        index_t num_var            = N * (nx + nu) + nx;
+        index_t num_eq_constr      = (N + 1) * nx;
+        index_t num_ineq_constr    = N * ny + ny_N;
+        this->rhs_eq.resize(num_eq_constr);
+        this->rhs_lb.resize(num_ineq_constr);
+        this->rhs_ub.resize(num_ineq_constr);
+        this->qr.resize(num_var);
+        read_from_mat(matfp.get(), "qr", std::span{qr});
+        read_from_mat(matfp.get(), "rhs_eq", std::span{rhs_eq});
+        read_from_mat(matfp.get(), "rhs_lb", std::span{rhs_lb});
+        read_from_mat(matfp.get(), "rhs_ub", std::span{rhs_ub});
+    }
 };
 
 void register_ocp(py::module_ &m) {
     py::class_<PythonOCP> ocp(m, "OCP");
-    ocp.def(py::init<cmtensor3, cmtensor3, crmat, cmtensor3, crmat, crvec, crvec, crvec, crvec,
-                     std::optional<crvec>, std::optional<crvec>, std::optional<crvec>>(),
-            "AB"_a, "CD"_a, "CN"_a, "QRS"_a, "QN"_a, "rhs_eq"_a, "rhs_lb"_a, "rhs_ub"_a, "qr"_a,
-            "x_guess"_a = py::none(), "y_guess"_a = py::none(), "p_guess"_a = py::none())
-        .def_readwrite("rhs_eq", &PythonOCP::rhs_eq)
-        .def_readwrite("rhs_lb", &PythonOCP::rhs_lb)
-        .def_readwrite("rhs_ub", &PythonOCP::rhs_ub)
-        .def_readwrite("qr", &PythonOCP::qr)
-        .def_property_readonly("dim", [](const PythonOCP &ocp) {
-            return py::make_tuple(ocp.ocp.dim.N_horiz, ocp.ocp.dim.nx, ocp.ocp.dim.nu,
-                                  ocp.ocp.dim.ny, ocp.ocp.dim.ny_N);
-        });
+    ocp.def(py::init<>())
+        .def(py::init<cmtensor3, cmtensor3, crmat, cmtensor3, crmat, crvec, crvec, crvec, crvec,
+                      std::optional<crvec>, std::optional<crvec>, std::optional<crvec>>(),
+             "AB"_a, "CD"_a, "CN"_a, "QRS"_a, "QN"_a, "rhs_eq"_a, "rhs_lb"_a, "rhs_ub"_a, "qr"_a,
+             "x_guess"_a = py::none(), "y_guess"_a = py::none(), "p_guess"_a = py::none())
+        .def_property(
+            "rhs_eq",
+            py::cpp_function(
+                [](PythonOCP &self) { return rvec{guanaqo::as_eigen(std::span{self.rhs_eq})}; },
+                py::return_value_policy::reference_internal),
+            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(std::span{self.rhs_eq}) = x; })
+        .def_property(
+            "rhs_lb",
+            py::cpp_function(
+                [](PythonOCP &self) { return rvec{guanaqo::as_eigen(std::span{self.rhs_lb})}; },
+                py::return_value_policy::reference_internal),
+            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(std::span{self.rhs_lb}) = x; })
+        .def_property(
+            "rhs_ub",
+            py::cpp_function(
+                [](PythonOCP &self) { return rvec{guanaqo::as_eigen(std::span{self.rhs_ub})}; },
+                py::return_value_policy::reference_internal),
+            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(std::span{self.rhs_ub}) = x; })
+        .def_property(
+            "qr",
+            py::cpp_function(
+                [](PythonOCP &self) { return rvec{guanaqo::as_eigen(std::span{self.qr})}; },
+                py::return_value_policy::reference_internal),
+            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(std::span{self.qr}) = x; })
+        .def_property_readonly("dim",
+                               [](const PythonOCP &ocp) {
+                                   return py::make_tuple(ocp.ocp.dim.N_horiz, ocp.ocp.dim.nx,
+                                                         ocp.ocp.dim.nu, ocp.ocp.dim.ny,
+                                                         ocp.ocp.dim.ny_N);
+                               })
+        .def("dump_mat", &PythonOCP::dump_mat)
+        .def("load_mat", &PythonOCP::load_mat);
     using cyqlone::qpalm::LinearOCPSparseQP;
     py::class_<LinearOCPSparseQP>(m, "LinearOCPSparseQP")
         .def(py::init([](const PythonOCP &ocp) { return LinearOCPSparseQP::build(ocp.ocp); }))
@@ -505,6 +560,23 @@ void register_qpalm_solver(py::module_ &m, const char *name) {
             "stats", py::cpp_function([](Solver &self) -> auto & { return self.solver.stats; },
                                       py::return_value_policy::reference_internal))
         .def("warm_start_solution", [](Solver &self) { return self.solver.warm_start_solution(); })
+        .def(
+            "set_initial_guess",
+            [](Solver &self, crvec x, crvec y, crvec λ) {
+                return self.solver.set_initial_guess(guanaqo::as_span(x), guanaqo::as_span(y),
+                                                     guanaqo::as_span(λ));
+            },
+            "x"_a, "y"_a, "λ"_a)
+        .def("get_initial_guess",
+             [](Solver &self) -> py::object {
+                 Eigen::VectorX<real_t> x(self.solver.get_num_variables()),
+                     y(self.solver.get_num_inequality_constraints()),
+                     λ(self.solver.get_num_equality_constraints());
+                 if (self.solver.get_initial_guess(guanaqo::as_span(x), guanaqo::as_span(y),
+                                                   guanaqo::as_span(λ)))
+                     return py::make_tuple(std::move(x), std::move(y), std::move(λ));
+                 return py::none();
+             })
         .def("update_data",
              [](Solver &self, const PythonOCP &ocp) {
                  BATMAT_ASSERT(self.solver.backend);
