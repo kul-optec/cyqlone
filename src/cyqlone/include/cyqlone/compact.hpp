@@ -24,7 +24,7 @@ struct CompactBLAS {
     using mut_batch_view_scalar = typename simd_types::template multi_scalar_view<value_type, O>;
     using batch_view            = typename simd_types::template multi_view<const value_type, O>;
     using mut_batch_view        = typename simd_types::template multi_view<value_type, O>;
-    static constexpr index_t simd_stride = simd_types::simd_stride_t();
+    static constexpr index_t simd_stride = typename simd_types::simd_stride_t();
 
     static void unpack(single_batch_view A, mut_single_batch_view_scalar B);
     static void unpack(single_batch_view A, mut_batch_view_scalar B);
