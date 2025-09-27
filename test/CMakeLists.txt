@@ -34,6 +34,9 @@ if (TARGET cyqlone::qpalm AND TARGET cyqlone::example-problems)
         target_link_libraries(tests PRIVATE QPALM::qpalm_cxx)
     endif()
 endif()
+if (CYQLONE_WITH_MATIO)
+    target_sources(tests PRIVATE "test-matio.cpp")
+endif()
 
 option(CYQLONE_FORCE_TEST_DISCOVERY
     "Query the test executable even when cross-compiling" Off)
