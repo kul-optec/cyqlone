@@ -1,5 +1,6 @@
 #include <cyqlone/qpalm/example-problems/platooning.hpp>
 #include <cyqlone/qpalm/example-problems/zoh.hpp>
+#include "cyqlone/qpalm/example-problems/conversion.hpp"
 #include <guanaqo/eigen/view.hpp>
 
 #include <algorithm>
@@ -30,20 +31,20 @@ PlatooningProblem platooning(PlatooningParams p) {
     }
     auto Ts       = p.T_horiz / static_cast<real_t>(p.N_horiz);
     auto [Ad, Bd] = discretize_zoh(A, B, Ts);
+    real_t scal   = 1e-2;
 
     // Constraints rhs
-    std::vector<real_t> eq((N + 1) * nx), lb(N * ny + ny_N), ub(N * ny + ny_N);
+    ocp.b().set_constant(0);
     for (index_t v = 0; v < n_vehicle; ++v)
-        eq[2 * v] = -static_cast<real_t>(v) * p.dist_init;
-    std::ranges::fill(lb, -inf);
-    std::ranges::fill(ub, +inf);
+        ocp.b(0)(2 * v, 0) = -static_cast<real_t>(v) * p.dist_init;
+    ocp.b_min().set_constant(-inf);
+    ocp.b_max().set_constant(+inf);
 
     // Dynamics and constraint matrices
     for (index_t i = 0; i < N; ++i) {
         auto Ai = ocp.A(i), Bi = ocp.B(i), Ci = ocp.C(i), Di = ocp.D(i);
         auto Qi = ocp.Q(i), Ri = ocp.R(i);
-        auto lbi = guanaqo::MatrixView<real_t, index_t>::as_column(lb).middle_rows(i * ny, ny);
-        auto ubi = guanaqo::MatrixView<real_t, index_t>::as_column(ub).middle_rows(i * ny, ny);
+        auto lbi = ocp.b_min(i), ubi = ocp.b_max(i);
         for (index_t v = 0; v < n_vehicle; ++v) {
             Ai                            = as_view(Ad);
             Bi                            = as_view(Bd);
@@ -63,14 +64,13 @@ PlatooningProblem platooning(PlatooningParams p) {
                 lbi(n_vehicle + v - 1, 0)              = -inf;
                 ubi(n_vehicle + v - 1, 0)              = -p.dist_min;
             }
-            Qi(2 * v, 2 * v)         = 10;
-            Qi(2 * v + 1, 2 * v + 1) = 1;
-            Ri(v, v)                 = 5;
+            Qi(2 * v, 2 * v)         = scal * 10;
+            Qi(2 * v + 1, 2 * v + 1) = scal * 1;
+            Ri(v, v)                 = scal * 5;
         }
     }
     auto Ci = ocp.C(N), Qi = ocp.Q(N);
-    auto lbi = guanaqo::MatrixView<real_t, index_t>::as_column(lb).middle_rows(N * ny, ny_N);
-    auto ubi = guanaqo::MatrixView<real_t, index_t>::as_column(ub).middle_rows(N * ny, ny_N);
+    auto lbi = ocp.b_min(N), ubi = ocp.b_max(N);
     for (index_t v = 0; v < n_vehicle; ++v) {
         Ci(v, 2 * v + 1) = 1; // Measure velocity
         lbi(v, 0)        = -p.v_max;
@@ -84,21 +84,19 @@ PlatooningProblem platooning(PlatooningParams p) {
             lbi(n_vehicle + v - 1, 0)              = -inf;
             ubi(n_vehicle + v - 1, 0)              = -p.dist_min;
         }
-        Qi(2 * v, 2 * v)         = 100;
-        Qi(2 * v + 1, 2 * v + 1) = 1;
+        Qi(2 * v, 2 * v)         = scal * 100;
+        Qi(2 * v + 1, 2 * v + 1) = scal * 1;
     }
     std::vector<real_t> ref(nx + nu + nx);
     for (index_t v = 0; v < n_vehicle; ++v) {
         ref[2 * v]           = p.p_target;
         ref[2 * v + nx + nu] = p.p_target;
     }
+    reference_to_gradient(ocp, ref);
 
     return {
-        .ocp         = std::move(ocp),
-        .rhs_eq      = std::move(eq),
-        .rhs_ineq_lb = std::move(lb),
-        .rhs_ineq_ub = std::move(ub),
-        .ref         = std::move(ref),
+        .ocp = std::move(ocp),
+        .ref = std::move(ref),
     };
 }
 

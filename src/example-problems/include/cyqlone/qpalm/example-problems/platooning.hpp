@@ -22,8 +22,6 @@ struct PlatooningParams {
 
 struct PlatooningProblem {
     LinearOCPStorage ocp;
-    std::vector<real_t> rhs_eq;
-    std::vector<real_t> rhs_ineq_lb, rhs_ineq_ub;
     std::vector<real_t> ref;
 };
 

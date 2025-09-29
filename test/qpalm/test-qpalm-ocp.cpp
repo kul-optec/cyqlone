@@ -48,9 +48,7 @@ static std::filesystem::path save_trace(const char *name) {
 TEST(QPALM, cyqlone) {
     auto ocp =
         qp::problems::platooning({.N_horiz = 128, .masses{100, 150, 130, 70, 180, 170, 169, 130}});
-    auto grad = qp::reference_to_gradient(ocp.ocp, ocp.ref);
-    auto cocp = cyqlone::CyqloneStorage<>::build(ocp.ocp, grad, ocp.rhs_eq, ocp.rhs_ineq_lb,
-                                                 ocp.rhs_ineq_ub);
+    auto cocp          = cyqlone::CyqloneStorage<>::build(ocp.ocp);
     const bool verbose = false;
     auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(cocp, {},
                                                            {.log_processors  = 5,
@@ -94,14 +92,13 @@ TEST(QPALM, cyqlone) {
     guanaqo::print_csv(solution, std::span{y});
 
 #if CYQLONE_WITH_MATIO
-    cyqlone::ocp_dump_mat(ocp.ocp, "cyqlone-platooning.mat");
+    cyqlone::ocp_dump_mat("cyqlone-platooning.mat", ocp.ocp);
 #endif
 }
 
 TEST(QPALM, cyqloneSpringsMasses) try {
     auto ocp  = qp::problems::load_from_csv("test/data/springs-masses", "masses=20-horiz=120");
-    auto cocp = cyqlone::CyqloneStorage<>::build(ocp.ocp, ocp.qr, ocp.rhs_eq, ocp.rhs_ineq_lb,
-                                                 ocp.rhs_ineq_ub);
+    auto cocp = cyqlone::CyqloneStorage<>::build(ocp);
     const bool verbose = false;
     auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(
         cocp, {}, {.log_processors = 4, .print_residuals = verbose, .pcg_print_resid = verbose});
@@ -135,7 +132,7 @@ TEST(QPALM, cyqloneSpringsMasses) try {
     guanaqo::print_csv(solution, std::span{y});
 
 #if CYQLONE_WITH_MATIO
-    cyqlone::ocp_dump_mat(ocp.ocp, "cyqlone-spring-masses.mat");
+    cyqlone::ocp_dump_mat("cyqlone-spring-masses.mat", ocp);
 #endif
 } catch (guanaqo::io::csv_read_error &e) {
     GTEST_SKIP() << e.what();

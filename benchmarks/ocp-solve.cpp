@@ -89,7 +89,6 @@ auto build_cyqlone_solver(const OCPDataRiccati &ocp_ric, index_t lP) {
                               .ny      = ocp_ric.ny,
                               .ny_N    = ocp_ric.ny}};
     const auto [N, nx, nu, ny, ny_N] = ocp.dim;
-    const index_t nux                = nu + nx;
     for (index_t i = 0; i < N; ++i) {
         as_eigen(ocp.A(i))       = ocp_ric.A(i);
         as_eigen(ocp.B(i))       = ocp_ric.B(i);
@@ -103,9 +102,7 @@ auto build_cyqlone_solver(const OCPDataRiccati &ocp_ric, index_t lP) {
     as_eigen(ocp.C(N)) = ocp_ric.C(N);
     as_eigen(ocp.Q(N)) = ocp_ric.Q(N);
     using Solver       = CyqloneSolver<VL, real_t, StorageOrder::ColMajor>;
-    std::vector<real_t> qr_lin(nux * N + nx), b_eq_lin(nux * (N + 1)), b_lb_lin(ny * N + ny_N),
-        b_ub_lin(ny * N + ny_N);
-    auto cocp = CyqloneStorage<real_t>::build(ocp, qr_lin, b_eq_lin, b_lb_lin, b_ub_lin);
+    auto cocp          = CyqloneStorage<real_t>::build(ocp);
     return Solver::build(cocp, lP + Solver::lvl);
 }
 

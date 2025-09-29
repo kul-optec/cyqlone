@@ -64,8 +64,6 @@ template <index_t VL>
 void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const CyqloneStorage<real_t> &ocp);
 
 template <index_t VL>
-void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp,
-                                  std::span<const real_t> qr, std::span<const real_t> b_eq,
-                                  std::span<const real_t> b_lb, std::span<const real_t> b_ub);
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp);
 
 } // namespace cyqlone::qpalm

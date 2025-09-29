@@ -39,21 +39,15 @@ index_t CyqloneStorage<T>::count_constr_0(const LinearOCPStorage &ocp, std::vect
 }
 
 template <class T>
-void CyqloneStorage<T>::update(const LinearOCPStorage &ocp, std::span<const value_type> qr,
-                               std::span<const value_type> b_eq, std::span<const value_type> b_lb,
-                               std::span<const value_type> b_ub) {
+void CyqloneStorage<T>::update(const LinearOCPStorage &ocp) {
     const auto ny_0_ = count_constr_0(ocp, Ju0);
     BATMAT_ASSERT(ny_0_ <= ny_0);
-    update_impl(ocp, qr, b_eq, b_lb, b_ub);
+    update_impl(ocp);
 }
 
 template <class T>
-void CyqloneStorage<T>::update_impl(const LinearOCPStorage &ocp, std::span<const value_type> qr,
-                                    std::span<const value_type> b_eq,
-                                    std::span<const value_type> b_lb,
-                                    std::span<const value_type> b_ub) {
-    using vw     = guanaqo::MatrixView<const value_type, index_t>;
-    const auto N = N_horiz, nux = nu + nx;
+void CyqloneStorage<T>::update_impl(const LinearOCPStorage &ocp) {
+    const auto N = N_horiz;
     // H₀ = [ R₀ 0 ]
     //      [ 0  Qₙ]
     data_H(0).top_left(nu, nu)     = ocp.R(0);
@@ -74,28 +68,28 @@ void CyqloneStorage<T>::update_impl(const LinearOCPStorage &ocp, std::span<const
             data_G0N(0).block(j, 0, 1, nu) = ocp.D(0).middle_rows(r, 1);
             value_type t                   = 0;
             for (index_t c = 0; c < nx; ++c) // lb - C₀ x₀
-                t += ocp.C(0)(r, c) * b_eq[c];
-            data_lb0N(0, j, 0) = b_lb[r] - t;
-            data_ub0N(0, j, 0) = b_ub[r] - t;
+                t += ocp.C(0)(r, c) * ocp.b(0)(c, 0);
+            data_lb0N(0, j, 0) = ocp.b_min(0)(r, 0) - t;
+            data_ub0N(0, j, 0) = ocp.b_max(0)(r, 0) - t;
             indices_G0[j]      = r;
             ++j;
         }
     }
     data_G0N(0).block(j, 0, ny_0 - j, nu).set_constant(0);
     data_G0N(0).bottom_right(ny_N, nx) = ocp.C(N);
-    data_lb0N(0).bottom_rows(ny_N)     = vw::as_column(b_lb.subspan(N * ny, ny_N));
-    data_ub0N(0).bottom_rows(ny_N)     = vw::as_column(b_ub.subspan(N * ny, ny_N));
+    data_lb0N(0).bottom_rows(ny_N)     = ocp.b_min().bottom_rows(ny_N);
+    data_ub0N(0).bottom_rows(ny_N)     = ocp.b_max().bottom_rows(ny_N);
     // c̃₀ = c₀ + A₀ x₀      (b_eq = [x₀, c₀, ... cₙ₋₁])
-    data_c(0) = vw::as_column(b_eq.subspan(nx, nx));
+    data_c(0) = ocp.b(1);
     for (index_t r = 0; r < nx; ++r)
         for (index_t c = 0; c < nx; ++c)
-            data_c(0, r, 0) += ocp.A(0)(r, c) * b_eq[c];
+            data_c(0, r, 0) += ocp.A(0)(r, c) * ocp.b(0)(c, 0);
     // r̃₀ = r₀ + S₀ x₀
-    data_rq(0).bottom_rows(nx) = vw::as_column(qr.subspan(nux * N, nx));
-    data_rq(0).top_rows(nu)    = vw::as_column(qr.subspan(nx, nu));
+    data_rq(0).bottom_rows(nx) = ocp.q(N);
+    data_rq(0).top_rows(nu)    = ocp.r(0);
     for (index_t r = 0; r < nu; ++r)
         for (index_t c = 0; c < nx; ++c)
-            data_rq(0, r, 0) += ocp.S_trans(0)(c, r) * b_eq[c];
+            data_rq(0, r, 0) += ocp.S_trans(0)(c, r) * ocp.b(0)(c, 0);
     for (index_t i = 1; i < N; ++i) {
         data_H(i).top_left(nu, nu)     = ocp.R(i);
         data_H(i).bottom_left(nx, nu)  = ocp.S_trans(i);
@@ -105,19 +99,16 @@ void CyqloneStorage<T>::update_impl(const LinearOCPStorage &ocp, std::span<const
         data_F(i).right_cols(nx)       = ocp.A(i);
         data_G(i - 1).left_cols(nu)    = ocp.D(i);
         data_G(i - 1).right_cols(nx)   = ocp.C(i);
-        data_lb(i - 1)                 = vw::as_column(b_lb.subspan(i * ny, ny));
-        data_ub(i - 1)                 = vw::as_column(b_ub.subspan(i * ny, ny));
-        data_c(i)                      = vw::as_column(b_eq.subspan((i + 1) * nx, nx));
-        data_rq(i).bottom_rows(nx)     = vw::as_column(qr.subspan(i * nux, nx));
-        data_rq(i).top_rows(nu)        = vw::as_column(qr.subspan(i * nux + nx, nu));
+        data_lb(i - 1)                 = ocp.b_min(i);
+        data_ub(i - 1)                 = ocp.b_max(i);
+        data_c(i)                      = ocp.b(i + 1);
+        data_rq(i).bottom_rows(nx)     = ocp.q(i);
+        data_rq(i).top_rows(nu)        = ocp.r(i);
     }
 }
 
 template <class T>
-CyqloneStorage<T>
-CyqloneStorage<T>::build(const LinearOCPStorage &ocp, std::span<const value_type> qr,
-                         std::span<const value_type> b_eq, std::span<const value_type> b_lb,
-                         std::span<const value_type> b_ub, index_t ny_0) {
+CyqloneStorage<T> CyqloneStorage<T>::build(const LinearOCPStorage &ocp, index_t ny_0) {
     const auto [N, nx, nu, ny, ny_N] = ocp.dim;
     // Count the number of input constraints in the first stage
     std::vector<bool> Ju0(ny);
@@ -133,7 +124,7 @@ CyqloneStorage<T>::build(const LinearOCPStorage &ocp, std::span<const value_type
                           .ny_0    = ny_0,
                           .ny_N    = ny_N,
                           .Ju0     = std::move(Ju0)};
-    res.update_impl(ocp, qr, b_eq, b_lb, b_ub);
+    res.update_impl(ocp);
     return res;
 }
 

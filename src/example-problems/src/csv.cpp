@@ -9,7 +9,7 @@ namespace cyqlone::qpalm::problems {
 
 using eigen_mat = Eigen::MatrixX<real_t>;
 
-CSVProblem load_from_csv(const fs::path &folder, const std::string &name) {
+LinearOCPStorage load_from_csv(const fs::path &folder, const std::string &name) {
     using guanaqo::as_view;
 
     std::array<index_t, 5> dims_array;
@@ -102,13 +102,13 @@ CSVProblem load_from_csv(const fs::path &folder, const std::string &name) {
     Ci = as_view(CN);
     Qi = as_view(QN);
 
-    return {
-        .ocp         = std::move(ocp),
-        .rhs_eq      = std::move(eq),
-        .rhs_ineq_lb = std::move(lb),
-        .rhs_ineq_ub = std::move(ub),
-        .qr          = std::move(qr),
-    };
+    // TODO: unnecessary copy
+    ocp.qr()    = decltype(ocp.qr())::as_column(std::span{qr});
+    ocp.b()     = decltype(ocp.b())::as_column(std::span{eq});
+    ocp.b_min() = decltype(ocp.b_min())::as_column(std::span{lb});
+    ocp.b_max() = decltype(ocp.b_max())::as_column(std::span{ub});
+
+    return ocp;
 }
 
 } // namespace cyqlone::qpalm::problems

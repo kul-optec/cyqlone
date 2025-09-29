@@ -19,8 +19,10 @@ namespace cyqlone::qpalm {
 /// with @f$ \ell_j(x, u) = \tfrac12 \left\| \begin{pmatrix} x - x^j_\text{ref}
 /// \\ u - u^j_\text{ref} \right\|_{H_j}^2 @f$, with the Hessian
 /// @f$ H_j = \begin{pmatrix} Q_j & S_j^\top \\ S_j & R_j \end{pmatrix} @f$.
-/// Returns @f$ \nabla J(0, 0) @f$.
-std::vector<real_t> reference_to_gradient(const LinearOCPStorage &ocp, std::span<const real_t> ref);
+/// Stores @f$ \nabla J(0, 0) @f$ to @p qr.
+void reference_to_gradient(const LinearOCPStorage &ocp, std::span<const real_t> ref,
+                           std::span<real_t> qr);
+void reference_to_gradient(LinearOCPStorage &ocp, std::span<const real_t> ref);
 
 using guanaqo::linalg::sparsity::SparseCSC;
 

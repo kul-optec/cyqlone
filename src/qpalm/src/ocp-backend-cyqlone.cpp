@@ -13,9 +13,8 @@ namespace cyqlone::qpalm {
         const CyqloneStorage<> &ocp, CyqloneData data, const CyqloneBackendSettings &settings);    \
     template void update_qpalm_cyqlone_backend<vl>(CyqloneBackend<vl> &,                           \
                                                    const CyqloneStorage<> &ocp);                   \
-    template void update_qpalm_cyqlone_backend<vl>(                                                \
-        CyqloneBackend<vl> &, const LinearOCPStorage &ocp, std::span<const real_t> qr,             \
-        std::span<const real_t> b_eq, std::span<const real_t> b_lb, std::span<const real_t> b_ub)
+    template void update_qpalm_cyqlone_backend<vl>(CyqloneBackend<vl> &,                           \
+                                                   const LinearOCPStorage &ocp)
 
 CYQLONE_INSTANTIATE_QPALM_Cyqlone(8);
 CYQLONE_INSTANTIATE_QPALM_Cyqlone(4);

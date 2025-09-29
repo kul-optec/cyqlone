@@ -41,13 +41,11 @@ TEST(Cyqlone, factor) {
     std::mt19937 rng(102030405);
     std::uniform_real_distribution<real_t> uni(-1, 1);
     std::bernoulli_distribution bern(0.01);
-    std::vector<real_t> qr_lin(nux * N + dim.nx), b_eq_lin(nux * (N + 1)), b_lb_lin(ny * N + ny_N),
-        b_ub_lin(ny * N + ny_N);
-    std::ranges::generate(qr_lin, [&] { return uni(rng); });
-    std::ranges::generate(b_eq_lin, [&] { return uni(rng); });
-    std::ranges::generate(b_lb_lin, [&] { return uni(rng); });
-    std::ranges::generate(b_ub_lin, [&] { return uni(rng); });
-    auto cocp     = CyqloneStorage<real_t>::build(ocp, qr_lin, b_eq_lin, b_lb_lin, b_ub_lin);
+    std::generate_n(ocp.qr().data, ocp.qr().rows, [&] { return uni(rng); });
+    std::generate_n(ocp.b().data, ocp.b().rows, [&] { return uni(rng); });
+    std::generate_n(ocp.b_min().data, ocp.b_min().rows, [&] { return uni(rng); });
+    std::generate_n(ocp.b_max().data, ocp.b_max().rows, [&] { return uni(rng); });
+    auto cocp     = CyqloneStorage<real_t>::build(ocp);
     Solver solver = Solver::build(cocp, lP);
 
     const index_t nyM = std::max(ny, ny_0 + ny_N);

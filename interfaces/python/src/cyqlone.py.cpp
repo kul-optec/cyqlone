@@ -53,21 +53,11 @@ namespace cyqlone {
 
 struct PythonOCP {
     cyqlone::LinearOCPStorage ocp;
-    std::vector<real_t> rhs_lb, rhs_ub, rhs_eq, qr, x_guess, y_guess, p_guess;
-
-    struct Init {
-        cyqlone::LinearOCPStorage ocp;
-        std::vector<real_t> rhs_lb, rhs_ub, rhs_eq, qr, x_guess, y_guess, p_guess;
-    };
 
     PythonOCP() = default;
-    PythonOCP(Init init)
-        : ocp{std::move(init.ocp)}, rhs_lb{std::move(init.rhs_lb)}, rhs_ub{std::move(init.rhs_ub)},
-          rhs_eq{std::move(init.rhs_eq)}, qr{std::move(init.qr)}, x_guess{std::move(init.x_guess)},
-          y_guess{std::move(init.y_guess)}, p_guess{std::move(init.p_guess)} {}
+    PythonOCP(cyqlone::LinearOCPStorage ocp) : ocp{std::move(ocp)} {}
     PythonOCP(cmtensor3 AB, cmtensor3 CD, crmat CN, cmtensor3 QRS, crmat QN, crvec rhs_eq,
-              crvec rhs_lb, crvec rhs_ub, crvec qr, std::optional<crvec> x_guess,
-              std::optional<crvec> y_guess, std::optional<crvec> p_guess)
+              crvec rhs_lb, crvec rhs_ub, crvec qr)
         : ocp{.dim = {
                   .N_horiz = static_cast<index_t>(AB.dimension(0)),
                   .nx      = static_cast<index_t>(AB.dimension(1)),
@@ -79,10 +69,6 @@ struct PythonOCP {
         index_t num_var            = N * (nx + nu) + nx;
         index_t num_eq_constr      = (N + 1) * nx;
         index_t num_ineq_constr    = N * ny + ny_N;
-        this->rhs_eq.resize(num_eq_constr);
-        this->rhs_lb.resize(num_ineq_constr);
-        this->rhs_ub.resize(num_ineq_constr);
-        this->qr.resize(num_var);
         if (CD.dimension(0) != N)
             throw std::invalid_argument("Invalid horizon length CD");
         if (QRS.dimension(0) != N)
@@ -107,12 +93,6 @@ struct PythonOCP {
             throw std::invalid_argument("Invalid size rhs_ub");
         if (qr.size() != num_var)
             throw std::invalid_argument("Invalid size qr");
-        if (x_guess && x_guess->size() != num_var)
-            throw std::invalid_argument("Invalid size x_guess");
-        if (y_guess && y_guess->size() != num_ineq_constr)
-            throw std::invalid_argument("Invalid size y_guess");
-        if (p_guess && p_guess->size() != num_eq_constr)
-            throw std::invalid_argument("Invalid size p_guess");
 
         for (index_t i = 0; i < N; ++i) {
             for (index_t r = 0; r < nx; ++r)
@@ -131,83 +111,53 @@ struct PythonOCP {
         for (index_t r = 0; r < nx; ++r)
             for (index_t c = 0; c < nx; ++c)
                 ocp.H(N)(r, c) = QN(r, c);
-        std::ranges::copy(rhs_eq, this->rhs_eq.begin());
-        std::ranges::copy(rhs_lb, this->rhs_lb.begin());
-        std::ranges::copy(rhs_ub, this->rhs_ub.begin());
-        std::ranges::copy(qr, this->qr.begin());
-        if (x_guess) {
-            this->x_guess.resize(num_var);
-            std::ranges::copy(*x_guess, this->x_guess.begin());
-        }
-        if (y_guess) {
-            this->y_guess.resize(num_ineq_constr);
-            std::ranges::copy(*y_guess, this->y_guess.begin());
-        }
-        if (p_guess) {
-            this->p_guess.resize(num_eq_constr);
-            std::ranges::copy(*p_guess, this->p_guess.begin());
-        }
+        std::ranges::copy(rhs_eq, ocp.b().data);
+        std::ranges::copy(rhs_lb, ocp.b_min().data);
+        std::ranges::copy(rhs_ub, ocp.b_max().data);
+        std::ranges::copy(qr, ocp.qr().data);
     }
 
     void dump_mat(const std::filesystem::path &filename) const {
-        using Mat  = guanaqo::MatrixView<const real_t, index_t>;
         auto matfp = cyqlone::create_mat(filename);
         add_to_mat(matfp.get(), ocp);
-        add_to_mat(matfp.get(), "qr", Mat::as_column(qr));
-        add_to_mat(matfp.get(), "rhs_eq", Mat::as_column(rhs_eq));
-        add_to_mat(matfp.get(), "rhs_lb", Mat::as_column(rhs_lb));
-        add_to_mat(matfp.get(), "rhs_ub", Mat::as_column(rhs_ub));
     }
 
     void load_mat(const std::filesystem::path &filename) {
         auto matfp = cyqlone::open_mat(filename);
         read_from_mat(matfp.get(), ocp);
-        auto [N, nx, nu, ny, ny_N] = ocp.dim;
-        index_t num_var            = N * (nx + nu) + nx;
-        index_t num_eq_constr      = (N + 1) * nx;
-        index_t num_ineq_constr    = N * ny + ny_N;
-        this->rhs_eq.resize(num_eq_constr);
-        this->rhs_lb.resize(num_ineq_constr);
-        this->rhs_ub.resize(num_ineq_constr);
-        this->qr.resize(num_var);
-        read_from_mat(matfp.get(), "qr", std::span{qr});
-        read_from_mat(matfp.get(), "rhs_eq", std::span{rhs_eq});
-        read_from_mat(matfp.get(), "rhs_lb", std::span{rhs_lb});
-        read_from_mat(matfp.get(), "rhs_ub", std::span{rhs_ub});
     }
 };
 
 void register_ocp(py::module_ &m) {
     py::class_<PythonOCP> ocp(m, "OCP");
     ocp.def(py::init<>())
-        .def(py::init<cmtensor3, cmtensor3, crmat, cmtensor3, crmat, crvec, crvec, crvec, crvec,
-                      std::optional<crvec>, std::optional<crvec>, std::optional<crvec>>(),
-             "AB"_a, "CD"_a, "CN"_a, "QRS"_a, "QN"_a, "rhs_eq"_a, "rhs_lb"_a, "rhs_ub"_a, "qr"_a,
-             "x_guess"_a = py::none(), "y_guess"_a = py::none(), "p_guess"_a = py::none())
+        .def(py::init<cmtensor3, cmtensor3, crmat, cmtensor3, crmat, crvec, crvec, crvec, crvec>(),
+             "AB"_a, "CD"_a, "CN"_a, "QRS"_a, "QN"_a, "rhs_eq"_a, "rhs_lb"_a, "rhs_ub"_a, "qr"_a)
+        .def_property(
+            "x0",
+            py::cpp_function([](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.b(0))}; },
+                             py::return_value_policy::reference_internal),
+            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.b(0)) = x; })
         .def_property(
             "rhs_eq",
-            py::cpp_function(
-                [](PythonOCP &self) { return rvec{guanaqo::as_eigen(std::span{self.rhs_eq})}; },
-                py::return_value_policy::reference_internal),
-            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(std::span{self.rhs_eq}) = x; })
-        .def_property(
-            "rhs_lb",
-            py::cpp_function(
-                [](PythonOCP &self) { return rvec{guanaqo::as_eigen(std::span{self.rhs_lb})}; },
-                py::return_value_policy::reference_internal),
-            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(std::span{self.rhs_lb}) = x; })
-        .def_property(
-            "rhs_ub",
-            py::cpp_function(
-                [](PythonOCP &self) { return rvec{guanaqo::as_eigen(std::span{self.rhs_ub})}; },
-                py::return_value_policy::reference_internal),
-            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(std::span{self.rhs_ub}) = x; })
+            py::cpp_function([](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.b())}; },
+                             py::return_value_policy::reference_internal),
+            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.b()) = x; })
+        .def_property("rhs_lb",
+                      py::cpp_function(
+                          [](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.b_min())}; },
+                          py::return_value_policy::reference_internal),
+                      [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.b_min()) = x; })
+        .def_property("rhs_ub",
+                      py::cpp_function(
+                          [](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.b_max())}; },
+                          py::return_value_policy::reference_internal),
+                      [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.b_max()) = x; })
         .def_property(
             "qr",
-            py::cpp_function(
-                [](PythonOCP &self) { return rvec{guanaqo::as_eigen(std::span{self.qr})}; },
-                py::return_value_policy::reference_internal),
-            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(std::span{self.qr}) = x; })
+            py::cpp_function([](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.qr())}; },
+                             py::return_value_policy::reference_internal),
+            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.qr()) = x; })
         .def_property_readonly("dim",
                                [](const PythonOCP &ocp) {
                                    return py::make_tuple(ocp.ocp.dim.N_horiz, ocp.ocp.dim.nx,
@@ -256,18 +206,8 @@ void register_ocp(py::module_ &m) {
     m.def(
         "create_platooning_problem",
         [](const cyqlone::qpalm::problems::PlatooningParams &params) {
-            auto p  = platooning(params);
-            auto qr = cyqlone::qpalm::reference_to_gradient(p.ocp, p.ref);
-            return PythonOCP{{
-                .ocp     = std::move(p.ocp),
-                .rhs_lb  = std::move(p.rhs_ineq_lb),
-                .rhs_ub  = std::move(p.rhs_ineq_ub),
-                .rhs_eq  = std::move(p.rhs_eq),
-                .qr      = std::move(qr),
-                .x_guess = {},
-                .y_guess = {},
-                .p_guess = {},
-            }};
+            auto p = platooning(params);
+            return PythonOCP{std::move(p.ocp)};
         },
         py::arg_v("params", cyqlone::qpalm::problems::PlatooningParams{}, "PlatooningParams()"));
 }
@@ -522,12 +462,7 @@ struct PythonCyqloneSolver {
                         cyqlone::qpalm::CyqloneBackendSettings backend_settings,
                         cyqlone::qpalm::Settings qpalm_settings)
         : solver{cyqlone::qpalm::make_qpalm_cyqlone_backend<VL>(
-                     cyqlone::CyqloneStorage<>::build(ocp.ocp, ocp.qr, ocp.rhs_eq, ocp.rhs_lb,
-                                                      ocp.rhs_ub),
-                     {.initial_variables              = ocp.x_guess,
-                      .initial_inequality_multipliers = ocp.y_guess,
-                      .initial_equality_multipliers   = ocp.p_guess},
-                     backend_settings),
+                     cyqlone::CyqloneStorage<>::build(ocp.ocp), {}, backend_settings),
                  qpalm_settings} {}
 };
 
@@ -580,8 +515,7 @@ void register_qpalm_solver(py::module_ &m, const char *name) {
         .def("update_data",
              [](Solver &self, const PythonOCP &ocp) {
                  BATMAT_ASSERT(self.solver.backend);
-                 return update_qpalm_cyqlone_backend(*self.solver.backend, ocp.ocp, ocp.qr,
-                                                     ocp.rhs_eq, ocp.rhs_lb, ocp.rhs_ub);
+                 return update_qpalm_cyqlone_backend(*self.solver.backend, ocp.ocp);
              })
         .def("set_b_eq",
              [](Solver &self, crvec b_eq) { return self.solver.set_b_eq(guanaqo::as_span(b_eq)); })
