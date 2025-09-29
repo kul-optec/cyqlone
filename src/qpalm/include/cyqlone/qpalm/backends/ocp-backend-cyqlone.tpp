@@ -115,6 +115,16 @@ struct CyqloneBackend {
     }
 
     void warm_start(const var_vec_t &x, const ineq_constr_vec_t &y, const eq_constr_vec_t &λ) {
+        const auto k_to_l = [&](index_t k) {
+            const auto num_stages = ocp.ceil_N >> ocp.lP;
+            const auto i          = (ocp.ceil_N - k) % num_stages;
+            const auto k1         = (k + i) / num_stages;
+            const auto k2         = k1 >> (ocp.lP - ocp.lvl);
+            const auto v          = k2 % (1 << ocp.lvl);
+            const auto t          = k1 - (k2 << (ocp.lP - ocp.lvl));
+            return ((num_stages * t + i) << ocp.lvl) + v;
+        };
+
         switch (settings.strategy) {
             case WarmStartingStrategy::Zeros:
                 this->x0.reset();
@@ -130,26 +140,26 @@ struct CyqloneBackend {
                 auto &x0 = this->x0.emplace(var_vec());         // TODO: zero init is redundant
                 auto &λ0 = this->λ0.emplace(eq_constr_vec());   // TODO: zero init is redundant
                 auto &y0 = this->y0.emplace(ineq_constr_vec()); // TODO: zero init is redundant
-                for (index_t i = 1; i < x0.depth(); ++i)        // TODO: vectorize?
-                    x0(i - 1) = x(i);
-                x0(x0.depth() - 1) = x(x0.depth() - 1);
-                for (index_t i = 1; i < y0.depth(); ++i) // TODO: vectorize?
-                    y0(i - 1) = y(i);
-                y0(y0.depth() - 1) = y(y0.depth() - 1);
-                for (index_t i = 1; i < λ0.depth(); ++i) // TODO: vectorize?
-                    λ0(i - 1) = λ(i);
-                λ0(λ0.depth() - 1) = λ(λ0.depth() - 1);
+                for (index_t k = 1; k < ocp.N_horiz; ++k)       // TODO: vectorize?
+                    x0(k_to_l(k - 1)) = x(k_to_l(k));
+                x0(k_to_l(ocp.N_horiz - 1)) = x(k_to_l(ocp.N_horiz - 1));
+                for (index_t k = 1; k < ocp.N_horiz; ++k) // TODO: vectorize?
+                    y0(k_to_l(k - 1)) = y(k_to_l(k));
+                y0(k_to_l(ocp.N_horiz - 1)) = y(k_to_l(ocp.N_horiz - 1));
+                for (index_t k = 1; k < ocp.N_horiz; ++k) // TODO: vectorize?
+                    λ0(k_to_l(k - 1)) = λ(k_to_l(k));
+                λ0(k_to_l(ocp.N_horiz - 1)) = λ(k_to_l(ocp.N_horiz - 1));
             } break;
             case WarmStartingStrategy::ShiftNoInequality: {
                 auto &x0 = this->x0.emplace(var_vec());       // TODO: zero init is redundant
                 auto &λ0 = this->λ0.emplace(eq_constr_vec()); // TODO: zero init is redundant
                 this->y0.emplace(y);
-                for (index_t i = 1; i < x0.depth(); ++i) // TODO: vectorize?
-                    x0(i - 1) = x(i);
-                x0(x0.depth() - 1) = x(x0.depth() - 1);
-                for (index_t i = 1; i < λ0.depth(); ++i) // TODO: vectorize?
-                    λ0(i - 1) = λ(i);
-                λ0(λ0.depth() - 1) = λ(λ0.depth() - 1);
+                for (index_t k = 1; k < ocp.N_horiz; ++k) // TODO: vectorize?
+                    x0(k_to_l(k - 1)) = x(k_to_l(k));
+                x0(k_to_l(ocp.N_horiz - 1)) = x(k_to_l(ocp.N_horiz - 1));
+                for (index_t k = 1; k < ocp.N_horiz; ++k) // TODO: vectorize?
+                    λ0(k_to_l(k - 1)) = λ(k_to_l(k));
+                λ0(k_to_l(ocp.N_horiz - 1)) = λ(k_to_l(ocp.N_horiz - 1));
             } break;
             default: BATMAT_ASSERT(false);
         }
@@ -605,7 +615,7 @@ struct CyqloneBackend {
     }
 
     index_t active_set_change(real_t, [[maybe_unused]] const ineq_constr_vec_t &Σ,
-                              const active_set_t &J, const active_set_t &J_old, index_t iter) {
+                              const active_set_t &J, const active_set_t &J_old) {
         assert(std::ranges::size(J) == std::ranges::size(J_old));
         BATMAT_ASSERT(J.view().layer_stride() == J.rows());
         BATMAT_ASSERT(J.outer_stride() == J.rows());
@@ -817,10 +827,8 @@ void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const CyqloneStor
 }
 
 template <index_t VL>
-void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp,
-                                  std::span<const real_t> qr, std::span<const real_t> b_eq,
-                                  std::span<const real_t> b_lb, std::span<const real_t> b_ub) {
-    const auto cocp = cyqlone::CyqloneStorage<>::build(ocp, qr, b_eq, b_lb, b_ub, backend.ocp.ny_0);
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp) {
+    const auto cocp = cyqlone::CyqloneStorage<>::build(ocp, backend.ocp.ny_0);
     update_qpalm_cyqlone_backend(backend, cocp);
 }
 
