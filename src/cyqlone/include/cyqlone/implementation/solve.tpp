@@ -12,14 +12,14 @@ using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_active([[maybe_unused]] index_t l,
-                                                        [[maybe_unused]] index_t biY,
-                                                        [[maybe_unused]] mut_view<> λ) const {
+                                                      [[maybe_unused]] index_t biY,
+                                                      [[maybe_unused]] mut_view<> λ) const {
     // TODO: nothing?
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_active_secondary(index_t l, index_t biU,
-                                                                  mut_view<> λ) const {
+                                                                mut_view<> λ) const {
     const index_t num_stages = ceil_N >> lP;
     const index_t offset     = 1 << l;
     const index_t biD        = sub_wrap_PmV(biU, offset);
@@ -46,7 +46,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_active_secondary(index_t l, index
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward(index_t ti, mut_view<> ux,
-                                                                 mut_view<> λ) const {
+                                                               mut_view<> λ) const {
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
     const index_t biI        = sub_wrap_PmV(ti, 1);
@@ -107,8 +107,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward(index_t ti, mut_v
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward_alt(index_t ti, mut_view<> ux,
-                                                                     mut_view<> λ,
-                                                                     mut_view<> work) const {
+                                                                   mut_view<> λ,
+                                                                   mut_view<> work) const {
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
     const index_t biI        = sub_wrap_PmV(ti, 1);
@@ -179,7 +179,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward_alt(index_t ti, m
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(mut_view<> ux, mut_view<> λ,
-                                                         mut_view<> work) const {
+                                                       mut_view<> work) const {
     const index_t P = 1 << (lP - lvl);
     batmat::foreach_thread(P, [this, &ux, &λ, &work](index_t ti, index_t) {
         alt ? solve_riccati_forward_alt(ti, ux, λ, work) : solve_riccati_forward(ti, ux, λ);
@@ -198,7 +198,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(mut_view<> ux, mut_view<>
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_active(index_t l, index_t bi,
-                                                                mut_view<> λ) const {
+                                                              mut_view<> λ) const {
     const index_t offset     = 1 << l;
     const index_t num_stages = ceil_N >> lP;
     const index_t biY        = add_wrap_PmV(bi, offset);
@@ -217,8 +217,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_active(index_t l, index_t
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(index_t ti, mut_view<> ux,
-                                                                 mut_view<> λ,
-                                                                 mut_view<> work) const {
+                                                               mut_view<> λ,
+                                                               mut_view<> work) const {
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
     const index_t biI        = sub_wrap_PmV(ti, 1);
@@ -289,8 +289,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(index_t ti, mut_v
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_alt(index_t ti, mut_view<> ux,
-                                                                     mut_view<> λ,
-                                                                     mut_view<> work) const {
+                                                                   mut_view<> λ,
+                                                                   mut_view<> work) const {
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
     const index_t biI        = sub_wrap_PmV(ti, 1);
@@ -347,14 +347,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_alt(index_t ti, m
             trsm(tril(Q̂i), w);
             // LQ⁻¹ λ - LÂᵀ λ
             gemm_sub(Âi.transposed(), λ.batch(di0), w);
-            // x_last = LQ⁻ᵀ(LQ⁻¹ λ - LÂᵀ λ)
+            // w = LQ⁻ᵀ(LQ⁻¹ λ - LÂᵀ λ)
             trsm(tril(Q̂i).transposed(), w);
+            // x_last = LQ⁻ᵀ(q_last + LQ⁻¹ λ - LÂᵀ λ)
             compact_blas::xadd_copy(simdify(x_last), simdify(x_last), simdify(w));
 
             // u -= LB̂ᵀ λ0 + LSᵀ q
             gemm_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
             gemm_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
-            // x = LQ⁻ᵀ q, u = LR⁻ᵀ (u - LSᵀ x)
+            // u = LR⁻ᵀ u
             trsm(tril(R̂i).transposed(), ux.batch(di).top_rows(nu));
         }
     }
@@ -362,7 +363,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_alt(index_t ti, m
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(mut_view<> ux, mut_view<> λ,
-                                                         mut_view<> work) const {
+                                                       mut_view<> work) const {
     const index_t P = 1 << (lP - lvl);
     batmat::foreach_thread(P, [this, &ux, &λ, &work](index_t ti, index_t) {
         for (index_t l = lP - lvl; l-- > 0;) {
@@ -378,8 +379,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(mut_view<> ux, mut_view<>
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve(mut_view<> ux, mut_view<> λ,
-                                                 mut_batch_view<> work_pcg,
-                                                 mut_view<> work_riccati) const {
+                                               mut_batch_view<> work_pcg,
+                                               mut_view<> work_riccati) const {
     solve_forward(ux, λ, work_riccati);
     solve_pcg(λ.batch(0), work_pcg);
     solve_reverse(ux, λ, work_riccati);
