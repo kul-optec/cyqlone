@@ -224,6 +224,7 @@ void register_ocp(py::module_ &m) {
         .def_readwrite("p_target", &cyqlone::qpalm::problems::PlatooningParams::p_target)
         .def_readwrite("N_horiz", &cyqlone::qpalm::problems::PlatooningParams::N_horiz)
         .def_readwrite("T_horiz", &cyqlone::qpalm::problems::PlatooningParams::T_horiz)
+        .def_readwrite("scale_cost", &cyqlone::qpalm::problems::PlatooningParams::scale_cost)
         .def_readwrite("masses", &cyqlone::qpalm::problems::PlatooningParams::masses);
     m.def(
         "create_platooning_problem",

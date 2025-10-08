@@ -31,7 +31,7 @@ PlatooningProblem platooning(PlatooningParams p) {
     }
     auto Ts       = p.T_horiz / static_cast<real_t>(p.N_horiz);
     auto [Ad, Bd] = discretize_zoh(A, B, Ts);
-    real_t scal   = 1e-2;
+    real_t scal   = p.scale_cost / static_cast<real_t>(p.N_horiz);
 
     // Constraints rhs
     ocp.b().set_constant(0);
