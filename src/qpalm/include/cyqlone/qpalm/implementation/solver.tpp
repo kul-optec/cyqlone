@@ -142,7 +142,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
 
         // Inner semismooth Newton loop
         unsigned no_change_active_set = 0;
-        bool force_τ_1                = false;
+        bool force_τ_1_active_set     = false;
         auto remaining_iter           = settings.max_total_inner_iter - stats.inner_iter;
         remaining_iter                = std::min(remaining_iter, settings.max_inner_iter);
         real_t stationarity           = std::numeric_limits<real_t>::infinity();
@@ -217,7 +217,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                 stats.detail->entries.back().num_changing_constr = active_set_change;
             if (!active_set_change &&
                 ++no_change_active_set >= settings.max_no_changes_active_set) {
-                if (force_τ_1 || !settings.force_linesearch_if_no_set_change) {
+                if (force_τ_1_active_set || !settings.force_linesearch_if_no_set_change) {
                     if (stats.detail)
                         stats.detail->entries.back().exit_reason =
                             DetailedStats::ExitReason::NoActiveSetChange;
@@ -227,7 +227,9 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                     leave_inner();
                     break;
                 }
-                force_τ_1 = true;
+                force_τ_1_active_set = true;
+            } else {
+                force_τ_1_active_set = false;
             }
 
             // Update regularization
@@ -251,6 +253,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                 backend.scale(scal_d, Δλ);
                 backend.scale(scal_d, MᵀΔλ);
             }
+            bool force_τ_1_dir_deriv = false;
             if (settings.print_directional_deriv || settings.force_linesearch_if_dir_deriv_pos ||
                 settings.detailed_stats) {
                 auto grad_add = backend.var_vec();
@@ -263,17 +266,18 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                     std::cout << "dir deriv: " << color << dir_deriv << "\x1b[0m" << std::endl;
                 }
                 if (settings.force_linesearch_if_dir_deriv_pos && dir_deriv > 0)
-                    force_τ_1 = true;
+                    force_τ_1_dir_deriv = true;
             }
 
             // Perform exact line search
-            real_t τ   = 1 / scal_d;
-            index_t iτ = 0;
-            if (force_τ_1) {
-                if (settings.verbose)
+            bool force_τ_1_first_iter = (stats.inner_iter + inner) == 0;
+            real_t τ                  = 1 / scal_d;
+            index_t iτ                = -999999;
+            if (force_τ_1_active_set || force_τ_1_dir_deriv || force_τ_1_first_iter) {
+                if (settings.verbose && !force_τ_1_first_iter)
                     std::cout << "    \x1b[0;33mWarning\x1b[0m: Forcing line "
                                  "search τ=1\n";
-            } else if (eq_resid <= eq_tol)
+            } else {
                 std::tie(τ, iτ) = timed(stats.timings.line_search, [&] {
                     real_t η = backend.dot(d, ξ), β = backend.dot(d, grad);
                     if (settings.linesearch_include_multipliers) {
@@ -290,6 +294,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                     return linesearch(backend, η, β, Σ, y, Ad, Ax, backend.Ax_min(),
                                       backend.Ax_max());
                 });
+            }
 
             if (stats.detail) {
                 stats.detail->entries.back().linesearch_step_size        = τ;
@@ -309,7 +314,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(backend_type &backend,
                           << ", #ΔJ = " << std::setw(6) << active_set_change
                           << ", stationarity=" << float_to_str(stationarity, prec)
                           << ", eq constr resid=" << float_to_str(eq_resid, prec) << ", τ=" << color
-                          << float_to_str(τ) << "\x1b[0m\n";
+                          << float_to_str(τ) << "\x1b[0m (" << iτ << ")\n";
             }
             τ = std::clamp(τ, τ_min, τ_max);
 
