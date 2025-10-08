@@ -31,6 +31,7 @@ namespace py = pybind11;
 using namespace py::literals;
 using tensor3   = Eigen::Tensor<real_t, 3>;
 using cmtensor3 = Eigen::TensorMap<const tensor3>;
+using rmat      = Eigen::Ref<Eigen::MatrixX<real_t>>;
 using crmat     = Eigen::Ref<const Eigen::MatrixX<real_t>>;
 using crvec     = Eigen::Ref<const Eigen::VectorX<real_t>>;
 using rvec      = Eigen::Ref<Eigen::VectorX<real_t>>;
@@ -159,16 +160,37 @@ void register_ocp(py::module_ &m) {
                              py::return_value_policy::reference_internal),
             [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.qr()) = x; })
         .def_property_readonly("dim",
-                               [](const PythonOCP &ocp) {
-                                   return py::make_tuple(ocp.ocp.dim.N_horiz, ocp.ocp.dim.nx,
-                                                         ocp.ocp.dim.nu, ocp.ocp.dim.ny,
-                                                         ocp.ocp.dim.ny_N);
+                               [](const PythonOCP &self) {
+                                   return py::make_tuple(self.ocp.dim.N_horiz, self.ocp.dim.nx,
+                                                         self.ocp.dim.nu, self.ocp.dim.ny,
+                                                         self.ocp.dim.ny_N);
                                })
+        .def(
+            "A", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.A(i))}; },
+            py::return_value_policy::reference_internal)
+        .def(
+            "B", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.B(i))}; },
+            py::return_value_policy::reference_internal)
+        .def(
+            "C", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.C(i))}; },
+            py::return_value_policy::reference_internal)
+        .def(
+            "D", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.D(i))}; },
+            py::return_value_policy::reference_internal)
+        .def(
+            "Q", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.Q(i))}; },
+            py::return_value_policy::reference_internal)
+        .def(
+            "R", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.R(i))}; },
+            py::return_value_policy::reference_internal)
+        .def(
+            "S", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.S(i))}; },
+            py::return_value_policy::reference_internal)
         .def("dump_mat", &PythonOCP::dump_mat)
         .def("load_mat", &PythonOCP::load_mat);
     using cyqlone::qpalm::LinearOCPSparseQP;
     py::class_<LinearOCPSparseQP>(m, "LinearOCPSparseQP")
-        .def(py::init([](const PythonOCP &ocp) { return LinearOCPSparseQP::build(ocp.ocp); }))
+        .def(py::init([](const PythonOCP &self) { return LinearOCPSparseQP::build(self.ocp); }))
         .def_property_readonly(
             "Q",
             [](const LinearOCPSparseQP &self) {
