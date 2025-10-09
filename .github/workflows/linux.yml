@@ -13,6 +13,8 @@ jobs:
         profile: ["laptop"]
       fail-fast: false
     runs-on: ubuntu-24.04
+    env:
+      CTEST_OUTPUT_ON_FAILURE: "1"
     steps:
     - uses: actions/checkout@v4
       with:
