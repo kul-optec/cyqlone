@@ -28,6 +28,8 @@ option(CYQLONE_WITH_BENCHMARKS
     "Build the benchmarks" Off)
 option(CYQLONE_WITH_PYTHON
     "Build the Python interface" Off)
+option(CYQLONE_WITH_PYTHON_DISPATCH
+    "Build the AVX2/AVX-512 dispatch logic for the Python interface" Off)
 option(CYQLONE_WITH_MATIO
     "Use the matio library to save OCPs to .mat files" Off)
 option(CYQLONE_WITH_SKA_SORT

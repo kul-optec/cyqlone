@@ -1,3 +1,5 @@
+set(CYQLONE_PYTHON_POSTFIX "_generic" CACHE STRING
+    "Additional postfix in Python module file name")
 set(PY_FULL_VERSION ${PROJECT_VERSION}${PY_VERSION_SUFFIX})
 set(PY_BUILD_CMAKE_MODULE_NAME "cyqlone" CACHE STRING "Python module name")
 set(PY_BUILD_CMAKE_PACKAGE_NAME "cyqlone" CACHE STRING "Python package name")
@@ -10,73 +12,92 @@ if (DEFINED PY_BUILD_CMAKE_PACKAGE_VERSION)
     endif()
 endif()
 
-if (CMAKE_CROSSCOMPILING AND NOT (APPLE AND "$ENV{CIBUILDWHEEL}" STREQUAL "1"))
-    find_package(Python3 REQUIRED COMPONENTS Development.Module)
+# Find Python and nanobind
+if (CMAKE_CROSSCOMPILING AND NOT CMAKE_CROSSCOMPILING_EMULATOR)
+    find_package(Python REQUIRED COMPONENTS Development.Module
+                        OPTIONAL_COMPONENTS Development.SABIModule)
 else()
-    find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
+    find_package(Python REQUIRED COMPONENTS Interpreter Development.Module
+                        OPTIONAL_COMPONENTS Development.SABIModule)
 endif()
-set(PYBIND11_USE_CROSSCOMPILING On)
-find_package(pybind11 ${ARGN} REQUIRED CONFIG CMAKE_FIND_ROOT_PATH_BOTH)
+find_package(nanobind REQUIRED CONFIG)
 find_package(Eigen3 REQUIRED)
 
-# Compile the example Python module
-pybind11_add_module(_cyqlone MODULE
-    "src/cyqlone.py.cpp"
-)
-target_include_directories(_cyqlone PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(_cyqlone PRIVATE
-    pybind11::pybind11 Eigen3::Eigen cyqlone::qpalm cyqlone::example-problems)
-target_link_libraries(_cyqlone PRIVATE cyqlone::warnings)
-target_compile_definitions(_cyqlone PRIVATE
-    MODULE_NAME=$<TARGET_FILE_BASE_NAME:_cyqlone>)
-set_target_properties(_cyqlone PROPERTIES
-    CXX_VISIBILITY_PRESET "hidden"
-    VISIBILITY_INLINES_HIDDEN true
-    RELEASE_POSTFIX ""
-    DEBUG_POSTFIX ""
-    RELWITHDEBINFO_POSTFIX ""
-    MINSIZEREL_POSTFIX ""
-)
-include(GenerateExportHeader)
-set(CYQLONE_PYTHON_DEBUG_CONFIG "Debug" CACHE STRING "")
-set_property(CACHE CYQLONE_PYTHON_DEBUG_CONFIG PROPERTY STRINGS
-    ${CMAKE_CONFIGURATION_TYPES})
-if (CYQLONE_PYTHON_DEBUG_CONFIG)
-    string(TOUPPER ${CYQLONE_PYTHON_DEBUG_CONFIG} CYQLONE_PYTHON_DEBUG_CONFIG_UP)
-    set_target_properties(_cyqlone PROPERTIES
-        ${CYQLONE_PYTHON_DEBUG_CONFIG_UP}_POSTFIX "_d"
-        PDB_NAME_${CYQLONE_PYTHON_DEBUG_CONFIG_UP} "_cyqlone_d")
-endif()
-if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-    target_link_options(_cyqlone PRIVATE "LINKER:--exclude-libs,ALL")
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    target_compile_options(_cyqlone PRIVATE "/bigobj")
+# Determine whether we're doing a stable or a free-threaded build
+set(USE_SABI)
+set(NANOBIND_TARGET "nanobind-cyqlone")
+if (PY_BUILD_CMAKE_PACKAGE_ABI_TAG MATCHES "(^|;)cp([0-9dmu]+)t($|;)")
+    message(STATUS "Free-threaded build")
+    string(APPEND NANOBIND_TARGET "-ft")
+elseif (DEFINED PY_BUILD_CMAKE_PACKAGE_USE_SABI)
+    message(STATUS "Stable ABI build (${PY_BUILD_CMAKE_PACKAGE_USE_SABI})")
+    string(APPEND NANOBIND_TARGET "-abi3")
+    set(USE_SABI USE_SABI ${PY_BUILD_CMAKE_PACKAGE_USE_SABI})
+    set(USE_LIMITED_API ${PY_BUILD_CMAKE_PACKAGE_LIMITED_API})
 endif()
 
-if (DEFINED PY_BUILD_CMAKE_VERSION)
-    set(CYQLONE_MODULE_INSTALL_DIR "")
-else()
-    set(CYQLONE_MODULE_INSTALL_DIR "${CYQLONE_INSTALL_LIBDIR}/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages")
+# Build the nanobind library
+nanobind_build_library(${NANOBIND_TARGET} AS_SYSINCLUDE)
+if (USE_LIMITED_API)
+    target_compile_definitions(${NANOBIND_TARGET} PRIVATE
+        Py_LIMITED_API=${USE_LIMITED_API})
 endif()
-
-# Install the Python source code
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/python/${PY_BUILD_CMAKE_MODULE_NAME}
+install(TARGETS ${NANOBIND_TARGET}
         EXCLUDE_FROM_ALL
-        COMPONENT python_source
-        DESTINATION "${CYQLONE_MODULE_INSTALL_DIR}"
-        PATTERN "__pycache__" EXCLUDE)
+        COMPONENT python_nanobind
+        DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME})
+
+# Configure the dynamic loading paths to locate the nanobind libraries.
+function(cyqlone_rpath_origin tgt)
+    if(APPLE)
+        set_target_properties(${tgt} PROPERTIES INSTALL_RPATH "@loader_path")
+    else()
+        set_target_properties(${tgt} PROPERTIES INSTALL_RPATH "$ORIGIN")
+    endif()
+endfunction()
+
+# Configure common options for Python extension modules
+function(cyqlone_configure_python_ext tgt)
+    target_link_libraries(${tgt} PRIVATE ${NANOBIND_TARGET})
+    cyqlone_rpath_origin(${tgt})
+    nanobind_compile_options(${tgt})
+    nanobind_link_options(${tgt})
+    cyqlone_configure_visibility(${tgt})
+    target_compile_definitions(${tgt} PRIVATE
+        MODULE_NAME=$<TARGET_FILE_BASE_NAME:${tgt}>
+        VERSION_INFO="${PY_FULL_VERSION}")
+endfunction()
+
+# Build the Python extension
+Python_add_library(_cyqlone MODULE WITH_SOABI ${USE_SABI} "src/cyqlone.py.cpp")
+cyqlone_configure_python_ext(_cyqlone)
+target_link_libraries(_cyqlone PRIVATE Eigen3::Eigen cyqlone::qpalm cyqlone::example-problems)
+target_link_libraries(_cyqlone PRIVATE cyqlone::warnings)
+set_target_properties(_cyqlone PROPERTIES
+    RELEASE_POSTFIX "${CYQLONE_PYTHON_POSTFIX}"
+    DEBUG_POSTFIX "${CYQLONE_PYTHON_POSTFIX}"
+    RELWITHDEBINFO_POSTFIX "${CYQLONE_PYTHON_POSTFIX}"
+    MINSIZEREL_POSTFIX "${CYQLONE_PYTHON_POSTFIX}")
 
 # Install the Python module
 install(TARGETS _cyqlone
         EXCLUDE_FROM_ALL
         COMPONENT python_modules
-        DESTINATION ./${CYQLONE_MODULE_INSTALL_DIR}/${PY_BUILD_CMAKE_MODULE_NAME})
+        DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME})
 
-# Strip and install debug information
-include(${PROJECT_SOURCE_DIR}/cmake/Debug.cmake)
-cyqlone_install_debug_syms(_cyqlone python_modules_debug
-    ./${CYQLONE_MODULE_INSTALL_DIR}/${PY_BUILD_CMAKE_MODULE_NAME}
-    ./${CYQLONE_MODULE_INSTALL_DIR}/${PY_BUILD_CMAKE_MODULE_NAME})
+# Build the dispatch library
+if (CYQLONE_WITH_PYTHON_DISPATCH)
+    Python_add_library(_dispatch MODULE WITH_SOABI ${USE_SABI} "src/dispatch.py.cpp")
+    cyqlone_configure_python_ext(_dispatch)
+    find_package(CpuFeatures REQUIRED)
+    target_link_libraries(_dispatch PRIVATE CpuFeatures::cpu_features)
+    target_link_libraries(_dispatch PRIVATE cyqlone::warnings)
+    cyqlone_configure_visibility(_dispatch)
+    install(TARGETS _dispatch
+        EXCLUDE_FROM_ALL
+        COMPONENT python_modules
+        DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME})
+endif()
 
 # Generate stubs for the Python module
 set(CYQLONE_WITH_PY_STUBS_DEFAULT On)
@@ -87,9 +108,21 @@ option(CYQLONE_WITH_PY_STUBS
     "Generate Python stub files (.pyi) for the Python module."
     ${CYQLONE_WITH_PY_STUBS_DEFAULT})
 if (CYQLONE_WITH_PY_STUBS)
-    include(cmake/Pybind11Stubgen.cmake)
-    pybind11_stubgen(_cyqlone
+    install(CODE "set(ENV{CYQLONE_VARIANT} \"${CYQLONE_PYTHON_POSTFIX}\")" COMPONENT python_stubs)
+    nanobind_add_stub(
+        cyqlone_stubs
+        INSTALL_TIME
         COMPONENT python_stubs
-        PACKAGE ${PY_BUILD_CMAKE_MODULE_NAME}
-        PACKAGE_ROOT "${CYQLONE_MODULE_INSTALL_DIR}")
+        MODULE "${PY_BUILD_CMAKE_IMPORT_NAME}.$<TARGET_FILE_BASE_NAME:_cyqlone>"
+        OUTPUT_PATH "${PY_BUILD_CMAKE_IMPORT_NAME}"
+        RECURSIVE
+        EXCLUDE_FROM_ALL
+        VERBOSE)
+    foreach(mod "__init__" "scalar" "simd4" "simd8")
+        file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/stubs/${mod}.pyi"
+             INPUT "${CMAKE_CURRENT_SOURCE_DIR}/stubs/${mod}.pyi")
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/stubs/${mod}.pyi"
+                COMPONENT python_stubs
+                DESTINATION "${PY_BUILD_CMAKE_IMPORT_NAME}/cyqlone")
+    endforeach()
 endif()

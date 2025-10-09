@@ -10,42 +10,39 @@
 #if !BATMAT_WITH_OPENMP
 #include <batmat/thread-pool.hpp>
 #endif
-#include <guanaqo/eigen/span.hpp>
+#include <guanaqo/eigen/span.hpp> // TODO: remove
 #include <guanaqo/eigen/view.hpp>
 #include <batmat-version.h>
 #include <cyqlone-version.h>
 
-#include <optional>
 #include <stdexcept>
 
 using cyqlone::index_t;
 using cyqlone::real_t;
 
-#include <pybind11/chrono.h>
-#include <pybind11/eigen/matrix.h>
-#include <pybind11/eigen/tensor.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/stl/filesystem.h>
-namespace py = pybind11;
-using namespace py::literals;
-using tensor3   = Eigen::Tensor<real_t, 3>;
-using cmtensor3 = Eigen::TensorMap<const tensor3>;
-using rmat      = Eigen::Ref<Eigen::MatrixX<real_t>>;
-using crmat     = Eigen::Ref<const Eigen::MatrixX<real_t>>;
-using crvec     = Eigen::Ref<const Eigen::VectorX<real_t>>;
-using rvec      = Eigen::Ref<Eigen::VectorX<real_t>>;
-using crbvec    = Eigen::Ref<const Eigen::VectorX<bool>>;
-using cmmat     = Eigen::Map<const Eigen::MatrixX<real_t>>;
-using cmvec     = Eigen::Map<const Eigen::VectorX<real_t>>;
-using cmbvec    = Eigen::Map<const Eigen::VectorX<bool>>;
+#include <nanobind/nanobind.h>
+#include <nanobind/ndarray.h>
+#include <nanobind/stl/filesystem.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/tuple.h>
+#include <nanobind/stl/vector.h>
+namespace nb = nanobind;
+using namespace nb::literals;
+
+template <class T = const real_t>
+using np_tensor3 = nb::ndarray<T, nb::ndim<3>, nb::f_contig, nb::device::cpu>;
+template <class T = const real_t>
+using np_matrix = nb::ndarray<T, nb::ndim<2>, nb::f_contig, nb::device::cpu>;
+template <class T = const real_t>
+using np_vector = nb::ndarray<T, nb::ndim<1>, nb::any_contig, nb::device::cpu>;
 
 #if BATMAT_WITH_OPENMP
 #include <omp.h>
 #endif
 #if GUANAQO_WITH_TRACING
 #include <guanaqo/trace.hpp>
-#include <pybind11/stl/filesystem.h>
+#include <nanobind/stl/filesystem.h>
 #include <filesystem>
 #include <fstream>
 #endif
@@ -57,65 +54,67 @@ struct PythonOCP {
 
     PythonOCP() = default;
     PythonOCP(cyqlone::LinearOCPStorage ocp) : ocp{std::move(ocp)} {}
-    PythonOCP(cmtensor3 AB, cmtensor3 CD, crmat CN, cmtensor3 QRS, crmat QN, crvec rhs_eq,
-              crvec rhs_lb, crvec rhs_ub, crvec qr)
+    PythonOCP(np_tensor3<> AB, np_tensor3<> CD, np_matrix<> CN, np_tensor3<> QRS, np_matrix<> QN,
+              np_vector<> rhs_eq, np_vector<> rhs_lb, np_vector<> rhs_ub, np_vector<> qr)
         : ocp{.dim = {
-                  .N_horiz = static_cast<index_t>(AB.dimension(0)),
-                  .nx      = static_cast<index_t>(AB.dimension(1)),
-                  .nu      = static_cast<index_t>(AB.dimension(2) - AB.dimension(1)),
-                  .ny      = static_cast<index_t>(CD.dimension(1)),
-                  .ny_N    = static_cast<index_t>(CN.rows()),
+                  .N_horiz = static_cast<index_t>(AB.shape(0)),
+                  .nx      = static_cast<index_t>(AB.shape(1)),
+                  .nu      = static_cast<index_t>(AB.shape(2) - AB.shape(1)),
+                  .ny      = static_cast<index_t>(CD.shape(1)),
+                  .ny_N    = static_cast<index_t>(CN.shape(0)),
               }} {
         auto [N, nx, nu, ny, ny_N] = ocp.dim;
         index_t num_var            = N * (nx + nu) + nx;
         index_t num_eq_constr      = (N + 1) * nx;
         index_t num_ineq_constr    = N * ny + ny_N;
-        if (CD.dimension(0) != N)
+        if (static_cast<index_t>(CD.shape(0)) != N)
             throw std::invalid_argument("Invalid horizon length CD");
-        if (QRS.dimension(0) != N)
+        if (static_cast<index_t>(QRS.shape(0)) != N)
             throw std::invalid_argument("Invalid horizon length QRS");
-        if (CD.dimension(2) != nx + nu)
+        if (static_cast<index_t>(CD.shape(2)) != nx + nu)
             throw std::invalid_argument("Invalid number of columns CD");
-        if (QRS.dimension(1) != nx + nu)
+        if (static_cast<index_t>(QRS.shape(1)) != nx + nu)
             throw std::invalid_argument("Invalid number of rows QRS");
-        if (QRS.dimension(2) != nx + nu)
+        if (static_cast<index_t>(QRS.shape(2)) != nx + nu)
             throw std::invalid_argument("Invalid number of columns QRS");
-        if (CN.cols() != nx)
+        if (static_cast<index_t>(CN.shape(1)) != nx)
             throw std::invalid_argument("Invalid number of columns CN");
-        if (QN.rows() != nx)
+        if (static_cast<index_t>(QN.shape(0)) != nx)
             throw std::invalid_argument("Invalid number of rows QN");
-        if (QN.cols() != nx)
+        if (static_cast<index_t>(QN.shape(1)) != nx)
             throw std::invalid_argument("Invalid number of cols QN");
-        if (rhs_eq.size() != num_eq_constr)
+        if (static_cast<index_t>(rhs_eq.shape(0)) != num_eq_constr)
             throw std::invalid_argument("Invalid size rhs_eq");
-        if (rhs_lb.size() != num_ineq_constr)
+        if (static_cast<index_t>(rhs_lb.shape(0)) != num_ineq_constr)
             throw std::invalid_argument("Invalid size rhs_lb");
-        if (rhs_ub.size() != num_ineq_constr)
+        if (static_cast<index_t>(rhs_ub.shape(0)) != num_ineq_constr)
             throw std::invalid_argument("Invalid size rhs_ub");
-        if (qr.size() != num_var)
+        if (static_cast<index_t>(qr.shape(0)) != num_var)
             throw std::invalid_argument("Invalid size qr");
 
+        auto ABv = AB.view(), CDv = CD.view(), QRSv = QRS.view();
         for (index_t i = 0; i < N; ++i) {
-            for (index_t r = 0; r < nx; ++r)
-                for (index_t c = 0; c < nx + nu; ++c)
-                    ocp.AB(i)(r, c) = AB(i, r, c);
-            for (index_t r = 0; r < ny; ++r)
-                for (index_t c = 0; c < nx + nu; ++c)
-                    ocp.CD(i)(r, c) = CD(i, r, c);
-            for (index_t r = 0; r < nx + nu; ++r)
-                for (index_t c = 0; c < nx + nu; ++c)
-                    ocp.H(i)(r, c) = QRS(i, r, c);
+            for (index_t c = 0; c < nx + nu; ++c)
+                for (index_t r = 0; r < nx; ++r)
+                    ocp.AB(i)(r, c) = ABv(i, r, c);
+            for (index_t c = 0; c < nx + nu; ++c)
+                for (index_t r = 0; r < ny; ++r)
+                    ocp.CD(i)(r, c) = CDv(i, r, c);
+            for (index_t c = 0; c < nx + nu; ++c)
+                for (index_t r = 0; r < nx + nu; ++r)
+                    ocp.H(i)(r, c) = QRSv(i, r, c);
         }
-        for (index_t r = 0; r < ny_N; ++r)
-            for (index_t c = 0; c < nx; ++c)
-                ocp.CD(N)(r, c) = CN(r, c);
-        for (index_t r = 0; r < nx; ++r)
-            for (index_t c = 0; c < nx; ++c)
-                ocp.H(N)(r, c) = QN(r, c);
-        std::ranges::copy(rhs_eq, ocp.b().data);
-        std::ranges::copy(rhs_lb, ocp.b_min().data);
-        std::ranges::copy(rhs_ub, ocp.b_max().data);
-        std::ranges::copy(qr, ocp.qr().data);
+        auto CNv = CN.view(), QNv = QN.view();
+        for (index_t c = 0; c < nx; ++c)
+            for (index_t r = 0; r < ny_N; ++r)
+                ocp.CD(N)(r, c) = CNv(r, c);
+        for (index_t c = 0; c < nx; ++c)
+            for (index_t r = 0; r < nx; ++r)
+                ocp.H(N)(r, c) = QNv(r, c);
+        std::copy_n(rhs_eq.data(), rhs_eq.size(), ocp.b().data);
+        std::copy_n(rhs_lb.data(), rhs_lb.size(), ocp.b_min().data);
+        std::copy_n(rhs_ub.data(), rhs_ub.size(), ocp.b_max().data);
+        std::copy_n(qr.data(), qr.size(), ocp.qr().data);
     }
 
     void dump_mat(const std::filesystem::path &filename) const {
@@ -129,114 +128,182 @@ struct PythonOCP {
     }
 };
 
-void register_ocp(py::module_ &m) {
-    py::class_<PythonOCP> ocp(m, "OCP");
-    ocp.def(py::init<>())
-        .def(py::init<cmtensor3, cmtensor3, crmat, cmtensor3, crmat, crvec, crvec, crvec, crvec>(),
+template <class T, class I, guanaqo::StorageOrder O>
+auto np_view_vec(guanaqo::MatrixView<T, I, std::integral_constant<I, 1>, O> matrix) {
+    using np_array = nb::ndarray<nb::numpy, T, nb::ndim<1>, nb::any_contig, nb::device::cpu>;
+    return np_array{
+        matrix.data,
+        {static_cast<size_t>(matrix.is_column_major ? matrix.rows : matrix.cols)},
+        {},
+        {1},
+    };
+}
+
+template <class T, size_t E>
+auto np_view_vec(std::span<T, E> vector) {
+    using np_array = nb::ndarray<nb::numpy, T, nb::ndim<1>, nb::any_contig, nb::device::cpu>;
+    return np_array{
+        vector.data(),
+        {vector.size()},
+        {},
+        {1},
+    };
+}
+
+template <class T, class I, guanaqo::StorageOrder O>
+auto np_view(guanaqo::MatrixView<T, I, std::integral_constant<I, 1>, O> matrix) {
+    using order    = std::conditional_t<matrix.is_column_major, nb::f_contig, nb::c_contig>;
+    using np_array = nb::ndarray<nb::numpy, T, nb::ndim<2>, order, nb::device::cpu>;
+    return np_array{
+        matrix.data,
+        {static_cast<size_t>(matrix.rows), static_cast<size_t>(matrix.cols)},
+        {},
+        {static_cast<int64_t>(matrix.row_stride()), static_cast<int64_t>(matrix.col_stride())},
+    };
+}
+
+template <class... Args>
+auto view(const nb::ndarray<Args...> &array)
+    requires(array.Order == 'F' || array.Order == 'C')
+{
+    using I = index_t;
+    using T = typename nb::ndarray<Args...>::Scalar;
+    using enum guanaqo::StorageOrder;
+    static constexpr auto O = array.Order == 'F' ? ColMajor : RowMajor;
+    return guanaqo::MatrixView<T, I, std::integral_constant<I, 1>, O>{{
+        .data         = array.data(),
+        .rows         = static_cast<I>(array.shape(0)),
+        .cols         = static_cast<I>(array.shape(1)),
+        .outer_stride = static_cast<I>(array.stride(array.Order == 'F' ? 1 : 0)),
+    }};
+}
+
+template <class T>
+auto view(const np_vector<T> &array) {
+    using I = index_t;
+    using enum guanaqo::StorageOrder;
+    return guanaqo::MatrixView<T, I, std::integral_constant<I, 1>, ColMajor>{{
+        .data = array.data(),
+        .rows = static_cast<I>(array.shape(0)),
+        .cols = 1,
+    }};
+}
+
+template <class T>
+auto as_span(const np_vector<T> &array) {
+    return std::span{array.data(), array.size()};
+}
+
+void register_ocp(nb::module_ &m) {
+    nb::class_<PythonOCP>(m, "OCP")
+        .def(nb::init<>())
+        .def(nb::init<np_tensor3<>, np_tensor3<>, np_matrix<>, np_tensor3<>, np_matrix<>,
+                      np_vector<>, np_vector<>, np_vector<>, np_vector<>>(),
              "AB"_a, "CD"_a, "CN"_a, "QRS"_a, "QN"_a, "rhs_eq"_a, "rhs_lb"_a, "rhs_ub"_a, "qr"_a)
-        .def_property(
-            "x0",
-            py::cpp_function([](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.b(0))}; },
-                             py::return_value_policy::reference_internal),
-            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.b(0)) = x; })
-        .def_property(
-            "rhs_eq",
-            py::cpp_function([](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.b())}; },
-                             py::return_value_policy::reference_internal),
-            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.b()) = x; })
-        .def_property("rhs_lb",
-                      py::cpp_function(
-                          [](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.b_min())}; },
-                          py::return_value_policy::reference_internal),
-                      [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.b_min()) = x; })
-        .def_property("rhs_ub",
-                      py::cpp_function(
-                          [](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.b_max())}; },
-                          py::return_value_policy::reference_internal),
-                      [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.b_max()) = x; })
-        .def_property(
-            "qr",
-            py::cpp_function([](PythonOCP &self) { return rvec{guanaqo::as_eigen(self.ocp.qr())}; },
-                             py::return_value_policy::reference_internal),
-            [](PythonOCP &self, crvec x) { guanaqo::as_eigen(self.ocp.qr()) = x; })
-        .def_property_readonly("dim",
-                               [](const PythonOCP &self) {
-                                   return py::make_tuple(self.ocp.dim.N_horiz, self.ocp.dim.nx,
-                                                         self.ocp.dim.nu, self.ocp.dim.ny,
-                                                         self.ocp.dim.ny_N);
-                               })
+        .def_prop_rw(
+            "x0", [](PythonOCP &self) { return np_view_vec(self.ocp.b(0)); },
+            [](PythonOCP &self, np_vector<> x) { self.ocp.b(0) = view(x); })
+        .def_prop_rw(
+            "rhs_eq", [](PythonOCP &self) { return np_view_vec(self.ocp.b()); },
+            [](PythonOCP &self, np_vector<> x) { self.ocp.b() = view(x); })
+        .def_prop_rw(
+            "rhs_lb", [](PythonOCP &self) { return np_view_vec(self.ocp.b_min()); },
+            [](PythonOCP &self, np_vector<> x) { self.ocp.b_min() = view(x); })
+        .def_prop_rw(
+            "rhs_ub", [](PythonOCP &self) { return np_view_vec(self.ocp.b_max()); },
+            [](PythonOCP &self, np_vector<> x) { self.ocp.b_max() = view(x); })
+        .def_prop_rw(
+            "qr", [](PythonOCP &self) { return np_view_vec(self.ocp.qr()); },
+            [](PythonOCP &self, np_vector<> x) { self.ocp.qr() = view(x); })
+        .def_prop_ro("dim",
+                     [](const PythonOCP &self) {
+                         return nb::make_tuple(self.ocp.dim.N_horiz, self.ocp.dim.nx,
+                                               self.ocp.dim.nu, self.ocp.dim.ny, self.ocp.dim.ny_N);
+                     })
         .def(
-            "A", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.A(i))}; },
-            py::return_value_policy::reference_internal)
+            "A", [](PythonOCP &self, index_t i) { return np_view(self.ocp.A(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
         .def(
-            "B", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.B(i))}; },
-            py::return_value_policy::reference_internal)
+            "B", [](PythonOCP &self, index_t i) { return np_view(self.ocp.B(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
         .def(
-            "C", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.C(i))}; },
-            py::return_value_policy::reference_internal)
+            "C", [](PythonOCP &self, index_t i) { return np_view(self.ocp.C(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
         .def(
-            "D", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.D(i))}; },
-            py::return_value_policy::reference_internal)
+            "D", [](PythonOCP &self, index_t i) { return np_view(self.ocp.D(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
         .def(
-            "Q", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.Q(i))}; },
-            py::return_value_policy::reference_internal)
+            "Q", [](PythonOCP &self, index_t i) { return np_view(self.ocp.Q(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
         .def(
-            "R", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.R(i))}; },
-            py::return_value_policy::reference_internal)
+            "R", [](PythonOCP &self, index_t i) { return np_view(self.ocp.R(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
         .def(
-            "S", [](PythonOCP &self, index_t i) { return rmat{guanaqo::as_eigen(self.ocp.S(i))}; },
-            py::return_value_policy::reference_internal)
+            "S", [](PythonOCP &self, index_t i) { return np_view(self.ocp.S(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
         .def("dump_mat", &PythonOCP::dump_mat)
         .def("load_mat", &PythonOCP::load_mat);
     using cyqlone::qpalm::LinearOCPSparseQP;
-    py::class_<LinearOCPSparseQP>(m, "LinearOCPSparseQP")
-        .def(py::init([](const PythonOCP &self) { return LinearOCPSparseQP::build(self.ocp); }))
-        .def_property_readonly(
+    nb::class_<LinearOCPSparseQP>(m, "LinearOCPSparseQP")
+        .def("__init__",
+             [](LinearOCPSparseQP *sto, const PythonOCP &ocp) {
+                 new (sto) LinearOCPSparseQP(LinearOCPSparseQP::build(ocp.ocp));
+             })
+        .def_prop_ro(
             "Q",
             [](const LinearOCPSparseQP &self) {
-                auto scipy_sparse = py::module_::import("scipy.sparse");
+                auto scipy_sparse = nb::module_::import_("scipy.sparse");
                 return scipy_sparse.attr("csc_array")(
-                    py::make_tuple(self.Q_values, self.Q_inner_idx, self.Q_outer_ptr),
-                    "shape"_a = py::make_tuple(self.Q_sparsity.rows, self.Q_sparsity.cols));
-            })
-        .def_property_readonly(
+                    nb::make_tuple(self.Q_values, self.Q_inner_idx, self.Q_outer_ptr),
+                    "shape"_a = nb::make_tuple(self.Q_sparsity.rows, self.Q_sparsity.cols));
+            },
+            "Cost Hessian matrix in sparse CSC format (lower triangular part only)",
+            nb::sig("@property\ndef Q(self) -> scipy.sparse.csc_array"))
+        .def_prop_ro(
             "A",
             [](const LinearOCPSparseQP &self) {
-                auto scipy_sparse = py::module_::import("scipy.sparse");
+                auto scipy_sparse = nb::module_::import_("scipy.sparse");
                 return scipy_sparse.attr("csc_array")(
-                    py::make_tuple(self.A_values, self.A_inner_idx, self.A_outer_ptr),
-                    "shape"_a = py::make_tuple(self.A_sparsity.rows, self.A_sparsity.cols));
-            })
-        .def("build_kkt_matrix", [](const LinearOCPSparseQP &self, real_t S, crvec Σ, crbvec J) {
-            auto K            = self.build_kkt(S, guanaqo::as_span(Σ), guanaqo::as_span(J));
-            auto scipy_sparse = py::module_::import("scipy.sparse");
-            return scipy_sparse.attr("csc_array")(
-                py::make_tuple(K.values, K.inner_idx, K.outer_ptr),
-                "shape"_a = py::make_tuple(K.sparsity.rows, K.sparsity.cols));
-        });
-    py::class_<cyqlone::qpalm::problems::PlatooningParams>(m, "PlatooningParams")
-        .def(py::init<>())
-        .def_readwrite("friction", &cyqlone::qpalm::problems::PlatooningParams::friction)
-        .def_readwrite("F_max", &cyqlone::qpalm::problems::PlatooningParams::F_max)
-        .def_readwrite("v_max", &cyqlone::qpalm::problems::PlatooningParams::v_max)
-        .def_readwrite("dist_min", &cyqlone::qpalm::problems::PlatooningParams::dist_min)
-        .def_readwrite("dist_init", &cyqlone::qpalm::problems::PlatooningParams::dist_init)
-        .def_readwrite("p_target", &cyqlone::qpalm::problems::PlatooningParams::p_target)
-        .def_readwrite("N_horiz", &cyqlone::qpalm::problems::PlatooningParams::N_horiz)
-        .def_readwrite("T_horiz", &cyqlone::qpalm::problems::PlatooningParams::T_horiz)
-        .def_readwrite("scale_cost", &cyqlone::qpalm::problems::PlatooningParams::scale_cost)
-        .def_readwrite("masses", &cyqlone::qpalm::problems::PlatooningParams::masses);
+                    nb::make_tuple(self.A_values, self.A_inner_idx, self.A_outer_ptr),
+                    "shape"_a = nb::make_tuple(self.A_sparsity.rows, self.A_sparsity.cols));
+            },
+            "Constraint Jacobian matrix in sparse CSC format",
+            nb::sig("@property\ndef A(self) -> scipy.sparse.csc_array"))
+        .def(
+            "build_kkt_matrix",
+            [](const LinearOCPSparseQP &self, real_t S, np_vector<> Σ, np_vector<const bool> J) {
+                auto K            = self.build_kkt(S, as_span(Σ), as_span(J));
+                auto scipy_sparse = nb::module_::import_("scipy.sparse");
+                return scipy_sparse.attr("csc_array")(
+                    nb::make_tuple(std::move(K.values), std::move(K.inner_idx),
+                                   std::move(K.outer_ptr)),
+                    "shape"_a = nb::make_tuple(K.sparsity.rows, K.sparsity.cols));
+            },
+            nb::sig("def build_kkt_matrix(self, S: float, Σ: NDArray[numpy.float64], "
+                    "J: NDArray[numpy.float64]) -> scipy.sparse.csc_array"));
+    nb::class_<cyqlone::qpalm::problems::PlatooningParams>(m, "PlatooningParams")
+        .def(nb::init<>())
+        .def_rw("friction", &cyqlone::qpalm::problems::PlatooningParams::friction)
+        .def_rw("F_max", &cyqlone::qpalm::problems::PlatooningParams::F_max)
+        .def_rw("v_max", &cyqlone::qpalm::problems::PlatooningParams::v_max)
+        .def_rw("dist_min", &cyqlone::qpalm::problems::PlatooningParams::dist_min)
+        .def_rw("dist_init", &cyqlone::qpalm::problems::PlatooningParams::dist_init)
+        .def_rw("p_target", &cyqlone::qpalm::problems::PlatooningParams::p_target)
+        .def_rw("N_horiz", &cyqlone::qpalm::problems::PlatooningParams::N_horiz)
+        .def_rw("T_horiz", &cyqlone::qpalm::problems::PlatooningParams::T_horiz)
+        .def_rw("scale_cost", &cyqlone::qpalm::problems::PlatooningParams::scale_cost)
+        .def_rw("masses", &cyqlone::qpalm::problems::PlatooningParams::masses);
     m.def(
         "create_platooning_problem",
         [](const cyqlone::qpalm::problems::PlatooningParams &params) {
             auto p = platooning(params);
             return PythonOCP{std::move(p.ocp)};
         },
-        py::arg_v("params", cyqlone::qpalm::problems::PlatooningParams{}, "PlatooningParams()"));
+        "params"_a.sig("PlatooningParams()") = cyqlone::qpalm::problems::PlatooningParams{});
 }
 
-void register_settings(py::module_ &m) {
-    py::enum_<cyqlone::qpalm::SolverStatus>(m, "SolverStatus")
+void register_settings(nb::module_ &m) {
+    nb::enum_<cyqlone::qpalm::SolverStatus>(m, "SolverStatus")
         .value("Busy", cyqlone::qpalm::SolverStatus::Busy)
         .value("Converged", cyqlone::qpalm::SolverStatus::Converged)
         .value("MaxTime", cyqlone::qpalm::SolverStatus::MaxTime)
@@ -246,32 +313,31 @@ void register_settings(py::module_ &m) {
         .value("Interrupted", cyqlone::qpalm::SolverStatus::Interrupted)
         .value("Exception", cyqlone::qpalm::SolverStatus::Exception);
     using DetailedStats = cyqlone::qpalm::DetailedStats;
-    py::class_<DetailedStats> detailed_stats(m, "DetailedStats");
-    py::enum_<DetailedStats::ExitReason>(detailed_stats, "ExitReason")
+    nb::class_<DetailedStats> detailed_stats(m, "DetailedStats");
+    nb::enum_<DetailedStats::ExitReason>(detailed_stats, "ExitReason")
         .value("Busy", DetailedStats::ExitReason::Busy)
         .value("Converged", DetailedStats::ExitReason::Converged)
         .value("NoActiveSetChange", DetailedStats::ExitReason::NoActiveSetChange)
         .value("Fail", DetailedStats::ExitReason::Fail);
-    py::class_<DetailedStats::Entry>(detailed_stats, "Entry")
-        .def_readwrite("outer_iter", &DetailedStats::Entry::outer_iter)
-        .def_readwrite("inner_iter", &DetailedStats::Entry::inner_iter)
-        .def_readwrite("stationarity", &DetailedStats::Entry::stationarity)
-        .def_readwrite("ineq_constr_viol", &DetailedStats::Entry::ineq_constr_viol)
-        .def_readwrite("eq_constr_viol", &DetailedStats::Entry::eq_constr_viol)
-        .def_readwrite("linesearch_step_size", &DetailedStats::Entry::linesearch_step_size)
-        .def_readwrite("linesearch_breakpoint_index",
-                       &DetailedStats::Entry::linesearch_breakpoint_index)
-        .def_readwrite("num_active_constr", &DetailedStats::Entry::num_active_constr)
-        .def_readwrite("num_changing_constr", &DetailedStats::Entry::num_changing_constr)
-        .def_readwrite("exit_reason", &DetailedStats::Entry::exit_reason);
-    detailed_stats.def_readonly("entries", &DetailedStats::entries);
+    nb::class_<DetailedStats::Entry>(detailed_stats, "Entry")
+        .def_rw("outer_iter", &DetailedStats::Entry::outer_iter)
+        .def_rw("inner_iter", &DetailedStats::Entry::inner_iter)
+        .def_rw("stationarity", &DetailedStats::Entry::stationarity)
+        .def_rw("ineq_constr_viol", &DetailedStats::Entry::ineq_constr_viol)
+        .def_rw("eq_constr_viol", &DetailedStats::Entry::eq_constr_viol)
+        .def_rw("linesearch_step_size", &DetailedStats::Entry::linesearch_step_size)
+        .def_rw("linesearch_breakpoint_index", &DetailedStats::Entry::linesearch_breakpoint_index)
+        .def_rw("num_active_constr", &DetailedStats::Entry::num_active_constr)
+        .def_rw("num_changing_constr", &DetailedStats::Entry::num_changing_constr)
+        .def_rw("exit_reason", &DetailedStats::Entry::exit_reason);
+    detailed_stats.def_ro("entries", &DetailedStats::entries);
 #if BATMAT_WITH_CPU_TIME
-    py::class_<guanaqo::TimingsCPU> timings_cpu(m, "TimingsCPU");
-    timings_cpu.def(py::init())
+    nb::class_<guanaqo::TimingsCPU> timings_cpu(m, "TimingsCPU");
+    timings_cpu.def(nb::init())
         .def("__copy__", [](const guanaqo::TimingsCPU &self) { return self; })
-        .def(py::pickle(
+        .def(nb::pickle(
             [](const guanaqo::TimingsCPU &p) { // __getstate__
-                return py::make_tuple(
+                return nb::make_tuple(
                     // clang-format off
                     p.num_invocations,
                     p.wall_time,
@@ -279,21 +345,21 @@ void register_settings(py::module_ &m) {
                     // clang-format on
                     ;
             },
-            [](py::tuple t) { // __setstate__
+            [](nb::tuple t) { // __setstate__
                 if (t.size() != 3)
                     throw std::runtime_error("Invalid state!");
                 using T = guanaqo::TimingsCPU;
                 return T{
                     // clang-format off
-                    .num_invocations = py::cast<decltype(T::num_invocations)>(t[0]),
-                    .wall_time = py::cast<decltype(T::wall_time)>(t[1]),
-                    .cpu_time = py::cast<decltype(T::cpu_time)>(t[2]),
+                    .num_invocations = nb::cast<decltype(T::num_invocations)>(t[0]),
+                    .wall_time = nb::cast<decltype(T::wall_time)>(t[1]),
+                    .cpu_time = nb::cast<decltype(T::cpu_time)>(t[2]),
                     // clang-format on
                 };
             }))
-        .def_readwrite("num_invocations", &guanaqo::TimingsCPU::num_invocations)
-        .def_readwrite("wall_time", &guanaqo::TimingsCPU::wall_time)
-        .def_readwrite("cpu_time", &guanaqo::TimingsCPU::cpu_time)
+        .def_rw("num_invocations", &guanaqo::TimingsCPU::num_invocations)
+        .def_rw("wall_time", &guanaqo::TimingsCPU::wall_time)
+        .def_rw("cpu_time", &guanaqo::TimingsCPU::cpu_time)
         .def("__str__", [](const guanaqo::TimingsCPU &self) {
             std::ostringstream ss;
             ss << self;
@@ -301,179 +367,174 @@ void register_settings(py::module_ &m) {
         });
     m.attr("DefaultTimings") = timings_cpu;
 #else
-    py::class_<batmat::DefaultTimings>(m, "DefaultTimings")
-        .def(py::init())
+    nb::class_<batmat::DefaultTimings>(m, "DefaultTimings")
+        .def(nb::init())
         .def("__copy__", [](const batmat::DefaultTimings &self) { return self; })
-        .def(py::pickle(
-            [](const batmat::DefaultTimings &p) { // __getstate__
-                return py::make_tuple(
-                    // clang-format off
-                    p.num_invocations,
-                    p.wall_time)
-                    // clang-format on
-                    ;
-            },
-            [](py::tuple t) { // __setstate__
-                if (t.size() != 2)
-                    throw std::runtime_error("Invalid state!");
-                using T = batmat::DefaultTimings;
-                return T{
-                    // clang-format off
-                    .num_invocations = py::cast<decltype(T::num_invocations)>(t[0]),
-                    .wall_time = py::cast<decltype(T::wall_time)>(t[1]),
-                    // clang-format on
-                };
-            }))
-        .def_readwrite("num_invocations", &batmat::DefaultTimings::num_invocations)
-        .def_readwrite("wall_time", &batmat::DefaultTimings::wall_time)
+        .def("__getstate__",
+             [](const batmat::DefaultTimings &self) {
+                 return nb::make_tuple(
+                     // clang-format off
+                    self.num_invocations,
+                    self.wall_time)
+                     // clang-format on
+                     ;
+             })
+        .def("__setstate__",
+             [](batmat::DefaultTimings *self, nb::tuple t) {
+                 if (t.size() != 2)
+                     throw std::runtime_error("Invalid state!");
+                 using T = batmat::DefaultTimings;
+                 new (self) T{
+                     // clang-format off
+                    .num_invocations = nb::cast<decltype(T::num_invocations)>(t[0]),
+                    .wall_time = nb::cast<decltype(T::wall_time)>(t[1]),
+                     // clang-format on
+                 };
+             })
+        .def_rw("num_invocations", &batmat::DefaultTimings::num_invocations)
+        .def_rw("wall_time", &batmat::DefaultTimings::wall_time)
         .def("__str__", [](const batmat::DefaultTimings &self) {
             std::ostringstream ss;
             ss << self;
             return std::move(ss).str();
         });
 #endif
-    py::class_<cyqlone::qpalm::SolverTimings>(m, "SolverTimings")
-        .def(py::init())
+    nb::class_<cyqlone::qpalm::SolverTimings>(m, "SolverTimings")
+        .def(nb::init())
         .def("__copy__", [](const cyqlone::qpalm::SolverTimings &self) { return self; })
-        .def(py::pickle(
-            [](const cyqlone::qpalm::SolverTimings &p) { // __getstate__
-                return py::make_tuple(
-                    // clang-format off
-                    p.total,
-                    p.scaling,
-                    p.line_search,
-                    p.recompute_inner,
-                    p.recompute_outer,
-                    p.mat_vec_M,
-                    p.mat_vec_MT,
-                    p.mat_vec_A,
-                    p.mat_vec_AT,
-                    p.mat_vec_Q,
-                    p.active_set_change,
-                    p.update_penalty,
-                    p.update_regularization,
-                    p.boost_regularization,
-                    p.solve,
-                    p.backend)
-                    // clang-format on
-                    ;
-            },
-            [](py::tuple t) { // __setstate__
-                if (t.size() != 16)
-                    throw std::runtime_error("Invalid state!");
-                using T = cyqlone::qpalm::SolverTimings;
-                return T{
-                    // clang-format off
-                    .total = py::cast<decltype(T::total)>(t[0]),
-                    .scaling = py::cast<decltype(T::scaling)>(t[1]),
-                    .line_search = py::cast<decltype(T::line_search)>(t[2]),
-                    .recompute_inner = py::cast<decltype(T::recompute_inner)>(t[3]),
-                    .recompute_outer = py::cast<decltype(T::recompute_outer)>(t[4]),
-                    .mat_vec_M = py::cast<decltype(T::mat_vec_M)>(t[5]),
-                    .mat_vec_MT = py::cast<decltype(T::mat_vec_MT)>(t[6]),
-                    .mat_vec_A = py::cast<decltype(T::mat_vec_A)>(t[7]),
-                    .mat_vec_AT = py::cast<decltype(T::mat_vec_AT)>(t[8]),
-                    .mat_vec_Q = py::cast<decltype(T::mat_vec_Q)>(t[9]),
-                    .active_set_change = py::cast<decltype(T::active_set_change)>(t[10]),
-                    .update_penalty = py::cast<decltype(T::update_penalty)>(t[11]),
-                    .update_regularization = py::cast<decltype(T::update_regularization)>(t[12]),
-                    .boost_regularization = py::cast<decltype(T::boost_regularization)>(t[13]),
-                    .solve = py::cast<decltype(T::solve)>(t[14]),
-                    .backend = py::cast<decltype(T::backend)>(t[15]),
-                    // clang-format on
-                };
-            }))
-        .def_readwrite("total", &cyqlone::qpalm::SolverTimings::total)
-        .def_readwrite("scaling", &cyqlone::qpalm::SolverTimings::scaling)
-        .def_readwrite("line_search", &cyqlone::qpalm::SolverTimings::line_search)
-        .def_readwrite("recompute_inner", &cyqlone::qpalm::SolverTimings::recompute_inner)
-        .def_readwrite("recompute_outer", &cyqlone::qpalm::SolverTimings::recompute_outer)
-        .def_readwrite("mat_vec_M", &cyqlone::qpalm::SolverTimings::mat_vec_M)
-        .def_readwrite("mat_vec_MT", &cyqlone::qpalm::SolverTimings::mat_vec_MT)
-        .def_readwrite("mat_vec_A", &cyqlone::qpalm::SolverTimings::mat_vec_A)
-        .def_readwrite("mat_vec_AT", &cyqlone::qpalm::SolverTimings::mat_vec_AT)
-        .def_readwrite("mat_vec_Q", &cyqlone::qpalm::SolverTimings::mat_vec_Q)
-        .def_readwrite("active_set_change", &cyqlone::qpalm::SolverTimings::active_set_change)
-        .def_readwrite("update_penalty", &cyqlone::qpalm::SolverTimings::update_penalty)
-        .def_readwrite("update_regularization",
-                       &cyqlone::qpalm::SolverTimings::update_regularization)
-        .def_readwrite("boost_regularization", &cyqlone::qpalm::SolverTimings::boost_regularization)
-        .def_readwrite("solve", &cyqlone::qpalm::SolverTimings::solve)
-        .def_readwrite("backend", &cyqlone::qpalm::SolverTimings::backend);
-    py::class_<cyqlone::qpalm::SolverStats>(m, "SolverStats")
-        .def(py::init())
+        .def("__getstate__",
+             [](const cyqlone::qpalm::SolverTimings &self) {
+                 return nb::make_tuple(
+                     // clang-format off
+                    self.total,
+                    self.scaling,
+                    self.line_search,
+                    self.recompute_inner,
+                    self.recompute_outer,
+                    self.mat_vec_M,
+                    self.mat_vec_MT,
+                    self.mat_vec_A,
+                    self.mat_vec_AT,
+                    self.mat_vec_Q,
+                    self.active_set_change,
+                    self.update_penalty,
+                    self.update_regularization,
+                    self.boost_regularization,
+                    self.solve,
+                    self.backend)
+                     // clang-format on
+                     ;
+             })
+        .def("__setstate__",
+             [](cyqlone::qpalm::SolverTimings *self, nb::tuple t) {
+                 if (t.size() != 16)
+                     throw std::runtime_error("Invalid state!");
+                 using T = cyqlone::qpalm::SolverTimings;
+                 new (self) T{
+                     // clang-format off
+                    .total = nb::cast<decltype(T::total)>(t[0]),
+                    .scaling = nb::cast<decltype(T::scaling)>(t[1]),
+                    .line_search = nb::cast<decltype(T::line_search)>(t[2]),
+                    .recompute_inner = nb::cast<decltype(T::recompute_inner)>(t[3]),
+                    .recompute_outer = nb::cast<decltype(T::recompute_outer)>(t[4]),
+                    .mat_vec_M = nb::cast<decltype(T::mat_vec_M)>(t[5]),
+                    .mat_vec_MT = nb::cast<decltype(T::mat_vec_MT)>(t[6]),
+                    .mat_vec_A = nb::cast<decltype(T::mat_vec_A)>(t[7]),
+                    .mat_vec_AT = nb::cast<decltype(T::mat_vec_AT)>(t[8]),
+                    .mat_vec_Q = nb::cast<decltype(T::mat_vec_Q)>(t[9]),
+                    .active_set_change = nb::cast<decltype(T::active_set_change)>(t[10]),
+                    .update_penalty = nb::cast<decltype(T::update_penalty)>(t[11]),
+                    .update_regularization = nb::cast<decltype(T::update_regularization)>(t[12]),
+                    .boost_regularization = nb::cast<decltype(T::boost_regularization)>(t[13]),
+                    .solve = nb::cast<decltype(T::solve)>(t[14]),
+                    .backend = nb::cast<decltype(T::backend)>(t[15]),
+                     // clang-format on
+                 };
+             })
+        .def_rw("total", &cyqlone::qpalm::SolverTimings::total)
+        .def_rw("scaling", &cyqlone::qpalm::SolverTimings::scaling)
+        .def_rw("line_search", &cyqlone::qpalm::SolverTimings::line_search)
+        .def_rw("recompute_inner", &cyqlone::qpalm::SolverTimings::recompute_inner)
+        .def_rw("recompute_outer", &cyqlone::qpalm::SolverTimings::recompute_outer)
+        .def_rw("mat_vec_M", &cyqlone::qpalm::SolverTimings::mat_vec_M)
+        .def_rw("mat_vec_MT", &cyqlone::qpalm::SolverTimings::mat_vec_MT)
+        .def_rw("mat_vec_A", &cyqlone::qpalm::SolverTimings::mat_vec_A)
+        .def_rw("mat_vec_AT", &cyqlone::qpalm::SolverTimings::mat_vec_AT)
+        .def_rw("mat_vec_Q", &cyqlone::qpalm::SolverTimings::mat_vec_Q)
+        .def_rw("active_set_change", &cyqlone::qpalm::SolverTimings::active_set_change)
+        .def_rw("update_penalty", &cyqlone::qpalm::SolverTimings::update_penalty)
+        .def_rw("update_regularization", &cyqlone::qpalm::SolverTimings::update_regularization)
+        .def_rw("boost_regularization", &cyqlone::qpalm::SolverTimings::boost_regularization)
+        .def_rw("solve", &cyqlone::qpalm::SolverTimings::solve)
+        .def_rw("backend", &cyqlone::qpalm::SolverTimings::backend);
+    nb::class_<cyqlone::qpalm::SolverStats>(m, "SolverStats")
+        .def(nb::init())
         .def("__copy__", [](const cyqlone::qpalm::SolverStats &self) { return self; })
-        .def_readwrite("inner_iter", &cyqlone::qpalm::SolverStats::inner_iter)
-        .def_readwrite("outer_iter", &cyqlone::qpalm::SolverStats::outer_iter)
-        .def_readwrite("stationarity", &cyqlone::qpalm::SolverStats::stationarity)
-        .def_readwrite("primal_residual_norm", &cyqlone::qpalm::SolverStats::primal_residual_norm)
-        .def_readwrite("max_penalty", &cyqlone::qpalm::SolverStats::max_penalty)
-        .def_readwrite("timings", &cyqlone::qpalm::SolverStats::timings)
-        .def_readwrite("detail", &cyqlone::qpalm::SolverStats::detail);
-    py::enum_<cyqlone::qpalm::WarmStartingStrategy>(m, "WarmStartingStrategy")
+        .def_rw("inner_iter", &cyqlone::qpalm::SolverStats::inner_iter)
+        .def_rw("outer_iter", &cyqlone::qpalm::SolverStats::outer_iter)
+        .def_rw("stationarity", &cyqlone::qpalm::SolverStats::stationarity)
+        .def_rw("primal_residual_norm", &cyqlone::qpalm::SolverStats::primal_residual_norm)
+        .def_rw("max_penalty", &cyqlone::qpalm::SolverStats::max_penalty)
+        .def_rw("timings", &cyqlone::qpalm::SolverStats::timings)
+        .def_rw("detail", &cyqlone::qpalm::SolverStats::detail);
+    nb::enum_<cyqlone::qpalm::WarmStartingStrategy>(m, "WarmStartingStrategy")
         .value("Zeros", cyqlone::qpalm::WarmStartingStrategy::Zeros)
         .value("Copy", cyqlone::qpalm::WarmStartingStrategy::Copy)
         .value("Shift", cyqlone::qpalm::WarmStartingStrategy::Shift)
         .value("ShiftNoInequality", cyqlone::qpalm::WarmStartingStrategy::ShiftNoInequality);
-    py::class_<cyqlone::qpalm::CyqloneBackendSettings>(m, "CyqloneBackendSettings")
+    nb::class_<cyqlone::qpalm::CyqloneBackendSettings>(m, "CyqloneBackendSettings")
         .def("__copy__", [](const cyqlone::qpalm::CyqloneBackendSettings &self) { return self; })
-        .def(py::init())
-        .def_readwrite("log_processors", &cyqlone::qpalm::CyqloneBackendSettings::log_processors)
-        .def_readwrite("print_residuals", &cyqlone::qpalm::CyqloneBackendSettings::print_residuals)
-        .def_readwrite("print_precision", &cyqlone::qpalm::CyqloneBackendSettings::print_precision)
-        .def_readwrite("factor_alt", &cyqlone::qpalm::CyqloneBackendSettings::factor_alt)
-        .def_readwrite("changing_constr_factor",
-                       &cyqlone::qpalm::CyqloneBackendSettings::changing_constr_factor)
-        .def_readwrite("max_update_count",
-                       &cyqlone::qpalm::CyqloneBackendSettings::max_update_count)
-        .def_readwrite("detailed_timings",
-                       &cyqlone::qpalm::CyqloneBackendSettings::detailed_timings)
-        .def_readwrite("pcg_max_iter", &cyqlone::qpalm::CyqloneBackendSettings::pcg_max_iter)
-        .def_readwrite("pcg_tolerance", &cyqlone::qpalm::CyqloneBackendSettings::pcg_tolerance)
-        .def_readwrite("pcg_print_resid", &cyqlone::qpalm::CyqloneBackendSettings::pcg_print_resid)
-        .def_readwrite("use_stair_preconditioner",
-                       &cyqlone::qpalm::CyqloneBackendSettings::use_stair_preconditioner)
-        .def_readwrite("strategy", &cyqlone::qpalm::CyqloneBackendSettings::strategy);
-    py::class_<cyqlone::qpalm::Settings>(m, "Settings")
-        .def(py::init())
+        .def(nb::init())
+        .def_rw("log_processors", &cyqlone::qpalm::CyqloneBackendSettings::log_processors)
+        .def_rw("print_residuals", &cyqlone::qpalm::CyqloneBackendSettings::print_residuals)
+        .def_rw("print_precision", &cyqlone::qpalm::CyqloneBackendSettings::print_precision)
+        .def_rw("factor_alt", &cyqlone::qpalm::CyqloneBackendSettings::factor_alt)
+        .def_rw("changing_constr_factor",
+                &cyqlone::qpalm::CyqloneBackendSettings::changing_constr_factor)
+        .def_rw("max_update_count", &cyqlone::qpalm::CyqloneBackendSettings::max_update_count)
+        .def_rw("detailed_timings", &cyqlone::qpalm::CyqloneBackendSettings::detailed_timings)
+        .def_rw("pcg_max_iter", &cyqlone::qpalm::CyqloneBackendSettings::pcg_max_iter)
+        .def_rw("pcg_tolerance", &cyqlone::qpalm::CyqloneBackendSettings::pcg_tolerance)
+        .def_rw("pcg_print_resid", &cyqlone::qpalm::CyqloneBackendSettings::pcg_print_resid)
+        .def_rw("use_stair_preconditioner",
+                &cyqlone::qpalm::CyqloneBackendSettings::use_stair_preconditioner)
+        .def_rw("strategy", &cyqlone::qpalm::CyqloneBackendSettings::strategy);
+    nb::class_<cyqlone::qpalm::Settings>(m, "Settings")
+        .def(nb::init())
         .def("__copy__", [](const cyqlone::qpalm::Settings &self) { return self; })
-        .def_readwrite("max_outer_iter", &cyqlone::qpalm::Settings::max_outer_iter)
-        .def_readwrite("max_inner_iter", &cyqlone::qpalm::Settings::max_inner_iter)
-        .def_readwrite("max_total_inner_iter", &cyqlone::qpalm::Settings::max_total_inner_iter)
-        .def_readwrite("max_time", &cyqlone::qpalm::Settings::max_time)
-        .def_readwrite("tolerance", &cyqlone::qpalm::Settings::tolerance)
-        .def_readwrite("dual_tolerance", &cyqlone::qpalm::Settings::dual_tolerance)
-        .def_readwrite("eq_constr_tolerance", &cyqlone::qpalm::Settings::eq_constr_tolerance)
-        .def_readwrite("initial_inner_tolerance",
-                       &cyqlone::qpalm::Settings::initial_inner_tolerance)
-        .def_readwrite("ρ", &cyqlone::qpalm::Settings::ρ)
-        .def_readwrite("θ", &cyqlone::qpalm::Settings::θ)
-        .def_readwrite("Δy", &cyqlone::qpalm::Settings::Δy)
-        .def_readwrite("max_penalty_y", &cyqlone::qpalm::Settings::max_penalty_y)
-        .def_readwrite("initial_penalty_y", &cyqlone::qpalm::Settings::initial_penalty_y)
-        .def_readwrite("Δx", &cyqlone::qpalm::Settings::Δx)
-        .def_readwrite("max_penalty_x", &cyqlone::qpalm::Settings::max_penalty_x)
-        .def_readwrite("boost_penalty_x", &cyqlone::qpalm::Settings::boost_penalty_x)
-        .def_readwrite("initial_penalty_x", &cyqlone::qpalm::Settings::initial_penalty_x)
-        .def_readwrite("proximal", &cyqlone::qpalm::Settings::proximal)
-        .def_readwrite("recompute_eq_res", &cyqlone::qpalm::Settings::recompute_eq_res)
-        .def_readwrite("recompute_inner", &cyqlone::qpalm::Settings::recompute_inner)
-        .def_readwrite("recompute", &cyqlone::qpalm::Settings::recompute)
-        .def_readwrite("verbose", &cyqlone::qpalm::Settings::verbose)
-        .def_readwrite("max_no_changes_active_set",
-                       &cyqlone::qpalm::Settings::max_no_changes_active_set)
-        .def_readwrite("linesearch_include_multipliers",
-                       &cyqlone::qpalm::Settings::linesearch_include_multipliers)
-        .def_readwrite("force_linesearch_if_no_set_change",
-                       &cyqlone::qpalm::Settings::force_linesearch_if_no_set_change)
-        .def_readwrite("force_linesearch_if_dir_deriv_pos",
-                       &cyqlone::qpalm::Settings::force_linesearch_if_dir_deriv_pos)
-        .def_readwrite("detailed_stats", &cyqlone::qpalm::Settings::detailed_stats)
-        .def_readwrite("scale_newton_step", &cyqlone::qpalm::Settings::scale_newton_step)
-        .def_readwrite("print_directional_deriv",
-                       &cyqlone::qpalm::Settings::print_directional_deriv)
-        .def_readwrite("print_linesearch_inputs",
-                       &cyqlone::qpalm::Settings::print_linesearch_inputs);
+        .def_rw("max_outer_iter", &cyqlone::qpalm::Settings::max_outer_iter)
+        .def_rw("max_inner_iter", &cyqlone::qpalm::Settings::max_inner_iter)
+        .def_rw("max_total_inner_iter", &cyqlone::qpalm::Settings::max_total_inner_iter)
+        .def_rw("max_time", &cyqlone::qpalm::Settings::max_time)
+        .def_rw("tolerance", &cyqlone::qpalm::Settings::tolerance)
+        .def_rw("dual_tolerance", &cyqlone::qpalm::Settings::dual_tolerance)
+        .def_rw("eq_constr_tolerance", &cyqlone::qpalm::Settings::eq_constr_tolerance)
+        .def_rw("initial_inner_tolerance", &cyqlone::qpalm::Settings::initial_inner_tolerance)
+        .def_rw("ρ", &cyqlone::qpalm::Settings::ρ)
+        .def_rw("θ", &cyqlone::qpalm::Settings::θ)
+        .def_rw("Δy", &cyqlone::qpalm::Settings::Δy)
+        .def_rw("max_penalty_y", &cyqlone::qpalm::Settings::max_penalty_y)
+        .def_rw("initial_penalty_y", &cyqlone::qpalm::Settings::initial_penalty_y)
+        .def_rw("Δx", &cyqlone::qpalm::Settings::Δx)
+        .def_rw("max_penalty_x", &cyqlone::qpalm::Settings::max_penalty_x)
+        .def_rw("boost_penalty_x", &cyqlone::qpalm::Settings::boost_penalty_x)
+        .def_rw("initial_penalty_x", &cyqlone::qpalm::Settings::initial_penalty_x)
+        .def_rw("proximal", &cyqlone::qpalm::Settings::proximal)
+        .def_rw("recompute_eq_res", &cyqlone::qpalm::Settings::recompute_eq_res)
+        .def_rw("recompute_inner", &cyqlone::qpalm::Settings::recompute_inner)
+        .def_rw("recompute", &cyqlone::qpalm::Settings::recompute)
+        .def_rw("verbose", &cyqlone::qpalm::Settings::verbose)
+        .def_rw("max_no_changes_active_set", &cyqlone::qpalm::Settings::max_no_changes_active_set)
+        .def_rw("linesearch_include_multipliers",
+                &cyqlone::qpalm::Settings::linesearch_include_multipliers)
+        .def_rw("force_linesearch_if_no_set_change",
+                &cyqlone::qpalm::Settings::force_linesearch_if_no_set_change)
+        .def_rw("force_linesearch_if_dir_deriv_pos",
+                &cyqlone::qpalm::Settings::force_linesearch_if_dir_deriv_pos)
+        .def_rw("detailed_stats", &cyqlone::qpalm::Settings::detailed_stats)
+        .def_rw("scale_newton_step", &cyqlone::qpalm::Settings::scale_newton_step)
+        .def_rw("print_directional_deriv", &cyqlone::qpalm::Settings::print_directional_deriv)
+        .def_rw("print_linesearch_inputs", &cyqlone::qpalm::Settings::print_linesearch_inputs);
 }
 
 template <index_t VL>
@@ -490,66 +551,66 @@ struct PythonCyqloneSolver {
 };
 
 template <class Solver, class BackendSettings>
-void register_qpalm_solver(py::module_ &m, const char *name) {
-    py::class_<Solver> solver(m, name);
+void register_qpalm_solver(nb::module_ &m, const char *name) {
+    nb::class_<Solver> solver(m, name);
     solver //
-        .def(py::init<const PythonOCP &, BackendSettings, cyqlone::qpalm::Settings>(), "ocp"_a,
+        .def(nb::init<const PythonOCP &, BackendSettings, cyqlone::qpalm::Settings>(), "ocp"_a,
              "backend_settings"_a, "qpalm_settings"_a)
         .def("__call__", [](Solver &self) { return self.solver(); })
-        .def_property_readonly("solution",
-                               [](Solver &self) -> py::object {
-                                   if (!self.solver.has_result())
-                                       return py::none();
-                                   return py::cast(self.solver.get_solution());
-                               })
-        .def_property_readonly("equality_multipliers",
-                               [](Solver &self) -> py::object {
-                                   if (!self.solver.has_result())
-                                       return py::none();
-                                   return py::cast(self.solver.get_equality_multipliers());
-                               })
-        .def_property_readonly("inequality_multipliers",
-                               [](Solver &self) -> py::object {
-                                   if (!self.solver.has_result())
-                                       return py::none();
-                                   return py::cast(self.solver.get_inequality_multipliers());
-                               })
-        .def_property_readonly(
-            "stats", py::cpp_function([](Solver &self) -> auto & { return self.solver.stats; },
-                                      py::return_value_policy::reference_internal))
+        .def_prop_ro("solution",
+                     [](Solver &self) {
+                         if (!self.solver.has_result())
+                             throw std::runtime_error("No solution available. Please solve first.");
+                         return self.solver.get_solution();
+                     })
+        .def_prop_ro("equality_multipliers",
+                     [](Solver &self) {
+                         if (!self.solver.has_result())
+                             throw std::runtime_error("No solution available. Please solve first.");
+                         return self.solver.get_equality_multipliers();
+                     })
+        .def_prop_ro("inequality_multipliers",
+                     [](Solver &self) {
+                         if (!self.solver.has_result())
+                             throw std::runtime_error("No solution available. Please solve first.");
+                         return self.solver.get_inequality_multipliers();
+                     })
+        .def_prop_ro("stats", [](Solver &self) -> auto & { return self.solver.stats; })
         .def("warm_start_solution", [](Solver &self) { return self.solver.warm_start_solution(); })
         .def(
             "set_initial_guess",
-            [](Solver &self, crvec x, crvec y, crvec λ) {
-                return self.solver.set_initial_guess(guanaqo::as_span(x), guanaqo::as_span(y),
-                                                     guanaqo::as_span(λ));
+            [](Solver &self, np_vector<> x, np_vector<> y, np_vector<> λ) {
+                return self.solver.set_initial_guess(as_span(x), as_span(y), as_span(λ));
             },
             "x"_a, "y"_a, "λ"_a)
-        .def("get_initial_guess",
-             [](Solver &self) -> py::object {
-                 Eigen::VectorX<real_t> x(self.solver.get_num_variables()),
-                     y(self.solver.get_num_inequality_constraints()),
-                     λ(self.solver.get_num_equality_constraints());
-                 if (self.solver.get_initial_guess(guanaqo::as_span(x), guanaqo::as_span(y),
-                                                   guanaqo::as_span(λ)))
-                     return py::make_tuple(std::move(x), std::move(y), std::move(λ));
-                 return py::none();
-             })
+        .def(
+            "get_initial_guess",
+            [](Solver &self) -> nb::object {
+                Eigen::VectorX<real_t> x(self.solver.get_num_variables()),
+                    y(self.solver.get_num_inequality_constraints()),
+                    λ(self.solver.get_num_equality_constraints());
+                if (self.solver.get_initial_guess(guanaqo::as_span(x), guanaqo::as_span(y),
+                                                  guanaqo::as_span(λ)))
+                    return nb::make_tuple(std::move(x), std::move(y), std::move(λ));
+                return nb::none();
+            },
+            nb::sig("def get_initial_guess(self) -> Optional[Tuple[NDArray[numpy.float64], "
+                    "NDArray[numpy.float64], NDArray[numpy.float64]]]"))
         .def("update_data",
              [](Solver &self, const PythonOCP &ocp) {
                  BATMAT_ASSERT(self.solver.backend);
                  return update_qpalm_cyqlone_backend(*self.solver.backend, ocp.ocp);
              })
         .def("set_b_eq",
-             [](Solver &self, crvec b_eq) { return self.solver.set_b_eq(guanaqo::as_span(b_eq)); })
+             [](Solver &self, np_vector<> b_eq) { return self.solver.set_b_eq(as_span(b_eq)); })
         .def("set_b_lb",
-             [](Solver &self, crvec b_lb) { return self.solver.set_b_lb(guanaqo::as_span(b_lb)); })
+             [](Solver &self, np_vector<> b_lb) { return self.solver.set_b_lb(as_span(b_lb)); })
         .def("set_b_ub",
-             [](Solver &self, crvec b_ub) { return self.solver.set_b_ub(guanaqo::as_span(b_ub)); });
+             [](Solver &self, np_vector<> b_ub) { return self.solver.set_b_ub(as_span(b_ub)); });
 }
 
 template <index_t VL>
-void register_qpalm_cyqlone(py::module_ &m) {
+void register_qpalm_cyqlone(nb::module_ &m) {
     register_qpalm_solver<PythonCyqloneSolver<VL>, cyqlone::qpalm::CyqloneBackendSettings>(
         m, "QPALM_Cyqlone");
 }
@@ -561,7 +622,7 @@ struct overloaded : Ts... {
 
 } // namespace cyqlone
 
-PYBIND11_MODULE(MODULE_NAME, m) {
+NB_MODULE(MODULE_NAME, m) {
     using namespace cyqlone;
     m.doc()                      = "Python interface to cyqlone's C++ implementation.";
     m.attr("__version__")        = CYQLONE_VERSION_FULL;
@@ -586,16 +647,15 @@ PYBIND11_MODULE(MODULE_NAME, m) {
 #endif
 
 #if GUANAQO_WITH_TRACING
-    py::class_<guanaqo::TraceLogger::Log>(m, "TraceLog")
-        .def_readonly("name", &guanaqo::TraceLogger::Log::name)
-        .def_readonly("instance", &guanaqo::TraceLogger::Log::instance)
-        .def_property_readonly(
-            "start_time",
-            [](const guanaqo::TraceLogger::Log &self) { return self.start_time.count(); })
-        .def_property_readonly(
-            "duration", [](const guanaqo::TraceLogger::Log &self) { return self.duration.count(); })
-        .def_readonly("thread_id", &guanaqo::TraceLogger::Log::thread_id)
-        .def_readonly("flop_count", &guanaqo::TraceLogger::Log::flop_count);
+    nb::class_<guanaqo::TraceLogger::Log>(m, "TraceLog")
+        .def_ro("name", &guanaqo::TraceLogger::Log::name)
+        .def_ro("instance", &guanaqo::TraceLogger::Log::instance)
+        .def_prop_ro("start_time",
+                     [](const guanaqo::TraceLogger::Log &self) { return self.start_time.count(); })
+        .def_prop_ro("duration",
+                     [](const guanaqo::TraceLogger::Log &self) { return self.duration.count(); })
+        .def_ro("thread_id", &guanaqo::TraceLogger::Log::thread_id)
+        .def_ro("flop_count", &guanaqo::TraceLogger::Log::flop_count);
     m.def("get_trace_log", [] {
         auto l = guanaqo::trace_logger.get_logs();
         return std::vector<guanaqo::TraceLogger::Log>{l.begin(), l.end()};

@@ -28,6 +28,7 @@ class CyqloneRecipe(ConanFile):
         "with_example_problems": True,
         "with_blasfeo": False,
         "with_python": False,
+        "with_python_dispatch": False,
         "with_ska_sort": False,
         "with_matio": True,
     }
@@ -68,7 +69,9 @@ class CyqloneRecipe(ConanFile):
         self.requires("guanaqo/1.0.0-alpha.17", transitive_headers=True, transitive_libs=True)
         self.requires("batmat/0.0.3", transitive_headers=True, transitive_libs=True)
         if self.options.with_python:
-            self.requires("pybind11/3.0.1")
+            self.requires("nanobind/2.9.2")
+            if self.options.with_python_dispatch:
+                self.requires("cpu_features/0.10.1")
             if self.options.with_conan_python:
                 self.requires("tttapa-python-dev/3.13.7")
         if self.options.with_python or self.options.with_example_problems:
