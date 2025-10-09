@@ -22,6 +22,11 @@ wheelhouse
 /staging
 /package
 /toolchains
+python/cyqlone/cyqlone/*.pyi
+python/cyqlone/_cyqlone_generic/*.pyi
+*.cross.profile
+*.cross.pbc
+*.local.pbc
 
 # Compiled or generated files
 *.mod

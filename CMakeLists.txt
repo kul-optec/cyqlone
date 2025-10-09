@@ -8,6 +8,7 @@ project(cyqlone
 )
 include(CTest)
 include(CMakeDependentOption)
+set(PY_VERSION_SUFFIX ".dev0")
 
 # Options
 option(CYQLONE_WITH_BLASFEO

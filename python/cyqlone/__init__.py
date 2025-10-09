@@ -2,7 +2,7 @@
 Parallel quadratic programming solver for optimal control.
 """
 
-__version__ = "0.0.1"
+__version__ = "0.0.1.dev0"
 
 from .cyqlone import *  # noqa: F403
 from .cyqlone import __version__ as __c_version__

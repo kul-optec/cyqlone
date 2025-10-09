@@ -1,0 +1,37 @@
+name: 'CI: Linux'
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    name: "Build (GCC ${{ matrix.gcc }}, ${{ matrix.build_type }}, ${{ matrix.profile }})"
+    strategy:
+      matrix:
+        gcc: ["15"]
+        build_type: ["Debug"]
+        profile: ["laptop"]
+      fail-fast: false
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup Conan and sccache
+      uses: ./.github/workflows/setup-conan
+      with:
+        cache-key: ${{ matrix.profile }}-${{ matrix.gcc }}-${{ matrix.build_type }}
+
+    - name: Build
+      run: >
+        conan create . --build=missing -pr scripts/dev/profiles/${{ matrix.profile }}
+        -s compiler.version=${{ matrix.gcc }}
+        -s build_type=${{ matrix.build_type }}
+        -c \*:tools.build:skip_test=True
+        -c \&:tools.build:skip_test=False
+        -o \&:with_benchmarks=True
+        -c '&:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_C_COMPILER_LAUNCHER": "sccache"}'
+        -c '&:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_CXX_COMPILER_LAUNCHER": "sccache"}'
+
+    - run: conan cache clean
