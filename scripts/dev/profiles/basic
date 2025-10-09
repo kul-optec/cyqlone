@@ -20,12 +20,9 @@ openblas/*:target=HASWELL
 blasfeo/*:target=X64_INTEL_HASWELL
 
 [tool_requires]
-tttapa-toolchains/1.1.0
-cmake/3.31.6
-ninja/1.12.1
-
-[replace_requires]
-eigen/*: eigen/tttapa.20250504
+tttapa-toolchains/1.2.0
+cmake/[>=3.31.6 <5]
+ninja/[*]
 
 [buildenv]
 MKLROOT={{ os.getenv("MKLROOT") or os.path.join(os.getenv("HOME"), "intel/oneapi/mkl/latest")}}
