@@ -49,7 +49,7 @@ TEST(QPALM, cyqlone) {
     auto ocp =
         qp::problems::platooning({.N_horiz = 128, .masses{100, 150, 130, 70, 180, 170, 169, 130}});
     auto cocp          = cyqlone::CyqloneStorage<>::build(ocp.ocp);
-    const bool verbose = false;
+    const bool verbose = true;
     auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(cocp, {},
                                                            {.log_processors  = 5,
                                                             .print_residuals = verbose,
@@ -62,7 +62,7 @@ TEST(QPALM, cyqlone) {
          .tolerance                      = 1e-8,
          .dual_tolerance                 = 1e-8,
          .max_penalty_y                  = 1e7,
-         .initial_penalty_y              = 1e5,
+         .initial_penalty_y              = 1e-2,
          .verbose                        = verbose,
          .linesearch_include_multipliers = true},
     };
