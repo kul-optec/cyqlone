@@ -1,20 +1,18 @@
-import os
-import typing
+import contextlib, importlib, os, sys
 
+_variant = os.getenv("CYQLONE_VARIANT")
+if _variant is None:
+    _variant = ""
+    with contextlib.suppress(ModuleNotFoundError):
+        from ._dispatch import get_dispatch_name
 
-def _is_truthy(s: typing.Optional[str]):
-    if s is None:
-        return False
-    return s.lower() not in ("", "false", "no", "off", "0")
+        _variant = "_" + get_dispatch_name()
 
+_target_name = "._cyqlone" + _variant
+_target = importlib.import_module(_target_name, package=__package__)
+setattr(_target, "variant", _variant)
+sys.modules[__name__] = _target
 
-if not typing.TYPE_CHECKING and _is_truthy(os.getenv("CYQLONE_PYTHON_DEBUG")):
-    from . import _cyqlone_d  # noqa: F401
-    from ._cyqlone_d import *  # noqa: F401, F403
-    from ._cyqlone_d import __version__ as __c_version__  # noqa: F401
-else:
-    from . import _cyqlone  # noqa: F401
-    from ._cyqlone import *  # noqa: F401, F403
-    from ._cyqlone import __version__ as __c_version__  # noqa: F401
-
-del _is_truthy, typing, os
+for _submod in ("simd8", "simd4", "scalar"):
+    _target = importlib.import_module(_target_name + "." + _submod, package=__package__)
+    sys.modules[__name__ + "." + _submod] = _target
