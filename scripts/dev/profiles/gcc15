@@ -21,8 +21,8 @@ VTUNE_PROFILER_DIR={{ os.getenv("VTUNE_PROFILER_DIR") or os.path.join(os.getenv(
 tools.cmake.cmaketoolchain:generator=Ninja
 tools.build:exelinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
 tools.build:sharedlinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
-tools.build:exelinkflags+=["-fuse-ld=mold"]
-tools.build:sharedlinkflags+=["-fuse-ld=mold"]
+!zlib/*:tools.build:exelinkflags+=["-fuse-ld=mold"]
+!zlib/*:tools.build:sharedlinkflags+=["-fuse-ld=mold"]
 
 [options]
 batmat/*:with_openmp=True

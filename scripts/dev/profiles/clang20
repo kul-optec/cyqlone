@@ -22,8 +22,8 @@ tools.build:compiler_executables*={"c": "clang-20", "cpp": "clang++-20"}
 tools.cmake.cmaketoolchain:generator=Ninja
 tools.build:exelinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
 tools.build:sharedlinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
-tools.build:exelinkflags+=["-fuse-ld=mold"]
-tools.build:sharedlinkflags+=["-fuse-ld=mold"]
+!zlib/*:tools.build:exelinkflags+=["-fuse-ld=mold"]
+!zlib/*:tools.build:sharedlinkflags+=["-fuse-ld=mold"]
 
 [options]
 batmat/*:with_gsi_hpc_simd=True
