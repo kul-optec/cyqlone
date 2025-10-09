@@ -75,9 +75,9 @@ class CyqloneRecipe(ConanFile):
             if self.options.with_conan_python:
                 self.requires("tttapa-python-dev/3.13.7")
         if self.options.with_python or self.options.with_example_problems:
-            self.requires("eigen/3.4.0", transitive_headers=True)
+            self.requires("eigen/[~3.4 || ~5.0]", transitive_headers=True)
         else:
-            self.test_requires("eigen/3.4.0")
+            self.test_requires("eigen/[~3.4 || ~5.0]")
         if self.options.get_safe("with_blasfeo"):
             self.requires("blasfeo/0.1.4.1")
         if self.options.get_safe("with_general_qpalm"):
