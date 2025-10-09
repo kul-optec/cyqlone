@@ -45,7 +45,7 @@ build-backend = "py_build_cmake.build"
 directory = "python"
 
 [tool.py-build-cmake.sdist]
-include = ["CMakeLists.txt", "src", "cmake", "interfaces", "test"]
+include = ["conanfile.py", "CMakeLists.txt", "src", "cmake", "interfaces", "test"]
 
 [tool.py-build-cmake.wheel]
 python_abi = "abi3"
