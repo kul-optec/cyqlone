@@ -37,8 +37,6 @@ if [ -n "$install_stubs_dir" ]; then
     set +x; source "$build_dir/generators/conanbuild.sh"; set -x
     # Re-run CMake to change Python executable (old one is in a temporary venv)
     cmake "$build_dir" -D "Python_EXECUTABLE=$(which python3)"
-    # Avoid expensive copies of large binary modules
-    export CMAKE_INSTALL_MODE=SYMLINK_OR_COPY
     # Install the binary modules into the source tree
     cmake --install "$build_dir" --prefix "$install_stubs_dir" \
         --component python_modules
