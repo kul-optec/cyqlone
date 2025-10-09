@@ -66,30 +66,30 @@ jobs:
 
       - run: conan cache clean
 
-#   # Testing is done in the official Python Docker container: https://hub.docker.com/_/python/
-#   # This should match more closely to the environment that users might use.
-#   # It also ensures that we don't accidentally depend on any libraries specific
-#   # to the build container.
-#   test-linux:
-#     name: Run tests
-#     needs: [build-sdist]
-#     runs-on: ubuntu-latest
-#     container: python:3.12-bookworm
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v4
+  # Testing is done in the official Python Docker container: https://hub.docker.com/_/python/
+  # This should match more closely to the environment that users might use.
+  # It also ensures that we don't accidentally depend on any libraries specific
+  # to the build container.
+  test-linux:
+    name: Run tests
+    needs: [build-sdist]
+    runs-on: ubuntu-latest
+    container: python:3.12-trixie
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-#       - name: Download wheels
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: native-wheels
-#           path: dist
+      - name: Download wheels
+        uses: actions/download-artifact@v4
+        with:
+          name: native-wheels
+          path: dist
 
-#       - name: Install
-#         run: python3 -m pip install --find-links=dist "${PACKAGE_NAME}[test]==${PACKAGE_VERSION}"
+      - name: Install
+        run: python3 -m pip install --find-links=dist "${PACKAGE_NAME}[test]==${PACKAGE_VERSION}"
 
-#       - name: Test
-#         run: pytest -rP
+      - name: Test
+        run: pytest -rP
 
   # After the native build, we have the stub files, and we can start cross-
   # compiling for all architectures.
