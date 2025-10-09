@@ -35,9 +35,9 @@ function(pybind11_stubgen target)
         --numpy-array-remove-parameters --exit-code \"${STUBGEN_MODULE}\"")
     install(CODE "
         message(STATUS \"Executing pybind11-stubgen for ${STUBGEN_MODULE} \"
-                       \"(destination: \\\"\${CMAKE_INSTALL_PREFIX}/${STUBGEN_PACKAGE_ROOT}\\\", interpreter: \\\"${Python3_HOST_EXECUTABLE}\\\")\")
+                       \"(destination: \\\"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${STUBGEN_PACKAGE_ROOT}\\\", interpreter: \\\"${Python3_HOST_EXECUTABLE}\\\")\")
         execute_process(COMMAND ${STUBGEN_CMD}
-                        WORKING_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}/${STUBGEN_PACKAGE_ROOT}\"
+                        WORKING_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${STUBGEN_PACKAGE_ROOT}\"
                         RESULT_VARIABLE STUBGEN_RET)
         if(NOT STUBGEN_RET EQUAL 0)
             message(SEND_ERROR \"pybind11-stubgen ${STUBGEN_MODULE} failed.\")
