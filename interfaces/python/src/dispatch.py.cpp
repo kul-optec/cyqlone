@@ -10,7 +10,7 @@ static const char *get_dispatch_name() {
         return "avx2";
     if (features.avx512f)
         return "avx512";
-    return "generic";
+    return "sse4";
 }
 #else
 static const char *get_dispatch_name() { return "generic"; }

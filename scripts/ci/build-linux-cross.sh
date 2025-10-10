@@ -12,8 +12,8 @@ python_majmin_nodot="${python_majmin//./}"
 archs=("generic")  # microarchitectures, most compatible first
 triple="${2:-x86_64-bionic-linux-gnu}"
 case "$triple" in
-    x86_64-centos7-*) plat_tag=manylinux_2_17_x86_64; archs=("avx2" "avx512") ;;
-    x86_64-bionic-*) plat_tag=manylinux_2_27_x86_64; archs=("avx2" "avx512") ;;
+    x86_64-centos7-*) plat_tag=manylinux_2_17_x86_64; archs=("sse4" "avx2" "avx512") ;;
+    x86_64-bionic-*) plat_tag=manylinux_2_27_x86_64; archs=("sse4" "avx2" "avx512") ;;
     aarch64-rpi3-*) plat_tag=manylinux_2_27_aarch64 ;;
     armv8-rpi3-*) plat_tag=manylinux_2_27_armv7l ;;
     armv7-neon-*) plat_tag=manylinux_2_27_armv7l ;;
