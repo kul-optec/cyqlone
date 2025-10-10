@@ -15,11 +15,6 @@ using batmat::linalg::simdify;
 template <index_t VL, class T, StorageOrder DefaultOrder>
 CyqloneSolver<VL, T, DefaultOrder>
 CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp, index_t lP) {
-#if !BATMAT_WITH_OPENMP
-    const auto n_thr = size_t{1} << (lP - lvl);
-    if (!batmat::pool || batmat::pool->size() < n_thr)
-        batmat::pool.emplace(n_thr);
-#endif
     CyqloneSolver<VL, T, DefaultOrder> res{
         .N_horiz = ocp.N_horiz,
         .nx      = ocp.nx,
