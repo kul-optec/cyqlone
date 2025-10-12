@@ -205,7 +205,7 @@ struct LinearOCPStorage {
         auto [N, nx, nu, ny, ny_N] = dim;
         index_t offset             = N * (2 * nx + nu + ny) * (nx + nu) + (nx + ny_N) * nx;
         return {{
-            .data = &storage[offset],
+            .data = storage.data() + offset,
             .rows = N * (nx + nu) + nx,
             .cols = 1,
         }};
@@ -231,7 +231,7 @@ struct LinearOCPStorage {
         auto [N, nx, nu, ny, ny_N] = dim;
         index_t offset             = N * (2 * nx + nu + ny + 1) * (nx + nu) + (nx + ny_N + 1) * nx;
         return {{
-            .data = &storage[offset],
+            .data = storage.data() + offset,
             .rows = (N + 1) * nx,
             .cols = 1,
         }};
@@ -247,7 +247,7 @@ struct LinearOCPStorage {
         auto [N, nx, nu, ny, ny_N] = dim;
         index_t offset = N * (2 * nx + nu + ny + 1) * (nx + nu) + (nx + ny_N + 2 + N) * nx;
         return {{
-            .data = &storage[offset],
+            .data = storage.data() + offset,
             .rows = N * ny + ny_N,
             .cols = 1,
         }};
@@ -264,7 +264,7 @@ struct LinearOCPStorage {
         index_t offset =
             N * (2 * nx + nu + ny + 1) * (nx + nu) + (nx + ny_N + 2 + N) * nx + N * ny + ny_N;
         return {{
-            .data = &storage[offset],
+            .data = storage.data() + offset,
             .rows = N * ny + ny_N,
             .cols = 1,
         }};
@@ -280,7 +280,7 @@ struct LinearOCPStorage {
         auto [N, nx, nu, ny, ny_N] = dim;
         index_t offset             = N * (2 * nx + nu + ny) * (nx + nu) + (nx + ny_N) * nx;
         return {{
-            .data = &storage[offset],
+            .data = storage.data() + offset,
             .rows = N * (nx + nu) + nx,
             .cols = 1,
         }};
@@ -306,7 +306,7 @@ struct LinearOCPStorage {
         auto [N, nx, nu, ny, ny_N] = dim;
         index_t offset             = N * (2 * nx + nu + ny + 1) * (nx + nu) + (nx + ny_N + 1) * nx;
         return {{
-            .data = &storage[offset],
+            .data = storage.data() + offset,
             .rows = (N + 1) * nx,
             .cols = 1,
         }};
@@ -322,7 +322,7 @@ struct LinearOCPStorage {
         auto [N, nx, nu, ny, ny_N] = dim;
         index_t offset = N * (2 * nx + nu + ny + 1) * (nx + nu) + (nx + ny_N + 2 + N) * nx;
         return {{
-            .data = &storage[offset],
+            .data = storage.data() + offset,
             .rows = N * ny + ny_N,
             .cols = 1,
         }};
@@ -339,7 +339,7 @@ struct LinearOCPStorage {
         index_t offset =
             N * (2 * nx + nu + ny + 1) * (nx + nu) + (nx + ny_N + 2 + N) * nx + N * ny + ny_N;
         return {{
-            .data = &storage[offset],
+            .data = storage.data() + offset,
             .rows = N * ny + ny_N,
             .cols = 1,
         }};

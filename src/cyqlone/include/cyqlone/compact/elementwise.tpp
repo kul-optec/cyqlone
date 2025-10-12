@@ -231,6 +231,21 @@ void CompactBLAS<T, Abi, O>::xadd_neg_copy_impl(OutView out, View x1, Views... x
 }
 
 template <class T, class Abi, StorageOrder O>
+template <int Rot>
+void CompactBLAS<T, Abi, O>::xsub(mut_single_batch_view A, single_batch_view B) {
+    using batmat::ops::rotr;
+    GUANAQO_TRACE("xsub", 0, A.rows() * A.cols() * A.depth());
+    assert(A.rows() == B.rows());
+    assert(A.cols() == B.cols());
+    const index_t n = A.rows(), m = A.cols();
+    for (index_t j = 0; j < m; ++j)
+        BATMAT_UNROLLED_IVDEP_FOR (8, index_t i = 0; i < n; ++i)
+            simd_types::aligned_store(simd_types::aligned_load(&A(0, i, j)) -
+                                          rotr<Rot>(simd_types::aligned_load(&B(0, i, j))),
+                                      &A(0, i, j));
+}
+
+template <class T, class Abi, StorageOrder O>
 auto CompactBLAS<T, Abi, O>::xdot(single_batch_view x, single_batch_view y) -> value_type {
     GUANAQO_TRACE("xdot", 0, x.rows() * x.cols() * x.depth());
     using std::fma;

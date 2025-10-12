@@ -26,11 +26,6 @@ TEST(Cyqlone, factor) {
 
     const int log_n_threads = 2;
 
-    BATMAT_OMP_IF(omp_set_num_threads(1 << log_n_threads));
-    batmat::pool_set_num_threads(1 << log_n_threads);
-    GUANAQO_IF_ITT(batmat::foreach_thread(
-        [](index_t i, index_t) { __itt_thread_set_name(std::format("OMP({})", i).c_str()); }));
-
     using Solver     = CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
     const index_t lP = log_n_threads + Solver::lvl;
     const index_t ny = 50, ny_0 = 25, ny_N = 25;
@@ -47,6 +42,11 @@ TEST(Cyqlone, factor) {
     std::generate_n(ocp.b_max().data, ocp.b_max().rows, [&] { return uni(rng); });
     auto cocp     = CyqloneStorage<real_t>::build(ocp);
     Solver solver = Solver::build(cocp, lP);
+    // Spin a bit longer to get more deterministic timings
+    solver.parallel_ctx->barrier.spin_count = std::numeric_limits<uint32_t>::max();
+
+    GUANAQO_IF_ITT(solver.parallel_ctx->run(
+        [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
 
     const index_t nyM = std::max(ny, ny_0 + ny_N);
     std::vector<real_t> Σ_lin((N - 1) * ny + ny_0 + ny_N);
@@ -80,30 +80,40 @@ TEST(Cyqlone, factor) {
     const bool alt        = true;
     const auto ux_initial = ux, λ_initial = λ;
     for (int i = 0; i < 50; ++i) {
-        solver.factor(1e100, Σ, alt);
-        solver.update(ΔΣ);
-        solver.solve(ux, λ);
-        solver.residual_dynamics_constr(ux, λ_initial, Mxb);
-        solver.transposed_dynamics_constr(λ, Mᵀλ);
-        solver.cost_gradient(ux, -1, ux_initial, 0, grad);
-        solver.general_constr(ux, DCux);
-        Solver::compact_blas::xhadamard(simdify(Σ2), simdify(DCux));
-        solver.transposed_general_constr(DCux, DCᵀΣDCux);
+        solver.parallel_ctx->run([&](auto &ctx) {
+            solver.factor(ctx, 1e100, Σ, alt);
+            solver.update(ctx, ΔΣ);
+            solver.solve(ctx, ux, λ);
+            solver.residual_dynamics_constr(ctx, ux, λ_initial, Mxb);
+            solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
+            solver.cost_gradient(ctx, ux, -1, ux_initial, 0, grad);
+            solver.general_constr(ctx, ux, DCux);
+            ctx.arrive_and_wait();
+            if (ctx.is_master()) // TODO
+                Solver::compact_blas::xhadamard(simdify(Σ2), simdify(DCux));
+            ctx.arrive_and_wait();
+            solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);
+        });
         ux.view() = ux_initial.view();
         λ.view()  = λ_initial.view();
     }
 #if GUANAQO_WITH_TRACING
     guanaqo::trace_logger.reset();
 #endif
-    solver.factor(1e100, Σ, alt);
-    solver.update(ΔΣ);
-    solver.solve(ux, λ);
-    solver.residual_dynamics_constr(ux, λ_initial, Mxb);
-    solver.transposed_dynamics_constr(λ, Mᵀλ);
-    solver.cost_gradient(ux, -1, ux_initial, 0, grad);
-    solver.general_constr(ux, DCux);
-    Solver::compact_blas::xhadamard(simdify(Σ2), simdify(DCux));
-    solver.transposed_general_constr(DCux, DCᵀΣDCux);
+    solver.parallel_ctx->run([&](auto &ctx) {
+        solver.factor(ctx, 1e100, Σ, alt);
+        solver.update(ctx, ΔΣ);
+        solver.solve(ctx, ux, λ);
+        solver.residual_dynamics_constr(ctx, ux, λ_initial, Mxb);
+        solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
+        solver.cost_gradient(ctx, ux, -1, ux_initial, 0, grad);
+        solver.general_constr(ctx, ux, DCux);
+        ctx.arrive_and_wait();
+        if (ctx.is_master()) // TODO
+            Solver::compact_blas::xhadamard(simdify(Σ2), simdify(DCux));
+        ctx.arrive_and_wait();
+        solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);
+    });
 
     using std::pow;
     const auto ε = pow(std::numeric_limits<real_t>::epsilon(), 0.6);
@@ -117,7 +127,7 @@ TEST(Cyqlone, factor) {
 
 #if GUANAQO_WITH_TRACING
     {
-        batmat::foreach_thread([](index_t i, index_t) { GUANAQO_TRACE("thread_id", i); });
+        solver.parallel_ctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
         const auto N     = solver.N_horiz;
         const auto VL    = solver.vl;
         std::string name = std::format("factor_cyclic_new.csv");
@@ -161,8 +171,13 @@ TEST(Cyqlone, factor) {
         for (auto x : b)
             f << guanaqo::float_to_str(x) << '\n';
     }
+    if (std::ofstream f("res.csv"); f) {
+        auto b = solver.build_rhs(Mᵀλ, Mxb);
+        for (auto x : b)
+            f << guanaqo::float_to_str(x) << '\n';
+    }
 
-    solver.factor(1e100, Σ2, alt);
+    solver.parallel_ctx->run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2, alt); });
     if (std::ofstream f("sparse_refactor.csv"); f) {
         auto sp = solver.build_sparse_factor();
         for (auto [r, c, x] : sp)

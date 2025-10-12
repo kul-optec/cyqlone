@@ -43,49 +43,48 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t biY) {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update(view<> ΔΣ) {
-    const index_t P = 1 << (lP - lvl);
-    batmat::foreach_thread(P, [this, ΔΣ](index_t ti, index_t) {
-        update_riccati(ti, ΔΣ);
-        for (index_t l = 0; l < lP - lvl; ++l) {
-            barrier();
-            const index_t offset = 1 << l;
-            const auto biY       = sub_wrap_PmV(ti, offset);
-            if (is_active(l, biY))
-                update_level(l, biY);
-        }
-        barrier(); // TODO: remove and simply execute on the last thread
-        const index_t l      = lP - lvl;
+void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
+    if (ctx.index == 0)
+        this->alt = true;
+    const index_t ti = ctx.index;
+    update_riccati(ctx, ΔΣ);
+    for (index_t l = 0; l < lP - lvl; ++l) {
+        ctx.arrive_and_wait();
         const index_t offset = 1 << l;
         const auto biY       = sub_wrap_PmV(ti, offset);
-        if (biY == 0) {
-            GUANAQO_TRACE("update_level last", biY);
-            const index_t j0 = 0, j1 = nJs.back(), nj = j1 - j0;
-            gemm_diag_add(work_update.batch(l & 3).middle_cols(j0, nj),
-                          work_update.batch((l + 2) & 3).middle_cols(j0, nj).transposed(),
-                          coupling_Y.batch(0), work_update_Σ.batch(0).middle_rows(j0, nj));
-            hyhound_diag(tril(coupling_D.batch(biY)),
-                         work_update.batch((l + 2) & 3).middle_cols(j0, nj),
-                         work_update_Σ.batch(0).middle_rows(j0, nj));
-            compact_blas::template xadd_copy<1>(
-                simdify(work_update_Σ.batch(0).middle_rows(j0, nj)),
-                simdify(work_update_Σ.batch(0).middle_rows(j0, nj)));
-            compact_blas_default::template xadd_copy<1>( // TODO
-                simdify(work_update.batch(l & 3).middle_cols(j0, nj)),
-                simdify(work_update.batch(l & 3).middle_cols(j0, nj)));
-            hyhound_diag(tril(coupling_D.batch(biY)), work_update.batch(l & 3).middle_cols(j0, nj),
-                         work_update_Σ.batch(0).middle_rows(j0, nj));
-            // TODO: we should actually merge these two xshhud calls to
-            //       make sure that the intermediate matrix does not become
-            //       indefinite (although this shouldn't be an issue for
-            //       QPALM)
-        }
-    });
-    this->alt = true;
+        if (is_active(l, biY))
+            update_level(l, biY);
+    }
+    ctx.arrive_and_wait(); // TODO: remove and simply execute on the last thread
+    const index_t l      = lP - lvl;
+    const index_t offset = 1 << l;
+    const auto biY       = sub_wrap_PmV(ti, offset);
+    if (biY == 0) {
+        GUANAQO_TRACE("update_level last", biY);
+        const index_t j0 = 0, j1 = nJs.back(), nj = j1 - j0;
+        gemm_diag_add(work_update.batch(l & 3).middle_cols(j0, nj),
+                      work_update.batch((l + 2) & 3).middle_cols(j0, nj).transposed(),
+                      coupling_Y.batch(0), work_update_Σ.batch(0).middle_rows(j0, nj));
+        hyhound_diag(tril(coupling_D.batch(biY)),
+                     work_update.batch((l + 2) & 3).middle_cols(j0, nj),
+                     work_update_Σ.batch(0).middle_rows(j0, nj));
+        compact_blas::template xadd_copy<1>(simdify(work_update_Σ.batch(0).middle_rows(j0, nj)),
+                                            simdify(work_update_Σ.batch(0).middle_rows(j0, nj)));
+        compact_blas_default::template xadd_copy<1>( // TODO
+            simdify(work_update.batch(l & 3).middle_cols(j0, nj)),
+            simdify(work_update.batch(l & 3).middle_cols(j0, nj)));
+        hyhound_diag(tril(coupling_D.batch(biY)), work_update.batch(l & 3).middle_cols(j0, nj),
+                     work_update_Σ.batch(0).middle_rows(j0, nj));
+        // TODO: we should actually merge these two xshhud calls to
+        //       make sure that the intermediate matrix does not become
+        //       indefinite (although this shouldn't be an issue for
+        //       QPALM)
+    }
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(index_t ti, view<> Σ) {
+void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ) {
+    const index_t ti         = ctx.index;
     const index_t nyM        = std::max(ny, ny_0 + ny_N);
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
@@ -147,10 +146,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(index_t ti, view<> Σ) {
         } else {
             const auto bi_upd = sub_wrap_PmV(ti, 1);
             nJs[bi_upd]       = nJi;
-            barrier();
+            ctx.arrive_and_wait();
             if (ti == 0)
                 std::inclusive_scan(begin(nJs), end(nJs), begin(nJs));
-            barrier();
+            ctx.arrive_and_wait(); // TODO: can be removed by having each thread compute its own sums
             [[maybe_unused]] const index_t j0 = bi_upd == 0 ? 0 : nJs[bi_upd - 1], j1 = nJs[bi_upd];
             assert(nJi == j1 - j0);
             constexpr index_t wiA_table[]{0, 1, 0, 2};

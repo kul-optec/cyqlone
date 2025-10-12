@@ -15,14 +15,14 @@ namespace cyqlone {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_Y(index_t l, index_t biY) {
+void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_Y(Context &ctx, index_t l, index_t biY) {
     const index_t offset = 1 << l;
     { // Compute Y[bi]
         GUANAQO_TRACE("Trsm Y", biY);
         trsm(coupling_Y.batch(biY), tril(coupling_D.batch(biY)).transposed());
     }
     // Wait for U[bi] from factor_schur_U
-    barrier();
+    ctx.arrive_and_wait();
     for (index_t c = 0; c < coupling_U.cols(); c += 1)
         for (index_t r = 0; r < coupling_U.rows(); r += 16)
             __builtin_prefetch(&coupling_U.batch(biY)(0, r, c), 0, 3);
@@ -41,7 +41,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_Y(index_t l, index_t biY) 
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(index_t l, index_t biU) {
+void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(Context &ctx, index_t l, index_t biU) {
     const index_t offset = 1 << l;
     const index_t biD    = sub_wrap_PmV(biU, offset);
     const index_t biY    = sub_wrap_PmV(biD, offset);
@@ -53,7 +53,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(index_t l, index_t biU) 
         trsm(coupling_U.batch(biU), tril(coupling_D.batch(biU)).transposed());
     }
     // Wait for Y[bi] from factor_schur_Y
-    barrier();
+    ctx.arrive_and_wait();
     for (index_t c = 0; c < coupling_Y.cols(); c += 1)
         for (index_t r = 0; r < coupling_Y.rows(); r += 16)
             __builtin_prefetch(&coupling_Y.batch(biY)(0, r, c), 0, 3);
@@ -79,7 +79,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(index_t l, index_t biU) 
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(const index_t ti) {
+void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
+    const index_t ti         = ctx.index;
     const index_t num_stages = ceil_N >> lP; // number of stages per thread
     const index_t biI        = sub_wrap_PmV(ti, 1);
     const index_t biA        = ti;
@@ -127,7 +128,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(const index_t ti) {
     }
     // Then synchronize to make sure there are no two threads updating the
     // same diagonal block.
-    barrier();
+    ctx.arrive_and_wait();
     // And finally backward in time, optionally merged with factorization.
     const bool do_factor = (biA & 1) == 1 || (lP - lvl == 0 && biA == 0);
     if (do_factor) {
@@ -142,8 +143,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(const index_t ti) {
 // Performs Riccati recursion and then factors level l=0 of
 // coupling equations + propagates the subdiagonal blocks to level l=1.
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(index_t ti, bool alt, value_type S,
+void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, value_type S,
                                                         view<> Σ) {
+    const index_t ti         = ctx.index;
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
     const index_t k0         = ti * num_stages; // stage index
@@ -220,25 +222,24 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(index_t ti, bool alt, va
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor(value_type S, view<> Σ, bool alt) {
-    this->alt       = alt;
-    const index_t P = 1 << (lP - lvl);
-    batmat::foreach_thread(P, [this, alt, S, Σ](index_t ti, index_t) {
-        factor_riccati(ti, alt, S, Σ);
-        factor_l0(ti);
-        for (index_t l = 0; l < lP - lvl; ++l) {
-            barrier();
-            const index_t offset = 1 << l;
-            const auto biY       = sub_wrap_PmV(ti, offset);
-            const auto biU       = ti;
-            if (is_active(l, biY))
-                factor_schur_Y(l, biY);
-            else if (is_active(l, biU))
-                factor_schur_U(l, biU);
-            else
-                barrier();
-        }
-    });
+void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view<> Σ, bool alt) {
+    if (ctx.index == 0)
+        this->alt = alt;
+    index_t ti = ctx.index;
+    factor_riccati(ctx, alt, S, Σ);
+    factor_l0(ctx);
+    for (index_t l = 0; l < lP - lvl; ++l) {
+        ctx.arrive_and_wait();
+        const index_t offset = 1 << l;
+        const auto biY       = sub_wrap_PmV(ti, offset);
+        const auto biU       = ti;
+        if (is_active(l, biY))
+            factor_schur_Y(ctx, l, biY);
+        else if (is_active(l, biU))
+            factor_schur_U(ctx, l, biU);
+        else
+            ctx.arrive_and_wait();
+    }
 }
 
 } // namespace cyqlone

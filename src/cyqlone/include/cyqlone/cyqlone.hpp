@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cyqlone/cyqlone-storage.hpp>
+#include <cyqlone/parallel.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 #include <batmat/matrix/layout.hpp>
@@ -16,9 +17,6 @@
 #include <bit>
 #include <cassert>
 #include <limits>
-#if !BATMAT_WITH_OPENMP
-#include <barrier>
-#endif
 
 namespace cyqlone {
 
@@ -96,6 +94,10 @@ struct CyqloneSolver {
     index_t pcg_max_iter          = 100;
     value_type pcg_tolerance      = std::numeric_limits<value_type>::epsilon() / 10;
     bool pcg_print_resid          = false;
+
+    using SharedContext                         = parallel::SharedContext;
+    using Context                               = parallel::Context<SharedContext>;
+    std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(1 << (lP - lvl));
 
     matrix<default_order> coupling_D = [this] {
         return matrix<default_order>{{
@@ -325,40 +327,31 @@ struct CyqloneSolver {
     [[nodiscard]] bool is_active(index_t l, index_t bi) const;
     [[nodiscard]] bool is_U_below_Y(index_t l, index_t bi) const;
 
-#if !BATMAT_WITH_OPENMP
-    std::unique_ptr<std::barrier<>> std_barrier = std::make_unique<std::barrier<>>(1 << (lP - lvl));
-#endif
-
-    void barrier() const {
-        BATMAT_OMP(barrier);
-#if !BATMAT_WITH_OPENMP
-        std_barrier->arrive_and_wait();
-#endif
-    }
-
-    void residual_dynamics_constr(view<> x, view<> b, mut_view<> Mxb) const;
-    void transposed_dynamics_constr(view<> λ, mut_view<> Mᵀλ) const;
-    void general_constr(view<> ux, mut_view<> DCux) const;
-    void transposed_general_constr(view<> y, mut_view<> DCᵀy) const;
+    void residual_dynamics_constr(Context &ctx, view<> x, view<> b, mut_view<> Mxb) const;
+    void transposed_dynamics_constr(Context &ctx, view<> λ, mut_view<> Mᵀλ) const;
+    void general_constr(Context &ctx, view<> ux, mut_view<> DCux) const;
+    void transposed_general_constr(Context &ctx, view<> y, mut_view<> DCᵀy) const;
     /// grad_f ← Q ux + a q + b grad_f
-    void cost_gradient(view<> ux, value_type a, view<> q, value_type b, mut_view<> grad_f) const;
-    void cost_gradient_regularized(value_type S, view<> ux, view<> ux0, view<> q,
+    void cost_gradient(Context &ctx, view<> ux, value_type a, view<> q, value_type b,
+                       mut_view<> grad_f) const;
+    void cost_gradient_regularized(Context &ctx, value_type S, view<> ux, view<> ux0, view<> q,
                                    mut_view<> grad_f) const;
-    void cost_gradient_remove_regularization(value_type S, view<> x, view<> x0,
+    void cost_gradient_remove_regularization(Context &ctx, value_type S, view<> x, view<> x0,
                                              mut_view<> grad_f) const;
 
-    void factor_schur_U(index_t l, index_t biU);
-    void factor_schur_Y(index_t l, index_t biY);
-    void factor_l0(index_t ti);
-    void factor_riccati(index_t ti, bool alt, value_type S, view<> Σ);
-    void factor(value_type S, view<> Σ, bool alt = false);
+    void factor_schur_U(Context &ctx, index_t l, index_t biU);
+    void factor_schur_Y(Context &ctx, index_t l, index_t biY);
+    void factor_l0(Context &ctx);
+    void factor_riccati(Context &ctx, bool alt, value_type S, view<> Σ);
+    void factor(Context &ctx, value_type S, view<> Σ, bool alt = false);
 
     void solve_active(index_t l, index_t biY, mut_view<> λ) const;
     void solve_active_secondary(index_t l, index_t biU, mut_view<> λ) const;
-    void solve_riccati_forward(index_t ti, mut_view<> ux, mut_view<> λ) const;
+    void solve_riccati_forward(Context &ctx, mut_view<> ux, mut_view<> λ) const;
     /// Preserves b in λ (except for coupling equations solved using CR)
-    void solve_riccati_forward_alt(index_t ti, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve_forward(mut_view<> ux, mut_view<> λ, mut_view<> work) const;
+    void solve_riccati_forward_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
+                                   mut_view<> work) const;
+    void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
 
     value_type mul_A(batch_view<> p, mut_batch_view<> Ap, batch_view<default_order> L,
                      batch_view<default_order> B) const;
@@ -368,16 +361,19 @@ struct CyqloneSolver {
     void solve_pcg(mut_batch_view<> λ) { solve_pcg(λ, work_pcg.batch(0)); }
 
     void solve_reverse_active(index_t l, index_t bi, mut_view<> λ) const;
-    void solve_riccati_reverse(index_t ti, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve_riccati_reverse_alt(index_t ti, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve_reverse(mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve(mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
+    void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
+    void solve_riccati_reverse_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
+                                   mut_view<> work) const;
+    void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
+    void solve(Context &ctx, mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
                mut_view<> work_riccati) const;
-    void solve(mut_view<> ux, mut_view<> λ) { solve(ux, λ, work_pcg.batch(0), riccati_work); }
+    void solve(Context &ctx, mut_view<> ux, mut_view<> λ) {
+        solve(ctx, ux, λ, work_pcg.batch(0), riccati_work);
+    }
 
     void update_level(index_t l, index_t biY);
-    void update(view<> ΔΣ);
-    void update_riccati(index_t ti, view<> Σ);
+    void update(Context &ctx, view<> ΔΣ);
+    void update_riccati(Context &ctx, view<> Σ);
 
     std::vector<std::tuple<index_t, index_t, value_type>>
     build_sparse(const CyqloneStorage<value_type> &ocp, std::span<const value_type> Σ) const;

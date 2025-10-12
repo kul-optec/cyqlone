@@ -104,6 +104,8 @@ struct CompactBLAS {
     static void xadd_neg_copy(mut_single_batch_view out, Views... xs) {
         xadd_neg_copy_impl<Rot>(out, single_batch_view{xs}...);
     }
+    template <int Rot = 0>
+    static void xsub(mut_single_batch_view A, single_batch_view B);
 
     /// Dot product
     static value_type xdot(single_batch_view x, single_batch_view y);
