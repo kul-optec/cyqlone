@@ -4,6 +4,8 @@
 #include <cyqlone/cyqlone-storage.hpp>
 #include <cyqlone/qpalm/solver.hpp>
 
+#include <cstdint>
+#include <limits>
 #include <memory>
 #include <span>
 
@@ -37,6 +39,7 @@ struct CyqloneBackendSettings {
     real_t pcg_tolerance          = std::numeric_limits<real_t>::epsilon() / 10;
     bool pcg_print_resid          = false;
     bool use_stair_preconditioner = true;
+    uint32_t spin_count           = std::numeric_limits<uint32_t>::max();
     WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };
 

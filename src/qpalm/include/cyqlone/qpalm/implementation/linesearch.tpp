@@ -32,9 +32,9 @@ struct LineSearch {
     LineSearchSettings settings;
     std::vector<Breakpoint> breakpoints;
 
-    std::pair<real_t, size_t> operator()(auto &backend, real_t η, real_t β, const vec_t &Σ,
-                                         const vec_t &y, const vec_t &Ad, const vec_t &Ax,
-                                         const vec_t &b_min, const vec_t &b_max);
+    std::pair<real_t, size_t> operator()(auto &ctx, auto &backend, real_t η, real_t β,
+                                         const vec_t &Σ, const vec_t &y, const vec_t &Ad,
+                                         const vec_t &Ax, const vec_t &b_min, const vec_t &b_max);
 
     static std::pair<real_t, size_t> find_stepsize_base(ABSum_t a, ABSum_t b, size_t i0,
                                                         std::span<Breakpoint> pos_bp);
@@ -113,7 +113,7 @@ std::pair<real_t, size_t> LineSearch<Vec>::find_stepsize(ABSum_t a, ABSum_t b, s
 /// @return τ Optimal step size @f$ \tau_\star @f$
 template <class Vec>
 std::pair<real_t, size_t>
-LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}{\xi} @f$
+LineSearch<Vec>::operator()(auto &ctx, auto &backend, real_t η, ///< @f$ \eta = \inprod{d}{\xi} @f$
                             real_t β, ///< @f$ \beta = \inprod{d}{\grad\tilde f_k(x^{k,\nu})} @f$
                             const vec_t &Σ,     ///< Penalty factor @f$ \Sigma_k @f$ (diagonal)
                             const vec_t &y,     ///< Lagrange multipliers @f$ y^k @f$
@@ -125,48 +125,49 @@ LineSearch<Vec>::operator()(auto &backend, real_t η, ///< @f$ \eta = \inprod{d}
     using std::abs;
     // Compute breakpoints t[i] and intermediate values α[i] and δ[i], then partition them by t[i]
     // and compute a0 and b0, summing over all negative breakpoints.
-    BreakpointsResult bp = get_breakpoints(backend, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+    BreakpointsResult bp = get_breakpoints(backend, ctx, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
     auto pos_bp          = bp.bp.pos_bp;
     auto [a, b]          = bp.ab_neg;
     a += η;
     b -= β;
-    index_t i = 0;
 
+    return ctx.call_broadcast([&]() -> std::pair<real_t, size_t> {
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
-    std::vector<Breakpoint> pos_bp_debug(pos_bp.begin(), pos_bp.end());
-    auto step_size_debug = find_stepsize_base(a, b, 0, std::span{pos_bp_debug});
+        std::vector<Breakpoint> pos_bp_debug(pos_bp.begin(), pos_bp.end());
+        auto step_size_debug = find_stepsize_base(a, b, 0, std::span{pos_bp_debug});
 #endif
-
-    // Handle the trivial cases first:
-    // If there are no positive breakpoints, then ψ is simply quadratic on [0, +∞), so we can safely
-    // accept unit step size.
-    if (pos_bp.size() == 0)
-        return {1, 0};
-    // Optimization: check the first interval for an early return if there is no active set change.
-    // If the smallest breakpoint already has ψʹ ≥ 0, then there's no need to sort all breakpoints.
-    // Find the smallest positive t[i] and move it to the beginning of positive
-    if (settings.find_smallest_breakpoint_first) {
-        const auto smallest     = min_element(pos_bp, [](Breakpoint b) { return b.t; });
-        const auto first_pos_it = std::ranges::begin(pos_bp);
-        if (first_pos_it != smallest)
-            std::ranges::iter_swap(first_pos_it, smallest);
-        if (auto ψʹ0 = pos_bp[0].t * a - b; ψʹ0 >= 0)
+        // Handle the trivial cases first:
+        // If there are no positive breakpoints, then ψ is simply quadratic on [0, +∞), so we can safely
+        // accept unit step size.
+        if (pos_bp.size() == 0)
             return {1, 0};
-        // Otherwise, skip the first breakpoint, and perform an actual search.
-        a += pos_bp[0].δ * abs(pos_bp[0].δ);
-        b += pos_bp[0].α() * abs(pos_bp[0].δ);
-        ++i;
-        pos_bp = pos_bp.subspan(1);
-    }
+        index_t i = 0;
+        // Optimization: check the first interval for an early return if there is no active set change.
+        // If the smallest breakpoint already has ψʹ ≥ 0, then there's no need to sort all breakpoints.
+        // Find the smallest positive t[i] and move it to the beginning of positive
+        if (settings.find_smallest_breakpoint_first) {
+            const auto smallest     = min_element(pos_bp, [](Breakpoint b) { return b.t; });
+            const auto first_pos_it = std::ranges::begin(pos_bp);
+            if (first_pos_it != smallest)
+                std::ranges::iter_swap(first_pos_it, smallest);
+            if (auto ψʹ0 = pos_bp[0].t * a - b; ψʹ0 >= 0)
+                return {1, 0};
+            // Otherwise, skip the first breakpoint, and perform an actual search.
+            a += pos_bp[0].δ * abs(pos_bp[0].δ);
+            b += pos_bp[0].α() * abs(pos_bp[0].δ);
+            ++i;
+            pos_bp = pos_bp.subspan(1);
+        }
 
-    GUANAQO_TRACE("linesearch find stepsize", 0);
-    auto step_size = find_stepsize(a, b, i, pos_bp);
+        GUANAQO_TRACE("linesearch find stepsize", 0);
+        auto step_size = find_stepsize(a, b, i, pos_bp);
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
-    BATMAT_ASSERT(step_size.second == step_size_debug.second);
-    BATMAT_ASSERT(abs(step_size.first - step_size_debug.first) <
-                  real_t(1e4) * std::numeric_limits<real_t>::epsilon());
+        BATMAT_ASSERT(step_size.second == step_size_debug.second);
+        BATMAT_ASSERT(abs(step_size.first - step_size_debug.first) <
+                      real_t(1e4) * std::numeric_limits<real_t>::epsilon());
 #endif
-    return step_size;
+        return step_size;
+    });
 }
 
 } // namespace cyqlone::qpalm

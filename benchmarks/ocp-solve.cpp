@@ -46,7 +46,6 @@ void trace(auto &&fun, const auto &name, const auto &params) {
         return;
     fun();
     guanaqo::trace_logger.reset();
-    batmat::foreach_thread([](index_t i, index_t) { GUANAQO_TRACE("thread_id", i); });
     fun();
     std::filesystem::create_directories(out_dir);
     std::ofstream csv{out_file};
@@ -200,9 +199,9 @@ void bm_factor_cyqlone(benchmark::State &state) {
     const auto lP = static_cast<index_t>(state.range(4));
     BATMAT_OMP_IF(omp_set_num_threads(1 << lP));
     batmat::pool_set_num_threads(1 << lP);
-    GUANAQO_IF_ITT(batmat::foreach_thread(
-        [](index_t i, index_t) { __itt_thread_set_name(std::format("OMP({})", i).c_str()); }));
-    auto solver   = build_cyqlone_solver<VL>(ocp, lP);
+    auto solver = build_cyqlone_solver<VL>(ocp, lP);
+    GUANAQO_IF_ITT(solver.parallel_ctx->run(
+        [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
     auto Σ_packed = solver.initialize_general_constraints();
     solver.pack_constraints(as_span(Σ.reshaped()), Σ_packed);
     const auto do_factor = [&] { solver.factor(1e100, Σ_packed); };

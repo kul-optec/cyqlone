@@ -27,7 +27,6 @@ namespace qp = cyqlone::qpalm;
 static void init_trace() {
     guanaqo::trace_logger.reset();
     guanaqo::trace_logger.logs.resize(65565);
-    batmat::foreach_thread([](index_t i, index_t) { GUANAQO_TRACE("thread_id", i); });
     GUANAQO_TRACE("init", 0);
 }
 static std::filesystem::path save_trace(const char *name) {
@@ -117,7 +116,7 @@ TEST(QPALM, cyqloneSpringsMasses) try {
     EXPECT_EQ(status, qp::SolverStatus::Converged);
 
 #if GUANAQO_WITH_TRACING
-    std::cout << save_trace("test-QPALM-cyqlone.csv") << "\n\n";
+    std::cout << save_trace("test-QPALM-cyqlone-spring-masses.csv") << "\n\n";
 #endif
 
     std::cout << "inner:   " << qpalm.stats->inner_iter << "\n"

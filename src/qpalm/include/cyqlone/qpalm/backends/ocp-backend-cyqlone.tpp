@@ -4,7 +4,9 @@
 #include <cyqlone/neumaier.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/implementation/breakpoint.hpp>
+#include <cyqlone/reduce.hpp>
 #include <batmat/assume.hpp>
+#include <batmat/config.hpp>
 #include <batmat/linalg/copy.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <batmat/openmp.h>
@@ -15,7 +17,6 @@
 
 #include <algorithm>
 #include <array>
-#include <atomic>
 #include <cassert>
 #include <cmath>
 #include <functional>
@@ -25,7 +26,6 @@
 #include <memory>
 #include <numeric>
 #include <optional>
-#include <ranges>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -37,10 +37,12 @@ namespace datapar = batmat::datapar;
 
 template <index_t VL>
 struct CyqloneBackend {
-    using OCP_t          = cyqlone::CyqloneSolver<VL>;
-    using storage_t      = typename OCP_t::template matrix<>;
-    using mask_storage_t = typename OCP_t::template mask_matrix<>;
-    using simd           = typename OCP_t::compact_blas::simd;
+    using OCP_t                 = cyqlone::CyqloneSolver<VL>;
+    using Context               = typename OCP_t::Context;
+    using storage_t             = typename OCP_t::template matrix<>;
+    using mask_storage_t        = typename OCP_t::template mask_matrix<>;
+    using simd                  = typename OCP_t::compact_blas::simd;
+    static constexpr auto norms = cyqlone::norms<real_t, simd>{};
     // clang-format off
     struct var_vec_t         : storage_t { friend CyqloneBackend; var_vec_t() = default;         private: var_vec_t(storage_t &&o)         : storage_t{std::move(o)} {} friend auto simdify(var_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const var_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
     struct eq_constr_vec_t   : storage_t { friend CyqloneBackend; eq_constr_vec_t() = default;   private: eq_constr_vec_t(storage_t &&o)   : storage_t{std::move(o)} {} friend auto simdify(eq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const eq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
@@ -68,16 +70,17 @@ struct CyqloneBackend {
     CyqloneBackend(const CyqloneStorage<> &ocp, CyqloneData data,
                    const CyqloneBackendSettings &settings)
         : ocp{OCP_t::build(ocp, settings.log_processors)}, settings{settings} {
-        this->ocp.alt                      = settings.factor_alt;
-        this->ocp.pcg_max_iter             = settings.pcg_max_iter;
-        this->ocp.pcg_tolerance            = settings.pcg_tolerance;
-        this->ocp.pcg_print_resid          = settings.pcg_print_resid;
-        this->ocp.use_stair_preconditioner = settings.use_stair_preconditioner;
-        b_min_strided                      = ineq_constr_vec();
-        b_max_strided                      = ineq_constr_vec();
-        ΔΣ                                 = ineq_constr_vec();
-        b_eq_strided                       = eq_constr_vec();
-        grad_strided                       = var_vec();
+        this->ocp.alt                              = settings.factor_alt;
+        this->ocp.pcg_max_iter                     = settings.pcg_max_iter;
+        this->ocp.pcg_tolerance                    = settings.pcg_tolerance;
+        this->ocp.pcg_print_resid                  = settings.pcg_print_resid;
+        this->ocp.use_stair_preconditioner         = settings.use_stair_preconditioner;
+        this->ocp.parallel_ctx->barrier.spin_count = settings.spin_count;
+        b_min_strided                              = ineq_constr_vec();
+        b_max_strided                              = ineq_constr_vec();
+        ΔΣ                                         = ineq_constr_vec();
+        b_eq_strided                               = eq_constr_vec();
+        grad_strided                               = var_vec();
         this->ocp.initialize_rhs(ocp, b_eq_strided);
         this->ocp.initialize_gradient(ocp, grad_strided);
         this->ocp.initialize_bounds(ocp, b_min_strided, b_max_strided);
@@ -204,162 +207,167 @@ struct CyqloneBackend {
         ([this](eq_constr_vec_t &λ) { λ = eq_constr_vec(); }(λs), ...);
     }
 
-    void initial_variables(var_vec_t &x) const {
+    void initial_variables(Context &ctx, var_vec_t &x) const {
         if (x0) {
-            x.view() = x0->view();
+            xcopy(ctx, *x0, x);
             return;
         }
-        set_constant(x, real_t{});
+        set_constant(ctx, x, real_t{});
     }
-    void initial_multipliers_eq(eq_constr_vec_t &λ) const {
+    void initial_multipliers_eq(Context &ctx, eq_constr_vec_t &λ) const {
         if (λ0) {
-            λ.view() = λ0->view();
+            xcopy(ctx, *λ0, λ);
             return;
         }
-        set_constant(λ, real_t{});
+        set_constant(ctx, λ, real_t{});
     }
-    void initial_multipliers_ineq(ineq_constr_vec_t &y) const {
+    void initial_multipliers_ineq(Context &ctx, ineq_constr_vec_t &y) const {
         if (y0) {
-            y.view() = y0->view();
+            xcopy(ctx, *y0, y);
             return;
         }
-        set_constant(y, real_t{});
+        set_constant(ctx, y, real_t{});
     }
 
     // e = Ax - clamp(Ax, b_min, b_max)
-    void ineq_constr_resid(const ineq_constr_vec_t &Ax, ineq_constr_vec_t &e) const {
-        auto t = get_timed(&OCP_t::Timings::ineq_constr_resid);
-        for (index_t i = 0; i < Ax.num_batches(); ++i)
-            OCP_t::compact_blas::proj_diff(simdify(Ax.batch(i)), simdify(b_min_strided.batch(i)),
-                                           simdify(b_max_strided.batch(i)), simdify(e.batch(i)));
+    void ineq_constr_resid(Context &ctx, const ineq_constr_vec_t &Ax, ineq_constr_vec_t &e) const {
+        auto t                   = get_timed(&OCP_t::Timings::ineq_constr_resid);
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            OCP_t::compact_blas::proj_diff(simdify(Ax.batch(di)), simdify(b_min_strided.batch(di)),
+                                           simdify(b_max_strided.batch(di)), simdify(e.batch(di)));
+        }
     }
 
-    // e = Ax - clamp(Ax, b_min, b_max)
-    ineq_constr_vec_t ineq_constr_resid(const ineq_constr_vec_t &Ax) const {
-        auto e = ineq_constr_vec();
-        ineq_constr_resid(Ax, e);
-        return e;
-    }
-
-    static auto inf_norm_accumulate(auto accum, auto t) {
-        using std::abs;
-        using std::max;
-        auto at = abs(t);
-        return std::array{max(at, accum[0]), at + accum[1]};
-    }
-
-    static std::array<real_t, 2> inf_norm_reduce(std::array<simd, 2> accum) {
-        return {hmax(accum[0]), reduce(accum[1])};
-    }
-
-    real_t ineq_constr_viol(const ineq_constr_vec_t &Ax) const {
+    real_t ineq_constr_viol(Context &ctx, const ineq_constr_vec_t &Ax) const {
         GUANAQO_TRACE("ineq_constr_viol", 0);
         auto t = get_timed(&OCP_t::Timings::ineq_constr_viol);
         using std::clamp;
         using std::isfinite;
-        auto [inf_nrm, l1_norm] = OCP_t::compact_blas::xreduce(
-            std::array<simd, 2>{0, 0},
-            [](auto accum, auto Axi, auto b_min_i, auto b_max_i) {
-                auto zi = clamp(Axi, b_min_i, b_max_i);
-                return inf_norm_accumulate(accum, Axi - zi);
-            },
-            inf_norm_reduce, Ax.view(), b_min_strided.view(), b_max_strided.view());
-        return isfinite(l1_norm) ? inf_nrm : l1_norm;
+        auto nrm_simd            = norms.zero_simd();
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            nrm_simd         = OCP_t::compact_blas::xreduce(
+                nrm_simd,
+                [](auto accum, auto Axi, auto b_min_i, auto b_max_i) {
+                    auto zi = clamp(Axi, b_min_i, b_max_i);
+                    return norms(accum, Axi - zi);
+                },
+                std::identity{}, simdify(Ax.batch(di))),
+            simdify(b_min_strided.batch(di)), simdify(b_max_strided.batch(di));
+        }
+        auto nrm = ctx.reduce(norms(nrm_simd), norms.zero(), norms);
+        return isfinite(nrm.asum) ? nrm.max : nrm.asum;
     }
 
-    real_t ineq_constr_resid_al(const ineq_constr_vec_t &y, const ineq_constr_vec_t &ŷ,
-                                const ineq_constr_vec_t &Σ, ineq_constr_vec_t &e) {
+    real_t ineq_constr_resid_al(Context &ctx, const ineq_constr_vec_t &y,
+                                const ineq_constr_vec_t &ŷ, const ineq_constr_vec_t &Σ,
+                                ineq_constr_vec_t &e) {
         GUANAQO_TRACE("ineq_constr_resid_al", 0);
         auto t = get_timed(&OCP_t::Timings::ineq_constr_resid_al);
         using std::clamp;
         using std::isfinite;
-        auto [inf_nrm, l1_norm] = OCP_t::compact_blas::xreduce_enumerate(
-            std::array<simd, 2>{0, 0},
-            [&e](auto coord, auto accum, auto yi, auto ŷi, auto Σi) {
-                auto [i, r, c] = coord;
-                auto ei        = (ŷi - yi) / Σi;
-                if constexpr (std::is_same_v<decltype(ei), simd>)
-                    datapar::aligned_store(ei, &e(i, r, c));
-                else
-                    e(i, r, c) = ei;
-                return inf_norm_accumulate(accum, ei);
-            },
-            inf_norm_reduce, simdify(y), simdify(ŷ), simdify(Σ));
-        return isfinite(l1_norm) ? inf_nrm : l1_norm;
+        auto nrm_simd            = norms.zero_simd();
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            nrm_simd         = OCP_t::compact_blas::xreduce_enumerate(
+                nrm_simd,
+                [di, &e](auto coord, auto accum, auto yi, auto ŷi, auto Σi) {
+                    auto [i, r, c] = coord;
+                    auto ei        = (ŷi - yi) / Σi;
+                    datapar::aligned_store(ei, &e.batch(di)(i, r, c));
+                    return norms(accum, ei);
+                },
+                std::identity{}, simdify(y.batch(di)), simdify(ŷ.batch(di)), simdify(Σ.batch(di)));
+        }
+        auto nrm = ctx.reduce(norms(nrm_simd), norms.zero(), norms);
+        return isfinite(nrm.asum) ? nrm.max : nrm.asum;
     }
 
-    void eq_constr_resid(const var_vec_t &x, eq_constr_vec_t &Mxb) {
-        ocp.residual_dynamics_constr(x, b_eq_strided, Mxb);
-    }
-    eq_constr_vec_t eq_constr_resid(const var_vec_t &x) {
-        auto Mxb = eq_constr_vec();
-        eq_constr_resid(x, Mxb);
-        return Mxb;
+    void eq_constr_resid(Context &ctx, const var_vec_t &x, eq_constr_vec_t &Mxb) {
+        ocp.residual_dynamics_constr(ctx, x, b_eq_strided, Mxb);
     }
 
-    void mat_vec_MT(const eq_constr_vec_t &λ, var_vec_t &Mᵀλ) {
-        ocp.transposed_dynamics_constr(λ, Mᵀλ);
-    }
-    var_vec_t mat_vec_MT(const eq_constr_vec_t &λ) {
-        auto Mᵀλ = var_vec();
-        mat_vec_MT(λ, Mᵀλ);
-        return Mᵀλ;
+    void mat_vec_MT(Context &ctx, const eq_constr_vec_t &λ, var_vec_t &Mᵀλ) {
+        ocp.transposed_dynamics_constr(ctx, λ, Mᵀλ);
     }
 
-    real_t unscaled_eq_constr_viol(const eq_constr_vec_t &Mxb) const { return norm_inf(Mxb); }
+    real_t unscaled_eq_constr_viol(Context &ctx, const eq_constr_vec_t &Mxb) const {
+        return norm_inf(ctx, Mxb);
+    }
+
+    void mat_vec_AT(Context &ctx, const ineq_constr_vec_t &y, var_vec_t &Aᵀy) {
+        ocp.transposed_general_constr(ctx, y, Aᵀy);
+    }
 
     void mat_vec_AT(const ineq_constr_vec_t &y, var_vec_t &Aᵀy) {
         ocp.transposed_general_constr(y, Aᵀy);
     }
 
-    void mat_vec_A(const var_vec_t &x, ineq_constr_vec_t &Ax) { ocp.general_constr(x, Ax); }
-    ineq_constr_vec_t mat_vec_A(const var_vec_t &x) {
+    void mat_vec_A(Context &ctx, const var_vec_t &x, ineq_constr_vec_t &Ax) {
+        ocp.general_constr(ctx, x, Ax);
+    }
+    ineq_constr_vec_t mat_vec_A(Context &ctx, const var_vec_t &x) {
         auto Ax = ineq_constr_vec();
-        mat_vec_A(x, Ax);
+        mat_vec_A(ctx, x, Ax);
         return Ax;
     }
 
-    void grad_f(const var_vec_t &x, var_vec_t &grad_f) {
-        ocp.cost_gradient(x, 1, grad_strided, 0, grad_f);
+    void grad_f(Context &ctx, const var_vec_t &x, var_vec_t &grad_f) {
+        ocp.cost_gradient(ctx, x, 1, grad_strided, 0, grad_f);
     }
-    void grad_f_regularized(real_t S, const var_vec_t &x, const var_vec_t &x_reg,
+    void grad_f_regularized(Context &ctx, real_t S, const var_vec_t &x, const var_vec_t &x_reg,
                             var_vec_t &grad_f) {
         using std::isfinite;
         if (isfinite(S))
-            ocp.cost_gradient_regularized(S, x, x_reg, grad_strided, grad_f);
+            ocp.cost_gradient_regularized(ctx, S, x, x_reg, grad_strided, grad_f);
         else
-            ocp.cost_gradient(x, 1, grad_strided, 0, grad_f);
+            ocp.cost_gradient(ctx, x, 1, grad_strided, 0, grad_f);
     }
-    void grad_f_remove_regularization(real_t S, const var_vec_t &x, const var_vec_t &x_reg,
-                                      var_vec_t &grad_f) {
+    void grad_f_remove_regularization(Context &ctx, real_t S, const var_vec_t &x,
+                                      const var_vec_t &x_reg, var_vec_t &grad_f) {
         using std::isfinite;
         if (isfinite(S))
-            ocp.cost_gradient_remove_regularization(S, x, x_reg, grad_f);
+            ocp.cost_gradient_remove_regularization(ctx, S, x, x_reg, grad_f);
     }
-    real_t f_grad_f(const var_vec_t &x, var_vec_t &grad_f) {
-        ocp.cost_gradient(x, 1, grad_strided, 0, grad_f);
+    real_t f_grad_f(Context &ctx, const var_vec_t &x, var_vec_t &grad_f) {
+        ocp.cost_gradient(ctx, x, 1, grad_strided, 0, grad_f);
         return std::numeric_limits<real_t>::quiet_NaN(); // TODO: compute f
     }
-    std::tuple<real_t, var_vec_t> f_grad_f(const var_vec_t &x) {
+    std::tuple<real_t, var_vec_t> f_grad_f(Context &ctx, const var_vec_t &x) {
         auto grad_f = var_vec();
-        real_t f    = f_grad_f(x, grad_f);
+        real_t f    = f_grad_f(ctx, x, grad_f);
         return {f, std::move(grad_f)};
     }
 
-    void update_regularization_changed(real_t S_new, real_t S_old) {
-        if (S_new != S_old)
-            reset_factorization = true;
+    void update_regularization_changed(Context &ctx, real_t S_new, real_t S_old) {
+        if (S_new != S_old) {
+            ctx.arrive_and_wait(__LINE__);
+            if (ctx.is_master())
+                reset_factorization = true;
+            ctx.arrive_and_wait(__LINE__);
+        }
     }
 
-    real_t boost_regularization(real_t S, real_t S_boost) {
-        update_regularization_changed(S_boost, S);
+    real_t boost_regularization(Context &ctx, real_t S, real_t S_boost) {
+        update_regularization_changed(ctx, S_boost, S);
         return S_boost;
     }
 
-    void update_penalty_changed(const ineq_constr_vec_t &Σ, index_t num_Σ_changed) {
+    void update_penalty_changed(Context &ctx, const ineq_constr_vec_t &Σ, index_t num_Σ_changed) {
         std::ignore = Σ;
-        if (num_Σ_changed > 0)
-            reset_factorization = true;
+        if (num_Σ_changed > 0) {
+            ctx.arrive_and_wait(__LINE__);
+            if (ctx.is_master())
+                reset_factorization = true;
+            ctx.arrive_and_wait(__LINE__);
+        }
     }
 
     template <class T, size_t N>
@@ -383,212 +391,258 @@ struct CyqloneBackend {
     }
 
     BreakpointsResult
-    compute_partition_breakpoints(std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
-                                  const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
-                                  const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
-                                  const ineq_constr_vec_t &b_max) {
+    compute_partition_breakpoints(Context &ctx, std::vector<Breakpoint> &breakpoints,
+                                  const ineq_constr_vec_t &Σ, const ineq_constr_vec_t &y,
+                                  const ineq_constr_vec_t &Ad, const ineq_constr_vec_t &Ax,
+                                  const ineq_constr_vec_t &b_min, const ineq_constr_vec_t &b_max) {
         auto t = get_timed(&OCP_t::Timings::breakpoints);
         using std::isfinite;
         using std::sqrt;
         // Allocate memory
-        const auto ny_M = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
-        const auto m    = ocp.ceil_N * ny_M;
-        breakpoints.resize(2 * m);
-        breakpoints_temp.resize(2 * m);
-        // Parallelization and vectorization
+        const index_t ny_M       = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
+        const index_t m          = ocp.ceil_N * ny_M;
         const index_t P          = 1 << (ocp.lP - ocp.lvl);
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
-        thread_indices.resize(P);
-        thread_sums.resize(2 * P);
+        if (ctx.is_master()) {
+            breakpoints.resize(2 * m);
+            breakpoints_temp.resize(2 * m);
+            thread_indices.resize(P);
+            thread_sums.resize(2 * P);
+        }
+        ctx.arrive_and_wait(__LINE__); // TODO: allocate ahead of time to avoid barrier
+        // Parallelization and vectorization
         auto as = std::span{thread_sums}.first(P), bs = std::span{thread_sums}.subspan(P);
+        auto thr_parts = std::span{thread_indices}.subspan(0, P);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
         std::span<Breakpoint> neg_bp, pos_bp;
-        batmat::foreach_thread(P, [&](index_t ti, index_t) {
-            Breakpoint *const fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
-            Breakpoint *const inf_0 = fin_0 + 2 * num_stages * ny_M * VL;
-            Breakpoint *fin = fin_0, *inf = inf_0;
-            const index_t di0 = ti * num_stages;
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = di0 + i;
-                GUANAQO_TRACE("linesearch breakpoints cyqlone", di);
-                for (index_t r = 0; r < ny_M; ++r) {
-                    const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
-                               yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
-                               Adi = batmat::datapar::aligned_load<simd>(&Ad.batch(di)(0, r, 0)),
-                               Axi = batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
-                               li  = batmat::datapar::aligned_load<simd>(&b_min.batch(di)(0, r, 0)),
-                               ui  = batmat::datapar::aligned_load<simd>(&b_max.batch(di)(0, r, 0));
-                    const auto s   = sqrt(Σi);
-                    const auto δ2 = s * Adi, δ1 = -δ2;
-                    const auto α1 = (yi + Σi * (Axi - li)) / s, α2 = (Σi * (ui - Axi) - yi) / s;
-                    const auto t1 = α1 / δ1, t2 = α2 / δ2;
-                    BATMAT_FULLY_UNROLLED_FOR (index_t v = 0; v < VL; ++v) {
-                        *(isfinite(t1[v]) ? fin++ : --inf) = {.t = t1[v], .δ = δ1[v]};
-                        *(isfinite(t2[v]) ? fin++ : --inf) = {.t = t2[v], .δ = δ2[v]};
-                    }
+        const index_t ti        = ctx.index;
+        Breakpoint *const fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
+        Breakpoint *const inf_0 = fin_0 + 2 * num_stages * ny_M * VL;
+        Breakpoint *fin = fin_0, *inf = inf_0;
+        const index_t di0 = ti * num_stages;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = di0 + i;
+            GUANAQO_TRACE("linesearch breakpoints cyqlone", di);
+            for (index_t r = 0; r < ny_M; ++r) {
+                const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
+                           yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
+                           Adi = batmat::datapar::aligned_load<simd>(&Ad.batch(di)(0, r, 0)),
+                           Axi = batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
+                           li  = batmat::datapar::aligned_load<simd>(&b_min.batch(di)(0, r, 0)),
+                           ui  = batmat::datapar::aligned_load<simd>(&b_max.batch(di)(0, r, 0));
+                const auto s   = sqrt(Σi);
+                const auto δ2 = s * Adi, δ1 = -δ2;
+                const auto α1 = (yi + Σi * (Axi - li)) / s, α2 = (Σi * (ui - Axi) - yi) / s;
+                const auto t1 = α1 / δ1, t2 = α2 / δ2;
+                BATMAT_FULLY_UNROLLED_FOR (index_t v = 0; v < VL; ++v) {
+                    *(isfinite(t1[v]) ? fin++ : --inf) = {.t = t1[v], .δ = δ1[v]};
+                    *(isfinite(t2[v]) ? fin++ : --inf) = {.t = t2[v], .δ = δ2[v]};
                 }
             }
-            // Partitioning the chunk of each thread separately improves partitioning performance
-            // later on in the line search because of branch prediction.
-            auto [pos, large] = [&] {
-                GUANAQO_TRACE("linesearch breakpoints cyqlone partition", di0);
-                auto pos   = partition(fin_0, fin, [](Breakpoint p) { return p.t <= 0; }).begin();
-                auto large = partition(pos, fin, [](Breakpoint p) { return p.t <= 1; }).begin();
-                return std::pair{pos, large};
-            }();
-            // Compute the partial sums
-            auto ab = partial_sum_negative(
-                {.neg_bp = std::span{fin_0, pos}, .pos_bp = std::span{pos, fin}});
-            as[ti] = ab.a; // We don't use an atomic accumulator here for reproducibility (float
-            bs[ti] = ab.b; // addition is not associative, and thread order is nondeterministic)
-            // Store the separator indices
-            thread_indices[ti][0] = pos - fin_0;
-            thread_indices[ti][1] = large - fin_0;
-            thread_indices[ti][2] = fin - fin_0;
-            thread_indices[ti][3] = inf_0 - fin_0;
-            // Synchronize the separator indices for all threads
-            ocp.barrier();
-            // Merge all local partitions of all threads into a single partitioned array
-            GUANAQO_TRACE("linesearch breakpoints cyqlone merge", di0);
-            merge_chunk<Breakpoint, 4>(std::span{fin_0, inf_0}, ti, std::span{thread_indices},
-                                       std::span{breakpoints});
-            if (ti == 0) {
-                auto first_pos = std::accumulate(thread_indices.begin(), thread_indices.end(),
-                                                 breakpoints.begin(),
-                                                 [](auto it, auto &i) { return it += i[0]; }),
-                     first_inf = std::accumulate(thread_indices.begin(), thread_indices.end(),
-                                                 breakpoints.begin(),
-                                                 [](auto it, auto &i) { return it += i[2]; });
-                neg_bp         = std::span{breakpoints.begin(), first_pos};
-                pos_bp         = std::span{first_pos, first_inf};
-            }
-        });
-        return {.bp     = {.neg_bp = neg_bp, .pos_bp = pos_bp},
-                .ab_neg = {.a = std::accumulate(begin(as), end(as), ABSum_t{}),
-                           .b = std::accumulate(begin(bs), end(bs), ABSum_t{})}};
+        }
+        // Partitioning the chunk of each thread separately improves partitioning performance
+        // later on in the line search because of branch prediction.
+        auto [pos, large] = [&] {
+            GUANAQO_TRACE("linesearch breakpoints cyqlone partition", di0);
+            auto pos   = partition(fin_0, fin, [](Breakpoint p) { return p.t <= 0; }).begin();
+            auto large = partition(pos, fin, [](Breakpoint p) { return p.t <= 1; }).begin();
+            return std::pair{pos, large};
+        }();
+        // Store the separator indices
+        thr_parts[ti][0]    = pos - fin_0; // TODO: this is an all-to-all
+        thr_parts[ti][1]    = large - fin_0;
+        thr_parts[ti][2]    = fin - fin_0;
+        thr_parts[ti][3]    = inf_0 - fin_0;
+        auto thr_parts_done = ctx.arrive();
+        // Compute the partial sums
+        PartitionedBreakpoints pos_neg_bp{.neg_bp = std::span{fin_0, pos},
+                                          .pos_bp = std::span{pos, fin}};
+        auto ab = partial_sum_negative(pos_neg_bp);
+        as[ti]  = ab.a; // We don't use an atomic accumulator here for reproducibility (float
+        bs[ti]  = ab.b; // addition is not associative, and thread order is nondeterministic)
+        // Synchronize the separator indices for all threads
+        ctx.wait(std::move(thr_parts_done));
+        auto as_bs_done = ctx.arrive();
+        // Merge all local partitions of all threads into a single partitioned array
+        GUANAQO_TRACE("linesearch breakpoints cyqlone merge", di0);
+        merge_chunk<Breakpoint, 4>(std::span{fin_0, inf_0}, ti, thr_parts, std::span{breakpoints});
+        ctx.wait(std::move(as_bs_done));
+        auto merge_done = ctx.arrive();
+        // Compute the final partition indices
+        auto first_pos = std::accumulate(thr_parts.begin(), thr_parts.end(), breakpoints.begin(),
+                                         [](auto it, auto &i) { return it += i[0]; }),
+             first_inf = std::accumulate(thr_parts.begin(), thr_parts.end(), breakpoints.begin(),
+                                         [](auto it, auto &i) { return it += i[2]; });
+        neg_bp         = std::span{breakpoints.begin(), first_pos};
+        pos_bp         = std::span{first_pos, first_inf};
+        // Compute the final sums
+        auto a = std::accumulate(begin(as), end(as), ABSum_t{}),
+             b = std::accumulate(begin(bs), end(bs), ABSum_t{});
+        // Wait for the full partitioning
+        ctx.wait(std::move(merge_done));
+        return {.bp = {.neg_bp = neg_bp, .pos_bp = pos_bp}, .ab_neg = {.a = a, .b = b}};
     }
 
     friend BreakpointsResult
-    guanaqo_tag_invoke(guanaqo::tag_t<get_breakpoints>, CyqloneBackend &backend,
+    guanaqo_tag_invoke(guanaqo::tag_t<get_breakpoints>, CyqloneBackend &backend, Context &ctx,
                        std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
                        const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad,
                        const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &b_min,
                        const ineq_constr_vec_t &b_max) {
-        return backend.compute_partition_breakpoints(breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+        return backend.compute_partition_breakpoints(ctx, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
     }
 
     template <class T, class U>
-    void xaxpy(real_t a, const T &x, U &y) {
+    void xaxpy(Context &ctx, real_t a, const T &x, U &y) {
         const auto x_ = simdify(x), y_ = simdify(y);
-        const index_t P          = 1 << (ocp.lP - ocp.lvl);
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
-        batmat::foreach_thread(P, [&](index_t ti, index_t) {
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                OCP_t::compact_blas::xaxpy(a, x_.batch(di), y_.batch(di));
-            }
-        });
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            OCP_t::compact_blas::xaxpy(a, x_.batch(di), y_.batch(di));
+        }
     }
 
     template <class T, class U>
-    static void xcopy(const T &x, U &y) {
+    void xcopy(Context &ctx, const T &x, U &y) const {
         BATMAT_ASSERT(x.depth() == y.depth());
-        for (index_t l = 0; l < x.num_batches(); ++l)
-            batmat::linalg::copy(x.batch(l), y.batch(l));
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            batmat::linalg::copy(x.batch(di), y.batch(di));
+        }
     }
 
     template <class T, class U>
-    static void set_constant(T &x, const U &y) {
-        for (index_t l = 0; l < x.num_batches(); ++l)
-            batmat::linalg::fill(y, x.batch(l));
+    void set_constant(Context &ctx, T &x, const U &y) const {
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            batmat::linalg::fill(y, x.batch(di));
+        }
     }
 
-    [[nodiscard]] real_t dot(const var_vec_t &a, const var_vec_t &b) const {
-        return OCP_t::compact_blas::xdot(simdify(a), simdify(b));
+    [[nodiscard]] real_t dot(Context &ctx, const var_vec_t &a, const var_vec_t &b) const {
+        real_t sum               = 0;
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            sum += OCP_t::compact_blas::xdot(simdify(a.batch(di)), simdify(b.batch(di)));
+        }
+        return ctx.reduce(sum, real_t{});
     }
 
-    [[nodiscard]] real_t norm_inf(const ineq_constr_vec_t &x) const {
+    template <class T>
+    [[nodiscard]] auto norm_inf_l1_sq(Context &ctx, const T &x) const {
+        auto nrm_simd            = norms.zero_simd();
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            nrm_simd         = OCP_t::compact_blas::xreduce(nrm_simd, norms, std::identity{},
+                                                            simdify(x.batch(di)));
+        }
+        return ctx.reduce(norms(nrm_simd), norms.zero(), norms);
+    }
+
+    template <class T>
+    [[nodiscard]] real_t norm_inf(Context &ctx, const T &x) const {
+        using std::isfinite;
+        auto nrm = norm_inf_l1_sq(ctx, x);
+        return isfinite(nrm.asum) ? nrm.max : nrm.asum;
+    }
+
+    template <class T>
+    [[nodiscard]] real_t norm_inf(const T &x) const {
         return OCP_t::compact_blas::xnrminf(simdify(x));
     }
 
-    [[nodiscard]] static real_t norm_inf(const eq_constr_vec_t &x) {
-        return OCP_t::compact_blas::xnrminf(simdify(x));
+    template <class T>
+    [[nodiscard]] real_t norm_squared(Context &ctx, const T &x) const {
+        real_t sum               = 0;
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            sum += OCP_t::compact_blas::xnrm2sq(simdify(x.batch(di)));
+        }
+        return ctx.reduce(sum, real_t{});
     }
 
-    [[nodiscard]] real_t norm_squared(const ineq_constr_vec_t &x) const {
-        return OCP_t::compact_blas::xnrm2sq(simdify(x));
-    }
-    [[nodiscard]] real_t norm_squared(const var_vec_t &x) const {
-        return OCP_t::compact_blas::xnrm2sq(simdify(x));
-    }
-    void scale(real_t s, var_vec_t &x) const {
-        return OCP_t::compact_blas::xaxpby(real_t{}, simdify(x), s, simdify(x));
-    }
-    void scale(real_t s, eq_constr_vec_t &x) const {
-        return OCP_t::compact_blas::xaxpby(real_t{}, simdify(x), s, simdify(x));
-    }
-    void scale(real_t s, ineq_constr_vec_t &x) const {
-        return OCP_t::compact_blas::xaxpby(real_t{}, simdify(x), s, simdify(x));
+    template <class T>
+    void scale(Context &ctx, real_t s, T &x) const {
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            OCP_t::compact_blas::xaxpby(real_t{}, simdify(x.batch(di)), s, simdify(x.batch(di)));
+        }
     }
 
     const ineq_constr_vec_t &Ax_min() const { return b_min_strided; }
     const ineq_constr_vec_t &Ax_max() const { return b_max_strided; }
 
-    index_t calc_ŷ_Aᵀŷ(const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &Σ,
+    index_t calc_ŷ_Aᵀŷ(Context &ctx, const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &Σ,
                        const ineq_constr_vec_t &y, ineq_constr_vec_t &ŷ, var_vec_t &Aᵀŷ,
                        active_set_t &J) {
         using std::clamp;
-        std::atomic<index_t> count_J{};
-        const index_t P          = 1 << (ocp.lP - ocp.lvl);
+        index_t count_J_local    = 0;
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
         {
             auto t = get_timed(&OCP_t::Timings::calc_y_hat);
-            batmat::foreach_thread(P, [&](index_t ti, index_t) {
-                index_t count_J_local = 0;
-                for (index_t i = 0; i < num_stages; ++i) {
-                    const index_t di = ti * num_stages + i;
-                    GUANAQO_TRACE("calc_ŷ_Aᵀŷ", di);
-                    for (index_t r = 0; r < y.rows(); ++r) {
-                        const auto Σi = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
-                                   yi = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
-                                   Axi =
-                                       batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
-                                   li = batmat::datapar::aligned_load<simd>(
-                                       &b_min_strided.batch(di)(0, r, 0)),
-                                   ui = batmat::datapar::aligned_load<simd>(
-                                       &b_max_strided.batch(di)(0, r, 0));
-                        auto ζ  = Axi + yi / Σi;
-                        auto z  = clamp(ζ, li, ui);
-                        auto ŷi = yi + Σi * (Axi - z);
-                        auto Ji = z != ζ; // TODO: inclusive?
-                        datapar::aligned_store(ŷi, &ŷ.batch(di)(0, r, 0));
-                        simd ΣJi{};
-                        where(Ji, ΣJi) = Σi;
-                        datapar::aligned_store(ΣJi, &J.batch(di)(0, r, 0));
-                        count_J_local += static_cast<index_t>(popcount(Ji));
-                    }
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                GUANAQO_TRACE("calc_ŷ_Aᵀŷ", di);
+                for (index_t r = 0; r < y.rows(); ++r) {
+                    const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
+                               yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
+                               Axi = batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
+                               li  = batmat::datapar::aligned_load<simd>(
+                                   &b_min_strided.batch(di)(0, r, 0)),
+                               ui = batmat::datapar::aligned_load<simd>(
+                                   &b_max_strided.batch(di)(0, r, 0));
+                    auto ζ  = Axi + yi / Σi;
+                    auto z  = clamp(ζ, li, ui);
+                    auto ŷi = yi + Σi * (Axi - z);
+                    auto Ji = z != ζ; // TODO: inclusive?
+                    datapar::aligned_store(ŷi, &ŷ.batch(di)(0, r, 0));
+                    simd ΣJi{};
+                    where(Ji, ΣJi) = Σi;
+                    datapar::aligned_store(ΣJi, &J.batch(di)(0, r, 0));
+                    count_J_local += static_cast<index_t>(popcount(Ji));
                 }
-                count_J.fetch_add(count_J_local, std::memory_order_relaxed);
-            });
+            }
         }
         auto t = get_timed(&OCP_t::Timings::calc_y_hat_AT);
-        mat_vec_AT(ŷ, Aᵀŷ);
-        return count_J.load(std::memory_order_relaxed);
+        mat_vec_AT(ctx, ŷ, Aᵀŷ);
+        return ctx.reduce(count_J_local, index_t{});
     }
 
-    real_t unscaled_aug_lagr_norm(const var_vec_t &grad_f, const var_vec_t &Mᵀλ,
-                                  const var_vec_t &Aᵀŷ) {
+    real_t unscaled_aug_lagr_norm(Context &ctx, const var_vec_t &grad_f, const var_vec_t &Mᵀλ,
+                                  const var_vec_t &Aᵀŷ) const {
         GUANAQO_TRACE("unscaled_aug_lagr_norm", 0);
         using std::clamp;
         using std::isfinite;
-        auto [inf_nrm, l1_norm] = OCP_t::compact_blas::xreduce(
-            std::array<simd, 2>{0, 0},
-            [](auto accum, auto grad_fi, auto Mᵀλi, auto Aᵀŷi) {
-                auto grad_ali = grad_fi + Mᵀλi + Aᵀŷi;
-                return inf_norm_accumulate(accum, grad_ali);
-            },
-            inf_norm_reduce, simdify(grad_f), simdify(Mᵀλ), simdify(Aᵀŷ));
-        return isfinite(l1_norm) ? inf_nrm : l1_norm;
+        auto nrm_simd            = norms.zero_simd();
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            nrm_simd         = OCP_t::compact_blas::xreduce(
+                nrm_simd,
+                [](auto accum, auto grad_fi, auto Mᵀλi, auto Aᵀŷi) {
+                    auto grad_ali = grad_fi + Mᵀλi + Aᵀŷi;
+                    return norms(accum, grad_ali);
+                },
+                std::identity{}, simdify(grad_f.batch(di)), simdify(Mᵀλ.batch(di)),
+                simdify(Aᵀŷ.batch(di)));
+        }
+        auto nrm = ctx.reduce(norms(nrm_simd), norms.zero(), norms);
+        return isfinite(nrm.asum) ? nrm.max : nrm.asum;
     }
 
     void scale_variables(std::span<const real_t> in, var_vec_t &out) const {
@@ -614,165 +668,231 @@ struct CyqloneBackend {
         ocp.unpack_dynamics(in, out);
     }
 
-    index_t active_set_change(real_t, [[maybe_unused]] const ineq_constr_vec_t &Σ,
+    index_t active_set_change(Context &ctx, real_t, [[maybe_unused]] const ineq_constr_vec_t &Σ,
                               const active_set_t &J, const active_set_t &J_old) {
-        assert(std::ranges::size(J) == std::ranges::size(J_old));
-        BATMAT_ASSERT(J.view().layer_stride() == J.rows());
-        BATMAT_ASSERT(J.outer_stride() == J.rows());
+        BATMAT_ASSERT(J.rows() == J_old.rows() && J.cols() == J_old.cols());
+        BATMAT_ASSERT(J.depth() == J_old.depth());
         BATMAT_ASSERT(J.cols() == 1);
-        auto size_J = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N) * ocp.ceil_N;
-        BATMAT_ASSERT(size_J == std::ranges::ssize(J));
-        auto num_different = [&] {
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        index_t num_different    = 0;
+        {
             GUANAQO_TRACE("active_set_change", 0);
-            auto t = get_timed(&OCP_t::Timings::update_active_set_change);
-            return std::inner_product(J.data(), J.data() + size_J, J_old.data(), index_t{0},
-                                      std::plus<>{}, std::not_equal_to<>{});
-        }();
+            for (index_t i = 0; i < num_stages; ++i)
+                num_different += [&] {
+                    auto t           = get_timed(&OCP_t::Timings::update_active_set_change);
+                    const index_t di = ti * num_stages + i;
+                    auto Ji          = simdify(J.batch(di));
+                    auto J_oldi      = simdify(J_old.batch(di));
+                    return std::inner_product(Ji.data, Ji.data + Ji.size(), J_oldi.data, index_t{0},
+                                              std::plus<>{}, std::not_equal_to<>{});
+                }();
+        }
+        num_different = ctx.reduce(num_different, index_t{});
         // If there are no changing constraints, or if we were going to
         // re-factorize anyway, we don't need to do anything.
         if (num_different == 0 || reset_factorization)
             return num_different;
-        bool do_reset_fac = ++num_updates > settings.max_update_count;
+        bool do_reset_fac = num_updates >= settings.max_update_count;
         do_reset_fac |= static_cast<double>(num_different) >=
                         static_cast<double>(num_ineq_constr()) * settings.changing_constr_factor;
         if (do_reset_fac) {
-            reset_factorization = true;
+            ctx.arrive_and_wait(__LINE__);
+            if (ctx.is_master())
+                reset_factorization = true;
+            ctx.arrive_and_wait(__LINE__);
             return num_different;
+        } else {
+            ctx.arrive_and_wait(__LINE__);
+            if (ctx.is_master())
+                ++num_updates;
+            ctx.arrive_and_wait(__LINE__);
         }
         // std::cout << "                                     -- Fact update\n";
         OCP_t::compact_blas::xsub_copy(simdify(ΔΣ), simdify(J), simdify(J_old));
         auto t = get_timed(&OCP_t::Timings::update_factorization);
-        ocp.update(ΔΣ);
+        ocp.update(ctx, ΔΣ);
         return num_different;
     }
 
-    void recompute_inner(real_t S, const var_vec_t &x_outer, const var_vec_t &x,
+    void recompute_inner(Context &ctx, real_t S, const var_vec_t &x_outer, const var_vec_t &x,
                          const eq_constr_vec_t &λ, var_vec_t &grad, ineq_constr_vec_t &Ax,
                          var_vec_t &Mᵀλ) {
         {
             auto t = get_timed(&OCP_t::Timings::recompute_inner_grad);
-            grad_f_regularized(S, x, x_outer, grad);
+            grad_f_regularized(ctx, S, x, x_outer, grad);
         }
         {
             auto t = get_timed(&OCP_t::Timings::recompute_inner_A);
-            mat_vec_A(x, Ax);
+            mat_vec_A(ctx, x, Ax);
         }
         {
             auto t = get_timed(&OCP_t::Timings::recompute_inner_MT);
-            mat_vec_MT(λ, Mᵀλ);
+            mat_vec_MT(ctx, λ, Mᵀλ);
         }
     }
 
-    real_t recompute_outer(const var_vec_t &x, const ineq_constr_vec_t &ŷ, const eq_constr_vec_t &λ,
-                           var_vec_t &grad, ineq_constr_vec_t &Ax, var_vec_t &Aᵀŷ, var_vec_t &Mᵀλ) {
+    real_t recompute_outer(Context &ctx, const var_vec_t &x, const ineq_constr_vec_t &ŷ,
+                           const eq_constr_vec_t &λ, var_vec_t &grad, ineq_constr_vec_t &Ax,
+                           var_vec_t &Aᵀŷ, var_vec_t &Mᵀλ) {
         {
             auto t = get_timed(&OCP_t::Timings::recompute_outer_grad);
-            grad_f(x, grad); // ∇f = Q * x + q
+            grad_f(ctx, x, grad); // ∇f = Q * x + q
         }
         {
             auto t = get_timed(&OCP_t::Timings::recompute_outer_A);
-            mat_vec_A(x, Ax); // Ax = A * x
+            mat_vec_A(ctx, x, Ax); // Ax = A * x
         }
         {
             auto t = get_timed(&OCP_t::Timings::recompute_outer_AT);
-            mat_vec_AT(ŷ, Aᵀŷ); // Aᵀŷ = Aᵀ * ŷ
+            mat_vec_AT(ctx, ŷ, Aᵀŷ); // Aᵀŷ = Aᵀ * ŷ
         }
         {
             auto t = get_timed(&OCP_t::Timings::recompute_outer_MT);
-            mat_vec_MT(λ, Mᵀλ); // Mᵀλ = Mᵀ * λ
+            mat_vec_MT(ctx, λ, Mᵀλ); // Mᵀλ = Mᵀ * λ
         }
         {
             auto t = get_timed(&OCP_t::Timings::recompute_outer_norm);
-            return unscaled_aug_lagr_norm(grad, Mᵀλ, Aᵀŷ);
+            return unscaled_aug_lagr_norm(ctx, grad, Mᵀλ, Aᵀŷ);
         }
     }
 
-    void solve([[maybe_unused]] const var_vec_t &x, const var_vec_t &grad, const var_vec_t &Mᵀλ,
-               const var_vec_t &Aᵀŷ, const eq_constr_vec_t &Mxb, real_t S,
+    var_vec_t temp_var;
+    eq_constr_vec_t temp_eq;
+    ineq_constr_vec_t temp_ineq;
+
+    void solve(Context &ctx, [[maybe_unused]] const var_vec_t &x, const var_vec_t &grad,
+               const var_vec_t &Mᵀλ, const var_vec_t &Aᵀŷ, const eq_constr_vec_t &Mxb, real_t S,
                [[maybe_unused]] const ineq_constr_vec_t &Σ,
                const active_set_t &J, //
                var_vec_t &d, var_vec_t &ξ, ineq_constr_vec_t &Ad, eq_constr_vec_t &Δλ,
                var_vec_t &MᵀΔλ) {
-        if (std::exchange(reset_factorization, false)) {
+        if (reset_factorization) {
             // std::cout << "                                     -- Fact reset\n";
             auto t = get_timed(&OCP_t::Timings::factor);
-            ocp.factor(S, J, settings.factor_alt);
-            num_updates = 0;
+            ocp.factor(ctx, S, J, settings.factor_alt);
+            ctx.arrive_and_wait(__LINE__);
+            if (ctx.is_master()) {
+                reset_factorization = false;
+                num_updates         = 0;
+            }
+            ctx.arrive_and_wait(__LINE__);
         }
-        OCP_t::compact_blas::xadd_neg_copy(simdify(d), simdify(grad), simdify(Mᵀλ), simdify(Aᵀŷ));
-        OCP_t::compact_blas::xadd_neg_copy(simdify(Δλ), simdify(Mxb));
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            OCP_t::compact_blas::xadd_neg_copy(simdify(d.batch(di)), simdify(grad.batch(di)),
+                                               simdify(Mᵀλ.batch(di)), simdify(Aᵀŷ.batch(di)));
+            OCP_t::compact_blas::xadd_neg_copy(simdify(Δλ.batch(di)), simdify(Mxb.batch(di)));
+        }
         if (settings.print_residuals) {
             int prec                      = settings.print_precision;
-            auto grad_norm_inf            = OCP_t::compact_blas::xnrminf(simdify(d));
-            auto grad_norm_sq             = OCP_t::compact_blas::xnrm2sq(simdify(d));
-            auto constr_norm_inf          = OCP_t::compact_blas::xnrminf(simdify(Δλ));
-            auto constr_norm_sq           = OCP_t::compact_blas::xnrm2sq(simdify(Δλ));
-            auto cost_grad_norm_sq        = OCP_t::compact_blas::xnrm2sq(simdify(grad));
-            auto eq_constr_grad_norm_sq   = OCP_t::compact_blas::xnrm2sq(simdify(Mᵀλ));
-            auto ineq_constr_grad_norm_sq = OCP_t::compact_blas::xnrm2sq(simdify(Aᵀŷ));
-            std::cout << "                   gradient:    abs∞="
-                      << guanaqo::float_to_str(grad_norm_inf, prec)
-                      << ",  abs₂=" << guanaqo::float_to_str(sqrt(grad_norm_sq), prec)
-                      << "      {grad cost=" << guanaqo::float_to_str(sqrt(cost_grad_norm_sq))
-                      << ",  Mᵀλ=" << guanaqo::float_to_str(sqrt(eq_constr_grad_norm_sq))
-                      << ",  Aᵀŷ=" << guanaqo::float_to_str(sqrt(ineq_constr_grad_norm_sq)) << "}\n"
-                      << "                constraints:    abs∞="
-                      << guanaqo::float_to_str(constr_norm_inf, prec)
-                      << ",  abs₂=" << guanaqo::float_to_str(sqrt(constr_norm_sq), prec) << "\n";
+            auto grad_norm_inf            = norm_inf(ctx, d);
+            auto grad_norm_sq             = norm_squared(ctx, d);
+            auto constr_norm_inf          = norm_inf(ctx, Δλ);
+            auto constr_norm_sq           = norm_squared(ctx, Δλ);
+            auto cost_grad_norm_sq        = norm_squared(ctx, grad);
+            auto eq_constr_grad_norm_sq   = norm_squared(ctx, Mᵀλ);
+            auto ineq_constr_grad_norm_sq = norm_squared(ctx, Aᵀŷ);
+            if (ctx.is_master()) {
+                using std::sqrt;
+                std::cout << "                   gradient:    abs∞="
+                          << guanaqo::float_to_str(grad_norm_inf, prec)
+                          << ",  abs₂=" << guanaqo::float_to_str(sqrt(grad_norm_sq), prec)
+                          << "      {grad cost=" << guanaqo::float_to_str(sqrt(cost_grad_norm_sq))
+                          << ",  Mᵀλ=" << guanaqo::float_to_str(sqrt(eq_constr_grad_norm_sq))
+                          << ",  Aᵀŷ=" << guanaqo::float_to_str(sqrt(ineq_constr_grad_norm_sq))
+                          << "}\n"
+                          << "                constraints:    abs∞="
+                          << guanaqo::float_to_str(constr_norm_inf, prec)
+                          << ",  abs₂=" << guanaqo::float_to_str(sqrt(constr_norm_sq), prec)
+                          << "\n";
+            }
         }
         {
             auto t = get_timed(&OCP_t::Timings::solve);
-            ocp.solve(d, Δλ);
+            ocp.solve(ctx, d, Δλ);
         }
         {
             auto t = get_timed(&OCP_t::Timings::solve_MT);
-            mat_vec_MT(Δλ, MᵀΔλ);
+            mat_vec_MT(ctx, Δλ, MᵀΔλ);
         }
         // Ad ← A d
         {
             auto t = get_timed(&OCP_t::Timings::solve_A);
-            mat_vec_A(d, Ad);
+            mat_vec_A(ctx, d, Ad);
         }
         // ξ ← Q d + S⁻¹ d
         {
             auto t = get_timed(&OCP_t::Timings::solve_grad);
-            ocp.cost_gradient(d, 1 / S, d, 0, ξ);
+            ocp.cost_gradient(ctx, d, 1 / S, d, 0, ξ);
         }
 
         if (settings.print_residuals) {
-            auto tm  = get_timed(&OCP_t::Timings::solve_resid);
+            if (ctx.is_master()) {
+                temp_var  = var_vec();
+                temp_eq   = eq_constr_vec();
+                temp_ineq = ineq_constr_vec();
+                std::cout << "temp_ineq size: " << temp_ineq.size() << "\n";
+            }
+            auto tm = get_timed(&OCP_t::Timings::solve_resid);
+            ctx.arrive_and_wait(__LINE__);
             int prec = settings.print_precision;
             using std::abs;
+            using std::isfinite;
             using std::max;
             using std::sqrt;
-            using std::views::zip;
-            auto t = ineq_constr_vec();
-            for (auto &&[ti, Ji, Adi] : zip(t, J, Ad))
-                ti = Ji * Adi;
-            auto r = var_vec();
-            mat_vec_AT(t, r);
-            real_t r_norm_sq = 0, grad_norm_sq = 0, r_norm_inf = 0;
-            for (auto &&[gradi, Mᵀλi, Aᵀŷi, MᵀΔλi, ξi, ri] : zip(grad, Mᵀλ, Aᵀŷ, MᵀΔλ, ξ, r)) {
-                auto gi    = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
-                ri         = gi + MᵀΔλi + ξi + ri;
-                r_norm_inf = max(r_norm_inf, abs(ri));
-                r_norm_sq += ri * ri;
-                grad_norm_sq += gi * gi;
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                OCP_t::compact_blas::xhadamard(simdify(J.batch(di)), simdify(Ad.batch(di)),
+                                               simdify(temp_ineq.batch(di)));
             }
-            std::cout << "        RESID(stationarity):    abs∞="
-                      << guanaqo::float_to_str(r_norm_inf, prec)
-                      << ",  abs₂=" << guanaqo::float_to_str(sqrt(r_norm_sq), prec)
-                      << ",  rel₂=" << guanaqo::float_to_str(sqrt(r_norm_sq / grad_norm_sq), prec)
-                      << "\n";
-            auto x_next = var_vec();
-            for (auto &&[x_nexti, xi, di] : zip(x_next, x, d))
-                x_nexti = xi + di;
-            auto res_x_next = eq_constr_resid(x_next);
-            real_t inf_res  = 0;
-            for (auto res_x_nexti : res_x_next)
-                inf_res = std::max(inf_res, std::abs(res_x_nexti));
-            std::cout << "        RESID(eq. feasibility): abs∞="
-                      << guanaqo::float_to_str(inf_res, prec) << "\n";
+            auto &res = temp_var;
+            mat_vec_AT(ctx, temp_ineq, res);
+            real_t r_norm_sq = 0, grad_norm_sq = 0, r_norm_inf = 0;
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                for (index_t r = 0; r < grad.rows(); ++r) {
+                    auto gradi = datapar::aligned_load<simd>(&grad.batch(di)(0, r, 0)),
+                         ξi    = datapar::aligned_load<simd>(&ξ.batch(di)(0, r, 0)),
+                         Mᵀλi  = datapar::aligned_load<simd>(&Mᵀλ.batch(di)(0, r, 0)),
+                         Aᵀŷi  = datapar::aligned_load<simd>(&Aᵀŷ.batch(di)(0, r, 0)),
+                         MᵀΔλi = datapar::aligned_load<simd>(&MᵀΔλ.batch(di)(0, r, 0)),
+                         ri    = datapar::aligned_load<simd>(&res.batch(di)(0, r, 0));
+                    auto gi    = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
+                    datapar::aligned_store(simd{gi + MᵀΔλi + ξi + ri}, &res.batch(di)(0, r, 0));
+                    r_norm_inf = max(r_norm_inf, hmax(abs(ri)));
+                    r_norm_sq += reduce(ri * ri);
+                    grad_norm_sq += reduce(simd{gi} * simd{gi});
+                }
+            }
+            r_norm_sq    = ctx.reduce(r_norm_sq, real_t{});
+            grad_norm_sq = ctx.reduce(grad_norm_sq, real_t{});
+            r_norm_inf = ctx.reduce(r_norm_inf, real_t{}, [](auto a, auto b) { return max(a, b); });
+            if (!isfinite(r_norm_sq))
+                r_norm_inf = r_norm_sq;
+            if (ctx.is_master())
+                std::cout << "        RESID(stationarity):    abs∞="
+                          << guanaqo::float_to_str(r_norm_inf, prec)
+                          << ",  abs₂=" << guanaqo::float_to_str(sqrt(r_norm_sq), prec)
+                          << ",  rel₂="
+                          << guanaqo::float_to_str(sqrt(r_norm_sq / grad_norm_sq), prec) << "\n";
+            auto &x_next = temp_var;
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                for (index_t r = 0; r < grad.rows(); ++r) {
+                    auto xi  = datapar::aligned_load<simd>(&x.batch(di)(0, r, 0)),
+                         dii = datapar::aligned_load<simd>(&d.batch(di)(0, r, 0));
+                    datapar::aligned_store(xi + dii, &x_next.batch(di)(0, r, 0));
+                }
+            }
+            auto &res_x_next = temp_eq;
+            eq_constr_resid(ctx, x_next, res_x_next);
+            real_t inf_res = norm_inf(ctx, res_x_next);
+            if (ctx.is_master())
+                std::cout << "        RESID(eq. feasibility): abs∞="
+                          << guanaqo::float_to_str(inf_res, prec) << "\n";
         }
     }
 

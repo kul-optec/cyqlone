@@ -39,6 +39,8 @@ struct CompactBLAS {
     static void xshh(mut_batch_view L, mut_batch_view A);
     static void xshh_ref(mut_single_batch_view L, mut_single_batch_view A);
 
+    /// C ← A ⊙ B
+    static void xhadamard(single_batch_view A, single_batch_view B, mut_single_batch_view C);
     /// B ← A ⊙ B
     static void xhadamard(single_batch_view A, mut_single_batch_view B);
     static void xhadamard(batch_view A, mut_batch_view B);
@@ -111,6 +113,7 @@ struct CompactBLAS {
     static value_type xdot(single_batch_view x, single_batch_view y);
     static value_type xdot(batch_view x, batch_view y);
     /// Square of the 2-norm
+    static value_type xnrm2sq(single_batch_view x);
     static value_type xnrm2sq(batch_view x);
     /// Infinity/max norm
     static value_type xnrminf(single_batch_view x);
@@ -127,6 +130,22 @@ struct CompactBLAS {
             for (index_t r = 0; r < m; ++r)
                 init = fun(init, simd_types::aligned_load(&x0(0, r, c)),
                            simd_types::aligned_load(&xs(0, r, c))...);
+        return reduce(init);
+    }
+
+    template <class T0, class F, class R, class... Args>
+    static auto xreduce_enumerate(T0 init, F fun, R reduce, single_batch_view x0,
+                                  const Args &...xs) {
+        const index_t m = x0.rows(), n = x0.cols();
+        assert(((x0.rows() == xs.rows()) && ...));
+        assert(((x0.cols() == xs.cols()) && ...));
+        assert(((x0.depth() == xs.depth()) && ...));
+        assert(((x0.batch_size() == xs.batch_size()) && ...));
+        const index_t i = 0;
+        for (index_t c = 0; c < n; ++c)
+            for (index_t r = 0; r < m; ++r)
+                init = fun(std::make_tuple(i, r, c), init, simd_types::aligned_load(&x0(i, r, c)),
+                           simd_types::aligned_load(&xs(i, r, c))...);
         return reduce(init);
     }
 

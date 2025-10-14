@@ -6,8 +6,11 @@
 #include <guanaqo/trace.hpp>
 #include <cstdint>
 #include <memory>
+#include <new>
 #include <optional>
+#include <type_traits>
 #include <utility>
+#include <vector>
 
 namespace cyqlone::parallel {
 
@@ -30,6 +33,7 @@ struct SharedContext {
     const index_t num_thr;
     barrier_type barrier{static_cast<uint32_t>(num_thr), {}};
     batmat::thread_pool thread_pool{static_cast<size_t>(num_thr)};
+    std::vector<std::byte> workspace = std::vector<std::byte>(static_cast<size_t>(num_thr) * 64);
     template <class F>
     void run(F &&);
 };
@@ -126,6 +130,11 @@ struct Context {
         auto trace = guanaqo::trace_logger.trace("barrier-arrive-and-wait", index);
         shared.barrier.arrive_and_wait(static_cast<uint32_t>(index));
     }
+    void arrive_and_wait(int line) {
+        wait();
+        auto trace = guanaqo::trace_logger.trace("barrier-arrive-and-wait", index);
+        shared.barrier.arrive_and_wait(static_cast<uint32_t>(index), line);
+    }
     bool wait(std::optional<arrival_token> &token) {
         if (!token)
             return false;
@@ -136,6 +145,64 @@ struct Context {
         if (!token)
             return false;
         return wait(*std::exchange(token, nullptr));
+    }
+
+    template <class T>
+    T *get_workspace_ptr(index_t idx) {
+        const size_t slot_size = shared.workspace.size() / num_thr;
+        BATMAT_ASSERT(sizeof(T) <= slot_size);
+        const size_t offset = slot_size * static_cast<size_t>(idx);
+        void *dest          = shared.workspace.data() + offset;
+        size_t space        = slot_size;
+        bool ok             = std::align(alignof(T), sizeof(T), dest, space);
+        BATMAT_ASSERT(ok);
+        return std::launder(reinterpret_cast<T *>(dest));
+    }
+
+    template <class T>
+    T broadcast(T x, index_t src = 0) {
+        void *dest   = shared.workspace.data();
+        size_t space = shared.workspace.size();
+        bool ok      = std::align(alignof(T), sizeof(T), dest, space);
+        BATMAT_ASSERT(ok);
+        if (index == src)
+            new (dest) T(std::move(x));
+        arrive_and_wait();
+        x = *std::launder(reinterpret_cast<T *>(dest));
+        arrive_and_wait(); // Ensure that the workspace is not used before everyone is done
+        return x;
+    }
+
+    template <class F, class... Args>
+    auto call_broadcast(F &&f, Args &&...args) -> std::invoke_result_t<F, Args...> {
+        using T      = std::invoke_result_t<F, Args...>;
+        void *dest   = shared.workspace.data();
+        size_t space = shared.workspace.size();
+        bool ok      = std::align(alignof(T), sizeof(T), dest, space);
+        BATMAT_ASSERT(ok);
+        if (is_master())
+            new (dest) T(std::invoke(std::forward<F>(f), std::forward<Args>(args)...));
+        arrive_and_wait();
+        T r = *std::launder(reinterpret_cast<T *>(dest));
+        arrive_and_wait(); // Ensure that the workspace is not used before everyone is done
+        return r;
+    }
+
+    template <class T, class F>
+    T reduce(T x, T init, F func) {
+        auto dest = get_workspace_ptr<T>(index);
+        new (dest) T(std::move(x));
+        arrive_and_wait();
+        // TODO: use a tree reduction
+        for (index_t i = 0; i < num_thr; ++i)
+            init = func(init, *get_workspace_ptr<T>(i));
+        arrive_and_wait(); // Ensure that the workspace is not used before everyone is done
+        return init;
+    }
+
+    template <class T>
+    T reduce(T x, T init) {
+        return reduce(std::move(x), std::move(init), std::plus<>{});
     }
 };
 

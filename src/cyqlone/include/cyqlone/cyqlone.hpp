@@ -331,6 +331,7 @@ struct CyqloneSolver {
     void transposed_dynamics_constr(Context &ctx, view<> λ, mut_view<> Mᵀλ) const;
     void general_constr(Context &ctx, view<> ux, mut_view<> DCux) const;
     void transposed_general_constr(Context &ctx, view<> y, mut_view<> DCᵀy) const;
+    void transposed_general_constr(view<> y, mut_view<> DCᵀy) const;
     /// grad_f ← Q ux + a q + b grad_f
     void cost_gradient(Context &ctx, view<> ux, value_type a, view<> q, value_type b,
                        mut_view<> grad_f) const;

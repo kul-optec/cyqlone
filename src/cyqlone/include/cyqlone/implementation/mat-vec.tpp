@@ -116,6 +116,23 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(Context &ctx,
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(view<> y,
+                                                                   mut_view<> DCᵀy) const {
+    const index_t P = 1 << (lP - lvl);
+    for (index_t ti = 0; ti < P; ++ti) {
+        const index_t num_stages = ceil_N >> lP;    // number of stages per thread
+        const index_t di0        = ti * num_stages; // data batch index
+        const index_t k0         = ti * num_stages; // stage index
+        for (index_t i = 0; i < num_stages; ++i) {
+            [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
+            GUANAQO_TRACE("transposed_general_constr", k);
+            index_t di = di0 + i;
+            gemm(data_DCᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
+        }
+    }
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, value_type a,
                                                        view<> q, value_type b,
                                                        mut_view<> grad_f) const {

@@ -58,30 +58,38 @@ struct compute_breakpoints_fn {
     template <class Backend>
     // The compute_breakpoints type should opt in to the tag to provide a custom
     // implementation.
-        requires(guanaqo::tag_invocable<
-                 compute_breakpoints_fn, Backend &, std::vector<Breakpoint> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &>)
-    auto operator()(Backend &backend, std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
+        requires(guanaqo::tag_invocable<compute_breakpoints_fn, Backend &,
+                                        typename Backend::Context &, std::vector<Breakpoint> &,
+                                        const vec_t<Backend> &, const vec_t<Backend> &,
+                                        const vec_t<Backend> &, const vec_t<Backend> &,
+                                        const vec_t<Backend> &, const vec_t<Backend> &>)
+    auto operator()(Backend &backend, typename Backend::Context &ctx,
+                    std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
                     const vec_t<Backend> &y, const vec_t<Backend> &Ad, const vec_t<Backend> &Ax,
                     const vec_t<Backend> &b_min, const vec_t<Backend> &b_max) const
         noexcept(guanaqo::is_nothrow_tag_invocable_v<
-                 compute_breakpoints_fn, Backend &, std::vector<Breakpoint> &,
+                 compute_breakpoints_fn, Backend &, typename Backend::Context &,
+                 std::vector<Breakpoint> &, const vec_t<Backend> &, const vec_t<Backend> &,
                  const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &>) {
-        return guanaqo::guanaqo_tag_invoke(*this, backend, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+                 const vec_t<Backend> &>) {
+        return guanaqo::guanaqo_tag_invoke(*this, backend, ctx, breakpoints, Σ, y, Ad, Ax, b_min,
+                                           b_max);
     }
 
     template <class Backend>
     // Fallback implementation for unknown backends
-        requires(!guanaqo::tag_invocable<
-                 compute_breakpoints_fn, Backend &, std::vector<Breakpoint> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &>)
-    auto operator()(Backend &, std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
-                    const vec_t<Backend> &y, const vec_t<Backend> &Ad, const vec_t<Backend> &Ax,
-                    const vec_t<Backend> &b_min, const vec_t<Backend> &b_max) const {
-        return compute_breakpoints_default(breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+        requires(!guanaqo::tag_invocable<compute_breakpoints_fn, Backend &,
+                                         typename Backend::Context &, std::vector<Breakpoint> &,
+                                         const vec_t<Backend> &, const vec_t<Backend> &,
+                                         const vec_t<Backend> &, const vec_t<Backend> &,
+                                         const vec_t<Backend> &, const vec_t<Backend> &>)
+    auto operator()(Backend &, typename Backend::Context &ctx, std::vector<Breakpoint> &breakpoints,
+                    const vec_t<Backend> &Σ, const vec_t<Backend> &y, const vec_t<Backend> &Ad,
+                    const vec_t<Backend> &Ax, const vec_t<Backend> &b_min,
+                    const vec_t<Backend> &b_max) const {
+        ctx.arrive_and_Wait();
+        return ctx.call_broadcast(
+            [&] { return compute_breakpoints_default(breakpoints, Σ, y, Ad, Ax, b_min, b_max); });
     }
 } inline constexpr compute_breakpoints;
 
@@ -92,33 +100,40 @@ struct get_partitioned_breakpoints_fn {
     template <class Backend>
     // The get_partitioned_breakpoints type should opt in to the tag to provide a custom
     // implementation.
-        requires(guanaqo::tag_invocable<
-                 get_partitioned_breakpoints_fn, Backend &, std::vector<Breakpoint> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &>)
-    PartitionedBreakpoints
-    operator()(Backend &backend, std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
-               const vec_t<Backend> &y, const vec_t<Backend> &Ad, const vec_t<Backend> &Ax,
-               const vec_t<Backend> &b_min, const vec_t<Backend> &b_max) const
+        requires(guanaqo::tag_invocable<get_partitioned_breakpoints_fn, Backend &,
+                                        typename Backend::Context &, std::vector<Breakpoint> &,
+                                        const vec_t<Backend> &, const vec_t<Backend> &,
+                                        const vec_t<Backend> &, const vec_t<Backend> &,
+                                        const vec_t<Backend> &, const vec_t<Backend> &>)
+    PartitionedBreakpoints operator()(Backend &backend, typename Backend::Context &ctx,
+                                      std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
+                                      const vec_t<Backend> &y, const vec_t<Backend> &Ad,
+                                      const vec_t<Backend> &Ax, const vec_t<Backend> &b_min,
+                                      const vec_t<Backend> &b_max) const
         noexcept(guanaqo::is_nothrow_tag_invocable_v<
-                 get_partitioned_breakpoints_fn, Backend &, std::vector<Breakpoint> &,
+                 get_partitioned_breakpoints_fn, Backend &, typename Backend::Context &,
+                 std::vector<Breakpoint> &, const vec_t<Backend> &, const vec_t<Backend> &,
                  const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &>) {
-        return guanaqo::guanaqo_tag_invoke(*this, backend, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+                 const vec_t<Backend> &>) {
+        return guanaqo::guanaqo_tag_invoke(*this, backend, ctx, breakpoints, Σ, y, Ad, Ax, b_min,
+                                           b_max);
     }
 
     template <class Backend>
     // Fallback implementation for unknown backends
-        requires(!guanaqo::tag_invocable<
-                 get_partitioned_breakpoints_fn, Backend &, std::vector<Breakpoint> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &>)
-    PartitionedBreakpoints
-    operator()(Backend &backend, std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
-               const vec_t<Backend> &y, const vec_t<Backend> &Ad, const vec_t<Backend> &Ax,
-               const vec_t<Backend> &b_min, const vec_t<Backend> &b_max) const {
-        auto bp = compute_breakpoints(backend, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
-        return partition_breakpoints_default(bp);
+        requires(!guanaqo::tag_invocable<get_partitioned_breakpoints_fn, Backend &,
+                                         typename Backend::Context &, std::vector<Breakpoint> &,
+                                         const vec_t<Backend> &, const vec_t<Backend> &,
+                                         const vec_t<Backend> &, const vec_t<Backend> &,
+                                         const vec_t<Backend> &, const vec_t<Backend> &>)
+    PartitionedBreakpoints operator()(Backend &backend, typename Backend::Context &ctx,
+                                      std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
+                                      const vec_t<Backend> &y, const vec_t<Backend> &Ad,
+                                      const vec_t<Backend> &Ax, const vec_t<Backend> &b_min,
+                                      const vec_t<Backend> &b_max) const {
+        auto bp = compute_breakpoints(backend, ctx, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+        // Assume that compute_breakpoints already synchronized
+        return ctx.call_broadcast([&] { return partition_breakpoints_default(bp); });
     }
 } inline constexpr get_partitioned_breakpoints;
 
@@ -129,31 +144,38 @@ struct get_breakpoints_fn {
     template <class Backend>
     // The get_breakpoints type should opt in to the tag to provide a custom
     // implementation.
-        requires(guanaqo::tag_invocable<get_breakpoints_fn, Backend &, std::vector<Breakpoint> &,
+        requires(guanaqo::tag_invocable<get_breakpoints_fn, Backend &, typename Backend::Context &,
+                                        std::vector<Breakpoint> &, const vec_t<Backend> &,
                                         const vec_t<Backend> &, const vec_t<Backend> &,
                                         const vec_t<Backend> &, const vec_t<Backend> &,
-                                        const vec_t<Backend> &, const vec_t<Backend> &>)
-    auto operator()(Backend &backend, std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
+                                        const vec_t<Backend> &>)
+    auto operator()(Backend &backend, typename Backend::Context &ctx,
+                    std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
                     const vec_t<Backend> &y, const vec_t<Backend> &Ad, const vec_t<Backend> &Ax,
                     const vec_t<Backend> &b_min, const vec_t<Backend> &b_max) const
         noexcept(guanaqo::is_nothrow_tag_invocable_v<
-                 get_breakpoints_fn, Backend &, std::vector<Breakpoint> &, const vec_t<Backend> &,
+                 get_breakpoints_fn, Backend &, typename Backend::Context &,
+                 std::vector<Breakpoint> &, const vec_t<Backend> &, const vec_t<Backend> &,
                  const vec_t<Backend> &, const vec_t<Backend> &, const vec_t<Backend> &,
-                 const vec_t<Backend> &, const vec_t<Backend> &>) {
-        return guanaqo::guanaqo_tag_invoke(*this, backend, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+                 const vec_t<Backend> &>) {
+        return guanaqo::guanaqo_tag_invoke(*this, backend, ctx, breakpoints, Σ, y, Ad, Ax, b_min,
+                                           b_max);
     }
 
     template <class Backend>
     // Fallback implementation for unknown backends
-        requires(!guanaqo::tag_invocable<get_breakpoints_fn, Backend &, std::vector<Breakpoint> &,
+        requires(!guanaqo::tag_invocable<get_breakpoints_fn, Backend &, typename Backend::Context &,
+                                         std::vector<Breakpoint> &, const vec_t<Backend> &,
                                          const vec_t<Backend> &, const vec_t<Backend> &,
                                          const vec_t<Backend> &, const vec_t<Backend> &,
-                                         const vec_t<Backend> &, const vec_t<Backend> &>)
-    BreakpointsResult operator()(Backend &backend, std::vector<Breakpoint> &breakpoints,
-                                 const vec_t<Backend> &Σ, const vec_t<Backend> &y,
-                                 const vec_t<Backend> &Ad, const vec_t<Backend> &Ax,
-                                 const vec_t<Backend> &b_min, const vec_t<Backend> &b_max) const {
-        auto bp = get_partitioned_breakpoints(backend, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
+                                         const vec_t<Backend> &>)
+    BreakpointsResult operator()(Backend &backend, typename Backend::Context &ctx,
+                                 std::vector<Breakpoint> &breakpoints, const vec_t<Backend> &Σ,
+                                 const vec_t<Backend> &y, const vec_t<Backend> &Ad,
+                                 const vec_t<Backend> &Ax, const vec_t<Backend> &b_min,
+                                 const vec_t<Backend> &b_max) const {
+        auto bp =
+            get_partitioned_breakpoints(backend, ctx, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
         return {.bp = bp, .ab_neg = partial_sum_negative(bp)};
     }
 } inline constexpr get_breakpoints;

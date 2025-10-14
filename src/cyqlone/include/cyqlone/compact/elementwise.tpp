@@ -9,6 +9,22 @@
 namespace cyqlone::compact {
 
 template <class T, class Abi, StorageOrder O>
+void CompactBLAS<T, Abi, O>::xhadamard(single_batch_view A, single_batch_view B,
+                                       mut_single_batch_view C) {
+    GUANAQO_TRACE("xhadamard", 0, A.rows() * A.cols() * A.depth());
+    assert(A.rows() == B.rows());
+    assert(A.cols() == B.cols());
+    assert(A.rows() == C.rows());
+    assert(A.cols() == C.cols());
+    const index_t n = A.rows(), m = A.cols();
+    for (index_t j = 0; j < m; ++j)
+        BATMAT_UNROLLED_IVDEP_FOR (8, index_t i = 0; i < n; ++i)
+            simd_types::aligned_store(simd_types::aligned_load(&A(0, i, j)) *
+                                          simd_types::aligned_load(&B(0, i, j)),
+                                      &C(0, i, j));
+}
+
+template <class T, class Abi, StorageOrder O>
 void CompactBLAS<T, Abi, O>::xhadamard(single_batch_view A, mut_single_batch_view B) {
     GUANAQO_TRACE("xhadamard", 0, A.rows() * A.cols() * A.depth());
     assert(A.rows() == B.rows());
@@ -264,6 +280,14 @@ auto CompactBLAS<T, Abi, O>::xdot(batch_view x, batch_view y) -> value_type {
         NeumaierSum(simd{0}), [](auto accum, auto xi, auto yi) { return accum + xi * yi; },
         [](auto accum) { return NeumaierSum(reduce(accum.sum), reduce(accum.compensation)); }, x,
         y);
+}
+
+template <class T, class Abi, StorageOrder O>
+auto CompactBLAS<T, Abi, O>::xnrm2sq(single_batch_view x) -> value_type {
+    using std::fma;
+    return xreduce(
+        simd{0}, [](auto accum, auto xi) { return xi * xi + accum; },
+        [](auto accum) { return reduce(accum); }, x);
 }
 
 template <class T, class Abi, StorageOrder O>

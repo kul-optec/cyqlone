@@ -57,6 +57,9 @@ class TreeBarrier {
     State::ticket_t &get_local_phase(uint32_t thread_id) noexcept {
         return state[thread_id >> 1].tickets[State::num_levels - 1 - (thread_id & 1)];
     }
+    State::ticket_t &get_local_line(uint32_t thread_id) noexcept {
+        return state[thread_id >> 1].tickets[State::num_levels - 3 - (thread_id & 1)];
+    }
 #endif
 
     bool arrive_impl(BarrierPhase old_phase, uint32_t thread_id) {
@@ -84,7 +87,7 @@ class TreeBarrier {
   public:
     static constexpr uint32_t max() {
 #if CYQLONE_SANITY_CHECKS_BARRIER // Leave space for local phases for sanity checks
-        constexpr static uint32_t num_levels = State::num_levels - 2;
+        constexpr static uint32_t num_levels = State::num_levels - 4;
 #else
         constexpr static uint32_t num_levels = State::num_levels;
 #endif
@@ -116,6 +119,32 @@ class TreeBarrier {
         return cur_phase;
     }
 
+    [[nodiscard]] arrival_token arrive(uint32_t thread_id, [[maybe_unused]] int line) {
+        BATMAT_ASSUME(thread_id < expected);
+        const auto cur_phase = phase.load(std::memory_order_relaxed);
+#if CYQLONE_SANITY_CHECKS_BARRIER
+        if (get_local_phase(thread_id).fetch_add(1, std::memory_order_relaxed) !=
+            static_cast<ticket_value_type>(cur_phase))
+            BATMAT_ASSERT(!"This thread has already arrived in this phase");
+#endif
+#if CYQLONE_SANITY_CHECKS_BARRIER
+        get_local_line(thread_id).store(static_cast<ticket_value_type>(line),
+                                        std::memory_order_relaxed);
+#endif
+        if (arrive_impl(cur_phase, thread_id)) {
+#if CYQLONE_SANITY_CHECKS_BARRIER
+            for (uint32_t i = 0; i < expected; ++i)
+                BATMAT_ASSERT(get_local_line(i).load(std::memory_order_relaxed) ==
+                              static_cast<ticket_value_type>(line));
+#endif
+            completion();
+            auto next_phase = static_cast<BarrierPhase>(static_cast<PhaseType>(cur_phase) + 1);
+            phase.store(next_phase, std::memory_order_release);
+            phase.notify_all();
+        }
+        return cur_phase;
+    }
+
     [[nodiscard]] BarrierPhase current_phase() const {
         return phase.load(std::memory_order_relaxed);
     }
@@ -134,6 +163,7 @@ class TreeBarrier {
     }
 
     void arrive_and_wait(uint32_t thread_id) { wait(arrive(thread_id)); }
+    void arrive_and_wait(uint32_t thread_id, int line) { wait(arrive(thread_id, line)); }
 };
 
 } // namespace cyqlone

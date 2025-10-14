@@ -498,6 +498,7 @@ void register_settings(nb::module_ &m) {
         .def_rw("pcg_print_resid", &cyqlone::qpalm::CyqloneBackendSettings::pcg_print_resid)
         .def_rw("use_stair_preconditioner",
                 &cyqlone::qpalm::CyqloneBackendSettings::use_stair_preconditioner)
+        .def_rw("spin_count", &cyqlone::qpalm::CyqloneBackendSettings::spin_count)
         .def_rw("strategy", &cyqlone::qpalm::CyqloneBackendSettings::strategy);
     nb::class_<cyqlone::qpalm::Settings>(m, "Settings")
         .def(nb::init())
@@ -666,7 +667,6 @@ NB_MODULE(MODULE_NAME, m) {
         [](const std::filesystem::path &filename) {
             std::filesystem::create_directories(filename.parent_path());
             std::ofstream csv{filename};
-            cyqlone::foreach_thread([](index_t i, index_t) { GUANAQO_TRACE("thread_id", i); });
             guanaqo::TraceLogger::write_column_headings(csv) << '\n';
             for (const auto &log : guanaqo::trace_logger.get_logs())
                 csv << log << '\n';
