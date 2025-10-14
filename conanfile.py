@@ -68,13 +68,13 @@ class CyqloneRecipe(ConanFile):
     def requirements(self):
         self.requires("guanaqo/1.0.0-alpha.17", transitive_headers=True, transitive_libs=True)
         self.requires("batmat/0.0.4", transitive_headers=True, transitive_libs=True)
-        if self.options.with_python:
+        if self.options.get_safe("with_python"):
             self.requires("nanobind/2.9.2")
             if self.options.with_python_dispatch:
                 self.requires("cpu_features/0.10.1")
             if self.options.with_conan_python:
                 self.requires("tttapa-python-dev/3.13.7")
-        if self.options.with_python or self.options.with_example_problems:
+        if self.options.get_safe("with_python") or self.options.get_safe("with_example_problems"):
             self.requires("eigen/[~3.4 || ~5.0]", transitive_headers=True)
         else:
             self.test_requires("eigen/[~3.4 || ~5.0]")
@@ -88,7 +88,7 @@ class CyqloneRecipe(ConanFile):
             self.requires("matio/1.5.27", transitive_headers=True)
         if self.options.get_safe("with_benchmarks"):
             self.requires("benchmark/1.9.4")
-            self.requires("hyhound/1.0.1")
+            self.requires("hyhound/1.0.2-alpha.1")
         self.test_requires("gtest/1.17.0")
 
     def config_options(self):
@@ -99,6 +99,9 @@ class CyqloneRecipe(ConanFile):
         if not self.options.get_safe("with_qpalm"):
             self.options.rm_safe("with_example_problems")
             self.options.rm_safe("with_python")
+        if not self.options.get_safe("with_python"):
+            self.options.rm_safe("with_python_dispatch")
+            self.options.rm_safe("with_conan_python")
         self.options["guanaqo/*"].with_blas = True
         self.options["hyhound/*"].with_ocp = True
         self.options["matio/*"].with_hdf5 = False
@@ -106,7 +109,7 @@ class CyqloneRecipe(ConanFile):
 
     def layout(self):
         if self.folders.build_folder_vars is None:
-            if self.options.with_python:
+            if self.options.get_safe("with_python"):
                 self.folders.build_folder_vars = ["const.python"]
         cmake_layout(self)
         self.cpp.build.builddirs.append("")
@@ -137,7 +140,6 @@ class CyqloneRecipe(ConanFile):
             cmake.install(component="python_source")
             cmake.install(component="python_modules")
             cmake.install(component="python_stubs")
-
 
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "none")
