@@ -514,6 +514,7 @@ void register_settings(nb::module_ &m) {
         .def_rw("ρ", &cyqlone::qpalm::Settings::ρ)
         .def_rw("θ", &cyqlone::qpalm::Settings::θ)
         .def_rw("Δy", &cyqlone::qpalm::Settings::Δy)
+        .def_rw("Δy_always", &cyqlone::qpalm::Settings::Δy_always)
         .def_rw("max_penalty_y", &cyqlone::qpalm::Settings::max_penalty_y)
         .def_rw("initial_penalty_y", &cyqlone::qpalm::Settings::initial_penalty_y)
         .def_rw("Δx", &cyqlone::qpalm::Settings::Δx)

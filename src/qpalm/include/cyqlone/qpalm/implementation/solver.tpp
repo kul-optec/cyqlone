@@ -55,7 +55,7 @@ struct SolverImplementation {
             real_t update_factor = insufficient_progress ? settings.Δy * abs(ei) / norm_inf_e : 1;
             update_factor *= settings.Δy_always;
             real_t Σ_new = Σi * update_factor;
-            Σ_new        = fmax(Σi, fmin(Σ_new, settings.max_penalty_y));
+            Σ_new        = fmax(Σi * settings.Δy_always, fmin(Σ_new, settings.max_penalty_y));
             num_changed += Σ_new != Σi;
             Σi = Σ_new;
         }
@@ -181,6 +181,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         remaining_iter                = std::min(remaining_iter, settings.max_inner_iter);
         real_t stationarity           = std::numeric_limits<real_t>::infinity();
         real_t eq_resid               = std::numeric_limits<real_t>::infinity();
+        bool increase_penalty_y       = true;
         for (unsigned inner = 0; true; ++inner) {
             // Compute gradient of augmented Lagrangian
             index_t nJ = timed(timings.mat_vec_AT, [&] {
@@ -227,6 +228,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             }
 
             if (inner_conv || fail) {
+                increase_penalty_y &= !fail;
                 if (detailed_stats)
                     detailed_stats->entries.back().exit_reason =
                         inner_conv ? DetailedStats::ExitReason::Converged
@@ -253,6 +255,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             if (!active_set_change &&
                 ++no_change_active_set >= settings.max_no_changes_active_set) {
                 if (force_τ_1_active_set || !settings.force_linesearch_if_no_set_change) {
+                    increase_penalty_y = false;
                     if (detailed_stats)
                         detailed_stats->entries.back().exit_reason =
                             DetailedStats::ExitReason::NoActiveSetChange;
@@ -433,7 +436,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         }
 
         // Update penalty factors
-        if (ineq_constr_resid > settings.dual_tolerance) {
+        if (increase_penalty_y && ineq_constr_resid > settings.dual_tolerance) {
             index_t num_Σ_changed = update_penalty_y(ctx, backend, Σ, e, e_old, settings);
             if (num_Σ_changed > 0)
                 timed(stats.timings.update_penalty,
