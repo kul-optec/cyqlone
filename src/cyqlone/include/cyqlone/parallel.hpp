@@ -127,12 +127,12 @@ struct Context {
     }
     void arrive_and_wait() {
         wait();
-        auto trace = guanaqo::trace_logger.trace("barrier-arrive-and-wait", index);
+        GUANAQO_TRACE("barrier-arrive-and-wait", index);
         shared.barrier.arrive_and_wait(static_cast<uint32_t>(index));
     }
     void arrive_and_wait(int line) {
         wait();
-        auto trace = guanaqo::trace_logger.trace("barrier-arrive-and-wait", index);
+        GUANAQO_TRACE("barrier-arrive-and-wait", index);
         shared.barrier.arrive_and_wait(static_cast<uint32_t>(index), line);
     }
     bool wait(std::optional<arrival_token> &token) {
