@@ -27,6 +27,9 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/implementation/solve.tpp"
           "cyqlone/include/cyqlone/implementation/sparse.tpp"
           "cyqlone/include/cyqlone/implementation/update.tpp"
+          "cyqlone/include/cyqlone/parallel.hpp"
+          "cyqlone/include/cyqlone/barrier.hpp"
+          "cyqlone/include/cyqlone/reduce.hpp"
 )
 target_link_libraries(cyqlone PUBLIC batmat::batmat guanaqo::guanaqo guanaqo::blas
                               PRIVATE cyqlone::warnings)
