@@ -12,6 +12,7 @@ endif()
 
 add_executable(tests
     "cyqlone/test-cyqlone.cpp"
+    "test-barrier.cpp"
 )
 target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(tests PRIVATE _CRT_SECURE_NO_WARNINGS)
