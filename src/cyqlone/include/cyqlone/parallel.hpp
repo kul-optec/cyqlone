@@ -2,9 +2,15 @@
 
 #include <cyqlone/barrier.hpp>
 #include <cyqlone/config.hpp>
+#include <batmat/config.hpp>
+#if BATMAT_WITH_OPENMP
+#include <batmat/openmp.h>
+#else
 #include <batmat/thread-pool.hpp>
+#endif
 #include <guanaqo/trace.hpp>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <new>
 #include <optional>
@@ -32,7 +38,9 @@ struct SharedContext {
     using barrier_type = TreeBarrier<completion_type, uint16_t>;
     const index_t num_thr;
     barrier_type barrier{static_cast<uint32_t>(num_thr), {}};
+#if !BATMAT_WITH_OPENMP
     batmat::thread_pool thread_pool{static_cast<size_t>(num_thr)};
+#endif
     std::vector<std::byte> workspace = std::vector<std::byte>(static_cast<size_t>(num_thr) * 64);
     template <class F>
     void run(F &&);
@@ -208,10 +216,18 @@ struct Context {
 
 template <class F>
 void SharedContext::run(F &&f) {
+#if !BATMAT_WITH_OPENMP
     thread_pool.sync_run_n(num_thr, [this, &f](index_t i, index_t) {
         Context<SharedContext> ctx{.shared = *this, .index = i};
         f(ctx);
     });
+#else
+    BATMAT_OMP(parallel for num_threads(num_thr))
+    for (index_t i = 0; i < num_thr; ++i) {
+        Context<SharedContext> ctx{.shared = *this, .index = i};
+        f(ctx);
+    }
+#endif
 }
 
 template <class T, class SC>
