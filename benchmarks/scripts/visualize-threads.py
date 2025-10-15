@@ -1,3 +1,4 @@
+from contextlib import suppress
 from pathlib import Path
 import time
 from typing import DefaultDict
@@ -59,6 +60,7 @@ colors = {
     "riccati solve bwd": "greenyellow",
     "riccati solve fwd": "hotpink",
     "linesearch breakpoints": "pink",
+    "linesearch breakpoints cyqlone": "pink",
     "linesearch sort": "green",
     "linesearch partition": "green",
     "linesearch find": "tan",
@@ -134,6 +136,7 @@ labels = {
     "riccati solve bwd": r"Riccati backward solve",
     "riccati solve fwd": r"Riccati forward solve",
     "linesearch breakpoints": r"Line search compute breakpoints",
+    "linesearch breakpoints cyqlone": r"Line search compute breakpoints",
     "linesearch sort": r"Line search sort breakpoints",
     "linesearch partition": r"Line search partition breakpoints",
     "linesearch find": r"Line search find minimum",
@@ -159,6 +162,7 @@ labels = {
     "riccati solve bwd": r"$\text{Riccati backward solve}$",
     "riccati solve fwd": r"$\text{Riccati forward solve}$",
     "linesearch breakpoints": r"$\text{Line search compute breakpoints}$",
+    "linesearch breakpoints cyqlone": r"$\text{Line search compute breakpoints}$",
     "linesearch sort": r"$\text{Line search sort breakpoints}$",
     "linesearch partition": r"$\text{Line search partition breakpoints}$",
     "linesearch find": r"$\text{Line search find minimum}$",
@@ -356,6 +360,7 @@ def visualize_scheduling(
     xlim_margin=0.1,
     exclude_legends=None,
     n_threads=1,
+    gflops_max=20,
 ):
     """
     Visualizes the scheduling of a parallel algorithm using Plotly within a subplot.
@@ -368,7 +373,9 @@ def visualize_scheduling(
         bs (int, optional): Block size for task labeling. Defaults to None.
         xlim_margin (float, optional): Margin for the x-axis limit. Defaults to 0.1.
     """
-    skip = {"solve wait", "factor wait", "solve", "factor"}
+    skip = {"solve wait", "factor wait", "solve", "factor", "barrier-complete", "barrier-arrive", "barrier-arrive-and-wait"}
+    barriers = task_data[task_data["name"] == "barrier-complete"]
+    barriers_arrive = task_data[task_data["name"].str.startswith("barrier-arrive")]
     task_data = task_data[~task_data["name"].isin(skip)]
     first_time, last_time = calculate_time_range(task_data)
     total_duration = last_time - first_time
@@ -377,15 +384,16 @@ def visualize_scheduling(
     if exclude_legends is None:
         exclude_legends = set()
 
-    # Add rectangles for tasks with flop_count == 0
+    # Add rectangles for tasks with flop_count < 0
     bar_data = DefaultDict(lambda: DefaultDict(lambda: []))
-    for _, td in task_data[task_data["flop_count"] <= 0].iterrows():
+    for _, td in task_data[task_data["flop_count"] < 0].iterrows():
         task_name = td["name"]
         task_id = td["instance"]
         start_time = td["start_time"]
         duration = td["duration"]
         thread_id = td["thread_id"]
-        n_threads = max(thread_id + 1, n_threads)
+        with suppress(ValueError):
+            n_threads = max(int(thread_id) + 1, n_threads)
 
         start_time -= first_time
         start_time /= 1000
@@ -490,16 +498,16 @@ def visualize_scheduling(
     # map_gflops_color = lambda gflops: f"hsla({120 * gflops / 20:.2f},100,45,0.9)"
 
     def map_gflops_color(gflops):
-        r, g, b, _ = plt.cm.RdYlGn(gflops / 20)
+        r, g, b, _ = plt.cm.RdYlGn(gflops / gflops_max)
         return f"rgba({255 * r}, {255 * g}, {255 * b}, 0.9)"
 
     colors_list = [
         map_gflops_color(td["gflops"])
-        for _, td in task_data[task_data["flop_count"] > 0].iterrows()
+        for _, td in task_data[task_data["flop_count"] >= 0].iterrows()
     ]
-    durations = task_data[task_data["flop_count"] > 0]["duration"] / 1000
-    start_times = (task_data[task_data["flop_count"] > 0]["start_time"] - first_time) / 1000
-    thread_ids = task_data[task_data["flop_count"] > 0]["thread_id"] - 0.5
+    durations = task_data[task_data["flop_count"] >= 0]["duration"] / 1000
+    start_times = (task_data[task_data["flop_count"] >= 0]["start_time"] - first_time) / 1000
+    thread_ids = task_data[task_data["flop_count"] >= 0]["thread_id"] - 0.5
 
     bar = go.Bar(
         name="",
@@ -519,11 +527,72 @@ def visualize_scheduling(
             f"FLOPs: {td['flop_count']:.2f}<br>"
             f"Start: {(td['start_time']-first_time)/1000:.3f}s<br>"
             f"Duration: {td['duration']/1000:.3f}s"
-            for _, td in task_data[task_data["flop_count"] > 0].iterrows()
+            for _, td in task_data[task_data["flop_count"] >= 0].iterrows()
         ],
         showlegend=False,  # Adjust if legends are required
     )
     fig.add_trace(bar, row=row, col=col)
+
+    # Add rectangles for barrier operations
+    bar_data = DefaultDict(lambda: DefaultDict(lambda: []))
+    for _, td in barriers_arrive.iterrows():
+        task_name = td["name"]
+        task_id = td["instance"]
+        start_time = td["start_time"]
+        duration = td["duration"]
+        thread_id = td["thread_id"]
+
+        start_time -= first_time
+        start_time /= 1000
+        duration /= 1000
+
+        task_label = str(task_id)
+        if bs and bs != 1:
+            task_label = f"{bs * task_id}"
+
+        bar_data[task_name]["x"] += [duration]
+        bar_data[task_name]["y"] += [thread_id - 0.53]
+        bar_data[task_name]["base"] += [start_time]
+        bar_data[task_name]["text"] += [task_label]
+        bar_data[task_name]["texttemplate"] += [
+            task_label if duration > 8.5 * total_duration / 1000 else ""
+        ]
+        bar_data[task_name]["hovertemplate"] += [
+            f"Instance: {task_id}<br>Start: {start_time:.3f}s<br>Duration: {duration:.3f}s"
+        ]
+    for task_name, v in bar_data.items():
+        color = "#550055" if task_name == "barrier-arrive" else "#aa00aa"
+        color = "rgba(" + ",".join(map(str, 255 * np.array(mcolors.to_rgb(color)))) + ",0.6)"
+        label = labels.get(task_name, task_name)
+        # Add rectangle to the subplot
+        bar = go.Bar(
+            **v,
+            offset=0,
+            textfont_size=8.5,
+            width=0.025,
+            orientation="h",
+            marker=dict(color=color, line=dict(color="black", width=0.5)),
+            name=label,
+            textposition="inside",
+            insidetextanchor="middle",
+            showlegend=(label is not None and task_name not in exclude_legends),
+            legendrank=v["base"][0] + 99999 * row,
+        )
+        fig.add_trace(bar, row=row, col=col)
+        if task_name not in exclude_legends:
+            exclude_legends.add(task_name)
+
+    # Add vertical lines for barrier completion times
+    for _, td in barriers.iterrows():
+        start_time = td["start_time"]
+        start_time -= first_time
+        start_time /= 1000
+        fig.add_vline(
+            x=start_time,
+            line=dict(color="#550055", width=2, dash="dash"),
+            row=row,
+            col=col,
+        )
 
     # Set layout for the subplot
     fig.update_xaxes(
