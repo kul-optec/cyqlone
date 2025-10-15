@@ -11,6 +11,10 @@
 #include <batmat/linalg/trsm.hpp>
 #include <batmat/linalg/trtri.hpp>
 
+#ifndef CYQLONE_FACTOR_DO_PREFETCH
+#define CYQLONE_FACTOR_DO_PREFETCH 0
+#endif
+
 namespace cyqlone {
 
 using namespace batmat::linalg;
@@ -24,9 +28,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_Y(Context &ctx, index_t l,
     }
     // Wait for U[bi] from factor_schur_U
     ctx.arrive_and_wait();
+#if CYQLONE_FACTOR_DO_PREFETCH
     for (index_t c = 0; c < coupling_U.cols(); c += 1)
         for (index_t r = 0; r < coupling_U.rows(); r += 16)
             __builtin_prefetch(&coupling_U.batch(biY)(0, r, c), 0, 3);
+#endif
     // Compute UYᵀ or YUᵀ
     if (is_U_below_Y(l, biY)) {
         const index_t bi_next = add_wrap_PmV(biY, offset); // TODO: need mod?
@@ -46,18 +52,22 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(Context &ctx, index_t l,
     const index_t offset = 1 << l;
     const index_t biD    = sub_wrap_PmV(biU, offset);
     const index_t biY    = sub_wrap_PmV(biD, offset);
+#if CYQLONE_FACTOR_DO_PREFETCH
     for (index_t c = 0; c < coupling_D.cols(); c += 1)
         for (index_t r = 0; r < coupling_D.rows(); r += 16)
             __builtin_prefetch(&coupling_D.batch(biD)(0, r, c), 0, 3);
+#endif
     { // Compute U[bi]
         GUANAQO_TRACE("Trsm U", biU);
         trsm(coupling_U.batch(biU), tril(coupling_D.batch(biU)).transposed());
     }
     // Wait for Y[bi] from factor_schur_Y
     ctx.arrive_and_wait();
+#if CYQLONE_FACTOR_DO_PREFETCH
     for (index_t c = 0; c < coupling_Y.cols(); c += 1)
         for (index_t r = 0; r < coupling_Y.rows(); r += 16)
             __builtin_prefetch(&coupling_Y.batch(biY)(0, r, c), 0, 3);
+#endif
     { // D -= UUᵀ
         GUANAQO_TRACE("Subtract UUᵀ", biD);
         syrk_sub(coupling_U.batch(biU), tril(coupling_D.batch(biD)));
