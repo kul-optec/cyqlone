@@ -61,7 +61,7 @@ void print_traces(std::ostream &os) {
         os << pth << '\n';
 }
 #else
-void trace(auto &&, const auto &, const auto &) {}
+void trace(auto &&, const auto &, const auto &, void * = nullptr) {}
 void print_traces(std::ostream &) {}
 #endif
 
