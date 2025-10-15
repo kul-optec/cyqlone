@@ -18,7 +18,8 @@ def test_cyqlone_qpalm(seed):
     AB = rng.uniform(-1, 1, (N, nx, nx + nu))
     CD = rng.uniform(-1, 1, (N, ny, nx + nu))
     # These rows are eliminated from D(0)
-    CD[0, [2, 4], nx:] = 0
+    if ny >= 5:
+        CD[0, [2, 4], nx:] = 0
     CN = rng.uniform(-1, 1, (ny_N, nx))
     QRS = rng.uniform(-1, 1, (N, nx + nu, nx + nu))
     QRS = QRS @ np.transpose(QRS, [0, 2, 1])
@@ -62,10 +63,14 @@ def test_cyqlone_qpalm(seed):
     b_l = np.concatenate((ocp.rhs_eq, ocp.rhs_lb))
     b_u = np.concatenate((ocp.rhs_eq, ocp.rhs_ub))
     Ax = qp.A @ x
-    ny0 = ny - 2  # TODO: automate
-    y0 = solver.inequality_multipliers[:ny0]
-    y0 = np.insert(y0, 2, 0)
-    y0 = np.insert(y0, 4, 0)
+    if ny >= 5:
+        ny0 = ny - 2  # TODO: automate
+        y0 = solver.inequality_multipliers[:ny0]
+        y0 = np.insert(y0, 2, 0)
+        y0 = np.insert(y0, 4, 0)
+    else:
+        ny0 = ny
+        y0 = solver.inequality_multipliers[:ny0]
     λ0 = (
         ocp.Q(0) @ ocp.x0
         + ocp.qr[:nx]
