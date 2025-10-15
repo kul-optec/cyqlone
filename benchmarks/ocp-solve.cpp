@@ -2,7 +2,6 @@
 #include <batmat/assume.hpp>
 #include <batmat/loop.hpp>
 #include <batmat/openmp.h>
-#include <batmat/thread-pool.hpp>
 #include <benchmark/benchmark.h>
 #include <guanaqo/eigen/span.hpp>
 #include <guanaqo/openmp.h>
@@ -36,7 +35,8 @@ using guanaqo::as_span;
 
 #if GUANAQO_WITH_TRACING
 std::map<std::tuple<std::string, std::string>, std::filesystem::path> traces;
-void trace(auto &&fun, const auto &name, const auto &params) {
+template <class T = void>
+void trace(auto &&fun, const auto &name, const auto &params, T *solver = nullptr) {
     std::string filename = std::format("{}.csv", name);
     std::filesystem::path out_dir{"traces"};
     out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
@@ -47,6 +47,9 @@ void trace(auto &&fun, const auto &name, const auto &params) {
     fun();
     guanaqo::trace_logger.reset();
     fun();
+    if constexpr (!std::is_void_v<T>)
+        if (solver)
+            solver->parallel_ctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
     std::filesystem::create_directories(out_dir);
     std::ofstream csv{out_file};
     guanaqo::TraceLogger::write_column_headings(csv) << '\n';
@@ -195,16 +198,17 @@ void bm_update_schur(benchmark::State &state) {
 template <int VL>
 void bm_factor_cyqlone(benchmark::State &state) {
     using batmat::linalg::StorageOrder;
-    auto [ocp, Σ] = generate_ocp(state);
-    const auto lP = static_cast<index_t>(state.range(4));
-    BATMAT_OMP_IF(omp_set_num_threads(1 << lP));
-    batmat::pool_set_num_threads(1 << lP);
-    auto solver = build_cyqlone_solver<VL>(ocp, lP);
+    auto [ocp, Σ]                           = generate_ocp(state);
+    const auto lP                           = static_cast<index_t>(state.range(4));
+    auto solver                             = build_cyqlone_solver<VL>(ocp, lP);
+    solver.parallel_ctx->barrier.spin_count = std::numeric_limits<uint32_t>::max();
     GUANAQO_IF_ITT(solver.parallel_ctx->run(
         [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
     auto Σ_packed = solver.initialize_general_constraints();
     solver.pack_constraints(as_span(Σ.reshaped()), Σ_packed);
-    const auto do_factor = [&] { solver.factor(1e100, Σ_packed); };
+    const auto do_factor = [&] {
+        solver.parallel_ctx->run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ_packed); });
+    };
     for (auto _ : state)
         do_factor();
     const std::string_view pcg = solver.use_stair_preconditioner ? "stair" : "jacobi";
@@ -212,7 +216,7 @@ void bm_factor_cyqlone(benchmark::State &state) {
         std::format("nx={}-nu={}-ny={}-N={}-thr={}-vl={}-pcg={}{}-{}", solver.nx, solver.nu,
                     solver.ny, solver.N_horiz, 1 << lP, VL, pcg, solver.alt ? "-alt" : "",
                     solver.default_order == StorageOrder::RowMajor ? "rm" : "cm");
-    trace([&] { do_factor(); }, "factor_cyqlone", params);
+    trace([&] { do_factor(); }, "factor_cyqlone", params, &solver);
 }
 
 #if WITH_BLASFEO
