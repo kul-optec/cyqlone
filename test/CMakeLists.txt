@@ -6,6 +6,7 @@ include(GoogleTest)
 # Dependencies
 find_package(GTest REQUIRED)
 find_package(guanaqo REQUIRED)
+find_package(Eigen3 REQUIRED)
 if (NOT TARGET cyqlone::cyqlone)
     find_package(cyqlone REQUIRED OPTIONAL_COMPONENTS QPALM Extra)
 endif()
@@ -13,12 +14,13 @@ endif()
 add_executable(tests
     "cyqlone/test-cyqlone.cpp"
     "test-barrier.cpp"
+    "test-compress.cpp"
 )
 target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(tests PRIVATE _CRT_SECURE_NO_WARNINGS)
 target_link_libraries(tests PRIVATE
     cyqlone::cyqlone cyqlone::warnings
-    GTest::gtest_main)
+    Eigen3::Eigen GTest::gtest_main GTest::gmock)
 if (MSVC)
     target_compile_definitions(tests PRIVATE __PRETTY_FUNCTION__=__FUNCSIG__)
 endif()
@@ -26,9 +28,8 @@ if (TARGET cyqlone::qpalm)
     target_sources(tests PRIVATE "test-partition.cpp")
 endif()
 if (TARGET cyqlone::qpalm AND TARGET cyqlone::example-problems)
-    find_package(Eigen3 REQUIRED)
     target_sources(tests PRIVATE "qpalm/test-qpalm-ocp.cpp")
-    target_link_libraries(tests PRIVATE cyqlone::qpalm cyqlone::example-problems Eigen3::Eigen)
+    target_link_libraries(tests PRIVATE cyqlone::qpalm cyqlone::example-problems)
     find_package(QPALM QUIET OPTIONAL_COMPONENTS cxx)
     if (TARGET QPALM::qpalm_cxx)
         target_sources(tests PRIVATE "qpalm/test-qpalm-ben.cpp")

@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/implementation/compress.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/loop.hpp>
@@ -149,18 +150,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
     const index_t k0         = ti * num_stages; // stage index
-    const index_t nux        = nu + nx;
-    auto R̂ŜQ̂                 = riccati_R̂ŜQ̂.batch(ti);
-    auto B̂                   = riccati_ÂB̂.batch(ti).right_cols(num_stages * nu);
-    auto Â                   = riccati_ÂB̂.batch(ti).left_cols(num_stages * nx);
-    auto BAᵀ                 = riccati_BAᵀ.batch(ti);
-    auto A0                  = data_BA.batch(di0).right_cols(nx);
+    const index_t nux = nu + nx, nyM = std::max(ny, ny_0 + ny_N);
+    auto R̂ŜQ̂ = riccati_R̂ŜQ̂.batch(ti);
+    auto B̂   = riccati_ÂB̂.batch(ti).right_cols(num_stages * nu);
+    auto Â   = riccati_ÂB̂.batch(ti).left_cols(num_stages * nx);
+    auto BAᵀ = riccati_BAᵀ.batch(ti);
+    auto A0  = data_BA.batch(di0).right_cols(nx);
     // Copy B and A from the last stage
     {
         GUANAQO_TRACE("Riccati init", k0);
         copy(data_BA.batch(di0).left_cols(nu), B̂.left_cols(nu));
-        syrk_diag_add(data_DCᵀ.batch(di0), tril(data_RSQ.batch(di0)), tril(R̂ŜQ̂.left_cols(nux)),
-                      Σ.batch(di0));
+        auto m = linalg::compress_masks_sqrt(data_DCᵀ.batch(di0), Σ.batch(di0), BAᵀ.left_cols(nyM));
+        syrk_add(BAᵀ.left_cols(m), tril(data_RSQ.batch(di0)), tril(R̂ŜQ̂.left_cols(nux)));
     }
     for (index_t i = 0; i < num_stages; ++i) {
         index_t k = sub_wrap_N(k0, i);
@@ -192,8 +193,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
             [[maybe_unused]] const auto k_next = sub_wrap_N(k, 1);
             GUANAQO_TRACE("Riccati update AB", k_next);
             const auto di_next = di0 + i + 1;
-            auto BAᵀi          = BAᵀ.middle_cols(alt ? 0 : i * nx, nx);
-            auto BAi           = data_BA.batch(di_next);
+            auto BADCᵀi        = BAᵀ.middle_cols(alt ? 0 : i * nx, nx + nyM);
+            auto BAᵀi = BADCᵀi.left_cols(nx), DCᵀi = BADCᵀi.right_cols(nyM);
+            auto BAi = data_BA.batch(di_next);
             auto Bi = BAi.left_cols(nu), Ai = BAi.right_cols(nx);
             // Compute next B̂ and Â
             auto B̂_next = B̂.middle_cols((i + 1) * nu, nu);
@@ -203,16 +205,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
             // Riccati update
             trmm(BAi.transposed(), tril(Q̂i), BAᵀi);
             auto R̂ŜQ̂_next = R̂ŜQ̂.middle_cols((i + 1) * nux, nux);
-#if 1
             // TODO: merge with next potrf
-            syrk_add(BAᵀi, tril(data_RSQ.batch(di_next)), tril(R̂ŜQ̂_next));
-            syrk_diag_add(data_DCᵀ.batch(di_next), tril(R̂ŜQ̂_next), Σ.batch(di_next));
-#else
-            compact_blas::xsyrk_schur_copy(data_DCᵀ.batch(di_next), Σ.batch(di_next),
-                                           data_RSQ.batch(di_next),
-                                           R̂ŜQ̂_next);    // ┐
-            compact_blas::xsyrk_add(BAᵀi, R̂ŜQ̂_next, be); // ┘
-#endif
+            auto m = linalg::compress_masks_sqrt(data_DCᵀ.batch(di_next), Σ.batch(di_next), DCᵀi);
+            syrk_add(BADCᵀi.left_cols(nx + m), tril(data_RSQ.batch(di_next)), tril(R̂ŜQ̂_next));
         } else {
             // Compute LÂ = Ã LQ⁻ᵀ
             GUANAQO_TRACE("Riccati last", k);

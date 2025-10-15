@@ -145,7 +145,7 @@ struct CyqloneSolver {
         return matrix<default_order>{{
             .depth = 1 << lP,
             .rows  = nu + nx,
-            .cols  = ((ceil_N >> lP) - 1) * nx,
+            .cols  = ((ceil_N >> lP) - 1) * nx + std::max(ny, ny_0 + ny_N),
         }};
     }();
     matrix<default_order> riccati_R̂ŜQ̂ = [this] {
