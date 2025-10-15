@@ -3,12 +3,9 @@
 #include <cyqlone/cyqlone.hpp>
 #include <cyqlone/random-ocp.hpp>
 #include <batmat/linalg/simdify.hpp>
-#include <batmat/loop.hpp>
-#include <batmat/openmp.h>
-#include <batmat/thread-pool.hpp>
 #include <guanaqo/print.hpp>
 #include <guanaqo/trace.hpp>
-#include <batmat-version.h>
+#include <cyqlone-version.h>
 
 #if GUANAQO_WITH_TRACING
 #include <filesystem>
@@ -17,8 +14,8 @@
 #include <iostream>
 #include <limits>
 
-using batmat::index_t;
-using batmat::real_t;
+using cyqlone::index_t;
+using cyqlone::real_t;
 
 TEST(Cyqlone, factor) {
     using namespace cyqlone;
@@ -137,7 +134,7 @@ TEST(Cyqlone, factor) {
 #else
         const std::string_view pcg = "stair";
 #endif
-        out_dir /= *batmat_commit_hash ? batmat_commit_hash : "unknown";
+        out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
         out_dir /=
             std::format("nx={}-nu={}-ny={}-N={}-thr={}-vl={}-pcg={}{}-{}", solver.nx, solver.nu,
                         solver.ny, N, 1 << log_n_threads, VL, pcg, alt ? "-alt" : "",

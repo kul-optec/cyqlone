@@ -1,9 +1,9 @@
 #include <cyqlone/cyqlone.hpp>
-#include <cyqlone/implementation/compress.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/loop.hpp>
 
+#include <batmat/linalg/compress.hpp>
 #include <batmat/linalg/gemm-diag.hpp>
 #include <batmat/linalg/gemm.hpp>
 #include <batmat/linalg/potrf.hpp>
@@ -146,6 +146,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, value_type S,
                                                         view<> Σ) {
+    using batmat::linalg::compress_masks_sqrt;
     const index_t ti         = ctx.index;
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
     const index_t di0        = ti * num_stages; // data batch index
@@ -162,7 +163,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
     {
         GUANAQO_TRACE("Riccati init", k0);
         copy(data_BA.batch(di0).left_cols(nu), B̂.left_cols(nu));
-        m_syrk = linalg::compress_masks_sqrt(DCᵀ0, Σ.batch(di0), BADCᵀ.left_cols(nyM));
+        m_syrk = compress_masks_sqrt(DCᵀ0, Σ.batch(di0), BADCᵀ.left_cols(nyM));
     }
     for (index_t i = 0; i < num_stages; ++i) {
         const index_t k = sub_wrap_N(k0, i);
@@ -206,8 +207,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
             // Riccati update
             trmm(BAi.transposed(), tril(Q̂i), BAᵀ_next);
             // TODO: merge with next potrf
-            m_syrk = nx + linalg::compress_masks_sqrt(data_DCᵀ.batch(di_next), Σ.batch(di_next),
-                                                      DCᵀ_next);
+            m_syrk = nx + compress_masks_sqrt(data_DCᵀ.batch(di_next), Σ.batch(di_next), DCᵀ_next);
         } else {
             // Compute LÂ = Ã LQ⁻ᵀ
             GUANAQO_TRACE("Riccati last", k);
