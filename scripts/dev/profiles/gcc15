@@ -10,7 +10,8 @@ os=Linux
 tttapa-toolchains/1.2.0
 # https://github.com/conan-io/conan/issues/17333#issuecomment-3387354597
 !zlib/*:mold/2.32.1
-cmake/[>=3.31.6 <5]
+cmake/[>=3.31.9 <5]
+blasfeo/*: cmake/3.31.9
 ninja/[*]
 
 [buildenv]
@@ -21,6 +22,7 @@ VTUNE_PROFILER_DIR={{ os.getenv("VTUNE_PROFILER_DIR") or os.path.join(os.getenv(
 tools.cmake.cmaketoolchain:generator=Ninja
 tools.build:exelinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
 tools.build:sharedlinkflags+=["-flto=auto", "-static-libstdc++", "-static-libgcc"]
+tools.build:compiler_executables*={"fortran": False}
 !zlib/*:tools.build:exelinkflags+=["-fuse-ld=mold"]
 !zlib/*:tools.build:sharedlinkflags+=["-fuse-ld=mold"]
 
