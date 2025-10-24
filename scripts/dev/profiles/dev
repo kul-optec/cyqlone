@@ -1,0 +1,55 @@
+# Common options
+{% set my_profiles = os.path.join(profile_dir, "..", "..", "ci", "conan-profiles", "profiles") %}
+include({{ os.path.join(my_profiles, "platform", "x86_64-bionic-linux-gnu.profile") }})
+include({{ os.path.join(my_profiles, "sccache", "only-self.profile") }})
+include({{ os.path.join(my_profiles, "color", "gcc.profile") }})
+include({{ os.path.join(my_profiles, "link", "lto-auto.profile") }})
+include({{ os.path.join(my_profiles, "link", "static.profile") }})
+include({{ os.path.join(my_profiles, "visibility", "hidden.profile") }})
+
+# Platform-specific options
+{% set my_profiles = os.path.join(profile_dir, "..", "..", "ci", "profiles") %}
+{% set lscpu = os.popen("lscpu").read() %}
+{% if "Intel(R) Core(TM) Ultra 7 2" in lscpu %}
+include({{ os.path.join(my_profiles, "arrowlake.profile") }})
+{% elif "avx512f" in lscpu %}
+include({{ os.path.join(my_profiles, "avx512.profile") }})
+{% elif "avx2" in lscpu %}
+include({{ os.path.join(my_profiles, "avx2.profile") }})
+{% else %}
+include({{ os.path.join(my_profiles, "generic.profile") }})
+{% endif %}
+
+# System dependencies
+{% set mkl_root = os.getenv("MKLROOT") or os.path.join(os.getenv("HOME"), "intel/oneapi/mkl/latest") %}
+
+[tool_requires]
+mold/2.40.1
+cmake/4.1.2
+blasfeo/*: cmake/[<4]
+ninja/1.12.1
+
+[buildenv]
+MKLROOT={{ mkl_root }}
+VTUNE_PROFILER_DIR={{ os.getenv("VTUNE_PROFILER_DIR") or os.path.join(os.getenv("HOME"), "intel/oneapi/vtune/latest")}}
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja
+tools.build:exelinkflags+=["-fuse-ld=mold"]
+tools.build:sharedlinkflags+=["-fuse-ld=mold"]
+tools.build.cross_building:cross_build=True
+tools.build.cross_building:can_run=True
+tools.cmake.cmaketoolchain:extra_variables*={"MKL_ROOT": "{{ mkl_root }}"}
+&:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_EXPORT_COMPILE_COMMANDS": "On"}
+&:tools.cmake.cmaketoolchain:extra_variables*={"BATMAT_WITH_ACCURATE_BUILD_TIME": "Off"}
+
+[options]
+guanaqo/*:with_blas=True
+guanaqo/*:with_mkl=True
+guanaqo/*:blas_index_type=long long
+guanaqo/*:with_itt=False
+guanaqo/*:with_tracing=False
+guanaqo/*:with_openmp=True
+batmat/*:with_openmp=True
+batmat/*:with_benchmarks=True
+batmat/*:with_blasfeo=True
