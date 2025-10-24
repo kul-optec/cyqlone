@@ -21,6 +21,8 @@ class CyqloneRecipe(ConanFile):
     # Binary configuration
     package_type = "library"
     settings = "os", "compiler", "build_type", "arch"
+    # https://github.com/conan-io/conan/issues/19108
+    package_id_non_embed_mode = "full_mode"
     bool_cyqlone_options = {
         "with_benchmarks": False,
         "with_qpalm": True,
@@ -66,8 +68,8 @@ class CyqloneRecipe(ConanFile):
     generators = ("CMakeDeps",)
 
     def requirements(self):
-        self.requires("guanaqo/1.0.0-alpha.17", transitive_headers=True, transitive_libs=True)
-        self.requires("batmat/0.0.5", transitive_headers=True, transitive_libs=True)
+        self.requires("guanaqo/1.0.0-alpha.19", transitive_headers=True, transitive_libs=True)
+        self.requires("batmat/0.0.6", transitive_headers=True, transitive_libs=True)
         if self.options.get_safe("with_python"):
             self.requires("nanobind/2.9.2")
             if self.options.with_python_dispatch:
