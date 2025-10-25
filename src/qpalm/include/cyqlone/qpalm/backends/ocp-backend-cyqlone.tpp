@@ -494,7 +494,8 @@ struct CyqloneBackend {
 
     template <class T, class U>
     void xaxpy(Context &ctx, real_t a, const T &x, U &y) {
-        const auto x_ = simdify(x), y_ = simdify(y);
+        const auto x_            = simdify(x);
+        const auto y_            = simdify(y);
         const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {

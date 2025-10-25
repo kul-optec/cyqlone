@@ -11,17 +11,17 @@
 
 namespace cyqlone {
 
-template class CyqloneSolver<1, real_t, StorageOrder::ColMajor>;
-template class CyqloneSolver<4, real_t, StorageOrder::ColMajor>;
-template class CyqloneSolver<8, real_t, StorageOrder::ColMajor>;
+template struct CyqloneSolver<1, real_t, StorageOrder::ColMajor>;
+template struct CyqloneSolver<4, real_t, StorageOrder::ColMajor>;
+template struct CyqloneSolver<8, real_t, StorageOrder::ColMajor>;
 
-template class CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
-template class CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
-template class CyqloneSolver<8, real_t, StorageOrder::RowMajor>;
+template struct CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
+template struct CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
+template struct CyqloneSolver<8, real_t, StorageOrder::RowMajor>;
 
 #if BATMAT_WITH_SINGLE
-template class CyqloneSolver<16, float, StorageOrder::ColMajor>;
-template class CyqloneSolver<16, float, StorageOrder::RowMajor>;
+template struct CyqloneSolver<16, float, StorageOrder::ColMajor>;
+template struct CyqloneSolver<16, float, StorageOrder::RowMajor>;
 #endif
 
 } // namespace cyqlone
