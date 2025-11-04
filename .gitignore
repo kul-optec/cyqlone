@@ -27,6 +27,7 @@ python/cyqlone/_cyqlone_generic/*.pyi
 *.cross.profile
 *.cross.pbc
 *.local.pbc
+*.dev.pbc
 
 # Compiled or generated files
 *.mod
@@ -70,5 +71,7 @@ traces
 # Media files
 *.mp4
 
+/*.csv
+/*.mat
 /data/**/*.csv
 /results/**/*.json
