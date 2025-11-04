@@ -352,7 +352,8 @@ struct CyqloneSolver {
     /// Preserves b in λ (except for coupling equations solved using CR)
     void solve_riccati_forward_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
                                    mut_view<> work) const;
-    void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
+    void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
+                       mut_view<> work) const;
 
     value_type mul_A(batch_view<> p, mut_batch_view<> Ap, batch_view<default_order> L,
                      batch_view<default_order> B) const;
