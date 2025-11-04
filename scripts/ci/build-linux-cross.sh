@@ -53,6 +53,8 @@ for i in "${!archs[@]}"; do
 	conan.$c.profile_host+=["$python_profile"]
 	conan.$c.profile_host+=["$profiles/gcc-static.profile"]
 	conan.$c.profile_host+=["$profiles/test/none.profile"]
+	conan.$c.args+=["-obatmat/*:with_openmp=True"]
+	conan.$c.args+=["-ctools.cmake.cmaketoolchain:generator=Ninja"]
 	conan.$c.cmake.args+=["--fresh"]
 	conan.$c.cmake.build_args+=["--verbose"]
 	conan.$c.cmake.options.CYQLONE_PYTHON_POSTFIX="_${archs[$i]}"

@@ -17,6 +17,8 @@ conan.profile_host+=["$profiles/link/lto-auto.profile"]
 conan.profile_host+=["$profiles/visibility/hidden.profile"]
 conan.profile_host+=["$profiles/sccache/only-self.profile"]
 conan.profile_host+=["$profiles/test/none.profile"]
+conan.args+=["-obatmat/*:with_openmp=True"]
+conan.args+=["-ctools.cmake.cmaketoolchain:generator=Ninja"]
 conan.cmake.args+=["--fresh"]
 conan.cmake.build_args+=["--verbose"]
 EOF
