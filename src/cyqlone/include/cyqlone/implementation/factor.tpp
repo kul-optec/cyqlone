@@ -15,9 +15,6 @@
 #define CYQLONE_FACTOR_DO_PREFETCH 0
 #endif
 
-#define LOG_WRITE(X, i) [&] { GUANAQO_TRACE("WRITE " #X, i); }()
-#define LOG_READ(X, i) [&] { GUANAQO_TRACE("READ " #X, i); }()
-
 namespace cyqlone {
 
 using namespace batmat::linalg;
@@ -27,8 +24,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_Y(Context &ctx, index_t l,
     const index_t offset = 1 << l;
     { // Compute Y[bi]
         GUANAQO_TRACE("Trsm Y", biY);
-        LOG_READ(D, biY);
-        LOG_WRITE(Y, biY);
         trsm(coupling_Y.batch(biY), tril(coupling_D.batch(biY)).transposed());
     }
     // Wait for U[bi] from factor_schur_U
@@ -42,17 +37,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_Y(Context &ctx, index_t l,
     if (is_U_below_Y(l, biY)) {
         const index_t bi_next = add_wrap_PmV(biY, offset); // TODO: need mod?
         GUANAQO_TRACE("Compute U", bi_next);
-        LOG_READ(U, biY);
-        LOG_READ(Y, biY);
-        LOG_WRITE(U, bi_next);
         gemm_neg(coupling_U.batch(biY), coupling_Y.batch(biY).transposed(),
                  coupling_U.batch(bi_next));
     } else {
         const index_t bi_prev = sub_wrap_PmV(biY, offset); // TODO: need mod?
         GUANAQO_TRACE("Compute Y", bi_prev);
-        LOG_READ(Y, biY);
-        LOG_READ(U, biY);
-        LOG_WRITE(Y, bi_prev);
         gemm_neg(coupling_Y.batch(biY), coupling_U.batch(biY).transposed(),
                  coupling_Y.batch(bi_prev));
     }
@@ -70,8 +59,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(Context &ctx, index_t l,
 #endif
     { // Compute U[bi]
         GUANAQO_TRACE("Trsm U", biU);
-        LOG_READ(D, biU);
-        LOG_WRITE(U, biU);
         trsm(coupling_U.batch(biU), tril(coupling_D.batch(biU)).transposed());
     }
     // Wait for Y[bi] from factor_schur_Y
@@ -83,20 +70,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(Context &ctx, index_t l,
 #endif
     { // D -= UUᵀ
         GUANAQO_TRACE("Subtract UUᵀ", biD);
-        LOG_READ(U, biU);
-        LOG_WRITE(D, biD);
         syrk_sub(coupling_U.batch(biU), tril(coupling_D.batch(biD)));
     }
     if (is_active(l + 1, biD)) { // chol(D - YYᵀ)
         BATMAT_ASSUME(biD != 0);
         GUANAQO_TRACE("Factor D", biD);
-        LOG_READ(Y, biY);
-        LOG_WRITE(D, biD);
         syrk_sub_potrf(coupling_Y.batch(biY), tril(coupling_D.batch(biD)));
     } else { // D -= YYᵀ
         GUANAQO_TRACE("Subtract YYᵀ", biD);
-        LOG_READ(Y, biY);
-        LOG_WRITE(D, biD);
         biD == 0 ? syrk_sub(coupling_Y.batch(biY), tril(coupling_D.batch(biD)), with_rotate_C<1>,
                             with_rotate_D<1>, with_mask_D<1>)
                  : syrk_sub(coupling_Y.batch(biY), tril(coupling_D.batch(biD)));
@@ -104,7 +85,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(Context &ctx, index_t l,
     // chol(D)
     if (l + 1 == lP - lvl && biD == 0) {
         GUANAQO_TRACE("Factor D", biD);
-        LOG_WRITE(D, biD);
         potrf(tril(coupling_D.batch(biD)));
     }
 }
@@ -138,13 +118,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
         // Top block is A → column index is row index of A (biA)
         // Target block in cyclic part is U in column λ(kA)
         GUANAQO_TRACE("Compute first U", biA);
-        LOG_WRITE(U, biA);
         trmm_neg(Q̂i_inv, Âi.transposed(), coupling_U.batch(biA));
     } else {
         // Top block is I → column index is row index of I (biI)
         // Target block in cyclic part is Y in column λ(kI)
         GUANAQO_TRACE("Compute first Y", biI);
-        LOG_WRITE(Y, biI);
         x_lanes ? trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI), with_rotate_C<-1>,
                            with_rotate_D<-1>, with_mask_D<-1>)
                 : trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI));
@@ -155,7 +133,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
     // first forward in time ...
     {
         GUANAQO_TRACE("Compute L⁻ᵀL⁻¹", biI);
-        LOG_WRITE(D, biI);
         x_lanes ? trmm(Q̂i_inv, Q̂i_inv.transposed(), DiI, with_rotate_C<-1>, with_rotate_D<-1>,
                        with_mask_D<-1>)
                 : trmm(Q̂i_inv, Q̂i_inv.transposed(), DiI);
@@ -167,11 +144,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
     const bool do_factor = (biA & 1) == 1 || (lP - lvl == 0 && biA == 0);
     if (do_factor) {
         GUANAQO_TRACE("Factor D", biA);
-        LOG_WRITE(D, biA);
         syrk_add_potrf(ÂB̂i, DiA);
     } else {
         GUANAQO_TRACE("Compute (BA)(BA)ᵀ", biA);
-        LOG_WRITE(D, biA);
         syrk_add(ÂB̂i, DiA);
     }
 }
@@ -273,6 +248,3 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view
 }
 
 } // namespace cyqlone
-
-#undef LOG_WRITE
-#undef LOG_READ

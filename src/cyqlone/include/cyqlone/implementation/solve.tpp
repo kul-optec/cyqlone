@@ -8,9 +8,6 @@
 #include <batmat/linalg/gemm.hpp>
 #include <batmat/linalg/trsm.hpp>
 
-#define LOG_WRITE(X, i) [&] { GUANAQO_TRACE("WRITE " #X, i); }()
-#define LOG_READ(X, i) [&] { GUANAQO_TRACE("READ " #X, i); }()
-
 namespace cyqlone {
 using namespace batmat::linalg;
 
@@ -33,16 +30,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_active_secondary(index_t l, index
     const index_t diY        = biY * num_stages;
     { // b[diD] -= U[biU] b[diU]
         GUANAQO_TRACE("Subtract Ub", biD);
-        LOG_READ(U, biD);
-        LOG_READ(λ, diU);
-        LOG_WRITE(λ, diD);
         gemm_sub(coupling_U.batch(biU), λ.batch(diU), λ.batch(diD));
     }
     { // b[diD] -= Y[biY] b[diY]
         GUANAQO_TRACE("Subtract Yb", biD);
-        LOG_READ(Y, biY);
-        LOG_READ(λ, diY);
-        LOG_WRITE(λ, diD);
         biD == 0 ? gemm_sub(coupling_Y.batch(biY), λ.batch(diY), λ.batch(diD), {}, with_rotate_C<1>,
                             with_rotate_D<1>, with_mask_D<1>)
                  : gemm_sub(coupling_Y.batch(biY), λ.batch(diY), λ.batch(diD));
@@ -50,8 +41,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_active_secondary(index_t l, index
     // solve D⁻¹[diD] d[diD]
     if (is_active(l + 1, biD)) {
         GUANAQO_TRACE("Solve b", biD);
-        LOG_READ(D, biD);
-        LOG_WRITE(λ, diD);
         trsm(tril(coupling_D.batch(biD)), λ.batch(diD));
     }
 }
@@ -114,9 +103,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward(Context &ctx, mut
     x_lanes ? compact_blas::template xadd_copy<-1>(simdify(λI), simdify(x_last), simdify(λI))
             : compact_blas::xadd_copy(simdify(λI), simdify(x_last), simdify(λI));
     compact_blas::xneg(simdify(λI)); // TODO: merge
-    LOG_WRITE(λ, diI);
     if (is_active(0, biI)) {
-        LOG_READ(D, biI);
         trsm(tril(coupling_D.batch(biI)), λI);
     }
 }
@@ -190,9 +177,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward_alt(Context &ctx,
     x_lanes ? compact_blas::template xadd_copy<-1>(simdify(λI), simdify(x_last), simdify(λI))
             : compact_blas::xadd_copy(simdify(λI), simdify(x_last), simdify(λI));
     compact_blas::xneg(simdify(λI)); // TODO: merge
-    LOG_WRITE(λ, diI);
     if (is_active(0, biI)) {
-        LOG_READ(D, biI);
         trsm(tril(coupling_D.batch(biI)), λI);
     }
 }
@@ -231,18 +216,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_active(index_t l, index_t
     const index_t diU        = biU * num_stages;
     const bool x_lanes       = diY == 0;
     GUANAQO_TRACE("Solve coupling reverse", bi);
-    LOG_READ(Y, bi);
-    LOG_READ(λ, diY);
-    LOG_WRITE(λ, di);
     x_lanes ? gemm_sub(coupling_Y.batch(bi).transposed(), λ.batch(diY), λ.batch(di), {},
                        with_shift_B<1>)
             : gemm_sub(coupling_Y.batch(bi).transposed(), λ.batch(diY), λ.batch(di));
-    LOG_READ(U, bi);
-    LOG_READ(λ, diU);
-    LOG_WRITE(λ, di);
     gemm_sub(coupling_U.batch(bi).transposed(), λ.batch(diU), λ.batch(di));
-    LOG_READ(D, bi);
-    LOG_WRITE(λ, di);
     trsm(tril(coupling_D.batch(bi)).transposed(), λ.batch(di));
 }
 
@@ -417,6 +394,3 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve(Context &ctx, mut_view<> ux, mut_
 }
 
 } // namespace cyqlone
-
-#undef LOG_WRITE
-#undef LOG_READ

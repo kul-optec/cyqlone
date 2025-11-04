@@ -10,9 +10,6 @@
 
 #include <numeric>
 
-#define LOG_WRITE(X, i) [&] { GUANAQO_TRACE("WRITE " #X, i); }()
-#define LOG_READ(X, i) [&] { GUANAQO_TRACE("READ " #X, i); }()
-
 namespace cyqlone {
 using namespace batmat::linalg;
 
@@ -25,9 +22,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t biY) {
                   nj = j1 - j0, jsplit = nJs[biY - 1] - j0;
     constexpr index_t w3_out_lut[]{1, 0, 0, 1};
     const index_t w3_out = w3_out_lut[i & 3];
-    LOG_WRITE(D, biY);
-    LOG_WRITE(Y, biY);
-    LOG_WRITE(U, biY);
     if (i & 1) {
         hyhound_diag_cyclic(
             tril(coupling_D.batch(biY)), work_update.batch(l & 3).middle_cols(j0, nj),
@@ -68,11 +62,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
     if (biY == 0) {
         GUANAQO_TRACE("update_level last", biY);
         const index_t j0 = 0, j1 = nJs.back(), nj = j1 - j0;
-        LOG_WRITE(Y, 0);
         gemm_diag_add(work_update.batch(l & 3).middle_cols(j0, nj),
                       work_update.batch((l + 2) & 3).middle_cols(j0, nj).transposed(),
                       coupling_Y.batch(0), work_update_Σ.batch(0).middle_rows(j0, nj));
-        LOG_WRITE(D, biY);
         hyhound_diag(tril(coupling_D.batch(biY)),
                      work_update.batch((l + 2) & 3).middle_cols(j0, nj),
                      work_update_Σ.batch(0).middle_rows(j0, nj));
@@ -185,6 +177,3 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
 }
 
 } // namespace cyqlone
-
-#undef LOG_WRITE
-#undef LOG_READ
