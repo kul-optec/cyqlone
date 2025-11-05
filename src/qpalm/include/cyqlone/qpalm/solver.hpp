@@ -5,7 +5,7 @@
 #include <cyqlone/qpalm/export.h>
 #include <cyqlone/qpalm/settings.hpp>
 #include <cyqlone/qpalm/status.hpp>
-#include <batmat/timing.hpp>
+#include <cyqlone/timing.hpp>
 #include <guanaqo/atomic-stop-signal.hpp>
 #include <guanaqo/timed.hpp>
 #include <map>
@@ -13,25 +13,25 @@
 #include <optional>
 #include <string>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 struct CYQLONE_QPALM_EXPORT SolverTimings {
-    batmat::DefaultTimings total;
-    batmat::DefaultTimings scaling;
-    batmat::DefaultTimings line_search;
-    batmat::DefaultTimings recompute_inner;
-    batmat::DefaultTimings recompute_outer;
-    batmat::DefaultTimings mat_vec_M;
-    batmat::DefaultTimings mat_vec_MT;
-    batmat::DefaultTimings mat_vec_A;
-    batmat::DefaultTimings mat_vec_AT;
-    batmat::DefaultTimings mat_vec_Q;
-    batmat::DefaultTimings active_set_change;
-    batmat::DefaultTimings update_penalty;
-    batmat::DefaultTimings update_regularization;
-    batmat::DefaultTimings boost_regularization;
-    batmat::DefaultTimings solve;
-    std::map<std::string, batmat::DefaultTimings> backend;
+    DefaultTimings total;
+    DefaultTimings scaling;
+    DefaultTimings line_search;
+    DefaultTimings recompute_inner;
+    DefaultTimings recompute_outer;
+    DefaultTimings mat_vec_M;
+    DefaultTimings mat_vec_MT;
+    DefaultTimings mat_vec_A;
+    DefaultTimings mat_vec_AT;
+    DefaultTimings mat_vec_Q;
+    DefaultTimings active_set_change;
+    DefaultTimings update_penalty;
+    DefaultTimings update_regularization;
+    DefaultTimings boost_regularization;
+    DefaultTimings solve;
+    std::map<std::string, DefaultTimings> backend;
 };
 
 CYQLONE_QPALM_EXPORT std::ostream &operator<<(std::ostream &, const SolverTimings &);
@@ -123,4 +123,4 @@ class Solver {
     ~Solver();
 };
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

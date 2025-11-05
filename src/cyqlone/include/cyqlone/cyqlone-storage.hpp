@@ -1,11 +1,12 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <cyqlone/ocp.hpp>
 #include <batmat/matrix/matrix.hpp>
 #include <span>
 #include <vector>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 using batmat::index_t;
 using batmat::real_t;
@@ -63,4 +64,4 @@ struct CyqloneStorage {
     static index_t count_constr_0(const LinearOCPStorage &ocp, std::vector<bool> &Ju0);
 };
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

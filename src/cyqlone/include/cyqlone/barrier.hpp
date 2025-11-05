@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <batmat/assume.hpp>
 #include <array>
 #include <atomic>
@@ -14,7 +15,7 @@
 #endif
 #endif
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 struct EmptyCompletion {
     void operator()() const noexcept {}
@@ -166,4 +167,4 @@ class TreeBarrier {
     void arrive_and_wait(uint32_t thread_id, int line) { wait(arrive(thread_id, line)); }
 };
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

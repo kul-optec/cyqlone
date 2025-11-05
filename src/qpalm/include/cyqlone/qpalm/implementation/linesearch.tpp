@@ -20,7 +20,7 @@
 #define LINE_SEARCH_COMPARE_IMPLEMENTATIONS 0
 #endif
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 struct LineSearchSettings {
     bool find_smallest_breakpoint_first = false;
@@ -170,4 +170,4 @@ LineSearch<Vec>::operator()(auto &ctx, auto &backend, real_t η, ///< @f$ \eta =
     });
 }
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

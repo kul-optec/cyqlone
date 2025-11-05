@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 #include <hyhound/ocp/riccati.hpp>
@@ -9,7 +10,7 @@
 #include <utility>
 #include <vector>
 
-namespace cyqlone::blasfeo {
+namespace CYQLONE_NAMESPACE::blasfeo {
 
 using batmat::index_t;
 using batmat::real_t;
@@ -180,4 +181,4 @@ void factor(RiccatiFactor &factor, Eigen::Ref<const Eigen::MatrixX<real_t>>);
 void update(RiccatiFactor &factor, Eigen::Ref<const Eigen::MatrixX<real_t>>);
 void solve(RiccatiFactor &factor);
 
-} // namespace cyqlone::blasfeo
+} // namespace CYQLONE_NAMESPACE::blasfeo

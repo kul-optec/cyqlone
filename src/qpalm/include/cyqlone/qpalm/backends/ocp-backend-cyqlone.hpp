@@ -9,7 +9,7 @@
 #include <memory>
 #include <span>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 template <index_t VL>
 struct CyqloneBackend;
@@ -69,4 +69,4 @@ void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const CyqloneStor
 template <index_t VL>
 void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp);
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

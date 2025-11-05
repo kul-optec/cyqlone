@@ -9,7 +9,7 @@
 #include <batmat/thread-pool.hpp>
 #endif
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 using batmat::linalg::simdify;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -344,4 +344,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y,
     }
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

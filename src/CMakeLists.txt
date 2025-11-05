@@ -28,6 +28,7 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/implementation/sparse.tpp"
           "cyqlone/include/cyqlone/implementation/update.tpp"
           "cyqlone/include/cyqlone/parallel.hpp"
+          "cyqlone/include/cyqlone/timing.hpp"
           "cyqlone/include/cyqlone/barrier.hpp"
           "cyqlone/include/cyqlone/reduce.hpp"
 )
@@ -45,6 +46,9 @@ if (CYQLONE_WITH_MATIO)
         BASE_DIRS "cyqlone/include"
         FILES "cyqlone/include/cyqlone/matio.hpp")
     target_link_libraries(cyqlone PUBLIC matio::matio)
+endif()
+if (DEFINED CYQLONE_NAMESPACE)
+    target_compile_definitions(cyqlone PUBLIC "CYQLONE_NAMESPACE=${CYQLONE_NAMESPACE}")
 endif()
 
 # QPALM solver

@@ -3,7 +3,7 @@
 #include <guanaqo/trace.hpp>
 #include <numeric>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 PartitionedBreakpoints partition_breakpoints_default(std::span<Breakpoint> breakpoints) {
     GUANAQO_TRACE("linesearch partition", 0);
@@ -40,4 +40,4 @@ ABSums partial_sum_negative(PartitionedBreakpoints breakpoints, real_t η, real_
     return {.a = a, .b = b};
 }
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

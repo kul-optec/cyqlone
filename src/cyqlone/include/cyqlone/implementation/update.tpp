@@ -10,7 +10,7 @@
 
 #include <numeric>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -176,4 +176,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
     }
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

@@ -8,7 +8,7 @@
 #include <batmat/linalg/gemm.hpp>
 #include <batmat/linalg/trsm.hpp>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -393,4 +393,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve(Context &ctx, mut_view<> ux, mut_
     solve_reverse(ctx, ux, λ, work_riccati); // TODO: check thread access pattern forward/reverse
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

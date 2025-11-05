@@ -12,7 +12,7 @@
 #include <guanaqo/linalg/sparsity.hpp>
 #include <vector>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 /// Simply computes the gradient of the quadratic cost
 /// @f$ J(x, u) = \sum_{j=1}^{N-1} \ell_j(x^j, u^j) + \ell_N(x^N) @f$,
@@ -50,4 +50,4 @@ struct LinearOCPSparseQP {
                                       std::span<const bool> J) const;
 };
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

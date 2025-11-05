@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <cyqlone/qpalm/detailed-stats.hpp>
 #include <cyqlone/qpalm/implementation/linesearch.tpp>
 #include <cyqlone/qpalm/solver.hpp>
@@ -13,7 +14,7 @@
 #include <optional>
 #include <utility>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 template <class Backend>
 struct SolverImplementation {
@@ -591,4 +592,4 @@ Solver<Backend> &Solver<Backend>::operator=(Solver &&) noexcept = default;
 template <class Backend>
 Solver<Backend>::~Solver() = default;
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace cyqlone::qpalm::problems {
+namespace CYQLONE_NAMESPACE::qpalm::problems {
 
 struct PlatooningParams {
     real_t friction   = 0.1;
@@ -28,4 +28,4 @@ struct PlatooningProblem {
 
 PlatooningProblem CYQLONE_EXAMPLE_PROBLEMS_EXPORT platooning(PlatooningParams p);
 
-} // namespace cyqlone::qpalm::problems
+} // namespace CYQLONE_NAMESPACE::qpalm::problems

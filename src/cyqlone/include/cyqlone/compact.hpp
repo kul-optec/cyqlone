@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <experimental/simd>
 #include <guanaqo/mat-view.hpp>
 #include <cassert>
@@ -9,7 +10,7 @@
 #include <batmat/linalg/uview.hpp>
 #include <batmat/matrix/view.hpp>
 
-namespace cyqlone::compact {
+namespace CYQLONE_NAMESPACE::compact {
 
 using batmat::linalg::StorageOrder;
 
@@ -202,7 +203,7 @@ struct CompactBLAS {
                           mut_single_batch_view y);
 };
 
-} // namespace cyqlone::compact
+} // namespace CYQLONE_NAMESPACE::compact
 
 #include "compact/elementwise.tpp"
 #include "compact/pack.tpp"

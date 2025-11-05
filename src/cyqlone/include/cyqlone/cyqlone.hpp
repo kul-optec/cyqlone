@@ -1,14 +1,15 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <cyqlone/cyqlone-storage.hpp>
 #include <cyqlone/parallel.hpp>
+#include <cyqlone/timing.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 #include <batmat/matrix/layout.hpp>
 #include <batmat/matrix/matrix.hpp>
 #include <batmat/openmp.h>
 #include <batmat/simd.hpp>
-#include <batmat/timing.hpp>
 #include <guanaqo/trace.hpp>
 
 #include "compact.hpp" // TODO
@@ -18,7 +19,7 @@
 #include <cassert>
 #include <limits>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 using batmat::index_t;
 using batmat::real_t;
@@ -221,8 +222,8 @@ struct CyqloneSolver {
     std::vector<index_t> nJs = std::vector<index_t>(1 << (lP - lvl));
 
     struct Timings {
-        using type    = batmat::DefaultTimings;
-        using timed_t = guanaqo::Timed<type>;
+        using type    = DefaultTimings;
+        using timed_t = guanaqo::Timed<batmat::DefaultTimings>;
         type breakpoints{};
         type calc_y_hat{};
         type calc_y_hat_AT{};
@@ -396,4 +397,4 @@ void copy(guanaqo::MatrixView<T1, I1, S1, O1> src, guanaqo::MatrixView<T2, I2, S
 }
 } // namespace detail
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

@@ -2,7 +2,7 @@
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 // TODO: make member function to reuse Ju0 and ny_0?
 template <class T>
@@ -133,4 +133,4 @@ template struct CyqloneStorage<double>;
 template struct CyqloneStorage<float>;
 #endif
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

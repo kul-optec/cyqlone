@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <numeric>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 void reference_to_gradient(const LinearOCPStorage &ocp, std::span<const real_t> ref,
                            std::span<real_t> qr) {
@@ -213,4 +213,4 @@ auto LinearOCPSparseQP::build_kkt(real_t S, std::span<const real_t> Σ,
     return K;
 }
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

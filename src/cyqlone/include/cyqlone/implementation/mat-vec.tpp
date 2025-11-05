@@ -6,7 +6,7 @@
 #include <batmat/linalg/uview.hpp>
 #include <batmat/loop.hpp>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 using batmat::linalg::simdify;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -206,4 +206,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_remove_regularization(
     }
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

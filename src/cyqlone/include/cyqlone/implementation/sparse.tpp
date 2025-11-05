@@ -8,7 +8,7 @@
 #include <batmat/linalg/copy.hpp>
 #include <batmat/linalg/trtri.hpp>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -369,4 +369,4 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const
     return tuples;
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

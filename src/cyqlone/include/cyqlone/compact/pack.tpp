@@ -1,11 +1,14 @@
+#pragma once
+
 #include <cyqlone/compact.hpp>
+#include <cyqlone/config.hpp>
 
 #include <batmat/loop.hpp>
 #include <batmat/lut.hpp>
 #include <batmat/ops/transpose.hpp>
 #include <guanaqo/trace.hpp>
 
-namespace cyqlone::compact {
+namespace CYQLONE_NAMESPACE::compact {
 
 using batmat::index_constant;
 
@@ -136,4 +139,4 @@ void CompactBLAS<T, Abi, O>::unpack_L(batch_view A, mut_batch_view_scalar B) {
     });
 }
 
-} // namespace cyqlone::compact
+} // namespace CYQLONE_NAMESPACE::compact

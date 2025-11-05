@@ -1,8 +1,8 @@
 #include <cyqlone/qpalm/status.hpp>
 #include <ostream>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 std::ostream &operator<<(std::ostream &os, SolverStatus s) { return os << enum_name(s); }
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

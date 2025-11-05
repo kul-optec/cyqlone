@@ -1,3 +1,4 @@
+#include <cyqlone/config.hpp>
 #include <cyqlone/matio.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/example-problems/conversion.hpp>
@@ -49,7 +50,7 @@ using np_vector = nb::ndarray<T, nb::ndim<1>, nb::any_contig, nb::device::cpu>;
 #include <fstream>
 #endif
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 struct PythonOCP {
     cyqlone::LinearOCPStorage ocp;
@@ -412,11 +413,11 @@ void register_settings(nb::module_ &m) {
         });
     m.attr("DefaultTimings") = timings_cpu;
 #else
-    nb::class_<batmat::DefaultTimings>(m, "DefaultTimings")
+    nb::class_<cyqlone::DefaultTimings>(m, "DefaultTimings")
         .def(nb::init())
-        .def("__copy__", [](const batmat::DefaultTimings &self) { return self; })
+        .def("__copy__", [](const cyqlone::DefaultTimings &self) { return self; })
         .def("__getstate__",
-             [](const batmat::DefaultTimings &self) {
+             [](const cyqlone::DefaultTimings &self) {
                  return nb::make_tuple(
                      // clang-format off
                     self.num_invocations,
@@ -425,20 +426,20 @@ void register_settings(nb::module_ &m) {
                      ;
              })
         .def("__setstate__",
-             [](batmat::DefaultTimings *self, nb::tuple t) {
+             [](cyqlone::DefaultTimings *self, nb::tuple t) {
                  if (t.size() != 2)
                      throw std::runtime_error("Invalid state!");
-                 using T = batmat::DefaultTimings;
-                 new (self) T{
+                 using T = cyqlone::DefaultTimings;
+                 new (self) T{{
                      // clang-format off
                     .num_invocations = nb::cast<decltype(T::num_invocations)>(t[0]),
                     .wall_time = nb::cast<decltype(T::wall_time)>(t[1]),
                      // clang-format on
-                 };
+                 }};
              })
-        .def_rw("num_invocations", &batmat::DefaultTimings::num_invocations)
-        .def_rw("wall_time", &batmat::DefaultTimings::wall_time)
-        .def("__str__", [](const batmat::DefaultTimings &self) {
+        .def_rw("num_invocations", &cyqlone::DefaultTimings::num_invocations)
+        .def_rw("wall_time", &cyqlone::DefaultTimings::wall_time)
+        .def("__str__", [](const cyqlone::DefaultTimings &self) {
             std::ostringstream ss;
             ss << self;
             return std::move(ss).str();
@@ -667,7 +668,7 @@ struct overloaded : Ts... {
     using Ts::operator()...;
 };
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE
 
 NB_MODULE(MODULE_NAME, m) {
     using namespace cyqlone;

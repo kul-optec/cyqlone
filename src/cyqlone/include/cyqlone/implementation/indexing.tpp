@@ -2,7 +2,7 @@
 
 #include <batmat/assume.hpp>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_N(index_t a, index_t b) const -> index_t {
@@ -65,4 +65,4 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
     return ((bi >> l) & 3) == 1 && l + 1 != lP - lvl;
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <cyqlone/ocp.hpp>
 #include <random>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 inline LinearOCPStorage generate_random_ocp(OCPDim dim, uint_fast32_t seed = 0) {
     LinearOCPStorage ocp{dim};
@@ -43,4 +44,4 @@ inline LinearOCPStorage generate_random_ocp(OCPDim dim, uint_fast32_t seed = 0) 
     return ocp;
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

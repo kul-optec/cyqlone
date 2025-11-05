@@ -3,7 +3,7 @@
 #include <cyqlone/config.hpp>
 #include <vector>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 struct DetailedStats {
     enum ExitReason {
@@ -23,4 +23,4 @@ struct DetailedStats {
     std::vector<Entry> entries;
 };
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

@@ -4,7 +4,7 @@
 #include <cyqlone/qpalm/export.h>
 #include <chrono>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 using namespace std::chrono_literals;
 
@@ -50,4 +50,4 @@ struct CYQLONE_QPALM_EXPORT Settings {
     bool operator!=(const Settings &other) const { return !(*this == other); }
 };
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

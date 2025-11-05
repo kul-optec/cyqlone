@@ -1,9 +1,10 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <cmath>
 #include <type_traits>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 template <class T>
 class NeumaierSum {
@@ -79,4 +80,4 @@ class NeumaierSum {
     }
 };
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

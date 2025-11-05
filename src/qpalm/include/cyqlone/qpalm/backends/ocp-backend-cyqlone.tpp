@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <cyqlone/cyqlone.hpp>
 #include <cyqlone/neumaier.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
@@ -30,7 +31,7 @@
 #include <tuple>
 #include <utility>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 using batmat::linalg::simdify;
 namespace datapar = batmat::datapar;
@@ -953,4 +954,4 @@ void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPSt
     update_qpalm_cyqlone_backend(backend, cocp);
 }
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

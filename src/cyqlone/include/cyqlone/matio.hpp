@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <cyqlone/ocp.hpp>
 #include <batmat/matrix/view.hpp>
 #include <filesystem>
@@ -9,7 +10,7 @@
 // from <matio.h>
 struct _mat_t; // NOLINT(*-reserved-identifier)
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 using mat_t      = ::_mat_t;
 using MatFilePtr = std::unique_ptr<mat_t, int (*)(mat_t *)>;
@@ -32,4 +33,4 @@ void read_from_mat(mat_t *mat, LinearOCPStorage &ocp);
 void read_from_mat(mat_t *mat, const std::string &filename, std::vector<real_t> &data);
 void read_from_mat(mat_t *mat, const std::string &filename, std::span<real_t> data);
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

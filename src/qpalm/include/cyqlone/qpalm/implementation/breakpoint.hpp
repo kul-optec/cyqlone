@@ -9,7 +9,7 @@
 #include <stdfloat>
 #endif
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 struct Breakpoint {
     // t = α/δ   <=>   α = t δ
@@ -180,4 +180,4 @@ struct get_breakpoints_fn {
     }
 } inline constexpr get_breakpoints;
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

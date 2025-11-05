@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <vector>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 template <typename T>
 struct matio_traits;
@@ -302,4 +302,4 @@ void ocp_dump_mat(const std::filesystem::path &filename, const LinearOCPStorage 
     add_to_mat(matfp.get(), ocp);
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

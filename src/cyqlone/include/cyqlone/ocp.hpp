@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <batmat/config.hpp>
 #include <guanaqo/mat-view.hpp>
 #include <vector>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 using batmat::index_t;
 using batmat::real_t;
@@ -352,4 +353,4 @@ struct LinearOCPStorage {
     }
 };
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

@@ -3,7 +3,7 @@
 #include <Eigen/Core>
 #include <unsupported/Eigen/MatrixFunctions>
 
-namespace cyqlone::qpalm::problems {
+namespace CYQLONE_NAMESPACE::qpalm::problems {
 
 using eigen_mat = Eigen::MatrixX<real_t>;
 
@@ -18,4 +18,4 @@ std::tuple<eigen_mat, eigen_mat> discretize_zoh(const Eigen::Ref<const eigen_mat
     return {ABOId.topLeftCorner(nx, nx), ABOId.topRightCorner(nx, nu)};
 }
 
-} // namespace cyqlone::qpalm::problems
+} // namespace CYQLONE_NAMESPACE::qpalm::problems

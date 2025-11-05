@@ -15,7 +15,7 @@
 #define CYQLONE_FACTOR_DO_PREFETCH 0
 #endif
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 using namespace batmat::linalg;
 
@@ -247,4 +247,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view
     }
 }
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE

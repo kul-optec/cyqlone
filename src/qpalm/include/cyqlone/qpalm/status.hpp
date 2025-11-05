@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cyqlone/config.hpp>
 #include <cyqlone/qpalm/export.h>
 #include <iosfwd>
 #include <stdexcept>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 /// Exit status of a numerical solver.
 enum class SolverStatus {
@@ -35,4 +36,4 @@ inline const char *enum_name(SolverStatus s) {
 
 CYQLONE_QPALM_EXPORT std::ostream &operator<<(std::ostream &os, SolverStatus s);
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

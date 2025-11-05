@@ -1,9 +1,10 @@
+#include <cyqlone/config.hpp>
 #include <cyqlone/qpalm/implementation/breakpoint.hpp>
 #include <guanaqo/trace.hpp>
 #include <cmath>
 #include <ranges>
 
-namespace cyqlone::qpalm {
+namespace CYQLONE_NAMESPACE::qpalm {
 
 template <class Vec>
 std::span<Breakpoint>
@@ -27,4 +28,4 @@ compute_breakpoints_default(std::vector<Breakpoint> &breakpoints, const Vec &Σ,
     return std::span{breakpoints};
 }
 
-} // namespace cyqlone::qpalm
+} // namespace CYQLONE_NAMESPACE::qpalm

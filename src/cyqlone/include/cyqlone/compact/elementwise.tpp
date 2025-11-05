@@ -1,4 +1,7 @@
+#pragma once
+
 #include <cyqlone/compact.hpp>
+#include <cyqlone/config.hpp>
 #include <cyqlone/neumaier.hpp>
 
 #include <batmat/loop.hpp>
@@ -6,7 +9,7 @@
 #include <guanaqo/trace.hpp>
 #include <concepts>
 
-namespace cyqlone::compact {
+namespace CYQLONE_NAMESPACE::compact {
 
 template <class T, class Abi, StorageOrder O>
 void CompactBLAS<T, Abi, O>::xhadamard(single_batch_view A, single_batch_view B,
@@ -345,4 +348,4 @@ void CompactBLAS<T, Abi, O>::proj_diff(single_batch_view x, single_batch_view l,
     }
 }
 
-} // namespace cyqlone::compact
+} // namespace CYQLONE_NAMESPACE::compact

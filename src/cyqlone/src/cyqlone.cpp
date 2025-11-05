@@ -9,7 +9,7 @@
 #include <cyqlone/implementation/update.tpp>
 #include <batmat/config.hpp>
 
-namespace cyqlone {
+namespace CYQLONE_NAMESPACE {
 
 template struct CyqloneSolver<1, real_t, StorageOrder::ColMajor>;
 template struct CyqloneSolver<4, real_t, StorageOrder::ColMajor>;
@@ -24,4 +24,4 @@ template struct CyqloneSolver<16, float, StorageOrder::ColMajor>;
 template struct CyqloneSolver<16, float, StorageOrder::RowMajor>;
 #endif
 
-} // namespace cyqlone
+} // namespace CYQLONE_NAMESPACE
