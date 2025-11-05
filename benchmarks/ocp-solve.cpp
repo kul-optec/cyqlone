@@ -15,7 +15,6 @@
 #include <hyhound/ocp/riccati.hpp>
 #include <hyhound/ocp/schur.hpp>
 
-#include <experimental/simd>
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -30,7 +29,6 @@
 
 using namespace hyhound;
 using namespace hyhound::ocp;
-namespace stdx = std::experimental;
 using guanaqo::as_span;
 
 #if GUANAQO_WITH_TRACING

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cyqlone/config.hpp>
-#include <experimental/simd>
 #include <guanaqo/mat-view.hpp>
 #include <cassert>
 #include <concepts>

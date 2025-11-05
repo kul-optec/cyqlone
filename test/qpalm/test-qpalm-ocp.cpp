@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include <batmat/loop.hpp>
-#include <experimental/simd>
 #include <guanaqo/io/csv.hpp>
 #include <guanaqo/print.hpp>
 #include <guanaqo/trace.hpp>
