@@ -428,6 +428,8 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             if (ctx.is_master())
                 stats.timings.backend = backend.clear_timings();
             swap(y, ŷ);
+            if (&this->y != &y.get())
+                backend.xcopy(ctx, y.get(), this->y);
             return converged     ? SolverStatus::Converged
                    : out_of_iter ? SolverStatus::MaxIter
                    : out_of_time ? SolverStatus::MaxTime
