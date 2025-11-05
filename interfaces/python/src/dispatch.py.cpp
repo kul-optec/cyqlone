@@ -6,10 +6,10 @@
 static const char *get_dispatch_name() {
     using namespace cpu_features;
     const X86Features features = GetX86Info().features;
-    if (features.avx2)
-        return "avx2";
     if (features.avx512f)
         return "avx512";
+    if (features.avx2)
+        return "avx2";
     return "generic";
 }
 #else
