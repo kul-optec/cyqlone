@@ -835,7 +835,6 @@ struct CyqloneBackend {
                 temp_var  = var_vec();
                 temp_eq   = eq_constr_vec();
                 temp_ineq = ineq_constr_vec();
-                std::cout << "temp_ineq size: " << temp_ineq.size() << "\n";
             }
             auto tm = get_timed(&OCP_t::Timings::solve_resid);
             ctx.arrive_and_wait(__LINE__);
@@ -862,7 +861,8 @@ struct CyqloneBackend {
                          MᵀΔλi = datapar::aligned_load<simd>(&MᵀΔλ.batch(di)(0, r, 0)),
                          ri    = datapar::aligned_load<simd>(&res.batch(di)(0, r, 0));
                     auto gi    = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
-                    datapar::aligned_store(simd{gi + MᵀΔλi + ξi + ri}, &res.batch(di)(0, r, 0));
+                    ri += gi + MᵀΔλi + ξi;
+                    datapar::aligned_store(ri, &res.batch(di)(0, r, 0));
                     r_norm_inf = max(r_norm_inf, hmax(abs(ri)));
                     r_norm_sq += reduce(ri * ri);
                     grad_norm_sq += reduce(simd{gi} * simd{gi});
