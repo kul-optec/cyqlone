@@ -33,6 +33,7 @@ implementation=cp
 version="$python_majmin_nodot"
 abi="cp$python_majmin_nodot"
 arch="$plat_tag"
+force_native_python=True
 EOF
 for i in "${!archs[@]}"; do
     c=$((i + 1))
