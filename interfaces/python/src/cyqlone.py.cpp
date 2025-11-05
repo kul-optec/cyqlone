@@ -22,7 +22,9 @@ using cyqlone::real_t;
 
 #include <nanobind/nanobind.h>
 #include <nanobind/ndarray.h>
+#include <nanobind/stl/chrono.h>
 #include <nanobind/stl/filesystem.h>
+#include <nanobind/stl/map.h>
 #include <nanobind/stl/optional.h>
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/tuple.h>
@@ -329,8 +331,51 @@ void register_settings(nb::module_ &m) {
         .def_rw("linesearch_breakpoint_index", &DetailedStats::Entry::linesearch_breakpoint_index)
         .def_rw("num_active_constr", &DetailedStats::Entry::num_active_constr)
         .def_rw("num_changing_constr", &DetailedStats::Entry::num_changing_constr)
-        .def_rw("exit_reason", &DetailedStats::Entry::exit_reason);
-    detailed_stats.def_ro("entries", &DetailedStats::entries);
+        .def_rw("exit_reason", &DetailedStats::Entry::exit_reason)
+        .def("__getstate__",
+             [](const DetailedStats::Entry &self) {
+                 return nb::make_tuple(
+                     // clang-format off
+                    self.outer_iter,
+                    self.inner_iter,
+                    self.stationarity,
+                    self.ineq_constr_viol,
+                    self.eq_constr_viol,
+                    self.linesearch_step_size,
+                    self.linesearch_breakpoint_index,
+                    self.num_active_constr,
+                    self.num_changing_constr,
+                    self.exit_reason
+                     // clang-format on
+                 );
+             })
+        .def("__setstate__", [](DetailedStats::Entry *self, nb::tuple t) {
+            if (t.size() != 10)
+                throw std::runtime_error("Invalid state!");
+            using T = DetailedStats::Entry;
+            new (self) T{
+                // clang-format off
+                    .outer_iter = nb::cast<decltype(T::outer_iter)>(t[0]),
+                    .inner_iter = nb::cast<decltype(T::inner_iter)>(t[1]),
+                    .stationarity = nb::cast<decltype(T::stationarity)>(t[2]),
+                    .ineq_constr_viol = nb::cast<decltype(T::ineq_constr_viol)>(t[3]),
+                    .eq_constr_viol = nb::cast<decltype(T::eq_constr_viol)>(t[4]),
+                    .linesearch_step_size = nb::cast<decltype(T::linesearch_step_size)>(t[5]),
+                    .linesearch_breakpoint_index = nb::cast<decltype(T::linesearch_breakpoint_index)>(t[6]),
+                    .num_active_constr = nb::cast<decltype(T::num_active_constr)>(t[7]),
+                    .num_changing_constr = nb::cast<decltype(T::num_changing_constr)>(t[8]),
+                    .exit_reason = nb::cast<decltype(T::exit_reason)>(t[9])
+                // clang-format on
+            };
+        });
+    detailed_stats.def_ro("entries", &DetailedStats::entries)
+        .def("__getstate__", [](const DetailedStats &self) { return nb::make_tuple(self.entries); })
+        .def("__setstate__", [](DetailedStats *self, nb::tuple t) {
+            if (t.size() != 1)
+                throw std::runtime_error("Invalid state!");
+            using T = DetailedStats;
+            new (self) T{.entries = nb::cast<decltype(T::entries)>(t[0])};
+        });
 #if BATMAT_WITH_CPU_TIME
     nb::class_<guanaqo::TimingsCPU> timings_cpu(m, "TimingsCPU");
     timings_cpu.def(nb::init())
