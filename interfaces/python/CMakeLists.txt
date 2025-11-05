@@ -93,6 +93,8 @@ if (CYQLONE_WITH_PYTHON_DISPATCH)
     target_link_libraries(_dispatch PRIVATE CpuFeatures::cpu_features)
     target_link_libraries(_dispatch PRIVATE cyqlone::warnings)
     cyqlone_configure_visibility(_dispatch)
+    set_target_properties(_dispatch PROPERTIES
+        RELEASE_POSTFIX "" DEBUG_POSTFIX "" RELWITHDEBINFO_POSTFIX "" MINSIZEREL_POSTFIX "")
     install(TARGETS _dispatch
         EXCLUDE_FROM_ALL
         COMPONENT python_modules
