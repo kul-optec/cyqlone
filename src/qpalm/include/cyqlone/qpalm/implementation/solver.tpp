@@ -424,7 +424,8 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             stats.stationarity         = stationarity;
             stats.primal_residual_norm = ineq_constr_resid;
             stats.max_penalty          = backend.norm_inf(ctx, Σ);
-            if (ctx.index == 0)
+            stats.timings              = std::move(timings);
+            if (ctx.is_master())
                 stats.timings.backend = backend.clear_timings();
             swap(y, ŷ);
             return converged     ? SolverStatus::Converged
