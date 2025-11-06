@@ -2,11 +2,8 @@
 cd "$( dirname "${BASH_SOURCE[0]}" )"/../..
 set -ex
 
-# Select Python version
-build_python_version="$(python3 --version | cut -d' ' -f2)"
-python_version="${build_python_version}"
-python_majmin="$(echo "$python_version" | cut -d'.' -f1,2)"
-python_majmin_nodot="${python_majmin//./}"
+# Install build dependencies
+uv pip install 'py-build-cmake~=0.6.0a2' 'numpy<3' 'conan~=2.22.1'
 
 # Select architecture
 archs=("generic")  # microarchitectures, most compatible first
@@ -28,11 +25,6 @@ pkg_dir="${2:-.}"
 pbc_config="$PWD/$triple.py-build-cmake.dev.pbc"
 profiles="$PWD/scripts/ci/conan-profiles/profiles"
 cat <<- EOF > "$pbc_config"
-os=linux
-implementation=cp
-version="$python_majmin_nodot"
-abi="cp$python_majmin_nodot"
-arch="$plat_tag"
 force_native_python=True
 EOF
 for i in "${!archs[@]}"; do
@@ -60,4 +52,4 @@ EOF
 # Build the Python package and install it in development mode
 export CLICOLOR_FORCE=1
 export CMAKE_INSTALL_MODE=REL_SYMLINK_OR_COPY
-python3 -m pip install -ve "$pkg_dir" --no-build-isolation -C --cross="$pbc_config"
+uv pip install -ve "$pkg_dir" --no-build-isolation -C cross="$pbc_config"

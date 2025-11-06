@@ -36,7 +36,7 @@ test = ["pytest>=7.2.0,<9", "qpalm~=1.2.6"]
 requires = [
     "py-build-cmake~=0.6.0a2",
     "numpy<3",
-    "conan~=2.21.0",
+    "conan~=2.22.0",
     "typing_extensions<5; python_version < '3.11'",
 ]
 build-backend = "py_build_cmake.build"
