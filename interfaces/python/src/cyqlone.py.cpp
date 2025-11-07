@@ -3,6 +3,7 @@
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/example-problems/conversion.hpp>
 #include <cyqlone/qpalm/example-problems/platooning.hpp>
+#include <cyqlone/qpalm/example-problems/spring-mass.hpp>
 #include <cyqlone/qpalm/settings.hpp>
 #include <cyqlone/qpalm/solver.hpp>
 #include <batmat/assume.hpp>
@@ -230,6 +231,9 @@ void register_ocp(nb::module_ &m) {
             "B", [](PythonOCP &self, index_t i) { return np_view(self.ocp.B(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def(
+            "b", [](PythonOCP &self, index_t i) { return np_view(self.ocp.b(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
+        .def(
             "C", [](PythonOCP &self, index_t i) { return np_view(self.ocp.C(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def(
@@ -244,6 +248,11 @@ void register_ocp(nb::module_ &m) {
         .def(
             "S", [](PythonOCP &self, index_t i) { return np_view(self.ocp.S(i)); },
             nb::rv_policy::reference_internal, "i"_a)
+        .def_prop_ro("N_horiz", [](const PythonOCP &self) { return self.ocp.dim.N_horiz; })
+        .def_prop_ro("nx", [](const PythonOCP &self) { return self.ocp.dim.nx; })
+        .def_prop_ro("nu", [](const PythonOCP &self) { return self.ocp.dim.nu; })
+        .def_prop_ro("ny", [](const PythonOCP &self) { return self.ocp.dim.ny; })
+        .def_prop_ro("ny_N", [](const PythonOCP &self) { return self.ocp.dim.ny_N; })
         .def("dump_mat", &PythonOCP::dump_mat)
         .def("load_mat", &PythonOCP::load_mat);
     using cyqlone::qpalm::LinearOCPSparseQP;
@@ -303,6 +312,38 @@ void register_ocp(nb::module_ &m) {
             return PythonOCP{std::move(p.ocp)};
         },
         "params"_a.sig("PlatooningParams()") = cyqlone::qpalm::problems::PlatooningParams{});
+    nb::class_<cyqlone::qpalm::problems::SpringMassParams> spring_mass_params(m,
+                                                                              "SpringMassParams");
+    using ActuatorPlacement = cyqlone::qpalm::problems::SpringMassParams::ActuatorPlacement;
+    nb::enum_<ActuatorPlacement>(spring_mass_params, "ActuatorPlacement")
+        .value("IndividualActuators", ActuatorPlacement::IndividualActuators)
+        .value("RandomActuators", ActuatorPlacement::RandomActuators)
+        .value("RandomPairsOfActuators", ActuatorPlacement::RandomPairsOfActuators)
+        .value("WangBoydActuators", ActuatorPlacement::WangBoydActuators)
+        .export_values();
+    spring_mass_params.def(nb::init<>())
+        .def_rw("friction", &cyqlone::qpalm::problems::SpringMassParams::friction)
+        .def_rw("k_spring", &cyqlone::qpalm::problems::SpringMassParams::k_spring)
+        .def_rw("F_max", &cyqlone::qpalm::problems::SpringMassParams::F_max)
+        .def_rw("p_max", &cyqlone::qpalm::problems::SpringMassParams::p_max)
+        .def_rw("width", &cyqlone::qpalm::problems::SpringMassParams::width)
+        .def_rw("N_horiz", &cyqlone::qpalm::problems::SpringMassParams::N_horiz)
+        .def_rw("T_horiz", &cyqlone::qpalm::problems::SpringMassParams::T_horiz)
+        .def_rw("q_vel", &cyqlone::qpalm::problems::SpringMassParams::q_vel)
+        .def_rw("q_pos", &cyqlone::qpalm::problems::SpringMassParams::q_pos)
+        .def_rw("r_act", &cyqlone::qpalm::problems::SpringMassParams::r_act)
+        .def_rw("masses", &cyqlone::qpalm::problems::SpringMassParams::masses)
+        .def_rw("n_actuators", &cyqlone::qpalm::problems::SpringMassParams::n_actuators)
+        .def_rw("actuator_placement",
+                &cyqlone::qpalm::problems::SpringMassParams::actuator_placement)
+        .def_rw("seed", &cyqlone::qpalm::problems::SpringMassParams::seed);
+    m.def(
+        "create_spring_mass_problem",
+        [](const cyqlone::qpalm::problems::SpringMassParams &params) {
+            auto p = spring_mass(params);
+            return PythonOCP{std::move(p.ocp)};
+        },
+        "params"_a.sig("SpringMassParams()") = cyqlone::qpalm::problems::SpringMassParams{});
 }
 
 void register_settings(nb::module_ &m) {

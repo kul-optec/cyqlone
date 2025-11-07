@@ -90,6 +90,7 @@ if (CYQLONE_WITH_QPALM)
             "example-problems/src/conversion.cpp"
             "example-problems/src/csv.cpp"
             "example-problems/src/platooning.cpp"
+            "example-problems/src/spring-mass.cpp"
         )
         target_sources(example-problems PUBLIC FILE_SET HEADERS
             BASE_DIRS "example-problems/include"
@@ -97,6 +98,7 @@ if (CYQLONE_WITH_QPALM)
                       "example-problems/include/cyqlone/qpalm/example-problems/zoh.hpp"
                       "example-problems/include/cyqlone/qpalm/example-problems/csv.hpp"
                       "example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp"
+                      "example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp"
         )
         target_link_libraries(example-problems
             PUBLIC cyqlone::cyqlone Eigen3::Eigen guanaqo::guanaqo guanaqo::blas)
