@@ -42,6 +42,7 @@ tools.build.cross_building:can_run=True
 tools.cmake.cmaketoolchain:extra_variables*={"MKL_ROOT": "{{ mkl_root }}"}
 &:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_EXPORT_COMPILE_COMMANDS": "On"}
 &:tools.cmake.cmaketoolchain:extra_variables*={"BATMAT_WITH_ACCURATE_BUILD_TIME": "Off"}
+hpipm/*:tools.build:cflags+=["-fvisibility=default"]
 
 [options]
 guanaqo/*:with_blas=True
