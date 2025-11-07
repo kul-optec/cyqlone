@@ -4,7 +4,7 @@
 #include <cmath>
 #include <ranges>
 
-namespace CYQLONE_NAMESPACE::qpalm {
+namespace CYQLONE_NS(cyqlone::qpalm) {
 
 template <class Vec>
 std::span<Breakpoint>
@@ -28,4 +28,4 @@ compute_breakpoints_default(std::vector<Breakpoint> &breakpoints, const Vec &Σ,
     return std::span{breakpoints};
 }
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace CYQLONE_NS(cyqlone::qpalm)

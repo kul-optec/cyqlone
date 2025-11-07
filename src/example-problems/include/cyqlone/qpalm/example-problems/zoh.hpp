@@ -4,7 +4,7 @@
 #include <unsupported/Eigen/MatrixFunctions>
 #include <cassert>
 
-namespace CYQLONE_NAMESPACE::qpalm::problems {
+namespace CYQLONE_NS(cyqlone::qpalm::problems) {
 
 using eigen_mat = Eigen::MatrixX<real_t>;
 
@@ -34,4 +34,4 @@ discretize_zoh(const Eigen::Ref<const eigen_mat> &A, const Eigen::Ref<const eige
     return {ABOId.block(0, 0, nx, nx), ABOId.block(0, nx, nx, nu), ABOId.block(0, nx + nu, nx, nb)};
 }
 
-} // namespace CYQLONE_NAMESPACE::qpalm::problems
+} // namespace CYQLONE_NS(cyqlone::qpalm::problems)

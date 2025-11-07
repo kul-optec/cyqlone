@@ -1,7 +1,7 @@
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp>
 #include <cyqlone/qpalm/implementation/solver.tpp>
 
-namespace CYQLONE_NAMESPACE::qpalm {
+namespace CYQLONE_NS(cyqlone::qpalm) {
 
 #define CYQLONE_INSTANTIATE_QPALM_Cyqlone(vl)                                                      \
                                                                                                    \
@@ -20,4 +20,4 @@ CYQLONE_INSTANTIATE_QPALM_Cyqlone(8);
 CYQLONE_INSTANTIATE_QPALM_Cyqlone(4);
 CYQLONE_INSTANTIATE_QPALM_Cyqlone(1);
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace CYQLONE_NS(cyqlone::qpalm)

@@ -15,7 +15,7 @@
 #define CYQLONE_FACTOR_DO_PREFETCH 0
 #endif
 
-namespace CYQLONE_NAMESPACE {
+namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 

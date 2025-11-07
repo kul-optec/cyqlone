@@ -9,7 +9,7 @@
 #include <guanaqo/trace.hpp>
 #include <concepts>
 
-namespace CYQLONE_NAMESPACE::compact {
+namespace CYQLONE_NS(cyqlone::compact) {
 
 template <class T, class Abi, StorageOrder O>
 void CompactBLAS<T, Abi, O>::xhadamard(single_batch_view A, single_batch_view B,
@@ -348,4 +348,4 @@ void CompactBLAS<T, Abi, O>::proj_diff(single_batch_view x, single_batch_view l,
     }
 }
 
-} // namespace CYQLONE_NAMESPACE::compact
+} // namespace CYQLONE_NS(cyqlone::compact)

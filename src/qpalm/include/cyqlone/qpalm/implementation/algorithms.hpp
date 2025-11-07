@@ -11,7 +11,7 @@
 #include <ska_sort.hpp>
 #endif
 
-namespace CYQLONE_NAMESPACE::qpalm {
+namespace CYQLONE_NS(cyqlone::qpalm) {
 
 template <class R, class F>
 static void sort(R &&range, F key) {
@@ -112,4 +112,4 @@ T transform_reduce(I first, I last, T init, BinOp binary_op, UnOp unary_op) {
     return std::transform_reduce(first, last, init, binary_op, unary_op);
 }
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace CYQLONE_NS(cyqlone::qpalm)

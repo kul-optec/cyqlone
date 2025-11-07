@@ -9,7 +9,7 @@
 #include <cyqlone/implementation/update.tpp>
 #include <batmat/config.hpp>
 
-namespace CYQLONE_NAMESPACE {
+namespace CYQLONE_NS(cyqlone) {
 
 template struct CyqloneSolver<1, real_t, StorageOrder::ColMajor>;
 template struct CyqloneSolver<4, real_t, StorageOrder::ColMajor>;

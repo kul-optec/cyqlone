@@ -19,10 +19,8 @@
 #include <cassert>
 #include <limits>
 
-namespace CYQLONE_NAMESPACE {
+namespace CYQLONE_NS(cyqlone) {
 
-using batmat::index_t;
-using batmat::real_t;
 using batmat::matrix::StorageOrder;
 
 [[nodiscard]] constexpr index_t get_depth(index_t n) {

@@ -31,7 +31,7 @@
 #include <tuple>
 #include <utility>
 
-namespace CYQLONE_NAMESPACE::qpalm {
+namespace CYQLONE_NS(cyqlone::qpalm) {
 
 using batmat::linalg::simdify;
 namespace datapar = batmat::datapar;
@@ -954,4 +954,4 @@ void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPSt
     update_qpalm_cyqlone_backend(backend, cocp);
 }
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace CYQLONE_NS(cyqlone::qpalm)

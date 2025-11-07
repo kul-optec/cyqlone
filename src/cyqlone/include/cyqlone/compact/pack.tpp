@@ -8,7 +8,7 @@
 #include <batmat/ops/transpose.hpp>
 #include <guanaqo/trace.hpp>
 
-namespace CYQLONE_NAMESPACE::compact {
+namespace CYQLONE_NS(cyqlone::compact) {
 
 using batmat::index_constant;
 
@@ -139,4 +139,4 @@ void CompactBLAS<T, Abi, O>::unpack_L(batch_view A, mut_batch_view_scalar B) {
     });
 }
 
-} // namespace CYQLONE_NAMESPACE::compact
+} // namespace CYQLONE_NS(cyqlone::compact)

@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <fstream>
 
-namespace CYQLONE_NAMESPACE::qpalm::problems {
+namespace CYQLONE_NS(cyqlone::qpalm::problems) {
 
 using eigen_mat = Eigen::MatrixX<real_t>;
 
@@ -111,4 +111,4 @@ LinearOCPStorage load_from_csv(const fs::path &folder, const std::string &name) 
     return ocp;
 }
 
-} // namespace CYQLONE_NAMESPACE::qpalm::problems
+} // namespace CYQLONE_NS(cyqlone::qpalm::problems)

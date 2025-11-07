@@ -68,7 +68,7 @@ function(cyqlone_configure_python_ext tgt)
         VERSION_INFO="${PY_FULL_VERSION}")
 endfunction()
 
-# Build the Python extension
+# Build the architecture-specific Python extension
 Python_add_library(_cyqlone MODULE WITH_SOABI ${USE_SABI} "src/cyqlone.py.cpp")
 cyqlone_configure_python_ext(_cyqlone)
 target_link_libraries(_cyqlone PRIVATE Eigen3::Eigen cyqlone::qpalm cyqlone::example-problems)
@@ -85,17 +85,21 @@ install(TARGETS _cyqlone
         COMPONENT python_modules
         DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME})
 
-# Build the dispatch library
-if (CYQLONE_WITH_PYTHON_DISPATCH)
-    Python_add_library(_dispatch MODULE WITH_SOABI ${USE_SABI} "src/dispatch.py.cpp")
-    cyqlone_configure_python_ext(_dispatch)
-    find_package(CpuFeatures REQUIRED)
-    target_link_libraries(_dispatch PRIVATE CpuFeatures::cpu_features)
-    target_link_libraries(_dispatch PRIVATE cyqlone::warnings)
-    cyqlone_configure_visibility(_dispatch)
-    set_target_properties(_dispatch PROPERTIES
+# Build the common library
+if (NOT CYQLONE_WITH_PYTHON_ARCH_SPECIFIC_ONLY)
+    Python_add_library(_common MODULE WITH_SOABI ${USE_SABI} "src/common.py.cpp")
+    cyqlone_configure_python_ext(_common)
+    target_link_libraries(_common PRIVATE cyqlone::qpalm cyqlone::example-problems)
+    target_link_libraries(_common PRIVATE cyqlone::warnings)
+    cyqlone_configure_visibility(_common)
+    set_target_properties(_common PROPERTIES
         RELEASE_POSTFIX "" DEBUG_POSTFIX "" RELWITHDEBINFO_POSTFIX "" MINSIZEREL_POSTFIX "")
-    install(TARGETS _dispatch
+    if (CYQLONE_WITH_PYTHON_DISPATCH)
+        find_package(CpuFeatures REQUIRED)
+        target_link_libraries(_common PRIVATE CpuFeatures::cpu_features)
+        target_compile_definitions(_common PRIVATE CYQLONE_WITH_PYTHON_DISPATCH)
+    endif()
+    install(TARGETS _common
         EXCLUDE_FROM_ALL
         COMPONENT python_modules
         DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME})
@@ -127,4 +131,15 @@ if (CYQLONE_WITH_PY_STUBS)
                 COMPONENT python_stubs
                 DESTINATION "${PY_BUILD_CMAKE_IMPORT_NAME}/cyqlone")
     endforeach()
+    if (NOT CYQLONE_WITH_PYTHON_ARCH_SPECIFIC_ONLY)
+        nanobind_add_stub(
+            cyqlone_stubs
+            INSTALL_TIME
+            COMPONENT python_stubs
+            MODULE "${PY_BUILD_CMAKE_IMPORT_NAME}.$<TARGET_FILE_BASE_NAME:_common>"
+            OUTPUT_PATH "${PY_BUILD_CMAKE_IMPORT_NAME}"
+            RECURSIVE
+            EXCLUDE_FROM_ALL
+            VERBOSE)
+    endif()
 endif()

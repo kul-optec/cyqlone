@@ -6,10 +6,7 @@
 #include <span>
 #include <vector>
 
-namespace CYQLONE_NAMESPACE {
-
-using batmat::index_t;
-using batmat::real_t;
+namespace CYQLONE_NS(cyqlone) {
 
 ///                ₙ₋₁
 ///     minimize    ∑ [½ uᵢᵀ Rᵢ uᵢ + uᵢᵀ S xᵢ + ½ xᵢᵀ Qᵢ xᵢ + rᵢᵀuᵢ + qᵢᵀxᵢ]

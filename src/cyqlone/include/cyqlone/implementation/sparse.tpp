@@ -8,7 +8,7 @@
 #include <batmat/linalg/copy.hpp>
 #include <batmat/linalg/trtri.hpp>
 
-namespace CYQLONE_NAMESPACE {
+namespace CYQLONE_NS(cyqlone) {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

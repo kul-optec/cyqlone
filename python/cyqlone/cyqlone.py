@@ -3,8 +3,8 @@ import contextlib, importlib, os, sys
 _variant = os.getenv("CYQLONE_VARIANT")
 if _variant is None:
     _variant = "_generic"
-    with contextlib.suppress(ModuleNotFoundError):
-        from ._dispatch import get_dispatch_name
+    with contextlib.suppress(Exception):
+        from .common import get_dispatch_name
 
         _variant = "_" + get_dispatch_name()
 

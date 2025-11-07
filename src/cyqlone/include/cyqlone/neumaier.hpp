@@ -4,7 +4,7 @@
 #include <cmath>
 #include <type_traits>
 
-namespace CYQLONE_NAMESPACE {
+namespace cyqlone {
 
 template <class T>
 class NeumaierSum {
@@ -80,4 +80,4 @@ class NeumaierSum {
     }
 };
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace cyqlone

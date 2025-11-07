@@ -9,7 +9,7 @@
 #include <batmat/linalg/uview.hpp>
 #include <batmat/matrix/view.hpp>
 
-namespace CYQLONE_NAMESPACE::compact {
+namespace CYQLONE_NS(cyqlone::compact) {
 
 using batmat::linalg::StorageOrder;
 
@@ -202,7 +202,7 @@ struct CompactBLAS {
                           mut_single_batch_view y);
 };
 
-} // namespace CYQLONE_NAMESPACE::compact
+} // namespace CYQLONE_NS(cyqlone::compact)
 
 #include "compact/elementwise.tpp"
 #include "compact/pack.tpp"

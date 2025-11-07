@@ -18,7 +18,7 @@
 #include <utility>
 #include <vector>
 
-namespace CYQLONE_NAMESPACE::parallel {
+namespace cyqlone::parallel {
 
 struct SharedContext;
 template <class SC = SharedContext>
@@ -265,4 +265,4 @@ struct SharedResult<void, SC> {
     void wait(context_type &ctx) { ctx.wait(results[ctx.index].token); }
 };
 
-} // namespace CYQLONE_NAMESPACE::parallel
+} // namespace cyqlone::parallel

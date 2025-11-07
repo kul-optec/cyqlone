@@ -6,7 +6,7 @@
 #include <batmat/linalg/uview.hpp>
 #include <batmat/loop.hpp>
 
-namespace CYQLONE_NAMESPACE {
+namespace CYQLONE_NS(cyqlone) {
 using batmat::linalg::simdify;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

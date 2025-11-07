@@ -3,7 +3,7 @@
 #include <cyqlone/config.hpp>
 #include <cmath>
 
-namespace CYQLONE_NAMESPACE {
+namespace cyqlone {
 
 template <class T, class simd = void>
 struct norms;
@@ -58,4 +58,4 @@ struct norms<T, void> {
     static result zero() { return {}; }
 };
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace cyqlone

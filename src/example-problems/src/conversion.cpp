@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <numeric>
 
-namespace CYQLONE_NAMESPACE::qpalm {
+namespace CYQLONE_NS(cyqlone::qpalm) {
 
 void reference_to_gradient(const LinearOCPStorage &ocp, std::span<const real_t> ref,
                            std::span<real_t> qr) {
@@ -40,6 +40,10 @@ void reference_to_gradient(LinearOCPStorage &ocp, std::span<const real_t> ref) {
     static_assert(qr.storage_order == guanaqo::StorageOrder::ColMajor);
     reference_to_gradient(ocp, ref, std::span{qr.data, static_cast<size_t>(qr.rows)});
 }
+
+} // namespace CYQLONE_NS(cyqlone::qpalm)
+
+namespace cyqlone::qpalm {
 
 LinearOCPSparseQP LinearOCPSparseQP::build(const LinearOCPStorage &ocp) {
     using guanaqo::linalg::sparsity::Symmetry;
@@ -213,4 +217,4 @@ auto LinearOCPSparseQP::build_kkt(real_t S, std::span<const real_t> Σ,
     return K;
 }
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace cyqlone::qpalm

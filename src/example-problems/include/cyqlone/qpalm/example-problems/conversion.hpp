@@ -12,17 +12,7 @@
 #include <guanaqo/linalg/sparsity.hpp>
 #include <vector>
 
-namespace CYQLONE_NAMESPACE::qpalm {
-
-/// Simply computes the gradient of the quadratic cost
-/// @f$ J(x, u) = \sum_{j=1}^{N-1} \ell_j(x^j, u^j) + \ell_N(x^N) @f$,
-/// with @f$ \ell_j(x, u) = \tfrac12 \left\| \begin{pmatrix} x - x^j_\text{ref}
-/// \\ u - u^j_\text{ref} \right\|_{H_j}^2 @f$, with the Hessian
-/// @f$ H_j = \begin{pmatrix} Q_j & S_j^\top \\ S_j & R_j \end{pmatrix} @f$.
-/// Stores @f$ \nabla J(0, 0) @f$ to @p qr.
-void reference_to_gradient(const LinearOCPStorage &ocp, std::span<const real_t> ref,
-                           std::span<real_t> qr);
-void reference_to_gradient(LinearOCPStorage &ocp, std::span<const real_t> ref);
+namespace cyqlone::qpalm {
 
 using guanaqo::linalg::sparsity::SparseCSC;
 
@@ -50,4 +40,18 @@ struct LinearOCPSparseQP {
                                       std::span<const bool> J) const;
 };
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace cyqlone::qpalm
+
+namespace CYQLONE_NS(cyqlone::qpalm) {
+
+/// Simply computes the gradient of the quadratic cost
+/// @f$ J(x, u) = \sum_{j=1}^{N-1} \ell_j(x^j, u^j) + \ell_N(x^N) @f$,
+/// with @f$ \ell_j(x, u) = \tfrac12 \left\| \begin{pmatrix} x - x^j_\text{ref}
+/// \\ u - u^j_\text{ref} \right\|_{H_j}^2 @f$, with the Hessian
+/// @f$ H_j = \begin{pmatrix} Q_j & S_j^\top \\ S_j & R_j \end{pmatrix} @f$.
+/// Stores @f$ \nabla J(0, 0) @f$ to @p qr.
+void reference_to_gradient(const LinearOCPStorage &ocp, std::span<const real_t> ref,
+                           std::span<real_t> qr);
+void reference_to_gradient(LinearOCPStorage &ocp, std::span<const real_t> ref);
+
+} // namespace CYQLONE_NS(cyqlone::qpalm)

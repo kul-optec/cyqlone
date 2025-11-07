@@ -47,9 +47,6 @@ if (CYQLONE_WITH_MATIO)
         FILES "cyqlone/include/cyqlone/matio.hpp")
     target_link_libraries(cyqlone PUBLIC matio::matio)
 endif()
-if (DEFINED CYQLONE_NAMESPACE)
-    target_compile_definitions(cyqlone PUBLIC "CYQLONE_NAMESPACE=${CYQLONE_NAMESPACE}")
-endif()
 
 # QPALM solver
 # ------------------------------------------------------------------------------

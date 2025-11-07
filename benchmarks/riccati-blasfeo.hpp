@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 
-namespace CYQLONE_NAMESPACE::blasfeo {
+namespace CYQLONE_NS(cyqlone::blasfeo) {
 
 using batmat::index_t;
 using batmat::real_t;
@@ -181,4 +181,4 @@ void factor(RiccatiFactor &factor, Eigen::Ref<const Eigen::MatrixX<real_t>>);
 void update(RiccatiFactor &factor, Eigen::Ref<const Eigen::MatrixX<real_t>>);
 void solve(RiccatiFactor &factor);
 
-} // namespace CYQLONE_NAMESPACE::blasfeo
+} // namespace CYQLONE_NS(cyqlone::blasfeo)

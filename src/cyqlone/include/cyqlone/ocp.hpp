@@ -5,10 +5,7 @@
 #include <guanaqo/mat-view.hpp>
 #include <vector>
 
-namespace CYQLONE_NAMESPACE {
-
-using batmat::index_t;
-using batmat::real_t;
+namespace cyqlone {
 
 struct OCPDim {
     index_t N_horiz;
@@ -353,4 +350,4 @@ struct LinearOCPStorage {
     }
 };
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace cyqlone

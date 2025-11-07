@@ -13,7 +13,7 @@
 #include <optional>
 #include <string>
 
-namespace CYQLONE_NAMESPACE::qpalm {
+namespace cyqlone::qpalm {
 
 struct CYQLONE_QPALM_EXPORT SolverTimings {
     DefaultTimings total;
@@ -45,6 +45,10 @@ struct CYQLONE_QPALM_EXPORT SolverStats {
     SolverTimings timings{};
     std::optional<DetailedStats> detail = std::nullopt;
 };
+
+} // namespace cyqlone::qpalm
+
+namespace CYQLONE_NS(cyqlone::qpalm) {
 
 namespace detail {
 
@@ -123,4 +127,4 @@ class Solver {
     ~Solver();
 };
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace CYQLONE_NS(cyqlone::qpalm)

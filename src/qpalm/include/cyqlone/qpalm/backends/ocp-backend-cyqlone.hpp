@@ -9,10 +9,7 @@
 #include <memory>
 #include <span>
 
-namespace CYQLONE_NAMESPACE::qpalm {
-
-template <index_t VL>
-struct CyqloneBackend;
+namespace cyqlone::qpalm {
 
 struct CyqloneData {
     std::span<const real_t> initial_variables = {}, initial_inequality_multipliers = {},
@@ -43,6 +40,13 @@ struct CyqloneBackendSettings {
     WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };
 
+} // namespace cyqlone::qpalm
+
+namespace CYQLONE_NS(cyqlone::qpalm) {
+
+template <index_t VL>
+struct CyqloneBackend;
+
 template <index_t VL>
 struct unique_CyqloneBackend : std::unique_ptr<CyqloneBackend<VL>> {
     unique_CyqloneBackend()                                             = default;
@@ -69,4 +73,4 @@ void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const CyqloneStor
 template <index_t VL>
 void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp);
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace CYQLONE_NS(cyqlone::qpalm)

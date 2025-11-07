@@ -10,7 +10,7 @@
 #include <random>
 #include <stdexcept>
 
-namespace CYQLONE_NAMESPACE::qpalm::problems {
+namespace CYQLONE_NS(cyqlone::qpalm::problems) {
 
 SpringMassProblem spring_mass(SpringMassParams p) {
     using guanaqo::as_view;
@@ -146,4 +146,4 @@ SpringMassProblem spring_mass(SpringMassParams p) {
     };
 }
 
-} // namespace CYQLONE_NAMESPACE::qpalm::problems
+} // namespace CYQLONE_NS(cyqlone::qpalm::problems)

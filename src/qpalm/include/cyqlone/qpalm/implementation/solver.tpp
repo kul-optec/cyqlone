@@ -14,7 +14,7 @@
 #include <optional>
 #include <utility>
 
-namespace CYQLONE_NAMESPACE::qpalm {
+namespace CYQLONE_NS(cyqlone::qpalm) {
 
 template <class Backend>
 struct SolverImplementation {
@@ -592,4 +592,4 @@ Solver<Backend> &Solver<Backend>::operator=(Solver &&) noexcept = default;
 template <class Backend>
 Solver<Backend>::~Solver() = default;
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace CYQLONE_NS(cyqlone::qpalm)

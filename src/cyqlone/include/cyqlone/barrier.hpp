@@ -15,7 +15,7 @@
 #endif
 #endif
 
-namespace CYQLONE_NAMESPACE {
+namespace cyqlone {
 
 struct EmptyCompletion {
     void operator()() const noexcept {}
@@ -167,4 +167,4 @@ class TreeBarrier {
     void arrive_and_wait(uint32_t thread_id, int line) { wait(arrive(thread_id, line)); }
 };
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace cyqlone

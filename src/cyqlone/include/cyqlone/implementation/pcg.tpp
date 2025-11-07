@@ -9,7 +9,7 @@
 #include <batmat/linalg/syomv.hpp>
 #include <batmat/linalg/trsm.hpp>
 
-namespace CYQLONE_NAMESPACE {
+namespace CYQLONE_NS(cyqlone) {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

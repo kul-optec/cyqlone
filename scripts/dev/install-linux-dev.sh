@@ -41,10 +41,12 @@ for i in "${!archs[@]}"; do
 	conan.$c.cmake.options.CYQLONE_PYTHON_POSTFIX="_${archs[$i]}"
 	conan.$c.cmake.options.CMAKE_INTERPROCEDURAL_OPTIMIZATION=true
 	conan.$c.cmake.install_components=["python_modules"]
+	conan.$c.args+=["-o&:with_python_arch_specific_only=True"]
 	EOF
 done
 cat <<- EOF >> "$pbc_config"
 conan.1.args+=["-o&:with_python_dispatch=True"]
+conan.1.args+=["-o&:with_python_arch_specific_only=False"]
 conan.1.cmake.options.CYQLONE_WITH_PY_STUBS=true
 conan.1.cmake.install_components+=["python_nanobind", "python_stubs"]
 EOF

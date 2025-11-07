@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace CYQLONE_NAMESPACE::qpalm::problems {
+namespace cyqlone::qpalm::problems {
 
 struct SpringMassParams {
     real_t friction = 0;   ///< friction coefficient
@@ -35,6 +35,10 @@ struct SpringMassProblem {
     std::vector<real_t> ref;
 };
 
+} // namespace cyqlone::qpalm::problems
+
+namespace CYQLONE_NS(cyqlone::qpalm::problems) {
+
 SpringMassProblem CYQLONE_EXAMPLE_PROBLEMS_EXPORT spring_mass(SpringMassParams p);
 
-} // namespace CYQLONE_NAMESPACE::qpalm::problems
+} // namespace CYQLONE_NS(cyqlone::qpalm::problems)

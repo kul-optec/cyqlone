@@ -5,7 +5,7 @@
 #include <iosfwd>
 #include <stdexcept>
 
-namespace CYQLONE_NAMESPACE::qpalm {
+namespace cyqlone::qpalm {
 
 /// Exit status of a numerical solver.
 enum class SolverStatus {
@@ -36,4 +36,4 @@ inline const char *enum_name(SolverStatus s) {
 
 CYQLONE_QPALM_EXPORT std::ostream &operator<<(std::ostream &os, SolverStatus s);
 
-} // namespace CYQLONE_NAMESPACE::qpalm
+} // namespace cyqlone::qpalm

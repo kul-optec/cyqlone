@@ -31,6 +31,7 @@ class CyqloneRecipe(ConanFile):
         "with_blasfeo": False,
         "with_python": False,
         "with_python_dispatch": False,
+        "with_python_arch_specific_only": False,
         "with_ska_sort": False,
         "with_matio": True,
     }
@@ -103,6 +104,7 @@ class CyqloneRecipe(ConanFile):
             self.options.rm_safe("with_python")
         if not self.options.get_safe("with_python"):
             self.options.rm_safe("with_python_dispatch")
+            self.options.rm_safe("with_python_arch_specific_only")
             self.options.rm_safe("with_conan_python")
         self.options["guanaqo/*"].with_blas = True
         self.options["hyhound/*"].with_ocp = True

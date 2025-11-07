@@ -1,7 +1,7 @@
 #include "riccati-blasfeo.hpp"
 #include <guanaqo/trace.hpp>
 
-namespace CYQLONE_NAMESPACE::blasfeo {
+namespace CYQLONE_NS(cyqlone::blasfeo) {
 
 void blasfeo_xcolsc(int kmax, double alpha, blasfeo_dmat *sA, int ai, int aj) {
     ::blasfeo_dcolsc(kmax, alpha, sA, ai, aj);

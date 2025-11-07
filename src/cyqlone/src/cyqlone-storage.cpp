@@ -2,7 +2,7 @@
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 
-namespace CYQLONE_NAMESPACE {
+namespace CYQLONE_NS(cyqlone) {
 
 // TODO: make member function to reuse Ju0 and ny_0?
 template <class T>
