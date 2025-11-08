@@ -4,6 +4,9 @@ include(CMakeFindDependencyMacro)
 
 find_dependency(guanaqo COMPONENTS BLAS)
 find_dependency(batmat)
+if (@CYQLONE_WITH_MATIO@)
+    find_dependency(matio)
+endif()
 
 include("${CMAKE_CURRENT_LIST_DIR}/cyqloneCoreTargets.cmake")
 

@@ -2,6 +2,10 @@
 
 include(CMakeFindDependencyMacro)
 
+if (@CYQLONE_WITH_SKA_SORT@)
+    find_dependency(ska-sort)
+endif()
+
 include("${CMAKE_CURRENT_LIST_DIR}/cyqloneQPALMTargets.cmake")
 
 check_required_components(cyqloneQPALM)
