@@ -40,12 +40,27 @@ struct CyqloneBackendSettings {
     WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };
 
+struct CyqloneBackendStats {
+    index_t num_updates  = 0;
+    index_t rank_updates = 0;
+    index_t num_factor   = 0;
+};
+
 } // namespace cyqlone::qpalm
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
 template <index_t VL>
 struct CyqloneBackend;
+
+namespace detail {
+
+template <index_t VL>
+struct backend_stats_type<CyqloneBackend<VL>> {
+    using type = CyqloneBackendStats;
+};
+
+} // namespace detail
 
 template <index_t VL>
 struct unique_CyqloneBackend : std::unique_ptr<CyqloneBackend<VL>> {

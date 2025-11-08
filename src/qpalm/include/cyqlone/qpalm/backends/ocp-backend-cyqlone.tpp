@@ -706,8 +706,11 @@ struct CyqloneBackend {
             return num_different;
         } else {
             ctx.arrive_and_wait(__LINE__);
-            if (ctx.is_master())
+            if (ctx.is_master()) {
                 ++num_updates;
+                ++stats.num_updates;
+                stats.rank_updates += num_different;
+            }
             ctx.arrive_and_wait(__LINE__);
         }
         // std::cout << "                                     -- Fact update\n";
@@ -777,6 +780,7 @@ struct CyqloneBackend {
             if (ctx.is_master()) {
                 reset_factorization = false;
                 num_updates         = 0;
+                ++stats.num_factor;
             }
             ctx.arrive_and_wait(__LINE__);
         }
@@ -902,6 +906,10 @@ struct CyqloneBackend {
         return ocp_timings ? std::optional<typename OCP_t::Timings::timed_t>((*ocp_timings).*member)
                            : std::nullopt;
     }
+
+    using Stats = CyqloneBackendStats;
+    Stats stats = {};
+    Stats clear_stats() { return std::exchange(stats, {}); }
 
     std::map<std::string, typename OCP_t::Timings::type> clear_timings() {
         if (!ocp_timings)

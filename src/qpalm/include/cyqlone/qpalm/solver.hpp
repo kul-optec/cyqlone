@@ -66,7 +66,10 @@ struct backend_type<T *> {
 };
 
 template <class T>
-using backend_type_t = backend_type<T>::type;
+using backend_type_t = typename backend_type<T>::type;
+
+template <class T>
+struct backend_stats_type; // deliberately undefined
 
 } // namespace detail
 
@@ -81,6 +84,8 @@ class Solver {
     [[nodiscard]] SolverStatus do_solve();
 
   public:
+    using BackendStats = typename detail::backend_stats_type<backend_type>::type;
+
     SolverStatus operator()() {
         guanaqo::Timed t{stats.emplace().timings.total};
         return do_solve();
@@ -89,7 +94,8 @@ class Solver {
     Backend backend;
     Settings settings;
     std::unique_ptr<SolverImplementation<backend_type>> impl{};
-    std::optional<SolverStats> stats = std::nullopt;
+    std::optional<SolverStats> stats          = std::nullopt;
+    std::optional<BackendStats> stats_backend = std::nullopt;
     guanaqo::AtomicStopSignal stop_signal{};
 
     [[nodiscard]] index_t get_num_variables() const;

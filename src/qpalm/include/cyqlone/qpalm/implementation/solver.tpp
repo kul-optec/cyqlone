@@ -111,8 +111,9 @@ SolverStatus Solver<Backend>::do_solve() {
         SolverStats stats;
         auto status_local = impl->do_main_loop(ctx, *backend, settings, stop_signal, stats);
         if (ctx.is_master()) {
-            status      = status_local;
-            this->stats = std::move(stats);
+            status              = status_local;
+            this->stats         = std::move(stats);
+            this->stats_backend = backend->clear_stats();
         }
         GUANAQO_TRACE("end", ctx.index);
     });
