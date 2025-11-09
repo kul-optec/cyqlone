@@ -92,6 +92,13 @@ TEST(QPALM, cyqlone) {
 #if CYQLONE_WITH_MATIO
     cyqlone::ocp_dump_mat("cyqlone-platooning.mat", ocp.ocp);
 #endif
+
+    auto err = cocp.compute_kkt_error(ocp.ocp, x, y, λ);
+    std::cout << "KKT error:\n"
+              << "  stationarity:        " << err.stationarity << "\n"
+              << "  inequality residual: " << err.inequality_residual << "\n"
+              << "  equality residual:   " << err.equality_residual << "\n"
+              << "  complementarity:     " << err.complementarity << std::endl;
 }
 
 TEST(QPALM, cyqloneSpringsMasses) try {

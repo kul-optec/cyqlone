@@ -55,10 +55,27 @@ struct CyqloneStorage {
     void update_impl(const LinearOCPStorage &ocp);
     void update(const LinearOCPStorage &ocp);
     static CyqloneStorage build(const LinearOCPStorage &ocp, index_t ny_0 = -1);
-    static void reconstruct_ineq_multipliers(const LinearOCPStorage &ocp,
-                                             std::span<const value_type> y_compressed,
-                                             std::span<value_type> y);
+    void reconstruct_ineq_multipliers(std::span<const value_type> y_compressed,
+                                      std::span<value_type> y) const;
+    std::vector<value_type>
+    reconstruct_ineq_multipliers(std::span<const value_type> y_compressed) const;
     static index_t count_constr_0(const LinearOCPStorage &ocp, std::vector<bool> &Ju0);
+
+    struct Solution {
+        std::vector<value_type> solution, inequality_multipliers, equality_multipliers;
+    };
+    Solution reconstruct_solution(const LinearOCPStorage &ocp,
+                                  std::span<const value_type> ux_compressed,
+                                  std::span<const value_type> y_compressed,
+                                  std::span<const value_type> λ_compressed) const;
+    struct KKTError {
+        value_type stationarity, inequality_residual, equality_residual, complementarity;
+    };
+    static KKTError compute_kkt_error(const LinearOCPStorage &ocp, const Solution &sol);
+    KKTError compute_kkt_error(const LinearOCPStorage &ocp,
+                               std::span<const value_type> ux_compressed,
+                               std::span<const value_type> y_compressed,
+                               std::span<const value_type> λ_compressed) const;
 };
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)

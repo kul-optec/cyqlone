@@ -42,6 +42,16 @@ struct norms<T, void> {
         real_t max;
         real_t asum;
         real_t sumsq;
+
+        [[nodiscard]] real_t norm1() const { return asum; }
+        [[nodiscard]] real_t norm2() const {
+            using std::sqrt;
+            return sqrt(sumsq);
+        }
+        [[nodiscard]] real_t norminf() const {
+            using std::isfinite;
+            return isfinite(asum) ? max : asum;
+        }
     };
 
     result operator()(result accum, T t) const {
