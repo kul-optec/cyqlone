@@ -60,6 +60,9 @@ void register_ocp(nb::module_ &m) {
             "B", [](PythonOCP &self, index_t i) { return np_view(self.ocp.B(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def(
+            "AB", [](PythonOCP &self, index_t i) { return np_view(self.ocp.AB(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
+        .def(
             "b", [](PythonOCP &self, index_t i) { return np_view(self.ocp.b(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def(
@@ -69,6 +72,9 @@ void register_ocp(nb::module_ &m) {
             "D", [](PythonOCP &self, index_t i) { return np_view(self.ocp.D(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def(
+            "CD", [](PythonOCP &self, index_t i) { return np_view(self.ocp.CD(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
+        .def(
             "Q", [](PythonOCP &self, index_t i) { return np_view(self.ocp.Q(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def(
@@ -76,6 +82,9 @@ void register_ocp(nb::module_ &m) {
             nb::rv_policy::reference_internal, "i"_a)
         .def(
             "S", [](PythonOCP &self, index_t i) { return np_view(self.ocp.S(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
+        .def(
+            "H", [](PythonOCP &self, index_t i) { return np_view(self.ocp.H(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def_prop_ro("N_horiz", [](const PythonOCP &self) { return self.ocp.dim.N_horiz; })
         .def_prop_ro("nx", [](const PythonOCP &self) { return self.ocp.dim.nx; })
