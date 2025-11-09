@@ -430,6 +430,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             if (ctx.is_master())
                 stats.timings.backend = backend.clear_timings();
             swap(y, ŷ);
+            backend.project_multipliers_ineq(ctx, y);
             if (&this->y != &y.get())
                 backend.xcopy(ctx, y.get(), this->y);
             return converged     ? SolverStatus::Converged
@@ -456,6 +457,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         }
         // Update multipliers
         swap(y, ŷ);
+        backend.project_multipliers_ineq(ctx, y);
         // Update tolerances
         inner_tol = std::max(inner_tol * settings.ρ, settings.tolerance);
     }

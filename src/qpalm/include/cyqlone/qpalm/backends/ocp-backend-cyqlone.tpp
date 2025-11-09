@@ -242,6 +242,26 @@ struct CyqloneBackend {
         }
     }
 
+    void project_multipliers_ineq(Context &ctx, ineq_constr_vec_t &y) const {
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            auto yi          = simdify(y.batch(di));
+            auto b_min_i     = simdify(b_min_strided.batch(di));
+            auto b_max_i     = simdify(b_max_strided.batch(di));
+            for (index_t j = 0; j < yi.rows(); ++j) {
+                auto yij            = batmat::datapar::aligned_load<simd>(&yi(0, j, 0));
+                const auto b_min_ij = batmat::datapar::aligned_load<simd>(&b_min_i(0, j, 0)),
+                           b_max_ij = batmat::datapar::aligned_load<simd>(&b_max_i(0, j, 0));
+                // If upper bound is infinite, multiplier cannot be positive
+                where(!isfinite(b_min_ij), yij) = fmax(yij, simd{0});
+                where(!isfinite(b_max_ij), yij) = fmin(yij, simd{0});
+                batmat::datapar::aligned_store(yij, &yi(0, j, 0));
+            }
+        }
+    }
+
     real_t ineq_constr_viol(Context &ctx, const ineq_constr_vec_t &Ax) const {
         GUANAQO_TRACE("ineq_constr_viol", 0);
         auto t = get_timed(&OCP_t::Timings::ineq_constr_viol);
