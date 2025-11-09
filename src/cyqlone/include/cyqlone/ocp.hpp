@@ -348,6 +348,16 @@ struct LinearOCPStorage {
         index_t size = ny;
         return b_max().middle_rows(i * size, i < N ? size : ny_N);
     }
+
+    struct Solution {
+        std::vector<real_t> solution, inequality_multipliers, equality_multipliers;
+    };
+
+    struct KKTError {
+        real_t stationarity, inequality_residual, equality_residual, complementarity;
+    };
+
+    [[nodiscard]] KKTError compute_kkt_error(const Solution &sol) const;
 };
 
 } // namespace cyqlone

@@ -61,17 +61,14 @@ struct CyqloneStorage {
     reconstruct_ineq_multipliers(std::span<const value_type> y_compressed) const;
     static index_t count_constr_0(const LinearOCPStorage &ocp, std::vector<bool> &Ju0);
 
-    struct Solution {
-        std::vector<value_type> solution, inequality_multipliers, equality_multipliers;
-    };
+    using Solution = LinearOCPStorage::Solution;
+    using KKTError = LinearOCPStorage::KKTError;
+
     Solution reconstruct_solution(const LinearOCPStorage &ocp,
                                   std::span<const value_type> ux_compressed,
                                   std::span<const value_type> y_compressed,
                                   std::span<const value_type> λ_compressed) const;
-    struct KKTError {
-        value_type stationarity, inequality_residual, equality_residual, complementarity;
-    };
-    static KKTError compute_kkt_error(const LinearOCPStorage &ocp, const Solution &sol);
+
     KKTError compute_kkt_error(const LinearOCPStorage &ocp,
                                std::span<const value_type> ux_compressed,
                                std::span<const value_type> y_compressed,

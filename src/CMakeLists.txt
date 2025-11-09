@@ -7,6 +7,7 @@ find_package(batmat REQUIRED)
 add_library(cyqlone
     "cyqlone/src/cyqlone.cpp"
     "cyqlone/src/cyqlone-storage.cpp"
+    "cyqlone/src/ocp.cpp"
 )
 target_sources(cyqlone PUBLIC FILE_SET HEADERS
     BASE_DIRS "cyqlone/include"
