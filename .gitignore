@@ -74,4 +74,5 @@ traces
 /*.csv
 /*.mat
 /data/**/*.csv
+/test/**/*.csv
 /results/**/*.json
