@@ -21,6 +21,7 @@ conan.args+=["-obatmat/*:with_openmp=True"]
 conan.args+=["-ctools.cmake.cmaketoolchain:generator=Ninja"]
 conan.cmake.args+=["--fresh"]
 conan.cmake.build_args+=["--verbose"]
+conan.cmake.options.CYQLONE_WITH_PY_STUBS=true
 EOF
 
 # Build the Python package
