@@ -163,18 +163,29 @@ void register_ocp(nb::module_ &m) {
         .def_rw("friction", &cyqlone::qpalm::problems::SpringMassParams::friction)
         .def_rw("k_spring", &cyqlone::qpalm::problems::SpringMassParams::k_spring)
         .def_rw("F_max", &cyqlone::qpalm::problems::SpringMassParams::F_max)
+        .def_rw("p_min", &cyqlone::qpalm::problems::SpringMassParams::p_min)
         .def_rw("p_max", &cyqlone::qpalm::problems::SpringMassParams::p_max)
+        .def_rw("p_min_f", &cyqlone::qpalm::problems::SpringMassParams::p_min_f)
+        .def_rw("p_max_f", &cyqlone::qpalm::problems::SpringMassParams::p_max_f)
+        .def_rw("v_max", &cyqlone::qpalm::problems::SpringMassParams::v_max)
+        .def_rw("v_max_f", &cyqlone::qpalm::problems::SpringMassParams::v_max_f)
         .def_rw("width", &cyqlone::qpalm::problems::SpringMassParams::width)
         .def_rw("N_horiz", &cyqlone::qpalm::problems::SpringMassParams::N_horiz)
         .def_rw("T_horiz", &cyqlone::qpalm::problems::SpringMassParams::T_horiz)
         .def_rw("q_vel", &cyqlone::qpalm::problems::SpringMassParams::q_vel)
         .def_rw("q_pos", &cyqlone::qpalm::problems::SpringMassParams::q_pos)
+        .def_rw("q_vel_f", &cyqlone::qpalm::problems::SpringMassParams::q_vel_f)
+        .def_rw("q_pos_f", &cyqlone::qpalm::problems::SpringMassParams::q_pos_f)
         .def_rw("r_act", &cyqlone::qpalm::problems::SpringMassParams::r_act)
         .def_rw("masses", &cyqlone::qpalm::problems::SpringMassParams::masses)
         .def_rw("n_actuators", &cyqlone::qpalm::problems::SpringMassParams::n_actuators)
         .def_rw("actuator_placement",
                 &cyqlone::qpalm::problems::SpringMassParams::actuator_placement)
-        .def_rw("seed", &cyqlone::qpalm::problems::SpringMassParams::seed);
+        .def_rw("seed", &cyqlone::qpalm::problems::SpringMassParams::seed)
+        .def_static("wang_boyd_2008", &cyqlone::qpalm::problems::SpringMassParams::wang_boyd_2008,
+                    "n_masses"_a, "N_horiz"_a = 30, "seed"_a = 0)
+        .def_static("domahidi_2012", &cyqlone::qpalm::problems::SpringMassParams::domahidi_2012,
+                    "n_masses"_a, "N_horiz"_a, "seed"_a = 0);
     m.def(
         "create_spring_mass_problem",
         [](const cyqlone::qpalm::problems::SpringMassParams &params) {

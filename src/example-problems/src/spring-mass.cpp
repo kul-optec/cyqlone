@@ -16,13 +16,15 @@ SpringMassProblem spring_mass(SpringMassParams p) {
     using guanaqo::as_view;
     const auto inf = std::numeric_limits<real_t>::infinity();
 
-    auto n_masses = static_cast<index_t>(p.masses.size());
+    auto n_masses        = static_cast<index_t>(p.masses.size());
+    const index_t ny_x   = p.v_max > 0 ? 2 * n_masses : n_masses,
+                  ny_x_N = p.v_max_f > 0 ? 2 * n_masses : n_masses;
     LinearOCPStorage ocp{.dim{
         .N_horiz = p.N_horiz,
         .nx      = 2 * n_masses, // position + velocity for each mass
         .nu      = p.n_actuators,
-        .ny      = n_masses + p.n_actuators,
-        .ny_N    = n_masses,
+        .ny      = ny_x + p.n_actuators,
+        .ny_N    = ny_x_N,
     }};
     auto [N, nx, nu, ny, ny_N] = ocp.dim;
 
@@ -108,30 +110,40 @@ SpringMassProblem spring_mass(SpringMassParams p) {
         auto Qi = ocp.Q(i), Ri = ocp.R(i);
         auto lbi = ocp.b_min(i), ubi = ocp.b_max(i);
         for (index_t v = 0; v < n_masses; ++v) {
-            Ai                             = as_view(Ad);
-            Bi                             = as_view(Bd);
-            bi                             = as_view(bd);
-            Ci(v, v)                       = 1; // Measure displacement
-            lbi(v, 0)                      = x0(v, 0) - p.p_max;
-            ubi(v, 0)                      = x0(v, 0) + p.p_max;
+            Ai        = as_view(Ad);
+            Bi        = as_view(Bd);
+            bi        = as_view(bd);
+            Ci(v, v)  = 1; // Measure displacement
+            lbi(v, 0) = x0(v, 0) + p.p_min;
+            ubi(v, 0) = x0(v, 0) + p.p_max;
+            if (p.v_max > 0) {
+                Ci(n_masses + v, n_masses + v) = 1; // Measure velocity
+                lbi(n_masses + v, 0)           = -p.v_max;
+                ubi(n_masses + v, 0)           = +p.v_max;
+            }
             Qi(v, v)                       = p.q_pos;
             Qi(n_masses + v, n_masses + v) = p.q_vel;
         }
         for (index_t a = 0; a < p.n_actuators; ++a) {
-            Di(n_masses + a, a)  = 1; // Measure input
-            lbi(n_masses + a, 0) = -p.F_max;
-            ubi(n_masses + a, 0) = +p.F_max;
-            Ri(a, a)             = p.r_act;
+            Di(ny_x + a, a)  = 1; // Measure input
+            lbi(ny_x + a, 0) = -p.F_max;
+            ubi(ny_x + a, 0) = +p.F_max;
+            Ri(a, a)         = p.r_act;
         }
     }
     auto Ci = ocp.C(N), Qi = ocp.Q(N);
     auto lbi = ocp.b_min(N), ubi = ocp.b_max(N);
     for (index_t v = 0; v < n_masses; ++v) {
-        Ci(v, v)                       = 1; // Measure displacement
-        lbi(v, 0)                      = x0(v, 0) - p.p_max;
-        ubi(v, 0)                      = x0(v, 0) + p.p_max;
-        Qi(v, v)                       = p.q_pos;
-        Qi(n_masses + v, n_masses + v) = p.q_vel;
+        Ci(v, v)  = 1; // Measure displacement
+        lbi(v, 0) = x0(v, 0) + p.p_min_f;
+        ubi(v, 0) = x0(v, 0) + p.p_max_f;
+        if (p.v_max_f > 0) {
+            Ci(n_masses + v, n_masses + v) = 1; // Measure velocity
+            lbi(n_masses + v, 0)           = -p.v_max_f;
+            ubi(n_masses + v, 0)           = +p.v_max_f;
+        }
+        Qi(v, v)                       = p.q_pos_f;
+        Qi(n_masses + v, n_masses + v) = p.q_vel_f;
     }
     std::vector<real_t> ref(nx + nu + nx);
     for (index_t v = 0; v < n_masses; ++v) {
