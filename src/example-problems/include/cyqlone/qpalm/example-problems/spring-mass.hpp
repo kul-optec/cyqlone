@@ -84,6 +84,40 @@ struct SpringMassParams {
             .seed               = seed,
         };
     }
+
+    static SpringMassParams active_state_constr(index_t n_masses = 18, index_t N_horiz = 256,
+                                                uint64_t seed = 0) {
+        std::vector<real_t> masses(n_masses, 1.0);
+        if (n_masses >= 3) {
+            // Lighter masses for stiffer dynamics
+            masses[n_masses / 2 - 1] = 0.2;
+            masses[n_masses / 2 + 0] = 0.5;
+            masses[n_masses / 2 + 1] = 0.2;
+        }
+        return {
+            .friction           = 0,
+            .k_spring           = 1,
+            .F_max              = 0.5,
+            .p_max              = 0.01,
+            .p_min              = -1,
+            .p_min_f            = -1e-3,
+            .p_max_f            = +1e-3,
+            .v_max              = 2,
+            .v_max_f            = 1e-3,
+            .width              = 0.1 * static_cast<real_t>(n_masses + 1),
+            .N_horiz            = N_horiz,
+            .T_horiz            = 15,
+            .q_vel              = 1,
+            .q_pos              = 1,
+            .q_vel_f            = 1e2,
+            .q_pos_f            = 1e1,
+            .r_act              = 1,
+            .masses             = std::move(masses),
+            .n_actuators        = n_masses / 2,
+            .actuator_placement = RandomActuators,
+            .seed               = seed,
+        };
+    }
 };
 
 struct SpringMassProblem {
