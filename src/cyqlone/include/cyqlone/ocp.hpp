@@ -351,6 +351,70 @@ struct LinearOCPStorage {
 
     struct Solution {
         std::vector<real_t> solution, inequality_multipliers, equality_multipliers;
+
+        [[nodiscard]] guanaqo::MatrixView<real_t, index_t> x(OCPDim dim) {
+            auto [N, nx, nu, ny, ny_N] = dim;
+            return {{.data = solution.data(), .rows = nx, .cols = N + 1, .outer_stride = nx + nu}};
+        }
+        [[nodiscard]] guanaqo::MatrixView<const real_t, index_t> x(OCPDim dim) const {
+            auto [N, nx, nu, ny, ny_N] = dim;
+            return {{.data = solution.data(), .rows = nx, .cols = N + 1, .outer_stride = nx + nu}};
+        }
+        [[nodiscard]] guanaqo::MatrixView<real_t, index_t> x(OCPDim dim, index_t i) {
+            return x(dim).middle_cols(i, 1);
+        }
+        [[nodiscard]] guanaqo::MatrixView<const real_t, index_t> x(OCPDim dim, index_t i) const {
+            return x(dim).middle_cols(i, 1);
+        }
+
+        [[nodiscard]] guanaqo::MatrixView<real_t, index_t> u(OCPDim dim) {
+            auto [N, nx, nu, ny, ny_N] = dim;
+            return {{.data = solution.data() + nx, .rows = nu, .cols = N, .outer_stride = nx + nu}};
+        }
+        [[nodiscard]] guanaqo::MatrixView<const real_t, index_t> u(OCPDim dim) const {
+            auto [N, nx, nu, ny, ny_N] = dim;
+            return {{.data = solution.data() + nx, .rows = nu, .cols = N, .outer_stride = nx + nu}};
+        }
+        [[nodiscard]] guanaqo::MatrixView<real_t, index_t> u(OCPDim dim, index_t i) {
+            return u(dim).middle_cols(i, 1);
+        }
+        [[nodiscard]] guanaqo::MatrixView<const real_t, index_t> u(OCPDim dim, index_t i) const {
+            return u(dim).middle_cols(i, 1);
+        }
+
+        [[nodiscard]] guanaqo::MatrixView<real_t, index_t> λ(OCPDim dim) {
+            auto [N, nx, nu, ny, ny_N] = dim;
+            return {{.data         = equality_multipliers.data(),
+                     .rows         = nx,
+                     .cols         = N + 1,
+                     .outer_stride = nx}};
+        }
+        [[nodiscard]] guanaqo::MatrixView<const real_t, index_t> λ(OCPDim dim) const {
+            auto [N, nx, nu, ny, ny_N] = dim;
+            return {{.data         = equality_multipliers.data(),
+                     .rows         = nx,
+                     .cols         = N + 1,
+                     .outer_stride = nx}};
+        }
+        [[nodiscard]] guanaqo::MatrixView<real_t, index_t> λ(OCPDim dim, index_t i) {
+            return λ(dim).middle_cols(i, 1);
+        }
+        [[nodiscard]] guanaqo::MatrixView<const real_t, index_t> λ(OCPDim dim, index_t i) const {
+            return λ(dim).middle_cols(i, 1);
+        }
+
+        [[nodiscard]] guanaqo::MatrixView<real_t, index_t> y(OCPDim dim, index_t i) {
+            auto [N, nx, nu, ny, ny_N] = dim;
+            return {{.data = inequality_multipliers.data() + i * ny,
+                     .rows = i < N ? ny : ny_N,
+                     .cols = 1}};
+        }
+        [[nodiscard]] guanaqo::MatrixView<const real_t, index_t> y(OCPDim dim, index_t i) const {
+            auto [N, nx, nu, ny, ny_N] = dim;
+            return {{.data = inequality_multipliers.data() + i * ny,
+                     .rows = i < N ? ny : ny_N,
+                     .cols = 1}};
+        }
     };
 
     struct KKTError {
