@@ -62,6 +62,14 @@ struct SpringMassParams {
         };
     }
 
+    static SpringMassParams wang_boyd_2008_width(index_t n_masses, index_t N_horiz = 30,
+                                                 uint64_t seed                     = 0,
+                                                 double steady_state_spring_length = 0.1) {
+        auto params  = wang_boyd_2008(n_masses, N_horiz, seed);
+        params.width = steady_state_spring_length * static_cast<real_t>(n_masses + 1);
+        return params;
+    }
+
     static SpringMassParams domahidi_2012(index_t n_masses, index_t N_horiz, uint64_t seed = 0) {
         const real_t Ts = 0.5;
         return {
