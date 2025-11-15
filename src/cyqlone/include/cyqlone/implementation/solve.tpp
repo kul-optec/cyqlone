@@ -6,6 +6,7 @@
 
 #include <batmat/linalg/copy.hpp>
 #include <batmat/linalg/gemm.hpp>
+#include <batmat/linalg/gemv.hpp>
 #include <batmat/linalg/trsm.hpp>
 
 namespace CYQLONE_NS(cyqlone) {
@@ -30,13 +31,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_active_secondary(index_t l, index
     const index_t diY        = biY * num_stages;
     { // b[diD] -= U[biU] b[diU]
         GUANAQO_TRACE("Subtract Ub", biD);
-        gemm_sub(coupling_U.batch(biU), λ.batch(diU), λ.batch(diD));
+        gemv_sub(coupling_U.batch(biU), λ.batch(diU), λ.batch(diD));
     }
     { // b[diD] -= Y[biY] b[diY]
         GUANAQO_TRACE("Subtract Yb", biD);
-        biD == 0 ? gemm_sub(coupling_Y.batch(biY), λ.batch(diY), λ.batch(diD), {}, with_rotate_C<1>,
+        biD == 0 ? gemv_sub(coupling_Y.batch(biY), λ.batch(diY), λ.batch(diD), with_rotate_C<1>,
                             with_rotate_D<1>, with_mask_D<1>)
-                 : gemm_sub(coupling_Y.batch(biY), λ.batch(diY), λ.batch(diD));
+                 : gemv_sub(coupling_Y.batch(biY), λ.batch(diY), λ.batch(diD));
     }
     // solve D⁻¹[diD] d[diD]
     if (is_active(l + 1, biD)) {
@@ -72,7 +73,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward(Context &ctx, mut
             // l = LR⁻¹ r, q = LQ⁻¹(q - LS l)
             trsm(tril(R̂ŜQ̂i), ux.batch(di));
             // λ0 -= LB̂ l
-            gemm_sub(B̂i, ux.batch(di).top_rows(nu), λ.batch(di0));
+            gemv_sub(B̂i, ux.batch(di).top_rows(nu), λ.batch(di0));
         }
         if (i + 1 < num_stages) {
             [[maybe_unused]] const auto k_next = sub_wrap_N(k, 1);
@@ -80,17 +81,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward(Context &ctx, mut
             auto BAᵀi                          = BAᵀ.middle_cols(i * nx, nx);
             GUANAQO_TRACE("Riccati solve b", k_next);
             // λ0 += Â λ
-            gemm_add(Âi, λ.batch(di_next), λ.batch(di0));
+            gemv_add(Âi, λ.batch(di_next), λ.batch(di0));
             // b = LQᵀb + q
             trmm(tril(Q̂i).transposed(), λ.batch(di_next));
             compact_blas::xadd_copy(simdify(λ.batch(di_next)), simdify(λ.batch(di_next)),
                                     simdify(ux.batch(di).bottom_rows(nx)));
             // l += LB λ, q += LA λ
-            gemm_add(BAᵀi, λ.batch(di_next), ux.batch(di_next));
+            gemv_add(BAᵀi, λ.batch(di_next), ux.batch(di_next));
         } else {
             GUANAQO_TRACE("Riccati last", k);
             // λ0 -= Â λ
-            gemm_sub(Âi, ux.batch(di).bottom_rows(nx), λ.batch(di0));
+            gemv_sub(Âi, ux.batch(di).bottom_rows(nx), λ.batch(di0));
         }
     }
     ctx.arrive_and_wait();
@@ -138,16 +139,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward_alt(Context &ctx,
             // l = LR⁻¹ r
             trsm(tril(R̂i), ux.batch(di).top_rows(nu));
             // p = q - LS l
-            gemm_sub(Ŝi, ux.batch(di).top_rows(nu), ux.batch(di).bottom_rows(nx));
+            gemv_sub(Ŝi, ux.batch(di).top_rows(nu), ux.batch(di).bottom_rows(nx));
             // λ0 -= LB̂ l
-            gemm_sub(B̂i, ux.batch(di).top_rows(nu), λ.batch(di0));
+            gemv_sub(B̂i, ux.batch(di).top_rows(nu), λ.batch(di0));
         }
         if (i + 1 < num_stages) {
             [[maybe_unused]] const auto k_next = sub_wrap_N(k, 1);
             const auto di_next                 = di + 1;
             GUANAQO_TRACE("Riccati solve b", k_next);
             // λ0 += Â b
-            gemm_add(Âi, λ.batch(di_next), λ.batch(di0));
+            gemv_add(Âi, λ.batch(di_next), λ.batch(di0));
             // b' = LQᵀb
             copy(λ.batch(di_next), w);
             trmm(tril(Q̂i).transposed(), w);
@@ -156,13 +157,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward_alt(Context &ctx,
             // d = LQ LQᵀ b + p
             compact_blas::xadd_copy(simdify(w), simdify(w), simdify(ux.batch(di).bottom_rows(nx)));
             // l += Bᵀd, q += Aᵀd
-            gemm_add(data_BA.batch(di_next).transposed(), w, ux.batch(di_next));
+            gemv_add(data_BA.batch(di_next).transposed(), w, ux.batch(di_next));
         } else {
             GUANAQO_TRACE("Riccati solve last", k);
             // q = LQ⁻¹ p
             trsm(tril(Q̂i), ux.batch(di).bottom_rows(nx));
             // λ0 -= LÂ q
-            gemm_sub(Âi, ux.batch(di).bottom_rows(nx), λ.batch(di0));
+            gemv_sub(Âi, ux.batch(di).bottom_rows(nx), λ.batch(di0));
         }
     }
     ctx.arrive_and_wait();
@@ -216,10 +217,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_active(index_t l, index_t
     const index_t diU        = biU * num_stages;
     const bool x_lanes       = diY == 0;
     GUANAQO_TRACE("Solve coupling reverse", bi);
-    x_lanes ? gemm_sub(coupling_Y.batch(bi).transposed(), λ.batch(diY), λ.batch(di), {},
-                       with_shift_B<1>)
-            : gemm_sub(coupling_Y.batch(bi).transposed(), λ.batch(diY), λ.batch(di));
-    gemm_sub(coupling_U.batch(bi).transposed(), λ.batch(diU), λ.batch(di));
+    x_lanes
+        ? gemv_sub(coupling_Y.batch(bi).transposed(), λ.batch(diY), λ.batch(di), with_shift_B<1>)
+        : gemv_sub(coupling_Y.batch(bi).transposed(), λ.batch(diY), λ.batch(di));
+    gemv_sub(coupling_U.batch(bi).transposed(), λ.batch(diU), λ.batch(di));
     trsm(tril(coupling_D.batch(bi)).transposed(), λ.batch(di));
 }
 
@@ -254,14 +255,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
             GUANAQO_TRACE("Riccati solve b", k_next);
             auto BAᵀi = BAᵀ.middle_cols(i * nx, nx);
             // b -= LBᵀ u + LAᵀ x
-            gemm_sub(BAᵀi.transposed(), ux.batch(di_next), λ.batch(di_next));
+            gemv_sub(BAᵀi.transposed(), ux.batch(di_next), λ.batch(di_next));
             compact_blas::xneg(simdify(λ.batch(di_next))); // TODO
             // q -= b
             compact_blas::xadd_copy(simdify(ux.batch(di).bottom_rows(nx)),
                                     simdify(ux.batch(di).bottom_rows(nx)),
                                     simdify(λ.batch(di_next)));
             trsm(tril(Q̂i), λ.batch(di_next));
-            gemm_add(Âi.transposed(), λ.batch(di0), λ.batch(di_next));
+            gemv_add(Âi.transposed(), λ.batch(di0), λ.batch(di_next));
         } else {
             // x_last = LQ⁻ᵀ(q_last + LQ⁻¹ λ - LÂᵀ λ)
             GUANAQO_TRACE("Riccati last", k);
@@ -274,7 +275,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
             // LQ⁻¹ λ
             trsm(tril(Q̂i), w);
             // LQ⁻¹ λ - LÂᵀ λ
-            gemm_sub(Âi.transposed(), λ.batch(di0), w);
+            gemv_sub(Âi.transposed(), λ.batch(di0), w);
             // x_last = LQ⁻ᵀ(LQ⁻¹ λ - LÂᵀ λ)
             trsm(tril(Q̂i).transposed(), w);
             compact_blas::xadd_copy(simdify(x_last), simdify(x_last), simdify(w));
@@ -282,14 +283,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
         if (i + 1 < num_stages) {
             GUANAQO_TRACE("Riccati solve QRS", k);
             // l -= LB̂ᵀ λ0
-            gemm_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
+            gemv_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
             // x = LQ⁻ᵀ q, u = LR⁻ᵀ (l - LSᵀ x)
             trsm(tril(R̂ŜQ̂i).transposed(), ux.batch(di));
         } else {
             GUANAQO_TRACE("Riccati solve QRS", k);
             // l -= LB̂ᵀ λ0 + LSᵀ q
-            gemm_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
-            gemm_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
+            gemv_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
+            gemv_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
             // x = LQ⁻ᵀ q, u = LR⁻ᵀ (l - LSᵀ x)
             trsm(tril(R̂i).transposed(), ux.batch(di).top_rows(nu));
         }
@@ -332,17 +333,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_alt(Context &ctx,
             // x = A x(next) + B u(next) - b(next)
             compact_blas::xadd_neg_copy(simdify(ux.batch(di).bottom_rows(nx)),
                                         simdify(λ.batch(di_next)));
-            gemm_add(BAi, ux.batch(di_next), ux.batch(di).bottom_rows(nx));
+            gemv_add(BAi, ux.batch(di_next), ux.batch(di).bottom_rows(nx));
             // u = LR⁻ᵀ(l - LSᵀ x - LB̂ᵀ λ(last))
-            gemm_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
-            gemm_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
+            gemv_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
+            gemv_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
             trsm(tril(R̂i).transposed(), ux.batch(di).top_rows(nu));
 
             // λ(next) = LQ LQᵀ x + Âᵀ λ(last) - p
             copy(ux.batch(di).bottom_rows(nx), λ.batch(di_next));
             trmm(tril(Q̂i).transposed(), λ.batch(di_next));
             trmm(tril(Q̂i), λ.batch(di_next));
-            gemm_add(Âi.transposed(), λ.batch(di0), λ.batch(di_next));
+            gemv_add(Âi.transposed(), λ.batch(di0), λ.batch(di_next));
             compact_blas::xsub_copy(simdify(λ.batch(di_next)), simdify(λ.batch(di_next)),
                                     simdify(w));
         } else {
@@ -356,15 +357,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_alt(Context &ctx,
             // LQ⁻¹ λ
             trsm(tril(Q̂i), w);
             // LQ⁻¹ λ - LÂᵀ λ
-            gemm_sub(Âi.transposed(), λ.batch(di0), w);
+            gemv_sub(Âi.transposed(), λ.batch(di0), w);
             // w = LQ⁻ᵀ(LQ⁻¹ λ - LÂᵀ λ)
             trsm(tril(Q̂i).transposed(), w);
             // x_last = LQ⁻ᵀ(q_last + LQ⁻¹ λ - LÂᵀ λ)
             compact_blas::xadd_copy(simdify(x_last), simdify(x_last), simdify(w));
 
             // u -= LB̂ᵀ λ0 + LSᵀ q
-            gemm_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
-            gemm_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
+            gemv_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
+            gemv_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
             // u = LR⁻ᵀ u
             trsm(tril(R̂i).transposed(), ux.batch(di).top_rows(nu));
         }
@@ -393,4 +394,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve(Context &ctx, mut_view<> ux, mut_
     solve_reverse(ctx, ux, λ, work_riccati); // TODO: check thread access pattern forward/reverse
 }
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)
