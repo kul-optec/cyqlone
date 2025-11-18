@@ -36,9 +36,9 @@ namespace CYQLONE_NS(cyqlone::qpalm) {
 using batmat::linalg::simdify;
 namespace datapar = batmat::datapar;
 
-template <index_t VL>
+template <index_t VL, StorageOrder DefaultOrder>
 struct CyqloneBackend {
-    using OCP_t                 = cyqlone::CyqloneSolver<VL>;
+    using OCP_t                 = cyqlone::CyqloneSolver<VL, real_t, DefaultOrder>;
     using Context               = typename OCP_t::Context;
     using storage_t             = typename OCP_t::template matrix<>;
     using mask_storage_t        = typename OCP_t::template mask_matrix<>;
@@ -962,22 +962,25 @@ struct CyqloneBackend {
     }
 };
 
-template <index_t VL>
-unique_CyqloneBackend<VL>::~unique_CyqloneBackend() = default;
+template <index_t VL, StorageOrder DefaultOrder>
+unique_CyqloneBackend<VL, DefaultOrder>::~unique_CyqloneBackend() = default;
 
-template <index_t VL>
-unique_CyqloneBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<> &ocp, CyqloneData data,
-                                                     const CyqloneBackendSettings &settings) {
-    return {std::make_unique<CyqloneBackend<VL>>(ocp, data, settings)};
+template <index_t VL, StorageOrder DefaultOrder>
+unique_CyqloneBackend<VL, DefaultOrder>
+make_qpalm_cyqlone_backend(const CyqloneStorage<> &ocp, CyqloneData data,
+                           const CyqloneBackendSettings &settings) {
+    return {std::make_unique<CyqloneBackend<VL, DefaultOrder>>(ocp, data, settings)};
 }
 
-template <index_t VL>
-void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const CyqloneStorage<real_t> &ocp) {
+template <index_t VL, StorageOrder DefaultOrder>
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend,
+                                  const CyqloneStorage<real_t> &ocp) {
     backend.update_data(ocp);
 }
 
-template <index_t VL>
-void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp) {
+template <index_t VL, StorageOrder DefaultOrder>
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend,
+                                  const LinearOCPStorage &ocp) {
     const auto cocp = cyqlone::CyqloneStorage<>::build(ocp, backend.ocp.ny_0);
     update_qpalm_cyqlone_backend(backend, cocp);
 }

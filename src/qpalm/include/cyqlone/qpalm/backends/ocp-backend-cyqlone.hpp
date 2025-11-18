@@ -3,6 +3,7 @@
 #include <cyqlone/config.hpp>
 #include <cyqlone/cyqlone-storage.hpp>
 #include <cyqlone/qpalm/solver.hpp>
+#include <guanaqo/mat-view.hpp>
 
 #include <cstdint>
 #include <limits>
@@ -50,42 +51,46 @@ struct CyqloneBackendStats {
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
-template <index_t VL>
+using guanaqo::StorageOrder;
+
+template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
 struct CyqloneBackend;
 
 namespace detail {
 
-template <index_t VL>
-struct backend_stats_type<CyqloneBackend<VL>> {
+template <index_t VL, StorageOrder DefaultOrder>
+struct backend_stats_type<CyqloneBackend<VL, DefaultOrder>> {
     using type = CyqloneBackendStats;
 };
 
 } // namespace detail
 
-template <index_t VL>
-struct unique_CyqloneBackend : std::unique_ptr<CyqloneBackend<VL>> {
+template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+struct unique_CyqloneBackend : std::unique_ptr<CyqloneBackend<VL, DefaultOrder>> {
     unique_CyqloneBackend()                                             = default;
     unique_CyqloneBackend(unique_CyqloneBackend &&) noexcept            = default;
     unique_CyqloneBackend &operator=(unique_CyqloneBackend &&) noexcept = default;
     ~unique_CyqloneBackend();
-    unique_CyqloneBackend(std::unique_ptr<CyqloneBackend<VL>> &&o) noexcept
-        : std::unique_ptr<CyqloneBackend<VL>>{std::move(o)} {}
+    unique_CyqloneBackend(std::unique_ptr<CyqloneBackend<VL, DefaultOrder>> &&o) noexcept
+        : std::unique_ptr<CyqloneBackend<VL, DefaultOrder>>{std::move(o)} {}
 };
 
-template <index_t VL>
-struct detail::backend_type<unique_CyqloneBackend<VL>> {
-    using type = CyqloneBackend<VL>;
+template <index_t VL, StorageOrder DefaultOrder>
+struct detail::backend_type<unique_CyqloneBackend<VL, DefaultOrder>> {
+    using type = CyqloneBackend<VL, DefaultOrder>;
 };
 
-template <index_t VL>
-unique_CyqloneBackend<VL> make_qpalm_cyqlone_backend(const CyqloneStorage<real_t> &ocp,
-                                                     CyqloneData data,
-                                                     const CyqloneBackendSettings &settings);
+template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+unique_CyqloneBackend<VL, DefaultOrder>
+make_qpalm_cyqlone_backend(const CyqloneStorage<real_t> &ocp, CyqloneData data,
+                           const CyqloneBackendSettings &settings);
 
-template <index_t VL>
-void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const CyqloneStorage<real_t> &ocp);
+template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend,
+                                  const CyqloneStorage<real_t> &ocp);
 
-template <index_t VL>
-void update_qpalm_cyqlone_backend(CyqloneBackend<VL> &backend, const LinearOCPStorage &ocp);
+template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+void update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend,
+                                  const LinearOCPStorage &ocp);
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)
