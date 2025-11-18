@@ -189,11 +189,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
         {
             GUANAQO_TRACE("Riccati QRS", k);
             using std::isfinite;
-            copy(tril(data_RSQ.batch(di)), tril(R̂ŜQ̂i)); // TODO: merge into potrf
-            if (isfinite(S))
-                R̂ŜQ̂i.add_to_diagonal(1 / S);
             // Factor R̂, update Ŝ, factor Q̂
-            syrk_add_potrf(BADCᵀ_prev, tril(R̂ŜQ̂i));
+            syrk_add_potrf(BADCᵀ_prev, tril(data_RSQ.batch(di)), tril(R̂ŜQ̂i), 1 / S);
             // Compute LB̂ = B̂ LR̂⁻ᵀ
             trsm(B̂i, tril(R̂i).transposed());
             // Update Â = Ã - LB̂ LŜᵀ
@@ -247,4 +244,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view
     }
 }
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)
