@@ -42,6 +42,8 @@ void trace(auto &&fun, const auto &name, const auto &params, T *solver = nullptr
     std::filesystem::path out_file = out_dir / filename;
     if (auto [_, ins] = traces.insert({{name, params}, out_file}); !ins)
         return;
+    fun(); // warmup
+    fun();
     fun();
     guanaqo::trace_logger.reset();
     fun();
@@ -101,7 +103,7 @@ auto build_cyqlone_solver(const OCPDataRiccati &ocp_ric, index_t lP) {
     }
     as_eigen(ocp.C(N)) = ocp_ric.C(N);
     as_eigen(ocp.Q(N)) = ocp_ric.Q(N);
-    using Solver       = CyqloneSolver<VL, real_t, StorageOrder::ColMajor>;
+    using Solver       = CyqloneSolver<VL, real_t, StorageOrder::RowMajor>;
     auto cocp          = CyqloneStorage<real_t>::build(ocp);
     return Solver::build(cocp, lP + Solver::lvl);
 }

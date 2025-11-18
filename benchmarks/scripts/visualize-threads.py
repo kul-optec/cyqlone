@@ -185,6 +185,7 @@ labels = {
     "Subtract YYᵀ": "CR multiply YYᵀ",
     "Subtract UUᵀ": "CR multiply UUᵀ",
     "riccati": "Riccati",
+    "barrier-arrive-and-wait": None,
 }
 
 # colors = {
@@ -614,13 +615,14 @@ project_dir = Path(__file__).parent.parent.parent
 data_to_plot = {
     "Cyqlone": (
         (
-            "traces/36ea2dd026325546f1eaaa99ff01457e79f50034/nx=68-nu=20-ny=50-N=256-thr=8-vl=16-pcg=stair-alt-rm/factor_cyclic_new.csv",
-            "traces/36ea2dd026325546f1eaaa99ff01457e79f50034/nx=68-nu=20-ny=50-N=256-thr=4-vl=16-pcg=stair-alt-rm/factor_cyclic_new.csv",
+            "traces/7a2ad9811efb21b680bc372d89b66e1e5b62a24c/nx=30-nu=30-ny=0-N=128-thr=8-vl=4-pcg=stair-rm/factor_cyqlone.csv",
+            "traces/7a2ad9811efb21b680bc372d89b66e1e5b62a24c/nx=30-nu=30-ny=0-N=128-thr=1/factor_riccati_blasfeo.csv",
         ),
         dict(
             n_threads=4,
             xlim_margin=0.15,
             title="Thread-level execution traces of KKT factorization methods",
+            gflops_max=20,
         ),
     )
 }
