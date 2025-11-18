@@ -70,7 +70,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
                      work_update_Σ.batch(0).middle_rows(j0, nj));
         compact_blas::template xadd_copy<1>(simdify(work_update_Σ.batch(0).middle_rows(j0, nj)),
                                             simdify(work_update_Σ.batch(0).middle_rows(j0, nj)));
-        compact_blas_default::template xadd_copy<1>( // TODO
+        compact_blas::template xadd_copy<1>( // TODO
             simdify(work_update.batch(l & 3).middle_cols(j0, nj)),
             simdify(work_update.batch(l & 3).middle_cols(j0, nj)));
         hyhound_diag(tril(coupling_D.batch(biY)), work_update.batch(l & 3).middle_cols(j0, nj),
@@ -163,8 +163,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
                                      work_update.batch(wiA).middle_cols(j0, nJi), Q̂i_inv,
                                      work_update.batch(wiI).middle_cols(j0, nJi), wΣ.top_rows(nJi),
                                      ti == 0); // TODO: optimize
-                compact_blas_default::xneg(
-                    simdify(work_update.batch(wiI).middle_cols(j0, nJi))); // TODO
+                compact_blas::xneg(simdify(work_update.batch(wiI).middle_cols(j0, nJi))); // TODO
                 ti == 0 ? compact_blas::template xadd_neg_copy<-1>(
                               simdify(work_update_Σ.batch(0).middle_rows(j0, nJi)),
                               simdify(wΣ.top_rows(nJi)))
@@ -176,4 +175,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
     }
 }
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)

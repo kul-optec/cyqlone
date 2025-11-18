@@ -119,8 +119,8 @@ struct CyqloneSolver {
             .cols  = nx,
         }};
     }();
-    matrix<default_order> work_update = [this] {
-        return matrix<default_order>{{
+    matrix<StorageOrder::ColMajor> work_update = [this] {
+        return matrix<StorageOrder::ColMajor>{{
             .depth = 4 << lvl,
             .rows  = nx,
             .cols  = (ceil_N >> lvl) * ny,
@@ -154,15 +154,15 @@ struct CyqloneSolver {
             .cols  = (ceil_N >> lP) * (nu + nx),
         }};
     }();
-    matrix<default_order> riccati_ΥΓ1 = [this] {
-        return matrix<default_order>{{
+    matrix<StorageOrder::ColMajor> riccati_ΥΓ1 = [this] {
+        return matrix<StorageOrder::ColMajor>{{
             .depth = 1 << lP,
             .rows  = nu + nx + nx,
             .cols  = (ceil_N >> lP) * std::max(ny, ny_0 + ny_N),
         }};
     }();
-    matrix<default_order> riccati_ΥΓ2 = [this] {
-        return matrix<default_order>{{
+    matrix<StorageOrder::ColMajor> riccati_ΥΓ2 = [this] {
+        return matrix<StorageOrder::ColMajor>{{
             .depth = 1 << lP,
             .rows  = nu + nx + nx,
             .cols  = (ceil_N >> lP) * std::max(ny, ny_0 + ny_N),
@@ -395,4 +395,4 @@ void copy(guanaqo::MatrixView<T1, I1, S1, O1> src, guanaqo::MatrixView<T2, I2, S
 }
 } // namespace detail
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)
