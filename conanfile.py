@@ -82,7 +82,7 @@ class CyqloneRecipe(ConanFile):
         else:
             self.test_requires("eigen/[~3.4 || ~5.0]")
         if self.options.get_safe("with_blasfeo"):
-            self.requires("blasfeo/0.1.4.1")
+            self.requires("blasfeo/0.1.4.2")
         if self.options.get_safe("with_general_qpalm"):
             self.requires("qpalm/1.2.6")
         if self.options.get_safe("with_ska_sort"):
