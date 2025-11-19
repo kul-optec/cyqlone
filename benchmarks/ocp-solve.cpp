@@ -211,12 +211,7 @@ void bm_factor_cyqlone(benchmark::State &state) {
     };
     for (auto _ : state)
         do_factor();
-    const std::string_view pcg = solver.use_stair_preconditioner ? "stair" : "jacobi";
-    const auto params =
-        std::format("nx={}-nu={}-ny={}-N={}-thr={}-vl={}-pcg={}{}-{}", solver.nx, solver.nu,
-                    solver.ny, solver.N_horiz, 1 << lP, VL, pcg, solver.alt ? "-alt" : "",
-                    solver.default_order == StorageOrder::RowMajor ? "rm" : "cm");
-    trace([&] { do_factor(); }, "factor_cyqlone", params, &solver);
+    trace([&] { do_factor(); }, "factor_cyqlone", solver.get_params_string(), &solver);
 }
 
 #if WITH_BLASFEO

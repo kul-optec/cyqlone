@@ -19,6 +19,15 @@
 #include <cassert>
 #include <limits>
 
+namespace cyqlone {
+
+enum class SolveMethod {
+    PCG, ///< Preconditioned Conjugate Gradient
+    PCR, ///< Parallel Cyclic Reduction
+};
+
+}
+
 namespace CYQLONE_NS(cyqlone) {
 
 using batmat::matrix::StorageOrder;
@@ -93,6 +102,16 @@ struct CyqloneSolver {
     index_t pcg_max_iter          = 100;
     value_type pcg_tolerance      = std::numeric_limits<value_type>::epsilon() / 10;
     bool pcg_print_resid          = false;
+    SolveMethod solve_method      = SolveMethod::PCR;
+
+    [[nodiscard]] std::string get_params_string() const {
+        std::string_view solve = solve_method == SolveMethod::PCR ? "pcr"
+                                 : use_stair_preconditioner       ? "pcg=stair"
+                                                                  : "pcg=jacobi";
+        std::string_view order = default_order == StorageOrder::RowMajor ? "rm" : "cm";
+        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}{}-{}", nx, nu, ny, N_horiz,
+                           1 << (lP - lvl), VL, solve, alt ? "-alt" : "", order);
+    }
 
     using SharedContext                         = parallel::SharedContext;
     using Context                               = parallel::Context<SharedContext>;

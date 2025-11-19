@@ -65,6 +65,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
         gemm_diag_add(work_update.batch(l & 3).middle_cols(j0, nj),
                       work_update.batch((l + 2) & 3).middle_cols(j0, nj).transposed(),
                       coupling_Y.batch(0), work_update_Σ.batch(0).middle_rows(j0, nj));
+        if (solve_method == SolveMethod::PCR)
+            syrk_diag_add(work_update.batch((l + 2) & 3).middle_cols(j0, nj),
+                          tril(coupling_D.batch(0)), work_update_Σ.batch(0).middle_rows(j0, nj));
         hyhound_diag(tril(pcr_L.batch(0)), work_update.batch((l + 2) & 3).middle_cols(j0, nj),
                      work_update_Σ.batch(0).middle_rows(j0, nj));
         compact_blas::template xadd_copy<1>(simdify(work_update_Σ.batch(0).middle_rows(j0, nj)),
@@ -72,12 +75,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
         compact_blas::template xadd_copy<1>( // TODO
             simdify(work_update.batch(l & 3).middle_cols(j0, nj)),
             simdify(work_update.batch(l & 3).middle_cols(j0, nj)));
+        if (solve_method == SolveMethod::PCR)
+            syrk_diag_add(work_update.batch(l & 3).middle_cols(j0, nj), tril(coupling_D.batch(0)),
+                          work_update_Σ.batch(0).middle_rows(j0, nj));
         hyhound_diag(tril(pcr_L.batch(0)), work_update.batch(l & 3).middle_cols(j0, nj),
                      work_update_Σ.batch(0).middle_rows(j0, nj));
         // TODO: we should actually merge these two xshhud calls to
         //       make sure that the intermediate matrix does not become
         //       indefinite (although this shouldn't be an issue for
         //       QPALM)
+        if (solve_method == SolveMethod::PCR)
+            factor_pcr(); // TODO: could use factorization updates here
     }
 }
 

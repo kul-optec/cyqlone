@@ -125,20 +125,10 @@ TEST(Cyqlone, factor) {
 #if GUANAQO_WITH_TRACING
     {
         solver.parallel_ctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
-        const auto N     = solver.N_horiz;
-        const auto VL    = solver.vl;
         std::string name = std::format("factor_cyclic_new.csv");
         std::filesystem::path out_dir{"traces"};
-#if USE_JACOBI_PREC
-        const std::string_view pcg = "jacobi";
-#else
-        const std::string_view pcg = "stair";
-#endif
         out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
-        out_dir /=
-            std::format("nx={}-nu={}-ny={}-N={}-thr={}-vl={}-pcg={}{}-{}", solver.nx, solver.nu,
-                        solver.ny, N, 1 << log_n_threads, VL, pcg, alt ? "-alt" : "",
-                        solver.default_order == StorageOrder::RowMajor ? "rm" : "cm");
+        out_dir /= solver.get_params_string();
         std::filesystem::create_directories(out_dir);
         std::ofstream csv{out_dir / name};
         guanaqo::TraceLogger::write_column_headings(csv) << '\n';

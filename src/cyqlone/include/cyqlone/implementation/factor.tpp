@@ -87,6 +87,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(Context &ctx, index_t l,
     if (l + 1 == lP - lvl && biD == 0) {
         GUANAQO_TRACE("Factor D", biD);
         potrf(tril(coupling_D.batch(biD)), tril(pcr_L.batch(0)));
+        if (solve_method == SolveMethod::PCR)
+            factor_pcr();
     }
 }
 
@@ -117,28 +119,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
         gemm_neg(pcr_U.batch(Level), pcr_Y.batch(Level).transposed(), B_next, {},
                  with_rotate_C<-stride>, with_rotate_D<-stride>, with_mask_D<-stride>);
     }
-}
-
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
-                                                   mut_batch_view<> work_pcr) const {
-    [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
-        (this->template solve_pcr_level<Levels>(λ, work_pcr), ...);
-    }(std::make_integer_sequence<index_t, CyqloneSolver::lvl>{});
-    trsm(tril(pcr_L.batch(lvl)), λ);
-    trsm(triu(pcr_L.batch(lvl).transposed()), λ);
-}
-
-template <index_t VL, class T, StorageOrder DefaultOrder>
-template <index_t Level>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
-                                                         mut_batch_view<> work_pcr) const {
-    static constexpr auto stride = 1 << Level;
-    trsm(tril(pcr_L.batch(Level)), λ, work_pcr); // w = L⁻¹ λ
-    gemm_sub(pcr_Y.batch(Level), work_pcr, λ, {}, with_rotate_C<+stride>, with_rotate_D<+stride>,
-             with_mask_D<+stride>); // TODO: gemv instead of gemm
-    gemm_sub(pcr_U.batch(Level), work_pcr, λ, {}, with_rotate_C<-stride>, with_rotate_D<-stride>,
-             with_mask_D<-stride>); // TODO: gemv instead of gemm
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

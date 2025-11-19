@@ -48,6 +48,28 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_active_secondary(index_t l, index
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
+                                                   mut_batch_view<> work_pcr) const {
+    [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
+        (this->template solve_pcr_level<Levels>(λ, work_pcr), ...);
+    }(std::make_integer_sequence<index_t, CyqloneSolver::lvl>{});
+    trsm(tril(pcr_L.batch(lvl)), λ);
+    trsm(triu(pcr_L.batch(lvl).transposed()), λ);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t Level>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
+                                                         mut_batch_view<> work_pcr) const {
+    static constexpr auto stride = 1 << Level;
+    trsm(tril(pcr_L.batch(Level)), λ, work_pcr); // w = L⁻¹ λ
+    gemm_sub(pcr_Y.batch(Level), work_pcr, λ, {}, with_rotate_C<+stride>, with_rotate_D<+stride>,
+             with_mask_D<+stride>); // TODO: gemv instead of gemm
+    gemm_sub(pcr_U.batch(Level), work_pcr, λ, {}, with_rotate_C<-stride>, with_rotate_D<-stride>,
+             with_mask_D<-stride>); // TODO: gemv instead of gemm
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_forward(Context &ctx, mut_view<> ux,
                                                                mut_view<> λ) const {
     const index_t ti         = ctx.index;
@@ -201,8 +223,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
             solve_active_secondary(l, biU, λ);
         }
     }
-    if (lP - lvl == 0 || ti == 1 << (lP - lvl - 1))
-        solve_pcg(λ.batch(0), work_pcg);
+    if (lP - lvl == 0 || ti == 1 << (lP - lvl - 1)) {
+        if (solve_method == SolveMethod::PCR)
+            solve_pcr(λ.batch(0), work_pcg.left_cols(1));
+        else
+            solve_pcg(λ.batch(0), work_pcg);
+    }
     ctx.arrive_and_wait();
 }
 
