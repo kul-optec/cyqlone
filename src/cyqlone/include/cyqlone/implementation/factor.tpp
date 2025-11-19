@@ -114,7 +114,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     potrf(tril(A_next), tril(pcr_L.batch(Level + 1)));
     if (Level + 1 < lvl) {
         auto B_next = pcr_Y.batch(Level + 1);
-        gemm_neg(pcr_U.batch(Level), pcr_Y.batch(Level).transposed(), B_next,
+        gemm_neg(pcr_U.batch(Level), pcr_Y.batch(Level).transposed(), B_next, {},
                  with_rotate_C<-stride>, with_rotate_D<-stride>, with_mask_D<-stride>);
     }
 }
@@ -135,10 +135,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
                                                          mut_batch_view<> work_pcr) const {
     static constexpr auto stride = 1 << Level;
     trsm(tril(pcr_L.batch(Level)), λ, work_pcr); // w = L⁻¹ λ
-    gemv_sub(pcr_Y.batch(Level), work_pcr, λ, with_rotate_C<+stride>, with_rotate_D<+stride>,
-             with_mask_D<+stride>);
-    gemv_sub(pcr_U.batch(Level), work_pcr, λ, with_rotate_C<-stride>, with_rotate_D<-stride>,
-             with_mask_D<-stride>);
+    gemm_sub(pcr_Y.batch(Level), work_pcr, λ, {}, with_rotate_C<+stride>, with_rotate_D<+stride>,
+             with_mask_D<+stride>); // TODO: gemv instead of gemm
+    gemm_sub(pcr_U.batch(Level), work_pcr, λ, {}, with_rotate_C<-stride>, with_rotate_D<-stride>,
+             with_mask_D<-stride>); // TODO: gemv instead of gemm
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

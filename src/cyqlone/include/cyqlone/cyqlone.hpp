@@ -386,7 +386,7 @@ struct CyqloneSolver {
                        mut_view<> work) const;
 
     void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
-    void solve_pcr(mut_batch_view<> λ) const { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
+    void solve_pcr(mut_batch_view<> λ) { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
     template <index_t Level>
     void solve_pcr_level(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
 
