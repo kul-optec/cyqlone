@@ -46,7 +46,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_pcg(mut_batch_view<> λ,
                                                    mut_batch_view<> work_pcg) const {
     auto r = work_pcg.middle_cols(0, 1), z = work_pcg.middle_cols(1, 1),
          p = work_pcg.middle_cols(2, 1), Ap = work_pcg.middle_cols(3, 1);
-    auto A = coupling_D.batch(0), B = coupling_Y.batch(0);
+    auto A = pcr_L.batch(0), B = coupling_Y.batch(0);
     value_type rᵀz = [&] {
         GUANAQO_TRACE("solve Ψ pcg", 0);
         copy(λ, r);

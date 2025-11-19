@@ -22,6 +22,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t biY) {
                   nj = j1 - j0, jsplit = nJs[biY - 1] - j0;
     constexpr index_t w3_out_lut[]{1, 0, 0, 1};
     const index_t w3_out = w3_out_lut[i & 3];
+    BATMAT_ASSUME(biY != 0);
     if (i & 1) {
         hyhound_diag_cyclic(
             tril(coupling_D.batch(biY)), work_update.batch(l & 3).middle_cols(j0, nj),
@@ -31,14 +32,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t biY) {
             work_update.batch((l + 1) % 4).middle_cols(j0, nj),
             work_update_Σ.batch(0).middle_rows(j0, nj), jsplit, 0);
     } else {
-        const bool x_lanes = l + 1 == lP - lvl && 0; // TODO
         hyhound_diag_cyclic(
             tril(coupling_D.batch(biY)), work_update.batch(l & 3).middle_cols(j0, nj),
             coupling_Y.batch(biY), work_update.batch((l + 1) % 4).middle_cols(j0, nj),
             work_update.batch((l + 1) % 4).middle_cols(j0, nj), coupling_U.batch(biY),
             work_update.batch((l + 2) % 4).middle_cols(j0, nj),
             work_update.batch((l + 2 + w3_out) % 4).middle_cols(j0, nj),
-            work_update_Σ.batch(0).middle_rows(j0, nj), jsplit, x_lanes ? 1 : 0);
+            work_update_Σ.batch(0).middle_rows(j0, nj), jsplit, 0);
     }
 }
 
@@ -65,15 +65,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
         gemm_diag_add(work_update.batch(l & 3).middle_cols(j0, nj),
                       work_update.batch((l + 2) & 3).middle_cols(j0, nj).transposed(),
                       coupling_Y.batch(0), work_update_Σ.batch(0).middle_rows(j0, nj));
-        hyhound_diag(tril(coupling_D.batch(biY)),
-                     work_update.batch((l + 2) & 3).middle_cols(j0, nj),
+        hyhound_diag(tril(pcr_L.batch(0)), work_update.batch((l + 2) & 3).middle_cols(j0, nj),
                      work_update_Σ.batch(0).middle_rows(j0, nj));
         compact_blas::template xadd_copy<1>(simdify(work_update_Σ.batch(0).middle_rows(j0, nj)),
                                             simdify(work_update_Σ.batch(0).middle_rows(j0, nj)));
         compact_blas::template xadd_copy<1>( // TODO
             simdify(work_update.batch(l & 3).middle_cols(j0, nj)),
             simdify(work_update.batch(l & 3).middle_cols(j0, nj)));
-        hyhound_diag(tril(coupling_D.batch(biY)), work_update.batch(l & 3).middle_cols(j0, nj),
+        hyhound_diag(tril(pcr_L.batch(0)), work_update.batch(l & 3).middle_cols(j0, nj),
                      work_update_Σ.batch(0).middle_rows(j0, nj));
         // TODO: we should actually merge these two xshhud calls to
         //       make sure that the intermediate matrix does not become

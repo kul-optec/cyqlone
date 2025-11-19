@@ -119,6 +119,34 @@ struct CyqloneSolver {
             .cols  = nx,
         }};
     }();
+    matrix<default_order> pcr_L = [this] {
+        return matrix<default_order>{{
+            .depth = VL * (lvl + 1),
+            .rows  = nx,
+            .cols  = nx,
+        }};
+    }();
+    matrix<default_order> pcr_Y = [this] {
+        return matrix<default_order>{{
+            .depth = VL * lvl,
+            .rows  = nx,
+            .cols  = nx,
+        }};
+    }();
+    matrix<default_order> pcr_U = [this] {
+        return matrix<default_order>{{
+            .depth = VL * lvl,
+            .rows  = nx,
+            .cols  = nx,
+        }};
+    }();
+    matrix<default_order> pcr_A = [this] {
+        return matrix<default_order>{{
+            .depth = VL,
+            .rows  = nx,
+            .cols  = nx,
+        }};
+    }();
     matrix<StorageOrder::ColMajor> work_update = [this] {
         return matrix<StorageOrder::ColMajor>{{
             .depth = 4 << lvl,
@@ -341,6 +369,9 @@ struct CyqloneSolver {
 
     void factor_schur_U(Context &ctx, index_t l, index_t biU);
     void factor_schur_Y(Context &ctx, index_t l, index_t biY);
+    void factor_pcr();
+    template <index_t Level>
+    void factor_pcr_level();
     void factor_l0(Context &ctx);
     void factor_riccati(Context &ctx, bool alt, value_type S, view<> Σ);
     void factor(Context &ctx, value_type S, view<> Σ, bool alt = false);
@@ -353,6 +384,11 @@ struct CyqloneSolver {
                                    mut_view<> work) const;
     void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
                        mut_view<> work) const;
+
+    void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
+    void solve_pcr(mut_batch_view<> λ) const { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
+    template <index_t Level>
+    void solve_pcr_level(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
 
     value_type mul_A(batch_view<> p, mut_batch_view<> Ap, batch_view<default_order> L,
                      batch_view<default_order> B) const;

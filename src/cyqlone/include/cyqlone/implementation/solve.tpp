@@ -42,6 +42,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_active_secondary(index_t l, index
     // solve D⁻¹[diD] d[diD]
     if (is_active(l + 1, biD)) {
         GUANAQO_TRACE("Solve b", biD);
+        BATMAT_ASSUME(biD != 0);
         trsm(tril(coupling_D.batch(biD)), λ.batch(diD));
     }
 }
