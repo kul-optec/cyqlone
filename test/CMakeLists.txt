@@ -10,6 +10,9 @@ if (NOT TARGET cyqlone::cyqlone)
     find_package(cyqlone REQUIRED OPTIONAL_COMPONENTS QPALM Extra)
 endif()
 
+add_executable(test-pcr "test-pcr.cpp")
+target_link_libraries(test-pcr PRIVATE cyqlone::cyqlone cyqlone::warnings)
+
 add_executable(tests
     "cyqlone/test-cyqlone.cpp"
     "test-barrier.cpp"
