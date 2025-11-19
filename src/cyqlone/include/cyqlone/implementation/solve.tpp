@@ -61,12 +61,13 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
                                                          mut_batch_view<> work_pcr) const {
+    GUANAQO_TRACE("Solve PCR", Level);
     static constexpr auto stride = 1 << Level;
     trsm(tril(pcr_L.batch(Level)), λ, work_pcr); // w = L⁻¹ λ
-    gemm_sub(pcr_Y.batch(Level), work_pcr, λ, {}, with_rotate_C<+stride>, with_rotate_D<+stride>,
-             with_mask_D<+stride>); // TODO: gemv instead of gemm
-    gemm_sub(pcr_U.batch(Level), work_pcr, λ, {}, with_rotate_C<-stride>, with_rotate_D<-stride>,
-             with_mask_D<-stride>); // TODO: gemv instead of gemm
+    gemv_sub(pcr_Y.batch(Level), work_pcr, λ, with_rotate_C<+stride>, with_rotate_D<+stride>,
+             with_mask_D<+stride>);
+    gemv_sub(pcr_U.batch(Level), work_pcr, λ, with_rotate_C<-stride>, with_rotate_D<-stride>,
+             with_mask_D<-stride>);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

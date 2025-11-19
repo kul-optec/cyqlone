@@ -87,8 +87,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(Context &ctx, index_t l,
     if (l + 1 == lP - lvl && biD == 0) {
         GUANAQO_TRACE("Factor D", biD);
         potrf(tril(coupling_D.batch(biD)), tril(pcr_L.batch(0)));
-        if (solve_method == SolveMethod::PCR)
-            factor_pcr();
     }
 }
 
@@ -102,6 +100,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr() {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
+    GUANAQO_TRACE("Factor PCR", Level);
     static constexpr auto stride = 1 << Level;
     auto A                       = Level == 0 ? coupling_D.batch(0) : pcr_A.batch(0);
     auto B                       = Level == 0 ? coupling_Y.batch(0) : pcr_Y.batch(Level);
@@ -273,6 +272,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view
             factor_schur_U(ctx, l, biU);
         else
             ctx.arrive_and_wait();
+    }
+    if (solve_method == SolveMethod::PCR) {
+        ctx.arrive_and_wait(); // wait for off-diagonal block
+        if (lP - lvl == 0 || ti == 1 << (lP - lvl - 1))
+            factor_pcr();
     }
 }
 
