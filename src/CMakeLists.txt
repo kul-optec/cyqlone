@@ -16,6 +16,7 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/ocp.hpp"
           "cyqlone/include/cyqlone/random-ocp.hpp"
           "cyqlone/include/cyqlone/cyqlone.hpp"
+          "cyqlone/include/cyqlone/cyqlone-params.hpp"
           "cyqlone/include/cyqlone/cyqlone-storage.hpp"
           "cyqlone/include/cyqlone/neumaier.hpp"
           "cyqlone/include/cyqlone/compact/elementwise.tpp"

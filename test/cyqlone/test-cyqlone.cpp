@@ -17,14 +17,15 @@
 using cyqlone::index_t;
 using cyqlone::real_t;
 
-class CyqloneFactorTest : public testing::TestWithParam<std::tuple<cyqlone::SolveMethod, bool>> {};
+#define WITH_UPDATES 1
+
+class CyqloneFactorTest : public testing::TestWithParam<cyqlone::SolveMethod> {};
 
 TEST_P(CyqloneFactorTest, factor) {
     using namespace cyqlone;
     using batmat::linalg::simdify;
 
-    auto [solve_method, use_stair_preconditioner] = GetParam();
-    const int log_n_threads                       = 2;
+    const int log_n_threads = 2;
 
     using Solver     = CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
     const index_t lP = log_n_threads + Solver::lvl;
@@ -40,10 +41,9 @@ TEST_P(CyqloneFactorTest, factor) {
     std::generate_n(ocp.b().data, ocp.b().rows, [&] { return uni(rng); });
     std::generate_n(ocp.b_min().data, ocp.b_min().rows, [&] { return uni(rng); });
     std::generate_n(ocp.b_max().data, ocp.b_max().rows, [&] { return uni(rng); });
-    auto cocp                       = CyqloneStorage<real_t>::build(ocp);
-    Solver solver                   = Solver::build(cocp, lP);
-    solver.solve_method             = solve_method;
-    solver.use_stair_preconditioner = use_stair_preconditioner;
+    auto cocp           = CyqloneStorage<real_t>::build(ocp);
+    Solver solver       = Solver::build(cocp, lP);
+    solver.solve_method = GetParam();
 
     // Spin a bit longer to get more deterministic timings
     solver.parallel_ctx->barrier.spin_count = std::numeric_limits<uint32_t>::max();
@@ -67,9 +67,11 @@ TEST_P(CyqloneFactorTest, factor) {
     std::ranges::generate(ux, [&] { return uni(rng); });
     std::ranges::generate(Σ_lin, [&] { return std::exp2(uni(rng)); });
     std::vector<real_t> Σ_lin2 = Σ_lin;
+#if WITH_UPDATES
     for (auto &Σ2i : Σ_lin2)
         if (bern(rng))
             Σ2i = std::exp2(uni(rng));
+#endif
     solver.pack_constraints(Σ_lin, Σ);
     solver.pack_constraints(Σ_lin2, Σ2);
     std::ranges::transform(Σ2, Σ, std::ranges::begin(ΔΣ), std::minus<>{});
@@ -85,7 +87,9 @@ TEST_P(CyqloneFactorTest, factor) {
     for (int i = 0; i < 50; ++i) {
         solver.parallel_ctx->run([&](auto &ctx) {
             solver.factor(ctx, 1e100, Σ, alt);
+#if WITH_UPDATES
             solver.update(ctx, ΔΣ);
+#endif
             solver.solve(ctx, ux, λ);
             solver.residual_dynamics_constr(ctx, ux, λ_initial, Mxb);
             solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
@@ -105,7 +109,9 @@ TEST_P(CyqloneFactorTest, factor) {
 #endif
     solver.parallel_ctx->run([&](auto &ctx) {
         solver.factor(ctx, 1e100, Σ, alt);
+#if WITH_UPDATES
         solver.update(ctx, ΔΣ);
+#endif
         solver.solve(ctx, ux, λ);
         solver.residual_dynamics_constr(ctx, ux, λ_initial, Mxb);
         solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
@@ -179,12 +185,9 @@ TEST_P(CyqloneFactorTest, factor) {
 }
 
 INSTANTIATE_TEST_SUITE_P(CyqloneSolverConfigs, CyqloneFactorTest,
-                         ::testing::Values(std::make_tuple(cyqlone::SolveMethod::PCG, true),
-                                           std::make_tuple(cyqlone::SolveMethod::PCG, false),
-                                           std::make_tuple(cyqlone::SolveMethod::PCR, true)),
+                         ::testing::Values(cyqlone::SolveMethod::StairPCG,
+                                           cyqlone::SolveMethod::JacobiPCG,
+                                           cyqlone::SolveMethod::PCR),
                          ([](const ::testing::TestParamInfo<CyqloneFactorTest::ParamType> &info) {
-                             auto [method, use_stair] = info.param;
-                             std::string precond_name = use_stair ? "Stair" : "Jacobi";
-                             return (method == cyqlone::SolveMethod::PCG) ? "PCG_" + precond_name
-                                                                          : "PCR";
+                             return enum_name(info.param);
                          }));

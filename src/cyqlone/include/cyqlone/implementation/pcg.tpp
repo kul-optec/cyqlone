@@ -30,7 +30,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::mul_precond(batch_view<> r, mut_batch_v
                                                      batch_view<default_order> B) const
     -> value_type {
     copy(r, z);
-    if (use_stair_preconditioner) {
+    if (solve_method == SolveMethod::StairPCG) {
         copy(r, w);
         trsm(tril(L), w);
         trsm(tril(L).transposed(), w);

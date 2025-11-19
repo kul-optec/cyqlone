@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cyqlone/config.hpp>
+#include <cyqlone/cyqlone-params.hpp>
 #include <cyqlone/cyqlone-storage.hpp>
 #include <cyqlone/parallel.hpp>
 #include <cyqlone/timing.hpp>
@@ -18,15 +19,6 @@
 #include <bit>
 #include <cassert>
 #include <limits>
-
-namespace cyqlone {
-
-enum class SolveMethod {
-    PCG, ///< Preconditioned Conjugate Gradient
-    PCR, ///< Parallel Cyclic Reduction
-};
-
-}
 
 namespace CYQLONE_NS(cyqlone) {
 
@@ -97,17 +89,16 @@ struct CyqloneSolver {
         cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>,
                                       default_order>; // TODO
 
-    bool alt                      = true;
-    bool use_stair_preconditioner = true;
-    index_t pcg_max_iter          = 100;
-    value_type pcg_tolerance      = std::numeric_limits<value_type>::epsilon() / 10;
-    bool pcg_print_resid          = false;
-    SolveMethod solve_method      = SolveMethod::PCR;
+    bool alt                 = true;
+    index_t pcg_max_iter     = 100;
+    value_type pcg_tolerance = std::numeric_limits<value_type>::epsilon() / 10;
+    bool pcg_print_resid     = false;
+    SolveMethod solve_method = SolveMethod::StairPCG;
 
     [[nodiscard]] std::string get_params_string() const {
-        std::string_view solve = solve_method == SolveMethod::PCR ? "pcr"
-                                 : use_stair_preconditioner       ? "pcg=stair"
-                                                                  : "pcg=jacobi";
+        std::string_view solve = solve_method == SolveMethod::PCR        ? "pcr"
+                                 : solve_method == SolveMethod::StairPCG ? "pcg=stair"
+                                                                         : "pcg=jacobi";
         std::string_view order = default_order == StorageOrder::RowMajor ? "rm" : "cm";
         return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}{}-{}", nx, nu, ny, N_horiz,
                            1 << (lP - lvl), VL, solve, alt ? "-alt" : "", order);

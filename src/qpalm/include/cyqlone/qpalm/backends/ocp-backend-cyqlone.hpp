@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cyqlone/config.hpp>
+#include <cyqlone/cyqlone-params.hpp>
 #include <cyqlone/cyqlone-storage.hpp>
 #include <cyqlone/qpalm/solver.hpp>
 #include <guanaqo/mat-view.hpp>
@@ -36,7 +37,7 @@ struct CyqloneBackendSettings {
     index_t pcg_max_iter          = 100;
     real_t pcg_tolerance          = std::numeric_limits<real_t>::epsilon() / 10;
     bool pcg_print_resid          = false;
-    bool use_stair_preconditioner = true;
+    SolveMethod solve_method      = SolveMethod::StairPCG;
     uint32_t spin_count           = std::numeric_limits<uint32_t>::max();
     WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };
