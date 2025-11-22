@@ -30,7 +30,7 @@ TEST_P(CyqloneFactorTest, factor) {
     using Solver     = CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
     const index_t lP = log_n_threads + Solver::lvl;
     const index_t ny = 50, ny_0 = 25, ny_N = 25;
-    OCPDim dim{.N_horiz = 91, .nx = 40, .nu = 30, .ny = ny, .ny_N = ny_N};
+    OCPDim dim{.N_horiz = 97, .nx = 40, .nu = 30, .ny = ny, .ny_N = ny_N};
     const index_t nux = dim.nu + dim.nx, N = dim.N_horiz;
     auto ocp = generate_random_ocp(dim);
     ocp.D(0).bottom_rows(ny_0).set_constant(0);

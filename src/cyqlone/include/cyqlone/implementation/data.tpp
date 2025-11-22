@@ -55,11 +55,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_data(const CyqloneStorage<value_
                         detail::copy(ocp.data_G(k - 1).transposed(),
                                      data_DCᵀ.batch(di)(vi).left_cols(ny));
                 } else {
-                    using std::pow;
-                    const auto ε = pow(std::numeric_limits<value_type>::min(), value_type(0.25));
-                    data_RSQ.batch(di)(vi).top_left(nu, nu).add_to_diagonal(1);
-                    data_RSQ.batch(di)(vi).bottom_right(nx, nx).add_to_diagonal(ε);
-                    data_BA.batch(di)(vi).right_cols(nx).add_to_diagonal(1);
+                    data_RSQ.batch(di)(vi).add_to_diagonal(1);
                 }
             }
         }
@@ -344,4 +340,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y,
     }
 }
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)
