@@ -44,7 +44,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t biY) {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
-void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_view<> WUY,
+void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_view<> WYU,
                                                           mut_batch_view<> WΣ) {
     constexpr index_t l    = Level;
     constexpr index_t rot0 = l == 0 ? 0 : 1 << (l - 1), rot1 = l == 0 ? 1 : 1 << (l - 1);
@@ -60,8 +60,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
     batmat::linalg::copy(Σ.top_rows(ml), Σ.top_rows(ml), with_rotate<-rot1>);
     if constexpr (l < lvl) {
         auto WL = work_update_pcr_L.left_cols(2 * ml).batch(0);
-        auto WU = WUY.left_cols(2 * ml);
-        auto WY = WUY.right_cols(2 * ml);
+        auto WU = WYU.right_cols(VL * m).left_cols(2 * ml);
+        auto WY = WYU.left_cols(VL * m).right_cols(2 * ml);
+        // Note that [ WY WU ] is contiguous (although this does not really help us since they have
+        // different rotations)
         batmat::linalg::copy(WY.right_cols(ml), WL.left_cols(ml), with_rotate<-rot1>);
         batmat::linalg::copy(WU.left_cols(ml), WL.right_cols(ml), with_rotate<+rot0>);
         batmat::linalg::copy(WU, WU, with_rotate<-rot1>); // TODO: fuse with hyhound_diag_cyclic
@@ -70,8 +72,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
                             pcr_Y.batch(l), WY, WY,   //
                             pcr_U.batch(l), WU, WU, Σ, ml, 0);
     } else {
-        batmat::linalg::copy(WUY, WUY, with_rotate<rot0>); // TODO: fuse with hyhound_diag
-        hyhound_diag(tril(pcr_L.batch(l)), WUY, Σ);
+        batmat::linalg::copy(WYU, WYU, with_rotate<rot0>); // TODO: fuse with hyhound_diag
+        hyhound_diag(tril(pcr_L.batch(l)), WYU, Σ);
     }
     // TODO: In the last level, we could maybe have WY and WU overlap (given proper masking
     //       in hyhound_diag_cyclic). The arrays WU and WY are suspiciously complementary ...
@@ -87,13 +89,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
 #endif
     index_t m = fwd.cols();
     BATMAT_ASSUME(m == bwd.cols());
-    auto WUY = work_update_pcr_UY.left_cols(2 * VL * m).batch(0);
+    auto WYU = work_update_pcr_UY.left_cols(2 * VL * m).batch(0);
+    auto WY  = WYU.left_cols(VL * m); // WY and WU start in the middle of WYU and grow outwards
+    auto WU  = WYU.right_cols(VL * m);
     auto Σ   = work_update_pcr_Σ.top_rows(2 * VL * m).batch(0);
-    batmat::linalg::copy(bwd, WUY.left_cols(m));
-    batmat::linalg::copy(fwd, WUY.right_cols(m));
+    batmat::linalg::copy(bwd, WU.left_cols(m));
+    batmat::linalg::copy(fwd, WY.right_cols(m));
     batmat::linalg::copy(Σfwd, Σ.top_rows(m));
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
-        (this->template update_pcr_level<Levels>(m, WUY, Σ), ...);
+        (this->template update_pcr_level<Levels>(m, WYU, Σ), ...);
     }(std::make_integer_sequence<index_t, CyqloneSolver::lvl + 1>{});
 }
 
