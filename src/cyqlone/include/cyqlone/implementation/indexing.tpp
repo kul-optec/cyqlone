@@ -61,8 +61,13 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
     return ((bi >> l) & 1) == 1 && !inactive;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::ν2p(index_t bi) const {
+    BATMAT_ASSUME(bi >= 0);
+    return bi == 0 ? lP - lvl : get_level(bi);
+}
+template <index_t VL, class T, StorageOrder DefaultOrder>
 [[nodiscard]] bool CyqloneSolver<VL, T, DefaultOrder>::is_U_below_Y(index_t l, index_t bi) const {
     return ((bi >> l) & 3) == 1 && l + 1 != lP - lvl;
 }
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)

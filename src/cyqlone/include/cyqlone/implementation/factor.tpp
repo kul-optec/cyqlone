@@ -21,72 +21,66 @@ namespace CYQLONE_NS(cyqlone) {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_Y(Context &ctx, index_t l, index_t biY) {
+void CyqloneSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, index_t biY) {
+    GUANAQO_TRACE("Trsm Y", biY);
+    trsm(coupling_Y.batch(biY), tril(coupling_D.batch(biY)).transposed());
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t bi) {
     const index_t offset = 1 << l;
-    { // Compute Y[bi]
-        GUANAQO_TRACE("Trsm Y", biY);
-        trsm(coupling_Y.batch(biY), tril(coupling_D.batch(biY)).transposed());
-    }
-    // Wait for U[bi] from factor_schur_U
-    ctx.arrive_and_wait();
 #if CYQLONE_FACTOR_DO_PREFETCH
     for (index_t c = 0; c < coupling_U.cols(); c += 1)
         for (index_t r = 0; r < coupling_U.rows(); r += 16)
-            __builtin_prefetch(&coupling_U.batch(biY)(0, r, c), 0, 3);
+            __builtin_prefetch(&coupling_U.batch(bi)(0, r, c), 0, 3);
 #endif
     // Compute UYᵀ or YUᵀ
-    if (is_U_below_Y(l, biY)) {
-        const index_t bi_next = add_wrap_PmV(biY, offset); // TODO: need mod?
+    if (is_U_below_Y(l, bi)) {
+        const index_t bi_next = add_wrap_PmV(bi, offset); // TODO: need mod?
         GUANAQO_TRACE("Compute U", bi_next);
-        gemm_neg(coupling_U.batch(biY), coupling_Y.batch(biY).transposed(),
+        gemm_neg(coupling_U.batch(bi), coupling_Y.batch(bi).transposed(),
                  coupling_U.batch(bi_next));
     } else {
-        const index_t bi_prev = sub_wrap_PmV(biY, offset); // TODO: need mod?
+        const index_t bi_prev = sub_wrap_PmV(bi, offset); // TODO: need mod?
         GUANAQO_TRACE("Compute Y", bi_prev);
-        gemm_neg(coupling_Y.batch(biY), coupling_U.batch(biY).transposed(),
+        gemm_neg(coupling_Y.batch(bi), coupling_U.batch(bi).transposed(),
                  coupling_Y.batch(bi_prev));
     }
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_schur_U(Context &ctx, index_t l, index_t biU) {
+void CyqloneSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, index_t biU) {
+    GUANAQO_TRACE("Trsm U", biU);
+    trsm(coupling_U.batch(biU), tril(coupling_D.batch(biU)).transposed());
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t bi) {
     const index_t offset = 1 << l;
-    const index_t biD    = sub_wrap_PmV(biU, offset);
-    const index_t biY    = sub_wrap_PmV(biD, offset);
-#if CYQLONE_FACTOR_DO_PREFETCH
-    for (index_t c = 0; c < coupling_D.cols(); c += 1)
-        for (index_t r = 0; r < coupling_D.rows(); r += 16)
-            __builtin_prefetch(&coupling_D.batch(biD)(0, r, c), 0, 3);
-#endif
-    { // Compute U[bi]
-        GUANAQO_TRACE("Trsm U", biU);
-        trsm(coupling_U.batch(biU), tril(coupling_D.batch(biU)).transposed());
-    }
-    // Wait for Y[bi] from factor_schur_Y
-    ctx.arrive_and_wait();
+    const index_t biU    = add_wrap_PmV(bi, offset);
+    const index_t biY    = sub_wrap_PmV(bi, offset);
 #if CYQLONE_FACTOR_DO_PREFETCH
     for (index_t c = 0; c < coupling_Y.cols(); c += 1)
         for (index_t r = 0; r < coupling_Y.rows(); r += 16)
             __builtin_prefetch(&coupling_Y.batch(biY)(0, r, c), 0, 3);
 #endif
     { // D -= UUᵀ
-        GUANAQO_TRACE("Subtract UUᵀ", biD);
-        syrk_sub(coupling_U.batch(biU), tril(coupling_D.batch(biD)));
+        GUANAQO_TRACE("Subtract UUᵀ", bi);
+        syrk_sub(coupling_U.batch(biU), tril(coupling_D.batch(bi)));
     }
-    if (is_active(l + 1, biD)) { // chol(D - YYᵀ)
-        BATMAT_ASSUME(biD != 0);
-        GUANAQO_TRACE("Factor D", biD);
-        syrk_sub_potrf(coupling_Y.batch(biY), tril(coupling_D.batch(biD)));
+    if (ν2p(bi) == l + 1 && bi != 0) { // chol(D - YYᵀ)
+        GUANAQO_TRACE("Factor D", bi);
+        syrk_sub_potrf(coupling_Y.batch(biY), tril(coupling_D.batch(bi)));
     } else { // D -= YYᵀ
-        GUANAQO_TRACE("Subtract YYᵀ", biD);
-        biD == 0 ? syrk_sub(coupling_Y.batch(biY), tril(coupling_D.batch(biD)), with_rotate_C<1>,
-                            with_rotate_D<1>, with_mask_D<1>)
-                 : syrk_sub(coupling_Y.batch(biY), tril(coupling_D.batch(biD)));
+        GUANAQO_TRACE("Subtract YYᵀ", bi);
+        bi == 0 ? syrk_sub(coupling_Y.batch(biY), tril(coupling_D.batch(bi)), with_rotate_C<1>,
+                           with_rotate_D<1>, with_mask_D<1>)
+                : syrk_sub(coupling_Y.batch(biY), tril(coupling_D.batch(bi)));
     }
     // chol(D)
-    if (l + 1 == lP - lvl && biD == 0) {
-        GUANAQO_TRACE("Factor D", biD);
-        potrf(tril(coupling_D.batch(biD)), tril(pcr_L.batch(0)));
+    if (ν2p(bi) == l + 1 && bi == 0) {
+        GUANAQO_TRACE("Factor D", bi);
+        potrf(tril(coupling_D.batch(bi)), tril(pcr_L.batch(0)));
     }
 }
 
@@ -262,20 +256,22 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view
     factor_riccati(ctx, alt, S, Σ);
     factor_l0(ctx);
     for (index_t l = 0; l < lP - lvl; ++l) {
-        ctx.arrive_and_wait();
-        const index_t offset = 1 << l;
-        const auto biY       = sub_wrap_PmV(ti, offset);
-        const auto biU       = ti;
-        if (is_active(l, biY))
-            factor_schur_Y(ctx, l, biY);
-        else if (is_active(l, biU))
-            factor_schur_U(ctx, l, biU);
-        else
-            ctx.arrive_and_wait();
+        ctx.arrive_and_wait(); // Wait for L
+        const auto biU = add_wrap_PmV(ti, 1), biY = sub_wrap_PmV(ti, (1 << l) - 1);
+        if (ν2p(biU) == l)
+            factor_U(l, biU);
+        else if (ν2p(biY) == l)
+            factor_Y(l, biY);
+        ctx.arrive_and_wait(); // Wait for U, Y
+        if (ν2p(biU) == l)
+            factor_L(l, biY);
+        else if (ν2p(biY) == l)
+            update_K(l, biY);
     }
     if (solve_method == SolveMethod::PCR) {
         ctx.arrive_and_wait(); // wait for off-diagonal block
-        if (lP - lvl == 0 || ti == 1 << (lP - lvl - 1))
+        const index_t biY = sub_wrap_PmV(ti, ((1 << (lP - lvl)) >> 1) - 1);
+        if (ν2p(biY) == lP - lvl)
             factor_pcr();
     }
 }

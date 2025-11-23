@@ -7,6 +7,7 @@
 #include <cyqlone/timing.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
+#include <batmat/linalg/hyhound.hpp> // TODO: isolate size functions
 #include <batmat/matrix/layout.hpp>
 #include <batmat/matrix/matrix.hpp>
 #include <batmat/openmp.h>
@@ -192,6 +193,11 @@ struct CyqloneSolver {
             .rows  = (ceil_N >> lvl) * std::max(ny, ny_0 + ny_N),
             .cols  = 1,
         }};
+    }();
+    matrix<StorageOrder::ColMajor> work_hyh = [this] {
+        using namespace batmat::linalg;
+        const auto [r, c] = hyhound_size_W(tril(coupling_D.batch(0)));
+        return matrix<StorageOrder::ColMajor>{{.depth = 1 << lP, .rows = r, .cols = c}};
     }();
     matrix<default_order> riccati_ÂB̂ = [this] {
         return matrix<default_order>{{
@@ -384,6 +390,7 @@ struct CyqloneSolver {
     // | 19      | 7        | 2       | 23      |      |      |       |       |
 
     [[nodiscard]] bool is_active(index_t l, index_t bi) const;
+    [[nodiscard]] index_t ν2p(index_t bi) const;
     [[nodiscard]] bool is_U_below_Y(index_t l, index_t bi) const;
 
     void residual_dynamics_constr(Context &ctx, view<> x, view<> b, mut_view<> Mxb) const;
@@ -399,8 +406,10 @@ struct CyqloneSolver {
     void cost_gradient_remove_regularization(Context &ctx, value_type S, view<> x, view<> x0,
                                              mut_view<> grad_f) const;
 
-    void factor_schur_U(Context &ctx, index_t l, index_t biU);
-    void factor_schur_Y(Context &ctx, index_t l, index_t biY);
+    void factor_U(index_t l, index_t biU);
+    void factor_Y(index_t l, index_t biY);
+    void factor_L(index_t l, index_t bi);
+    void update_K(index_t l, index_t bi);
     void factor_pcr();
     template <index_t Level>
     void factor_pcr_level();
@@ -440,7 +449,10 @@ struct CyqloneSolver {
         solve(ctx, ux, λ, work_pcg.batch(0), riccati_work);
     }
 
-    void update_level(index_t l, index_t biY);
+    void update_level(index_t l, index_t bi);
+    void update_L(index_t l, index_t bi);
+    void update_U(index_t l, index_t bi);
+    void update_Y(index_t l, index_t bi);
     void update(Context &ctx, view<> ΔΣ);
     void update_riccati(Context &ctx, view<> Σ);
 

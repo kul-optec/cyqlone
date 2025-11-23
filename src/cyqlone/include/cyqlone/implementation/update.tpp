@@ -16,28 +16,107 @@ namespace CYQLONE_NS(cyqlone) {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t biY) {
-    GUANAQO_TRACE("update_level", biY);
+void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t bi) {
+    if (bi == 0) { // Last level
+        const index_t j0 = 0, j1 = nJs.back(), nj = j1 - j0;
+        auto W  = work_update.middle_cols(j0, nj);
+        auto wΣ = work_update_Σ.batch(0).middle_rows(j0, nj);
+        if (solve_method == SolveMethod::PCR && pcr_use_update)
+            return update_pcr(W.batch(l & 3), W.batch((l + 2) & 3), wΣ);
+        GUANAQO_TRACE("Update L", bi);
+        gemm_diag_add(W.batch(l & 3), W.batch((l + 2) & 3).transposed(), coupling_Y.batch(0), wΣ);
+        if (solve_method == SolveMethod::PCR)
+            syrk_diag_add(W.batch((l + 2) & 3), tril(coupling_D.batch(0)), wΣ);
+        hyhound_diag(tril(pcr_L.batch(0)), W.batch((l + 2) & 3), wΣ);
+        batmat::linalg::copy(wΣ, wΣ, with_rotate<-1>);
+        batmat::linalg::copy(W.batch(l & 3), W.batch(l & 3), with_rotate<-1>);
+        if (solve_method == SolveMethod::PCR)
+            syrk_diag_add(W.batch(l & 3), tril(coupling_D.batch(0)), wΣ);
+        hyhound_diag(tril(pcr_L.batch(0)), W.batch(l & 3), wΣ);
+        // TODO: we should actually merge these two xshhud calls to
+        //       make sure that the intermediate matrix does not become
+        //       indefinite (although this shouldn't be an issue for
+        //       QPALM)
+        if (solve_method == SolveMethod::PCR)
+            factor_pcr();
+    } else {
+        GUANAQO_TRACE("Update L", bi);
+        const index_t offset = 1 << l;
+        const index_t j0 = bi == offset ? 0 : nJs[bi - 1 - offset], j1 = nJs[bi - 1 + offset],
+                      nj = j1 - j0;
+        auto UpL         = work_update.middle_cols(j0, nj).batch(l & 3);
+        auto Σ           = work_update_Σ.batch(0).middle_rows(j0, nj);
+        auto WQ          = work_hyh.batch(bi);
+        // (L̃ | 0) = (L | Υ→ Υ← ) Q̆
+        hyhound_diag(tril(coupling_D.batch(bi)), UpL, Σ, WQ);
+    }
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t bi) {
+    GUANAQO_TRACE("Update U", bi);
+    const index_t offset = 1 << l, i = bi >> (l + 1), j0 = bi == offset ? 0 : nJs[bi - 1 - offset],
+                  j1 = nJs[bi - 1 + offset], nj = j1 - j0, jsplit = nJs[bi - 1] - j0;
+    constexpr index_t w3_out_lut[]{1, 0, 0, 1};
+    const index_t w3_out = w3_out_lut[i & 3];
+    auto W               = work_update.middle_cols(j0, nj);
+    auto UpL             = W.batch(l & 3);
+    auto Σ               = work_update_Σ.batch(0).middle_rows(j0, nj);
+    auto WQ              = work_hyh.batch(bi);
+    if (i & 1)
+        hyhound_diag_apply(coupling_U.batch(bi), W.batch((l + 1) & 3), //
+                           W.batch((l + 1) & 3),                       //
+                           UpL, Σ, WQ, 0, jsplit);
+    else
+        hyhound_diag_apply(coupling_U.batch(bi), W.batch((l + 2) & 3), //
+                           W.batch((l + 2 + w3_out) & 3),              //
+                           UpL, Σ, WQ, 0, jsplit);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t bi) {
+    GUANAQO_TRACE("Update Y", bi);
+    const index_t offset = 1 << l, i = bi >> (l + 1), j0 = bi == offset ? 0 : nJs[bi - 1 - offset],
+                  j1 = nJs[bi - 1 + offset], nj = j1 - j0, jsplit = nJs[bi - 1] - j0;
+    constexpr index_t w3_out_lut[]{1, 0, 0, 1};
+    const index_t w3_out = w3_out_lut[i & 3];
+    auto W               = work_update.middle_cols(j0, nj);
+    auto UpL             = W.batch(l & 3);
+    auto Σ               = work_update_Σ.batch(0).middle_rows(j0, nj);
+    auto WQ              = work_hyh.batch(bi);
+    if (i & 1)
+        hyhound_diag_apply(coupling_Y.batch(bi), W.batch((l + 2) & 3), //
+                           W.batch((l + 2 + w3_out) & 3),              //
+                           UpL, Σ, WQ, jsplit, -1);
+    else
+        hyhound_diag_apply(coupling_Y.batch(bi), W.batch((l + 1) & 3), //
+                           W.batch((l + 1) & 3),                       //
+                           UpL, Σ, WQ, jsplit, -1);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t bi) {
+    GUANAQO_TRACE("update_level", bi);
     const index_t offset = 1 << l;
-    const index_t i      = biY >> (l + 1);
-    const index_t j0 = biY == offset ? 0 : nJs[biY - 1 - offset], j1 = nJs[biY - 1 + offset],
-                  nj = j1 - j0, jsplit = nJs[biY - 1] - j0;
+    const index_t i      = bi >> (l + 1);
+    const index_t j0 = bi == offset ? 0 : nJs[bi - 1 - offset], j1 = nJs[bi - 1 + offset],
+                  nj = j1 - j0, jsplit = nJs[bi - 1] - j0;
     constexpr index_t w3_out_lut[]{1, 0, 0, 1};
     const index_t w3_out = w3_out_lut[i & 3];
     auto W               = work_update.middle_cols(j0, nj);
     auto wΣ              = work_update_Σ.batch(0).middle_rows(j0, nj);
-    BATMAT_ASSUME(biY != 0);
+    BATMAT_ASSUME(bi != 0);
     if (i & 1) {
-        hyhound_diag_cyclic(                                                            //
-            tril(coupling_D.batch(biY)), W.batch(l & 3),                                //
-            coupling_Y.batch(biY), W.batch((l + 2) & 3), W.batch((l + 2 + w3_out) & 3), //
-            coupling_U.batch(biY), W.batch((l + 1) & 3), W.batch((l + 1) & 3),          //
+        hyhound_diag_cyclic(                                                           //
+            tril(coupling_D.batch(bi)), W.batch(l & 3),                                //
+            coupling_Y.batch(bi), W.batch((l + 2) & 3), W.batch((l + 2 + w3_out) & 3), //
+            coupling_U.batch(bi), W.batch((l + 1) & 3), W.batch((l + 1) & 3),          //
             wΣ, jsplit, 0);
     } else {
-        hyhound_diag_cyclic(                                                            //
-            tril(coupling_D.batch(biY)), W.batch(l & 3),                                //
-            coupling_Y.batch(biY), W.batch((l + 1) & 3), W.batch((l + 1) & 3),          //
-            coupling_U.batch(biY), W.batch((l + 2) & 3), W.batch((l + 2 + w3_out) & 3), //
+        hyhound_diag_cyclic(                                                           //
+            tril(coupling_D.batch(bi)), W.batch(l & 3),                                //
+            coupling_Y.batch(bi), W.batch((l + 1) & 3), W.batch((l + 1) & 3),          //
+            coupling_U.batch(bi), W.batch((l + 2) & 3), W.batch((l + 2 + w3_out) & 3), //
             wΣ, jsplit, 0);
     }
 }
@@ -107,39 +186,19 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
         this->alt = true;
     const index_t ti = ctx.index;
     update_riccati(ctx, ΔΣ);
+    ctx.arrive_and_wait();
+    if (ν2p(ti) == 0)
+        update_L(0, ti);
     for (index_t l = 0; l < lP - lvl; ++l) {
         ctx.arrive_and_wait();
-        const index_t offset = 1 << l;
-        const auto biY       = sub_wrap_PmV(ti, offset);
-        if (is_active(l, biY))
-            update_level(l, biY);
-    }
-    ctx.arrive_and_wait(); // TODO: remove and simply execute on the last thread
-    const index_t l      = lP - lvl;
-    const index_t offset = 1 << l;
-    const auto biY       = sub_wrap_PmV(ti, offset);
-    if (biY == 0) {
-        const index_t j0 = 0, j1 = nJs.back(), nj = j1 - j0;
-        auto W  = work_update.middle_cols(j0, nj);
-        auto wΣ = work_update_Σ.batch(0).middle_rows(j0, nj);
-        if (solve_method == SolveMethod::PCR && pcr_use_update)
-            return update_pcr(W.batch(l & 3), W.batch((l + 2) & 3), wΣ);
-        GUANAQO_TRACE("update_level last", biY);
-        gemm_diag_add(W.batch(l & 3), W.batch((l + 2) & 3).transposed(), coupling_Y.batch(0), wΣ);
-        if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(W.batch((l + 2) & 3), tril(coupling_D.batch(0)), wΣ);
-        hyhound_diag(tril(pcr_L.batch(0)), W.batch((l + 2) & 3), wΣ);
-        batmat::linalg::copy(wΣ, wΣ, with_rotate<-1>);
-        batmat::linalg::copy(W.batch(l & 3), W.batch(l & 3), with_rotate<-1>);
-        if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(W.batch(l & 3), tril(coupling_D.batch(0)), wΣ);
-        hyhound_diag(tril(pcr_L.batch(0)), W.batch(l & 3), wΣ);
-        // TODO: we should actually merge these two xshhud calls to
-        //       make sure that the intermediate matrix does not become
-        //       indefinite (although this shouldn't be an issue for
-        //       QPALM)
-        if (solve_method == SolveMethod::PCR)
-            factor_pcr();
+        const auto biU = add_wrap_PmV(ti, 1), biY = sub_wrap_PmV(ti, (1 << l) - 1);
+        if (ν2p(biU) == l)
+            update_U(l, biU);
+        else if (ν2p(biY) == l)
+            update_Y(l, biY);
+        ctx.arrive_and_wait();
+        if (ν2p(biY) == l + 1)
+            update_L(l + 1, biY);
     }
 }
 
