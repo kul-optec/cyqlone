@@ -449,7 +449,6 @@ struct CyqloneSolver {
         solve(ctx, ux, λ, work_pcg.batch(0), riccati_work);
     }
 
-    void update_level(index_t l, index_t bi);
     void update_L(index_t l, index_t bi);
     void update_U(index_t l, index_t bi);
     void update_Y(index_t l, index_t bi);

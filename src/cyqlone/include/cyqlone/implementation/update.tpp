@@ -57,20 +57,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t bi) {
     GUANAQO_TRACE("Update U", bi);
     const index_t offset = 1 << l, i = bi >> (l + 1), j0 = bi == offset ? 0 : nJs[bi - 1 - offset],
                   j1 = nJs[bi - 1 + offset], nj = j1 - j0, jsplit = nJs[bi - 1] - j0;
-    constexpr index_t w3_out_lut[]{1, 0, 0, 1};
-    const index_t w3_out = w3_out_lut[i & 3];
-    auto W               = work_update.middle_cols(j0, nj);
-    auto UpL             = W.batch(l & 3);
-    auto Σ               = work_update_Σ.batch(0).middle_rows(j0, nj);
-    auto WQ              = work_hyh.batch(bi);
-    if (i & 1)
-        hyhound_diag_apply(coupling_U.batch(bi), W.batch((l + 1) & 3), //
-                           W.batch((l + 1) & 3),                       //
-                           UpL, Σ, WQ, 0, jsplit);
-    else
-        hyhound_diag_apply(coupling_U.batch(bi), W.batch((l + 2) & 3), //
-                           W.batch((l + 2 + w3_out) & 3),              //
-                           UpL, Σ, WQ, 0, jsplit);
+    // alternating batches to make optimal use of the workspace
+    static constexpr index_t w1b[]{2, 1, 2, 1};
+    static constexpr index_t w2b[]{3, 1, 2, 1};
+    auto W   = work_update.middle_cols(j0, nj);
+    auto UpL = W.batch(l & 3);
+    auto Σ   = work_update_Σ.batch(0).middle_rows(j0, nj);
+    auto WQ  = work_hyh.batch(bi);
+    hyhound_diag_apply(coupling_U.batch(bi), W.batch((l + w1b[i & 3]) & 3), //
+                       W.batch((l + w2b[i & 3]) & 3),                       //
+                       UpL, Σ, WQ, 0, jsplit);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -78,47 +74,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t bi) {
     GUANAQO_TRACE("Update Y", bi);
     const index_t offset = 1 << l, i = bi >> (l + 1), j0 = bi == offset ? 0 : nJs[bi - 1 - offset],
                   j1 = nJs[bi - 1 + offset], nj = j1 - j0, jsplit = nJs[bi - 1] - j0;
-    constexpr index_t w3_out_lut[]{1, 0, 0, 1};
-    const index_t w3_out = w3_out_lut[i & 3];
-    auto W               = work_update.middle_cols(j0, nj);
-    auto UpL             = W.batch(l & 3);
-    auto Σ               = work_update_Σ.batch(0).middle_rows(j0, nj);
-    auto WQ              = work_hyh.batch(bi);
-    if (i & 1)
-        hyhound_diag_apply(coupling_Y.batch(bi), W.batch((l + 2) & 3), //
-                           W.batch((l + 2 + w3_out) & 3),              //
-                           UpL, Σ, WQ, jsplit, -1);
-    else
-        hyhound_diag_apply(coupling_Y.batch(bi), W.batch((l + 1) & 3), //
-                           W.batch((l + 1) & 3),                       //
-                           UpL, Σ, WQ, jsplit, -1);
-}
-
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t bi) {
-    GUANAQO_TRACE("update_level", bi);
-    const index_t offset = 1 << l;
-    const index_t i      = bi >> (l + 1);
-    const index_t j0 = bi == offset ? 0 : nJs[bi - 1 - offset], j1 = nJs[bi - 1 + offset],
-                  nj = j1 - j0, jsplit = nJs[bi - 1] - j0;
-    constexpr index_t w3_out_lut[]{1, 0, 0, 1};
-    const index_t w3_out = w3_out_lut[i & 3];
-    auto W               = work_update.middle_cols(j0, nj);
-    auto wΣ              = work_update_Σ.batch(0).middle_rows(j0, nj);
-    BATMAT_ASSUME(bi != 0);
-    if (i & 1) {
-        hyhound_diag_cyclic(                                                           //
-            tril(coupling_D.batch(bi)), W.batch(l & 3),                                //
-            coupling_Y.batch(bi), W.batch((l + 2) & 3), W.batch((l + 2 + w3_out) & 3), //
-            coupling_U.batch(bi), W.batch((l + 1) & 3), W.batch((l + 1) & 3),          //
-            wΣ, jsplit, 0);
-    } else {
-        hyhound_diag_cyclic(                                                           //
-            tril(coupling_D.batch(bi)), W.batch(l & 3),                                //
-            coupling_Y.batch(bi), W.batch((l + 1) & 3), W.batch((l + 1) & 3),          //
-            coupling_U.batch(bi), W.batch((l + 2) & 3), W.batch((l + 2 + w3_out) & 3), //
-            wΣ, jsplit, 0);
-    }
+    // alternating batches to make optimal use of the workspace
+    static constexpr index_t w1b[]{1, 2, 1, 2};
+    static constexpr index_t w2b[]{1, 2, 1, 3};
+    auto W   = work_update.middle_cols(j0, nj);
+    auto UpL = W.batch(l & 3);
+    auto Σ   = work_update_Σ.batch(0).middle_rows(j0, nj);
+    auto WQ  = work_hyh.batch(bi);
+    hyhound_diag_apply(coupling_Y.batch(bi), W.batch((l + w1b[i & 3]) & 3), //
+                       W.batch((l + w2b[i & 3]) & 3),                       //
+                       UpL, Σ, WQ, jsplit, -1);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
