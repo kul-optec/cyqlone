@@ -30,14 +30,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_level(index_t l, index_t biY) {
     if (i & 1) {
         hyhound_diag_cyclic(                                                            //
             tril(coupling_D.batch(biY)), W.batch(l & 3),                                //
-            coupling_Y.batch(biY), W.batch((l + 2) % 4), W.batch((l + 2 + w3_out) % 4), //
-            coupling_U.batch(biY), W.batch((l + 1) % 4), W.batch((l + 1) % 4),          //
+            coupling_Y.batch(biY), W.batch((l + 2) & 3), W.batch((l + 2 + w3_out) & 3), //
+            coupling_U.batch(biY), W.batch((l + 1) & 3), W.batch((l + 1) & 3),          //
             wΣ, jsplit, 0);
     } else {
         hyhound_diag_cyclic(                                                            //
             tril(coupling_D.batch(biY)), W.batch(l & 3),                                //
-            coupling_Y.batch(biY), W.batch((l + 1) % 4), W.batch((l + 1) % 4),          //
-            coupling_U.batch(biY), W.batch((l + 2) % 4), W.batch((l + 2 + w3_out) % 4), //
+            coupling_Y.batch(biY), W.batch((l + 1) & 3), W.batch((l + 1) & 3),          //
+            coupling_U.batch(biY), W.batch((l + 2) & 3), W.batch((l + 2 + w3_out) & 3), //
             wΣ, jsplit, 0);
     }
 }
@@ -46,32 +46,33 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
 void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_view<> WUY,
                                                           mut_batch_view<> WΣ) {
-    constexpr index_t l      = Level;
-    const index_t ml         = m << l;
-    constexpr index_t shiftL = l == 0 ? 0 : 1 << (l - 1), shiftUY = l == 0 ? 1 : 1 << (l - 1);
+    constexpr index_t l    = Level;
+    constexpr index_t rot0 = l == 0 ? 0 : 1 << (l - 1), rot1 = l == 0 ? 1 : 1 << (l - 1);
+    const index_t ml = m << l;
     GUANAQO_TRACE("Update PCR", l);
-    auto WL = work_update_pcr_L.left_cols(2 * ml).batch(0);
-    auto WU = WUY.left_cols(2 * ml);
-    auto WY = WUY.right_cols(2 * ml);
-    auto Σ  = WΣ.top_rows(2 * ml);
+    auto Σ = WΣ.top_rows(2 * ml);
     /*
      WL = [ Υ→[0]  | Υ←[0]  ]
      WY = [   0    | Υ→[+1] ]
      WU = [ Υ←[-1] |   0    ]
      */
-    batmat::linalg::copy(Σ.top_rows(ml), Σ.bottom_rows(ml), with_rotate<+shiftL>);
-    batmat::linalg::copy(Σ.top_rows(ml), Σ.top_rows(ml), with_rotate<-shiftUY>);
-    // WL[:ml] = roll(WU[-ml:], +shiftL)
-    batmat::linalg::copy(WY.right_cols(ml), WL.left_cols(ml), with_rotate<-shiftL>);
-    // WL[ml:2*ml] = roll(WU[:ml], -shiftL)
-    batmat::linalg::copy(WU.left_cols(ml), WL.right_cols(ml), with_rotate<+shiftL>);
-    // WU = roll(WU, +shiftUY)
-    batmat::linalg::copy(WU, WU, with_rotate<-shiftUY>); // TODO: fuse with hyhound_diag_cyclic
-    // WY = roll(WY, -shiftUY)
-    batmat::linalg::copy(WY, WY, with_rotate<+shiftUY>);
-    hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL, //
-                        pcr_Y.batch(l), WY, WY,   //
-                        pcr_U.batch(l), WU, WU, Σ, ml, 0);
+    batmat::linalg::copy(Σ.top_rows(ml), Σ.bottom_rows(ml), with_rotate<+rot0>);
+    batmat::linalg::copy(Σ.top_rows(ml), Σ.top_rows(ml), with_rotate<-rot1>);
+    if constexpr (l < lvl) {
+        auto WL = work_update_pcr_L.left_cols(2 * ml).batch(0);
+        auto WU = WUY.left_cols(2 * ml);
+        auto WY = WUY.right_cols(2 * ml);
+        batmat::linalg::copy(WY.right_cols(ml), WL.left_cols(ml), with_rotate<-rot1>);
+        batmat::linalg::copy(WU.left_cols(ml), WL.right_cols(ml), with_rotate<+rot0>);
+        batmat::linalg::copy(WU, WU, with_rotate<-rot1>); // TODO: fuse with hyhound_diag_cyclic
+        batmat::linalg::copy(WY, WY, with_rotate<+rot0>);
+        hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL, //
+                            pcr_Y.batch(l), WY, WY,   //
+                            pcr_U.batch(l), WU, WU, Σ, ml, 0);
+    } else {
+        batmat::linalg::copy(WUY, WUY, with_rotate<rot0>); // TODO: fuse with hyhound_diag
+        hyhound_diag(tril(pcr_L.batch(l)), WUY, Σ);
+    }
     // TODO: In the last level, we could maybe have WY and WU overlap (given proper masking
     //       in hyhound_diag_cyclic). The arrays WU and WY are suspiciously complementary ...
 }
@@ -85,23 +86,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
     work_update_pcr_UY.set_constant(std::numeric_limits<T>::quiet_NaN());
 #endif
     index_t m = fwd.cols();
-    BATMAT_ASSERT(m == bwd.cols());
+    BATMAT_ASSUME(m == bwd.cols());
     auto WUY = work_update_pcr_UY.left_cols(2 * VL * m).batch(0);
     auto Σ   = work_update_pcr_Σ.top_rows(2 * VL * m).batch(0);
     batmat::linalg::copy(bwd, WUY.left_cols(m));
-    batmat::linalg::copy(fwd, WUY.right_cols(m), with_rotate<-1>);
+    batmat::linalg::copy(fwd, WUY.right_cols(m));
     batmat::linalg::copy(Σfwd, Σ.top_rows(m));
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template update_pcr_level<Levels>(m, WUY, Σ), ...);
-    }(std::make_integer_sequence<index_t, CyqloneSolver::lvl>{});
-    constexpr index_t l      = lvl;
-    const index_t ml         = m << l;
-    constexpr index_t shiftL = l == 0 ? 0 : 1 << (l - 1), shiftUY = l == 0 ? 1 : 1 << (l - 1);
-    GUANAQO_TRACE("Update PCR", l);
-    batmat::linalg::copy(WUY, WUY, with_rotate<shiftL>); // TODO: fuse with hyhound_diag
-    batmat::linalg::copy(Σ.top_rows(ml), Σ.bottom_rows(ml), with_rotate<+shiftL>);
-    batmat::linalg::copy(Σ.top_rows(ml), Σ.top_rows(ml), with_rotate<-shiftUY>);
-    hyhound_diag(tril(pcr_L.batch(lvl)), WUY, Σ);
+    }(std::make_integer_sequence<index_t, CyqloneSolver::lvl + 1>{});
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
