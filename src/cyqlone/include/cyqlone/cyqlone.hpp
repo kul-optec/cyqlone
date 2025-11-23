@@ -157,17 +157,45 @@ struct CyqloneSolver {
             .cols  = nx,
         }};
     }();
+    matrix<StorageOrder::ColMajor> work_update_pcr_L = [this] {
+        return matrix<StorageOrder::ColMajor>{{
+            .depth = VL,
+            .rows  = nx,
+            .cols  = ceil_N * std::max(ny, ny_0 + ny_N),
+        }};
+    }(); // TODO: merge with work_update?
+    matrix<StorageOrder::ColMajor> work_update_pcr_UY = [this] {
+        return matrix<StorageOrder::ColMajor>{{
+            .depth = VL,
+            .rows  = nx,
+            .cols  = 2 * ceil_N * std::max(ny, ny_0 + ny_N),
+        }};
+    }(); // TODO: merge with work_update?
+    matrix<StorageOrder::ColMajor> work_update_pcr_Σ_L = [this] {
+        return matrix<StorageOrder::ColMajor>{{
+            .depth = VL,
+            .rows  = ceil_N * std::max(ny, ny_0 + ny_N),
+            .cols  = 1,
+        }};
+    }();
+    matrix<StorageOrder::ColMajor> work_update_pcr_Σ_UY = [this] {
+        return matrix<StorageOrder::ColMajor>{{
+            .depth = VL,
+            .rows  = 2 * ceil_N * std::max(ny, ny_0 + ny_N),
+            .cols  = 1,
+        }};
+    }();
     matrix<StorageOrder::ColMajor> work_update = [this] {
         return matrix<StorageOrder::ColMajor>{{
             .depth = 4 << lvl,
             .rows  = nx,
-            .cols  = (ceil_N >> lvl) * ny,
+            .cols  = (ceil_N >> lvl) * std::max(ny, ny_0 + ny_N),
         }};
     }(); // TODO: merge with riccati_ΥΓ?
     matrix<StorageOrder::ColMajor> work_update_Σ = [this] {
         return matrix<StorageOrder::ColMajor>{{
             .depth = 1 << lvl,
-            .rows  = (ceil_N >> lvl) * ny,
+            .rows  = (ceil_N >> lvl) * std::max(ny, ny_0 + ny_N),
             .cols  = 1,
         }};
     }();
@@ -421,6 +449,10 @@ struct CyqloneSolver {
     void update_level(index_t l, index_t biY);
     void update(Context &ctx, view<> ΔΣ);
     void update_riccati(Context &ctx, view<> Σ);
+
+    void update_pcr(batch_view<> fwd, batch_view<> bwd, batch_view<> Σ);
+    template <index_t Level>
+    void update_pcr_level(index_t m, mut_batch_view<> WUY, mut_batch_view<> ΣUY);
 
     std::vector<std::tuple<index_t, index_t, value_type>>
     build_sparse(const CyqloneStorage<value_type> &ocp, std::span<const value_type> Σ) const;
