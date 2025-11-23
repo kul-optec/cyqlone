@@ -38,6 +38,7 @@ struct CyqloneBackendSettings {
     real_t pcg_tolerance          = std::numeric_limits<real_t>::epsilon() / 10;
     bool pcg_print_resid          = false;
     SolveMethod solve_method      = SolveMethod::StairPCG;
+    bool pcr_use_update           = true;
     uint32_t spin_count           = std::numeric_limits<uint32_t>::max();
     WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };

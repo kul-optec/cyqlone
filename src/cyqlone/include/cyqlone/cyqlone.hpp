@@ -94,6 +94,7 @@ struct CyqloneSolver {
     value_type pcg_tolerance = std::numeric_limits<value_type>::epsilon() / 10;
     bool pcg_print_resid     = false;
     SolveMethod solve_method = SolveMethod::StairPCG;
+    bool pcr_use_update      = true; // TODO: replace by FLOP-based heuristic
 
     [[nodiscard]] std::string get_params_string() const {
         std::string_view solve = solve_method == SolveMethod::PCR        ? "pcr"

@@ -127,15 +127,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
     const index_t offset = 1 << l;
     const auto biY       = sub_wrap_PmV(ti, offset);
     if (biY == 0) {
-        GUANAQO_TRACE("update_level last", biY);
         const index_t j0 = 0, j1 = nJs.back(), nj = j1 - j0;
+        if (solve_method == SolveMethod::PCR && pcr_use_update)
+            return update_pcr(work_update.batch(l & 3).middle_cols(j0, nj),
+                              work_update.batch((l + 2) & 3).middle_cols(j0, nj),
+                              work_update_Σ.batch(0).middle_rows(j0, nj));
+        GUANAQO_TRACE("update_level last", biY);
         gemm_diag_add(work_update.batch(l & 3).middle_cols(j0, nj),
                       work_update.batch((l + 2) & 3).middle_cols(j0, nj).transposed(),
                       coupling_Y.batch(0), work_update_Σ.batch(0).middle_rows(j0, nj));
-        if (solve_method == SolveMethod::PCR)
-            return update_pcr(/* fwd */ work_update.batch(l & 3).middle_cols(j0, nj),
-                              /* bwd */ work_update.batch((l + 2) & 3).middle_cols(j0, nj),
-                              work_update_Σ.batch(0).middle_rows(j0, nj));
         if (solve_method == SolveMethod::PCR)
             syrk_diag_add(work_update.batch((l + 2) & 3).middle_cols(j0, nj),
                           tril(coupling_D.batch(0)), work_update_Σ.batch(0).middle_rows(j0, nj));

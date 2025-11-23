@@ -76,6 +76,7 @@ struct CyqloneBackend {
         this->ocp.pcg_tolerance                    = settings.pcg_tolerance;
         this->ocp.pcg_print_resid                  = settings.pcg_print_resid;
         this->ocp.solve_method                     = settings.solve_method;
+        this->ocp.pcr_use_update                   = settings.pcr_use_update;
         this->ocp.parallel_ctx->barrier.spin_count = settings.spin_count;
         b_min_strided                              = ineq_constr_vec();
         b_max_strided                              = ineq_constr_vec();
