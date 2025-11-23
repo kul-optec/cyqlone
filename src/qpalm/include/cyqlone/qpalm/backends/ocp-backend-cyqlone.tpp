@@ -76,7 +76,7 @@ struct CyqloneBackend {
         this->ocp.pcg_tolerance                    = settings.pcg_tolerance;
         this->ocp.pcg_print_resid                  = settings.pcg_print_resid;
         this->ocp.solve_method                     = settings.solve_method;
-        this->ocp.pcr_use_update                   = settings.pcr_use_update;
+        this->ocp.pcr_max_update_fraction          = settings.pcr_max_update_fraction;
         this->ocp.parallel_ctx->barrier.spin_count = settings.spin_count;
         b_min_strided                              = ineq_constr_vec();
         b_max_strided                              = ineq_constr_vec();
@@ -630,8 +630,13 @@ struct CyqloneBackend {
                                    &b_max_strided.batch(di)(0, r, 0));
                     auto ζ  = Axi + yi / Σi;
                     auto z  = clamp(ζ, li, ui);
-                    auto ŷi = yi + Σi * (Axi - z);
                     auto Ji = z != ζ; // TODO: inclusive?
+#if 0
+                    simd ŷi{0};
+                    where(Ji, ŷi) = yi + Σi * (Axi - z);
+#else
+                    auto ŷi = yi + Σi * (Axi - z);
+#endif
                     datapar::aligned_store(ŷi, &ŷ.batch(di)(0, r, 0));
                     simd ΣJi{};
                     where(Ji, ΣJi) = Σi;
@@ -877,20 +882,24 @@ struct CyqloneBackend {
             auto &res = temp_var;
             mat_vec_AT(ctx, temp_ineq, res);
             real_t r_norm_sq = 0, grad_norm_sq = 0, r_norm_inf = 0;
+            real_t r_kkt_norm_sq = 0, r_kkt_norm_inf = 0;
             for (index_t i = 0; i < num_stages; ++i) {
                 const index_t di = ti * num_stages + i;
                 for (index_t r = 0; r < grad.rows(); ++r) {
-                    auto gradi = datapar::aligned_load<simd>(&grad.batch(di)(0, r, 0)),
-                         ξi    = datapar::aligned_load<simd>(&ξ.batch(di)(0, r, 0)),
-                         Mᵀλi  = datapar::aligned_load<simd>(&Mᵀλ.batch(di)(0, r, 0)),
-                         Aᵀŷi  = datapar::aligned_load<simd>(&Aᵀŷ.batch(di)(0, r, 0)),
-                         MᵀΔλi = datapar::aligned_load<simd>(&MᵀΔλ.batch(di)(0, r, 0)),
-                         ri    = datapar::aligned_load<simd>(&res.batch(di)(0, r, 0));
-                    auto gi    = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
+                    auto gradi   = datapar::aligned_load<simd>(&grad.batch(di)(0, r, 0)),
+                         ξi      = datapar::aligned_load<simd>(&ξ.batch(di)(0, r, 0)),
+                         Mᵀλi    = datapar::aligned_load<simd>(&Mᵀλ.batch(di)(0, r, 0)),
+                         Aᵀŷi    = datapar::aligned_load<simd>(&Aᵀŷ.batch(di)(0, r, 0)),
+                         MᵀΔλi   = datapar::aligned_load<simd>(&MᵀΔλ.batch(di)(0, r, 0)),
+                         ri      = datapar::aligned_load<simd>(&res.batch(di)(0, r, 0));
+                    auto gi      = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
+                    simd r_kkt_i = gi + MᵀΔλi + ξi;
                     ri += gi + MᵀΔλi + ξi;
                     datapar::aligned_store(ri, &res.batch(di)(0, r, 0));
                     r_norm_inf = max(r_norm_inf, hmax(abs(ri)));
                     r_norm_sq += reduce(ri * ri);
+                    r_kkt_norm_inf = max(r_kkt_norm_inf, hmax(abs(r_kkt_i)));
+                    r_kkt_norm_sq += reduce(r_kkt_i * r_kkt_i);
                     grad_norm_sq += reduce(simd{gi} * simd{gi});
                 }
             }
@@ -900,11 +909,17 @@ struct CyqloneBackend {
             if (!isfinite(r_norm_sq))
                 r_norm_inf = r_norm_sq;
             if (ctx.is_master())
-                std::cout << "        RESID(stationarity):    abs∞="
+                std::cout << "        RESID(stationarity inner):   abs∞="
                           << guanaqo::float_to_str(r_norm_inf, prec)
                           << ",  abs₂=" << guanaqo::float_to_str(sqrt(r_norm_sq), prec)
                           << ",  rel₂="
-                          << guanaqo::float_to_str(sqrt(r_norm_sq / grad_norm_sq), prec) << "\n";
+                          << guanaqo::float_to_str(sqrt(r_norm_sq / grad_norm_sq), prec) << "\n"
+                          << "        RESID(stationarity outer):   abs∞="
+                          << guanaqo::float_to_str(r_kkt_norm_inf, prec)
+                          << ",  abs₂=" << guanaqo::float_to_str(sqrt(r_kkt_norm_sq), prec)
+                          << ",  rel₂="
+                          << guanaqo::float_to_str(sqrt(r_kkt_norm_sq / grad_norm_sq), prec)
+                          << "\n";
             auto &x_next = temp_var;
             for (index_t i = 0; i < num_stages; ++i) {
                 const index_t di = ti * num_stages + i;
@@ -918,8 +933,115 @@ struct CyqloneBackend {
             eq_constr_resid(ctx, x_next, res_x_next);
             real_t inf_res = norm_inf(ctx, res_x_next);
             if (ctx.is_master())
-                std::cout << "        RESID(eq. feasibility): abs∞="
+                std::cout << "        RESID(eq. feasibility):  abs∞="
                           << guanaqo::float_to_str(inf_res, prec) << "\n";
+        }
+    }
+
+    void solve_saddle(Context &ctx, [[maybe_unused]] const var_vec_t &x, const var_vec_t &grad,
+                      const var_vec_t &Mᵀλ, const var_vec_t &Aᵀŷ, const eq_constr_vec_t &Mxb,
+                      real_t S, [[maybe_unused]] const ineq_constr_vec_t &Σ,
+                      const active_set_t &J, //
+                      var_vec_t &d, var_vec_t &ξ, ineq_constr_vec_t &Ad, eq_constr_vec_t &Δλ,
+                      var_vec_t &MᵀΔλ) {
+        if (reset_factorization) {
+            // std::cout << "                                     -- Fact reset\n";
+            auto t = get_timed(&OCP_t::Timings::factor);
+            ocp.factor(ctx, S, J, settings.factor_alt);
+            ctx.arrive_and_wait(__LINE__);
+            if (ctx.is_master()) {
+                reset_factorization = false;
+                num_updates         = 0;
+                ++stats.num_factor;
+            }
+            ctx.arrive_and_wait(__LINE__);
+        }
+        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            OCP_t::compact_blas::xadd_neg_copy(simdify(d.batch(di)), simdify(grad.batch(di)),
+                                               simdify(Mᵀλ.batch(di)), simdify(Aᵀŷ.batch(di)));
+            OCP_t::compact_blas::xadd_neg_copy(simdify(Δλ.batch(di)), simdify(Mxb.batch(di)));
+        }
+        {
+            auto t = get_timed(&OCP_t::Timings::solve);
+            ocp.solve(ctx, d, Δλ);
+        }
+
+        int count = 1000000;
+        while (true) {
+            {
+                auto t = get_timed(&OCP_t::Timings::solve_MT);
+                mat_vec_MT(ctx, Δλ, MᵀΔλ);
+            }
+            // Ad ← A d
+            {
+                auto t = get_timed(&OCP_t::Timings::solve_A);
+                mat_vec_A(ctx, d, Ad);
+            }
+            // ξ ← Q d + S⁻¹ d
+            {
+                auto t = get_timed(&OCP_t::Timings::solve_grad);
+                ocp.cost_gradient(ctx, d, 0, d, 0, ξ);
+            }
+
+            if (count-- == 0)
+                break;
+
+            if (ctx.is_master()) {
+                temp_var  = var_vec();
+                temp_eq   = eq_constr_vec();
+                temp_ineq = ineq_constr_vec();
+            }
+            auto &res = temp_var;
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                for (index_t r = 0; r < grad.rows(); ++r) {
+                    auto gradi = datapar::aligned_load<simd>(&grad.batch(di)(0, r, 0)),
+                         ξi    = datapar::aligned_load<simd>(&ξ.batch(di)(0, r, 0)),
+                         Mᵀλi  = datapar::aligned_load<simd>(&Mᵀλ.batch(di)(0, r, 0)),
+                         Aᵀŷi  = datapar::aligned_load<simd>(&Aᵀŷ.batch(di)(0, r, 0)),
+                         MᵀΔλi = datapar::aligned_load<simd>(&MᵀΔλ.batch(di)(0, r, 0));
+                    auto gi    = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
+                    simd ri    = gi + MᵀΔλi + ξi;
+                    datapar::aligned_store(-ri, &res.batch(di)(0, r, 0));
+                }
+            }
+            auto &res_eq = temp_eq;
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                // res_eq = b - Mx
+                OCP_t::compact_blas::xadd_neg_copy(simdify(res_eq.batch(di)),
+                                                   simdify(Mxb.batch(di)));
+            }
+            // res_eq = M d - (b - Mx) = M (x + d) - b
+            ocp.residual_dynamics_constr(ctx, d, res_eq, res_eq);
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                // res_eq = b - M (x + d)
+                OCP_t::compact_blas::xadd_neg_copy(simdify(res_eq.batch(di)),
+                                                   simdify(res_eq.batch(di)));
+            }
+            real_t inf_res = norm_inf(ctx, res_eq), inf_stat = norm_inf(ctx, res);
+            int prec = settings.print_precision;
+            if (ctx.is_master() && count % 1000 == 0)
+                std::cout << "        RESID(stationarity):     abs∞="
+                          << guanaqo::float_to_str(inf_stat, prec) << "\n"
+                          << "        RESID(eq. feasibility):  abs∞="
+                          << guanaqo::float_to_str(inf_res, prec) << "\n";
+
+            {
+                auto t = get_timed(&OCP_t::Timings::solve);
+                ocp.solve(ctx, res, res_eq);
+            }
+            for (index_t i = 0; i < num_stages; ++i) {
+                const index_t di = ti * num_stages + i;
+                OCP_t::compact_blas::xadd_copy(simdify(d.batch(di)), simdify(d.batch(di)),
+                                               simdify(res.batch(di)));
+                OCP_t::compact_blas::xadd_copy(simdify(Δλ.batch(di)), simdify(Δλ.batch(di)),
+                                               simdify(res_eq.batch(di)));
+            }
         }
     }
 

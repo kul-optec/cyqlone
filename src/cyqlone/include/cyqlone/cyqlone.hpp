@@ -90,12 +90,12 @@ struct CyqloneSolver {
         cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>,
                                       default_order>; // TODO
 
-    bool alt                 = true;
-    index_t pcg_max_iter     = 100;
-    value_type pcg_tolerance = std::numeric_limits<value_type>::epsilon() / 10;
-    bool pcg_print_resid     = false;
-    SolveMethod solve_method = SolveMethod::StairPCG;
-    bool pcr_use_update      = true; // TODO: replace by FLOP-based heuristic
+    bool alt                       = true;
+    index_t pcg_max_iter           = 100;
+    value_type pcg_tolerance       = std::numeric_limits<value_type>::epsilon() / 10;
+    bool pcg_print_resid           = false;
+    SolveMethod solve_method       = SolveMethod::StairPCG;
+    double pcr_max_update_fraction = 0.6;
 
     [[nodiscard]] std::string get_params_string() const {
         std::string_view solve = solve_method == SolveMethod::PCR        ? "pcr"

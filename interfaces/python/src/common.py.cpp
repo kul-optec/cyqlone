@@ -438,7 +438,7 @@ void register_settings(nb::module_ &m) {
         .def_rw("pcg_tolerance", &cyqlone::qpalm::CyqloneBackendSettings::pcg_tolerance)
         .def_rw("pcg_print_resid", &cyqlone::qpalm::CyqloneBackendSettings::pcg_print_resid)
         .def_rw("solve_method", &cyqlone::qpalm::CyqloneBackendSettings::solve_method)
-        .def_rw("pcr_use_update", &cyqlone::qpalm::CyqloneBackendSettings::pcr_use_update)
+        .def_rw("pcr_max_update_fraction", &cyqlone::qpalm::CyqloneBackendSettings::pcr_max_update_fraction)
         .def_rw("spin_count", &cyqlone::qpalm::CyqloneBackendSettings::spin_count)
         .def_rw("strategy", &cyqlone::qpalm::CyqloneBackendSettings::strategy);
     nb::class_<cyqlone::qpalm::Settings>(m, "Settings")

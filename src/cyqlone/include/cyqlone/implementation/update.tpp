@@ -19,9 +19,10 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t bi) {
     if (bi == 0) { // Last level
         const index_t j0 = 0, j1 = nJs.back(), nj = j1 - j0;
-        auto W  = work_update.middle_cols(j0, nj);
-        auto wΣ = work_update_Σ.batch(0).middle_rows(j0, nj);
-        if (solve_method == SolveMethod::PCR && pcr_use_update)
+        auto W      = work_update.middle_cols(j0, nj);
+        auto wΣ     = work_update_Σ.batch(0).middle_rows(j0, nj);
+        bool update = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
+        if (solve_method == SolveMethod::PCR && update)
             return update_pcr(W.batch(l & 3), W.batch((l + 2) & 3), wΣ);
         GUANAQO_TRACE("Update L", bi);
         gemm_diag_add(W.batch(l & 3), W.batch((l + 2) & 3).transposed(), coupling_Y.batch(0), wΣ);
