@@ -77,6 +77,7 @@ struct CyqloneBackend {
         this->ocp.pcg_print_resid                  = settings.pcg_print_resid;
         this->ocp.solve_method                     = settings.solve_method;
         this->ocp.pcr_max_update_fraction          = settings.pcr_max_update_fraction;
+        this->ocp.cr_max_update_fraction           = settings.cr_max_update_fraction;
         this->ocp.parallel_ctx->barrier.spin_count = settings.spin_count;
         b_min_strided                              = ineq_constr_vec();
         b_max_strided                              = ineq_constr_vec();
@@ -740,7 +741,12 @@ struct CyqloneBackend {
             ctx.arrive_and_wait(__LINE__);
         }
         // std::cout << "                                     -- Fact update\n";
-        OCP_t::compact_blas::xsub_copy(simdify(ΔΣ), simdify(J), simdify(J_old));
+
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            OCP_t::compact_blas::xsub_copy(simdify(ΔΣ.batch(di)), simdify(J.batch(di)),
+                                           simdify(J_old.batch(di)));
+        }
         auto t = get_timed(&OCP_t::Timings::update_factorization);
         ocp.update(ctx, ΔΣ);
         return num_different;

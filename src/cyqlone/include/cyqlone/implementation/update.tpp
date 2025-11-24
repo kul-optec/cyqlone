@@ -19,26 +19,36 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t bi) {
     if (bi == 0) { // Last level
         const index_t j0 = 0, j1 = nJs.back(), nj = j1 - j0;
-        auto W      = work_update.middle_cols(j0, nj);
-        auto wΣ     = work_update_Σ.batch(0).middle_rows(j0, nj);
-        bool update = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
-        if (solve_method == SolveMethod::PCR && update)
-            return update_pcr(W.batch(l & 3), W.batch((l + 2) & 3), wΣ);
+        auto W        = work_update.middle_cols(j0, nj);
+        auto wΣ       = work_update_Σ.batch(0).middle_rows(j0, nj);
+        bool update   = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
+        bool update_y = static_cast<double>(nj) < cr_max_update_fraction * static_cast<double>(nx);
+        bool do_update_pcr = solve_method == SolveMethod::PCR && update;
+        if (do_update_pcr)
+            update_pcr(W.batch(l & 3), W.batch((l + 2) & 3), wΣ);
         GUANAQO_TRACE("Update L", bi);
-        gemm_diag_add(W.batch(l & 3), W.batch((l + 2) & 3).transposed(), coupling_Y.batch(0), wΣ);
+        // TODO: could be optimized further by recomputing if nj is larger than nx
+        if (update_y || (1 << (lP - lvl)) >> 1 == 0)
+            gemm_diag_add(W.batch(l & 3), W.batch((l + 2) & 3).transposed(), coupling_Y.batch(0),
+                          wΣ);
+        else
+            gemm_neg(coupling_Y.batch((1 << (lP - lvl)) >> 1),
+                     coupling_U.batch((1 << (lP - lvl)) >> 1).transposed(), coupling_Y.batch(0));
         if (solve_method == SolveMethod::PCR)
             syrk_diag_add(W.batch((l + 2) & 3), tril(coupling_D.batch(0)), wΣ);
-        hyhound_diag(tril(pcr_L.batch(0)), W.batch((l + 2) & 3), wΣ);
+        if (!do_update_pcr)
+            hyhound_diag(tril(pcr_L.batch(0)), W.batch((l + 2) & 3), wΣ);
         batmat::linalg::copy(wΣ, wΣ, with_rotate<-1>);
         batmat::linalg::copy(W.batch(l & 3), W.batch(l & 3), with_rotate<-1>);
         if (solve_method == SolveMethod::PCR)
             syrk_diag_add(W.batch(l & 3), tril(coupling_D.batch(0)), wΣ);
-        hyhound_diag(tril(pcr_L.batch(0)), W.batch(l & 3), wΣ);
+        if (!do_update_pcr)
+            hyhound_diag(tril(pcr_L.batch(0)), W.batch(l & 3), wΣ);
         // TODO: we should actually merge these two xshhud calls to
         //       make sure that the intermediate matrix does not become
         //       indefinite (although this shouldn't be an issue for
         //       QPALM)
-        if (solve_method == SolveMethod::PCR)
+        if (solve_method == SolveMethod::PCR && !update)
             factor_pcr();
     } else {
         GUANAQO_TRACE("Update L", bi);

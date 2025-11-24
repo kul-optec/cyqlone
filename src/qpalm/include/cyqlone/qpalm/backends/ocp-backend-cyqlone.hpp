@@ -39,6 +39,7 @@ struct CyqloneBackendSettings {
     bool pcg_print_resid           = false;
     SolveMethod solve_method       = SolveMethod::StairPCG;
     double pcr_max_update_fraction = 0.6;
+    double cr_max_update_fraction  = 0.9;
     uint32_t spin_count            = std::numeric_limits<uint32_t>::max();
     WarmStartingStrategy strategy  = WarmStartingStrategy::Copy;
 };
