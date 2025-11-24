@@ -126,8 +126,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
     // equation to next stage for odd threads, vice versa for even threads.
     const bool I_below_A = (biA & 1) == 1;
     // Update the subdiagonal blocks U and Y of the coupling equations
-    auto DiI = tril(coupling_D.batch(biI));
-    auto DiA = tril(coupling_D.batch(biA));
+    auto DiI = tril(lP == lvl ? pcr_L.batch(0) : coupling_D.batch(biI));
+    auto DiA = tril(lP == lvl ? pcr_L.batch(0) : coupling_D.batch(biA));
     auto Âi  = riccati_ÂB̂.batch(biR).middle_cols(nx * (num_stages - 1), nx);
     auto ÂB̂i = riccati_ÂB̂.batch(biR).right_cols(nx + nu * num_stages);
     auto R̂ŜQ̂ = riccati_R̂ŜQ̂.batch(biR);
