@@ -126,8 +126,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
     // equation to next stage for odd threads, vice versa for even threads.
     const bool I_below_A = (biA & 1) == 1;
     // Update the subdiagonal blocks U and Y of the coupling equations
-    auto DiI = tril(lP == lvl ? pcr_L.batch(0) : coupling_D.batch(biI));
-    auto DiA = tril(lP == lvl ? pcr_L.batch(0) : coupling_D.batch(biA));
+    auto DiI = tril(coupling_D.batch(biI));
+    auto DiA = tril(coupling_D.batch(biA));
     auto Âi  = riccati_ÂB̂.batch(biR).middle_cols(nx * (num_stages - 1), nx);
     auto ÂB̂i = riccati_ÂB̂.batch(biR).right_cols(nx + nu * num_stages);
     auto R̂ŜQ̂ = riccati_R̂ŜQ̂.batch(biR);
@@ -166,8 +166,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
     // same diagonal block.
     ctx.arrive_and_wait();
     // And finally backward in time, optionally merged with factorization.
-    const bool do_factor = (biA & 1) == 1 || (lP - lvl == 0 && biA == 0);
-    if (do_factor) {
+    if (lP == lvl) {
+        GUANAQO_TRACE("Factor D last", biA);
+        syrk_add(ÂB̂i, DiA);
+        potrf(DiA, tril(pcr_L.batch(0)));
+    } else if (ν2p(biA) == 0) {
         GUANAQO_TRACE("Factor D", biA);
         syrk_add_potrf(ÂB̂i, DiA);
     } else {
