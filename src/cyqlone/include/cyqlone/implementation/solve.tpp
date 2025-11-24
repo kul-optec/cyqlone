@@ -20,8 +20,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_active([[maybe_unused]] index_t l
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_active_secondary(index_t l, index_t biU,
-                                                                mut_view<> λ) const {
+void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t biU,
+                                                         mut_view<> λ) const {
     const index_t num_stages = ceil_N >> lP;
     const index_t offset     = 1 << l;
     const index_t biD        = sub_wrap_PmV(biU, offset);
@@ -52,7 +52,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
                                                    mut_batch_view<> work_pcr) const {
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template solve_pcr_level<Levels>(λ, work_pcr), ...);
-    }(std::make_integer_sequence<index_t, CyqloneSolver::lvl>{});
+    }(std::make_integer_sequence<index_t, lvl>{});
+    GUANAQO_TRACE("Solve PCR", lvl);
     trsm(tril(pcr_L.batch(lvl)), λ);
     trsm(triu(pcr_L.batch(lvl).transposed()), λ);
 }
@@ -215,16 +216,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
     alt ? solve_riccati_forward_alt(ctx, ux, λ, work) : solve_riccati_forward(ctx, ux, λ);
     for (index_t l = 0; l < lP - lvl; ++l) {
         ctx.arrive_and_wait();
-        const index_t offset = 1 << l;
-        const auto biY       = sub_wrap_PmV(ti, offset);
-        const auto biU       = ti;
-        if (is_active(l, biY)) {
-            solve_active(l, biY, λ);
-        } else if (is_active(l, biU)) {
-            solve_active_secondary(l, biU, λ);
-        }
+        const auto biU = add_wrap_PmV(ti, 1);
+        if (ν2p(biU) == l)
+            solve_fwd_level(l, biU, λ);
     }
-    if (lP - lvl == 0 || ti == 1 << (lP - lvl - 1)) {
+    const index_t biY = sub_wrap_PmV(ti, ((1 << (lP - lvl)) >> 1) - 1);
+    if (ν2p(biY) == lP - lvl) {
         if (solve_method == SolveMethod::PCR)
             solve_pcr(λ.batch(0), work_pcg.left_cols(1));
         else
@@ -234,8 +231,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_active(index_t l, index_t bi,
-                                                              mut_view<> λ) const {
+void CyqloneSolver<VL, T, DefaultOrder>::solve_rev_level(index_t l, index_t bi,
+                                                         mut_view<> λ) const {
     const index_t offset     = 1 << l;
     const index_t num_stages = ceil_N >> lP;
     const index_t biY        = add_wrap_PmV(bi, offset);
@@ -405,10 +402,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
                                                        mut_view<> work) const {
     const index_t ti = ctx.index;
     for (index_t l = lP - lvl; l-- > 0;) {
-        const index_t offset = 1 << l;
-        const auto bi        = sub_wrap_PmV(ti, offset);
-        if (is_active(l, bi))
-            solve_reverse_active(l, bi, λ);
+        const auto biY = sub_wrap_PmV(ti, (1 << l) >> 2);
+        if (ν2p(biY) == l)
+            solve_rev_level(l, biY, λ);
         ctx.arrive_and_wait();
     }
     alt ? solve_riccati_reverse_alt(ctx, ux, λ, work) : solve_riccati_reverse(ctx, ux, λ, work);

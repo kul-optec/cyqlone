@@ -419,7 +419,7 @@ struct CyqloneSolver {
     void factor(Context &ctx, value_type S, view<> Σ, bool alt = false);
 
     void solve_active(index_t l, index_t biY, mut_view<> λ) const;
-    void solve_active_secondary(index_t l, index_t biU, mut_view<> λ) const;
+    void solve_fwd_level(index_t l, index_t biU, mut_view<> λ) const;
     void solve_riccati_forward(Context &ctx, mut_view<> ux, mut_view<> λ) const;
     /// Preserves b in λ (except for coupling equations solved using CR)
     void solve_riccati_forward_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
@@ -439,7 +439,7 @@ struct CyqloneSolver {
     void solve_pcg(mut_batch_view<> λ, mut_batch_view<> work_pcg) const;
     void solve_pcg(mut_batch_view<> λ) { solve_pcg(λ, work_pcg.batch(0)); }
 
-    void solve_reverse_active(index_t l, index_t bi, mut_view<> λ) const;
+    void solve_rev_level(index_t l, index_t bi, mut_view<> λ) const;
     void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
     void solve_riccati_reverse_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
                                    mut_view<> work) const;
@@ -449,6 +449,9 @@ struct CyqloneSolver {
     void solve(Context &ctx, mut_view<> ux, mut_view<> λ) {
         solve(ctx, ux, λ, work_pcg.batch(0), riccati_work);
     }
+    void solve_fwd_L(index_t l, index_t bi);
+    void solve_fwd_U(index_t l, index_t bi);
+    void solve_fwd_Y(index_t l, index_t bi);
 
     void update_L(index_t l, index_t bi);
     void update_U(index_t l, index_t bi);
