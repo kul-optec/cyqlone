@@ -317,7 +317,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const
         const index_t vi = i / (1 << (lP - lvl));
         for (index_t c = 0; c < nx; ++c) {
             for (index_t r = c; r < nx; ++r)
-                tuples.emplace_back(s + r, s + c, coupling_D.batch(bi)(vi)(r, c));
+                tuples.emplace_back(s + r, s + c, pcr_L.batch(0)(vi)(r, c));
             if (i + offset < (1 << lP))
                 for (index_t r = 0; r < nx; ++r)
                     tuples.emplace_back(sY + r, s + c, coupling_Y.batch(bi)(vi)(r, c));
