@@ -49,7 +49,7 @@ MatFilePtr open_mat(const std::filesystem::path &filename, MatioOpenMode mode) {
     int imode = mode == MatioOpenMode::Write ? MAT_ACC_RDWR : MAT_ACC_RDONLY;
     MatFilePtr matfp(Mat_Open(filename.c_str(), imode), Mat_Close);
     if (!matfp)
-        throw std::runtime_error(std::format("Failed to create .mat file {}", filename.string()));
+        throw std::runtime_error(std::format("Failed to open .mat file {}", filename.string()));
     return matfp;
 }
 
