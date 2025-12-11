@@ -12,6 +12,8 @@ import plotly.io as pio
 
 pio.renderers.default = "browser"
 
+font_fam = "Times New Roman"
+
 plt.rcParams.update(
     {
         "text.usetex": True,
@@ -169,22 +171,23 @@ labels = {
 }
 
 labels = {
-    "Riccati init": "Modified Riccati",
+    "Riccati init": "Modified Riccati (1─2)",
+    "Riccati update AB": None,
     "Riccati QRS": None,
     "Riccati last": None,
     "Invert Q": None,
-    "Compute first U": "Schur complement",
+    "Compute first U": "Schur complement <i>K</i> (3)",
     "Compute first Y": None,
-    "Compute L⁻ᵀL⁻¹": None,
+    "Compute L⁻ᵀL⁻¹": "Schur complement <i>M</i> (3)",
     "Compute (BA)(BA)ᵀ": None,
-    "Factor D": "CR factor L",
-    "Trsm U": "CR solve U",
-    "Trsm Y": "CR solve Y",
-    "Compute U": "CR multiply YUᵀ",
-    "Compute Y": "CR multiply UYᵀ",
-    "Subtract YYᵀ": "CR multiply YYᵀ",
-    "Subtract UUᵀ": "CR multiply UUᵀ",
-    "riccati": "Riccati",
+    "Factor D": "CR factor <i>L</i> (4)",
+    "Trsm U": "CR solve <i>U</i> (4)",
+    "Trsm Y": "CR solve <i>Y</i> (4)",
+    "Compute U": "CR multiply <i>YU</i><sup>⊤</sup> (4)",
+    "Compute Y": "CR multiply <i>UY</i><sup>⊤</sup> (4)",
+    "Subtract YYᵀ": "CR multiply <i>YY</i><sup>⊤</sup> (4)",
+    "Subtract UUᵀ": "CR multiply <i>UU</i><sup>⊤</sup> (4)",
+    "riccati": "Factorized Riccati",
     "barrier-arrive-and-wait": None,
 }
 
@@ -289,17 +292,22 @@ colors = {
     "notify Y": "yellow",
     "solve Ψ pcg": "lawngreen",
 } | {
-    "Riccati init": "#4abdea",
-    "Riccati QRS": "#4abdea",
-    "Riccati update AB": "#4abdea",
-    "Riccati last": "#4abdea",
-    "Invert Q": "navajowhite",
-    "Compute first U": "navajowhite",
-    "Compute first Y": "navajowhite",
-    "Compute L⁻ᵀL⁻¹": "navajowhite",
-    "Compute (BA)(BA)ᵀ": "navajowhite",
-    "Trsm Y": "brown",
-    "Factor D": "tomato",
+    "Riccati init": "#cccccc",
+    "Riccati QRS": "#cccccc",
+    "Riccati update AB": "#cccccc",
+    "Riccati last": "#cccccc",
+    "Invert Q": "#4aa0c3",
+    "Compute first U": "#4aa0c3",
+    "Compute first Y": "#4aa0c3",
+    "Compute L⁻ᵀL⁻¹": "#CA2929",
+    "Compute (BA)(BA)ᵀ": "#CA2929",
+    "Trsm U": "#73e573",
+    "Trsm Y": "#fcce60",
+    "Compute U": "#3434ab",
+    "Compute Y": "#5a5af8",
+    "Factor D": "#fb8d6f",
+    "Subtract UUᵀ": "#ff6666",
+    "Subtract YYᵀ": "#fb4c4c",
 }
 
 fontsizes = {
@@ -420,13 +428,13 @@ def visualize_scheduling(
         ]
     for task_name, v in bar_data.items():
         color = colors.get(task_name, "gray")
-        color = "rgba(" + ",".join(map(str, 255 * np.array(mcolors.to_rgb(color)))) + ",0.6)"
+        color = "rgba(" + ",".join(map(str, 255 * np.array(mcolors.to_rgb(color)))) + ",0.9)"
         label = labels.get(task_name, task_name)
         # Add rectangle to the subplot
         bar = go.Bar(
             **v,
             offset=0,
-            textfont_size=8.5,
+            textfont_size=9.5,
             width=0.75,
             orientation="h",
             marker=dict(color=color, line=dict(color="black", width=0.5)),
@@ -547,17 +555,9 @@ def visualize_scheduling(
         start_time /= 1000
         duration /= 1000
 
-        task_label = str(task_id)
-        if bs and bs != 1:
-            task_label = f"{bs * task_id}"
-
         bar_data[task_name]["x"] += [duration]
         bar_data[task_name]["y"] += [thread_id - 0.53]
         bar_data[task_name]["base"] += [start_time]
-        bar_data[task_name]["text"] += [task_label]
-        bar_data[task_name]["texttemplate"] += [
-            task_label if duration > 8.5 * total_duration / 1000 else ""
-        ]
         bar_data[task_name]["hovertemplate"] += [
             f"Instance: {task_id}<br>Start: {start_time:.3f}s<br>Duration: {duration:.3f}s"
         ]
@@ -576,7 +576,7 @@ def visualize_scheduling(
             name=label,
             textposition="inside",
             insidetextanchor="middle",
-            showlegend=(label is not None and task_name not in exclude_legends),
+            showlegend=False,
             legendrank=v["base"][0] + 99999 * row,
         )
         fig.add_trace(bar, row=row, col=col)
@@ -590,7 +590,7 @@ def visualize_scheduling(
         start_time /= 1000
         fig.add_vline(
             x=start_time,
-            line=dict(color="#550055", width=2, dash="dash"),
+            line=dict(color="#550055", width=1, dash="dash"),
             row=row,
             col=col,
         )
@@ -614,15 +614,23 @@ def visualize_scheduling(
 project_dir = Path(__file__).parent.parent.parent
 data_to_plot = {
     "Cyqlone": (
-        (
-            "traces/7a2ad9811efb21b680bc372d89b66e1e5b62a24c/nx=30-nu=30-ny=0-N=128-thr=8-vl=4-pcg=stair-rm/factor_cyqlone.csv",
-            "traces/7a2ad9811efb21b680bc372d89b66e1e5b62a24c/nx=30-nu=30-ny=0-N=128-thr=1/factor_riccati_blasfeo.csv",
-        ),
+        {
+            r"C<span style='font-size:75%'>YQLONE</span> (<i>p</i>=8, <i>v</i>=4)":
+            "traces/92fc9235e9288b5287395b1c93a9e8c3815b5a70/nx=30-nu=20-ny=0-N=96-p=8-v=4-pcg=stair-rm/factor_cyqlone.csv",
+            "Riccati recursion (BLASFEO)":
+            "traces/92fc9235e9288b5287395b1c93a9e8c3815b5a70/nx=30-nu=20-ny=0-N=96-thr=1/factor_riccati_blasfeo.csv",
+        },
+        # {
+        #     r"C<span style='font-size:75%'>YQLONE</span> (<i>p</i>=8, <i>v</i>=4)":
+        #     "traces/92fc9235e9288b5287395b1c93a9e8c3815b5a70/nx=30-nu=20-ny=0-N=128-p=8-v=4-pcg=stair-rm/factor_cyqlone.csv",
+        #     "Riccati recursion (BLASFEO)":
+        #     "traces/3cd9b7c277e749625eeaa15e5365ccb26f18fc06/nx=30-nu=20-ny=0-N=128-thr=1/factor_riccati_blasfeo.csv",
+        # },
         dict(
-            n_threads=4,
-            xlim_margin=0.15,
-            title="Thread-level execution traces of KKT factorization methods",
-            gflops_max=20,
+            n_threads=8,
+            xlim_margin=0.01,
+            title="Thread-level execution traces of factorization methods",
+            gflops_max=18,
         ),
     )
 }
@@ -638,9 +646,14 @@ for name, opts in data_to_plot.items():
         data = {name: Path(name) if Path(name).is_absolute() else project_dir / name}
     if isinstance(opts, tuple):
         names, opts = opts
-        data = {
-            name: Path(name) if Path(name).is_absolute() else project_dir / name for name in names
-        }
+        if isinstance(names, (list, tuple)):
+            data = {
+                name: Path(name) if Path(name).is_absolute() else project_dir / name for name in names
+            }
+        elif isinstance(names, dict):
+            data = {
+                k: Path(v) if Path(v).is_absolute() else project_dir / v for k, v in names.items()
+            }
 
     title = opts.pop(
         "title", "Parallel execution traces for KKT factor, solve and update algorithms"
@@ -657,7 +670,7 @@ for name, opts in data_to_plot.items():
         subplot_titles=list(map(lambda lbl: subtitles.get(lbl, lbl), data)),
         vertical_spacing=0.1,
         figure=go.Figure(
-            layout=go.Layout(font=dict(family="Fira Sans Light", size=24, color="black"))
+            layout=go.Layout(font=dict(family=font_fam, size=24, color="black"))
         ),
     )
     for i, (k, d) in enumerate(data.items()):
@@ -670,22 +683,38 @@ for name, opts in data_to_plot.items():
             exclude_legends=exclude_legends,
             **opts,
         )
-    fig.update_xaxes(title_text="Time [µs]", row=len(data), col=1)
+    fig.update_xaxes(title_text="Time [<i>µ</i>s]", row=len(data), col=1)
 
     fig.update_layout(
-        title=dict(
-            text=title,
-            x=0.5,
-            xanchor="center",
-        ),
+        # title=dict(
+        #     text=title,
+        #     x=0.5,
+        #     xanchor="center",
+        # ),
         legend=dict(
             yanchor="middle",
             y=0.5,
             xanchor="right",
             x=0.99,
         ),
-        plot_bgcolor="#ececec",
+        plot_bgcolor="#f3f3f3",
         uniformtext=dict(minsize=5, mode="show"),
+    )
+    for annotation in fig["layout"]["annotations"]:
+        annotation["font"] = dict(size=32, family=font_fam, color="black")
+        annotation["xanchor"] = "left"
+        annotation["x"] = 0
+    fig.update_layout(
+        autosize=False,
+        width=1200 * 1.2,
+        height=680 * 1.2,
+        legend=dict(
+            yanchor="top",
+            y=1,
+            xanchor="right",
+            x=1,
+        ),
+        # uniformtext=dict(minsize=4, mode="show"),
     )
     fig.show(include_mathjax=True)
 
@@ -702,7 +731,7 @@ for name, opts in data_to_plot.items():
         uniformtext=dict(minsize=4, mode="show"),
     )
     for annotation in fig["layout"]["annotations"]:
-        annotation["font"] = dict(size=28, family="Fira Sans Light", color="black")
+        annotation["font"] = dict(size=28, family=font_fam, color="black")
     # fig.update_layout(showlegend=False)
     pdf_file = project_dir / "fig" / Path(name + ".pdf")
     pdf_file.parent.mkdir(parents=True, exist_ok=True)
