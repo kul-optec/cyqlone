@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 4.1)
+set(CMAKE_CXX_SCAN_FOR_MODULES Off)
+project(cyqlone-benchmarks)
+
+option(WITH_HPIPM "Enable the HPIPM benchmarks" On)
+
+find_package(CLI11 REQUIRED)
+find_package(benchmark REQUIRED)
+find_package(cyqlone COMPONENTS QPALM Extra REQUIRED)
+if (WITH_HPIPM)
+    find_package(hpipm REQUIRED)
+endif()
+
+add_executable(spring-mass spring-mass.cpp)
+target_link_libraries(spring-mass PRIVATE benchmark::benchmark CLI11::CLI11)
+target_link_libraries(spring-mass PRIVATE cyqlone::qpalm cyqlone::example-problems)
+if (WITH_HPIPM)
+    target_sources(spring-mass PRIVATE hpipm.cpp)
+    target_link_libraries(spring-mass PRIVATE hpipm)
+    target_compile_definitions(spring-mass PRIVATE WITH_HPIPM)
+endif()
