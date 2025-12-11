@@ -2,7 +2,6 @@
 
 #include <cyqlone/config.hpp>
 #include <cyqlone/cyqlone.hpp>
-#include <cyqlone/matio.hpp>
 #include <cyqlone/neumaier.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/implementation/breakpoint.hpp>
@@ -698,8 +697,6 @@ struct CyqloneBackend {
         ocp.unpack_dynamics(in, out);
     }
 
-    real_t last_S = std::numeric_limits<real_t>::quiet_NaN();
-
     index_t active_set_change(Context &ctx, real_t, [[maybe_unused]] const ineq_constr_vec_t &Σ,
                               const active_set_t &J, const active_set_t &J_old) {
         BATMAT_ASSERT(J.rows() == J_old.rows() && J.cols() == J_old.cols());
@@ -751,47 +748,7 @@ struct CyqloneBackend {
                                            simdify(J_old.batch(di)));
         }
         auto t = get_timed(&OCP_t::Timings::update_factorization);
-        if (settings.print_residuals && ctx.is_master()) {
-            std::cout << "### UPDATE #" << stats.num_updates << " ### (" << num_different << ")\n";
-        }
         ocp.update(ctx, ΔΣ);
-
-        if (settings.print_residuals && stats.num_updates >= 15) {
-            auto add_to_mat_batched = [](auto *mfile, const auto &name, const auto &M) {
-                batmat::matrix::Matrix<real_t, index_t> res{
-                    {.depth = M.depth(), .rows = M.rows(), .cols = M.cols()}};
-                for (index_t l = 0; l < M.depth(); ++l)
-                    for (index_t c = 0; c < M.cols(); ++c)
-                        for (index_t r = 0; r < M.rows(); ++r)
-                            res(l, r, c) = M(l, r, c);
-                add_to_mat(mfile, name, res);
-            };
-            ctx.arrive_and_wait();
-            if (ctx.is_master()) {
-                auto m = create_mat(
-                    std::filesystem::path{std::format("sparse_factor_{}.mat", stats.num_updates)});
-                add_to_mat_batched(m.get(), "coupling_D", ocp.coupling_D);
-                add_to_mat_batched(m.get(), "coupling_U", ocp.coupling_U);
-                add_to_mat_batched(m.get(), "coupling_Y", ocp.coupling_Y);
-                add_to_mat_batched(m.get(), "pcr_L", ocp.pcr_L);
-                add_to_mat_batched(m.get(), "pcr_U", ocp.pcr_U);
-                add_to_mat_batched(m.get(), "pcr_Y", ocp.pcr_Y);
-            }
-            ctx.arrive_and_wait();
-            ocp.factor(ctx, last_S, J, settings.factor_alt);
-            ctx.arrive_and_wait();
-            if (ctx.is_master()) {
-                auto m = create_mat(std::filesystem::path{
-                    std::format("sparse_refactor_{}.mat", stats.num_updates)});
-                add_to_mat_batched(m.get(), "coupling_D", ocp.coupling_D);
-                add_to_mat_batched(m.get(), "coupling_U", ocp.coupling_U);
-                add_to_mat_batched(m.get(), "coupling_Y", ocp.coupling_Y);
-                add_to_mat_batched(m.get(), "pcr_L", ocp.pcr_L);
-                add_to_mat_batched(m.get(), "pcr_U", ocp.pcr_U);
-                add_to_mat_batched(m.get(), "pcr_Y", ocp.pcr_Y);
-            }
-        }
-
         return num_different;
     }
 
@@ -847,7 +804,6 @@ struct CyqloneBackend {
                const active_set_t &J, //
                var_vec_t &d, var_vec_t &ξ, ineq_constr_vec_t &Ad, eq_constr_vec_t &Δλ,
                var_vec_t &MᵀΔλ) {
-        last_S = S;
         if (reset_factorization) {
             // std::cout << "                                     -- Fact reset\n";
             auto t = get_timed(&OCP_t::Timings::factor);
