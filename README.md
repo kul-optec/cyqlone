@@ -36,9 +36,8 @@ Requirements: CMake, Conan 2.
 # Prepare environment and dependencies
 python3 -m pip install -U conan
 export CONAN_HOME="$PWD/.conan2"
-conan profile detect ||:
-git clone https://github.com/tttapa/conan-recipes
-conan remote add tttapa-conan-recipes "$PWD/conan-recipes"
+conan profile detect --exist-ok
+conan remote add tttapa-conan-recipes "$PWD/scripts/ci/conan-recipes"
 ```
 
 ```sh
@@ -47,6 +46,8 @@ conan build . --build=missing -pr scripts/dev/profiles/laptop -o \&:with_benchma
 ```
 
 Replace `laptop` by `desktop` if your hardware supports AVX-512. If sufficient RAM is available, the number of parallel build jobs can be increased.
+
+Manual installation using CMake (without the Conan package manager) is also supported, provided that the necessary dependencies are installed.
 
 ## Related projects
 
