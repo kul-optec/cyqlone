@@ -1,6 +1,0 @@
-include({{ os.path.join(profile_dir, "sccache", "only-self.profile") }})
-include({{ os.path.join(profile_dir, "color", "gcc.profile") }})
-include({{ os.path.join(profile_dir, "link", "gc.profile") }})
-include({{ os.path.join(profile_dir, "link", "lto-auto.profile") }})
-include({{ os.path.join(profile_dir, "link", "static.profile") }})
-include({{ os.path.join(profile_dir, "visibility", "hidden.profile") }})
