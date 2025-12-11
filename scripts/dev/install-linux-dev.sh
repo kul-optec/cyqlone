@@ -32,11 +32,12 @@ for i in "${!archs[@]}"; do
 	cat <<- EOF >> "$pbc_config"
 	conan.$c.profile_host=["$profiles/platform/$triple.profile"]
 	conan.$c.profile_host+=["$PWD/scripts/ci/profiles/${archs[$i]}.profile"]
+	conan.$c.profile_host+=["$PWD/scripts/dev/profiles/ninja.profile"]
 	conan.$c.profile_host+=["$profiles/gcc-static.profile"]
 	conan.$c.profile_host+=["$profiles/test/none.profile"]
 	conan.$c.args+=["-obatmat/*:with_openmp=True"]
-	conan.$c.args+=["-ctools.cmake.cmaketoolchain:generator=Ninja"]
 	conan.$c.cmake.args+=["--fresh"]
+	conan.$c.cmake.generator="Ninja"
 	conan.$c.cmake.build_args+=["--verbose"]
 	conan.$c.cmake.options.CYQLONE_PYTHON_POSTFIX="_${archs[$i]}"
 	conan.$c.cmake.options.CMAKE_INTERPROCEDURAL_OPTIMIZATION=true
