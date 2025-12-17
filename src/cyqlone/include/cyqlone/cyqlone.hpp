@@ -418,7 +418,6 @@ struct CyqloneSolver {
     void factor_riccati(Context &ctx, bool alt, value_type S, view<> Σ);
     void factor(Context &ctx, value_type S, view<> Σ, bool alt = false);
 
-    void solve_active(index_t l, index_t biY, mut_view<> λ) const;
     void solve_fwd_level(index_t l, index_t biU, mut_view<> λ) const;
     void solve_riccati_forward(Context &ctx, mut_view<> ux, mut_view<> λ) const;
     /// Preserves b in λ (except for coupling equations solved using CR)

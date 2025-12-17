@@ -13,13 +13,6 @@ namespace CYQLONE_NS(cyqlone) {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_active([[maybe_unused]] index_t l,
-                                                      [[maybe_unused]] index_t biY,
-                                                      [[maybe_unused]] mut_view<> λ) const {
-    // TODO: nothing?
-}
-
-template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t biU,
                                                          mut_view<> λ) const {
     const index_t num_stages = ceil_N >> lP;
