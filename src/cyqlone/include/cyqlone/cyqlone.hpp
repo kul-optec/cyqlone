@@ -328,12 +328,42 @@ struct CyqloneSolver {
     void initialize_bounds(const CyqloneStorage<value_type> &ocp, mut_view<> b_min,
                            mut_view<> b_max) const;
     void pack_variables(std::span<const value_type> ux_lin, mut_view<> ux) const;
+    matrix<> pack_variables(std::span<const value_type> ux_lin) const {
+        matrix<> ux = initialize_variables();
+        pack_variables(ux_lin, ux);
+        return ux;
+    }
     void unpack_variables(view<> ux, std::span<value_type> ux_lin) const;
+    std::vector<value_type> unpack_variables(view<> ux) const {
+        std::vector<value_type> ux_lin(num_variables());
+        unpack_variables(ux, ux_lin);
+        return ux_lin;
+    }
     void pack_dynamics(std::span<const value_type> λ_lin, mut_view<> λ) const;
+    matrix<> pack_dynamics(std::span<const value_type> λ_lin) const {
+        matrix<> λ = initialize_dynamics_constraints();
+        pack_dynamics(λ_lin, λ);
+        return λ;
+    }
     void unpack_dynamics(view<> λ, std::span<value_type> λ_lin) const;
+    std::vector<value_type> unpack_dynamics(view<> λ) const {
+        std::vector<value_type> λ_lin(num_dynamics_constraints());
+        unpack_dynamics(λ, λ_lin);
+        return λ_lin;
+    }
     void pack_constraints(std::span<const value_type> y_lin, mut_view<> y,
                           value_type fill = 0) const;
+    matrix<> pack_constraints(std::span<const value_type> y_lin, value_type fill = 0) const {
+        matrix<> y = initialize_general_constraints();
+        pack_constraints(y_lin, y, fill);
+        return y;
+    }
     void unpack_constraints(view<> y, std::span<value_type> y_lin) const;
+    std::vector<value_type> unpack_constraints(view<> y) const {
+        std::vector<value_type> y_lin(num_general_constraints());
+        unpack_constraints(y, y_lin);
+        return y_lin;
+    }
 
     [[nodiscard]] index_t num_variables() const { return N_horiz * (nu + nx); }
     [[nodiscard]] index_t num_dynamics_constraints() const { return N_horiz * nx; }
