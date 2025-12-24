@@ -195,11 +195,22 @@ void register_cyqlone_solver(nb::module_ &m) {
             "y"_a.noconvert())
         .def(
             "factor",
-            [](Solver &self, real_t S, np_batched_view<VL, const real_t> Σ, bool alt) {
+            [](Solver &self, real_t S, np_batched_view<VL, const real_t> Σ) {
                 auto Σ_vw = view_as_batched(Σ);
-                self.parallel_ctx->run([&](auto &ctx) { self.factor(ctx, S, Σ_vw, alt); });
+                self.parallel_ctx->run([&](auto &ctx) { self.factor(ctx, S, Σ_vw); });
             },
-            "S"_a, "Σ"_a.noconvert(), "alt"_a = true)
+            "S"_a, "Σ"_a.noconvert())
+        .def(
+            "factor_solve",
+            [](Solver &self, real_t S, np_batched_view<VL, const real_t> Σ,
+               np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
+                auto Σ_vw  = view_as_batched(Σ);
+                auto ux_vw = view_as_batched(ux);
+                auto λ_vw  = view_as_batched(λ);
+                self.parallel_ctx->run(
+                    [&](auto &ctx) { self.factor_solve(ctx, S, Σ_vw, ux_vw, λ_vw); });
+            },
+            "S"_a, "Σ"_a.noconvert(), "ux"_a.noconvert(), "λ"_a.noconvert())
         .def(
             "solve",
             [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
@@ -225,6 +236,16 @@ void register_cyqlone_solver(nb::module_ &m) {
                 auto λ_vw  = view_as_batched(λ);
                 self.parallel_ctx->run(
                     [&](auto &ctx) { self.solve_reverse(ctx, ux_vw, λ_vw, self.riccati_work); });
+            },
+            "ux"_a.noconvert(), "λ"_a.noconvert())
+        .def(
+            "solve_reverse_new",
+            [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
+                auto ux_vw = view_as_batched(ux);
+                auto λ_vw  = view_as_batched(λ);
+                self.parallel_ctx->run([&](auto &ctx) {
+                    self.solve_reverse_new(ctx, ux_vw, λ_vw, self.riccati_work);
+                });
             },
             "ux"_a.noconvert(), "λ"_a.noconvert())
         .def("build_sparse",

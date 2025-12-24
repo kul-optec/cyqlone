@@ -179,6 +179,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const
     -> std::vector<std::tuple<index_t, index_t, value_type>> {
     std::vector<std::tuple<index_t, index_t, value_type>> tuples;
+    constexpr bool alt = true;
     const index_t nux = nu + nx, nuxx = nux + nx;
     const index_t vstride    = ceil_N >> lvl;
     const index_t num_stages = ceil_N >> lP; // number of stages per thread
@@ -369,4 +370,4 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const
     return tuples;
 }
 
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)

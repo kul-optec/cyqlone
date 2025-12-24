@@ -30,7 +30,6 @@ struct CyqloneBackendSettings {
     bool print_residuals   = false;
     int print_precision    = 3;
     // bool init_x0               = false; // TODO
-    bool factor_alt                = true;
     double changing_constr_factor  = 0.05;
     index_t max_update_count       = 5;
     bool detailed_timings          = false;

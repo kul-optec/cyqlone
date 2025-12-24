@@ -91,7 +91,6 @@ struct CyqloneSolver {
         cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>,
                                       default_order>; // TODO
 
-    bool alt                       = true;
     index_t pcg_max_iter           = 100;
     value_type pcg_tolerance       = std::numeric_limits<value_type>::epsilon() / 10;
     bool pcg_print_resid           = false;
@@ -104,8 +103,8 @@ struct CyqloneSolver {
                                  : solve_method == SolveMethod::StairPCG ? "pcg=stair"
                                                                          : "pcg=jacobi";
         std::string_view order = default_order == StorageOrder::RowMajor ? "rm" : "cm";
-        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}{}-{}", nx, nu, ny, N_horiz,
-                           1 << (lP - lvl), VL, solve, alt ? "-alt" : "", order);
+        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz,
+                           1 << (lP - lvl), VL, solve, order);
     }
 
     using SharedContext                         = parallel::SharedContext;
@@ -131,6 +130,13 @@ struct CyqloneSolver {
             .depth = 1 << lP,
             .rows  = nx,
             .cols  = nx,
+        }};
+    }();
+    matrix<StorageOrder::ColMajor> work_cr = [this] {
+        return matrix<StorageOrder::ColMajor>{{
+            .depth = 1 << lP,
+            .rows  = nx,
+            .cols  = 1,
         }};
     }();
     matrix<default_order> pcr_L = [this] {
@@ -460,10 +466,25 @@ struct CyqloneSolver {
     void factor_pcr();
     template <index_t Level>
     void factor_pcr_level();
-    void factor_l0(Context &ctx);
-    void factor_riccati(Context &ctx, bool alt, value_type S, view<> Σ);
-    void factor(Context &ctx, value_type S, view<> Σ, bool alt = true);
+    template <bool Solve = true>
+    void factor_l0_solve(Context &ctx, mut_view<> ux, mut_view<> λ);
+    template <bool Solve = true>
+    void factor_riccati_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
+    void factor_riccati(Context &ctx, value_type S, view<> Σ) {
+        factor_riccati_solve<false>(ctx, S, Σ, {}, {});
+    }
+    template <bool Solve = true>
+    void factor_solve_impl(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
+    void factor_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ) {
+        factor_solve_impl<true>(ctx, S, Σ, ux, λ);
+    }
+    void factor(Context &ctx, value_type S, view<> Σ) {
+        factor_solve_impl<false>(ctx, S, Σ, {}, {});
+    }
 
+    void solve_u_forward(index_t l, index_t biU, mut_view<> λ) const;
+    void solve_y_forward(index_t l, index_t biY, mut_view<> λ, mut_view<> w) const;
+    void solve_λ_forward(index_t l, index_t biD, mut_view<> λ, view<> w) const;
     void solve_fwd_level(index_t l, index_t biU, mut_view<> λ) const;
     void solve_riccati_forward(Context &ctx, mut_view<> ux, mut_view<> λ) const;
     /// Preserves b in λ (except for coupling equations solved using CR)
@@ -488,7 +509,13 @@ struct CyqloneSolver {
     void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
     void solve_riccati_reverse_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
                                    mut_view<> work) const;
+    void solve_riccati_reverse_new(Context &ctx, mut_view<> ux, mut_view<> λ,
+                                   mut_view<> work) const;
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
+    void solve_u_backward(index_t l, index_t biU, mut_view<> λ, mut_view<> w) const;
+    void solve_y_backward(index_t l, index_t biY, mut_view<> λ) const;
+    void solve_λ_backward(index_t biD, mut_view<> λ, view<> w) const;
+    void solve_reverse_new(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
     void solve(Context &ctx, mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
                mut_view<> work_riccati) const;
     void solve(Context &ctx, mut_view<> ux, mut_view<> λ) {

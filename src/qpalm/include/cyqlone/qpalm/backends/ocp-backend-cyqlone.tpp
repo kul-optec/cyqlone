@@ -71,7 +71,6 @@ struct CyqloneBackend {
     CyqloneBackend(const CyqloneStorage<> &ocp, CyqloneData data,
                    const CyqloneBackendSettings &settings)
         : ocp{OCP_t::build(ocp, settings.log_processors)}, settings{settings} {
-        this->ocp.alt                              = settings.factor_alt;
         this->ocp.pcg_max_iter                     = settings.pcg_max_iter;
         this->ocp.pcg_tolerance                    = settings.pcg_tolerance;
         this->ocp.pcg_print_resid                  = settings.pcg_print_resid;
@@ -807,7 +806,7 @@ struct CyqloneBackend {
         if (reset_factorization) {
             // std::cout << "                                     -- Fact reset\n";
             auto t = get_timed(&OCP_t::Timings::factor);
-            ocp.factor(ctx, S, J, settings.factor_alt);
+            ocp.factor(ctx, S, J);
             ctx.arrive_and_wait(__LINE__);
             if (ctx.is_master()) {
                 reset_factorization = false;
@@ -953,7 +952,7 @@ struct CyqloneBackend {
         if (reset_factorization) {
             // std::cout << "                                     -- Fact reset\n";
             auto t = get_timed(&OCP_t::Timings::factor);
-            ocp.factor(ctx, S, J, settings.factor_alt);
+            ocp.factor(ctx, S, J);
             ctx.arrive_and_wait(__LINE__);
             if (ctx.is_master()) {
                 reset_factorization = false;

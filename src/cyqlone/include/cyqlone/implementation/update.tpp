@@ -158,8 +158,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
-    if (ctx.index == 0)
-        this->alt = true;
     const index_t ti = ctx.index;
     update_riccati(ctx, ΔΣ);
     ctx.arrive_and_wait();

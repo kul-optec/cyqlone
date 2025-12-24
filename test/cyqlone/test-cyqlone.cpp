@@ -82,11 +82,10 @@ TEST_P(CyqloneFactorTest, factor) {
             f << guanaqo::float_to_str(x) << '\n';
     }
 
-    const bool alt        = true;
     const auto ux_initial = ux, λ_initial = λ;
     for (int i = 0; i < 50; ++i) {
         solver.parallel_ctx->run([&](auto &ctx) {
-            solver.factor(ctx, 1e100, Σ, alt);
+            solver.factor(ctx, 1e100, Σ);
 #if WITH_UPDATES
             solver.update(ctx, ΔΣ);
 #endif
@@ -108,7 +107,7 @@ TEST_P(CyqloneFactorTest, factor) {
     guanaqo::trace_logger.reset();
 #endif
     solver.parallel_ctx->run([&](auto &ctx) {
-        solver.factor(ctx, 1e100, Σ, alt);
+        solver.factor(ctx, 1e100, Σ);
 #if WITH_UPDATES
         solver.update(ctx, ΔΣ);
 #endif
@@ -176,7 +175,7 @@ TEST_P(CyqloneFactorTest, factor) {
             f << guanaqo::float_to_str(x) << '\n';
     }
 
-    solver.parallel_ctx->run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2, alt); });
+    solver.parallel_ctx->run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2); });
     if (std::ofstream f("sparse_refactor.csv"); f) {
         auto sp = solver.build_sparse_factor();
         for (auto [r, c, x] : sp)

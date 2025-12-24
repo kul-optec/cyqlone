@@ -6,10 +6,14 @@
 #include <batmat/linalg/compress.hpp>
 #include <batmat/linalg/gemm-diag.hpp>
 #include <batmat/linalg/gemm.hpp>
+#include <batmat/linalg/gemv.hpp>
 #include <batmat/linalg/potrf.hpp>
 #include <batmat/linalg/shift.hpp>
 #include <batmat/linalg/trsm.hpp>
 #include <batmat/linalg/trtri.hpp>
+#include <guanaqo/print.hpp>
+#include <iostream>
+#include <syncstream>
 #include <utility>
 
 #ifndef CYQLONE_FACTOR_DO_PREFETCH
@@ -28,20 +32,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, in
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t bi) {
-    const index_t offset = 1 << l;
+    const index_t bi_prev = sub_wrap_PmV(bi, 1 << l), bi_next = add_wrap_PmV(bi, 1 << l);
 #if CYQLONE_FACTOR_DO_PREFETCH
     for (index_t c = 0; c < coupling_U.cols(); c += 1)
         for (index_t r = 0; r < coupling_U.rows(); r += 16)
             __builtin_prefetch(&coupling_U.batch(bi)(0, r, c), 0, 3);
 #endif
     // Compute UYᵀ or YUᵀ
-    if (is_U_below_Y(l, bi)) {
-        const index_t bi_next = add_wrap_PmV(bi, offset); // TODO: need mod?
+    if (ν2p(bi_prev) > ν2p(bi_next)) {
         GUANAQO_TRACE("Compute U", bi_next);
         gemm_neg(coupling_U.batch(bi), coupling_Y.batch(bi).transposed(),
                  coupling_U.batch(bi_next));
     } else {
-        const index_t bi_prev = sub_wrap_PmV(bi, offset); // TODO: need mod?
         GUANAQO_TRACE("Compute Y", bi_prev);
         gemm_neg(coupling_Y.batch(bi), coupling_U.batch(bi).transposed(),
                  coupling_Y.batch(bi_prev));
@@ -115,12 +117,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
+template <bool Solve>
+void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<> ux,
+                                                         mut_view<> λ) {
     const index_t ti         = ctx.index;
     const index_t num_stages = ceil_N >> lP; // number of stages per thread
     const index_t biI        = sub_wrap_PmV(ti, 1);
     const index_t biA        = ti;
     const auto biR           = biA;
+    const auto diI           = biI * num_stages;
+    const auto diA           = biA * num_stages;
     const bool x_lanes       = biA == 0; // first stage wraps around
     // Coupling equation to previous stage is eliminated after coupling
     // equation to next stage for odd threads, vice versa for even threads.
@@ -177,13 +183,58 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0(Context &ctx) {
         GUANAQO_TRACE("Compute (BA)(BA)ᵀ", biA);
         syrk_add(ÂB̂i, DiA);
     }
+    if constexpr (Solve) {
+        {
+            GUANAQO_TRACE("Update λ", diI);
+            std::osyncstream out(std::cout);
+            const index_t dix = add_wrap_N(diA, num_stages - 1);
+            out << "dix=" << dix << ", diI=" << diI << "\n";
+            out.emit();
+
+            ctx.arrive_and_wait();
+            if (ctx.is_master()) {
+                for (index_t jj = 0; jj < ceil_N; ++jj) {
+                    guanaqo::print_python(std::cout << "x[" << jj << "] = ",
+                                          ux(jj).bottom_rows(nx));
+                }
+                for (index_t ii = 0; ii < (1 << (lP - lvl)); ++ii) {
+                    index_t jj = ii * num_stages;
+                    guanaqo::print_python(std::cout << "λ[" << jj << "] = ", λ(jj));
+                }
+            }
+            ctx.arrive_and_wait();
+
+            x_lanes ? compact_blas::template xsub<-1>(simdify(λ.batch(diI)),
+                                                      simdify(ux.batch(dix).bottom_rows(nx)))
+                    : compact_blas::template xsub<+0>(simdify(λ.batch(diI)),
+                                                      simdify(ux.batch(dix).bottom_rows(nx)));
+
+            ctx.arrive_and_wait();
+            if (ctx.is_master()) {
+                for (index_t ii = 0; ii < (1 << (lP - lvl)); ++ii) {
+                    index_t jj = ii * num_stages;
+                    guanaqo::print_python(std::cout << "λ[" << jj << "] = ", λ(jj));
+                }
+            }
+            ctx.arrive_and_wait();
+        }
+        auto tok = ctx.arrive(); // TODO: move before xsub
+        ctx.wait(std::move(tok));
+        {
+            GUANAQO_TRACE("Solve λ", diI);
+            if (ν2p(biI) == 0)
+                trsm(DiI, λ.batch(diI));
+        }
+    }
 }
 
 // Performs Riccati recursion and then factors level l=0 of
 // coupling equations + propagates the subdiagonal blocks to level l=1.
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, value_type S,
-                                                        view<> Σ) {
+template <bool Solve>
+void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, value_type S, view<> Σ,
+                                                              mut_view<> ux, mut_view<> λ) {
+    constexpr bool alt = true; // Don't store intermediate BA LQ products
     using batmat::linalg::compress_masks_sqrt;
     const index_t ti         = ctx.index;
     const index_t num_stages = ceil_N >> lP;    // number of stages per thread
@@ -219,8 +270,26 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
             using std::isfinite;
             // Factor R̂, update Ŝ, factor Q̂
             syrk_add_potrf(BADCᵀ_prev, tril(data_RSQ.batch(di)), tril(R̂ŜQ̂i), 1 / S);
+            if constexpr (Solve) {
+                // Solve u ← LR̂⁻¹ u, x ← x - Ŝ u
+                auto ui = ux.batch(di).top_rows(nu), xi = ux.batch(di).bottom_rows(nx);
+                trsm(tril(R̂i), ui);
+                gemv_sub(Ŝi, ui, xi);
+            }
             // Compute LB̂ = B̂ LR̂⁻ᵀ
             trsm(B̂i, tril(R̂i).transposed());
+            if constexpr (Solve) {
+                auto ui = ux.batch(di).top_rows(nu), λ_last = λ.batch(di0);
+                gemv_add(B̂i, ui, λ_last);
+                ctx.arrive_and_wait();
+                if (ctx.is_master()) {
+                    for (index_t ii = 0; ii < (1 << (lP - lvl)); ++ii) {
+                        index_t jj = ii * num_stages;
+                        guanaqo::print_python(std::cout << "λ[" << jj << "] = ", λ(jj));
+                    }
+                }
+                ctx.arrive_and_wait();
+            }
             // Update Â = Ã - LB̂ LŜᵀ
             i == 0 ? gemm_sub(B̂i, Ŝi.transposed(), A0, Âi) //
                    : gemm_sub(B̂i, Ŝi.transposed(), Âi);
@@ -239,6 +308,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
             auto Â_next = Â.middle_cols((i + 1) * nx, nx);
             gemm(Âi, Bi, B̂_next);
             gemm(Âi, Ai, Â_next);
+            if constexpr (Solve) {
+                auto xi = ux.batch(di).bottom_rows(nx), ux_next = ux.batch(di_next),
+                     λ_next = λ.batch(di_next), λ_last = λ.batch(di0);
+                gemv_add(Âi, λ_next, λ_last); // λ(jn) += Â λ(j-1)
+                auto w = work_cr.batch(ti).left_cols(1);
+                trmm(tril(Q̂i).transposed(), λ_next, w); // w = LQᵀ(j) λ(j-1)
+                trmm(tril(Q̂i), w);                      // w = LQ(j) LQᵀ(j) λ(j-1)
+                compact_blas::xsub_copy(simdify(w), simdify(xi),
+                                        simdify(w));    // w = x(j) - LQ(j) LQᵀ(j) λ(j-1)
+                gemv_add(BAi.transposed(), w, ux_next); // u(j-1) += BAᵀ(j-1) w
+            }
             // Riccati update
             trmm(BAi.transposed(), tril(Q̂i), BAᵀ_next);
             // TODO: merge with next potrf
@@ -247,35 +327,67 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati(Context &ctx, bool alt, 
             // Compute LÂ = Ã LQ⁻ᵀ
             GUANAQO_TRACE("Riccati last", k);
             trsm(Âi, tril(Q̂i).transposed());
+            if constexpr (Solve) {
+                auto xi = ux.batch(di).bottom_rows(nx), λ_last = λ.batch(di0);
+                trsm(tril(Q̂i), xi);
+                gemv_add(Âi, xi, λ_last);
+                trsm(tril(Q̂i).transposed(), xi);
+
+                ctx.arrive_and_wait();
+                if (ctx.is_master()) {
+                    for (index_t ii = 0; ii < (1 << (lP - lvl)); ++ii) {
+                        index_t jj = ii * num_stages;
+                        guanaqo::print_python(std::cout << "λ[" << jj << "] = ", λ(jj));
+                    }
+                }
+                ctx.arrive_and_wait();
+            }
         }
     }
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view<> Σ, bool alt) {
-    if (ctx.index == 0)
-        this->alt = alt;
+template <bool Solve>
+void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_type S, view<> Σ,
+                                                           mut_view<> ux, mut_view<> λ) {
     index_t ti = ctx.index;
-    factor_riccati(ctx, alt, S, Σ);
-    factor_l0(ctx);
+    factor_riccati_solve<Solve>(ctx, S, Σ, ux, λ);
+    factor_l0_solve<Solve>(ctx, ux, λ);
     for (index_t l = 0; l < lP - lvl; ++l) {
         ctx.arrive_and_wait(); // Wait for L
         const auto biU = add_wrap_PmV(ti, 1), biY = sub_wrap_PmV(ti, (1 << l) - 1);
-        if (ν2p(biU) == l)
+        if (ν2p(biU) == l) {
             factor_U(l, biU);
-        else if (ν2p(biY) == l)
+            if constexpr (Solve)
+                solve_u_forward(l, biU, λ);
+        } else if (ν2p(biY) == l) {
             factor_Y(l, biY);
+            if constexpr (Solve)
+                solve_y_forward(l, biY, λ, work_cr);
+        }
         ctx.arrive_and_wait(); // Wait for U, Y
-        if (ν2p(biU) == l)
+        if (ν2p(biU) == l) {
             factor_L(l, biY);
-        else if (ν2p(biY) == l)
+            if constexpr (Solve)
+                solve_λ_forward(l, biY, λ, work_cr);
+        } else if (ν2p(biY) == l) {
             update_K(l, biY);
+        }
     }
+
     if (solve_method == SolveMethod::PCR) {
         ctx.arrive_and_wait(); // wait for off-diagonal block
-        const index_t biY = sub_wrap_PmV(ti, ((1 << (lP - lvl)) >> 1) - 1);
-        if (ν2p(biY) == lP - lvl)
+        if (ν2p(ti + 1) + 1 == lP - lvl)
             factor_pcr();
+    }
+
+    if constexpr (Solve) {
+        if (ν2p(ti + 1) + 1 == lP - lvl) {
+            if (solve_method == SolveMethod::PCR)
+                solve_pcr(λ.batch(0), work_pcg.batch(0).left_cols(1));
+            else
+                solve_pcg(λ.batch(0), work_pcg.batch(0));
+        }
     }
 }
 

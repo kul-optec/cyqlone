@@ -501,7 +501,6 @@ void register_settings(nb::module_ &m) {
         .def_rw("log_processors", &cyqlone::qpalm::CyqloneBackendSettings::log_processors)
         .def_rw("print_residuals", &cyqlone::qpalm::CyqloneBackendSettings::print_residuals)
         .def_rw("print_precision", &cyqlone::qpalm::CyqloneBackendSettings::print_precision)
-        .def_rw("factor_alt", &cyqlone::qpalm::CyqloneBackendSettings::factor_alt)
         .def_rw("changing_constr_factor",
                 &cyqlone::qpalm::CyqloneBackendSettings::changing_constr_factor)
         .def_rw("max_update_count", &cyqlone::qpalm::CyqloneBackendSettings::max_update_count)

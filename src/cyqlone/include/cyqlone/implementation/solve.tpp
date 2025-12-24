@@ -41,6 +41,92 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t biU,
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t biU,
+                                                         mut_view<> λ) const {
+    const index_t num_stages = ceil_N >> lP;
+    const index_t offset     = 1 << l;
+    const index_t biD        = sub_wrap_PmV(biU, offset);
+    const index_t diU        = biU * num_stages;
+    const index_t diD        = biD * num_stages;
+    // b[diD] -= U[biU] b[diU]
+    GUANAQO_TRACE("Subtract Ub", biD);
+    gemv_sub(coupling_U.batch(biU), λ.batch(diU), λ.batch(diD));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t biY, mut_view<> λ,
+                                                         mut_view<> w) const {
+    const index_t num_stages = ceil_N >> lP;
+    const index_t offset     = 1 << l;
+    const index_t biD        = add_wrap_PmV(biY, offset);
+    const index_t diY        = biY * num_stages;
+    // w[diD] = Y[biY] b[diY]
+    GUANAQO_TRACE("Subtract Yb", biD);
+    gemv(coupling_Y.batch(biY), λ.batch(diY), w.batch(biD));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t biD, mut_view<> λ,
+                                                         view<> w) const {
+    const index_t num_stages = ceil_N >> lP;
+    const index_t diD        = biD * num_stages;
+    { // λ[diD] -= w[biD]
+        GUANAQO_TRACE("Subtract work b", biD);
+        biD == 0 ? compact_blas::template xsub<-1>(simdify(λ.batch(diD)), simdify(w.batch(biD)))
+                 : compact_blas::template xsub<+0>(simdify(λ.batch(diD)), simdify(w.batch(biD)));
+    }
+    // solve D⁻¹[diD] d[diD]
+    if (is_active(l + 1, biD)) {
+        GUANAQO_TRACE("Solve b", biD);
+        BATMAT_ASSUME(biD != 0);
+        trsm(tril(coupling_D.batch(biD)), λ.batch(diD));
+    }
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t biU, mut_view<> λ,
+                                                          mut_view<> w) const {
+    const index_t num_stages = ceil_N >> lP;
+    const index_t offset     = 1 << l;
+    const index_t biD        = sub_wrap_PmV(biU, offset);
+    const index_t diD        = biD * num_stages;
+    // w[biU] = U[biU]ᵀ b[diD]
+    GUANAQO_TRACE("Subtract Uᵀb", biD);
+    gemv(coupling_U.batch(biU).transposed(), λ.batch(diD), w.batch(biU));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t biY,
+                                                          mut_view<> λ) const {
+    const index_t num_stages = ceil_N >> lP;
+    const index_t offset     = 1 << l;
+    const index_t biD        = add_wrap_PmV(biY, offset);
+    const index_t diD        = biD * num_stages;
+    const index_t diY        = biY * num_stages;
+    const bool x_lanes       = biD == 0;
+    // b[diY] -= Y[biY]ᵀ b[diD]
+    GUANAQO_TRACE("Subtract Yᵀb", biD);
+    x_lanes
+        ? gemv_sub(coupling_Y.batch(biY).transposed(), λ.batch(diD), λ.batch(diY), with_shift_B<1>)
+        : gemv_sub(coupling_Y.batch(biY).transposed(), λ.batch(diD), λ.batch(diY));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t biD, mut_view<> λ,
+                                                          view<> w) const {
+    const index_t num_stages = ceil_N >> lP;
+    const index_t diD        = biD * num_stages;
+    { // λ[diD] -= w[biD]
+        GUANAQO_TRACE("Subtract work b", biD);
+        compact_blas::xsub(simdify(λ.batch(diD)), simdify(w.batch(biD)));
+    }
+    // solve D⁻ᵀ[diD] d[diD]
+    GUANAQO_TRACE("Solve b", biD);
+    BATMAT_ASSUME(biD != 0);
+    trsm(tril(coupling_D.batch(biD)).transposed(), λ.batch(diD));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
                                                    mut_batch_view<> work_pcr) const {
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
@@ -206,7 +292,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
                                                        mut_batch_view<> work_pcg,
                                                        mut_view<> work) const {
     const index_t ti = ctx.index;
-    alt ? solve_riccati_forward_alt(ctx, ux, λ, work) : solve_riccati_forward(ctx, ux, λ);
+    solve_riccati_forward_alt(ctx, ux, λ, work);
     for (index_t l = 0; l < lP - lvl; ++l) {
         ctx.arrive_and_wait();
         const auto biU = add_wrap_PmV(ti, 1);
@@ -233,7 +319,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_rev_level(index_t l, index_t bi,
     const index_t di         = bi * num_stages;
     const index_t diY        = biY * num_stages;
     const index_t diU        = biU * num_stages;
-    const bool x_lanes       = diY == 0;
+    const bool x_lanes       = biY == 0;
     GUANAQO_TRACE("Solve coupling reverse", bi);
     x_lanes
         ? gemv_sub(coupling_Y.batch(bi).transposed(), λ.batch(diY), λ.batch(di), with_shift_B<1>)
@@ -391,6 +477,81 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_alt(Context &ctx,
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_new(Context &ctx, mut_view<> ux,
+                                                                   mut_view<> λ,
+                                                                   mut_view<> work) const {
+    const index_t ti         = ctx.index;
+    const index_t num_stages = ceil_N >> lP;    // number of stages per thread
+    const index_t di0        = ti * num_stages; // data batch index
+    const index_t biI        = sub_wrap_PmV(ti, 1);
+    const index_t diI        = biI * num_stages;
+    const index_t k0         = ti * num_stages; // stage index
+    const index_t nux        = nu + nx;
+    auto R̂ŜQ̂                 = riccati_R̂ŜQ̂.batch(ti);
+    auto B̂                   = riccati_ÂB̂.batch(ti).right_cols(num_stages * nu);
+    auto Â                   = riccati_ÂB̂.batch(ti).left_cols(num_stages * nx);
+    const auto w             = work.batch(ti);
+
+    for (index_t i = num_stages; i-- > 0;) {
+        index_t k  = sub_wrap_N(k0, i);
+        index_t di = di0 + i;
+        auto R̂ŜQ̂i  = R̂ŜQ̂.middle_cols(i * nux, nux);
+        auto Q̂i    = R̂ŜQ̂i.bottom_right(nx, nx);
+        auto R̂i    = R̂ŜQ̂i.top_left(nu, nu);
+        auto Ŝi    = R̂ŜQ̂i.bottom_left(nx, nu);
+        auto B̂i    = B̂.middle_cols(i * nu, nu);
+        auto Âi    = Â.middle_cols(i * nx, nx);
+        if (i + 1 < num_stages) {
+            [[maybe_unused]] const auto k_next = sub_wrap_N(k, 1);
+            const auto di_next                 = di + 1;
+            GUANAQO_TRACE("Riccati solve rev", k_next);
+            auto BAi = data_BA.batch(di_next);
+
+            // w = p
+            copy(ux.batch(di).bottom_rows(nx), w);
+            // x = A x(next) + B u(next) + b(next)
+            compact_blas::xadd_copy(simdify(ux.batch(di).bottom_rows(nx)),
+                                    simdify(λ.batch(di_next)));
+            gemv_add(BAi, ux.batch(di_next), ux.batch(di).bottom_rows(nx));
+            // u = LR⁻ᵀ(l - LSᵀ x - LB̂ᵀ λ(last))
+            gemv_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
+            gemv_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
+            trsm(tril(R̂i).transposed(), ux.batch(di).top_rows(nu));
+
+            // λ(next) = LQ LQᵀ x + Âᵀ λ(last) - p
+            copy(ux.batch(di).bottom_rows(nx), λ.batch(di_next));
+            trmm(tril(Q̂i).transposed(), λ.batch(di_next));
+            trmm(tril(Q̂i), λ.batch(di_next));
+            gemv_add(Âi.transposed(), λ.batch(di0), λ.batch(di_next));
+            compact_blas::xsub_copy(simdify(λ.batch(di_next)), simdify(λ.batch(di_next)),
+                                    simdify(w));
+        } else {
+            // x_last = LQ⁻ᵀ(q_last + LQ⁻¹ λ - LÂᵀ λ)
+            GUANAQO_TRACE("Riccati solve rev", k);
+            // λ0 -= Â λ
+            const auto x_last  = ux.batch(di).bottom_rows(nx);
+            const bool x_lanes = ti == 0;
+            x_lanes ? compact_blas::template xadd_copy<1>(simdify(w), simdify(λ.batch(diI)))
+                    : compact_blas::template xadd_copy<0>(simdify(w), simdify(λ.batch(diI)));
+            // LQ⁻¹ λ
+            trsm(tril(Q̂i), w);
+            // LQ⁻¹ λ - LÂᵀ λ
+            gemv_sub(Âi.transposed(), λ.batch(di0), w);
+            // w = LQ⁻ᵀ(LQ⁻¹ λ - LÂᵀ λ)
+            trsm(tril(Q̂i).transposed(), w);
+            // x_last = LQ⁻ᵀ(q_last + LQ⁻¹ λ - LÂᵀ λ)
+            compact_blas::xadd_copy(simdify(x_last), simdify(x_last), simdify(w));
+
+            // u -= LB̂ᵀ λ0 + LSᵀ q
+            gemv_sub(B̂i.transposed(), λ.batch(di0), ux.batch(di).top_rows(nu));
+            gemv_sub(Ŝi.transposed(), ux.batch(di).bottom_rows(nx), ux.batch(di).top_rows(nu));
+            // u = LR⁻ᵀ u
+            trsm(tril(R̂i).transposed(), ux.batch(di).top_rows(nu));
+        }
+    }
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
                                                        mut_view<> work) const {
     const index_t ti = ctx.index;
@@ -400,7 +561,28 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
             solve_rev_level(l, biY, λ);
         ctx.arrive_and_wait();
     }
-    alt ? solve_riccati_reverse_alt(ctx, ux, λ, work) : solve_riccati_reverse(ctx, ux, λ, work);
+    solve_riccati_reverse_alt(ctx, ux, λ, work);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_new(Context &ctx, mut_view<> ux,
+                                                           mut_view<> λ, mut_view<> work) const {
+    const index_t ti = ctx.index;
+    for (index_t l = lP - lvl; l-- > 0;) {
+        const index_t i_u = add_wrap_PmV(ti, 1), i_y = sub_wrap_PmV(ti, (1 << l) - 1),
+                      i_λ = sub_wrap_PmV(ti, (1 << std::max(l - 1, index_t{0})) - 1);
+        ctx.arrive_and_wait();
+        if (ν2p(i_u) == l)
+            solve_u_backward(l, i_u, λ, work);
+        else if (ν2p(i_y) == l)
+            solve_y_backward(l, i_y, λ);
+
+        ctx.arrive_and_wait();
+        if (ν2p(i_λ) == l)
+            solve_λ_backward(i_λ, λ, work);
+    }
+    ctx.arrive_and_wait();
+    solve_riccati_reverse_new(ctx, ux, λ, work);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
