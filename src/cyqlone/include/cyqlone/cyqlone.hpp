@@ -20,6 +20,7 @@
 #include <bit>
 #include <cassert>
 #include <limits>
+#include <utility>
 
 namespace CYQLONE_NS(cyqlone) {
 
@@ -324,9 +325,24 @@ struct CyqloneSolver {
     static CyqloneSolver build(const CyqloneStorage<value_type> &ocp, index_t lP);
     void update_data(const CyqloneStorage<value_type> &ocp);
     void initialize_rhs(const CyqloneStorage<value_type> &ocp, mut_view<> rhs) const;
+    matrix<> initialize_rhs(const CyqloneStorage<value_type> &ocp) const {
+        matrix<> rhs = initialize_dynamics_constraints();
+        initialize_rhs(ocp, rhs);
+        return rhs;
+    }
     void initialize_gradient(const CyqloneStorage<value_type> &ocp, mut_view<> grad) const;
+    matrix<> initialize_gradient(const CyqloneStorage<value_type> &ocp) const {
+        matrix<> grad = initialize_variables();
+        initialize_gradient(ocp, grad);
+        return grad;
+    }
     void initialize_bounds(const CyqloneStorage<value_type> &ocp, mut_view<> b_min,
                            mut_view<> b_max) const;
+    std::pair<matrix<>, matrix<>> initialize_bounds(const CyqloneStorage<value_type> &ocp) const {
+        std::pair b{initialize_general_constraints(), initialize_general_constraints()};
+        initialize_bounds(ocp, b.first, b.second);
+        return b;
+    }
     void pack_variables(std::span<const value_type> ux_lin, mut_view<> ux) const;
     matrix<> pack_variables(std::span<const value_type> ux_lin) const {
         matrix<> ux = initialize_variables();
@@ -446,7 +462,7 @@ struct CyqloneSolver {
     void factor_pcr_level();
     void factor_l0(Context &ctx);
     void factor_riccati(Context &ctx, bool alt, value_type S, view<> Σ);
-    void factor(Context &ctx, value_type S, view<> Σ, bool alt = false);
+    void factor(Context &ctx, value_type S, view<> Σ, bool alt = true);
 
     void solve_fwd_level(index_t l, index_t biU, mut_view<> λ) const;
     void solve_riccati_forward(Context &ctx, mut_view<> ux, mut_view<> λ) const;

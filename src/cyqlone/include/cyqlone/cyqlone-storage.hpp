@@ -6,7 +6,7 @@
 #include <span>
 #include <vector>
 
-namespace CYQLONE_NS(cyqlone) {
+namespace cyqlone {
 
 ///                ₙ₋₁
 ///     minimize    ∑ [½ uᵢᵀ Rᵢ uᵢ + uᵢᵀ S xᵢ + ½ xᵢᵀ Qᵢ xᵢ + rᵢᵀuᵢ + qᵢᵀxᵢ]
@@ -75,4 +75,4 @@ struct CyqloneStorage {
                                std::span<const value_type> λ_compressed) const;
 };
 
-} // namespace CYQLONE_NS(cyqlone)
+} // namespace cyqlone

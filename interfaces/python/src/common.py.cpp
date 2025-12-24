@@ -51,8 +51,9 @@ void register_ocp(nb::module_ &m) {
             [](PythonOCP &self, np_vector<> x) { self.ocp.qr() = view(x); })
         .def_prop_ro("dim",
                      [](const PythonOCP &self) {
-                         return nb::make_tuple(self.ocp.dim.N_horiz, self.ocp.dim.nx,
-                                               self.ocp.dim.nu, self.ocp.dim.ny, self.ocp.dim.ny_N);
+                         return std::make_tuple(self.ocp.dim.N_horiz, self.ocp.dim.nx,
+                                                self.ocp.dim.nu, self.ocp.dim.ny,
+                                                self.ocp.dim.ny_N);
                      })
         .def(
             "A", [](PythonOCP &self, index_t i) { return np_view(self.ocp.A(i)); },
@@ -64,7 +65,7 @@ void register_ocp(nb::module_ &m) {
             "AB", [](PythonOCP &self, index_t i) { return np_view(self.ocp.AB(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def(
-            "b", [](PythonOCP &self, index_t i) { return np_view(self.ocp.b(i)); },
+            "b", [](PythonOCP &self, index_t i) { return np_view_vec(self.ocp.b(i)); },
             nb::rv_policy::reference_internal, "i"_a)
         .def(
             "C", [](PythonOCP &self, index_t i) { return np_view(self.ocp.C(i)); },
@@ -87,6 +88,12 @@ void register_ocp(nb::module_ &m) {
         .def(
             "H", [](PythonOCP &self, index_t i) { return np_view(self.ocp.H(i)); },
             nb::rv_policy::reference_internal, "i"_a)
+        .def(
+            "q", [](PythonOCP &self, index_t i) { return np_view_vec(self.ocp.q(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
+        .def(
+            "r", [](PythonOCP &self, index_t i) { return np_view_vec(self.ocp.r(i)); },
+            nb::rv_policy::reference_internal, "i"_a)
         .def_prop_ro("N_horiz", [](const PythonOCP &self) { return self.ocp.dim.N_horiz; })
         .def_prop_ro("nx", [](const PythonOCP &self) { return self.ocp.dim.nx; })
         .def_prop_ro("nu", [](const PythonOCP &self) { return self.ocp.dim.nu; })
@@ -94,6 +101,22 @@ void register_ocp(nb::module_ &m) {
         .def_prop_ro("ny_N", [](const PythonOCP &self) { return self.ocp.dim.ny_N; })
         .def("dump_mat", &PythonOCP::dump_mat)
         .def("load_mat", &PythonOCP::load_mat);
+
+    using Solution = LinearOCPStorage::Solution;
+    nb::class_<Solution>(m, "Solution")
+        .def_prop_ro("solution", [](Solution &self) { return np_view_vec(self.solution); })
+        .def_prop_ro("inequality_multipliers",
+                     [](Solution &self) { return np_view_vec(self.inequality_multipliers); })
+        .def_prop_ro("equality_multipliers",
+                     [](Solution &self) { return np_view_vec(self.equality_multipliers); });
+
+    using KKTError = LinearOCPStorage::KKTError;
+    nb::class_<KKTError>(m, "KKTError")
+        .def_ro("stationarity", &KKTError::stationarity)
+        .def_ro("inequality_residual", &KKTError::inequality_residual)
+        .def_ro("equality_residual", &KKTError::equality_residual)
+        .def_ro("complementarity", &KKTError::complementarity);
+
     using cyqlone::qpalm::LinearOCPSparseQP;
     nb::class_<LinearOCPSparseQP>(m, "LinearOCPSparseQP")
         .def("__init__",
@@ -132,6 +155,55 @@ void register_ocp(nb::module_ &m) {
             },
             nb::sig("def build_kkt_matrix(self, S: float, Σ: NDArray[numpy.float64], "
                     "J: NDArray[numpy.float64]) -> scipy.sparse.csc_array"));
+    using CyOCP = CyqloneStorage<>;
+    nb::class_<CyOCP>(m, "CyqloneOCP")
+        .def(
+            "__init__",
+            [](CyOCP &self, const PythonOCP &ocp, index_t ny_0) {
+                new (&self) CyOCP{CyOCP::build(ocp.ocp, ny_0)};
+            },
+            "ocp"_a, "ny_0"_a = -1)
+        .def(
+            "update", [](CyOCP &self, const PythonOCP &ocp) { self.update(ocp.ocp); }, "ocp"_a)
+        .def_prop_ro("N_horiz", [](const CyOCP &self) { return self.N_horiz; })
+        .def_prop_ro("nx", [](const CyOCP &self) { return self.nx; })
+        .def_prop_ro("nu", [](const CyOCP &self) { return self.nu; })
+        .def_prop_ro("ny", [](const CyOCP &self) { return self.ny; })
+        .def_prop_ro("ny_0", [](const CyOCP &self) { return self.ny_0; })
+        .def_prop_ro("ny_N", [](const CyOCP &self) { return self.ny_N; })
+        .def_prop_ro("indices_G0", [](CyOCP &self) { return np_view_vec(self.indices_G0); })
+        .def_prop_ro("data_H", [](CyOCP &self) { return np_view(self.data_H.view()); })
+        .def_prop_ro("data_F", [](CyOCP &self) { return np_view(self.data_F.view()); })
+        .def_prop_ro("data_G", [](CyOCP &self) { return np_view(self.data_G.view()); })
+        .def_prop_ro("data_G0N", [](CyOCP &self) { return np_view(self.data_G0N.view()); })
+        .def_prop_ro("data_rq", [](CyOCP &self) { return np_view(self.data_rq.view()); })
+        .def_prop_ro("data_c", [](CyOCP &self) { return np_view(self.data_c.view()); })
+        .def_prop_ro("data_lb", [](CyOCP &self) { return np_view(self.data_lb.view()); })
+        .def_prop_ro("data_lb0N", [](CyOCP &self) { return np_view(self.data_lb0N.view()); })
+        .def_prop_ro("data_ub", [](CyOCP &self) { return np_view(self.data_ub.view()); })
+        .def_prop_ro("data_ub0N", [](CyOCP &self) { return np_view(self.data_ub0N.view()); })
+        .def(
+            "reconstruct_ineq_multipliers",
+            [](const CyOCP &self, np_vector<> y_compressed) {
+                return np_copy(self.reconstruct_ineq_multipliers(as_span(y_compressed)));
+            },
+            "y_compressed"_a)
+        .def(
+            "reconstruct_solution",
+            [](const CyOCP &self, const PythonOCP &ocp, np_vector<> ux_compressed,
+               np_vector<> y_compressed, np_vector<> λ_compressed) {
+                return self.reconstruct_solution(ocp.ocp, as_span(ux_compressed),
+                                                 as_span(y_compressed), as_span(λ_compressed));
+            },
+            "ocp"_a, "ux_compressed"_a, "y_compressed"_a, "λ_compressed"_a)
+        .def(
+            "compute_kkt_error",
+            [](const CyOCP &self, const PythonOCP &ocp, np_vector<> ux_compressed,
+               np_vector<> y_compressed, np_vector<> λ_compressed) {
+                return self.compute_kkt_error(ocp.ocp, as_span(ux_compressed),
+                                              as_span(y_compressed), as_span(λ_compressed));
+            },
+            "ocp"_a, "ux_compressed"_a, "y_compressed"_a, "λ_compressed"_a);
     nb::class_<cyqlone::qpalm::problems::PlatooningParams>(m, "PlatooningParams")
         .def(nb::init<>())
         .def_rw("friction", &cyqlone::qpalm::problems::PlatooningParams::friction)
@@ -438,8 +510,10 @@ void register_settings(nb::module_ &m) {
         .def_rw("pcg_tolerance", &cyqlone::qpalm::CyqloneBackendSettings::pcg_tolerance)
         .def_rw("pcg_print_resid", &cyqlone::qpalm::CyqloneBackendSettings::pcg_print_resid)
         .def_rw("solve_method", &cyqlone::qpalm::CyqloneBackendSettings::solve_method)
-        .def_rw("pcr_max_update_fraction", &cyqlone::qpalm::CyqloneBackendSettings::pcr_max_update_fraction)
-        .def_rw("cr_max_update_fraction", &cyqlone::qpalm::CyqloneBackendSettings::cr_max_update_fraction)
+        .def_rw("pcr_max_update_fraction",
+                &cyqlone::qpalm::CyqloneBackendSettings::pcr_max_update_fraction)
+        .def_rw("cr_max_update_fraction",
+                &cyqlone::qpalm::CyqloneBackendSettings::cr_max_update_fraction)
         .def_rw("spin_count", &cyqlone::qpalm::CyqloneBackendSettings::spin_count)
         .def_rw("strategy", &cyqlone::qpalm::CyqloneBackendSettings::strategy);
     nb::class_<cyqlone::qpalm::Settings>(m, "Settings")

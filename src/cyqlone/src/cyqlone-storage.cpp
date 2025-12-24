@@ -3,7 +3,7 @@
 #include <batmat/config.hpp>
 #include <guanaqo/blas/hl-blas-interface.hpp>
 
-namespace CYQLONE_NS(cyqlone) {
+namespace cyqlone {
 
 // TODO: make member function to reuse Ju0 and ny_0?
 template <class T>
@@ -170,4 +170,4 @@ template struct CyqloneStorage<double>;
 template struct CyqloneStorage<float>;
 #endif
 
-} // namespace CYQLONE_NS(cyqlone)
+} // namespace cyqlone

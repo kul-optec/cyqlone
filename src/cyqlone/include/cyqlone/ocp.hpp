@@ -14,6 +14,13 @@ struct OCPDim {
     friend constexpr bool operator!=(OCPDim, OCPDim) = default;
 };
 
+///             ₙ₋₁
+///  minimize    ∑ [½ uᵢᵀ Rᵢ uᵢ + uᵢᵀ S xᵢ + ½ xᵢᵀ Qᵢ xᵢ + rᵢᵀuᵢ + qᵢᵀxᵢ] + ½ xₙᵀ Qₙ xₙ + qₙᵀ xₙ
+///             ⁱ⁼⁰
+///  s.t.        x₀   = b₀
+///              xᵢ₊₁ = Aᵢ xᵢ + Bᵢ uᵢ + bᵢ₊₁
+///              lᵢ   ≤ Cᵢ xᵢ + Dᵢ uᵢ ≤ uᵢ
+///              lₙ   ≤ Cₙ xₙ ≤ uₙ
 struct LinearOCPStorage {
     OCPDim dim{};
     /// Storage layout:     size        offset

@@ -3,6 +3,8 @@
 #include <cyqlone/config.hpp>
 #include <cyqlone/matio.hpp>
 #include <cyqlone/ocp.hpp>
+#include <batmat/assume.hpp>
+#include <batmat/matrix/matrix.hpp>
 
 using cyqlone::index_t;
 using cyqlone::real_t;
@@ -25,6 +27,8 @@ template <class T = const real_t>
 using np_matrix = nb::ndarray<T, nb::ndim<2>, nb::f_contig, nb::device::cpu>;
 template <class T = const real_t>
 using np_vector = nb::ndarray<T, nb::ndim<1>, nb::any_contig, nb::device::cpu>;
+template <index_t VL, class T = const real_t>
+using np_batched_view = nb::ndarray<T, nb::shape<VL, -1, -1, -1>, nb::device::cpu>;
 
 namespace cyqlone {
 
@@ -129,6 +133,19 @@ auto np_view_vec(std::span<T, E> vector) {
     };
 }
 
+template <class T>
+auto np_view_vec(std::vector<T> &vector) {
+    return np_view_vec(std::span<T>{vector});
+}
+
+template <class T>
+auto np_view_vec(const std::vector<T> &vector) {
+    return np_view_vec(std::span<const T>{vector});
+}
+
+template <class T>
+auto np_view_vec(std::vector<T> &&vector) = delete;
+
 template <class T, class I, guanaqo::StorageOrder O>
 auto np_view(guanaqo::MatrixView<T, I, std::integral_constant<I, 1>, O> matrix) {
     using order    = std::conditional_t<matrix.is_column_major, nb::f_contig, nb::c_contig>;
@@ -139,6 +156,59 @@ auto np_view(guanaqo::MatrixView<T, I, std::integral_constant<I, 1>, O> matrix) 
         {},
         {static_cast<int64_t>(matrix.row_stride()), static_cast<int64_t>(matrix.col_stride())},
     };
+}
+
+template <class T, class I, class D, class L, guanaqo::StorageOrder O>
+auto np_view(batmat::matrix::View<T, I, std::integral_constant<I, 1>, D, L, O> matrix) {
+    using np_array = nb::ndarray<nb::numpy, T, nb::ndim<3>, nb::device::cpu>;
+    return np_array{
+        matrix.data,
+        {
+            static_cast<size_t>(matrix.depth()),
+            static_cast<size_t>(matrix.rows()),
+            static_cast<size_t>(matrix.cols()),
+        },
+        {},
+        {
+            static_cast<int64_t>(matrix.layer_stride()),
+            static_cast<int64_t>(matrix.is_column_major ? 1 : matrix.outer_stride()),
+            static_cast<int64_t>(matrix.is_column_major ? matrix.outer_stride() : 1),
+        },
+    };
+}
+
+template <class T, class I, index_t VL, class D, guanaqo::StorageOrder O>
+auto np_copy(batmat::matrix::Matrix<T, I, std::integral_constant<I, VL>, D, O> matrix) {
+    using enum guanaqo::StorageOrder;
+    static_assert(O == ColMajor,
+                  "Batched views are only supported for column-major storage"); // TODO
+    BATMAT_ASSERT(matrix.depth() % VL == 0 && "Batched views require depth to be multiple of VL");
+    using order    = std::conditional_t<O == ColMajor, nb::f_contig, nb::c_contig>;
+    using np_array = nb::ndarray<nb::numpy, T, nb::shape<VL, -1, -1, -1>, order, nb::device::cpu>;
+    auto *m        = new decltype(matrix){std::move(matrix)};
+    auto deleter   = [](void *p) noexcept { delete static_cast<decltype(matrix) *>(p); };
+    BATMAT_ASSERT(m->outer_stride() == m->rows());
+    BATMAT_ASSERT(m->view().layer_stride() == m->outer_stride() * m->cols());
+    np_array r{
+        m->data(),
+        {
+            static_cast<size_t>(VL),
+            static_cast<size_t>(m->rows()),
+            static_cast<size_t>(m->cols()),
+            static_cast<size_t>((m->depth() + VL - 1) / VL),
+        },
+        nb::capsule{m, deleter},
+    };
+    return r;
+}
+
+template <class T>
+auto np_copy(std::vector<T> matrix) {
+    using order    = nb::f_contig;
+    using np_array = nb::ndarray<nb::numpy, T, nb::shape<-1>, order, nb::device::cpu>;
+    auto *m        = new decltype(matrix){std::move(matrix)};
+    auto deleter   = [](void *p) noexcept { delete static_cast<decltype(matrix) *>(p); };
+    return np_array{m->data(), {m->size()}, nb::capsule{m, deleter}};
 }
 
 template <class... Args>
