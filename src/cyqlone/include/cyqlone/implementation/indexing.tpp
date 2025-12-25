@@ -7,6 +7,7 @@ namespace CYQLONE_NS(cyqlone) {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_N(index_t a, index_t b) const -> index_t {
     const index_t N = ceil_N;
+    BATMAT_ASSUME(N >= 0);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
     BATMAT_ASSUME(a < N);
@@ -16,6 +17,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_N(index_t a, index_t b) const 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_N(index_t a, index_t b) const -> index_t {
     const index_t N = ceil_N;
+    BATMAT_ASSUME(N >= 0);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
     BATMAT_ASSUME(a < N);
@@ -24,6 +26,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_N(index_t a, index_t b) const 
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_PmV(index_t a, index_t b) const -> index_t {
+    BATMAT_ASSUME(lP >= lvl);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
     BATMAT_ASSUME(a < (1 << (lP - lvl)));
@@ -32,6 +35,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_PmV(index_t a, index_t b) cons
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_PmV(index_t a, index_t b) const -> index_t {
+    BATMAT_ASSUME(lP >= lvl);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
     BATMAT_ASSUME(a < (1 << (lP - lvl)));
