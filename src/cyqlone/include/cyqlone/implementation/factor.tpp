@@ -11,9 +11,6 @@
 #include <batmat/linalg/shift.hpp>
 #include <batmat/linalg/trsm.hpp>
 #include <batmat/linalg/trtri.hpp>
-#include <guanaqo/print.hpp>
-#include <iostream>
-#include <syncstream>
 #include <utility>
 
 #ifndef CYQLONE_FACTOR_DO_PREFETCH
@@ -184,41 +181,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<
         syrk_add(ÂB̂i, DiA);
     }
     if constexpr (Solve) {
+        auto tok = ctx.arrive();
         {
             GUANAQO_TRACE("Update λ", diI);
-            std::osyncstream out(std::cout);
             const index_t dix = add_wrap_N(diA, num_stages - 1);
-            out << "dix=" << dix << ", diI=" << diI << "\n";
-            out.emit();
-
-            ctx.arrive_and_wait();
-            if (ctx.is_master()) {
-                for (index_t jj = 0; jj < ceil_N; ++jj) {
-                    guanaqo::print_python(std::cout << "x[" << jj << "] = ",
-                                          ux(jj).bottom_rows(nx));
-                }
-                for (index_t ii = 0; ii < (1 << (lP - lvl)); ++ii) {
-                    index_t jj = ii * num_stages;
-                    guanaqo::print_python(std::cout << "λ[" << jj << "] = ", λ(jj));
-                }
-            }
-            ctx.arrive_and_wait();
-
             x_lanes ? compact_blas::template xsub<-1>(simdify(λ.batch(diI)),
                                                       simdify(ux.batch(dix).bottom_rows(nx)))
                     : compact_blas::template xsub<+0>(simdify(λ.batch(diI)),
                                                       simdify(ux.batch(dix).bottom_rows(nx)));
-
-            ctx.arrive_and_wait();
-            if (ctx.is_master()) {
-                for (index_t ii = 0; ii < (1 << (lP - lvl)); ++ii) {
-                    index_t jj = ii * num_stages;
-                    guanaqo::print_python(std::cout << "λ[" << jj << "] = ", λ(jj));
-                }
-            }
-            ctx.arrive_and_wait();
         }
-        auto tok = ctx.arrive(); // TODO: move before xsub
         ctx.wait(std::move(tok));
         {
             GUANAQO_TRACE("Solve λ", diI);
@@ -281,14 +252,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
             if constexpr (Solve) {
                 auto ui = ux.batch(di).top_rows(nu), λ_last = λ.batch(di0);
                 gemv_add(B̂i, ui, λ_last);
-                ctx.arrive_and_wait();
-                if (ctx.is_master()) {
-                    for (index_t ii = 0; ii < (1 << (lP - lvl)); ++ii) {
-                        index_t jj = ii * num_stages;
-                        guanaqo::print_python(std::cout << "λ[" << jj << "] = ", λ(jj));
-                    }
-                }
-                ctx.arrive_and_wait();
             }
             // Update Â = Ã - LB̂ LŜᵀ
             i == 0 ? gemm_sub(B̂i, Ŝi.transposed(), A0, Âi) //
@@ -332,15 +295,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
                 trsm(tril(Q̂i), xi);
                 gemv_add(Âi, xi, λ_last);
                 trsm(tril(Q̂i).transposed(), xi);
-
-                ctx.arrive_and_wait();
-                if (ctx.is_master()) {
-                    for (index_t ii = 0; ii < (1 << (lP - lvl)); ++ii) {
-                        index_t jj = ii * num_stages;
-                        guanaqo::print_python(std::cout << "λ[" << jj << "] = ", λ(jj));
-                    }
-                }
-                ctx.arrive_and_wait();
             }
         }
     }

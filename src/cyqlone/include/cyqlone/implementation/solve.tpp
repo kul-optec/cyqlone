@@ -570,14 +570,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_new(Context &ctx, mut_vie
     const index_t ti = ctx.index;
     for (index_t l = lP - lvl; l-- > 0;) {
         const index_t i_u = add_wrap_PmV(ti, 1), i_y = sub_wrap_PmV(ti, (1 << l) - 1),
-                      i_λ = sub_wrap_PmV(ti, (1 << std::max(l - 1, index_t{0})) - 1);
-        ctx.arrive_and_wait();
+                      i_λ = l > 0 ? sub_wrap_PmV(ti, (1 << (l - 1)) - 1) : ti;
+        ctx.arrive_and_wait(); // wait for λ
         if (ν2p(i_u) == l)
             solve_u_backward(l, i_u, λ, work);
         else if (ν2p(i_y) == l)
             solve_y_backward(l, i_y, λ);
-
-        ctx.arrive_and_wait();
+        ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
         if (ν2p(i_λ) == l)
             solve_λ_backward(i_λ, λ, work);
     }
