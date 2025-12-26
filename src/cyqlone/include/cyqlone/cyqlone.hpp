@@ -475,12 +475,8 @@ struct CyqloneSolver {
     }
     template <bool Solve = true>
     void factor_solve_impl(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
-    void factor_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ) {
-        factor_solve_impl<true>(ctx, S, Σ, ux, λ);
-    }
-    void factor(Context &ctx, value_type S, view<> Σ) {
-        factor_solve_impl<false>(ctx, S, Σ, {}, {});
-    }
+    void factor_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
+    void factor(Context &ctx, value_type S, view<> Σ);
 
     void solve_u_forward(index_t l, index_t biU, mut_view<> λ) const;
     void solve_y_forward(index_t l, index_t biY, mut_view<> λ, mut_view<> w) const;

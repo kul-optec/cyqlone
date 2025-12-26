@@ -184,11 +184,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<
         auto tok = ctx.arrive();
         {
             GUANAQO_TRACE("Update λ", diI);
-            const index_t dix = add_wrap_N(diA, num_stages - 1);
-            x_lanes ? compact_blas::template xsub<-1>(simdify(λ.batch(diI)),
-                                                      simdify(ux.batch(dix).bottom_rows(nx)))
-                    : compact_blas::template xsub<+0>(simdify(λ.batch(diI)),
-                                                      simdify(ux.batch(dix).bottom_rows(nx)));
+            auto x_last = ux.batch(diA + num_stages - 1).bottom_rows(nx);
+            x_lanes ? compact_blas::template xsub<-1>(simdify(λ.batch(diI)), simdify(x_last))
+                    : compact_blas::template xsub<+0>(simdify(λ.batch(diI)), simdify(x_last));
         }
         ctx.wait(std::move(tok));
         {
@@ -343,6 +341,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
                 solve_pcg(λ.batch(0), work_pcg.batch(0));
         }
     }
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::factor_solve(Context &ctx, value_type S, view<> Σ,
+                                                      mut_view<> ux, mut_view<> λ) {
+    factor_solve_impl<true>(ctx, S, Σ, ux, λ);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view<> Σ) {
+    factor_solve_impl<false>(ctx, S, Σ, {}, {});
 }
 
 } // namespace CYQLONE_NS(cyqlone)

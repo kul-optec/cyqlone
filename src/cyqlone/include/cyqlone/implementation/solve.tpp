@@ -72,8 +72,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t biD
     const index_t diD        = biD * num_stages;
     { // λ[diD] -= w[biD]
         GUANAQO_TRACE("Subtract work b", biD);
-        biD == 0 ? compact_blas::template xsub<-1>(simdify(λ.batch(diD)), simdify(w.batch(biD)))
-                 : compact_blas::template xsub<+0>(simdify(λ.batch(diD)), simdify(w.batch(biD)));
+        biD == 0 ? compact_blas::template xsub<1>(simdify(λ.batch(diD)), simdify(w.batch(biD)))
+                 : compact_blas::template xsub<0>(simdify(λ.batch(diD)), simdify(w.batch(biD)));
     }
     // solve D⁻¹[diD] d[diD]
     if (is_active(l + 1, biD)) {
