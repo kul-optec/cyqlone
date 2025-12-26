@@ -38,6 +38,12 @@ void register_cyqlone_solver(nb::module_ &m) {
     static constexpr auto view_as_batched = []<class T>(const np_batched_view<VL, T> &t) {
         using View = batmat::matrix::View<T, index_t, std::integral_constant<index_t, VL>, index_t,
                                           index_t, StorageOrder::ColMajor>;
+        constexpr size_t alignment = VL * alignof(T);
+        if (reinterpret_cast<uintptr_t>(t.data()) % alignment != 0)
+            throw std::invalid_argument(std::format("Data pointer not aligned to {} bytes for "
+                                                    "batched view, got {}",
+                                                    alignment,
+                                                    static_cast<const void *>(t.data())));
         if (t.shape(0) > 1 && t.stride(0) != 1)
             throw std::invalid_argument(std::format("Innermost stride should be unit for batched "
                                                     "view, got ({}, {}, {}, {}):({}, {}, {}, {})",
