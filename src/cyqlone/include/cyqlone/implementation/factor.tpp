@@ -122,19 +122,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<
     const index_t biI        = sub_wrap_PmV(ti, 1);
     const index_t biA        = ti;
     const auto biR           = biA;
-    const auto diI           = biI * num_stages;
+    const auto biR_next      = add_wrap_PmV(biA, 1);
     const auto diA           = biA * num_stages;
-    const bool x_lanes       = biA == 0; // first stage wraps around
+    const auto diR_next      = biR_next * num_stages;
     // Coupling equation to previous stage is eliminated after coupling
     // equation to next stage for odd threads, vice versa for even threads.
     const bool I_below_A = (biA & 1) == 1;
-    // Update the subdiagonal blocks U and Y of the coupling equations
-    auto DiI = tril(coupling_D.batch(biI));
-    auto DiA = tril(coupling_D.batch(biA));
-    auto Âi  = riccati_ÂB̂.batch(biR).middle_cols(nx * (num_stages - 1), nx);
-    auto ÂB̂i = riccati_ÂB̂.batch(biR).right_cols(nx + nu * num_stages);
-    auto R̂ŜQ̂ = riccati_R̂ŜQ̂.batch(biR);
-    auto Q̂i  = tril(R̂ŜQ̂.bottom_right(nx, nx));
+    auto DiA             = tril(coupling_D.batch(biA));
+    auto Âi              = riccati_ÂB̂.batch(biR).middle_cols(nx * (num_stages - 1), nx);
+    auto ÂB̂i             = riccati_ÂB̂.batch(biR).right_cols(nx + nu * num_stages);
+    auto R̂ŜQ̂             = riccati_R̂ŜQ̂.batch(biR);
+    auto Q̂i              = tril(R̂ŜQ̂.bottom_right(nx, nx));
     if constexpr (Factor) {
         // LQ⁻ᵀ is upper triangular, stored one row up from LQ itself
         assert(nu >= 1);
@@ -143,6 +141,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<
             GUANAQO_TRACE("Invert Q", biI);
             trtri(Q̂i, Q̂i_inv.transposed());
         }
+        auto inv_Q_tok = ctx.arrive();
+        // Update the subdiagonal blocks U and Y of the coupling equations
         if (I_below_A) {
             // Top block is A → column index is row index of A (biA)
             // Target block in cyclic part is U in column λ(kA)
@@ -152,23 +152,24 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<
             // Top block is I → column index is row index of I (biI)
             // Target block in cyclic part is Y in column λ(kI)
             GUANAQO_TRACE("Compute first Y", biI);
-            x_lanes ? trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI), with_rotate_C<-1>,
-                               with_rotate_D<-1>, with_mask_D<-1>)
-                    : trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI));
+            biA == 0 ? trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI), with_rotate_C<-1>,
+                                with_rotate_D<-1>, with_mask_D<-1>)
+                     : trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI));
         }
+        // Wait for the inversion in the next interval
+        ctx.wait(std::move(inv_Q_tok));
         // Each column of the cyclic part with coupling equations is updated by
         // two threads: one for the forward, and one for the backward coupling.
         // Update the diagonal blocks of the coupling equations,
         // first forward in time ...
+        auto R̂ŜQ̂_next    = riccati_R̂ŜQ̂.batch(biR_next);
+        auto Q̂i_inv_next = triu(R̂ŜQ̂_next.right_cols(nx).middle_rows(nu - 1, nx));
         {
-            GUANAQO_TRACE("Compute L⁻ᵀL⁻¹", biI);
-            x_lanes ? trmm(Q̂i_inv, Q̂i_inv.transposed(), DiI, with_rotate_C<-1>, with_rotate_D<-1>,
-                           with_mask_D<-1>)
-                    : trmm(Q̂i_inv, Q̂i_inv.transposed(), DiI);
+            GUANAQO_TRACE("Compute L⁻ᵀL⁻¹", diR_next);
+            biR_next == 0 ? trmm(Q̂i_inv_next, Q̂i_inv_next.transposed(), DiA, with_rotate_C<-1>,
+                                 with_rotate_D<-1>, with_mask_D<-1>)
+                          : trmm(Q̂i_inv_next, Q̂i_inv_next.transposed(), DiA);
         }
-        // Then synchronize to make sure there are no two threads updating the
-        // same diagonal block.
-        ctx.arrive_and_wait();
         // And finally backward in time, optionally merged with factorization.
         if (lP == lvl) {
             GUANAQO_TRACE("Factor D last", biA);
@@ -183,21 +184,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<
         }
     }
     if constexpr (Solve) {
-        auto tok = ctx.arrive();
-        if constexpr (!Factor)
-            ctx.wait(std::move(tok)); // wait for λ(diI)
+        if (!Factor)
+            ctx.arrive_and_wait(); // Wait for x_next
         {
-            GUANAQO_TRACE("Update λ", diI);
-            auto x_last = ux.batch(diA + num_stages - 1).bottom_rows(nx);
-            x_lanes ? compact_blas::template xsub<-1>(simdify(λ.batch(diI)), simdify(x_last))
-                    : compact_blas::template xsub<+0>(simdify(λ.batch(diI)), simdify(x_last));
+            GUANAQO_TRACE("Update λ", diA);
+            auto x_next = ux.batch(diR_next + num_stages - 1).bottom_rows(nx);
+            biR_next == 0 ? compact_blas::template xsub<-1>(simdify(λ.batch(diA)), simdify(x_next))
+                          : compact_blas::template xsub<+0>(simdify(λ.batch(diA)), simdify(x_next));
         }
-        if constexpr (Factor)
-            ctx.wait(std::move(tok)); // wait for DiI
         {
-            GUANAQO_TRACE("Solve λ", diI);
-            if (ν2p(biI) == 0)
-                trsm(DiI, λ.batch(diI));
+            GUANAQO_TRACE("Solve λ", diA);
+            if (ν2p(biA) == 0)
+                trsm(DiA, λ.batch(diA));
         }
     }
 }
