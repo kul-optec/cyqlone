@@ -466,14 +466,14 @@ struct CyqloneSolver {
     void factor_pcr();
     template <index_t Level>
     void factor_pcr_level();
-    template <bool Solve = true>
+    template <bool Factor = true, bool Solve = true>
     void factor_l0_solve(Context &ctx, mut_view<> ux, mut_view<> λ);
-    template <bool Solve = true>
+    template <bool Factor = true, bool Solve = true>
     void factor_riccati_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
     void factor_riccati(Context &ctx, value_type S, view<> Σ) {
         factor_riccati_solve<false>(ctx, S, Σ, {}, {});
     }
-    template <bool Solve = true>
+    template <bool Factor = true, bool Solve = true>
     void factor_solve_impl(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
     void factor_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
     void factor(Context &ctx, value_type S, view<> Σ);
@@ -486,6 +486,7 @@ struct CyqloneSolver {
     /// Preserves b in λ (except for coupling equations solved using CR)
     void solve_riccati_forward_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
                                    mut_view<> work) const;
+    void solve_forward_new(Context &ctx, mut_view<> ux, mut_view<> λ);
     void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
                        mut_view<> work) const;
 

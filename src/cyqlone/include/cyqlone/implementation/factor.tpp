@@ -114,7 +114,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-template <bool Solve>
+template <bool Factor, bool Solve>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<> ux,
                                                          mut_view<> λ) {
     const index_t ti         = ctx.index;
@@ -135,60 +135,65 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<
     auto ÂB̂i = riccati_ÂB̂.batch(biR).right_cols(nx + nu * num_stages);
     auto R̂ŜQ̂ = riccati_R̂ŜQ̂.batch(biR);
     auto Q̂i  = tril(R̂ŜQ̂.bottom_right(nx, nx));
-    // LQ⁻ᵀ is upper triangular, stored one row up from LQ itself
-    assert(nu >= 1);
-    auto Q̂i_inv = triu(R̂ŜQ̂.right_cols(nx).middle_rows(nu - 1, nx));
-    {
-        GUANAQO_TRACE("Invert Q", biI);
-        trtri(Q̂i, Q̂i_inv.transposed());
-    }
-    if (I_below_A) {
-        // Top block is A → column index is row index of A (biA)
-        // Target block in cyclic part is U in column λ(kA)
-        GUANAQO_TRACE("Compute first U", biA);
-        trmm_neg(Q̂i_inv, Âi.transposed(), coupling_U.batch(biA));
-    } else {
-        // Top block is I → column index is row index of I (biI)
-        // Target block in cyclic part is Y in column λ(kI)
-        GUANAQO_TRACE("Compute first Y", biI);
-        x_lanes ? trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI), with_rotate_C<-1>,
-                           with_rotate_D<-1>, with_mask_D<-1>)
-                : trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI));
-    }
-    // Each column of the cyclic part with coupling equations is updated by
-    // two threads: one for the forward, and one for the backward coupling.
-    // Update the diagonal blocks of the coupling equations,
-    // first forward in time ...
-    {
-        GUANAQO_TRACE("Compute L⁻ᵀL⁻¹", biI);
-        x_lanes ? trmm(Q̂i_inv, Q̂i_inv.transposed(), DiI, with_rotate_C<-1>, with_rotate_D<-1>,
-                       with_mask_D<-1>)
-                : trmm(Q̂i_inv, Q̂i_inv.transposed(), DiI);
-    }
-    // Then synchronize to make sure there are no two threads updating the
-    // same diagonal block.
-    ctx.arrive_and_wait();
-    // And finally backward in time, optionally merged with factorization.
-    if (lP == lvl) {
-        GUANAQO_TRACE("Factor D last", biA);
-        syrk_add(ÂB̂i, DiA);
-        potrf(DiA, tril(pcr_L.batch(0)));
-    } else if (ν2p(biA) == 0) {
-        GUANAQO_TRACE("Factor D", biA);
-        syrk_add_potrf(ÂB̂i, DiA);
-    } else {
-        GUANAQO_TRACE("Compute (BA)(BA)ᵀ", biA);
-        syrk_add(ÂB̂i, DiA);
+    if constexpr (Factor) {
+        // LQ⁻ᵀ is upper triangular, stored one row up from LQ itself
+        assert(nu >= 1);
+        auto Q̂i_inv = triu(R̂ŜQ̂.right_cols(nx).middle_rows(nu - 1, nx));
+        {
+            GUANAQO_TRACE("Invert Q", biI);
+            trtri(Q̂i, Q̂i_inv.transposed());
+        }
+        if (I_below_A) {
+            // Top block is A → column index is row index of A (biA)
+            // Target block in cyclic part is U in column λ(kA)
+            GUANAQO_TRACE("Compute first U", biA);
+            trmm_neg(Q̂i_inv, Âi.transposed(), coupling_U.batch(biA));
+        } else {
+            // Top block is I → column index is row index of I (biI)
+            // Target block in cyclic part is Y in column λ(kI)
+            GUANAQO_TRACE("Compute first Y", biI);
+            x_lanes ? trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI), with_rotate_C<-1>,
+                               with_rotate_D<-1>, with_mask_D<-1>)
+                    : trmm_neg(Âi, Q̂i_inv.transposed(), coupling_Y.batch(biI));
+        }
+        // Each column of the cyclic part with coupling equations is updated by
+        // two threads: one for the forward, and one for the backward coupling.
+        // Update the diagonal blocks of the coupling equations,
+        // first forward in time ...
+        {
+            GUANAQO_TRACE("Compute L⁻ᵀL⁻¹", biI);
+            x_lanes ? trmm(Q̂i_inv, Q̂i_inv.transposed(), DiI, with_rotate_C<-1>, with_rotate_D<-1>,
+                           with_mask_D<-1>)
+                    : trmm(Q̂i_inv, Q̂i_inv.transposed(), DiI);
+        }
+        // Then synchronize to make sure there are no two threads updating the
+        // same diagonal block.
+        ctx.arrive_and_wait();
+        // And finally backward in time, optionally merged with factorization.
+        if (lP == lvl) {
+            GUANAQO_TRACE("Factor D last", biA);
+            syrk_add(ÂB̂i, DiA);
+            potrf(DiA, tril(pcr_L.batch(0)));
+        } else if (ν2p(biA) == 0) {
+            GUANAQO_TRACE("Factor D", biA);
+            syrk_add_potrf(ÂB̂i, DiA);
+        } else {
+            GUANAQO_TRACE("Compute (BA)(BA)ᵀ", biA);
+            syrk_add(ÂB̂i, DiA);
+        }
     }
     if constexpr (Solve) {
         auto tok = ctx.arrive();
+        if constexpr (!Factor)
+            ctx.wait(std::move(tok)); // wait for λ(diI)
         {
             GUANAQO_TRACE("Update λ", diI);
             auto x_last = ux.batch(diA + num_stages - 1).bottom_rows(nx);
             x_lanes ? compact_blas::template xsub<-1>(simdify(λ.batch(diI)), simdify(x_last))
                     : compact_blas::template xsub<+0>(simdify(λ.batch(diI)), simdify(x_last));
         }
-        ctx.wait(std::move(tok));
+        if constexpr (Factor)
+            ctx.wait(std::move(tok)); // wait for DiI
         {
             GUANAQO_TRACE("Solve λ", diI);
             if (ν2p(biI) == 0)
@@ -200,7 +205,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_l0_solve(Context &ctx, mut_view<
 // Performs Riccati recursion and then factors level l=0 of
 // coupling equations + propagates the subdiagonal blocks to level l=1.
 template <index_t VL, class T, StorageOrder DefaultOrder>
-template <bool Solve>
+template <bool Factor, bool Solve>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, value_type S, view<> Σ,
                                                               mut_view<> ux, mut_view<> λ) {
     constexpr bool alt = true; // Don't store intermediate BA LQ products
@@ -215,13 +220,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
     auto Â         = riccati_ÂB̂.batch(ti).left_cols(num_stages * nx);
     auto BADCᵀ     = riccati_BAᵀ.batch(ti);
     auto A0        = data_BA.batch(di0).right_cols(nx);
-    auto DCᵀ0      = data_DCᵀ.batch(di0);
     index_t m_syrk = 0;
     // Copy B and A from the last stage
-    {
+    if constexpr (Factor) {
         GUANAQO_TRACE("Riccati init", k0);
         copy(data_BA.batch(di0).left_cols(nu), B̂.left_cols(nu));
-        m_syrk = compress_masks_sqrt(DCᵀ0, Σ.batch(di0), BADCᵀ.left_cols(nyM));
+        auto DCᵀ0 = data_DCᵀ.batch(di0);
+        m_syrk    = compress_masks_sqrt(DCᵀ0, Σ.batch(di0), BADCᵀ.left_cols(nyM));
     }
     for (index_t i = 0; i < num_stages; ++i) {
         const index_t k = sub_wrap_N(k0, i);
@@ -233,27 +238,33 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
         auto Q̂i         = R̂ŜQ̂i.bottom_right(nx, nx);
         auto B̂i         = B̂.middle_cols(i * nu, nu);
         auto Âi         = Â.middle_cols(i * nx, nx);
-        auto BADCᵀ_prev = BADCᵀ.middle_cols(alt || i == 0 ? 0 : (i - 1) * nx, m_syrk);
         {
             GUANAQO_TRACE("Riccati QRS", k);
             using std::isfinite;
-            // Factor R̂, update Ŝ, factor Q̂
-            syrk_add_potrf(BADCᵀ_prev, tril(data_RSQ.batch(di)), tril(R̂ŜQ̂i), 1 / S);
+            if constexpr (Factor) {
+                // Factor R̂, update Ŝ, factor Q̂
+                auto BADCᵀ_prev = BADCᵀ.middle_cols(alt || i == 0 ? 0 : (i - 1) * nx, m_syrk);
+                syrk_add_potrf(BADCᵀ_prev, tril(data_RSQ.batch(di)), tril(R̂ŜQ̂i), 1 / S);
+            }
             if constexpr (Solve) {
                 // Solve u ← LR̂⁻¹ u, x ← x - Ŝ u
                 auto ui = ux.batch(di).top_rows(nu), xi = ux.batch(di).bottom_rows(nx);
                 trsm(tril(R̂i), ui);
                 gemv_sub(Ŝi, ui, xi);
             }
-            // Compute LB̂ = B̂ LR̂⁻ᵀ
-            trsm(B̂i, tril(R̂i).transposed());
+            if constexpr (Factor) {
+                // Compute LB̂ = B̂ LR̂⁻ᵀ
+                trsm(B̂i, tril(R̂i).transposed());
+            }
             if constexpr (Solve) {
                 auto ui = ux.batch(di).top_rows(nu), λ_last = λ.batch(di0);
                 gemv_add(B̂i, ui, λ_last);
             }
-            // Update Â = Ã - LB̂ LŜᵀ
-            i == 0 ? gemm_sub(B̂i, Ŝi.transposed(), A0, Âi) //
-                   : gemm_sub(B̂i, Ŝi.transposed(), Âi);
+            if constexpr (Factor) {
+                // Update Â = Ã - LB̂ LŜᵀ
+                i == 0 ? gemm_sub(B̂i, Ŝi.transposed(), A0, Âi) //
+                       : gemm_sub(B̂i, Ŝi.transposed(), Âi);
+            }
         }
         if (i + 1 < num_stages) {
             // Copy next B and A
@@ -264,11 +275,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
             auto BAᵀ_next = BADCᵀ_next.left_cols(nx), DCᵀ_next = BADCᵀ_next.right_cols(nyM);
             auto BAi = data_BA.batch(di_next);
             auto Bi = BAi.left_cols(nu), Ai = BAi.right_cols(nx);
-            // Compute next B̂ and Â
-            auto B̂_next = B̂.middle_cols((i + 1) * nu, nu);
-            auto Â_next = Â.middle_cols((i + 1) * nx, nx);
-            gemm(Âi, Bi, B̂_next);
-            gemm(Âi, Ai, Â_next);
+            if constexpr (Factor) {
+                // Compute next B̂ and Â
+                auto B̂_next = B̂.middle_cols((i + 1) * nu, nu);
+                auto Â_next = Â.middle_cols((i + 1) * nx, nx);
+                gemm(Âi, Bi, B̂_next);
+                gemm(Âi, Ai, Â_next);
+            }
             if constexpr (Solve) {
                 auto xi = ux.batch(di).bottom_rows(nx), ux_next = ux.batch(di_next),
                      λ_next = λ.batch(di_next), λ_last = λ.batch(di0);
@@ -281,13 +294,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
                 gemv_add(BAi.transposed(), w, ux_next); // u(j-1) += BAᵀ(j-1) w
             }
             // Riccati update
-            trmm(BAi.transposed(), tril(Q̂i), BAᵀ_next);
-            // TODO: merge with next potrf
-            m_syrk = nx + compress_masks_sqrt(data_DCᵀ.batch(di_next), Σ.batch(di_next), DCᵀ_next);
+            if constexpr (Factor) {
+                trmm(BAi.transposed(), tril(Q̂i), BAᵀ_next);
+                m_syrk =
+                    nx + compress_masks_sqrt(data_DCᵀ.batch(di_next), Σ.batch(di_next), DCᵀ_next);
+            }
         } else {
             // Compute LÂ = Ã LQ⁻ᵀ
             GUANAQO_TRACE("Riccati last", k);
-            trsm(Âi, tril(Q̂i).transposed());
+            if constexpr (Factor) {
+                trsm(Âi, tril(Q̂i).transposed());
+            }
             if constexpr (Solve) {
                 auto xi = ux.batch(di).bottom_rows(nx), λ_last = λ.batch(di0);
                 trsm(tril(Q̂i), xi);
@@ -299,59 +316,67 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-template <bool Solve>
+template <bool Factor, bool Solve>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_type S, view<> Σ,
                                                            mut_view<> ux, mut_view<> λ) {
     index_t ti = ctx.index;
-    factor_riccati_solve<Solve>(ctx, S, Σ, ux, λ);
-    factor_l0_solve<Solve>(ctx, ux, λ);
+    factor_riccati_solve<Factor, Solve>(ctx, S, Σ, ux, λ);
+    factor_l0_solve<Factor, Solve>(ctx, ux, λ);
     for (index_t l = 0; l < lP - lvl; ++l) {
         ctx.arrive_and_wait(); // Wait for L
         const auto biU = add_wrap_PmV(ti, 1), biY = sub_wrap_PmV(ti, (1 << l) - 1);
         if (ν2p(biU) == l) {
-            factor_U(l, biU);
+            if constexpr (Factor)
+                factor_U(l, biU);
             if constexpr (Solve)
                 solve_u_forward(l, biU, λ);
         } else if (ν2p(biY) == l) {
-            factor_Y(l, biY);
+            if constexpr (Factor)
+                factor_Y(l, biY);
             if constexpr (Solve)
                 solve_y_forward(l, biY, λ, work_cr);
         }
         ctx.arrive_and_wait(); // Wait for U, Y
         if (ν2p(biU) == l) {
-            factor_L(l, biY);
+            if constexpr (Factor)
+                factor_L(l, biY);
             if constexpr (Solve)
                 solve_λ_forward(l, biY, λ, work_cr);
         } else if (ν2p(biY) == l) {
-            update_K(l, biY);
+            if constexpr (Factor)
+                update_K(l, biY);
         }
     }
-
-    if (solve_method == SolveMethod::PCR) {
-        ctx.arrive_and_wait(); // wait for off-diagonal block
-        if (ν2p(ti + 1) + 1 == lP - lvl)
-            factor_pcr();
-    }
-
-    if constexpr (Solve) {
+    if constexpr (Factor)
+        if (solve_method == SolveMethod::PCR) {
+            ctx.arrive_and_wait(); // wait for off-diagonal block
+            if (ν2p(ti + 1) + 1 == lP - lvl)
+                factor_pcr();
+        }
+    if constexpr (Solve)
         if (ν2p(ti + 1) + 1 == lP - lvl) {
             if (solve_method == SolveMethod::PCR)
                 solve_pcr(λ.batch(0), work_pcg.batch(0).left_cols(1));
             else
                 solve_pcg(λ.batch(0), work_pcg.batch(0));
         }
-    }
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_solve(Context &ctx, value_type S, view<> Σ,
                                                       mut_view<> ux, mut_view<> λ) {
-    factor_solve_impl<true>(ctx, S, Σ, ux, λ);
+    factor_solve_impl<true, true>(ctx, S, Σ, ux, λ);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view<> Σ) {
-    factor_solve_impl<false>(ctx, S, Σ, {}, {});
+    factor_solve_impl<true, false>(ctx, S, Σ, {}, {});
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_forward_new(Context &ctx, mut_view<> ux,
+                                                           mut_view<> λ) {
+    factor_solve_impl<false, true>(ctx, 0, {}, ux, λ);
 }
 
 } // namespace CYQLONE_NS(cyqlone)

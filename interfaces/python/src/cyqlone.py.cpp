@@ -236,6 +236,15 @@ void register_cyqlone_solver(nb::module_ &m) {
             },
             "ux"_a.noconvert(), "λ"_a.noconvert())
         .def(
+            "solve_forward_new",
+            [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
+                auto ux_vw = view_as_batched(ux);
+                auto λ_vw  = view_as_batched(λ);
+                self.parallel_ctx->run(
+                    [&](auto &ctx) { self.solve_forward_new(ctx, ux_vw, λ_vw); });
+            },
+            "ux"_a.noconvert(), "λ"_a.noconvert())
+        .def(
             "solve_reverse",
             [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);
