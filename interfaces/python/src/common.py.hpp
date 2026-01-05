@@ -3,6 +3,7 @@
 #include <cyqlone/config.hpp>
 #include <cyqlone/matio.hpp>
 #include <cyqlone/ocp.hpp>
+#include <cyqlone/sparse.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/matrix/matrix.hpp>
 
@@ -244,3 +245,37 @@ auto as_span(const np_vector<T> &array) {
 }
 
 } // namespace cyqlone
+
+NAMESPACE_BEGIN(NB_NAMESPACE)
+NAMESPACE_BEGIN(detail)
+
+template <>
+struct type_caster<cyqlone::SparseMatrix> {
+  public:
+    using SparseMatrix = cyqlone::SparseMatrix;
+    NB_TYPE_CASTER(SparseMatrix, const_name("scipy.sparse.coo_array"));
+
+    bool from_python(handle, uint8_t, cleanup_list *) noexcept { return false; }
+
+    template <typename T>
+    static handle from_cpp(T *value, rv_policy policy, cleanup_list *cleanup) {
+        if (!value)
+            return none().release();
+        return from_cpp(*value, policy, cleanup);
+    }
+
+    template <class T>
+    static handle from_cpp(T &&src, rv_policy, cleanup_list *) {
+        object coo_array = module_::import_("scipy.sparse").attr("coo_array");
+        return coo_array(make_tuple(cyqlone::np_copy(std::forward<T>(src).values),
+                                    make_tuple(cyqlone::np_copy(std::forward<T>(src).row_indices),
+                                               cyqlone::np_copy(std::forward<T>(src).col_indices))),
+                         "shape"_a = make_tuple(src.sparsity.rows, src.sparsity.cols))
+            .release();
+    }
+
+    operator SparseMatrix() noexcept { return SparseMatrix{}; }
+};
+
+NAMESPACE_END(detail)
+NAMESPACE_END(NB_NAMESPACE)
