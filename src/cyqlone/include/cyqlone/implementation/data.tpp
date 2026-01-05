@@ -173,12 +173,19 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_variables(std::span<const value_ty
                 using crview = guanaqo::MatrixView<const value_type, index_t>;
                 if (k == 0) {
                     ux.batch(di)(vi).top_rows(nu) = crview::as_column(ux_lin.first(nu));
-                    ux.batch(di)(vi).bottom_rows(nx) =
-                        crview::as_column(ux_lin.subspan(nu + (N_horiz - 1) * nux, nx));
+                    if (ceil_N == N_horiz)
+                        ux.batch(di)(vi).bottom_rows(nx) =
+                            crview::as_column(ux_lin.subspan(nu + (N_horiz - 1) * nux, nx));
+                    else
+                        ux.batch(di)(vi).bottom_rows(nx).set_constant(0);
                 } else if (k < N_horiz) {
                     ux.batch(di)(vi).top_rows(nu) = crview::as_column(ux_lin.subspan(k * nux, nu));
                     ux.batch(di)(vi).bottom_rows(nx) =
                         crview::as_column(ux_lin.subspan(nu + (k - 1) * nux, nx));
+                } else if (k == N_horiz) {
+                    // only pack the last state if we have padding stages
+                    ux.batch(di)(vi).bottom_rows(nx) =
+                        crview::as_column(ux_lin.subspan(nu + (N_horiz - 1) * nux, nx));
                 } else {
                     ux.batch(di)(vi).set_constant(0);
                 }
@@ -207,11 +214,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_variables(view<> ux,
                 using rview = guanaqo::MatrixView<value_type, index_t>;
                 if (k == 0) {
                     rview::as_column(ux_lin.first(nu)) = ux.batch(di)(vi).top_rows(nu);
-                    rview::as_column(ux_lin.subspan(nu + (N_horiz - 1) * nux, nx)) =
-                        ux.batch(di)(vi).bottom_rows(nx);
+                    if (ceil_N == N_horiz)
+                        rview::as_column(ux_lin.subspan(nu + (N_horiz - 1) * nux, nx)) =
+                            ux.batch(di)(vi).bottom_rows(nx);
                 } else if (k < N_horiz) {
                     rview::as_column(ux_lin.subspan(k * nux, nu)) = ux.batch(di)(vi).top_rows(nu);
                     rview::as_column(ux_lin.subspan(nu + (k - 1) * nux, nx)) =
+                        ux.batch(di)(vi).bottom_rows(nx);
+                } else if (k == N_horiz) {
+                    // only unpack the last state if we have padding stages
+                    rview::as_column(ux_lin.subspan(nu + (N_horiz - 1) * nux, nx)) =
                         ux.batch(di)(vi).bottom_rows(nx);
                 }
             }
