@@ -34,7 +34,17 @@ template <typename CompletionFn = EmptyCompletion, class PhaseType = uint32_t>
 class TreeBarrier {
   public:
     enum class BarrierPhase : PhaseType {};
-    using arrival_token = BarrierPhase;
+    class arrival_token {
+        BarrierPhase phase;
+
+      public:
+        explicit arrival_token(BarrierPhase phase) : phase{phase} {}
+        arrival_token(const arrival_token &phase)            = delete;
+        arrival_token(arrival_token &&phase)                 = default;
+        arrival_token &operator=(const arrival_token &phase) = delete;
+        arrival_token &operator=(arrival_token &&phase)      = default;
+        BarrierPhase get() const noexcept { return phase; }
+    };
 
   private:
     static constexpr size_t cache_line_size = 64;
@@ -117,7 +127,7 @@ class TreeBarrier {
             phase.store(next_phase, std::memory_order_release);
             phase.notify_all();
         }
-        return cur_phase;
+        return arrival_token{cur_phase};
     }
 
     [[nodiscard]] arrival_token arrive(uint32_t thread_id, [[maybe_unused]] int line) {
@@ -143,7 +153,7 @@ class TreeBarrier {
             phase.store(next_phase, std::memory_order_release);
             phase.notify_all();
         }
-        return cur_phase;
+        return arrival_token{cur_phase};
     }
 
     [[nodiscard]] BarrierPhase current_phase() const {
@@ -152,7 +162,8 @@ class TreeBarrier {
 
     uint32_t spin_count = 1000; // approx. 2-3 cycles/iteration (Haswell, according to llvm-mca)
 
-    void wait(arrival_token &&old_phase) const {
+    void wait(arrival_token &&token) const {
+        const auto old_phase = token.get();
         // barring overflow, we have that current_phase >= old_phase
         if (phase.load(std::memory_order_acquire) != old_phase) [[likely]]
             return;
