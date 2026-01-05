@@ -83,7 +83,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<val
                     rhs.batch(di)(vi).set_constant(0);
                 }
             }
-            compact_blas::xneg(simdify(rhs.batch(di))); // TODO
         }
     }
 }

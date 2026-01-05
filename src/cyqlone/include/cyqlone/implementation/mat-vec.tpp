@@ -13,6 +13,7 @@ using batmat::linalg::simdify;
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, view<> x, view<> b,
                                                                   mut_view<> Mxb) const {
+    // Mx - b = x(j+1) - A x(j) - B u(j) - b(j)
     auto arrival                 = ctx.arrive();
     const index_t ti             = ctx.index;
     const index_t num_stages     = ceil_N >> lP;    // number of stages per thread
@@ -33,18 +34,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, 
         index_t di = di0 + i;
         auto BAi   = data_BA.batch(di);
         auto uxi   = x.batch(di);
-        gemv_add(BAi, uxi, Mxb.batch(di));
+        gemv_sub(BAi, uxi, Mxb.batch(di));
         if (i + 1 < num_stages) {
             index_t di_next = di + 1;
-            compact_blas::xadd_neg_copy(simdify(Mxb.batch(di_next)), simdify(b.batch(di_next)),
-                                        simdify(uxi.bottom_rows(nx)));
+            compact_blas::xsub_copy(simdify(Mxb.batch(di_next)), simdify(uxi.bottom_rows(nx)),
+                                    simdify(b.batch(di_next)));
         }
     }
     ctx.wait(std::move(arrival)); // x_next comes from next thread
     {
         GUANAQO_TRACE("resid_dyn_constr final", k0);
-        ti_next == 0 ? compact_blas::template xsub<-1>(simdify(Mxb0), simdify(x_next_thread))
-                     : compact_blas::template xsub<0>(simdify(Mxb0), simdify(x_next_thread));
+        ti_next == 0 ? compact_blas::template xadd<-1>(simdify(Mxb0), simdify(x_next_thread))
+                     : compact_blas::template xadd<+0>(simdify(Mxb0), simdify(x_next_thread));
     }
 }
 
