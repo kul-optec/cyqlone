@@ -270,7 +270,7 @@ void register_cyqlone_solver(nb::module_ &m) {
         .def("build_rhs",
              [](Solver &self, np_batched_view<VL, const real_t> ux,
                 np_batched_view<VL, const real_t> λ) {
-                 return self.build_rhs(view_as_batched(ux), view_as_batched(λ));
+                 return np_copy(self.build_rhs(view_as_batched(ux), view_as_batched(λ)));
              })
         .def("build_sparse_factor", [](Solver &self) { return self.build_sparse_factor(); })
         .def("build_sparse_diag", [](Solver &self) { return self.build_sparse_diag(); });
