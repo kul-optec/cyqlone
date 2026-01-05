@@ -14,15 +14,16 @@ using namespace batmat::linalg;
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value_type> &ocp,
                                                       std::span<const value_type> Σ) const
-    -> std::vector<std::tuple<index_t, index_t, value_type>> {
+    -> SparseMatrix {
     using std::sqrt;
-    std::vector<std::tuple<index_t, index_t, value_type>> tuples;
 
     const index_t nux = nu + nx, nuxx = nux + nx;
     const index_t vstride    = ceil_N >> lvl;
     const index_t num_stages = ceil_N >> lP; // number of stages per thread
     const index_t num_proc   = 1 << (lP - lvl);
-    const index_t sλ         = ceil_N * nuxx - (nx << lP);
+    const index_t n          = ceil_N * nuxx;
+    const index_t sλ         = n - (nx << lP);
+    SparseMatrixBuilder mat{.rows = n, .cols = n, .symmetry = Symmetry::Unsymmetric};
 
     batmat::matrix::Matrix<value_type, index_t> RSQ_DC{{
         .depth = N_horiz,
@@ -69,68 +70,57 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value
                 const index_t k = sub_wrap_N(k0, i);
                 index_t s       = sv + ti * (nuxx * num_stages - nx) + nuxx * i;
                 if (k >= N_horiz) {
-                    const auto ε = std::numeric_limits<value_type>::epsilon();
                     for (index_t c = 0; c < nu; ++c)
-                        tuples.emplace_back(s + c, s + c, 1);
+                        mat.add(s + c, s + c, 1); // R = I
                     for (index_t c = 0; c < nx; ++c) {
-                        tuples.emplace_back(s + c + nu, s + c + nu, ε * ε);
+                        mat.add(s + c + nu, s + c + nu, 1); // Q = I
                         if (i + 1 < num_stages)
-                            tuples.emplace_back(s + c + nux, s + c + nu, -1);
+                            mat.add(s + c + nux, s + c + nu, -1); // E = -I
                         else
-                            tuples.emplace_back(sλI + c, s + c + nu, -1);
-                        if (i == 0)
-                            tuples.emplace_back(sλA + c, s + c + nu, 1);
+                            mat.add(sλI + c, s + c + nu, -1); // E = -I
                     }
-                    if (i > 0)
-                        for (index_t c = 0; c < nx; ++c)
-                            tuples.emplace_back(s + nu + c, s - nx + c, 1);
                     continue;
                 }
                 for (index_t c = 0; c < nu; ++c) {
                     for (index_t r = c; r < nu; ++r)
-                        tuples.emplace_back(s + r, s + c, R(k)(r, c));
+                        mat.add(s + r, s + c, R(k)(r, c));
                     if (k > 0)
                         for (index_t r = 0; r < nx; ++r)
-                            tuples.emplace_back(s + r + nu, s + c, Sᵀ(k)(r, c));
-                    if (i == 0) {
+                            mat.add(s + r + nu, s + c, Sᵀ(k)(r, c));
+                    if (i == 0)
                         for (index_t r = 0; r < nx; ++r)
-                            tuples.emplace_back(sλA + r, s + c, ocp.data_F(k0).left_cols(nu)(r, c));
-                    }
+                            mat.add(sλA + r, s + c, ocp.data_F(k0).left_cols(nu)(r, c));
                 }
                 for (index_t c = 0; c < nx; ++c) {
                     for (index_t r = c; r < nx; ++r)
-                        tuples.emplace_back(s + r + nu, s + c + nu, Q(k)(r, c));
+                        mat.add(s + r + nu, s + c + nu, Q(k)(r, c));
                     if (i + 1 < num_stages)
-                        tuples.emplace_back(s + c + nux, s + c + nu, -1);
+                        mat.add(s + c + nux, s + c + nu, -1);
                     else
-                        tuples.emplace_back(sλI + c, s + c + nu, -1);
-                    if (i == 0 && k > 0) {
+                        mat.add(sλI + c, s + c + nu, -1);
+                    if (i == 0 && k > 0)
                         for (index_t r = 0; r < nx; ++r)
-                            tuples.emplace_back(sλA + r, s + c + nu,
-                                                ocp.data_F(k0).right_cols(nx)(r, c));
-                    }
+                            mat.add(sλA + r, s + c + nu, ocp.data_F(k0).right_cols(nx)(r, c));
                 }
                 if (i > 0) {
                     for (index_t c = 0; c < nx; ++c) {
                         for (index_t r = 0; r < nu; ++r)
-                            tuples.emplace_back(s + r, s - nx + c,
-                                                ocp.data_F(k).left_cols(nu)(c, r));
+                            mat.add(s + r, s - nx + c, ocp.data_F(k).left_cols(nu)(c, r));
                         for (index_t r = 0; r < nx; ++r)
-                            tuples.emplace_back(s + nu + r, s - nx + c,
-                                                ocp.data_F(k).right_cols(nx)(c, r));
+                            mat.add(s + nu + r, s - nx + c, ocp.data_F(k).right_cols(nx)(c, r));
                     }
                 }
             }
         }
     }
-    return tuples;
+    return std::move(mat).build();
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -> std::vector<T> {
     const index_t nux = nu + nx, nuxx = nux + nx;
-    std::vector<value_type> tuples(nuxx * ceil_N);
-    std::ranges::fill(tuples, std::numeric_limits<value_type>::quiet_NaN());
+    std::vector<value_type> rhs(nuxx * ceil_N);
+    std::ranges::fill(rhs, std::numeric_limits<value_type>::quiet_NaN());
     const index_t num_stages = ceil_N >> lP; // number of stages per thread
     const index_t num_proc   = 1 << (lP - lvl);
     const index_t sλ         = ceil_N * nuxx - (nx << lP);
@@ -144,9 +134,9 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -
                 index_t s        = sv + ti * (nuxx * num_stages - nx) + nuxx * i;
                 if (i > 0)
                     for (index_t c = 0; c < nx; ++c)
-                        tuples[s - nx + c] = λ.batch(di)(vi)(c, 0);
+                        rhs[s - nx + c] = λ.batch(di)(vi)(c, 0);
                 for (index_t c = 0; c < nux; ++c)
-                    tuples[s + c] = ux.batch(di)(vi)(c, 0);
+                    rhs[s + c] = ux.batch(di)(vi)(c, 0);
             }
         }
     }
@@ -156,7 +146,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -
         const index_t vi = i / (1 << (lP - lvl));
         const index_t di = bi * num_stages;
         for (index_t c = 0; c < nx; ++c)
-            tuples[s + c] = λ.batch(di)(vi)(c, 0);
+            rhs[s + c] = λ.batch(di)(vi)(c, 0);
         s += nx;
     };
     if (lP != lvl) {
@@ -172,19 +162,19 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -
     for (index_t i = 0; i < (1 << lP); i += (1 << (lP - lvl))) {
         cyclic_block(i);
     }
-    return tuples;
+    return rhs;
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const
-    -> std::vector<std::tuple<index_t, index_t, value_type>> {
-    std::vector<std::tuple<index_t, index_t, value_type>> tuples;
+auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMatrix {
     constexpr bool alt = true;
     const index_t nux = nu + nx, nuxx = nux + nx;
     const index_t vstride    = ceil_N >> lvl;
     const index_t num_stages = ceil_N >> lP; // number of stages per thread
     const index_t num_proc   = 1 << (lP - lvl);
-    const index_t sλ         = ceil_N * nuxx - (nx << lP);
+    const index_t n          = ceil_N * nuxx;
+    const index_t sλ         = n - (nx << lP);
+    SparseMatrixBuilder mat{.rows = n, .cols = n, .symmetry = Symmetry::Unsymmetric};
     matrix AinvQᵀ{{
         .depth = 1 << lP,
         .rows  = nx,
@@ -266,31 +256,31 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const
                     auto AiQprevᵀ  = AiQᵀ.middle_cols((i - 1) * nx, nx);
                     for (index_t c = 0; c < nx; ++c) {
                         for (index_t r = 0; r <= c; ++r)
-                            tuples.emplace_back(s - nx + r, s - nx + c, -iQᵀprev(r, c));
+                            mat.add(s - nx + r, s - nx + c, -iQᵀprev(r, c));
                         for (index_t r = 0; r < nux; ++r)
-                            tuples.emplace_back(s + r, s - nx + c, LBAi(vi)(r, c));
+                            mat.add(s + r, s - nx + c, LBAi(vi)(r, c));
                         for (index_t r = 0; r < nx; ++r)
-                            tuples.emplace_back(sλA + r, s - nx + c, AiQprevᵀ(vi)(r, c));
+                            mat.add(sλA + r, s - nx + c, AiQprevᵀ(vi)(r, c));
                     }
                 }
                 for (index_t c = 0; c < nu; ++c) {
                     for (index_t r = c; r < nux; ++r)
-                        tuples.emplace_back(s + r, s + c, RSi(r, c));
+                        mat.add(s + r, s + c, RSi(r, c));
                     for (index_t r = 0; r < nx; ++r)
-                        tuples.emplace_back(sλA + r, s + c, B̂i(vi)(r, c));
+                        mat.add(sλA + r, s + c, B̂i(vi)(r, c));
                 }
                 for (index_t c = 0; c < nx; ++c) {
                     for (index_t r = c; r < nx; ++r) {
-                        tuples.emplace_back(s + r + nu, s + c + nu, Qi(r, c));
+                        mat.add(s + r + nu, s + c + nu, Qi(r, c));
                     }
                     if (i + 1 < num_stages)
                         for (index_t r = 0; r <= c; ++r)
-                            tuples.emplace_back(s + r + nux, s + c + nu, -iQiᵀ(vi)(r, c));
+                            mat.add(s + r + nux, s + c + nu, -iQiᵀ(vi)(r, c));
                     else
                         for (index_t r = 0; r <= c; ++r)
-                            tuples.emplace_back(sλI + r, s + c + nu, -iQiᵀ(vi)(r, c));
+                            mat.add(sλI + r, s + c + nu, -iQiᵀ(vi)(r, c));
                     for (index_t r = 0; r < nx; ++r)
-                        tuples.emplace_back(sλA + r, s + c + nu, AiQiᵀ(vi)(r, c));
+                        mat.add(sλA + r, s + c + nu, AiQiᵀ(vi)(r, c));
                 }
             }
         }
@@ -303,12 +293,12 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const
         const index_t vi = i / (1 << (lP - lvl));
         for (index_t c = 0; c < nx; ++c) {
             for (index_t r = c; r < nx; ++r)
-                tuples.emplace_back(s + r, s + c, coupling_D.batch(bi)(vi)(r, c));
+                mat.add(s + r, s + c, coupling_D.batch(bi)(vi)(r, c));
             if (i + offset < (1 << lP))
                 for (index_t r = 0; r < nx; ++r)
-                    tuples.emplace_back(sY + r, s + c, coupling_Y.batch(bi)(vi)(r, c));
+                    mat.add(sY + r, s + c, coupling_Y.batch(bi)(vi)(r, c));
             for (index_t r = 0; r < nx; ++r)
-                tuples.emplace_back(sU + r, s + c, coupling_U.batch(bi)(vi)(r, c));
+                mat.add(sU + r, s + c, coupling_U.batch(bi)(vi)(r, c));
         }
         s += nx;
     };
@@ -318,10 +308,10 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const
         const index_t vi = i / (1 << (lP - lvl));
         for (index_t c = 0; c < nx; ++c) {
             for (index_t r = c; r < nx; ++r)
-                tuples.emplace_back(s + r, s + c, pcr_L.batch(0)(vi)(r, c));
+                mat.add(s + r, s + c, pcr_L.batch(0)(vi)(r, c));
             if (i + offset < (1 << lP))
                 for (index_t r = 0; r < nx; ++r)
-                    tuples.emplace_back(sY + r, s + c, coupling_Y.batch(bi)(vi)(r, c));
+                    mat.add(sY + r, s + c, coupling_Y.batch(bi)(vi)(r, c));
         }
         s += nx;
     };
@@ -338,17 +328,17 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const
     for (index_t i = 0; i < (1 << lP); i += (1 << (lP - lvl))) {
         cyclic_block_final(i, 1 << (lP - lvl));
     }
-    return tuples;
+    return std::move(mat).build();
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const
-    -> std::vector<std::tuple<index_t, index_t, value_type>> {
-    std::vector<std::tuple<index_t, index_t, value_type>> tuples;
+auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const -> SparseMatrix {
     const index_t nux = nu + nx, nuxx = nux + nx;
     const index_t num_stages = ceil_N >> lP; // number of stages per thread
     const index_t num_proc   = 1 << (lP - lvl);
-    const index_t sλ         = ceil_N * nuxx - (nx << lP);
+    const index_t n          = ceil_N * nuxx;
+    const index_t sλ         = n - (nx << lP);
+    SparseMatrixBuilder mat{.rows = n, .cols = n, .symmetry = Symmetry::Lower};
     for (index_t vi = 0; vi < vl; ++vi) {
         const index_t sv = vi * num_proc * (nuxx * num_stages - nx);
         for (index_t ti = 0; ti < num_proc; ++ti) {
@@ -356,18 +346,18 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const
                 index_t s = sv + ti * (nuxx * num_stages - nx) + nuxx * i;
                 if (i > 0)
                     for (index_t c = 0; c < nx; ++c)
-                        tuples.emplace_back(s - nx + c, s - nx + c, -1);
+                        mat.add(s - nx + c, s - nx + c, -1);
                 for (index_t c = 0; c < nu; ++c)
-                    tuples.emplace_back(s + c, s + c, 1);
+                    mat.add(s + c, s + c, 1);
                 for (index_t c = 0; c < nx; ++c)
-                    tuples.emplace_back(s + c + nu, s + c + nu, 1);
+                    mat.add(s + c + nu, s + c + nu, 1);
             }
         }
     }
     for (index_t i = 0; i < 1 << lP; ++i)
         for (index_t r = 0; r < nx; ++r)
-            tuples.emplace_back(sλ + nx * i + r, sλ + nx * i + r, -1);
-    return tuples;
+            mat.add(sλ + nx * i + r, sλ + nx * i + r, -1);
+    return std::move(mat).build();
 }
 
 } // namespace CYQLONE_NS(cyqlone)

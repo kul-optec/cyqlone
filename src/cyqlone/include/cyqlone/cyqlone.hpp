@@ -4,6 +4,7 @@
 #include <cyqlone/cyqlone-params.hpp>
 #include <cyqlone/cyqlone-storage.hpp>
 #include <cyqlone/parallel.hpp>
+#include <cyqlone/sparse.hpp>
 #include <cyqlone/timing.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
@@ -532,11 +533,11 @@ struct CyqloneSolver {
     template <index_t Level>
     void update_pcr_level(index_t m, mut_batch_view<> WYU, mut_batch_view<> WΣ);
 
-    std::vector<std::tuple<index_t, index_t, value_type>>
-    build_sparse(const CyqloneStorage<value_type> &ocp, std::span<const value_type> Σ) const;
-    std::vector<value_type> build_rhs(view<> ux, view<> λ) const;
-    std::vector<std::tuple<index_t, index_t, value_type>> build_sparse_factor() const;
-    std::vector<std::tuple<index_t, index_t, value_type>> build_sparse_diag() const;
+    [[nodiscard]] SparseMatrix build_sparse(const CyqloneStorage<value_type> &ocp,
+                                            std::span<const value_type> Σ) const;
+    [[nodiscard]] std::vector<value_type> build_rhs(view<> ux, view<> λ) const;
+    [[nodiscard]] SparseMatrix build_sparse_factor() const;
+    [[nodiscard]] SparseMatrix build_sparse_diag() const;
 };
 
 namespace detail {
