@@ -64,9 +64,10 @@ struct CyqloneSolver {
     /// log2(P), logarithm of the number of parallel execution units
     /// (number of processors × vector length)
     const index_t lP = lp() + lv();
+    /// Number of stages per thread per lane (rounded up)
+    const index_t n = (N_horiz + p * vl - 1) / (p * vl);
 
-    const index_t ceil_p = 1 << lp();
-    const index_t ceil_N = ((N_horiz + (1 << lP) - 1) / (1 << lP)) * (1 << lP);
+    [[nodiscard]] index_t ceil_N() const { return n * p * vl; }
 
     [[nodiscard]] index_t add_wrap_N(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_N(index_t a, index_t b) const;
@@ -109,38 +110,38 @@ struct CyqloneSolver {
                                  : solve_method == SolveMethod::StairPCG ? "pcg=stair"
                                                                          : "pcg=jacobi";
         std::string_view order = default_order == StorageOrder::RowMajor ? "rm" : "cm";
-        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz,
-                           1 << (lP - lvl), VL, solve, order);
+        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz, p, VL,
+                           solve, order);
     }
 
     using SharedContext                         = parallel::SharedContext;
     using Context                               = parallel::Context<SharedContext>;
-    std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(1 << (lP - lvl));
+    std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
 
     matrix<default_order> cr_L = [this] {
         return matrix<default_order>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nx,
             .cols  = nx,
         }};
     }();
     matrix<default_order> cr_U = [this] {
         return matrix<default_order>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nx,
             .cols  = nx,
         }};
     }();
     matrix<default_order> cr_Y = [this] {
         return matrix<default_order>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nx,
             .cols  = nx,
         }};
     }();
     matrix<StorageOrder::ColMajor> work_cr = [this] {
         return matrix<StorageOrder::ColMajor>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nx,
             .cols  = 1,
         }};
@@ -177,20 +178,20 @@ struct CyqloneSolver {
         return matrix<StorageOrder::ColMajor>{{
             .depth = VL,
             .rows  = nx,
-            .cols  = ceil_N * std::max(ny, ny_0 + ny_N),
+            .cols  = N_horiz * std::max(ny, ny_0 + ny_N),
         }};
     }(); // TODO: merge with work_update?
     matrix<StorageOrder::ColMajor> work_update_pcr_UY = [this] {
         return matrix<StorageOrder::ColMajor>{{
             .depth = VL,
             .rows  = nx,
-            .cols  = 2 * ceil_N * std::max(ny, ny_0 + ny_N),
+            .cols  = 2 * N_horiz * std::max(ny, ny_0 + ny_N),
         }};
     }(); // TODO: merge with work_update?
     matrix<StorageOrder::ColMajor> work_update_pcr_Σ = [this] {
         return matrix<StorageOrder::ColMajor>{{
             .depth = VL,
-            .rows  = 2 * ceil_N * std::max(ny, ny_0 + ny_N),
+            .rows  = 2 * N_horiz * std::max(ny, ny_0 + ny_N),
             .cols  = 1,
         }};
     }();
@@ -198,94 +199,94 @@ struct CyqloneSolver {
         return matrix<StorageOrder::ColMajor>{{
             .depth = 4 << lvl,
             .rows  = nx,
-            .cols  = (ceil_N >> lvl) * std::max(ny, ny_0 + ny_N),
+            .cols  = n * p * std::max(ny, ny_0 + ny_N),
         }};
     }(); // TODO: merge with riccati_ΥΓ?
     matrix<StorageOrder::ColMajor> work_update_Σ = [this] {
         return matrix<StorageOrder::ColMajor>{{
             .depth = 1 << lvl,
-            .rows  = (ceil_N >> lvl) * std::max(ny, ny_0 + ny_N),
+            .rows  = n * p * std::max(ny, ny_0 + ny_N),
             .cols  = 1,
         }};
     }();
     matrix<StorageOrder::ColMajor> work_hyh = [this] {
         using namespace batmat::linalg;
         const auto [r, c] = hyhound_size_W(tril(cr_L.batch(0)));
-        return matrix<StorageOrder::ColMajor>{{.depth = 1 << lP, .rows = r, .cols = c}};
+        return matrix<StorageOrder::ColMajor>{{.depth = p * vl, .rows = r, .cols = c}};
     }();
     matrix<default_order> riccati_ÂB̂ = [this] {
         return matrix<default_order>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nx,
-            .cols  = (ceil_N >> lP) * (nu + nx),
+            .cols  = n * (nu + nx),
         }};
     }();
     matrix<default_order> riccati_BAᵀ = [this] {
         return matrix<default_order>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nu + nx,
-            .cols  = ((ceil_N >> lP) - 1) * nx + std::max(ny, ny_0 + ny_N),
+            .cols  = (n - 1) * nx + std::max(ny, ny_0 + ny_N),
         }};
     }();
     matrix<default_order> riccati_R̂ŜQ̂ = [this] {
         return matrix<default_order>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nu + nx,
-            .cols  = (ceil_N >> lP) * (nu + nx),
+            .cols  = n * (nu + nx),
         }};
     }();
     matrix<StorageOrder::ColMajor> riccati_ΥΓ1 = [this] {
         return matrix<StorageOrder::ColMajor>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nu + nx + nx,
-            .cols  = (ceil_N >> lP) * std::max(ny, ny_0 + ny_N),
+            .cols  = n * std::max(ny, ny_0 + ny_N),
         }};
     }();
     matrix<StorageOrder::ColMajor> riccati_ΥΓ2 = [this] {
         return matrix<StorageOrder::ColMajor>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nu + nx + nx,
-            .cols  = (ceil_N >> lP) * std::max(ny, ny_0 + ny_N),
+            .cols  = n * std::max(ny, ny_0 + ny_N),
         }};
     }();
     matrix<default_order> data_BA = [this] {
         return matrix<default_order>{{
-            .depth = ceil_N,
+            .depth = ceil_N(),
             .rows  = nx,
             .cols  = nu + nx,
         }};
     }();
     matrix<default_order> data_DCᵀ = [this] {
         return matrix<default_order>{{
-            .depth = ceil_N,
+            .depth = ceil_N(),
             .rows  = nu + nx,
             .cols  = std::max(ny, ny_0 + ny_N),
         }};
     }();
     matrix<StorageOrder::ColMajor> data_rhs_constr = [this] {
         return matrix<StorageOrder::ColMajor>{{
-            .depth = ceil_N,
+            .depth = ceil_N(),
             .rows  = nx,
             .cols  = 1,
         }};
     }();
     matrix<StorageOrder::ColMajor> work_Σ = [this] {
         return matrix<StorageOrder::ColMajor>{{
-            .depth = 1 << lP,
-            .rows  = (ceil_N >> lP) * std::max(ny, ny_0 + ny_N),
+            .depth = p * vl,
+            .rows  = n * std::max(ny, ny_0 + ny_N),
             .cols  = 1,
         }};
     }();
     matrix<default_order> data_RSQ = [this] {
         return matrix<default_order>{{
-            .depth = ceil_N,
+            .depth = ceil_N(),
             .rows  = nu + nx,
             .cols  = nu + nx,
         }};
     }();
     matrix<StorageOrder::ColMajor> riccati_work = [this] {
         return matrix<StorageOrder::ColMajor>{{
-            .depth = 1 << lP,
+            .depth = p * vl,
             .rows  = nx,
             .cols  = 1,
         }};
@@ -297,7 +298,7 @@ struct CyqloneSolver {
             .cols  = 4,
         }};
     }();
-    std::vector<index_t> nJs = std::vector<index_t>(1 << (lP - lvl));
+    std::vector<index_t> nJs = std::vector<index_t>(p);
 
     struct Timings {
         using type    = DefaultTimings;
@@ -400,16 +401,16 @@ struct CyqloneSolver {
     }
 
     matrix<> initialize_variables() const {
-        return matrix<>{{.depth = ceil_N, .rows = nu + nx, .cols = 1}};
+        return matrix<>{{.depth = ceil_N(), .rows = nu + nx, .cols = 1}};
     }
     matrix<> initialize_dynamics_constraints() const {
-        return matrix<>{{.depth = ceil_N, .rows = nx, .cols = 1}};
+        return matrix<>{{.depth = ceil_N(), .rows = nx, .cols = 1}};
     }
     matrix<> initialize_general_constraints() const {
-        return matrix<>{{.depth = ceil_N, .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
+        return matrix<>{{.depth = ceil_N(), .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
     }
     mask_matrix<> initialize_active_set() const {
-        return mask_matrix<>{{.depth = ceil_N, .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
+        return mask_matrix<>{{.depth = ceil_N(), .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
     }
 
     // For lgp = 5, lgv = 2, N = 3 << lgp

@@ -112,7 +112,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t iU,
                                                          mut_view<> λ) const {
-    const index_t n   = ceil_N >> lP;
     const index_t r   = 1 << l;
     const index_t iL  = sub_wrap_p(iU, r); // k
     const index_t iY  = sub_wrap_p(iL, r); // k-2^l
@@ -143,7 +142,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t iU,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU,
                                                          mut_view<> λ) const {
-    const index_t n   = ceil_N >> lP;
     const index_t r   = 1 << l;
     const index_t iL  = sub_wrap_p(iU, r); // = k, iU = k+2^l
     const index_t diU = iU * n, diL = iL * n;
@@ -156,7 +154,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY, mut_view<> λ,
                                                          mut_view<> w) const {
-    const index_t n   = ceil_N >> lP;
     const index_t r   = 1 << l;
     const index_t iL  = add_wrap_p(iY, r); // = k, iY = k-2^l
     const index_t diY = iY * n;
@@ -168,7 +165,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY, 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL, mut_view<> λ,
                                                          view<> w) const {
-    const index_t n   = ceil_N >> lP;
     const index_t diL = iL * n;
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
     { // b(diL) -= w(iL)
@@ -188,7 +184,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU, mut_view<> λ,
                                                           mut_view<> w) const {
-    const index_t n   = ceil_N >> lP;
     const index_t r   = 1 << l;
     const index_t iL  = sub_wrap_p(iU, r); // = k, iU = k+2^l
     const index_t diL = iL * n;
@@ -201,7 +196,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY,
                                                           mut_view<> λ) const {
-    const index_t n   = ceil_N >> lP;
     const index_t r   = 1 << l;
     const index_t iL  = add_wrap_p(iY, r); // = k, iY = k-2^l
     const index_t diL = iL * n, diY = iY * n;
@@ -216,7 +210,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<> λ,
                                                           view<> w) const {
-    const index_t n   = ceil_N >> lP;
     const index_t diL = iL * n; // iL = k
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     { // λ[diL] -= w[iL]

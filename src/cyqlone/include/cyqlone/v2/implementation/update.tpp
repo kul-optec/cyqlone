@@ -28,11 +28,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t bi) {
             update_pcr(W.batch(l & 3), W.batch((l + 2) & 3), wΣ);
         GUANAQO_TRACE("Update L", bi);
         // TODO: could be optimized further by recomputing if nj is larger than nx
-        if (update_y || (1 << (lP - lvl)) >> 1 == 0)
+        if (update_y || p >> 1 == 0)
             gemm_diag_add(W.batch(l & 3), W.batch((l + 2) & 3).transposed(), cr_Y.batch(0), wΣ);
         else
-            gemm_neg(cr_Y.batch((1 << (lP - lvl)) >> 1),
-                     cr_U.batch((1 << (lP - lvl)) >> 1).transposed(), cr_Y.batch(0));
+            gemm_neg(cr_Y.batch(p >> 1), cr_U.batch(p >> 1).transposed(), cr_Y.batch(0));
         if (solve_method == SolveMethod::PCR)
             syrk_diag_add(W.batch((l + 2) & 3), tril(cr_L.batch(0)), wΣ);
         if (!do_update_pcr)
@@ -181,9 +180,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
     const index_t nyM = std::max(ny, ny_0 + ny_N);
     // TODO: special case nyM for c == 0
     // const index_t nyM = c == 0 ? std::max(ny, ny_0 + ny_N) : ny;
-    const index_t n   = ceil_N >> lP; // number of stages per thread
-    const index_t dn  = c * n;        // data batch index
-    const index_t jn  = c * n;        // stage index
+    const index_t dn  = c * n; // data batch index
+    const index_t jn  = c * n; // stage index
     const index_t nux = nu + nx;
     auto R̂ŜQ̂          = riccati_R̂ŜQ̂.batch(c);
     auto B̂            = riccati_ÂB̂.batch(c).right_cols(n * nu);

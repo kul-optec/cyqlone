@@ -16,13 +16,12 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value
                                                       std::span<const value_type> Σ) const
     -> SparseMatrix {
     using std::sqrt;
-
     const index_t nux = nu + nx, nuxx = nux + nx;
-    const index_t vstride    = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    const index_t n          = ceil_N * nuxx;
-    const index_t sλ         = n - (nx << lP);
-    SparseMatrixBuilder mat{.rows = n, .cols = n, .symmetry = Symmetry::Unsymmetric};
+    const index_t vstride    = p * n;
+    const index_t num_stages = n; // number of stages per thread
+    const index_t nn         = ceil_N() * nuxx;
+    const index_t sλ         = nn - (nx * p * vl);
+    SparseMatrixBuilder mat{.rows = nn, .cols = nn, .symmetry = Symmetry::Unsymmetric};
 
     batmat::matrix::Matrix<value_type, index_t> RSQ_DC{{
         .depth = N_horiz,
@@ -64,7 +63,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value
             const auto biI   = sub_wrap_P(biA, 1);
             const auto sλA   = sλ + nx * get_linear_batch_offset(biA);
             const auto sλI   = sλ + nx * get_linear_batch_offset(biI);
-            // TODO: handle case if lev > or >= lP - lvl
+            // TODO: handle case if lev > or >= lp()
             for (index_t i = 0; i < num_stages; ++i) {
                 const index_t k = sub_wrap_N(k0, i);
                 index_t s       = sv + ti * (nuxx * num_stages - nx) + nuxx * i;
@@ -118,11 +117,11 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -> std::vector<T> {
     const index_t nux = nu + nx, nuxx = nux + nx;
-    std::vector<value_type> rhs(nuxx * ceil_N);
+    std::vector<value_type> rhs(nuxx * ceil_N());
     std::ranges::fill(rhs, std::numeric_limits<value_type>::quiet_NaN());
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    const index_t num_proc   = 1 << (lP - lvl);
-    const index_t sλ         = ceil_N * nuxx - (nx << lP);
+    const index_t num_stages = n; // number of stages per thread
+    const index_t num_proc   = p;
+    const index_t sλ         = ceil_N() * nuxx - (nx * p * vl);
 
     for (index_t vi = 0; vi < vl; ++vi) {
         const index_t sv = vi * num_proc * (nuxx * num_stages - nx);
@@ -141,24 +140,24 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -
     }
     index_t s               = sλ;
     const auto cyclic_block = [&](index_t i) {
-        const index_t bi = i % (1 << (lP - lvl));
-        const index_t vi = i / (1 << (lP - lvl));
+        const index_t bi = i % p;
+        const index_t vi = i / p;
         const index_t di = bi * num_stages;
         for (index_t c = 0; c < nx; ++c)
             rhs[s + c] = λ.batch(di)(vi)(c, 0);
         s += nx;
     };
     if (lP != lvl) {
-        for (index_t i = 0; i < (1 << (lP - 1)); ++i)
+        for (index_t i = 0; i < ((p * vl) >> 1); ++i)
             cyclic_block(2 * i + 1);
-        for (index_t l = 1; l < lP - lvl; ++l) {
+        for (index_t l = 1; l < lp(); ++l) {
             index_t offset = 1 << l;
             index_t stride = offset << 1;
-            for (index_t i = offset; i < (1 << lP); i += stride)
+            for (index_t i = offset; i < vl * p; i += stride)
                 cyclic_block(i);
         }
     }
-    for (index_t i = 0; i < (1 << lP); i += (1 << (lP - lvl))) {
+    for (index_t i = 0; i < vl * p; i += p) {
         cyclic_block(i);
     }
     return rhs;
@@ -168,26 +167,26 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMatrix {
     constexpr bool alt = true;
     const index_t nux = nu + nx, nuxx = nux + nx;
-    const index_t vstride    = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    const index_t num_proc   = 1 << (lP - lvl);
-    const index_t n          = ceil_N * nuxx;
-    const index_t sλ         = n - (nx << lP);
-    SparseMatrixBuilder mat{.rows = n, .cols = n, .symmetry = Symmetry::Unsymmetric};
+    const index_t vstride    = n * p;
+    const index_t num_stages = n; // number of stages per thread
+    const index_t num_proc   = p;
+    const index_t nn         = ceil_N() * nuxx;
+    const index_t sλ         = nn - (nx * p * vl);
+    SparseMatrixBuilder mat{.rows = nn, .cols = nn, .symmetry = Symmetry::Unsymmetric};
     matrix AinvQᵀ{{
-        .depth = 1 << lP,
+        .depth = vl * p,
         .rows  = nx,
-        .cols  = (ceil_N >> lP) * nx,
+        .cols  = num_stages * nx,
     }};
     matrix invQᵀ{{
-        .depth = 1 << lP,
+        .depth = vl * p,
         .rows  = nx,
-        .cols  = (ceil_N >> lP) * nx,
+        .cols  = num_stages * nx,
     }};
     matrix LBA{{
-        .depth = 1 << lP,
+        .depth = vl * p,
         .rows  = nu + nx,
-        .cols  = ((ceil_N >> lP) - 1) * nx,
+        .cols  = (num_stages - 1) * nx,
     }};
     for (index_t ti = 0; ti < num_proc; ++ti) {
         const index_t di0 = ti * num_stages; // data batch index
@@ -237,7 +236,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
             auto B̂           = riccati_ÂB̂.batch(ti).right_cols(num_stages * nu);
             auto R̂ŜQ̂         = riccati_R̂ŜQ̂.batch(ti);
             auto LBAt        = LBA.batch(ti);
-            // TODO: handle case if lev > or >= lP - lvl
+            // TODO: handle case if lev > or >= lp()
             for (index_t i = 0; i < num_stages; ++i) {
                 [[maybe_unused]] const index_t k = sub_wrap_N(k0, i);
                 index_t s                        = sv + ti * (nuxx * num_stages - nx) + nuxx * i;
@@ -288,12 +287,12 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
     const auto cyclic_block = [&](index_t i, index_t offset) {
         const index_t sY = sλ + nx * get_linear_batch_offset(i + offset);
         const index_t sU = sλ + nx * get_linear_batch_offset(i - offset);
-        const index_t bi = i % (1 << (lP - lvl));
-        const index_t vi = i / (1 << (lP - lvl));
+        const index_t bi = i % p;
+        const index_t vi = i / p;
         for (index_t c = 0; c < nx; ++c) {
             for (index_t r = c; r < nx; ++r)
                 mat.add(s + r, s + c, cr_L.batch(bi)(vi)(r, c));
-            if (i + offset < (1 << lP))
+            if (i + offset < vl * p)
                 for (index_t r = 0; r < nx; ++r)
                     mat.add(sY + r, s + c, cr_Y.batch(bi)(vi)(r, c));
             for (index_t r = 0; r < nx; ++r)
@@ -303,29 +302,29 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
     };
     const auto cyclic_block_final = [&](index_t i, index_t offset) {
         const index_t sY = sλ + nx * get_linear_batch_offset(i + offset);
-        const index_t bi = i % (1 << (lP - lvl));
-        const index_t vi = i / (1 << (lP - lvl));
+        const index_t bi = i % p;
+        const index_t vi = i / p;
         for (index_t c = 0; c < nx; ++c) {
             for (index_t r = c; r < nx; ++r)
                 mat.add(s + r, s + c, pcr_L.batch(0)(vi)(r, c));
-            if (i + offset < (1 << lP))
+            if (i + offset < vl * p)
                 for (index_t r = 0; r < nx; ++r)
                     mat.add(sY + r, s + c, cr_Y.batch(bi)(vi)(r, c));
         }
         s += nx;
     };
     if (lP != lvl) {
-        for (index_t i = 0; i < (1 << (lP - 1)); ++i)
+        for (index_t i = 0; i < ((p * vl) >> 1); ++i)
             cyclic_block(2 * i + 1, 1);
-        for (index_t l = 1; l < lP - lvl; ++l) {
+        for (index_t l = 1; l < lp(); ++l) {
             index_t offset = 1 << l;
             index_t stride = offset << 1;
-            for (index_t i = offset; i < (1 << lP); i += stride)
+            for (index_t i = offset; i < vl * p; i += stride)
                 cyclic_block(i, offset);
         }
     }
-    for (index_t i = 0; i < (1 << lP); i += (1 << (lP - lvl))) {
-        cyclic_block_final(i, 1 << (lP - lvl));
+    for (index_t i = 0; i < vl * p; i += p) {
+        cyclic_block_final(i, p);
     }
     return std::move(mat).build();
 }
@@ -333,11 +332,11 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const -> SparseMatrix {
     const index_t nux = nu + nx, nuxx = nux + nx;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    const index_t num_proc   = 1 << (lP - lvl);
-    const index_t n          = ceil_N * nuxx;
-    const index_t sλ         = n - (nx << lP);
-    SparseMatrixBuilder mat{.rows = n, .cols = n, .symmetry = Symmetry::Lower};
+    const index_t num_stages = n; // number of stages per thread
+    const index_t num_proc   = p;
+    const index_t nn         = ceil_N() * nuxx;
+    const index_t sλ         = nn - (nx * p * vl);
+    SparseMatrixBuilder mat{.rows = nn, .cols = nn, .symmetry = Symmetry::Lower};
     for (index_t vi = 0; vi < vl; ++vi) {
         const index_t sv = vi * num_proc * (nuxx * num_stages - nx);
         for (index_t ti = 0; ti < num_proc; ++ti) {
@@ -353,7 +352,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const -> SparseMatr
             }
         }
     }
-    for (index_t i = 0; i < 1 << lP; ++i)
+    for (index_t i = 0; i < p * vl; ++i)
         for (index_t r = 0; r < nx; ++r)
             mat.add(sλ + nx * i + r, sλ + nx * i + r, -1);
     return std::move(mat).build();

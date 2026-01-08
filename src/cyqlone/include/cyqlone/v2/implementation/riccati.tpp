@@ -35,8 +35,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
     using batmat::linalg::compress_masks_sqrt;
     using std::isfinite;
     const index_t c = ctx.index;
-    //  2|  n = N/P
-    const index_t n = ceil_N >> lP; // number of stages per thread (per lane)
     //  3|  j₁ = n(c-1)+1, jₙ = nc
     const index_t dn  = c * n; // data batch index
     const index_t jn  = c * n; // stage index
@@ -156,10 +154,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
                                                                mut_view<> work) const {
     const index_t c       = ctx.index;
     const index_t c_prev  = sub_wrap_p(c, 1);
-    const index_t n       = ceil_N >> lP; // number of stages per thread
-    const index_t jn      = c * n;        // stage index
-    const index_t dn      = c * n;        // jₙ data batch index
-    const index_t dn_prev = c_prev * n;   // j₀ data batch index
+    const index_t jn      = c * n;      // stage index
+    const index_t dn      = c * n;      // jₙ data batch index
+    const index_t dn_prev = c_prev * n; // j₀ data batch index
     const index_t nux     = nu + nx;
     const auto L          = riccati_R̂ŜQ̂.batch(c);
     const auto LB         = riccati_ÂB̂.batch(c).right_cols(n * nu);
