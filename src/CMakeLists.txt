@@ -6,6 +6,7 @@ find_package(batmat REQUIRED)
 # ------------------------------------------------------------------------------
 add_library(cyqlone
     "cyqlone/src/cyqlone.cpp"
+    "cyqlone/src/v2/cyqlone.cpp"
     "cyqlone/src/cyqlone-storage.cpp"
     "cyqlone/src/ocp.cpp"
 )
@@ -29,6 +30,7 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/implementation/solve.tpp"
           "cyqlone/include/cyqlone/implementation/sparse.tpp"
           "cyqlone/include/cyqlone/implementation/update.tpp"
+          # TODO: v2 files
           "cyqlone/include/cyqlone/parallel.hpp"
           "cyqlone/include/cyqlone/timing.hpp"
           "cyqlone/include/cyqlone/barrier.hpp"
