@@ -490,6 +490,9 @@ struct CyqloneSolver {
     void solve_forward_new(Context &ctx, mut_view<> ux, mut_view<> λ);
     void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
                        mut_view<> work) const;
+    void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ) {
+        solve_forward(ctx, ux, λ, work_pcg.batch(0), riccati_work);
+    }
 
     void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
     void solve_pcr(mut_batch_view<> λ) { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }

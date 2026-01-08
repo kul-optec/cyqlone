@@ -3,9 +3,11 @@
 #include <cyqlone/cyqlone.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/solver.hpp>
+#include <cyqlone/v2/cyqlone.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
-#include <guanaqo/eigen/span.hpp> // TODO: remove
+#include <batmat/linalg/simdify.hpp> // TODO: remove
+#include <guanaqo/eigen/span.hpp>    // TODO: remove
 #include <guanaqo/eigen/view.hpp>
 
 #include <format>
@@ -33,8 +35,9 @@ struct PythonCyqloneSolver {
                  qpalm_settings} {}
 };
 
-template <index_t VL>
+template <class Solver>
 void register_cyqlone_solver(nb::module_ &m) {
+    static constexpr index_t VL           = Solver::vl;
     static constexpr auto view_as_batched = []<class T>(const np_batched_view<VL, T> &t) {
         using View = batmat::matrix::View<T, index_t, std::integral_constant<index_t, VL>, index_t,
                                           index_t, StorageOrder::ColMajor>;
@@ -78,7 +81,6 @@ void register_cyqlone_solver(nb::module_ &m) {
         }};
     };
 
-    using Solver = CyqloneSolver<VL>;
     nb::class_<Solver> solver(m, "CyqloneSolver");
     solver //
         .def(
@@ -218,30 +220,23 @@ void register_cyqlone_solver(nb::module_ &m) {
             },
             "S"_a, "Σ"_a.noconvert(), "ux"_a.noconvert(), "λ"_a.noconvert())
         .def(
-            "solve",
-            [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
-                auto ux_vw = view_as_batched(ux);
-                auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run([&](auto &ctx) { self.solve(ctx, ux_vw, λ_vw); });
+            "factor_solve",
+            [](Solver &self, real_t S, np_batched_view<VL, const real_t> Σ,
+               const CyqloneStorage<> &ocp) {
+                auto Σ_vw = view_as_batched(Σ);
+                auto ux   = self.initialize_gradient(ocp);
+                Solver::compact_blas::xneg(batmat::linalg::simdify(ux)); // TODO: remove
+                auto λ = self.initialize_rhs(ocp);
+                self.parallel_ctx->run([&](auto &ctx) { self.factor_solve(ctx, S, Σ_vw, ux, λ); });
+                return std::make_tuple(np_copy(std::move(ux)), np_copy(std::move(λ)));
             },
-            "ux"_a.noconvert(), "λ"_a.noconvert())
+            "S"_a, "Σ"_a.noconvert(), "ocp"_a)
         .def(
             "solve_forward",
             [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);
                 auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run([&](auto &ctx) {
-                    self.solve_forward(ctx, ux_vw, λ_vw, self.work_pcg.batch(0), self.riccati_work);
-                });
-            },
-            "ux"_a.noconvert(), "λ"_a.noconvert())
-        .def(
-            "solve_forward_new",
-            [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
-                auto ux_vw = view_as_batched(ux);
-                auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run(
-                    [&](auto &ctx) { self.solve_forward_new(ctx, ux_vw, λ_vw); });
+                self.parallel_ctx->run([&](auto &ctx) { self.solve_forward(ctx, ux_vw, λ_vw); });
             },
             "ux"_a.noconvert(), "λ"_a.noconvert())
         .def(
@@ -251,16 +246,6 @@ void register_cyqlone_solver(nb::module_ &m) {
                 auto λ_vw  = view_as_batched(λ);
                 self.parallel_ctx->run(
                     [&](auto &ctx) { self.solve_reverse(ctx, ux_vw, λ_vw, self.riccati_work); });
-            },
-            "ux"_a.noconvert(), "λ"_a.noconvert())
-        .def(
-            "solve_reverse_new",
-            [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
-                auto ux_vw = view_as_batched(ux);
-                auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run([&](auto &ctx) {
-                    self.solve_reverse_new(ctx, ux_vw, λ_vw, self.riccati_work);
-                });
             },
             "ux"_a.noconvert(), "λ"_a.noconvert())
         .def("build_sparse",
@@ -274,6 +259,37 @@ void register_cyqlone_solver(nb::module_ &m) {
              })
         .def("build_sparse_factor", [](Solver &self) { return self.build_sparse_factor(); })
         .def("build_sparse_diag", [](Solver &self) { return self.build_sparse_diag(); });
+
+    if constexpr (requires { &Solver::solve; })
+        solver.def(
+            "solve",
+            [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
+                auto ux_vw = view_as_batched(ux);
+                auto λ_vw  = view_as_batched(λ);
+                self.parallel_ctx->run([&](auto &ctx) { self.solve(ctx, ux_vw, λ_vw); });
+            },
+            "ux"_a.noconvert(), "λ"_a.noconvert());
+    if constexpr (requires { &Solver::solve_forward_new; })
+        solver.def(
+            "solve_forward_new",
+            [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
+                auto ux_vw = view_as_batched(ux);
+                auto λ_vw  = view_as_batched(λ);
+                self.parallel_ctx->run(
+                    [&](auto &ctx) { self.solve_forward_new(ctx, ux_vw, λ_vw); });
+            },
+            "ux"_a.noconvert(), "λ"_a.noconvert());
+    if constexpr (requires { &Solver::solve_reverse_new; })
+        solver.def(
+            "solve_reverse_new",
+            [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
+                auto ux_vw = view_as_batched(ux);
+                auto λ_vw  = view_as_batched(λ);
+                self.parallel_ctx->run([&](auto &ctx) {
+                    self.solve_reverse_new(ctx, ux_vw, λ_vw, self.riccati_work);
+                });
+            },
+            "ux"_a.noconvert(), "λ"_a.noconvert());
 }
 
 template <class Solver, class BackendSettings>
@@ -339,7 +355,6 @@ void register_qpalm_solver(nb::module_ &m, const char *name) {
 
 template <index_t VL>
 void register_qpalm_cyqlone(nb::module_ &m) {
-    register_cyqlone_solver<VL>(m);
     register_qpalm_solver<PythonCyqloneSolver<VL>, cyqlone::qpalm::CyqloneBackendSettings>(
         m, "QPALM_Cyqlone");
 }
@@ -358,4 +373,14 @@ NB_MODULE(MODULE_NAME, m) {
     cyqlone::register_qpalm_cyqlone<8>(simd8);
     cyqlone::register_qpalm_cyqlone<4>(simd4);
     cyqlone::register_qpalm_cyqlone<1>(scalar);
+    cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<8>>(simd8);
+    cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<4>>(simd4);
+    cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<1>>(scalar);
+
+    auto simd8_v2  = simd8.def_submodule("v2");
+    auto simd4_v2  = simd4.def_submodule("v2");
+    auto scalar_v2 = scalar.def_submodule("v2");
+    cyqlone::register_cyqlone_solver<cyqlone::v2::CyqloneSolver<8>>(simd8_v2);
+    cyqlone::register_cyqlone_solver<cyqlone::v2::CyqloneSolver<4>>(simd4_v2);
+    cyqlone::register_cyqlone_solver<cyqlone::v2::CyqloneSolver<1>>(scalar_v2);
 }
