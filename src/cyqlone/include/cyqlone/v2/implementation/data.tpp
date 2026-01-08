@@ -13,8 +13,8 @@ using batmat::linalg::simdify;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 CyqloneSolver<VL, T, DefaultOrder>
-CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp, index_t lP) {
-    BATMAT_ASSERT(lP >= lvl);
+CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp, index_t p) {
+    BATMAT_ASSERT(p > 0);
     CyqloneSolver<VL, T, DefaultOrder> res{
         .N_horiz = ocp.N_horiz,
         .nx      = ocp.nx,
@@ -22,7 +22,7 @@ CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp,
         .ny      = ocp.ny,
         .ny_0    = ocp.ny_0,
         .ny_N    = ocp.ny_N,
-        .p       = 1 << (lP - lvl),
+        .p       = p,
     };
     res.update_data(ocp);
     return res;

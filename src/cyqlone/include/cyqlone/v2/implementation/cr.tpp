@@ -28,6 +28,10 @@ using namespace batmat::linalg;
 // 20|  U(iU) = K˂(iU) L(iU)⁻ᵀ
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, index_t iU) {
+    // Boundary conditions for scalar case (batched case requires circular boundary conditions)
+    if constexpr (VL == 1)
+        if (iU == p) // U = 0 for M on the last thread
+            return;
     GUANAQO_TRACE("Trsm U", iU);
     trsm(cr_U.batch(iU), tril(cr_L.batch(iU)).transposed());
 }
@@ -63,8 +67,28 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
     const index_t offset = 1 << l;
     const index_t iU     = add_wrap_p(i, offset);
     const index_t iY     = sub_wrap_p(i, offset);
-    auto M               = tril(cr_L.batch(i));
+    // Final block L(0) is stored separately (for PCR/PCG later)
+    auto M = tril(cr_L.batch(i)), L0 = tril(pcr_L.batch(0));
     auto U = cr_U.batch(iU), Y = cr_Y.batch(iY);
+    const bool factor = ν2p(i) == l + 1;
+    // Boundary conditions for scalar case (batched case requires circular boundary conditions)
+    if constexpr (VL == 1) {
+        if (i == 0) { // Y = 0 for M on the first thread
+            GUANAQO_TRACE("Subtract UUᵀ", i);
+            // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
+            // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
+            factor ? syrk_sub_potrf(U, M, L0) // chol(M - UUᵀ)
+                   : syrk_sub(U, M);
+            return;
+        } else if (iU == p) { // U = 0 for M on the last thread
+            GUANAQO_TRACE("Subtract YYᵀ", i);
+            // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
+            // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
+            factor ? syrk_sub_potrf(Y, M) // chol(M - YYᵀ)
+                   : syrk_sub(Y, M);
+            return;
+        }
+    }
 #if CYQLONE_FACTOR_DO_PREFETCH
     for (index_t c = 0; c < cr_Y.cols(); c += 1)
         for (index_t r = 0; r < cr_Y.rows(); r += 16)
@@ -75,7 +99,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
         // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
         syrk_sub(U, M);
     }
-    if (ν2p(i) == l + 1 && i != 0) {
+    if (factor && i != 0) {
         GUANAQO_TRACE("Factor M", i);
         // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
         // 28|  if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
@@ -83,13 +107,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
     } else {
         GUANAQO_TRACE("Subtract YYᵀ", i);
         // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
-        i == 0 ? syrk_sub(Y, M, with_rotate_C<1>, with_rotate_D<1>, with_mask_D<1>)
-               : syrk_sub(Y, M);
+        if (i != 0)
+            syrk_sub(Y, M);
+        else if constexpr (VL > 1)
+            syrk_sub(Y, M, with_rotate_C<1>, with_rotate_D<1>, with_mask_D<1>);
     }
     // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
-    if (ν2p(i) == l + 1 && i == 0) {
+    if (factor && i == 0) {
         GUANAQO_TRACE("Factor M", i);
-        potrf(M, tril(pcr_L.batch(0))); // Final block is stored separately (for PCR/PCG later)
+        potrf(M, L0);
     }
 }
 
