@@ -58,7 +58,7 @@ struct CyqloneSolver {
     const index_t nx, nu, ny, ny_0, ny_N;
     /// Number of processors/threads
     const index_t p = 8;
-    [[nodiscard]] constexpr index_t lp() const { return get_depth(p - 1); }
+    [[nodiscard]] constexpr index_t lp() const { return get_depth(p); }
     [[nodiscard]] static constexpr index_t lv() { return lvl; }
 
     /// log2(P), logarithm of the number of parallel execution units
@@ -463,6 +463,10 @@ struct CyqloneSolver {
     void cost_gradient_remove_regularization(Context &ctx, value_type S, view<> x, view<> x0,
                                              mut_view<> grad_f) const;
 
+    template <bool Factor = true, bool Solve = true>
+    void factor_riccati_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
+    template <bool Factor = true, bool Solve = true>
+    void compute_schur(Context &ctx, mut_view<> ux, mut_view<> λ);
     void factor_U(index_t l, index_t biU);
     void factor_Y(index_t l, index_t biY);
     void factor_L(index_t l, index_t bi);
@@ -471,13 +475,6 @@ struct CyqloneSolver {
     template <index_t Level>
     void factor_pcr_level();
     template <bool Factor = true, bool Solve = true>
-    void compute_schur(Context &ctx, mut_view<> ux, mut_view<> λ);
-    template <bool Factor = true, bool Solve = true>
-    void factor_riccati_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
-    void factor_riccati(Context &ctx, value_type S, view<> Σ) {
-        factor_riccati_solve<false>(ctx, S, Σ, {}, {});
-    }
-    template <bool Factor = true, bool Solve = true>
     void factor_solve_impl(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
     void factor_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
     void factor(Context &ctx, value_type S, view<> Σ);
@@ -485,19 +482,12 @@ struct CyqloneSolver {
     void solve_u_forward(index_t l, index_t biU, mut_view<> λ) const;
     void solve_y_forward(index_t l, index_t biY, mut_view<> λ, mut_view<> w) const;
     void solve_λ_forward(index_t l, index_t biL, mut_view<> λ, view<> w) const;
-    void solve_fwd_level(index_t l, index_t biU, mut_view<> λ) const;
-    void solve_riccati_forward(Context &ctx, mut_view<> ux, mut_view<> λ) const;
-    /// Preserves b in λ (except for coupling equations solved using CR)
-    void solve_riccati_forward_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
-                                   mut_view<> work) const;
-    void solve_forward_new(Context &ctx, mut_view<> ux, mut_view<> λ);
-    void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
-                       mut_view<> work) const;
+    void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ);
 
-    void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
-    void solve_pcr(mut_batch_view<> λ) { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
     template <index_t Level>
     void solve_pcr_level(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
+    void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
+    void solve_pcr(mut_batch_view<> λ) { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
 
     value_type mul_Mv(batch_view<> p, mut_batch_view<> Ap, batch_view<default_order> L,
                       batch_view<default_order> K) const;
@@ -506,35 +496,22 @@ struct CyqloneSolver {
     void solve_pcg(mut_batch_view<> λ, mut_batch_view<> work_pcg) const;
     void solve_pcg(mut_batch_view<> λ) { solve_pcg(λ, work_pcg.batch(0)); }
 
-    void solve_rev_level(index_t l, index_t bi, mut_view<> λ) const;
     void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve_riccati_reverse_alt(Context &ctx, mut_view<> ux, mut_view<> λ,
-                                   mut_view<> work) const;
-    void solve_riccati_reverse_new(Context &ctx, mut_view<> ux, mut_view<> λ,
-                                   mut_view<> work) const;
+    void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ);
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
     void solve_u_backward(index_t l, index_t biU, mut_view<> λ, mut_view<> w) const;
     void solve_y_backward(index_t l, index_t biY, mut_view<> λ) const;
     void solve_λ_backward(index_t biL, mut_view<> λ, view<> w) const;
-    void solve_reverse_new(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve(Context &ctx, mut_view<> ux, mut_view<> λ, mut_batch_view<> work_pcg,
-               mut_view<> work_riccati) const;
-    void solve(Context &ctx, mut_view<> ux, mut_view<> λ) {
-        solve(ctx, ux, λ, work_pcg.batch(0), riccati_work);
-    }
-    void solve_fwd_L(index_t l, index_t bi);
-    void solve_fwd_U(index_t l, index_t bi);
-    void solve_fwd_Y(index_t l, index_t bi);
 
+    void update_riccati(Context &ctx, view<> Σ);
     void update_L(index_t l, index_t bi);
     void update_U(index_t l, index_t bi);
     void update_Y(index_t l, index_t bi);
     void update(Context &ctx, view<> ΔΣ);
-    void update_riccati(Context &ctx, view<> Σ);
 
-    void update_pcr(batch_view<> fwd, batch_view<> bwd, batch_view<> Σ);
     template <index_t Level>
     void update_pcr_level(index_t m, mut_batch_view<> WYU, mut_batch_view<> WΣ);
+    void update_pcr(batch_view<> fwd, batch_view<> bwd, batch_view<> Σ);
 
     [[nodiscard]] SparseMatrix build_sparse(const CyqloneStorage<value_type> &ocp,
                                             std::span<const value_type> Σ) const;

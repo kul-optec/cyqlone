@@ -41,8 +41,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
     const index_t dn  = c * n; // data batch index
     const index_t jn  = c * n; // stage index
     const index_t nux = nu + nx;
-    const index_t nyM = c == 0 ? std::max(ny, ny_0 + ny_N) : ny; // max active constraints/stage
-    auto R̂ŜQ̂          = riccati_R̂ŜQ̂.batch(c);
+    const index_t nyM = std::max(ny, ny_0 + ny_N); // max active constraints/stage
+    // TODO: special case nyM for c == 0
+    auto R̂ŜQ̂ = riccati_R̂ŜQ̂.batch(c);
     auto B̂ = riccati_ÂB̂.batch(c).right_cols(n * nu), Â = riccati_ÂB̂.batch(c).left_cols(n * nx);
     auto VDCᵀ      = riccati_BAᵀ.batch(c);
     index_t m_syrk = 0; // number of columns of VDCᵀ (depends on active constraints)
@@ -150,9 +151,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_new(Context &ctx, mut_view<> ux,
-                                                                   mut_view<> λ,
-                                                                   mut_view<> work) const {
+void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut_view<> ux,
+                                                               mut_view<> λ,
+                                                               mut_view<> work) const {
     const index_t c       = ctx.index;
     const index_t c_prev  = sub_wrap_p(c, 1);
     const index_t n       = ceil_N >> lP; // number of stages per thread
@@ -198,9 +199,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse_new(Context &ctx,
             GUANAQO_TRACE("Riccati solve rev", j);
             const auto u1 = ux.batch(di).top_rows(nu), x1 = ux.batch(di).bottom_rows(nx);
             const auto LA1 = AclLA.middle_cols(i * nx, nx);
+#if 1
             // w = LQ(j₁)⁻¹ λ(j₀)
-            c == 0 ? trsm(tril(LQi), λ.batch(dn_prev), w, with_shift_B<1>)
+            c == 0 ? trsm(tril(LQi), λ.batch(dn_prev), w, with_rotate_B<-1>)
                    : trsm(tril(LQi), λ.batch(dn_prev), w);
+#else
+            const bool x_lanes = c == 0;
+            x_lanes ? compact_blas::template xadd_copy<1>(simdify(w), simdify(λ.batch(dn_prev)))
+                    : compact_blas::template xadd_copy<0>(simdify(w), simdify(λ.batch(dn_prev)));
+            // LQ⁻¹ λ
+            trsm(tril(LQi), w);
+#endif
             // w = LQ(j₁)⁻¹ λ(j₀) - LA(j₁)ᵀ λ(jₙ)
             gemv_sub(LA1.transposed(), λn, w);
             // w = LQ(j₁)⁻ᵀ(LQ(j₁)⁻¹ λ(j₀) - LA(j₁)ᵀ λ(jₙ))

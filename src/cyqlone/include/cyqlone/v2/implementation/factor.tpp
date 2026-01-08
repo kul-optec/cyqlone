@@ -90,8 +90,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view
     factor_solve_impl<true, false>(ctx, S, Σ, {}, {});
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_forward_new(Context &ctx, mut_view<> ux,
-                                                           mut_view<> λ) {
+void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ) {
     factor_solve_impl<false, true>(ctx, 0, {}, ux, λ);
 }
 
@@ -103,8 +102,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward_new(Context &ctx, mut_vie
 // recursion. Note that the evaluation of λ(0) is performed during the forward solve step.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_new(Context &ctx, mut_view<> ux,
-                                                           mut_view<> λ, mut_view<> work) const {
+void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
+                                                       mut_view<> work) const {
     const index_t ti = ctx.index;
     for (index_t l = lp(); l-- > 0;) {
         const index_t i_u = add_wrap_p(ti, 1), i_y = sub_wrap_p(ti, (1 << l) - 1),
@@ -119,7 +118,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_new(Context &ctx, mut_vie
             solve_λ_backward(i_λ, λ, work);
     }
     ctx.arrive_and_wait();
-    solve_riccati_reverse_new(ctx, ux, λ, work);
+    solve_riccati_reverse(ctx, ux, λ, work);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ) {
+    solve_reverse(ctx, ux, λ, riccati_work);
 }
 
 } // namespace CYQLONE_NS(cyqlone)::v2

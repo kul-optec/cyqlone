@@ -108,6 +108,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
 //    U(k)ᵀ x(k-2^l) is stored in a temporary workspace to avoid races on x(k).
 //  - The last level is not handled here, because it is solved using PCG or PCR.
 
+#if 0
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t iU,
                                                          mut_view<> λ) const {
@@ -137,6 +138,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t iU,
         trsm(tril(cr_L.batch(iL)), λ.batch(diL));
     }
 }
+#endif
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU,
@@ -175,7 +177,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL,
                 : compact_blas::template xsub<0>(simdify(λ.batch(diL)), simdify(w.batch(iL)));
     }
     // 14|  b̃(k)⁺ = L(k)⁻¹ b(k)⁺    -- for the next level
-    if (ν2p(iL) == l + 1) {
+    if (ν2p(iL) == l + 1 && iL != 0) { // TODO: double check iL != 0
         GUANAQO_TRACE("Solve b", iL);
         BATMAT_ASSUME(iL != 0);
         // solve L(diL)⁻¹ b(diL)

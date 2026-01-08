@@ -3,7 +3,6 @@
 #include <batmat/assume.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <guanaqo/blas/hl-blas-interface.hpp>
-#include <cmath>
 #include <limits>
 #if !BATMAT_WITH_OPENMP
 #include <batmat/thread-pool.hpp>
@@ -15,6 +14,7 @@ using batmat::linalg::simdify;
 template <index_t VL, class T, StorageOrder DefaultOrder>
 CyqloneSolver<VL, T, DefaultOrder>
 CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp, index_t lP) {
+    BATMAT_ASSERT(lP >= lvl);
     CyqloneSolver<VL, T, DefaultOrder> res{
         .N_horiz = ocp.N_horiz,
         .nx      = ocp.nx,
@@ -22,7 +22,7 @@ CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp,
         .ny      = ocp.ny,
         .ny_0    = ocp.ny_0,
         .ny_N    = ocp.ny_N,
-        .lP      = lP,
+        .p       = 1 << (lP - lvl),
     };
     res.update_data(ocp);
     return res;

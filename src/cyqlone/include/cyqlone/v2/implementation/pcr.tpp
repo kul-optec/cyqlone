@@ -49,7 +49,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     auto L = pcr_L.batch(Level), Y = pcr_Y.batch(Level), U = pcr_U.batch(Level);
     static constexpr auto r = 1 << Level; // 2^l
     //  8|  U(k) = K(k-2^l)ᵀ L(k)⁻ᵀ
-    trsm(K.transposed(), triu(L.transposed()), U, with_shift_A<-r>);
+    trsm(K.transposed(), triu(L.transposed()), U, with_rotate_A<-r>);
     //  7|  Y(k) = K(k) L(k)⁻ᵀ
     trsm(K, triu(L.transposed()), Y);
     // 10|  M(k)⁺ = M(k) - Y(k-2^l) Y(k-2^l)ᵀ - U(k+2^l) U(k+2^l)ᵀ

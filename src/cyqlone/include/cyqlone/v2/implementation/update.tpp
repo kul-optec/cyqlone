@@ -178,7 +178,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ) {
     const index_t c   = ctx.index;
-    const index_t nyM = c == 0 ? std::max(ny, ny_0 + ny_N) : ny;
+    const index_t nyM = std::max(ny, ny_0 + ny_N);
+    // TODO: special case nyM for c == 0
+    // const index_t nyM = c == 0 ? std::max(ny, ny_0 + ny_N) : ny;
     const index_t n   = ceil_N >> lP; // number of stages per thread
     const index_t dn  = c * n;        // data batch index
     const index_t jn  = c * n;        // stage index
