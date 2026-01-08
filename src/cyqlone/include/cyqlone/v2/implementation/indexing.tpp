@@ -26,29 +26,30 @@ auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_N(index_t a, index_t b) const 
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_p(index_t a, index_t b) const -> index_t {
-    BATMAT_ASSUME(lP >= lvl);
+    BATMAT_ASSUME(p > 0);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
-    BATMAT_ASSUME(a < (1 << lp()));
+    BATMAT_ASSUME(a < p);
     a -= b;
-    return a < 0 ? a + (1 << lp()) : a;
+    return a < 0 ? a + p : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_p(index_t a, index_t b) const -> index_t {
-    BATMAT_ASSUME(lP >= lvl);
+    BATMAT_ASSUME(p > 0);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
-    BATMAT_ASSUME(a < (1 << lp()));
+    BATMAT_ASSUME(a < p);
     a += b;
-    return a >= (1 << lp()) ? a - (1 << lp()) : a;
+    return a >= p ? a - p : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_P(index_t a, index_t b) const -> index_t {
+    const index_t P = (1 << lP);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
-    BATMAT_ASSUME(a < (1 << lP));
+    BATMAT_ASSUME(a < P);
     a -= b;
-    return a < 0 ? a + (1 << lP) : a;
+    return a < 0 ? a + P : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::get_linear_batch_offset(index_t biA) const -> index_t {

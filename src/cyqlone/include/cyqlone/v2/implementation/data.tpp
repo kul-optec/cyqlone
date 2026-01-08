@@ -36,26 +36,44 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_data(const CyqloneStorage<value_
     BATMAT_ASSERT(ocp.ny == ny);
     BATMAT_ASSERT(ocp.ny_0 == ny_0);
     BATMAT_ASSERT(ocp.ny_N == ny_N);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n     = ceil_N >> lP; // number of stages per thread
+    const auto scale_QN = 1 / static_cast<value_type>(n * p - N_horiz + 1);
+    for (index_t c = 0; c < p; ++c) {
+        const index_t k0  = c * n;
+        const index_t di0 = c * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k = sub_wrap_N(k0 + vi * vstride, i);
-                if (k < N_horiz) {
-                    detail::copy(ocp.data_F(k), data_BA.batch(di)(vi));
-                    detail::copy(ocp.data_H(k), data_RSQ.batch(di)(vi));
-                    if (k == 0)
-                        detail::copy(ocp.data_G0N(0).transposed(),
-                                     data_DCᵀ.batch(di)(vi).left_cols(ny_0 + ny_N));
-                    else
-                        detail::copy(ocp.data_G(k - 1).transposed(),
-                                     data_DCᵀ.batch(di)(vi).left_cols(ny));
+                auto k = sub_wrap_N(k0 + vi * p * n, i);
+                if (k == 0) {
+                    if (ceil_N == N_horiz) {
+                        detail::copy(ocp.data_F(0), data_BA.batch(di)(vi));  // A, B
+                        detail::copy(ocp.data_H(0), data_RSQ.batch(di)(vi)); // R, S, Q
+                    } else {
+                        detail::copy(ocp.data_F(0).left_cols(nu),
+                                     data_BA.batch(di)(vi).left_cols(nu));          // B
+                        data_BA.batch(di)(vi).right_cols(nx).set_constant(0);       // A = 0
+                        detail::copy(ocp.data_H(0).top_left(nu, nu),                //
+                                     data_RSQ.batch(di)(vi).top_left(nu, nu));      // R
+                        data_RSQ.batch(di)(vi).bottom_left(nx, nu).set_constant(0); // S = 0
+                        detail::scale(scale_QN, ocp.data_H(0).bottom_right(nx, nx), //
+                                      data_RSQ.batch(di)(vi).bottom_right(nx, nx)); // Q = α Q(N)
+                    }
+                    detail::copy(ocp.data_G0N(0).transposed(),
+                                 data_DCᵀ.batch(di)(vi).left_cols(ny_0 + ny_N)); // D, C
+                } else if (k < N_horiz) {
+                    detail::copy(ocp.data_F(k), data_BA.batch(di)(vi));  // A, B
+                    detail::copy(ocp.data_H(k), data_RSQ.batch(di)(vi)); // R, S, Q
+                    detail::copy(ocp.data_G(k - 1).transposed(),         //
+                                 data_DCᵀ.batch(di)(vi).left_cols(ny));  // D, C
                 } else {
-                    data_RSQ.batch(di)(vi).add_to_diagonal(1);
+                    data_BA.batch(di)(vi).set_constant(0);                      // B = 0
+                    data_BA.batch(di)(vi).right_cols(nx).set_diagonal(1);       // A = I
+                    data_RSQ.batch(di)(vi).left_cols(nu).set_constant(0);       // S = 0
+                    data_RSQ.batch(di)(vi).top_left(nu, nu).set_diagonal(1);    // R = I
+                    detail::scale(scale_QN, ocp.data_H(0).bottom_right(nx, nx), //
+                                  data_RSQ.batch(di)(vi).bottom_right(nx, nx)); // Q = α Q(N)
+                    data_DCᵀ.batch(di)(vi).left_cols(ny).set_constant(0);       // D, C
                 }
             }
         }
@@ -68,15 +86,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<val
     BATMAT_ASSERT(rhs.depth() == ceil_N);
     BATMAT_ASSERT(rhs.rows() == nx);
     BATMAT_ASSERT(rhs.cols() == 1);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n = ceil_N >> lP; // number of stages per thread
+    for (index_t ti = 0; ti < p; ++ti) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k = sub_wrap_N(k0 + vi * vstride, i);
+                auto k = sub_wrap_N(k0 + vi * p * n, i);
                 if (k < N_horiz) {
                     rhs.batch(di)(vi) = ocp.data_c(k);
                 } else {
@@ -93,19 +110,29 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(const CyqloneStorag
     BATMAT_ASSERT(grad.depth() == ceil_N);
     BATMAT_ASSERT(grad.rows() == nu + nx);
     BATMAT_ASSERT(grad.cols() == 1);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n     = ceil_N >> lP; // number of stages per thread
+    const auto scale_qN = 1 / static_cast<value_type>(n * p - N_horiz + 1);
+    for (index_t ti = 0; ti < p; ++ti) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k = sub_wrap_N(k0 + vi * vstride, i);
-                if (k < N_horiz) {
+                auto k = sub_wrap_N(k0 + vi * p * n, i);
+                if (k == 0) {
+                    if (ceil_N == N_horiz) {
+                        grad.batch(di)(vi) = ocp.data_rq(0);
+                    } else {
+                        grad.batch(di)(vi).top_rows(nu) = ocp.data_rq(0).top_rows(nu);
+                        detail::scale(scale_qN, ocp.data_rq(0).bottom_rows(nx),
+                                      grad.batch(di)(vi).bottom_rows(nx));
+                    }
+                } else if (k < N_horiz) {
                     grad.batch(di)(vi) = ocp.data_rq(k);
                 } else {
-                    grad.batch(di)(vi).set_constant(0);
+                    grad.batch(di)(vi).top_rows(nu).set_constant(0);
+                    detail::scale(scale_qN, ocp.data_rq(0).bottom_rows(nx),
+                                  grad.batch(di)(vi).bottom_rows(nx));
                 }
             }
         }
@@ -123,16 +150,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(const CyqloneStorage<
     BATMAT_ASSERT(b_max.depth() == ceil_N);
     BATMAT_ASSERT(b_max.rows() == nyM);
     BATMAT_ASSERT(b_max.cols() == 1);
-    const auto inf           = std::numeric_limits<value_type>::infinity();
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
+    const auto inf  = std::numeric_limits<value_type>::infinity();
+    const index_t n = ceil_N >> lP; // number of stages per thread
     for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k       = sub_wrap_N(k0 + vi * vstride, i);
+                auto k       = sub_wrap_N(k0 + vi * p * n, i);
                 auto b_min_i = b_min.batch(di)(vi), b_max_i = b_max.batch(di)(vi);
                 if (k == 0) {
                     b_min_i.top_rows(ny_0 + ny_N) = ocp.data_lb0N(0);
@@ -161,15 +187,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_variables(std::span<const value_ty
     BATMAT_ASSERT(ux.depth() == ceil_N);
     BATMAT_ASSERT(ux.rows() == nux);
     BATMAT_ASSERT(ux.cols() == 1);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n = ceil_N >> lP; // number of stages per thread
+    for (index_t ti = 0; ti < p; ++ti) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k       = sub_wrap_N(k0 + vi * vstride, i);
+                auto k       = sub_wrap_N(k0 + vi * p * n, i);
                 using crview = guanaqo::MatrixView<const value_type, index_t>;
                 if (k == 0) {
                     ux.batch(di)(vi).top_rows(nu) = crview::as_column(ux_lin.first(nu));
@@ -202,15 +227,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_variables(view<> ux,
     BATMAT_ASSERT(ux.depth() == ceil_N);
     BATMAT_ASSERT(ux.rows() == nux);
     BATMAT_ASSERT(ux.cols() == 1);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n = ceil_N >> lP; // number of stages per thread
+    for (index_t ti = 0; ti < p; ++ti) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k      = sub_wrap_N(k0 + vi * vstride, i);
+                auto k      = sub_wrap_N(k0 + vi * p * n, i);
                 using rview = guanaqo::MatrixView<value_type, index_t>;
                 if (k == 0) {
                     rview::as_column(ux_lin.first(nu)) = ux.batch(di)(vi).top_rows(nu);
@@ -239,15 +263,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_dynamics(std::span<const value_typ
     BATMAT_ASSERT(λ.depth() == ceil_N);
     BATMAT_ASSERT(λ.rows() == nλ);
     BATMAT_ASSERT(λ.cols() == 1);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n = ceil_N >> lP; // number of stages per thread
+    for (index_t ti = 0; ti < p; ++ti) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k       = sub_wrap_N(k0 + vi * vstride, i);
+                auto k       = sub_wrap_N(k0 + vi * p * n, i);
                 using crview = guanaqo::MatrixView<const value_type, index_t>;
                 if (k < N_horiz) {
                     λ.batch(di)(vi) = crview::as_column(λ_lin.subspan(k * nλ, nλ));
@@ -267,15 +290,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_dynamics(view<> λ,
     BATMAT_ASSERT(λ.depth() == ceil_N);
     BATMAT_ASSERT(λ.rows() == nλ);
     BATMAT_ASSERT(λ.cols() == 1);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n = ceil_N >> lP; // number of stages per thread
+    for (index_t ti = 0; ti < p; ++ti) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k      = sub_wrap_N(k0 + vi * vstride, i);
+                auto k      = sub_wrap_N(k0 + vi * p * n, i);
                 using rview = guanaqo::MatrixView<value_type, index_t>;
                 if (k < N_horiz) {
                     rview::as_column(λ_lin.subspan(k * nλ, nλ)) = λ.batch(di)(vi);
@@ -292,15 +314,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_constraints(std::span<const value_
     BATMAT_ASSERT(y.depth() == ceil_N);
     BATMAT_ASSERT(y.rows() == std::max(ny, ny_0 + ny_N));
     BATMAT_ASSERT(y.cols() == 1);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n = ceil_N >> lP; // number of stages per thread
+    for (index_t ti = 0; ti < p; ++ti) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k       = sub_wrap_N(k0 + vi * vstride, i);
+                auto k       = sub_wrap_N(k0 + vi * p * n, i);
                 using crview = guanaqo::MatrixView<const value_type, index_t>;
                 if (k == 0) {
                     index_t ny_pad                 = std::max(ny, ny_0 + ny_N) - (ny_0 + ny_N);
@@ -328,15 +349,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y,
     BATMAT_ASSERT(y.depth() == ceil_N);
     BATMAT_ASSERT(y.rows() == std::max(ny, ny_0 + ny_N));
     BATMAT_ASSERT(y.cols() == 1);
-    const auto vstride       = ceil_N >> lvl;
-    const index_t num_stages = ceil_N >> lP; // number of stages per thread
-    for (index_t ti = 0; ti < (1 << (lP - lvl)); ++ti) {
-        const index_t k0  = ti * num_stages;
-        const index_t di0 = ti * num_stages;
-        for (index_t i = 0; i < num_stages; ++i) {
+    const index_t n = ceil_N >> lP; // number of stages per thread
+    for (index_t ti = 0; ti < p; ++ti) {
+        const index_t k0  = ti * n;
+        const index_t di0 = ti * n;
+        for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
             for (index_t vi = 0; vi < vl; ++vi) {
-                auto k      = sub_wrap_N(k0 + vi * vstride, i);
+                auto k      = sub_wrap_N(k0 + vi * p * n, i);
                 using rview = guanaqo::MatrixView<value_type, index_t>;
                 if (k == 0) {
                     rview::as_column(y_lin.first(ny_0)) = y.batch(di)(vi).top_rows(ny_0);

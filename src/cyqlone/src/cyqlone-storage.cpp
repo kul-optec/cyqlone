@@ -96,8 +96,8 @@ void CyqloneStorage<T>::update_impl(const LinearOCPStorage &ocp) {
     data_F(0).right_cols(nx).set_constant(0);
     // G₀ = [ D₀ 0 ]  ny_0
     //      [ 0  Cₙ]  ny_N
-    data_G(0).bottom_left(ny_N, nu).set_constant(0);
-    data_G(0).top_right(ny_0, nx).set_constant(0);
+    data_G0N(0).bottom_left(ny_N, nu).set_constant(0);
+    data_G0N(0).top_right(ny_0, nx).set_constant(0);
     index_t j = 0;
     for (index_t r = 0; r < ny; ++r) {
         if (Ju0[r]) {

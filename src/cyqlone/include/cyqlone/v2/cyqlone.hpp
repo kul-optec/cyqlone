@@ -530,6 +530,16 @@ void copy(guanaqo::MatrixView<T1, I1, S1, O1> src, guanaqo::MatrixView<T2, I2, S
         for (index_t c = 0; c < src.cols; ++c)
             dst(r, c) = src(r, c);
 }
+template <class T0, class T1, class I1, class S1, guanaqo::StorageOrder O1, class T2, class I2,
+          class S2, guanaqo::StorageOrder O2>
+void scale(T0 scalar, guanaqo::MatrixView<T1, I1, S1, O1> src,
+           guanaqo::MatrixView<T2, I2, S2, O2> dst) {
+    assert(src.rows == dst.rows);
+    assert(src.cols == dst.cols);
+    for (index_t r = 0; r < src.rows; ++r) // TODO: optimize
+        for (index_t c = 0; c < src.cols; ++c)
+            dst(r, c) = scalar * src(r, c);
+}
 } // namespace detail
 
 } // namespace CYQLONE_NS(cyqlone)::v2
