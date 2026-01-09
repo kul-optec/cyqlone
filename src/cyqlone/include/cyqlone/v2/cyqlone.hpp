@@ -73,6 +73,8 @@ struct CyqloneSolver {
     [[nodiscard]] index_t sub_wrap_N(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_p(index_t a, index_t b) const;
     [[nodiscard]] index_t add_wrap_p(index_t a, index_t b) const;
+    [[nodiscard]] index_t sub_wrap_ceil_p(index_t a, index_t b) const;
+    [[nodiscard]] index_t add_wrap_ceil_p(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_P(index_t a, index_t b) const;
     [[nodiscard]] index_t get_linear_batch_offset(index_t biA) const;
 
@@ -468,6 +470,7 @@ struct CyqloneSolver {
     void factor_riccati_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
     template <bool Factor = true, bool Solve = true>
     void compute_schur(Context &ctx, mut_view<> ux, mut_view<> λ);
+    [[nodiscard]] index_t cr_thread_assignment(index_t l, index_t c) const;
     void factor_U(index_t l, index_t biU);
     void factor_Y(index_t l, index_t biY);
     void factor_L(index_t l, index_t bi);

@@ -196,17 +196,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
             GUANAQO_TRACE("Riccati solve rev", j);
             const auto u1 = ux.batch(di).top_rows(nu), x1 = ux.batch(di).bottom_rows(nx);
             const auto LA1 = AclLA.middle_cols(i * nx, nx);
-#if 1
             // w = LQ(j₁)⁻¹ λ(j₀)
             c == 0 ? trsm(tril(LQi), λ.batch(dn_prev), w, with_rotate_B<-1>)
                    : trsm(tril(LQi), λ.batch(dn_prev), w);
-#else
-            const bool x_lanes = c == 0;
-            x_lanes ? compact_blas::template xadd_copy<1>(simdify(w), simdify(λ.batch(dn_prev)))
-                    : compact_blas::template xadd_copy<0>(simdify(w), simdify(λ.batch(dn_prev)));
-            // LQ⁻¹ λ
-            trsm(tril(LQi), w);
-#endif
             // w = LQ(j₁)⁻¹ λ(j₀) - LA(j₁)ᵀ λ(jₙ)
             gemv_sub(LA1.transposed(), λn, w);
             // w = LQ(j₁)⁻ᵀ(LQ(j₁)⁻¹ λ(j₀) - LA(j₁)ᵀ λ(jₙ))

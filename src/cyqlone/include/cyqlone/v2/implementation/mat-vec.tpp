@@ -18,7 +18,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, 
     const index_t ti             = ctx.index;
     const index_t di0            = ti * n; // data batch index
     const index_t k0             = ti * n; // stage index
-    const index_t ti_next        = add_wrap_p(ti, 1);
+    const index_t ti_next        = add_wrap_ceil_p(ti, 1);
     const index_t di_next_thread = ti_next * n + n - 1;
     auto x_next_thread           = x.batch(di_next_thread).bottom_rows(nx);
     auto Mxb0                    = Mxb.batch(di0);
@@ -74,7 +74,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
         GUANAQO_TRACE("transposed_dynamics_constr final u", k);
         Mᵀλ.batch(di).top_rows(nu).set_constant(0);
     }
-    const index_t ti_next        = sub_wrap_p(ti, 1);
+    const index_t ti_next        = sub_wrap_ceil_p(ti, 1);
     const index_t di_next_thread = ti_next * n;
     ctx.wait(std::move(arrival)); // λ_next comes from next thread
     GUANAQO_TRACE("transposed_dynamics_constr final", k);

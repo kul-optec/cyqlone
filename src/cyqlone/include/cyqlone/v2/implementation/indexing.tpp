@@ -43,6 +43,26 @@ auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_p(index_t a, index_t b) const 
     return a >= p ? a - p : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
+auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_ceil_p(index_t a, index_t b) const -> index_t {
+    const index_t ceil_p = 1 << lp();
+    BATMAT_ASSUME(ceil_p > 0);
+    BATMAT_ASSUME(a >= 0);
+    BATMAT_ASSUME(b >= 0);
+    BATMAT_ASSUME(a < ceil_p);
+    a -= b;
+    return a < 0 ? a + ceil_p : a;
+}
+template <index_t VL, class T, StorageOrder DefaultOrder>
+auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_ceil_p(index_t a, index_t b) const -> index_t {
+    const index_t ceil_p = 1 << lp();
+    BATMAT_ASSUME(ceil_p > 0);
+    BATMAT_ASSUME(a >= 0);
+    BATMAT_ASSUME(b >= 0);
+    BATMAT_ASSUME(a < ceil_p);
+    a += b;
+    return a >= ceil_p ? a - ceil_p : a;
+}
+template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_P(index_t a, index_t b) const -> index_t {
     const index_t P = (1 << lP);
     BATMAT_ASSUME(a >= 0);

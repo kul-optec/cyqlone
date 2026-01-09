@@ -23,7 +23,7 @@ template <bool Factor, bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
 void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_type S, view<> Σ,
                                                            mut_view<> ux, mut_view<> λ) {
-    index_t c = ctx.index;
+    const index_t c = ctx.index;
     //  2|  factor-block-column-riccati(c)    -- steps 1 and 2
     factor_riccati_solve<Factor, Solve>(ctx, S, Σ, ux, λ);
     //  3|  compute-schur(c)                  -- step 3
@@ -32,8 +32,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
 
     // 17|  for l = 0 ... log₂(P)-1
     for (index_t l = 0; l < lp(); ++l) { // Recursion level of cyclic reduction
+        const auto c_ = cr_thread_assignment(l, c);
         // 18|  iU = c+1, iY = c+1-2^l
-        const auto iU = add_wrap_ceil_p(c, 1), iY = sub_wrap_ceil_p(c, (1 << l) - 1);
+        const auto iU = add_wrap_ceil_p(c_, 1), iY = sub_wrap_ceil_p(c_, (1 << l) - 1);
         // 19|  -- sync --
         ctx.arrive_and_wait(); // Wait for L
         // 20|  if ν₂(iU) = l:  U(iU) = K˂(iU) L(iU)⁻ᵀ
@@ -110,18 +111,23 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
                                                        mut_view<> work) const {
-    const index_t ti = ctx.index;
     for (index_t l = lp(); l-- > 0;) {
-        const index_t i_u = add_wrap_ceil_p(ti, 1), i_y = sub_wrap_ceil_p(ti, (1 << l) - 1),
-                      i_λ = l > 0 ? sub_wrap_ceil_p(ti, (1 << (l - 1)) - 1) : ti;
         ctx.arrive_and_wait(); // wait for λ
-        if (ν2p(i_u) == l)
-            solve_u_backward(l, i_u, λ, work);
-        else if (ν2p(i_y) == l)
-            solve_y_backward(l, i_y, λ);
+        {
+            const auto c      = cr_thread_assignment(l, ctx.index);
+            const index_t i_u = add_wrap_ceil_p(c, 1), i_y = sub_wrap_ceil_p(c, (1 << l) - 1);
+            if (ν2p(i_u) == l)
+                solve_u_backward(l, i_u, λ, work);
+            else if (ν2p(i_y) == l)
+                solve_y_backward(l, i_y, λ);
+        }
         ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
-        if (ν2p(i_λ) == l)
-            solve_λ_backward(i_λ, λ, work);
+        {
+            const auto c      = cr_thread_assignment(l - 1, ctx.index);
+            const index_t i_λ = l > 0 ? sub_wrap_ceil_p(c, (1 << (l - 1)) - 1) : c;
+            if (ν2p(i_λ) == l)
+                solve_λ_backward(i_λ, λ, work);
+        }
     }
     ctx.arrive_and_wait();
     solve_riccati_reverse(ctx, ux, λ, work);
@@ -130,6 +136,23 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ) {
     solve_reverse(ctx, ux, λ, riccati_work);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+index_t CyqloneSolver<VL, T, DefaultOrder>::cr_thread_assignment(index_t l, index_t c) const {
+    // Adjust thread assignment for non-power-of-two p:
+    // The diagonal blocks M(⌊p/2⌋2) are usually mapped to increasing thread indices as l increases.
+    // (They curve to the right in the thread assignment diagram in the paper.)
+    // However, these large thread indices are not actually present if p is not a power of two, so
+    // we need to remap them. We always assign them to the even thread ⌊p/2⌋2, since this thread is
+    // present even if p is odd. The odd thread ⌊p/2⌋2+1 is assigned the original index of the even
+    // one, which is inactive.
+    const auto ceil_p = 1 << lp();
+    // c == p - 1 for odd p; c == p - 2 or c == p - 1 for even p
+    const bool remapped_thread = (c >> 1) + 1 == (p + 1) >> 1;
+    if (p < ceil_p && remapped_thread && l > 0)
+        return (c & 1) ? (c ^ 1) : add_wrap_ceil_p(c, (1 << l) - 1);
+    return c;
 }
 
 } // namespace CYQLONE_NS(cyqlone)::v2

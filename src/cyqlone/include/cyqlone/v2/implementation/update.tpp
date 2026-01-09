@@ -163,7 +163,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
         update_L(0, ti);
     for (index_t l = 0; l < lP - lvl; ++l) {
         ctx.arrive_and_wait();
-        const auto biU = add_wrap_p(ti, 1), biY = sub_wrap_p(ti, (1 << l) - 1);
+        const auto biU = add_wrap_ceil_p(ti, 1), biY = sub_wrap_ceil_p(ti, (1 << l) - 1);
         if (ν2p(biU) == l)
             update_U(l, biU);
         else if (ν2p(biY) == l)
@@ -237,7 +237,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
                 hyhound_diag(tril(Q̂i), ΥΓi.middle_rows(nu, nx), wΣ.top_rows(nJi));
             }
         } else {
-            const auto bi_upd = sub_wrap_p(c, 1);
+            const auto bi_upd = sub_wrap_ceil_p(c, 1);
             nJs[bi_upd]       = nJi;
             ctx.arrive_and_wait();
             if (ctx.is_master())

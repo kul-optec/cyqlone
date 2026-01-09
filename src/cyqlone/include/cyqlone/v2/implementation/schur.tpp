@@ -30,7 +30,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
     //  7|  j₁ = n(c-1)+1,  jₙ = nc
     const auto dn = c * n, dn_next = c_next * n, d1_next = dn_next + n - 1;
     //  8|  i˃ = c,  i˂ = c-1
-    const index_t i_fwd = c, i_bwd = sub_wrap_p(c, 1);
+    const index_t i_fwd = c, i_bwd = sub_wrap_ceil_p(c, 1);
     auto M = tril(cr_L.batch(c));
     // 13|  W = [ LB(jₙ) ... LB(j₁) LA(j₁) ]    -- The order here is [ LA(j₁) LB(jₙ) ... LB(j₁) ]
     auto W = riccati_ÂB̂.batch(c).right_cols(nx + nu * n);
@@ -52,9 +52,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
             trmm_neg(Tc, LA1.transposed(), cr_U.batch(i_fwd));
         } else {
             GUANAQO_TRACE("Compute first Y", i_bwd);
-            i_fwd == 0 ? trmm_neg(LA1, Tc.transposed(), cr_Y.batch(i_bwd), //
-                                  with_rotate_C<-1>, with_rotate_D<-1>, with_mask_D<-1>)
-                       : trmm_neg(LA1, Tc.transposed(), cr_Y.batch(i_bwd));
+            if (i_fwd > 0)
+                trmm_neg(LA1, Tc.transposed(), cr_Y.batch(i_bwd));
+            else if constexpr (VL > 1)
+                trmm_neg(LA1, Tc.transposed(), cr_Y.batch(i_bwd), //
+                         with_rotate_C<-1>, with_rotate_D<-1>, with_mask_D<-1>);
         }
         // 11|  -- sync --
         //      Wait for the inversion in the next interval
@@ -67,9 +69,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
         auto Tc_next = triu(R̂ŜQ̂_next.right_cols(nx).middle_rows(nu - 1, nx));
         {
             GUANAQO_TRACE("Compute TTᵀ", c_next);
-            c_next == 0 ? trmm(Tc_next, Tc_next.transposed(), M, //
-                               with_rotate_C<-1>, with_rotate_D<-1>, with_mask_D<-1>)
-                        : trmm(Tc_next, Tc_next.transposed(), M);
+            if (c_next > 0 || VL == 1)
+                trmm(Tc_next, Tc_next.transposed(), M);
+            else
+                trmm(Tc_next, Tc_next.transposed(), M, with_rotate_C<-1>, with_rotate_D<-1>);
         }
         //      And finally backward in time, optionally fused with the factorization.
         if (lP == lvl) { // no multi-threading
