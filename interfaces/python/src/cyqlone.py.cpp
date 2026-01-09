@@ -95,6 +95,7 @@ void register_cyqlone_solver(nb::module_ &m) {
                 new (&self) Solver(Solver::build(CyqloneStorage<>::build(ocp.ocp), lP));
             },
             "ocp"_a, "lP"_a)
+        .def_prop_ro("params_string", [](const Solver &self) { return self.get_params_string(); })
         .def_prop_ro("num_variables", &Solver::num_variables)
         .def_prop_ro("num_dynamics_constraints", &Solver::num_dynamics_constraints)
         .def_prop_ro("num_general_constraints", &Solver::num_general_constraints)
