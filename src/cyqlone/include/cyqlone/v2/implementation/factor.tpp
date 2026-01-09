@@ -33,7 +33,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
     // 17|  for l = 0 ... log₂(P)-1
     for (index_t l = 0; l < lp(); ++l) { // Recursion level of cyclic reduction
         // 18|  iU = c+1, iY = c+1-2^l
-        const auto iU = add_wrap_p(c, 1), iY = sub_wrap_p(c, (1 << l) - 1);
+        const auto iU = add_wrap_ceil_p(c, 1), iY = sub_wrap_ceil_p(c, (1 << l) - 1);
         // 19|  -- sync --
         ctx.arrive_and_wait(); // Wait for L
         // 20|  if ν₂(iU) = l:  U(iU) = K˂(iU) L(iU)⁻ᵀ
@@ -65,19 +65,25 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
                 update_K(l, iY);
         }
     }
-    if constexpr (Factor)
+    if constexpr (Factor) {
         if (solve_method == SolveMethod::PCR) {
             ctx.arrive_and_wait(); // wait for off-diagonal block
             if (ν2p(c + 1) + 1 == lp())
                 factor_pcr();
         }
-    if constexpr (Solve)
-        if (ν2p(c + 1) + 1 == lp()) {
-            if (solve_method == SolveMethod::PCR)
+    }
+    if constexpr (Solve) {
+        if (solve_method == SolveMethod::PCR) {
+            if constexpr (!Factor)
+                ctx.arrive_and_wait(); // wait for off-diagonal block TODO: necessary?
+            if (ν2p(c + 1) + 1 == lp())
                 solve_pcr(λ.batch(0), work_pcg.batch(0).left_cols(1));
-            else
+        } else {
+            ctx.arrive_and_wait(); // wait for off-diagonal block
+            if (ν2p(c + 1) + 1 == lp())
                 solve_pcg(λ.batch(0), work_pcg.batch(0));
         }
+    }
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -106,8 +112,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
                                                        mut_view<> work) const {
     const index_t ti = ctx.index;
     for (index_t l = lp(); l-- > 0;) {
-        const index_t i_u = add_wrap_p(ti, 1), i_y = sub_wrap_p(ti, (1 << l) - 1),
-                      i_λ = l > 0 ? sub_wrap_p(ti, (1 << (l - 1)) - 1) : ti;
+        const index_t i_u = add_wrap_ceil_p(ti, 1), i_y = sub_wrap_ceil_p(ti, (1 << l) - 1),
+                      i_λ = l > 0 ? sub_wrap_ceil_p(ti, (1 << (l - 1)) - 1) : ti;
         ctx.arrive_and_wait(); // wait for λ
         if (ν2p(i_u) == l)
             solve_u_backward(l, i_u, λ, work);
