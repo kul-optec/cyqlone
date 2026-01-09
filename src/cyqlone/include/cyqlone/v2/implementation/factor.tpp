@@ -1,4 +1,6 @@
 #include <cyqlone/v2/cyqlone.hpp>
+#include <bit>
+#include <type_traits>
 
 namespace CYQLONE_NS(cyqlone)::v2 {
 
@@ -112,23 +114,22 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
                                                        mut_view<> work) const {
     for (index_t l = lp(); l-- > 0;) {
+        const auto c      = cr_thread_assignment(l, ctx.index);
+        const index_t i_u = add_wrap_ceil_p(c, 1), i_y = sub_wrap_ceil_p(c, (1 << l) - 1);
+        if (l < lp() - 1) {
+            ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
+            if (ν2p(i_u) == l && ν2p(i_y) == l + 1)
+                solve_λ_backward(i_y, λ, work);
+        }
         ctx.arrive_and_wait(); // wait for λ
-        {
-            const auto c      = cr_thread_assignment(l, ctx.index);
-            const index_t i_u = add_wrap_ceil_p(c, 1), i_y = sub_wrap_ceil_p(c, (1 << l) - 1);
-            if (ν2p(i_u) == l)
-                solve_u_backward(l, i_u, λ, work);
-            else if (ν2p(i_y) == l)
-                solve_y_backward(l, i_y, λ);
-        }
-        ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
-        {
-            const auto c      = cr_thread_assignment(l - 1, ctx.index);
-            const index_t i_λ = l > 0 ? sub_wrap_ceil_p(c, (1 << (l - 1)) - 1) : c;
-            if (ν2p(i_λ) == l)
-                solve_λ_backward(i_λ, λ, work);
-        }
+        if (ν2p(i_u) == l)
+            solve_u_backward(l, i_u, λ, work);
+        else if (ν2p(i_y) == l)
+            solve_y_backward(l, i_y, λ);
     }
+    ctx.arrive_and_wait();
+    if (ν2p(ctx.index) == 0)
+        solve_λ_backward(ctx.index, λ, work);
     ctx.arrive_and_wait();
     solve_riccati_reverse(ctx, ux, λ, work);
 }
@@ -145,13 +146,19 @@ index_t CyqloneSolver<VL, T, DefaultOrder>::cr_thread_assignment(index_t l, inde
     // (They curve to the right in the thread assignment diagram in the paper.)
     // However, these large thread indices are not actually present if p is not a power of two, so
     // we need to remap them. We always assign them to the even thread ⌊p/2⌋2, since this thread is
-    // present even if p is odd. The odd thread ⌊p/2⌋2+1 is assigned the original index of the even
-    // one, which is inactive.
-    const auto ceil_p = 1 << lp();
-    // c == p - 1 for odd p; c == p - 2 or c == p - 1 for even p
-    const bool remapped_thread = (c >> 1) + 1 == (p + 1) >> 1;
-    if (p < ceil_p && remapped_thread && l > 0)
-        return (c & 1) ? (c ^ 1) : add_wrap_ceil_p(c, (1 << l) - 1);
+    // present even if p is odd. The odd thread ⌊p/2⌋2+1 is assigned an inactive index, since it
+    // never has any work during CR, since there is no coupling between the last and first stages
+    // (at least not in the scalar case).
+    const bool non_pow_two_p = !std::has_single_bit(static_cast<std::make_unsigned_t<index_t>>(p));
+    // Only remap the last two threads: c == p - 1 for odd p; c == p - 2 or c == p - 1 for even p
+    const bool last_threads = (c >> 1) + 1 == (p + 1) >> 1;
+    // Index of the last diagonal block M or L that may need to be handled in this level
+    const auto iL = c & ~index_t{(1 << l) - 1};
+    // If this block iL would be assigned to a thread >= p, remap it to the last even thread < p
+    const bool remap = iL + (1 << l) - 1 >= p;
+    if (non_pow_two_p && last_threads && remap)
+        return c & 1 ? iL                                 // last odd thread gets the inactive index
+                     : add_wrap_ceil_p(iL, (1 << l) - 1); // last even thread gets remapped
     return c;
 }
 
