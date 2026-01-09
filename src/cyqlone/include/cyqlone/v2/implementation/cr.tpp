@@ -21,14 +21,18 @@ using namespace batmat::linalg;
 // Cyclic reduction helper functions.
 //
 // Differences compared to the pseudo-code in the paper:
-//  - The factorization is done in-place on cr_L, cr_U, and cr_Y. Subdiagonal
-//    blocks K˂ and K˃ are temporarily stored in cr_U and cr_Y respectively.
+//  - The factorization is done in-place on cr_L, cr_U, and cr_Y. Subdiagonal blocks K˂ and K˃ are
+//    temporarily stored in cr_U and cr_Y respectively.
 //  - Syrk and potrf operations are fused where possible to improve performance.
+//  - Additional masking is performed for the scalar case (VL == 1), corresponding to the boundary
+//    conditions K˃(p-2^l)=0 (i.e. no circular coupling between the last and first stages). This
+//    serves two main purposes: it avoids unnecessary computations on zero blocks, and it allows
+//    for processor counts p that are not powers of two. In contrast, the vectorized case requires
+//    circular boundary conditions, so this masking is not applied for VL > 1.
 
 // 20|  U(iU) = K˂(iU) L(iU)⁻ᵀ
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, index_t iU) {
-    // Boundary conditions for scalar case (batched case requires circular boundary conditions)
     if constexpr (VL == 1)
         if (iU >= p) // happens in cases where p is not a power of two
             return;
@@ -75,24 +79,24 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
     const index_t iY     = sub_wrap_ceil_p(i, offset);
     // Final block L(0) is stored separately (for PCR/PCG later)
     auto M = tril(cr_L.batch(i)), L0 = tril(pcr_L.batch(0));
-    const bool factor = ν2p(i) == l + 1;
-    // Boundary conditions for scalar case (batched case requires circular boundary conditions)
+    // 28|  if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
+    const bool factor_next = ν2p(i) == l + 1;
     if constexpr (VL == 1) {
         if (i == 0) { // Y(iY)=0 for M on the first thread
             GUANAQO_TRACE("Subtract UUᵀ", i);
             auto U = cr_U.batch(iU);
             // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
             // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
-            factor ? syrk_sub_potrf(U, M, L0) // chol(M - UUᵀ)
-                   : syrk_sub(U, M);
+            factor_next ? syrk_sub_potrf(U, M, L0) // chol(M - UUᵀ)
+                        : syrk_sub(U, M);
             return;
         } else if (iU >= p) { // happens in cases where p is not a power of two
             GUANAQO_TRACE("Subtract YYᵀ", i);
             auto Y = cr_Y.batch(iY);
             // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
             // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
-            factor ? syrk_sub_potrf(Y, M) // chol(M - YYᵀ)
-                   : syrk_sub(Y, M);
+            factor_next ? syrk_sub_potrf(Y, M) // chol(M - YYᵀ)
+                        : syrk_sub(Y, M);
             return;
         }
     }
@@ -107,7 +111,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
         // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
         syrk_sub(U, M);
     }
-    if (factor && i != 0) {
+    if (factor_next && i != 0) {
         GUANAQO_TRACE("Factor M", i);
         // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
         // 28|  if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
@@ -121,7 +125,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
             syrk_sub(Y, M, with_rotate_C<1>, with_rotate_D<1>, with_mask_D<1>);
     }
     // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
-    if (factor && i == 0) {
+    if (factor_next && i == 0) {
         GUANAQO_TRACE("Factor M", i);
         potrf(M, L0);
     }
@@ -141,36 +145,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
 //    with U(k+2^l) b̃(k+2^l), as they both update b(k)⁺. Similarly for the backward solve, where
 //    U(k)ᵀ x(k-2^l) is stored in a temporary workspace to avoid races on x(k).
 //  - The last level is not handled here, because it is solved using PCG or PCR.
-
-#if 0
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t iU,
-                                                         mut_view<> λ) const {
-    const index_t iL  = sub_wrap_p(iU, 1 << l); // k
-    const index_t iY  = sub_wrap_p(iL, 1 << l); // k-2^l
-    const index_t diU = iU * n, diL = iL * n, diY = iY * n;
-    auto Y = cr_Y.batch(iY);
-    // 16|  b(0)⁺ = b(0) - U(2^l) b̃(2^l)
-    // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
-    { // b(diL) -= U(iU) b(diU)
-        GUANAQO_TRACE("Subtract Ub", iL);
-        gemv_sub(cr_U.batch(iU), λ.batch(diU), λ.batch(diL));
-    }
-    { // b(diL) -= Y(iY) b(diY)
-        GUANAQO_TRACE("Subtract Yb", iL);
-        iL == 0 ? gemv_sub(Y, λ.batch(diY), λ.batch(diL), //
-                           with_rotate_C<1>, with_rotate_D<1>, with_mask_D<1>)
-                : gemv_sub(Y, λ.batch(diY), λ.batch(diL));
-    }
-    // 14|  b̃(k)⁺ = L(k)⁻¹ b(k)⁺    -- for the next level
-    if (ν2p(iL) == l + 1) {
-        GUANAQO_TRACE("Solve b", iL);
-        BATMAT_ASSUME(iL != 0);
-        // solve L(diL)⁻¹ b(diL)
-        trsm(tril(cr_L.batch(iL)), λ.batch(diL));
-    }
-}
-#endif
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU,
