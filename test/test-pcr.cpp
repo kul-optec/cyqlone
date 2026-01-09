@@ -61,7 +61,7 @@ class PCRFactorTest {
         auto B                       = Level == 0 ? B0 : pcr_Y.batch(Level);
         auto A_next                  = pcr_A.batch(0);
         trsm(B.transposed(), triu(pcr_L.batch(Level).transposed()), pcr_U.batch(Level),
-             with_shift_A<-stride>);
+             with_rotate_A<-stride>);
         trsm(B, triu(pcr_L.batch(Level).transposed()), pcr_Y.batch(Level));
         syrk_sub(pcr_U.batch(Level), tril(A), tril(A_next), with_rotate_C<-stride>,
                  with_rotate_D<-stride>, with_mask_D<-stride>);
