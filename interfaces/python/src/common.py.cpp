@@ -607,17 +607,18 @@ NB_MODULE(MODULE_NAME, m) {
         .def_ro("thread_id", &guanaqo::TraceLogger::Log::thread_id)
         .def_ro("flop_count", &guanaqo::TraceLogger::Log::flop_count);
     m.def("get_trace_log", [] {
-        auto l = guanaqo::trace_logger.get_logs();
+        auto l = guanaqo::get_trace_logger().get_logs();
         return std::vector<guanaqo::TraceLogger::Log>{l.begin(), l.end()};
     });
-    m.def("reset_trace_log", [] { guanaqo::trace_logger.reset(); });
+    m.def("reset_trace_log", [] { guanaqo::get_trace_logger().reset(); });
     m.def(
         "dump_trace_log",
         [](const std::filesystem::path &filename) {
-            std::filesystem::create_directories(filename.parent_path());
+            if (filename.has_parent_path())
+                std::filesystem::create_directories(filename.parent_path());
             std::ofstream csv{filename};
             guanaqo::TraceLogger::write_column_headings(csv) << '\n';
-            for (const auto &log : guanaqo::trace_logger.get_logs())
+            for (const auto &log : guanaqo::get_trace_logger().get_logs())
                 csv << log << '\n';
         },
         "filename"_a);

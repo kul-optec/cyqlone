@@ -45,7 +45,7 @@ void trace(auto &&fun, const auto &name, const auto &params, T *solver = nullptr
     fun(); // warmup
     fun();
     fun();
-    guanaqo::trace_logger.reset();
+    guanaqo::get_trace_logger().reset();
     fun();
     if constexpr (!std::is_void_v<T>)
         if (solver)
@@ -53,7 +53,7 @@ void trace(auto &&fun, const auto &name, const auto &params, T *solver = nullptr
     std::filesystem::create_directories(out_dir);
     std::ofstream csv{out_file};
     guanaqo::TraceLogger::write_column_headings(csv) << '\n';
-    for (const auto &log : guanaqo::trace_logger.get_logs())
+    for (const auto &log : guanaqo::get_trace_logger().get_logs())
         csv << log << '\n';
 }
 void print_traces(std::ostream &os) {

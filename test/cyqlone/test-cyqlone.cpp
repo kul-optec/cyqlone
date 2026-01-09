@@ -104,7 +104,7 @@ TEST_P(CyqloneFactorTest, factor) {
         λ.view()  = λ_initial.view();
     }
 #if GUANAQO_WITH_TRACING
-    guanaqo::trace_logger.reset();
+    guanaqo::get_trace_logger().reset();
 #endif
     solver.parallel_ctx->run([&](auto &ctx) {
         solver.factor(ctx, 1e100, Σ);
@@ -143,7 +143,7 @@ TEST_P(CyqloneFactorTest, factor) {
         std::filesystem::create_directories(out_dir);
         std::ofstream csv{out_dir / name};
         guanaqo::TraceLogger::write_column_headings(csv) << '\n';
-        for (const auto &log : guanaqo::trace_logger.get_logs())
+        for (const auto &log : guanaqo::get_trace_logger().get_logs())
             csv << log << '\n';
         std::cout << (out_dir / name) << std::endl;
     }

@@ -28,7 +28,7 @@ struct SharedContext {
 #if GUANAQO_WITH_TRACING
     struct completion_type {
         void operator()() const noexcept {
-            auto trace = guanaqo::trace_logger.trace("barrier-complete", 0);
+            auto trace = guanaqo::get_trace_logger().trace("barrier-complete", 0);
             trace.log  = nullptr;
         }
     };
@@ -101,7 +101,7 @@ struct Context {
     arrival_token arrive() {
         wait();
 #if GUANAQO_WITH_TRACING
-        auto trace = guanaqo::trace_logger.trace("barrier-arrive", index);
+        auto trace = guanaqo::get_trace_logger().trace("barrier-arrive", index);
         return {shared.barrier.arrive(static_cast<uint32_t>(index)), std::move(trace)};
 #else
         return shared.barrier.arrive(static_cast<uint32_t>(index));
@@ -127,7 +127,7 @@ struct Context {
         wait();
         this->token = &token;
 #if GUANAQO_WITH_TRACING
-        auto trace = guanaqo::trace_logger.trace("barrier-arrive", index);
+        auto trace = guanaqo::get_trace_logger().trace("barrier-arrive", index);
         token.emplace(shared.barrier.arrive(static_cast<uint32_t>(index)), std::move(trace));
 #else
         token = shared.barrier.arrive(static_cast<uint32_t>(index));

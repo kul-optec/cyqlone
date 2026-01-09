@@ -260,6 +260,12 @@ void register_cyqlone_solver(nb::module_ &m) {
         .def("build_sparse_factor", [](Solver &self) { return self.build_sparse_factor(); })
         .def("build_sparse_diag", [](Solver &self) { return self.build_sparse_diag(); });
 
+#if GUANAQO_WITH_TRACING
+    solver.def("log_thread_names", [](Solver &self) {
+        self.parallel_ctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
+    });
+#endif
+
     if constexpr (requires { &Solver::solve; })
         solver.def(
             "solve",

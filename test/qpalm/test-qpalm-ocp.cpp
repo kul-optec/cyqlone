@@ -24,12 +24,12 @@ namespace qp = cyqlone::qpalm;
 
 #if GUANAQO_WITH_TRACING
 static void init_trace() {
-    guanaqo::trace_logger.reset();
-    guanaqo::trace_logger.logs.resize(65565);
+    guanaqo::get_trace_logger().reset();
+    guanaqo::get_trace_logger().logs.resize(65565);
     GUANAQO_TRACE("init", 0);
 }
 static std::filesystem::path save_trace(const char *name) {
-    std::optional tr = guanaqo::trace_logger.trace("end", 0);
+    std::optional tr = guanaqo::get_trace_logger().trace("end", 0);
     std::filesystem::path out_dir{"traces"};
     out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
     std::filesystem::path out_file = out_dir / name;
@@ -37,7 +37,7 @@ static std::filesystem::path save_trace(const char *name) {
     std::ofstream csv{out_file};
     guanaqo::TraceLogger::write_column_headings(csv) << '\n';
     tr.reset();
-    for (const auto &log : guanaqo::trace_logger.get_logs())
+    for (const auto &log : guanaqo::get_trace_logger().get_logs())
         csv << log << '\n';
     return out_file;
 }
