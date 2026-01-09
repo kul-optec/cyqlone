@@ -146,9 +146,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_fwd_level(index_t l, index_t iU,
                                                          mut_view<> λ) const {
-    const index_t r   = 1 << l;
-    const index_t iL  = sub_wrap_p(iU, r); // k
-    const index_t iY  = sub_wrap_p(iL, r); // k-2^l
+    const index_t iL  = sub_wrap_p(iU, 1 << l); // k
+    const index_t iY  = sub_wrap_p(iL, 1 << l); // k-2^l
     const index_t diU = iU * n, diL = iL * n, diY = iY * n;
     auto Y = cr_Y.batch(iY);
     // 16|  b(0)⁺ = b(0) - U(2^l) b̃(2^l)
@@ -179,8 +178,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU,
     if constexpr (VL == 1)
         if (iU >= p) // happens in cases where p is not a power of two
             return;
-    const index_t r   = 1 << l;
-    const index_t iL  = sub_wrap_ceil_p(iU, r); // = k, iU = k+2^l
+    const index_t iL  = sub_wrap_ceil_p(iU, 1 << l); // = k, iU = k+2^l
     const index_t diU = iU * n, diL = iL * n;
     // 16|  b(0)⁺ = b(0) - U(2^l) b̃(2^l)
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
@@ -194,8 +192,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY, 
     if constexpr (VL == 1)
         if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
             return;
-    const index_t r   = 1 << l;
-    const index_t iL  = add_wrap_ceil_p(iY, r); // = k, iY = k-2^l
+    const index_t iL  = add_wrap_ceil_p(iY, 1 << l); // = k, iY = k-2^l
     const index_t diY = iY * n;
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
     GUANAQO_TRACE("Subtract Yb", iL);
@@ -206,8 +203,10 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL, mut_view<> λ,
                                                          view<> w) const {
     const index_t diL = iL * n;
+    const index_t iY  = sub_wrap_ceil_p(iL, 1 << l);
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
-    { // b(diL) -= w(iL)
+    if (VL > 1 || iY + (1 << l) < p) { // Equilvalent to iL >= (1 << l), but kept for clarity
+        // b(diL) -= w(iL)
         GUANAQO_TRACE("Subtract work b", iL);
         iL == 0 ? compact_blas::template xsub<1>(simdify(λ.batch(diL)), simdify(w.batch(iL)))
                 : compact_blas::template xsub<0>(simdify(λ.batch(diL)), simdify(w.batch(iL)));
@@ -226,8 +225,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU,
     if constexpr (VL == 1)
         if (iU >= p) // happens in cases where p is not a power of two
             return;
-    const index_t r   = 1 << l;
-    const index_t iL  = sub_wrap_ceil_p(iU, r); // = k, iU = k+2^l
+    const index_t iL  = sub_wrap_ceil_p(iU, 1 << l); // = k, iU = k+2^l
     const index_t diL = iL * n;
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     GUANAQO_TRACE("Subtract Uᵀb", iL);
@@ -241,8 +239,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY,
     if constexpr (VL == 1)
         if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
             return;
-    const index_t r   = 1 << l;
-    const index_t iL  = add_wrap_ceil_p(iY, r); // = k, iY = k-2^l
+    const index_t iL  = add_wrap_ceil_p(iY, 1 << l); // = k, iY = k-2^l
     const index_t diL = iL * n, diY = iY * n;
     auto Y = cr_Y.batch(iY);
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))

@@ -98,8 +98,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
         {
             GUANAQO_TRACE("Update λ", dn);
             auto x_next = ux.batch(d1_next).bottom_rows(nx);
-            c_next == 0 ? compact_blas::template xsub<-1>(simdify(λ.batch(dn)), simdify(x_next))
-                        : compact_blas::template xsub<+0>(simdify(λ.batch(dn)), simdify(x_next));
+            if (c_next > 0 || VL == 1)
+                compact_blas::template xsub<+0>(simdify(λ.batch(dn)), simdify(x_next));
+            else
+                compact_blas::template xsub<-1>(simdify(λ.batch(dn)), simdify(x_next));
         }
         {
             GUANAQO_TRACE("Solve λ", dn);
