@@ -102,14 +102,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
          with_rotate_A<-stride>);
     trsm(B, triu(pcr_L.batch(Level).transposed()), pcr_Y.batch(Level));
     syrk_sub(pcr_U.batch(Level), tril(A), tril(A_next), with_rotate_C<-stride>,
-             with_rotate_D<-stride>, with_mask_D<-stride>);
-    syrk_sub(pcr_Y.batch(Level), tril(A_next), with_rotate_C<+stride>, with_rotate_D<+stride>,
-             with_mask_D<+stride>);
+             with_rotate_D<-stride>);
+    syrk_sub(pcr_Y.batch(Level), tril(A_next), with_rotate_C<+stride>, with_rotate_D<+stride>);
     potrf(tril(A_next), tril(pcr_L.batch(Level + 1)));
     if constexpr (Level + 1 < lvl) {
         auto B_next = pcr_Y.batch(Level + 1);
         gemm_neg(pcr_Y.batch(Level), pcr_U.batch(Level).transposed(), B_next, {},
-                 with_rotate_C<-stride>, with_rotate_D<-stride>, with_mask_D<-stride>);
+                 with_rotate_C<-stride>, with_rotate_D<-stride>);
     }
 }
 

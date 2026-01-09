@@ -54,16 +54,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     trsm(K, triu(L.transposed()), Y);
     // 10|  M(k)⁺ = M(k) - Y(k-2^l) Y(k-2^l)ᵀ - U(k+2^l) U(k+2^l)ᵀ
     //      -- implemented as M(k-2^l)⁺ = M(k-2^l) - Y(k) Y(k)ᵀ
-    syrk_sub(U, tril(M), tril(M_next), with_rotate_C<-r>, with_rotate_D<-r>, with_mask_D<-r>);
+    syrk_sub(U, tril(M), tril(M_next), with_rotate_C<-r>, with_rotate_D<-r>);
     //      -- followed by    M(k+2^l)⁺ -= U(k) U(k)ᵀ
-    syrk_sub(Y, tril(M_next), with_rotate_C<+r>, with_rotate_D<+r>, with_mask_D<+r>);
+    syrk_sub(Y, tril(M_next), with_rotate_C<+r>, with_rotate_D<+r>);
     //  3|  L(k)⁺ = chol(M(k)⁺)    -- for the next level
     potrf(tril(M_next), tril(pcr_L.batch(Level + 1)));
     if constexpr (Level + 1 < lvl) {
         auto K_next = pcr_Y.batch(Level + 1);
         // 11|  K(k)⁺ = -Y(k+2^l) U(k+2^l)ᵀ    -- implemented as K(k-2^l)⁺ = -Y(k) U(k)ᵀ
-        gemm_neg(Y, U.transposed(), K_next, //
-                 {}, with_rotate_C<-r>, with_rotate_D<-r>, with_mask_D<-r>);
+        gemm_neg(Y, U.transposed(), K_next, {}, with_rotate_C<-r>, with_rotate_D<-r>);
     }
 }
 
