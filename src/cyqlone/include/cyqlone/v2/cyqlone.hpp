@@ -27,6 +27,12 @@ namespace CYQLONE_NS(cyqlone)::v2 {
 
 using batmat::matrix::StorageOrder;
 
+[[nodiscard]] constexpr bool is_pow_2(index_t n) {
+    BATMAT_ASSUME(n > 0);
+    auto un = static_cast<std::make_unsigned_t<index_t>>(n);
+    return std::has_single_bit(un);
+}
+
 [[nodiscard]] constexpr index_t get_depth(index_t n) {
     BATMAT_ASSUME(n > 0);
     auto un = static_cast<std::make_unsigned_t<index_t>>(n);

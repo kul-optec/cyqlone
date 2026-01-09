@@ -1,6 +1,4 @@
 #include <cyqlone/v2/cyqlone.hpp>
-#include <bit>
-#include <type_traits>
 
 namespace CYQLONE_NS(cyqlone)::v2 {
 
@@ -113,12 +111,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
                                                        mut_view<> work) const {
+    const index_t c = ctx.index;
     for (index_t l = lp(); l-- > 0;) {
-        const auto c      = cr_thread_assignment(l, ctx.index);
-        const index_t i_u = add_wrap_ceil_p(c, 1), i_y = sub_wrap_ceil_p(c, (1 << l) - 1);
-        if (l < lp() - 1) {
+        const auto c_     = cr_thread_assignment(l, c);
+        const index_t i_u = add_wrap_ceil_p(c_, 1), i_y = sub_wrap_ceil_p(c_, (1 << l) - 1);
+        if (l < lp() - 1) {        // λ(0) was already computed during forward solve
             ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
-            if (ν2p(i_u) == l && ν2p(i_y) == l + 1)
+            if (ν2p(i_y) == l + 1)
                 solve_λ_backward(i_y, λ, work);
         }
         ctx.arrive_and_wait(); // wait for λ
@@ -127,10 +126,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
         else if (ν2p(i_y) == l)
             solve_y_backward(l, i_y, λ);
     }
-    ctx.arrive_and_wait();
-    if (ν2p(ctx.index) == 0)
-        solve_λ_backward(ctx.index, λ, work);
-    ctx.arrive_and_wait();
+    ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
+    if (ν2p(c) == 0)
+        solve_λ_backward(c, λ, work);
+    ctx.arrive_and_wait(); // wait for λ(c-1)
     solve_riccati_reverse(ctx, ux, λ, work);
 }
 
@@ -139,26 +138,27 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
     solve_reverse(ctx, ux, λ, riccati_work);
 }
 
+// Adjust thread assignment for non-power-of-two p:
+// The diagonal blocks M(⌊p/2⌋2) are usually mapped to increasing thread indices as l increases,
+// as can be seen in the functions above, where iY = c + 1 - 2^l, and from the way the path of
+// M nodes curves to the right in the thread assignment diagram in the paper.
+// However, these large thread indices are not actually present if p is not a power of two, so
+// we need to remap them, undoing the offset 1 - 2^l.
+// We always assign the last M evaluation to the even thread ⌊p/2⌋2, since this thread is present
+// even if p is odd. The odd thread ⌊p/2⌋2+1 is assigned an inactive index, since it never has any
+// work during CR, as there is no coupling between the last and first stages (at least not in the
+// scalar case).
 template <index_t VL, class T, StorageOrder DefaultOrder>
 index_t CyqloneSolver<VL, T, DefaultOrder>::cr_thread_assignment(index_t l, index_t c) const {
-    // Adjust thread assignment for non-power-of-two p:
-    // The diagonal blocks M(⌊p/2⌋2) are usually mapped to increasing thread indices as l increases.
-    // (They curve to the right in the thread assignment diagram in the paper.)
-    // However, these large thread indices are not actually present if p is not a power of two, so
-    // we need to remap them. We always assign them to the even thread ⌊p/2⌋2, since this thread is
-    // present even if p is odd. The odd thread ⌊p/2⌋2+1 is assigned an inactive index, since it
-    // never has any work during CR, since there is no coupling between the last and first stages
-    // (at least not in the scalar case).
-    const bool non_pow_two_p = !std::has_single_bit(static_cast<std::make_unsigned_t<index_t>>(p));
-    // Only remap the last two threads: c == p - 1 for odd p; c == p - 2 or c == p - 1 for even p
-    const bool last_threads = (c >> 1) + 1 == (p + 1) >> 1;
     // Index of the last diagonal block M or L that may need to be handled in this level
     const auto iL = c & ~index_t{(1 << l) - 1};
+    // Only remap the last two threads: c == p - 1 for odd p; c == p - 2 or c == p - 1 for even p
+    const bool last_threads = (c >> 1) + 1 == (p + 1) >> 1;
     // If this block iL would be assigned to a thread >= p, remap it to the last even thread < p
     const bool remap = iL + (1 << l) - 1 >= p;
-    if (non_pow_two_p && last_threads && remap)
-        return c & 1 ? iL                                 // last odd thread gets the inactive index
-                     : add_wrap_ceil_p(iL, (1 << l) - 1); // last even thread gets remapped
+    if (!is_pow_2(p) && last_threads && remap)
+        c = c & 1 ? iL                                 // last odd thread gets the inactive index
+                  : add_wrap_ceil_p(iL, (1 << l) - 1); // last even thread gets remapped
     return c;
 }
 
