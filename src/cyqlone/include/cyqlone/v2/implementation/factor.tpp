@@ -66,6 +66,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
                 update_K(l, iY);
         }
     }
+    // Factor or solve the last level using PCR or PCG
     if constexpr (Factor) {
         if (solve_method == SolveMethod::PCR) {
             ctx.arrive_and_wait(); // wait for off-diagonal block
@@ -138,16 +139,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
     solve_reverse(ctx, ux, λ, riccati_work);
 }
 
-// Adjust thread assignment for non-power-of-two p:
-// The diagonal blocks M(⌊p/2⌋2) are usually mapped to increasing thread indices as l increases,
-// as can be seen in the functions above, where iY = c + 1 - 2^l, and from the way the path of
-// M nodes curves to the right in the thread assignment diagram in the paper.
-// However, these large thread indices are not actually present if p is not a power of two, so
-// we need to remap them, undoing the offset 1 - 2^l.
-// We always assign the last M evaluation to the even thread ⌊p/2⌋2, since this thread is present
-// even if p is odd. The odd thread ⌊p/2⌋2+1 is assigned an inactive index, since it never has any
-// work during CR, as there is no coupling between the last and first stages (at least not in the
-// scalar case).
+/// Adjust thread assignment for non-power-of-two p:
+/// The diagonal blocks M(⌊p/2⌋2) are usually mapped to increasing thread indices c as the CR level
+/// l increases, as can be seen in the functions above, where iY = c + 1 - 2^l, and from the way the
+/// path of M nodes curves to the right in the thread assignment diagram in the paper.
+/// However, these large thread indices are not actually present if p is not a power of two, so
+/// we need to remap them, undoing the offset 1 - 2^l.
+/// We always assign the last M evaluation to the even thread ⌊p/2⌋2, since this thread is present
+/// even if p is odd. The odd thread ⌊p/2⌋2+1 is assigned an inactive index, since it never has any
+/// work during CR, as there is no coupling between the last and first stages (at least not in the
+/// scalar case).
 template <index_t VL, class T, StorageOrder DefaultOrder>
 index_t CyqloneSolver<VL, T, DefaultOrder>::cr_thread_assignment(index_t l, index_t c) const {
     // Index of the last diagonal block M or L that may need to be handled in this level
