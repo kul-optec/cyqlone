@@ -99,6 +99,12 @@ void register_cyqlone_solver(nb::module_ &m) {
         .def_prop_ro("num_variables", &Solver::num_variables)
         .def_prop_ro("num_dynamics_constraints", &Solver::num_dynamics_constraints)
         .def_prop_ro("num_general_constraints", &Solver::num_general_constraints)
+        .def_rw("pcg_max_iter", &Solver::pcg_max_iter)
+        .def_rw("pcg_tolerance", &Solver::pcg_tolerance)
+        .def_rw("pcg_print_resid", &Solver::pcg_print_resid)
+        .def_rw("solve_method", &Solver::solve_method)
+        .def_rw("pcr_max_update_fraction", &Solver::pcr_max_update_fraction)
+        .def_rw("cr_max_update_fraction", &Solver::cr_max_update_fraction)
         .def(
             "initialize_rhs",
             [](Solver &self, const CyqloneStorage<> &ocp, np_batched_view<VL, real_t> rhs) {
