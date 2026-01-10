@@ -184,8 +184,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
     const index_t dn  = c * n; // data batch index
     const index_t jn  = c * n; // stage index
     const index_t nux = nu + nx;
-    auto R̂ŜQ̂          = riccati_R̂ŜQ̂.batch(c);
-    auto B̂ = riccati_ÂB̂.batch(c).right_cols(n * nu), Â = riccati_ÂB̂.batch(c).left_cols(n * nx);
+    auto R̂ŜQ̂          = riccati_LH.batch(c);
+    auto B̂ = riccati_LAB.batch(c).right_cols(n * nu), Â = riccati_LAB.batch(c).left_cols(n * nx);
     auto Υ1 = riccati_Υ1.batch(c), Υ2 = riccati_Υ2.batch(c);
     auto wΣ = work_Σ.batch(c);
 
@@ -193,7 +193,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
     {
         GUANAQO_TRACE("Riccati update compress", jn);
         auto DC0 = Υ2.top_left(nu + nx, nyM);
-        nJ       = compress_masks(data_DCᵀ.batch(dn), Σ.batch(dn), DC0, wΣ.top_rows(nyM));
+        nJ       = compress_masks(data_Gᵀ.batch(dn), Σ.batch(dn), DC0, wΣ.top_rows(nyM));
         Υ2.bottom_left(nx, nJ).set_constant(0);
     }
 
@@ -218,14 +218,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
             auto Υ_next                        = ((i & 1) ? Υ2 : Υ1).left_cols(nJi + nyM);
             if (nJi > 0) {
                 GUANAQO_TRACE("Riccati update prop", k_next);
-                gemm(data_BA.batch(di_next).transposed(), Υi.middle_rows(nu, nx),
+                gemm(data_F.batch(di_next).transposed(), Υi.middle_rows(nu, nx),
                      Υ_next.top_left(nu + nx, nJi));
                 copy(Υi.bottom_rows(nx), Υ_next.bottom_left(nx, nJi));
             }
             {
                 GUANAQO_TRACE("Riccati update compress", k_next);
                 auto DC_next = Υ_next.block(0, nJi, nu + nx, nyM);
-                nJ += compress_masks(data_DCᵀ.batch(di_next), Σ.batch(di_next), DC_next,
+                nJ += compress_masks(data_Gᵀ.batch(di_next), Σ.batch(di_next), DC_next,
                                      wΣ.middle_rows(nJi, nyM));
                 Υ_next.block(nu + nx, nJi, nx, nJ - nJi).set_constant(0);
             }

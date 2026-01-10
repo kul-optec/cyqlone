@@ -84,33 +84,33 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_data(const CyqloneStorage<value_
                 auto k = sub_wrap_N(k0 + vi * p * n, i);
                 if (k == 0) {
                     if (ceil_N() == N_horiz) {
-                        detail::copy(ocp.data_F(0), data_BA.batch(di)(vi));  // A, B
-                        detail::copy(ocp.data_H(0), data_RSQ.batch(di)(vi)); // R, S, Q
+                        detail::copy(ocp.data_F(0), data_F.batch(di)(vi)); // A, B
+                        detail::copy(ocp.data_H(0), data_H.batch(di)(vi)); // R, S, Q
                     } else {
                         detail::copy(ocp.data_F(0).left_cols(nu),
-                                     data_BA.batch(di)(vi).left_cols(nu));          // B
-                        data_BA.batch(di)(vi).right_cols(nx).set_constant(0);       // A = 0
+                                     data_F.batch(di)(vi).left_cols(nu));           // B
+                        data_F.batch(di)(vi).right_cols(nx).set_constant(0);        // A = 0
                         detail::copy(ocp.data_H(0).top_left(nu, nu),                //
-                                     data_RSQ.batch(di)(vi).top_left(nu, nu));      // R
-                        data_RSQ.batch(di)(vi).bottom_left(nx, nu).set_constant(0); // S = 0
+                                     data_H.batch(di)(vi).top_left(nu, nu));        // R
+                        data_H.batch(di)(vi).bottom_left(nx, nu).set_constant(0);   // S = 0
                         detail::scale(scale_QN, ocp.data_H(0).bottom_right(nx, nx), //
-                                      data_RSQ.batch(di)(vi).bottom_right(nx, nx)); // Q = α Q(N)
+                                      data_H.batch(di)(vi).bottom_right(nx, nx));   // Q = α Q(N)
                     }
                     detail::copy(ocp.data_G0N(0).transposed(),
-                                 data_DCᵀ.batch(di)(vi).left_cols(ny_0 + ny_N)); // D, C
+                                 data_Gᵀ.batch(di)(vi).left_cols(ny_0 + ny_N)); // D, C
                 } else if (k < N_horiz) {
-                    detail::copy(ocp.data_F(k), data_BA.batch(di)(vi));  // A, B
-                    detail::copy(ocp.data_H(k), data_RSQ.batch(di)(vi)); // R, S, Q
-                    detail::copy(ocp.data_G(k - 1).transposed(),         //
-                                 data_DCᵀ.batch(di)(vi).left_cols(ny));  // D, C
+                    detail::copy(ocp.data_F(k), data_F.batch(di)(vi)); // A, B
+                    detail::copy(ocp.data_H(k), data_H.batch(di)(vi)); // R, S, Q
+                    detail::copy(ocp.data_G(k - 1).transposed(),       //
+                                 data_Gᵀ.batch(di)(vi).left_cols(ny)); // D, C
                 } else {
-                    data_BA.batch(di)(vi).set_constant(0);                      // B = 0
-                    data_BA.batch(di)(vi).right_cols(nx).set_diagonal(1);       // A = I
-                    data_RSQ.batch(di)(vi).left_cols(nu).set_constant(0);       // S = 0
-                    data_RSQ.batch(di)(vi).top_left(nu, nu).set_diagonal(1);    // R = I
+                    data_F.batch(di)(vi).set_constant(0);                       // B = 0
+                    data_F.batch(di)(vi).right_cols(nx).set_diagonal(1);        // A = I
+                    data_H.batch(di)(vi).left_cols(nu).set_constant(0);         // S = 0
+                    data_H.batch(di)(vi).top_left(nu, nu).set_diagonal(1);      // R = I
                     detail::scale(scale_QN, ocp.data_H(0).bottom_right(nx, nx), //
-                                  data_RSQ.batch(di)(vi).bottom_right(nx, nx)); // Q = α Q(N)
-                    data_DCᵀ.batch(di)(vi).left_cols(ny).set_constant(0);       // D, C
+                                  data_H.batch(di)(vi).bottom_right(nx, nx));   // Q = α Q(N)
+                    data_Gᵀ.batch(di)(vi).left_cols(ny).set_constant(0);        // D, C
                 }
             }
         }

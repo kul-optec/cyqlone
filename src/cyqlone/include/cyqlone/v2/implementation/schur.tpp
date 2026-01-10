@@ -33,9 +33,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
     const index_t i_fwd = c, i_bwd = sub_wrap_ceil_p(c, 1);
     auto M = tril(cr_L.batch(c));
     // 13|  W = [ LB(jₙ) ... LB(j₁) LA(j₁) ]    -- The order here is [ LA(j₁) LB(jₙ) ... LB(j₁) ]
-    auto W = riccati_ÂB̂.batch(c).right_cols(nx + nu * n);
+    auto W = riccati_LAB.batch(c).right_cols(nx + nu * n);
     if constexpr (Factor) {
-        auto R̂ŜQ̂ = riccati_R̂ŜQ̂.batch(c);
+        auto R̂ŜQ̂ = riccati_LH.batch(c);
         auto LQ  = tril(R̂ŜQ̂.bottom_right(nx, nx));
         //  9|  T(c) = LQ(j₁)⁻ᵀ
         BATMAT_ASSERT(nu >= 1); // T = LQ⁻ᵀ is upper triangular, stored one row up from LQ itself
@@ -45,7 +45,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
             trtri(LQ, Tc.transposed());
         }
         auto T_ready = ctx.arrive();
-        auto LA1     = riccati_ÂB̂.batch(c).middle_cols(nx * (n - 1), nx); // LA(j₁)
+        auto LA1     = riccati_LAB.batch(c).middle_cols(nx * (n - 1), nx); // LA(j₁)
         // 10|  if ν2(i˂) > ν2(i˃)    K˂(i˃) = -T(c) LA(j₁)ᵀ    else    K˃(i˂) = -LA(j₁) T(c)ᵀ
         if (ν2p(i_bwd) > ν2p(i_fwd)) {
             GUANAQO_TRACE("Compute first U", i_fwd);
@@ -64,7 +64,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
         //      Each column of the cyclic part with coupling equations is updated by two threads:
         //      one for the forward, and one for the backward coupling. Update the diagonal blocks
         //      of the coupling equations, first forward in time ...
-        auto R̂ŜQ̂_next = riccati_R̂ŜQ̂.batch(c_next);
+        auto R̂ŜQ̂_next = riccati_LH.batch(c_next);
         // 12|  M(c)˂ = T(c+1) T(c+1)ᵀ
         auto Tc_next = triu(R̂ŜQ̂_next.right_cols(nx).middle_rows(nu - 1, nx));
         {

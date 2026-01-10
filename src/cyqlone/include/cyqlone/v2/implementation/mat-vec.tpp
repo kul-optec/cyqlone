@@ -31,7 +31,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, 
         [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
         GUANAQO_TRACE("resid_dyn_constr", k);
         index_t di = di0 + i;
-        auto BAi   = data_BA.batch(di);
+        auto BAi   = data_F.batch(di);
         auto uxi   = x.batch(di);
         gemv_sub(BAi, uxi, Mxb.batch(di));
         if (i + 1 < n) {
@@ -59,7 +59,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
         [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
         GUANAQO_TRACE("transposed_dynamics_constr", k);
         index_t di = di0 + i;
-        auto BAi   = data_BA.batch(di);
+        auto BAi   = data_F.batch(di);
         Mᵀλ.batch(di).top_rows(nu).set_constant(0);
         index_t di_next = di + 1;
         compact_blas::xadd_neg_copy(simdify(Mᵀλ.batch(di).bottom_rows(nx)),
@@ -69,7 +69,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
     const index_t i            = n - 1;
     [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
     index_t di                 = di0 + i;
-    auto BAi                   = data_BA.batch(di);
+    auto BAi                   = data_F.batch(di);
     {
         GUANAQO_TRACE("transposed_dynamics_constr final u", k);
         Mᵀλ.batch(di).top_rows(nu).set_constant(0);
@@ -95,7 +95,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::general_constr(Context &ctx, view<> ux,
         [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
         GUANAQO_TRACE("general_constr", k);
         index_t di = di0 + i;
-        gemv(data_DCᵀ.batch(di).transposed(), ux.batch(di), DCux.batch(di));
+        gemv(data_Gᵀ.batch(di).transposed(), ux.batch(di), DCux.batch(di));
     }
 }
 
@@ -109,7 +109,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(Context &ctx,
         [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
         GUANAQO_TRACE("transposed_general_constr", k);
         index_t di = di0 + i;
-        gemv(data_DCᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
+        gemv(data_Gᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
     }
 }
 
@@ -123,7 +123,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(view<> y,
             [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
             GUANAQO_TRACE("transposed_general_constr", k);
             index_t di = di0 + i;
-            gemv(data_DCᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
+            gemv(data_Gᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
         }
     }
 }
@@ -141,7 +141,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, 
         index_t di = di0 + i;
         if (a != 0 || b != 1)
             compact_blas::xaxpby(a, simdify(q.batch(di)), b, simdify(grad_f.batch(di)));
-        symv_add(tril(data_RSQ.batch(di)), ux.batch(di), grad_f.batch(di));
+        symv_add(tril(data_H.batch(di)), ux.batch(di), grad_f.batch(di));
     }
 }
 
@@ -169,7 +169,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx,
             simd grad_fij = invS * (xij - x0ij) + qij;
             simd_types::aligned_store(grad_fij, &grad_fi(0, j, 0));
         }
-        symv_add(tril(data_RSQ.batch(di)), ux.batch(di), grad_f.batch(di));
+        symv_add(tril(data_H.batch(di)), ux.batch(di), grad_f.batch(di));
     }
 }
 

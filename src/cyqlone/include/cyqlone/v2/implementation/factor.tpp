@@ -8,7 +8,7 @@ namespace CYQLONE_NS(cyqlone)::v2 {
 // Optionally fused factorization and forward solve of the KKT system.
 //
 // Differences compared to the pseudo-code in the paper:
-//  - The penalty terms DCᵀ Σ DC and the regularizers Γₓ = SI are added to the cost Hessians during
+//  - The penalty terms DCᵀ Σ DC and the regularizers Γₓ = γI are added to the cost Hessians during
 //    the Riccati factorization step, as described in §5.1 “The augmented Lagrangian inner problem”.
 //  - Solution is fused/interleaved with the factorization steps to improve temporal locality and
 //    reduce memory bandwidth.
@@ -21,11 +21,11 @@ namespace CYQLONE_NS(cyqlone)::v2 {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <bool Factor, bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
-void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_type S, view<> Σ,
+void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_type γ, view<> Σ,
                                                            mut_view<> ux, mut_view<> λ) {
     const index_t c = ctx.index;
     //  2|  factor-block-column-riccati(c)    -- steps 1 and 2
-    factor_riccati_solve<Factor, Solve>(ctx, S, Σ, ux, λ);
+    factor_riccati_solve<Factor, Solve>(ctx, γ, Σ, ux, λ);
     //  3|  compute-schur(c)                  -- step 3
     compute_schur<Factor, Solve>(ctx, ux, λ);
     //  4|  factor-schur(c)                   -- step 4
@@ -88,13 +88,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_solve(Context &ctx, value_type S, view<> Σ,
+void CyqloneSolver<VL, T, DefaultOrder>::factor_solve(Context &ctx, value_type γ, view<> Σ,
                                                       mut_view<> ux, mut_view<> λ) {
-    factor_solve_impl<true, true>(ctx, S, Σ, ux, λ);
+    factor_solve_impl<true, true>(ctx, γ, Σ, ux, λ);
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type S, view<> Σ) {
-    factor_solve_impl<true, false>(ctx, S, Σ, {}, {});
+void CyqloneSolver<VL, T, DefaultOrder>::factor(Context &ctx, value_type γ, view<> Σ) {
+    factor_solve_impl<true, false>(ctx, γ, Σ, {}, {});
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ) {

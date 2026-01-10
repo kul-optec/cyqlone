@@ -132,13 +132,16 @@ struct CyqloneSolver {
     /// @name OCP data (reordered for use during the Cyqlone algorithm)
     /// @{
 
-    matrix<default_order> data_RSQ = [this] {
+    /// Stage-wise Hessian blocks H(j) = [ R(j)  S(j);  S(j)ᵀ  Q(j) ] of the OCP cost function.
+    matrix<default_order> data_H = [this] {
         return matrix<default_order>{{.depth = ceil_N(), .rows = nu + nx, .cols = nu + nx}};
     }();
-    matrix<default_order> data_BA = [this] {
+    /// Stage-wise dynamics matrices F(j) = [ B(j)  A(j) ] of the OCP.
+    matrix<default_order> data_F = [this] {
         return matrix<default_order>{{.depth = ceil_N(), .rows = nx, .cols = nu + nx}};
     }();
-    matrix<default_order> data_DCᵀ = [this] {
+    /// Stage-wise constraint Jacobians G(j)ᵀ = [ D(j)  C(j) ]ᵀ of the OCP.
+    matrix<default_order> data_Gᵀ = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
         return matrix<default_order>{{.depth = ceil_N(), .rows = nu + nx, .cols = nyM}};
     }();
@@ -148,16 +151,25 @@ struct CyqloneSolver {
     /// @name Modified Riccati data structures
     /// @{
 
-    matrix<default_order> riccati_R̂ŜQ̂ = [this] {
+    /// Cholesky factors of the Hessian blocks for the Riccati recursion.
+    /// LH(j) = [ LR(j)  0;  LS(j)  LQ(j) ]
+    matrix<default_order> riccati_LH = [this] {
         return matrix<default_order>{{.depth = p * vl, .rows = nu + nx, .cols = n * (nu + nx)}};
     }();
-    matrix<default_order> riccati_ÂB̂ = [this] {
-        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = n * (nu + nx)}};
+    /// Storage for the matrices LB(j), Acl(j) and LA(j₁) for the Riccati recursion.
+    /// Grouped per thread, with layout [ Acl(jₙ) ... Acl(j₂) LA(j₁) | LB(jₙ) ... LB(j₁) ], so that
+    /// LA(j₁) and LB(j) are contiguous (useful when evaluating the Schur complement).
+    matrix<default_order> riccati_LAB = [this] {
+        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = n * nx + n * nu}};
     }();
-    matrix<default_order> riccati_BAᵀ = [this] {
+    /// Temporary storage for the V(j) = [ B(j)ᵀ LQ(j);  A(j)ᵀ LQ(j) ] matrices during the Riccati
+    /// recursion. The workspace is wider than just V to also accommodate the active constraint
+    /// Jacobians, since both are used to update the Hessian blocks during the Riccati recursion.
+    matrix<default_order> riccati_V = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
         return matrix<default_order>{{.depth = p * vl, .rows = nu + nx, .cols = nx + nyM}};
     }();
+    /// Temporary workspace for the Riccati solve phase.
     matrix<column_major> riccati_work = [this] {
         return matrix<column_major>{{.depth = p * vl, .rows = nx, .cols = 1}};
     }();
@@ -407,13 +419,13 @@ struct CyqloneSolver {
     /// grad_f ← Q ux + a q + b grad_f
     void cost_gradient(Context &ctx, view<> ux, value_type a, view<> q, value_type b,
                        mut_view<> grad_f) const;
-    void cost_gradient_regularized(Context &ctx, value_type S, view<> ux, view<> ux0, view<> q,
+    void cost_gradient_regularized(Context &ctx, value_type γ, view<> ux, view<> ux0, view<> q,
                                    mut_view<> grad_f) const;
-    void cost_gradient_remove_regularization(Context &ctx, value_type S, view<> x, view<> x0,
+    void cost_gradient_remove_regularization(Context &ctx, value_type γ, view<> x, view<> x0,
                                              mut_view<> grad_f) const;
 
     template <bool Factor = true, bool Solve = true>
-    void factor_riccati_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
+    void factor_riccati_solve(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
     template <bool Factor = true, bool Solve = true>
     void compute_schur(Context &ctx, mut_view<> ux, mut_view<> λ);
     [[nodiscard]] index_t cr_thread_assignment(index_t l, index_t c) const;
@@ -425,9 +437,9 @@ struct CyqloneSolver {
     template <index_t Level>
     void factor_pcr_level();
     template <bool Factor = true, bool Solve = true>
-    void factor_solve_impl(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
-    void factor_solve(Context &ctx, value_type S, view<> Σ, mut_view<> ux, mut_view<> λ);
-    void factor(Context &ctx, value_type S, view<> Σ);
+    void factor_solve_impl(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
+    void factor_solve(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
+    void factor(Context &ctx, value_type γ, view<> Σ);
 
     void solve_u_forward(index_t l, index_t biU, mut_view<> λ) const;
     void solve_y_forward(index_t l, index_t biY, mut_view<> λ, mut_view<> w) const;

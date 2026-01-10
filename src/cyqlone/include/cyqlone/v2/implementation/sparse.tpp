@@ -192,15 +192,15 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
         const index_t di0 = ti * num_stages; // data batch index
         for (index_t i = 0; i < num_stages; ++i) {
             const auto di = di0 + i;
-            auto RSQ      = riccati_R̂ŜQ̂.batch(ti);
+            auto RSQ      = riccati_LH.batch(ti);
             auto RSQi     = RSQ.middle_cols(i * nux, nux);
             auto Qi       = tril(RSQi.bottom_right(nx, nx));
             auto Qi_inv   = triu(invQᵀ.batch(ti).middle_cols(i * nx, nx));
-            auto Â        = riccati_ÂB̂.batch(ti).left_cols(num_stages * nx);
+            auto Â        = riccati_LAB.batch(ti).left_cols(num_stages * nx);
             auto Âi       = Â.middle_cols(i * nx, nx);
             auto AiQᵀ     = AinvQᵀ.batch(ti);
             auto AiQiᵀ    = AiQᵀ.middle_cols(i * nx, nx);
-            auto BAᵀ      = riccati_BAᵀ.batch(ti);
+            auto BAᵀ      = riccati_V.batch(ti);
             auto LBAt     = LBA.batch(ti);
 
             copy(Âi, AiQiᵀ);
@@ -215,7 +215,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
                 if (alt) {
                     auto RSQ_prev = RSQ.middle_cols((i - 1) * nux, nux);
                     auto Q_prev   = tril(RSQ_prev.bottom_right(nx, nx));
-                    auto BA       = data_BA.batch(di);
+                    auto BA       = data_F.batch(di);
                     copy(BA.transposed(), LBAi);
                     trmm(LBAi, Q_prev);
                 } else {
@@ -233,8 +233,8 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
             const auto biI   = sub_wrap_P(biA, 1);
             const auto sλA   = sλ + nx * get_linear_batch_offset(biA);
             const auto sλI   = sλ + nx * get_linear_batch_offset(biI);
-            auto B̂           = riccati_ÂB̂.batch(ti).right_cols(num_stages * nu);
-            auto R̂ŜQ̂         = riccati_R̂ŜQ̂.batch(ti);
+            auto B̂           = riccati_LAB.batch(ti).right_cols(num_stages * nu);
+            auto R̂ŜQ̂         = riccati_LH.batch(ti);
             auto LBAt        = LBA.batch(ti);
             // TODO: handle case if lev > or >= lp()
             for (index_t i = 0; i < num_stages; ++i) {
