@@ -74,7 +74,7 @@ struct CyqloneSolver {
     const index_t n = (N_horiz + p * vl - 1) / (p * vl);
 
     [[nodiscard]] index_t ceil_N() const { return n * p * vl; }
-
+    [[nodiscard]] index_t ν2p(index_t bi) const;
     [[nodiscard]] index_t add_wrap_N(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_N(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_p(index_t a, index_t b) const;
@@ -84,27 +84,27 @@ struct CyqloneSolver {
     [[nodiscard]] index_t sub_wrap_P(index_t a, index_t b) const;
     [[nodiscard]] index_t get_linear_batch_offset(index_t biA) const;
 
-    template <StorageOrder O = StorageOrder::ColMajor>
+    static constexpr auto default_order = DefaultOrder;
+    static constexpr auto column_major  = StorageOrder::ColMajor;
+
+    template <StorageOrder O = column_major>
     using matrix = batmat::matrix::Matrix<value_type, index_t, vl_t, index_t, O, align_t>;
-    template <StorageOrder O = StorageOrder::ColMajor>
-    using mask_matrix = batmat::matrix::Matrix<bool, index_t, vl_t, index_t, O, align_t>;
-    template <StorageOrder O = StorageOrder::ColMajor>
+    template <StorageOrder O = column_major>
     using view = batmat::matrix::View<const value_type, index_t, vl_t, index_t, index_t, O>;
-    template <StorageOrder O = StorageOrder::ColMajor>
+    template <StorageOrder O = column_major>
     using mut_view     = batmat::matrix::View<value_type, index_t, vl_t, index_t, index_t, O>;
     using layer_stride = batmat::matrix::DefaultStride;
-    template <StorageOrder O = StorageOrder::ColMajor>
+    template <StorageOrder O = column_major>
     using batch_view = batmat::matrix::View<const value_type, index_t, vl_t, vl_t, layer_stride, O>;
-    template <StorageOrder O = StorageOrder::ColMajor>
+    template <StorageOrder O = column_major>
     using mut_batch_view = batmat::matrix::View<value_type, index_t, vl_t, vl_t, layer_stride, O>;
 
-    static constexpr auto default_order = DefaultOrder;
-
-    using compact_blas = cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>,
-                                                       StorageOrder::ColMajor>; // TODO
+    // TODO: these are remnant classes that are used for simple elementwise operations only, and
+    //       they should be replaced by free functions similar to the ones in batmat::linalg.
+    using compact_blas =
+        cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>, column_major>;
     using compact_blas_default =
-        cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>,
-                                      default_order>; // TODO
+        cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>, default_order>;
 
     index_t pcg_max_iter           = 100;
     value_type pcg_tolerance       = std::numeric_limits<value_type>::epsilon() / 10;
@@ -126,214 +126,195 @@ struct CyqloneSolver {
     using Context                               = parallel::Context<SharedContext>;
     std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
 
-    matrix<default_order> cr_L = [this] {
-        return matrix<default_order>{{
-            .depth = p * vl,
-            .rows  = nx,
-            .cols  = nx,
-        }};
-    }();
-    matrix<default_order> cr_U = [this] {
-        return matrix<default_order>{{
-            .depth = p * vl,
-            .rows  = nx,
-            .cols  = nx,
-        }};
-    }();
-    matrix<default_order> cr_Y = [this] {
-        return matrix<default_order>{{
-            .depth = p * vl,
-            .rows  = nx,
-            .cols  = nx,
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> work_cr = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = p * vl,
-            .rows  = nx,
-            .cols  = 1,
-        }};
-    }();
-    matrix<default_order> pcr_L = [this] {
-        return matrix<default_order>{{
-            .depth = VL * (lvl + 1),
-            .rows  = nx,
-            .cols  = nx,
-        }};
-    }();
-    matrix<default_order> pcr_Y = [this] {
-        return matrix<default_order>{{
-            .depth = VL * lvl,
-            .rows  = nx,
-            .cols  = nx,
-        }};
-    }();
-    matrix<default_order> pcr_U = [this] {
-        return matrix<default_order>{{
-            .depth = VL * lvl,
-            .rows  = nx,
-            .cols  = nx,
-        }};
-    }();
-    matrix<default_order> pcr_M = [this] {
-        return matrix<default_order>{{
-            .depth = VL,
-            .rows  = nx,
-            .cols  = nx,
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> work_update_pcr_L = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = VL,
-            .rows  = nx,
-            .cols  = N_horiz * std::max(ny, ny_0 + ny_N),
-        }};
-    }(); // TODO: merge with work_update?
-    matrix<StorageOrder::ColMajor> work_update_pcr_UY = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = VL,
-            .rows  = nx,
-            .cols  = 2 * N_horiz * std::max(ny, ny_0 + ny_N),
-        }};
-    }(); // TODO: merge with work_update?
-    matrix<StorageOrder::ColMajor> work_update_pcr_Σ = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = VL,
-            .rows  = 2 * N_horiz * std::max(ny, ny_0 + ny_N),
-            .cols  = 1,
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> work_update = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = 4 << lvl,
-            .rows  = nx,
-            .cols  = n * p * std::max(ny, ny_0 + ny_N),
-        }};
-    }(); // TODO: merge with riccati_ΥΓ?
-    matrix<StorageOrder::ColMajor> work_update_Σ = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = 1 << lvl,
-            .rows  = n * p * std::max(ny, ny_0 + ny_N),
-            .cols  = 1,
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> work_hyh = [this] {
-        using namespace batmat::linalg;
-        const auto [r, c] = hyhound_size_W(tril(cr_L.batch(0)));
-        return matrix<StorageOrder::ColMajor>{{.depth = p * vl, .rows = r, .cols = c}};
-    }();
-    matrix<default_order> riccati_ÂB̂ = [this] {
-        return matrix<default_order>{{
-            .depth = p * vl,
-            .rows  = nx,
-            .cols  = n * (nu + nx),
-        }};
-    }();
-    matrix<default_order> riccati_BAᵀ = [this] {
-        return matrix<default_order>{{
-            .depth = p * vl,
-            .rows  = nu + nx,
-            .cols  = (n - 1) * nx + std::max(ny, ny_0 + ny_N),
-        }};
-    }();
-    matrix<default_order> riccati_R̂ŜQ̂ = [this] {
-        return matrix<default_order>{{
-            .depth = p * vl,
-            .rows  = nu + nx,
-            .cols  = n * (nu + nx),
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> riccati_ΥΓ1 = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = p * vl,
-            .rows  = nu + nx + nx,
-            .cols  = n * std::max(ny, ny_0 + ny_N),
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> riccati_ΥΓ2 = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = p * vl,
-            .rows  = nu + nx + nx,
-            .cols  = n * std::max(ny, ny_0 + ny_N),
-        }};
+    // Note: the cumbersome IILE initialization syntax is to work around a GCC bug
+    //       https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116015
+
+    /// @name OCP data (reordered for use during the Cyqlone algorithm)
+    /// @{
+
+    matrix<default_order> data_RSQ = [this] {
+        return matrix<default_order>{{.depth = ceil_N(), .rows = nu + nx, .cols = nu + nx}};
     }();
     matrix<default_order> data_BA = [this] {
-        return matrix<default_order>{{
-            .depth = ceil_N(),
-            .rows  = nx,
-            .cols  = nu + nx,
-        }};
+        return matrix<default_order>{{.depth = ceil_N(), .rows = nx, .cols = nu + nx}};
     }();
     matrix<default_order> data_DCᵀ = [this] {
-        return matrix<default_order>{{
-            .depth = ceil_N(),
-            .rows  = nu + nx,
-            .cols  = std::max(ny, ny_0 + ny_N),
-        }};
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<default_order>{{.depth = ceil_N(), .rows = nu + nx, .cols = nyM}};
     }();
-    matrix<StorageOrder::ColMajor> data_rhs_constr = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = ceil_N(),
-            .rows  = nx,
-            .cols  = 1,
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> work_Σ = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = p * vl,
-            .rows  = n * std::max(ny, ny_0 + ny_N),
-            .cols  = 1,
-        }};
-    }();
-    matrix<default_order> data_RSQ = [this] {
-        return matrix<default_order>{{
-            .depth = ceil_N(),
-            .rows  = nu + nx,
-            .cols  = nu + nx,
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> riccati_work = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = p * vl,
-            .rows  = nx,
-            .cols  = 1,
-        }};
-    }();
-    matrix<StorageOrder::ColMajor> work_pcg = [this] {
-        return matrix<StorageOrder::ColMajor>{{
-            .depth = vl,
-            .rows  = nx,
-            .cols  = 4,
-        }};
-    }();
-    std::vector<index_t> nJs = std::vector<index_t>(p);
 
-    struct Timings {
-        using type    = DefaultTimings;
-        using timed_t = guanaqo::Timed<batmat::DefaultTimings>;
-        type breakpoints{};
-        type calc_y_hat{};
-        type calc_y_hat_AT{};
-        type update_active_set_change{};
-        type update_factorization{};
-        type factor{};
-        type solve{};
-        type solve_MT{};
-        type solve_A{};
-        type solve_grad{};
-        type solve_resid{};
-        type recompute_outer_grad{};
-        type recompute_outer_A{};
-        type recompute_outer_AT{};
-        type recompute_outer_MT{};
-        type recompute_outer_norm{};
-        type recompute_inner_grad{};
-        type recompute_inner_A{};
-        type recompute_inner_MT{};
-        type ineq_constr_resid{};
-        type ineq_constr_viol{};
-        type ineq_constr_resid_al{};
-    };
+    /// @}
+
+    /// @name Modified Riccati data structures
+    /// @{
+
+    matrix<default_order> riccati_R̂ŜQ̂ = [this] {
+        return matrix<default_order>{{.depth = p * vl, .rows = nu + nx, .cols = n * (nu + nx)}};
+    }();
+    matrix<default_order> riccati_ÂB̂ = [this] {
+        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = n * (nu + nx)}};
+    }();
+    matrix<default_order> riccati_BAᵀ = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<default_order>{{.depth = p * vl, .rows = nu + nx, .cols = nx + nyM}};
+    }();
+    matrix<column_major> riccati_work = [this] {
+        return matrix<column_major>{{.depth = p * vl, .rows = nx, .cols = 1}};
+    }();
+
+    /// @}
+
+    /// @name Cyclic reduction data structures
+    /// @{
+
+    /// Diagonal blocks of the Cholesky factor of the Schur complement (used during CR).
+    /// These matrices are used to evaluate the diagonal blocks M themselves first, and are then
+    /// factorized in-place. After the (batched) CR phase, cr_L(0) still contains M(0), and L(0)
+    /// is stored in pcr_L(0).
+    matrix<default_order> cr_L = [this] {
+        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = nx}};
+    }();
+    /// Subdiagonal blocks U of the Cholesky factor of the Schur complement (used during CR).
+    /// These matrices are associated with coupling backward in time (K˂).
+    matrix<default_order> cr_U = [this] {
+        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = nx}};
+    }();
+    /// Subdiagonal blocks Y of the Cholesky factor of the Schur complement (used during CR).
+    /// These matrices are associated with coupling forward in time (K˃).
+    matrix<default_order> cr_Y = [this] {
+        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = nx}};
+    }();
+    /// Temporary workspace for the CR solve phase to enable parallel evaluation of matrix-vector
+    /// products with U and Y without data races.
+    matrix<column_major> work_cr = [this] {
+        return matrix<column_major>{{.depth = p * vl, .rows = nx, .cols = 1}};
+    }();
+
+    /// @}
+
+    /// @name Parallel cyclic reduction data structures
+    /// @{
+
+    /// Diagonal blocks of the PCR Cholesky factorizations of the block-tridiagonal system with
+    /// diagonal blocks cr_L(0) and subdiagonal blocks cr_Y(0). Note that pcr_L(0) should be
+    /// initialized with the Cholesky factors of cr_L(0) before performing PCR.
+    matrix<default_order> pcr_L = [this] {
+        return matrix<default_order>{{.depth = VL * (lvl + 1), .rows = nx, .cols = nx}};
+    }();
+    /// Subdiagonal blocks Y of the PCR Cholesky factorizations.
+    matrix<default_order> pcr_Y = [this] {
+        return matrix<default_order>{{.depth = VL * lvl, .rows = nx, .cols = nx}};
+    }();
+    /// Subdiagonal blocks U of the PCR Cholesky factorizations.
+    matrix<default_order> pcr_U = [this] {
+        return matrix<default_order>{{.depth = VL * lvl, .rows = nx, .cols = nx}};
+    }();
+    /// Workspace to store the diagonal blocks during the PCR factorization.
+    matrix<default_order> pcr_M = [this] {
+        return matrix<default_order>{{.depth = VL, .rows = nx, .cols = nx}};
+    }();
+    /// Temporary workspace for CG vectors.
+    matrix<column_major> work_pcg = [this] {
+        return matrix<column_major>{{.depth = vl, .rows = nx, .cols = 4}};
+    }();
+
+    /// @}
+
+    /// @name Factorization update data structures
+    /// @{
+
+    /// Update rank (number of changing constraints) per thread. Replaced by their partial sums
+    /// over all threads before the update of the Schur complement.
+    std::vector<index_t> nJs = std::vector<index_t>(p);
+    /// Compressed representation of the nonzero diagonal elements of the matrix Σ, populated
+    /// for each thread separately during the factorization update of the Riccati recursion, and
+    /// later compressed across all threads into @ref work_update_Σ so it can be applied to the
+    /// Schur complement.
+    matrix<column_major> work_Σ = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<column_major>{{.depth = p * vl, .rows = n * nyM, .cols = 1}};
+    }();
+    /// Workspace to store the update matrices Υu, Υx, Υλ, Φu, Φx and Φλ during the factorization
+    /// update of the Riccati recursion.
+    /// Both @ref riccati_Υ1 and @ref riccati_Υ2 are used alternately.
+    matrix<column_major> riccati_Υ1 = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<column_major>{{.depth = p * vl, .rows = nu + nx + nx, .cols = n * nyM}};
+    }();
+    /// Alternate workspace to @ref riccati_Υ1.
+    matrix<column_major> riccati_Υ2 = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<column_major>{{.depth = p * vl, .rows = nu + nx + nx, .cols = n * nyM}};
+    }();
+
+    /// Compressed reprentation of the nonzero diagonal elements of the matrix Σ, with their indices
+    /// matching the column indices of the update matrices in @ref work_update. Used during the
+    /// factorization update of the Schur complement. Initialized by the values in @ref work_Σ.
+    /// @todo Consider reusing @ref work_Σ directly.
+    matrix<column_major> work_update_Σ = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<column_major>{{.depth = 1 << lvl, .rows = n * p * nyM, .cols = 1}};
+    }();
+    /// Workspace to store the update matrices Ξ(Υ) for the factorization update of the Schur
+    /// complement. They get wider at higher levels of the CR tree, because more stages are merged.
+    /// We use a clever trick to minimize data movement between levels: at each level, we perform
+    /// the same operation that introduces zeros in the top two blocks of the update matrix, and
+    /// introduces non-zeros in two blocks in the bottom part (see §6.4 “Cyclic reduction
+    /// factorization updates of the Schur complement”).
+    /// At each level l, work_update[l % 4] contains the part of the update matrix that is being
+    /// zeroed out while updating L. After the update, work_update[l % 4] contains the hyperbolic
+    /// Householder reflectors that are then applied to the blocks U and Y below it: depending on
+    /// the index of the block, the matrices that update U and Y in the current level are either at
+    /// work_update[(l + 1) % 4] or work_update[(l + 2) % 4]. The results of the hyperbolic
+    /// Householder transformations applied to these update matrices are either stored in the same
+    /// workspace, or at work_update[(l + 3) % 4]. This is done in a way such that all update
+    /// matrices for L in the next level all end up at work_update[(l+1) % 4], and in a way that
+    /// leaves room for the nonzeros that are introduced in the update matrices for U and Y in the
+    /// next level. Since only four workspaces are ever used concurrently, we can cycle through them
+    /// cyclically, hence the modulo 4 in the indexing above.
+    /// The update matrices do not move "horizontally" in memory, the column index for each rank-1
+    /// update is computed based on the values in @ref nJs at the beginning of the procedure,
+    /// ensuring that update matrices applied to L are contiguous, even though they consist of the
+    /// concatenation of two update matrices from the previous level.
+    matrix<column_major> work_update = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<column_major>{{.depth = 4 << lvl, .rows = nx, .cols = n * p * nyM}};
+    }();
+    /// Storage for the hyperbolic Householder transformations during the factorization update of
+    /// the Schur complement. Together with the reflector vectors stored in @ref work_update, these
+    /// form the matrices Q̆ that are applied to the subdiagonal blocks U, and Y.
+    /// The dimensions depend on the block size used by the linear algebra, and is architecture
+    /// dependent.
+    /// @todo We may only need half as many (p * vl / 2).
+    matrix<column_major> work_hyh = [this] {
+        using namespace batmat::linalg;
+        const auto [r, c] = hyhound_size_W(tril(cr_L.batch(0)));
+        return matrix<column_major>{{.depth = p * vl, .rows = r, .cols = c}};
+    }();
+
+    /// Two copies of @ref work_update_Σ, with different rotations for use during the factorization
+    /// updates of the PCR factorization of the last block of the Schur complement.
+    /// @todo Reuse @ref work_update_Σ?
+    matrix<column_major> work_update_pcr_Σ = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<column_major>{{.depth = VL, .rows = 2 * N_horiz * nyM, .cols = 1}};
+    }();
+    /// Update matrices to apply to the diagonal blocks L during the factorization update of the PCR
+    /// factorization of the last block of the Schur complement.
+    /// @todo Merge with @ref work_update?
+    matrix<column_major> work_update_pcr_L = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<column_major>{{.depth = VL, .rows = nx, .cols = N_horiz * nyM}};
+    }();
+    /// Update matrices to apply to the subdiagonal blocks U and Y during the factorization update
+    /// of the PCR factorization of the last block of the Schur complement.
+    /// @todo Merge with @ref work_update?
+    matrix<column_major> work_update_pcr_UY = [this] {
+        const auto nyM = std::max(ny, ny_0 + ny_N);
+        return matrix<column_major>{{.depth = VL, .rows = nx, .cols = 2 * N_horiz * nyM}};
+    }();
+
+    /// @}
 
     /// Constraints on u(0) and x(N) should be independent.
     ///
@@ -417,47 +398,6 @@ struct CyqloneSolver {
     matrix<> initialize_general_constraints() const {
         return matrix<>{{.depth = ceil_N(), .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
     }
-    mask_matrix<> initialize_active_set() const {
-        return mask_matrix<>{{.depth = ceil_N(), .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
-    }
-
-    // For lgp = 5, lgv = 2, N = 3 << lgp
-    //
-    // | Stage k | Thread t | Index i | Data di | λ(A) | λ(I) | bλ(A) | bλ(I) |
-    // |:-------:|:--------:|:-------:|:-------:|-----:|-----:|------:|------:|
-    // | 0/96    | 0        | 0       | 0       | 0    | 93   | 0     | 7*    |
-    // | 95      | 0        | 1       | 1       |      |      |       |       |
-    // | 94      | 0        | 2       | 2       |      |      |       |       |
-    // |         |          |         |         |      |      |       |       |
-    // | 3       | 1        | 0       | 3       | 3    | 0    | 1     | 0     |
-    // | 2       | 1        | 1       | 4       |      |      |       |       |
-    // | 1       | 1        | 2       | 5       |      |      |       |       |
-    // |         |          |         |         |      |      |       |       |
-    // | 6       | 2        | 0       | 6       | 6    | 3    | 2     | 1     |
-    // | 5       | 2        | 1       | 7       |      |      |       |       |
-    // | 4       | 2        | 2       | 8       |      |      |       |       |
-    // |         |          |         |         |      |      |       |       |
-    // | 9       | 3        | 0       | 9       | 9    | 6    | 3     | 2     |
-    // | 8       | 3        | 1       | 10      |      |      |       |       |
-    // | 7       | 3        | 2       | 11      |      |      |       |       |
-    // |         |          |         |         |      |      |       |       |
-    // | 12      | 4        | 0       | 12      | 12   | 9    | 4     | 3     |
-    // | 11      | 4        | 1       | 13      |      |      |       |       |
-    // | 10      | 4        | 2       | 14      |      |      |       |       |
-    // |         |          |         |         |      |      |       |       |
-    // | 15      | 5        | 0       | 15      | 15   | 12   | 5     | 4     |
-    // | 14      | 5        | 1       | 16      |      |      |       |       |
-    // | 13      | 5        | 2       | 17      |      |      |       |       |
-    // |         |          |         |         |      |      |       |       |
-    // | 18      | 6        | 0       | 18      | 18   | 15   | 6     | 5     |
-    // | 17      | 6        | 1       | 19      |      |      |       |       |
-    // | 16      | 6        | 2       | 20      |      |      |       |       |
-    // |         |          |         |         |      |      |       |       |
-    // | 21      | 7        | 0       | 21      | 21   | 18   | 7     | 6     |
-    // | 20      | 7        | 1       | 22      |      |      |       |       |
-    // | 19      | 7        | 2       | 23      |      |      |       |       |
-
-    [[nodiscard]] index_t ν2p(index_t bi) const;
 
     void residual_dynamics_constr(Context &ctx, view<> x, view<> b, mut_view<> Mxb) const;
     void transposed_dynamics_constr(Context &ctx, view<> λ, mut_view<> Mᵀλ) const;
@@ -499,7 +439,7 @@ struct CyqloneSolver {
     void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
     void solve_pcr(mut_batch_view<> λ) { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
 
-    value_type mul_Mv(batch_view<> p, mut_batch_view<> Ap, batch_view<default_order> L,
+    value_type mul_Mv(batch_view<> p, mut_batch_view<> Mp, batch_view<default_order> L,
                       batch_view<default_order> K) const;
     value_type mul_precond(batch_view<> r, mut_batch_view<> z, mut_batch_view<> w,
                            batch_view<default_order> L, batch_view<default_order> K) const;

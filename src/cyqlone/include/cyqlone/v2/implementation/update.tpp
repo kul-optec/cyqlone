@@ -132,6 +132,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
     //       in hyhound_diag_cyclic). The arrays WU and WY are suspiciously complementary ...
 }
 
+// TODO: write down the pseudocode for this algorithm in the appendix of the paper?
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view<> bwd,
                                                     batch_view<> Σfwd) {
@@ -184,18 +185,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
     const index_t jn  = c * n; // stage index
     const index_t nux = nu + nx;
     auto R̂ŜQ̂          = riccati_R̂ŜQ̂.batch(c);
-    auto B̂            = riccati_ÂB̂.batch(c).right_cols(n * nu);
-    auto Â            = riccati_ÂB̂.batch(c).left_cols(n * nx);
-    auto ΥΓ1          = riccati_ΥΓ1.batch(c);
-    auto ΥΓ2          = riccati_ΥΓ2.batch(c);
-    auto wΣ           = work_Σ.batch(c);
+    auto B̂ = riccati_ÂB̂.batch(c).right_cols(n * nu), Â = riccati_ÂB̂.batch(c).left_cols(n * nx);
+    auto Υ1 = riccati_Υ1.batch(c), Υ2 = riccati_Υ2.batch(c);
+    auto wΣ = work_Σ.batch(c);
 
     index_t nJ;
     {
         GUANAQO_TRACE("Riccati update compress", jn);
-        auto DC0 = ΥΓ2.top_left(nu + nx, nyM);
+        auto DC0 = Υ2.top_left(nu + nx, nyM);
         nJ       = compress_masks(data_DCᵀ.batch(dn), Σ.batch(dn), DC0, wΣ.top_rows(nyM));
-        ΥΓ2.bottom_left(nx, nJ).set_constant(0);
+        Υ2.bottom_left(nx, nJ).set_constant(0);
     }
 
     for (index_t i = 0; i < n; ++i) {
@@ -207,34 +206,34 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
         auto Âi   = Â.middle_cols(i * nx, nx);
 
         index_t nJi = nJ;
-        auto ΥΓi    = ((i & 1) ? ΥΓ1 : ΥΓ2).left_cols(nJi);
+        auto Υi     = ((i & 1) ? Υ1 : Υ2).left_cols(nJi);
         if (nJi > 0) {
             GUANAQO_TRACE("Riccati update R", j);
-            hyhound_diag_2(tril(R̂Ŝi), ΥΓi.top_rows(nu + nx), B̂i, ΥΓi.bottom_rows(nx),
+            hyhound_diag_2(tril(R̂Ŝi), Υi.top_rows(nu + nx), B̂i, Υi.bottom_rows(nx),
                            wΣ.top_rows(nJi));
         }
         if (i + 1 < n) {
             [[maybe_unused]] const auto k_next = sub_wrap_N(j, 1);
             const auto di_next                 = dn + i + 1;
-            auto ΥΓ_next                       = ((i & 1) ? ΥΓ2 : ΥΓ1).left_cols(nJi + nyM);
+            auto Υ_next                        = ((i & 1) ? Υ2 : Υ1).left_cols(nJi + nyM);
             if (nJi > 0) {
                 GUANAQO_TRACE("Riccati update prop", k_next);
-                gemm(data_BA.batch(di_next).transposed(), ΥΓi.middle_rows(nu, nx),
-                     ΥΓ_next.top_left(nu + nx, nJi));
-                copy(ΥΓi.bottom_rows(nx), ΥΓ_next.bottom_left(nx, nJi));
+                gemm(data_BA.batch(di_next).transposed(), Υi.middle_rows(nu, nx),
+                     Υ_next.top_left(nu + nx, nJi));
+                copy(Υi.bottom_rows(nx), Υ_next.bottom_left(nx, nJi));
             }
             {
                 GUANAQO_TRACE("Riccati update compress", k_next);
-                auto DC_next = ΥΓ_next.block(0, nJi, nu + nx, nyM);
+                auto DC_next = Υ_next.block(0, nJi, nu + nx, nyM);
                 nJ += compress_masks(data_DCᵀ.batch(di_next), Σ.batch(di_next), DC_next,
                                      wΣ.middle_rows(nJi, nyM));
-                ΥΓ_next.block(nu + nx, nJi, nx, nJ - nJi).set_constant(0);
+                Υ_next.block(nu + nx, nJi, nx, nJ - nJi).set_constant(0);
             }
             if (nJi > 0) {
                 GUANAQO_TRACE("Riccati update Q", j);
-                gemm_diag_add(ΥΓi.bottom_rows(nx), ΥΓi.middle_rows(nu, nx).transposed(), Âi,
+                gemm_diag_add(Υi.bottom_rows(nx), Υi.middle_rows(nu, nx).transposed(), Âi,
                               wΣ.top_rows(nJi));
-                hyhound_diag(tril(Q̂i), ΥΓi.middle_rows(nu, nx), wΣ.top_rows(nJi));
+                hyhound_diag(tril(Q̂i), Υi.middle_rows(nu, nx), wΣ.top_rows(nJi));
             }
         } else {
             const auto bi_upd = sub_wrap_ceil_p(c, 1);
@@ -252,7 +251,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
             if (nJi > 0) {
                 GUANAQO_TRACE("Riccati update Q", j);
                 auto Q̂i_inv = R̂ŜQ̂i.block(nu - 1, nu, nx, nx);
-                hyhound_diag_riccati(tril(Q̂i), ΥΓi.middle_rows(nu, nx), Âi, ΥΓi.bottom_rows(nx),
+                hyhound_diag_riccati(tril(Q̂i), Υi.middle_rows(nu, nx), Âi, Υi.bottom_rows(nx),
                                      work_update.batch(wiA).middle_cols(j0, nJi), Q̂i_inv,
                                      work_update.batch(wiI).middle_cols(j0, nJi), wΣ.top_rows(nJi),
                                      c == 0); // TODO: optimize

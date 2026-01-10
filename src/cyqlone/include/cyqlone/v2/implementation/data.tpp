@@ -9,6 +9,7 @@
 #endif
 
 namespace CYQLONE_NS(cyqlone)::v2 {
+
 using batmat::linalg::simdify;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -28,6 +29,42 @@ CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp,
     res.update_data(ocp);
     return res;
 }
+
+// For lgp = 5, lgv = 2, N = 3 << lgp
+//
+// | Stage j | Thread c | Index i | Data di | λ(A) | λ(I) | bλ(A) | bλ(I) |
+// |:-------:|:--------:|:-------:|:-------:|-----:|-----:|------:|------:|
+// | 0/96    | 0        | 0       | 0       | 0    | 93   | 0     | 7*    |
+// | 95      | 0        | 1       | 1       |      |      |       |       |
+// | 94      | 0        | 2       | 2       |      |      |       |       |
+// |         |          |         |         |      |      |       |       |
+// | 3       | 1        | 0       | 3       | 3    | 0    | 1     | 0     |
+// | 2       | 1        | 1       | 4       |      |      |       |       |
+// | 1       | 1        | 2       | 5       |      |      |       |       |
+// |         |          |         |         |      |      |       |       |
+// | 6       | 2        | 0       | 6       | 6    | 3    | 2     | 1     |
+// | 5       | 2        | 1       | 7       |      |      |       |       |
+// | 4       | 2        | 2       | 8       |      |      |       |       |
+// |         |          |         |         |      |      |       |       |
+// | 9       | 3        | 0       | 9       | 9    | 6    | 3     | 2     |
+// | 8       | 3        | 1       | 10      |      |      |       |       |
+// | 7       | 3        | 2       | 11      |      |      |       |       |
+// |         |          |         |         |      |      |       |       |
+// | 12      | 4        | 0       | 12      | 12   | 9    | 4     | 3     |
+// | 11      | 4        | 1       | 13      |      |      |       |       |
+// | 10      | 4        | 2       | 14      |      |      |       |       |
+// |         |          |         |         |      |      |       |       |
+// | 15      | 5        | 0       | 15      | 15   | 12   | 5     | 4     |
+// | 14      | 5        | 1       | 16      |      |      |       |       |
+// | 13      | 5        | 2       | 17      |      |      |       |       |
+// |         |          |         |         |      |      |       |       |
+// | 18      | 6        | 0       | 18      | 18   | 15   | 6     | 5     |
+// | 17      | 6        | 1       | 19      |      |      |       |       |
+// | 16      | 6        | 2       | 20      |      |      |       |       |
+// |         |          |         |         |      |      |       |       |
+// | 21      | 7        | 0       | 21      | 21   | 18   | 7     | 6     |
+// | 20      | 7        | 1       | 22      |      |      |       |       |
+// | 19      | 7        | 2       | 23      |      |      |       |       |
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_data(const CyqloneStorage<value_type> &ocp) {
