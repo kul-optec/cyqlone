@@ -217,6 +217,21 @@ def test_cyqlone_factor_solve_simd4(P, Np, seed):
         run_test_cyqlone_factor_solve(Params(P=P, N=N - 3, seed=seed, solver=solver))
 
 
+@pytest.mark.parametrize("P", [2, 4, 8, 16, 64])
+@pytest.mark.parametrize("Np", [1, 2, 3])
+@pytest.mark.parametrize("seed", [12345, 54321, 10101])
+def test_cyqlone_factor_solve_simd8(P, Np, seed):
+    N = 8 * Np * P
+    solver = cyqlone.simd8.v2.CyqloneSolver
+    run_test_cyqlone_factor_solve(Params(P=P, N=N, seed=seed, solver=solver))
+    if N > 1:
+        run_test_cyqlone_factor_solve(Params(P=P, N=N - 1, seed=seed, solver=solver))
+    if N > 2:
+        run_test_cyqlone_factor_solve(Params(P=P, N=N - 2, seed=seed, solver=solver))
+    if N > 3:
+        run_test_cyqlone_factor_solve(Params(P=P, N=N - 3, seed=seed, solver=solver))
+
+
 if __name__ == "__main__":
     plot_on_failure = True
     run_test_cyqlone_factor_solve(
