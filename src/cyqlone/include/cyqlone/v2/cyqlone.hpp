@@ -412,7 +412,8 @@ struct CyqloneSolver {
     }
 
     void residual_dynamics_constr(Context &ctx, view<> x, view<> b, mut_view<> Mxb) const;
-    void transposed_dynamics_constr(Context &ctx, view<> λ, mut_view<> Mᵀλ) const;
+    void transposed_dynamics_constr(Context &ctx, view<> λ, mut_view<> Mᵀλ,
+                                    bool accum = false) const;
     void general_constr(Context &ctx, view<> ux, mut_view<> DCux) const;
     void transposed_general_constr(Context &ctx, view<> y, mut_view<> DCᵀy) const;
     void transposed_general_constr(view<> y, mut_view<> DCᵀy) const;

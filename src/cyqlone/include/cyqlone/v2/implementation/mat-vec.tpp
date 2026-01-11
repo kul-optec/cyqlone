@@ -8,93 +8,89 @@
 #include <batmat/loop.hpp>
 
 namespace CYQLONE_NS(cyqlone)::v2 {
-using batmat::linalg::simdify;
+
+using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, view<> x, view<> b,
                                                                   mut_view<> Mxb) const {
-    // Mx - b = x(j+1) - A x(j) - B u(j) - b(j)
-    auto arrival                 = ctx.arrive();
-    const index_t ti             = ctx.index;
-    const index_t di0            = ti * n; // data batch index
-    const index_t k0             = ti * n; // stage index
-    const index_t ti_next        = add_wrap_ceil_p(ti, 1);
-    const index_t di_next_thread = ti_next * n + n - 1;
-    auto x_next_thread           = x.batch(di_next_thread).bottom_rows(nx);
-    auto Mxb0                    = Mxb.batch(di0);
-    auto b0                      = b.batch(di0);
-    {
-        GUANAQO_TRACE("resid_dyn_constr init", k0);
-        compact_blas::xadd_neg_copy(simdify(Mxb0), simdify(b0));
-    }
-    for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-        GUANAQO_TRACE("resid_dyn_constr", k);
-        index_t di = di0 + i;
-        auto BAi   = data_F.batch(di);
-        auto uxi   = x.batch(di);
-        gemv_sub(BAi, uxi, Mxb.batch(di));
-        if (i + 1 < n) {
-            index_t di_next = di + 1;
-            compact_blas::xsub_copy(simdify(Mxb.batch(di_next)), simdify(uxi.bottom_rows(nx)),
-                                    simdify(b.batch(di_next)));
+    // (Mx + b)(j) = A(j) x(j) + B(j) u(j) - x(j+1) + b(j)
+    auto arrival          = ctx.arrive();
+    const index_t c       = ctx.index;
+    const index_t dn      = c * n; // data batch index
+    const index_t jn      = c * n; // stage index
+    const index_t c_next  = add_wrap_p(c, 1);
+    const index_t dn_next = c_next * n, d1_next = dn_next + n - 1;
+    for (index_t i = n; i-- > 0;) {
+        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        GUANAQO_TRACE("resid_dyn_constr", j);
+        index_t di = dn + i;
+        auto BAj   = data_F.batch(di);
+        auto uxj   = x.batch(di);
+        auto bj    = b.batch(di);
+        auto Mxbj  = Mxb.batch(di);
+        gemv_add(BAj, uxj, bj, Mxbj); // A(j) x(j) + B(j) u(j) + b(j)
+        if (i > 0) {
+            index_t di_next = di - 1; // j + 1
+            auto x_next     = x.batch(di_next).bottom_rows(nx);
+            compact_blas::xsub(simdify(Mxbj), simdify(x_next)); // - x(j+1)
+        } else {
+            ctx.wait(std::move(arrival)); // x_next comes from next thread
+            auto x_next = x.batch(d1_next).bottom_rows(nx);
+            if (c_next > 0 || VL == 1)
+                compact_blas::template xsub<+0>(simdify(Mxbj), simdify(x_next));
+            else
+                compact_blas::template xsub<-1>(simdify(Mxbj), simdify(x_next));
         }
-    }
-    ctx.wait(std::move(arrival)); // x_next comes from next thread
-    {
-        GUANAQO_TRACE("resid_dyn_constr final", k0);
-        ti_next == 0 ? compact_blas::template xadd<-1>(simdify(Mxb0), simdify(x_next_thread))
-                     : compact_blas::template xadd<+0>(simdify(Mxb0), simdify(x_next_thread));
     }
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx, view<> λ,
-                                                                    mut_view<> Mᵀλ) const {
-    auto arrival      = ctx.arrive();
-    const index_t ti  = ctx.index;
-    const index_t di0 = ti * n; // data batch index
-    const index_t k0  = ti * n; // stage index
-    for (index_t i = 0; i < n - 1; ++i) {
-        [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-        GUANAQO_TRACE("transposed_dynamics_constr", k);
-        index_t di = di0 + i;
-        auto BAi   = data_F.batch(di);
-        Mᵀλ.batch(di).top_rows(nu).set_constant(0);
-        index_t di_next = di + 1;
-        compact_blas::xadd_neg_copy(simdify(Mᵀλ.batch(di).bottom_rows(nx)),
-                                    simdify(λ.batch(di_next)));
-        gemv_add(BAi.transposed(), λ.batch(di), Mᵀλ.batch(di));
+                                                                    mut_view<> Mᵀλ,
+                                                                    bool accum) const {
+    // (Mᵀλ)(j) = [ B(j)ᵀ ] λ(j) - [ 0 ] λ(j-1)
+    //            [ A(j)ᵀ ]        [ I ]
+    auto arrival          = ctx.arrive();
+    const index_t c       = ctx.index;
+    const index_t dn      = c * n; // data batch index
+    const index_t jn      = c * n; // stage index
+    const index_t c_prev  = sub_wrap_p(c, 1);
+    const index_t dn_prev = c_prev * n;
+    for (index_t i = 0; i < n; ++i) {
+        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        GUANAQO_TRACE("trans_dyn_constr", j);
+        index_t di = dn + i;
+        auto BAj   = data_F.batch(di);
+        auto λj    = λ.batch(di);
+        auto Mᵀλj  = Mᵀλ.batch(di);
+        accum ? gemv_add(BAj.transposed(), λj, Mᵀλj) //
+               : gemv(BAj.transposed(), λj, Mᵀλj);
+        if (i + 1 < n) {
+            index_t di_prev = di + 1; // j - 1
+            auto λ_prev     = λ.batch(di_prev);
+            compact_blas::xsub(simdify(Mᵀλj.bottom_rows(nx)), simdify(λ_prev));
+        } else {
+            ctx.wait(std::move(arrival)); // λ_prev comes from previous thread
+            auto λ_prev = λ.batch(dn_prev);
+            if (c > 0 || VL == 1)
+                compact_blas::template xsub<0>(simdify(Mᵀλj.bottom_rows(nx)), simdify(λ_prev));
+            else
+                compact_blas::template xsub<1>(simdify(Mᵀλj.bottom_rows(nx)), simdify(λ_prev));
+        }
     }
-    const index_t i            = n - 1;
-    [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-    index_t di                 = di0 + i;
-    auto BAi                   = data_F.batch(di);
-    {
-        GUANAQO_TRACE("transposed_dynamics_constr final u", k);
-        Mᵀλ.batch(di).top_rows(nu).set_constant(0);
-    }
-    const index_t ti_next        = sub_wrap_ceil_p(ti, 1);
-    const index_t di_next_thread = ti_next * n;
-    ctx.wait(std::move(arrival)); // λ_next comes from next thread
-    GUANAQO_TRACE("transposed_dynamics_constr final", k);
-    ti == 0 ? compact_blas::template xadd_neg_copy<1>(simdify(Mᵀλ.batch(di).bottom_rows(nx)),
-                                                      simdify(λ.batch(di_next_thread)))
-            : compact_blas::template xadd_neg_copy<0>(simdify(Mᵀλ.batch(di).bottom_rows(nx)),
-                                                      simdify(λ.batch(di_next_thread)));
-    gemv_add(BAi.transposed(), λ.batch(di), Mᵀλ.batch(di));
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::general_constr(Context &ctx, view<> ux,
                                                         mut_view<> DCux) const {
-    const index_t ti  = ctx.index;
-    const index_t di0 = ti * n; // data batch index
-    const index_t k0  = ti * n; // stage index
+    const index_t c  = ctx.index;
+    const index_t dn = c * n; // data batch index
+    const index_t jn = c * n; // stage index
     for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-        GUANAQO_TRACE("general_constr", k);
-        index_t di = di0 + i;
+        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        GUANAQO_TRACE("general_constr", j);
+        index_t di = dn + i;
         gemv(data_Gᵀ.batch(di).transposed(), ux.batch(di), DCux.batch(di));
     }
 }
@@ -175,12 +171,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx,
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_remove_regularization(
-    Context &ctx, value_type S, view<> ux, view<> ux0, mut_view<> grad_f) const {
+    Context &ctx, value_type γ, view<> ux, view<> ux0, mut_view<> grad_f) const {
     const index_t ti = ctx.index;
     using abi        = batmat::linalg::simdified_abi_t<decltype(ux.batch(0))>;
     using simd_types = batmat::linalg::simd_view_types<T, abi>;
     using simd       = simd_types::simd;
-    simd invS{1 / S};
+    simd inv_γ{1 / γ};
     const index_t di0 = ti * n; // data batch index
     const index_t k0  = ti * n; // stage index
     for (index_t i = 0; i < n; ++i) {
@@ -193,7 +189,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_remove_regularization(
             simd grad_fij = simd_types::aligned_load(&grad_fi(0, j, 0)),
                  xij      = simd_types::aligned_load(&xi(0, j, 0)),
                  x0ij     = simd_types::aligned_load(&x0i(0, j, 0));
-            grad_fij += invS * (x0ij - xij);
+            grad_fij += inv_γ * (x0ij - xij);
             simd_types::aligned_store(grad_fij, &grad_fi(0, j, 0));
         }
     }
