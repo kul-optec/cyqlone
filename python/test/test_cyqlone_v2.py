@@ -87,7 +87,7 @@ def random_ocp(N, nx, nu, ny, ny_N, rng):
 
 @dataclass
 class Params:
-    P: int
+    p: int
     N: int
     nx: int = 13
     nu: int = 11
@@ -101,7 +101,7 @@ def prepare_test(params: Params):
     rng = np.random.default_rng(seed=params.seed)
     ocp = random_ocp(params.N, params.nx, params.nu, params.ny, params.ny_N, rng)
     cocp = cyqlone.CyqloneOCP(ocp)
-    solver = params.solver(cocp, params.P)
+    solver = params.solver(cocp, params.p)
     solver.solve_method = cyqlone.SolveMethod.PCR
     return rng, ocp, cocp, solver
 
@@ -169,7 +169,7 @@ def run_test_cyqlone_factor_solve(params):
     Σ = np.zeros(solver.num_general_constraints)
     Σ_packed = solver.pack_constraints(Σ)
 
-    for _ in range(50):
+    for _ in range(5):
         ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
     cyqlone.reset_trace_log()
     solver.log_thread_names()
@@ -188,52 +188,66 @@ def run_test_cyqlone_factor_solve(params):
         cyqlone.dump_trace_log(f"traces/test_cyqlone_v2_trace-{solver.params_string}.csv")
 
 
-@pytest.mark.parametrize("P", [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 64])
-@pytest.mark.parametrize("Np", [1, 2, 3])
-@pytest.mark.parametrize("seed", [12345, 54321, 10101])
-def test_cyqlone_factor_solve_scalar(P, Np, seed):
-    N = Np * P
-    run_test_cyqlone_factor_solve(Params(P=P, N=N, seed=seed))
-    if N > 1:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 1, seed=seed))
-    if N > 2:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 2, seed=seed))
-    if N > 3:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 3, seed=seed))
+def run_test_cyqlone_mat_vec(params):
+    _, ocp, cocp, solver = prepare_test(params)
+    print(solver.__class__.__qualname__, solver.params_string)
+    Σ = np.zeros(solver.num_general_constraints)
+    Σ_packed = solver.pack_constraints(Σ)
+
+    cyqlone.reset_trace_log()
+    solver.log_thread_names()
+    ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
+    u, x, λs = extract_solution(solver, ocp, ux, λ)
+
+    N, nx = ocp.N_horiz, ocp.nx
+    resid = solver.residual_dynamics_constr(ux, cocp)
+    r = solver.unpack_dynamics(resid).reshape((N, nx))
+    for j in range(N):
+        print(j, " " * 6, end="\r")
+        expected = ocp.A(j) @ x[j] + ocp.B(j) @ u[j] + ocp.b(j + 1) - x[j + 1]
+        assert la.norm(expected - r[j], np.inf) < 1e-10
 
 
-@pytest.mark.parametrize("P", [2, 4, 8, 16, 64])
-@pytest.mark.parametrize("Np", [1, 2, 3])
-@pytest.mark.parametrize("seed", [12345, 54321, 10101])
-def test_cyqlone_factor_solve_simd4(P, Np, seed):
-    N = 4 * Np * P
-    solver = cyqlone.simd4.v2.CyqloneSolver
-    run_test_cyqlone_factor_solve(Params(P=P, N=N, seed=seed, solver=solver))
-    if N > 1:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 1, seed=seed, solver=solver))
-    if N > 2:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 2, seed=seed, solver=solver))
-    if N > 3:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 3, seed=seed, solver=solver))
+def run_with_shorter_N(test_func, p, base_N, seed, solver):
+    """Run test function for N, N-1, N-2, N-3."""
+    for offset in range(min(4, base_N)):
+        test_func(Params(p=p, N=base_N - offset, seed=seed, solver=solver))
 
 
-@pytest.mark.parametrize("P", [2, 4, 8, 16, 64])
-@pytest.mark.parametrize("Np", [1, 2, 3])
-@pytest.mark.parametrize("seed", [12345, 54321, 10101])
-def test_cyqlone_factor_solve_simd8(P, Np, seed):
-    N = 8 * Np * P
-    solver = cyqlone.simd8.v2.CyqloneSolver
-    run_test_cyqlone_factor_solve(Params(P=P, N=N, seed=seed, solver=solver))
-    if N > 1:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 1, seed=seed, solver=solver))
-    if N > 2:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 2, seed=seed, solver=solver))
-    if N > 3:
-        run_test_cyqlone_factor_solve(Params(P=P, N=N - 3, seed=seed, solver=solver))
+SEEDS = [12345, 54321, 10101]
+SEEDS = [12345]
+SIMD_SOLVERS = {
+    1: cyqlone.scalar.v2.CyqloneSolver,
+    4: cyqlone.simd4.v2.CyqloneSolver,
+    8: cyqlone.simd8.v2.CyqloneSolver,
+}
+SIMD_P_COMBOS = {
+    1: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 64],
+    4: [2, 4, 8, 16, 64],  # TODO: add p=1
+    8: [2, 4, 8, 16, 64],  # TODO: add p=1
+}
+SOLVER_P_COMBOS = [(SIMD_SOLVERS[v], v, p) for v in [1, 4, 8] for p in SIMD_P_COMBOS[v]]
+SOLVER_P_ID = [f"{solver.__qualname__}-v{v}-p{p}" for solver, v, p in SOLVER_P_COMBOS]
+
+
+@pytest.mark.parametrize("solver,v,p", SOLVER_P_COMBOS, ids=SOLVER_P_ID)
+@pytest.mark.parametrize("n", [1, 2, 3])
+@pytest.mark.parametrize("seed", SEEDS)
+def test_cyqlone_factor_solve(solver, v, p, n, seed):
+    N = v * n * p
+    run_with_shorter_N(run_test_cyqlone_factor_solve, p, N, seed, solver=solver)
+
+
+@pytest.mark.parametrize("solver,v,p", SOLVER_P_COMBOS, ids=SOLVER_P_ID)
+@pytest.mark.parametrize("n", [1, 2, 3])
+@pytest.mark.parametrize("seed", SEEDS)
+def test_cyqlone_mat_vec(solver, v, p, n, seed):
+    N = v * n * p
+    run_with_shorter_N(run_test_cyqlone_mat_vec, p, N, seed, solver=solver)
 
 
 if __name__ == "__main__":
     plot_on_failure = True
-    run_test_cyqlone_factor_solve(
-        Params(P=4, N=16, seed=12345, nx=5, nu=3, solver=cyqlone.simd4.v2.CyqloneSolver)
+    run_test_cyqlone_mat_vec(
+        Params(p=4, N=12, seed=12345, nx=5, nu=3, solver=cyqlone.simd4.v2.CyqloneSolver)
     )

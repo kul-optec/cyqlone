@@ -239,6 +239,29 @@ void register_cyqlone_solver(nb::module_ &m) {
             },
             "S"_a, "Σ"_a.noconvert(), "ocp"_a)
         .def(
+            "residual_dynamics_constr",
+            [](Solver &self, np_batched_view<VL, const real_t> x,
+               np_batched_view<VL, const real_t> b) {
+                auto x_vw = view_as_batched(x);
+                auto b_vw = view_as_batched(b);
+                auto Mxb  = self.initialize_dynamics_constraints();
+                self.parallel_ctx->run(
+                    [&](auto &ctx) { self.residual_dynamics_constr(ctx, x_vw, b_vw, Mxb); });
+                return np_copy(std::move(Mxb));
+            },
+            "ux"_a.noconvert(), "b"_a.noconvert())
+        .def(
+            "residual_dynamics_constr",
+            [](Solver &self, np_batched_view<VL, const real_t> x, const CyqloneStorage<> &ocp) {
+                auto x_vw = view_as_batched(x);
+                auto b    = self.initialize_rhs(ocp);
+                auto Mxb  = self.initialize_dynamics_constraints();
+                self.parallel_ctx->run(
+                    [&](auto &ctx) { self.residual_dynamics_constr(ctx, x_vw, b, Mxb); });
+                return np_copy(std::move(Mxb));
+            },
+            "ux"_a.noconvert(), "b"_a.noconvert())
+        .def(
             "solve_forward",
             [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);
