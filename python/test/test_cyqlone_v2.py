@@ -187,6 +187,12 @@ def run_test_cyqlone_factor_solve(params):
         print()
         cyqlone.dump_trace_log(f"traces/test_cyqlone_v2_trace-{solver.params_string}.csv")
 
+    resid = solver.residual_dynamics_constr(ux, cocp)
+    r = solver.unpack_dynamics(resid).reshape((ocp.N_horiz, ocp.nx))
+    for j in range(ocp.N_horiz):
+        print(j, " " * 6, end="\r")
+        assert la.norm(r[j], np.inf) < 1e-8
+
 
 def run_test_cyqlone_mat_vec(params):
     _, ocp, cocp, solver = prepare_test(params)
