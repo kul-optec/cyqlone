@@ -262,6 +262,16 @@ void register_cyqlone_solver(nb::module_ &m) {
             },
             "ux"_a.noconvert(), "b"_a.noconvert())
         .def(
+            "transposed_dynamics_constr",
+            [](Solver &self, np_batched_view<VL, const real_t> λ) {
+                auto λ_vw = view_as_batched(λ);
+                auto Mᵀλ  = self.initialize_variables();
+                self.parallel_ctx->run(
+                    [&](auto &ctx) { self.transposed_dynamics_constr(ctx, λ_vw, Mᵀλ); });
+                return np_copy(std::move(Mᵀλ));
+            },
+            "λ"_a.noconvert())
+        .def(
             "solve_forward",
             [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);

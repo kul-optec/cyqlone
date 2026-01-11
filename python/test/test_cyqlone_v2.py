@@ -107,7 +107,7 @@ def prepare_test(params: Params):
 
 
 # TODO: this should really be provided by the solver itself
-def extract_solution(solver: Solver, ocp: cyqlone.OCP, ux, λ):
+def extract_solution(solver: Solver, ocp: cyqlone.OCP, ux):
     x0 = ocp.b(0)
     uxs = solver.unpack_variables(ux)
     N, nx, nu = ocp.N_horiz, ocp.nx, ocp.nu
@@ -115,10 +115,16 @@ def extract_solution(solver: Solver, ocp: cyqlone.OCP, ux, λ):
     u = np.array([uxs[j * nux : nu + j * nux] for j in range(N)])
     x = np.array([uxs[nu + j * nux : nux + j * nux] for j in range(N)])
     x = np.vstack([x0[None, :], x])
+    return u, x
+
+
+def extract_multipliers(solver: Solver, ocp: cyqlone.OCP, λ, u):
+    N, nx = ocp.N_horiz, ocp.nx
+    x0 = ocp.b(0)
     λs = solver.unpack_dynamics(λ).reshape((N, nx))
     λ_init = ocp.q(0) + ocp.Q(0) @ x0 + ocp.S(0).T @ u[0] + ocp.A(0).T @ λs[0]
     λs = np.vstack([λs, λ_init[None, :]])  # λ_init corresponds to λs[-1]
-    return u, x, λs
+    return λs
 
 
 def compute_kkt_residuals(ocp: cyqlone.OCP, u, x, λs):
@@ -176,7 +182,8 @@ def run_test_cyqlone_factor_solve(params):
     ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
     solver.solve_reverse(ux, λ)
 
-    u, x, λs = extract_solution(solver, ocp, ux, λ)
+    u, x = extract_solution(solver, ocp, ux)
+    λs = extract_multipliers(solver, ocp, λ, u)
     r, gx, gu = compute_kkt_residuals(ocp, u, x, λs)
     try:
         check_kkt_residuals(ocp.N_horiz, r, gx, gu)
@@ -203,15 +210,32 @@ def run_test_cyqlone_mat_vec(params):
     cyqlone.reset_trace_log()
     solver.log_thread_names()
     ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
-    u, x, λs = extract_solution(solver, ocp, ux, λ)
+    u, x = extract_solution(solver, ocp, ux)
+    λs = extract_multipliers(solver, ocp, λ, u)
 
-    N, nx = ocp.N_horiz, ocp.nx
+    N, nx, nu = ocp.N_horiz, ocp.nx, ocp.nu
     resid = solver.residual_dynamics_constr(ux, cocp)
     r = solver.unpack_dynamics(resid).reshape((N, nx))
     for j in range(N):
         print(j, " " * 6, end="\r")
         expected = ocp.A(j) @ x[j] + ocp.B(j) @ u[j] + ocp.b(j + 1) - x[j + 1]
         assert la.norm(expected - r[j], np.inf) < 1e-10
+
+    Mᵀλ = solver.transposed_dynamics_constr(λ)
+    rq = solver.unpack_variables(Mᵀλ)
+    nux = nx + nu
+    for j in range(0, N):
+        print(j, " " * 6, end="\r")
+        rj = rq[j * nux : j * nux + nu]
+        rj_ref = ocp.B(j).T @ λs[j]
+        assert la.norm(rj_ref - rj, np.inf) < 1e-10
+        if j > 0:
+            qj = rq[nu + (j - 1) * nux : j * nux]
+            qj_ref = ocp.A(j).T @ λs[j] - λs[j - 1]
+            assert la.norm(qj_ref - qj, np.inf) < 1e-10
+    gN = rq[nu + (N - 1) * nux : N * nux]
+    gN_ref = -λs[N - 1]
+    assert la.norm(gN_ref - gN, np.inf) < 1e-10
 
 
 def run_with_shorter_N(test_func, p, base_N, seed, solver):
@@ -249,11 +273,11 @@ def test_cyqlone_factor_solve(solver, v, p, n, seed):
 @pytest.mark.parametrize("seed", SEEDS)
 def test_cyqlone_mat_vec(solver, v, p, n, seed):
     N = v * n * p
-    run_with_shorter_N(run_test_cyqlone_mat_vec, p, N, seed, solver=solver)
+    run_test_cyqlone_mat_vec(Params(p=p, N=N, seed=seed, solver=solver))
 
 
 if __name__ == "__main__":
     plot_on_failure = True
     run_test_cyqlone_mat_vec(
-        Params(p=4, N=12, seed=12345, nx=5, nu=3, solver=cyqlone.simd4.v2.CyqloneSolver)
+        Params(p=2, N=8, seed=12345, nx=1, nu=1, solver=cyqlone.simd4.v2.CyqloneSolver)
     )
