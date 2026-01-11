@@ -61,11 +61,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
         [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
         GUANAQO_TRACE("trans_dyn_constr", j);
         index_t di = dn + i;
-        auto BAj   = data_F.batch(di);
-        auto λj    = λ.batch(di);
-        auto Mᵀλj  = Mᵀλ.batch(di);
-        accum ? gemv_add(BAj.transposed(), λj, Mᵀλj) //
-               : gemv(BAj.transposed(), λj, Mᵀλj);
+        auto BAj = data_F.batch(di), Bj = BAj.left_cols(nu);
+        auto λj   = λ.batch(di);
+        auto Mᵀλj = Mᵀλ.batch(di);
+        if (VL > 1 || c > 0 || i > 0) {
+            accum ? gemv_add(BAj.transposed(), λj, Mᵀλj) //
+                  : gemv(BAj.transposed(), λj, Mᵀλj);
+        } else {
+            accum ? gemv_add(Bj.transposed(), λj, Mᵀλj.top_rows(nu)) //
+                  : gemv(Bj.transposed(), λj, Mᵀλj.top_rows(nu));
+            if (!accum)
+                Mᵀλj.bottom_rows(nx).set_constant(0);
+        }
         if (i + 1 < n) {
             index_t di_prev = di + 1; // j - 1
             auto λ_prev     = λ.batch(di_prev);
