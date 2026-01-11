@@ -98,13 +98,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::general_constr(Context &ctx, view<> ux,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(Context &ctx, view<> y,
                                                                    mut_view<> DCᵀy) const {
-    const index_t ti  = ctx.index;
-    const index_t di0 = ti * n; // data batch index
-    const index_t k0  = ti * n; // stage index
+    const index_t c  = ctx.index;
+    const index_t dn = c * n; // data batch index
+    const index_t jn = c * n; // stage index
     for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-        GUANAQO_TRACE("transposed_general_constr", k);
-        index_t di = di0 + i;
+        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        GUANAQO_TRACE("transposed_general_constr", j);
+        index_t di = dn + i;
         gemv(data_Gᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
     }
 }
@@ -112,13 +112,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(Context &ctx,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(view<> y,
                                                                    mut_view<> DCᵀy) const {
-    for (index_t ti = 0; ti < p; ++ti) {
-        const index_t di0 = ti * n; // data batch index
-        const index_t k0  = ti * n; // stage index
+    for (index_t c = 0; c < p; ++c) {
+        const index_t dn = c * n; // data batch index
+        const index_t jn = c * n; // stage index
         for (index_t i = 0; i < n; ++i) {
-            [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-            GUANAQO_TRACE("transposed_general_constr", k);
-            index_t di = di0 + i;
+            [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+            GUANAQO_TRACE("transposed_general_constr", j);
+            index_t di = dn + i;
             gemv(data_Gᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
         }
     }
@@ -128,13 +128,13 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, value_type a,
                                                        view<> q, value_type b,
                                                        mut_view<> grad_f) const {
-    const index_t ti  = ctx.index;
-    const index_t di0 = ti * n; // data batch index
-    const index_t k0  = ti * n; // stage index
+    const index_t c  = ctx.index;
+    const index_t dn = c * n; // data batch index
+    const index_t jn = c * n; // stage index
     for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-        GUANAQO_TRACE("cost_gradient", k);
-        index_t di = di0 + i;
+        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        GUANAQO_TRACE("cost_gradient", j);
+        index_t di = dn + i;
         if (a != 0 || b != 1)
             compact_blas::xaxpby(a, simdify(q.batch(di)), b, simdify(grad_f.batch(di)));
         symv_add(tril(data_H.batch(di)), ux.batch(di), grad_f.batch(di));
@@ -142,27 +142,27 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, 
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx, value_type S,
+void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx, value_type γ,
                                                                    view<> ux, view<> ux0, view<> q,
                                                                    mut_view<> grad_f) const {
-    const index_t ti = ctx.index;
+    const index_t c  = ctx.index;
     using abi        = batmat::linalg::simdified_abi_t<decltype(ux.batch(0))>;
     using simd_types = batmat::linalg::simd_view_types<T, abi>;
     using simd       = simd_types::simd;
-    simd invS{1 / S};
-    const index_t di0 = ti * n; // data batch index
-    const index_t k0  = ti * n; // stage index
+    simd inv_γ{1 / γ};
+    const index_t dn = c * n; // data batch index
+    const index_t jn = c * n; // stage index
     for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-        GUANAQO_TRACE("cost_gradient_regularized", k);
-        index_t di = di0 + i;
+        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        GUANAQO_TRACE("cost_gradient_regularized", j);
+        index_t di = dn + i;
         auto qi = q.batch(di), xi = ux.batch(di), x0i = ux0.batch(di);
         auto grad_fi = grad_f.batch(di);
         for (index_t j = 0; j < ux.rows(); ++j) {
             simd qij      = simd_types::aligned_load(&qi(0, j, 0)),
                  xij      = simd_types::aligned_load(&xi(0, j, 0)),
                  x0ij     = simd_types::aligned_load(&x0i(0, j, 0));
-            simd grad_fij = invS * (xij - x0ij) + qij;
+            simd grad_fij = inv_γ * (xij - x0ij) + qij;
             simd_types::aligned_store(grad_fij, &grad_fi(0, j, 0));
         }
         symv_add(tril(data_H.batch(di)), ux.batch(di), grad_f.batch(di));
@@ -172,17 +172,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_remove_regularization(
     Context &ctx, value_type γ, view<> ux, view<> ux0, mut_view<> grad_f) const {
-    const index_t ti = ctx.index;
+    const index_t c  = ctx.index;
     using abi        = batmat::linalg::simdified_abi_t<decltype(ux.batch(0))>;
     using simd_types = batmat::linalg::simd_view_types<T, abi>;
     using simd       = simd_types::simd;
     simd inv_γ{1 / γ};
-    const index_t di0 = ti * n; // data batch index
-    const index_t k0  = ti * n; // stage index
+    const index_t dn = c * n; // data batch index
+    const index_t jn = c * n; // stage index
     for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t k = sub_wrap_N(k0, i);
-        GUANAQO_TRACE("cost_gradient_remove_regularization", k);
-        index_t di = di0 + i;
+        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        GUANAQO_TRACE("cost_gradient_remove_regularization", j);
+        index_t di = dn + i;
         auto xi = ux.batch(di), x0i = ux0.batch(di);
         auto grad_fi = grad_f.batch(di);
         for (index_t j = 0; j < ux.rows(); ++j) {
