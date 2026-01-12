@@ -508,8 +508,7 @@ struct CyqloneSolver {
         prefetch(cr_Y.batch(biY));
     }
 
-    template <bool Update, bool Solve>
-    void update_riccati_solve(Context &ctx, view<> Σ, mut_view<> ux, mut_view<> λ);
+    void update_riccati(Context &ctx, view<> Σ);
     void update_L(index_t l, index_t bi);
     void update_U(index_t l, index_t bi);
     void update_Y(index_t l, index_t bi);
