@@ -5,8 +5,10 @@
 #include <batmat/linalg/copy.hpp>
 #include <batmat/linalg/gemm-diag.hpp>
 #include <batmat/linalg/gemm.hpp>
+#include <batmat/linalg/gemv.hpp>
 #include <batmat/linalg/hyhound.hpp>
 #include <batmat/linalg/simdify.hpp>
+#include <batmat/linalg/trsm.hpp>
 #include <batmat/loop.hpp>
 
 #include <numeric>
@@ -158,7 +160,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
     const index_t ti = ctx.index;
-    update_riccati(ctx, ΔΣ);
+    // Call with Update=true, Solve=false for now (solve is separate phase)
+    // TODO: merge solve step by passing ux and λ when implementing combined update+solve
+    update_riccati_solve<true, false>(ctx, ΔΣ, {}, {});
     ctx.arrive_and_wait();
     if (ν2p(ti) == 0)
         update_L(0, ti);
@@ -176,7 +180,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ) {
+template <bool Update, bool Solve>
+// NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
+void CyqloneSolver<VL, T, DefaultOrder>::update_riccati_solve(Context &ctx, view<> Σ,
+                                                               [[maybe_unused]] mut_view<> ux,
+                                                               [[maybe_unused]] mut_view<> λ) {
     const index_t c   = ctx.index;
     const index_t nyM = std::max(ny, ny_0 + ny_N);
     // TODO: special case nyM for c == 0
@@ -189,8 +197,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
     auto Υ1 = riccati_Υ1.batch(c), Υ2 = riccati_Υ2.batch(c);
     auto wΣ = work_Σ.batch(c);
 
-    index_t nJ;
-    {
+    index_t nJ = 0;
+    if constexpr (Update) {
         GUANAQO_TRACE("Riccati update compress", jn);
         auto DC0 = Υ2.top_left(nu + nx, nyM);
         nJ       = compress_masks(data_Gᵀ.batch(dn), Σ.batch(dn), DC0, wΣ.top_rows(nyM));
@@ -206,34 +214,62 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
         auto Âi   = Â.middle_cols(i * nx, nx);
 
         index_t nJi = nJ;
-        auto Υi     = ((i & 1) ? Υ1 : Υ2).left_cols(nJi);
-        if (nJi > 0) {
-            GUANAQO_TRACE("Riccati update R", j);
-            hyhound_diag_2(tril(R̂Ŝi), Υi.top_rows(nu + nx), B̂i, Υi.bottom_rows(nx),
-                           wΣ.top_rows(nJi));
+        auto Υi     = (i & 1 ? Υ1 : Υ2).left_cols(nJi);
+        if constexpr (Update) {
+            if (nJi > 0) {
+                GUANAQO_TRACE("Riccati update R", j);
+                hyhound_diag_2(tril(R̂Ŝi), Υi.top_rows(nu + nx), B̂i, Υi.bottom_rows(nx),
+                               wΣ.top_rows(nJi));
+            }
+        }
+        if constexpr (Solve) {
+            // Solve u ← LR̂⁻¹ u, x ← x - Ŝ u
+            const index_t di = dn + i;
+            auto ui = ux.batch(di).top_rows(nu), xi = ux.batch(di).bottom_rows(nx);
+            auto R = R̂Ŝi.top_rows(nu), S = R̂Ŝi.bottom_rows(nx);
+            trsm(tril(R), ui);
+            gemv_sub(S, ui, xi);
+            // λ(jₙ) += B̂ᵀ u
+            auto λ_last = λ.batch(dn);
+            gemv_add(B̂i, ui, λ_last);
         }
         if (i + 1 < n) {
             [[maybe_unused]] const auto k_next = sub_wrap_N(j, 1);
             const auto di_next                 = dn + i + 1;
-            auto Υ_next                        = ((i & 1) ? Υ2 : Υ1).left_cols(nJi + nyM);
-            if (nJi > 0) {
-                GUANAQO_TRACE("Riccati update prop", k_next);
-                gemm(data_F.batch(di_next).transposed(), Υi.middle_rows(nu, nx),
-                     Υ_next.top_left(nu + nx, nJi));
-                copy(Υi.bottom_rows(nx), Υ_next.bottom_left(nx, nJi));
+            auto Υ_next                        = (i & 1 ? Υ2 : Υ1).left_cols(nJi + nyM);
+            if constexpr (Update) {
+                if (nJi > 0) {
+                    GUANAQO_TRACE("Riccati update prop", k_next);
+                    gemm(data_F.batch(di_next).transposed(), Υi.middle_rows(nu, nx),
+                         Υ_next.top_left(nu + nx, nJi));
+                    copy(Υi.bottom_rows(nx), Υ_next.bottom_left(nx, nJi));
+                }
+                {
+                    GUANAQO_TRACE("Riccati update compress", k_next);
+                    auto DC_next = Υ_next.block(0, nJi, nu + nx, nyM);
+                    nJ += compress_masks(data_Gᵀ.batch(di_next), Σ.batch(di_next), DC_next,
+                                         wΣ.middle_rows(nJi, nyM));
+                    Υ_next.block(nu + nx, nJi, nx, nJ - nJi).set_constant(0);
+                }
+                if (nJi > 0) {
+                    GUANAQO_TRACE("Riccati update Q", j);
+                    gemm_diag_add(Υi.bottom_rows(nx), Υi.middle_rows(nu, nx).transposed(), Âi,
+                                  wΣ.top_rows(nJi));
+                    hyhound_diag(tril(Q̂i), Υi.middle_rows(nu, nx), wΣ.top_rows(nJi));
+                }
             }
-            {
-                GUANAQO_TRACE("Riccati update compress", k_next);
-                auto DC_next = Υ_next.block(0, nJi, nu + nx, nyM);
-                nJ += compress_masks(data_Gᵀ.batch(di_next), Σ.batch(di_next), DC_next,
-                                     wΣ.middle_rows(nJi, nyM));
-                Υ_next.block(nu + nx, nJi, nx, nJ - nJi).set_constant(0);
-            }
-            if (nJi > 0) {
-                GUANAQO_TRACE("Riccati update Q", j);
-                gemm_diag_add(Υi.bottom_rows(nx), Υi.middle_rows(nu, nx).transposed(), Âi,
-                              wΣ.top_rows(nJi));
-                hyhound_diag(tril(Q̂i), Υi.middle_rows(nu, nx), wΣ.top_rows(nJi));
+            if constexpr (Solve) {
+                const index_t di = dn + i;
+                auto xi = ux.batch(di).bottom_rows(nx), ux_next = ux.batch(di_next);
+                auto λ_next = λ.batch(di_next), λ_last = λ.batch(dn);
+                auto Q̂i = R̂ŜQ̂i.bottom_right(nx, nx);
+                gemv_add(Âi, λ_next, λ_last); // λ(jₙ) += Âᵀ λ(j-1)
+                auto w = work_Σ.batch(c).right_cols(1); // Reuse workspace
+                trmm(tril(Q̂i).transposed(), λ_next, w); // w = LQᵀ(j) λ(j-1)
+                trmm(tril(Q̂i), w);                      // w = LQ(j) LQᵀ(j) λ(j-1)
+                compact_blas::xsub_copy(simdify(w), simdify(xi),
+                                        simdify(w));       // w = x(j) - LQ(j) LQᵀ(j) λ(j-1)
+                gemv_add(data_F.batch(di_next).transposed(), w, ux_next); // u(j-1) += BAᵀ(j-1) w
             }
         } else {
             const auto bi_upd = sub_wrap_ceil_p(c, 1);
@@ -248,20 +284,45 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Σ)
             constexpr index_t wiI_table[]{2, 0, 1, 0};
             const index_t wiA = wiA_table[bi_upd & 3];
             const index_t wiI = wiI_table[bi_upd & 3];
-            if (nJi > 0) {
-                GUANAQO_TRACE("Riccati update Q", j);
-                auto Q̂i_inv = R̂ŜQ̂i.block(nu - 1, nu, nx, nx);
-                hyhound_diag_riccati(tril(Q̂i), Υi.middle_rows(nu, nx), Âi, Υi.bottom_rows(nx),
-                                     work_update.batch(wiA).middle_cols(j0, nJi), Q̂i_inv,
-                                     work_update.batch(wiI).middle_cols(j0, nJi), wΣ.top_rows(nJi),
-                                     c == 0); // TODO: optimize
-                compact_blas::xneg(simdify(work_update.batch(wiI).middle_cols(j0, nJi))); // TODO
-                c == 0 ? compact_blas::template xadd_neg_copy<-1>(
-                             simdify(work_update_Σ.batch(0).middle_rows(j0, nJi)),
-                             simdify(wΣ.top_rows(nJi)))
-                       : compact_blas::template xadd_neg_copy<+0>(
-                             simdify(work_update_Σ.batch(0).middle_rows(j0, nJi)),
-                             simdify(wΣ.top_rows(nJi)));
+            if constexpr (Update) {
+                if (nJi > 0) {
+                    GUANAQO_TRACE("Riccati update Q", j);
+                    auto Q̂i_inv = R̂ŜQ̂i.block(nu - 1, nu, nx, nx);
+                    hyhound_diag_riccati(tril(Q̂i), Υi.middle_rows(nu, nx), Âi, Υi.bottom_rows(nx),
+                                         work_update.batch(wiA).middle_cols(j0, nJi), Q̂i_inv,
+                                         work_update.batch(wiI).middle_cols(j0, nJi), wΣ.top_rows(nJi),
+                                         c == 0); // TODO: optimize
+                    compact_blas::xneg(simdify(work_update.batch(wiI).middle_cols(j0, nJi))); // TODO
+                    c == 0 ? compact_blas::template xadd_neg_copy<-1>(
+                                 simdify(work_update_Σ.batch(0).middle_rows(j0, nJi)),
+                                 simdify(wΣ.top_rows(nJi)))
+                           : compact_blas::template xadd_neg_copy<+0>(
+                                 simdify(work_update_Σ.batch(0).middle_rows(j0, nJi)),
+                                 simdify(wΣ.top_rows(nJi)));
+                }
+            }
+            if constexpr (Solve) {
+                const index_t di = dn + i;
+                const index_t c_prev = sub_wrap_p(c, 1);
+                const index_t dn_prev = c_prev * n;
+                auto u1 = ux.batch(di).top_rows(nu), x1 = ux.batch(di).bottom_rows(nx);
+                auto Q̂i = R̂ŜQ̂i.bottom_right(nx, nx);
+                auto λ_last = λ.batch(dn);
+                auto w = work_Σ.batch(c).right_cols(1); // Reuse workspace
+                // w = LQ(j₁)⁻¹ λ(j₀)
+                c == 0 ? trsm(tril(Q̂i), λ.batch(dn_prev), w, with_rotate_B<-1>)
+                       : trsm(tril(Q̂i), λ.batch(dn_prev), w);
+                // w = LQ(j₁)⁻¹ λ(j₀) - LAᵀ(j₁) λ(jₙ)
+                gemv_sub(Âi.transposed(), λ_last, w);
+                // w = LQ(j₁)⁻ᵀ(LQ(j₁)⁻¹ λ(j₀) - LAᵀ(j₁) λ(jₙ))
+                trsm(tril(Q̂i).transposed(), w);
+                // x(j₁) = LQ(j₁)⁻ᵀ(LQ(j₁)⁻¹ λ(j₀) - LAᵀ(j₁) λ(jₙ)) + q(j₁)
+                compact_blas::xadd(simdify(x1), simdify(w));
+                // u(j₁) = LR(j₁)⁻ᵀ(r(j₁) - LB(j₁)ᵀ λ(jₙ) - LS(j₁)ᵀ x(j₁))
+                auto R = R̂Ŝi.top_rows(nu), S = R̂Ŝi.bottom_rows(nx);
+                gemv_sub(B̂i.transposed(), λ_last, u1);
+                gemv_sub(S.transposed(), x1, u1);
+                trsm(tril(R).transposed(), u1);
             }
         }
     }
