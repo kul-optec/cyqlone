@@ -865,13 +865,12 @@ struct CyqloneBackend {
             // std::cout << "                                     -- Fact reset\n";
             auto t = get_timed(&Timings::factor);
             ocp.factor_solve(ctx, S, J, d, Δλ);
-            ctx.arrive_and_wait(__LINE__);
             if (ctx.is_master()) {
+                // No synchronization needed here, barriers in factor_solve and solve_reverse
                 reset_factorization = false;
                 num_updates         = 0;
                 ++stats.num_factor;
             }
-            ctx.arrive_and_wait(__LINE__);
         } else {
             auto t = get_timed(&Timings::solve);
             ocp.solve_forward(ctx, d, Δλ);
