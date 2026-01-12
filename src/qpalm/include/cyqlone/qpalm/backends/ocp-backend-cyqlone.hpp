@@ -26,9 +26,9 @@ enum class WarmStartingStrategy {
 };
 
 struct CyqloneBackendSettings {
-    index_t log_processors = 3;
-    bool print_residuals   = false;
-    int print_precision    = 3;
+    index_t processors   = 8;
+    bool print_residuals = false;
+    int print_precision  = 3;
     // bool init_x0               = false; // TODO
     double changing_constr_factor  = 0.05;
     index_t max_update_count       = 5;

@@ -38,20 +38,20 @@ const std::map<std::string, ProblemType> problem_type_map{
 };
 
 struct Options {
-    bool warm           = false;
-    bool no_updates     = false;
-    int log_parallelism = 5;
-    bool rm             = false;
-    bool cm             = true;
-    bool pcr            = true;
-    bool hpipm          = true;
-    bool v8             = false;
-    bool warm_copy      = false;
+    bool warm       = false;
+    bool no_updates = false;
+    int parallelism = 8;
+    bool rm         = false;
+    bool cm         = true;
+    bool pcr        = true;
+    bool hpipm      = true;
+    bool v8         = false;
+    bool warm_copy  = false;
     std::vector<int> horizon{32, 64, 96, 128, 192, 256};
     std::vector<int> masses{6, 12, 30};
-    uint64_t num_instances   = 50;
-    uint64_t seed            = 0;
-    ProblemType problem_type = ProblemType::WangBoyd2008;
+    uint64_t num_instances         = 50;
+    uint64_t seed                  = 0;
+    ProblemType problem_type       = ProblemType::WangBoyd2008;
     double pcr_max_update_fraction = 0.25;
     double cr_max_update_fraction  = 0.9;
     double changing_constr_factor  = 0.01;
@@ -97,7 +97,7 @@ void run_benchmark(benchmark::State &state, const SpringMassParams &params,
                    qp::CyqloneBackendSettings backend_settings, qp::Settings settings,
                    bool warm = false) {
     auto problem = create_problem(params);
-    if (problem.ocp.dim.N_horiz <= (1 << (backend_settings.log_processors - 1)))
+    if (problem.ocp.dim.N_horiz <= (backend_settings.processors >> 1))
         state.SkipWithMessage("Problem too small for the selected number of processors");
     // Build a QPALM Cyqlone solver
     auto ocp     = cyqlone::CyqloneStorage<>::build(problem.ocp);
@@ -248,7 +248,7 @@ struct Solver {
 std::generator<Solver> get_solvers(const Options &opts) {
     using enum qp::StorageOrder;
     qp::CyqloneBackendSettings backend{
-        .log_processors          = opts.log_parallelism,
+        .processors              = opts.parallelism,
         .changing_constr_factor  = opts.changing_constr_factor,
         .max_update_count        = 20,
         .pcr_max_update_fraction = opts.pcr_max_update_fraction,
@@ -264,7 +264,7 @@ std::generator<Solver> get_solvers(const Options &opts) {
         backend.solve_method = cyqlone::SolveMethod::PCR;
     if (opts.warm) {
         backend.strategy = qp::WarmStartingStrategy::Zeros;
-        co_yield {std::format("cyqlone(v=4,p={},zero)", 1 << (backend.log_processors - 2)),
+        co_yield {std::format("cyqlone(v=4,p={},zero)", backend.processors),
                   [=](benchmark::State &state, const SpringMassParams &params) {
                       run_benchmark<4>(state, params, backend, settings, true);
                   }};
@@ -272,13 +272,13 @@ std::generator<Solver> get_solvers(const Options &opts) {
         settings.initial_inner_tolerance = 1e-4;
         if (opts.warm_copy) {
             backend.strategy = qp::WarmStartingStrategy::Copy;
-            co_yield {std::format("cyqlone(v=4,p={},copy)", 1 << (backend.log_processors - 2)),
+            co_yield {std::format("cyqlone(v=4,p={},copy)", backend.processors),
                       [=](benchmark::State &state, const SpringMassParams &params) {
                           run_benchmark<4>(state, params, backend, settings, true);
                       }};
         }
         backend.strategy = qp::WarmStartingStrategy::Shift;
-        co_yield {std::format("cyqlone(v=4,p={},shift)", 1 << (backend.log_processors - 2)),
+        co_yield {std::format("cyqlone(v=4,p={},shift)", backend.processors),
                   [=](benchmark::State &state, const SpringMassParams &params) {
                       run_benchmark<4>(state, params, backend, settings, true);
                   }};
@@ -299,26 +299,24 @@ std::generator<Solver> get_solvers(const Options &opts) {
 #endif
     } else {
         if (opts.rm)
-            co_yield {std::format("cyqlone(v=4,p={},rm)", 1 << (backend.log_processors - 2)),
+            co_yield {std::format("cyqlone(v=4,p={},rm)", backend.processors),
                       [=](benchmark::State &state, const SpringMassParams &params) {
                           run_benchmark<4, RowMajor>(state, params, backend, settings);
                       }};
         if (opts.cm)
-            co_yield {std::format("cyqlone(v=4,p={},cm)", 1 << (backend.log_processors - 2)),
+            co_yield {std::format("cyqlone(v=4,p={},cm)", backend.processors),
                       [=](benchmark::State &state, const SpringMassParams &params) {
                           run_benchmark<4, ColMajor>(state, params, backend, settings);
                       }};
         if (opts.v8) {
-            ++backend.log_processors;
-            co_yield {std::format("cyqlone(v=8,p={},cm)", 1 << (backend.log_processors - 3)),
+            co_yield {std::format("cyqlone(v=8,p={},cm)", backend.processors),
                       [=](benchmark::State &state, const SpringMassParams &params) {
                           run_benchmark<8, ColMajor>(state, params, backend, settings);
                       }};
-            --backend.log_processors;
         }
         if (opts.no_updates) {
             backend.max_update_count = 0;
-            co_yield {std::format("cyqlone(v=4,p={},upd={})", 1 << (backend.log_processors - 2),
+            co_yield {std::format("cyqlone(v=4,p={},upd={})", backend.processors,
                                   backend.max_update_count),
                       [=](benchmark::State &state, const SpringMassParams &params) {
                           run_benchmark<4>(state, params, backend, settings);
@@ -359,14 +357,14 @@ int main(int argc, char **argv) try {
                    "Number of random problem instances to generate for each (M,N) pair");
     app.add_option("--seed,-s", opts.seed, "Random seed for problem instance generation");
     app.add_flag("--no-updates", opts.no_updates, "Compare to the Cyqlone backend without updates");
-    app.add_option("--log-parallelism,-P", opts.log_parallelism,
-                   "Log2 of the amount of parallelism to use in the Cyqlone backend");
+    app.add_option("--parallelism,-p", opts.parallelism,
+                   "The number of threads to use in the Cyqlone backend");
     app.add_flag("--rm,!--no-rm", opts.rm, "Use row-major (default) storage");
     app.add_flag("--cm,!--no-cm", opts.cm, "Use column-major storage");
     app.add_flag("--pcr,!--pcg", opts.pcr, "Use parallel cyclic reduction in the Cyqlone backend");
     app.add_flag("--hpipm,!--no-hpipm", opts.hpipm, "Use HPIPM solver for comparison");
     app.add_flag("--v8,!--no-v8", opts.v8, "Include vector length 8 for the Cyqlone backend");
-    app.add_option("--problem,-p", opts.problem_type, "Problem type to benchmark")
+    app.add_option("--problem", opts.problem_type, "Problem type to benchmark")
         ->transform(CLI::CheckedTransformer(problem_type_map, CLI::ignore_case));
     app.add_option("--pcr-max-update-fraction", opts.pcr_max_update_fraction,
                    "Maximum update rank fraction when using PCR");

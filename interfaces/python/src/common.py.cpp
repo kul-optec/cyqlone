@@ -498,7 +498,7 @@ void register_settings(nb::module_ &m) {
     nb::class_<cyqlone::qpalm::CyqloneBackendSettings>(m, "CyqloneBackendSettings")
         .def("__copy__", [](const cyqlone::qpalm::CyqloneBackendSettings &self) { return self; })
         .def(nb::init())
-        .def_rw("log_processors", &cyqlone::qpalm::CyqloneBackendSettings::log_processors)
+        .def_rw("processors", &cyqlone::qpalm::CyqloneBackendSettings::processors)
         .def_rw("print_residuals", &cyqlone::qpalm::CyqloneBackendSettings::print_residuals)
         .def_rw("print_precision", &cyqlone::qpalm::CyqloneBackendSettings::print_precision)
         .def_rw("changing_constr_factor",

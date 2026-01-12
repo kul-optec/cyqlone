@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include <cyqlone/cyqlone.hpp>
 #include <cyqlone/random-ocp.hpp>
+#include <cyqlone/v2/cyqlone.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <guanaqo/print.hpp>
 #include <guanaqo/trace.hpp>
@@ -27,7 +27,7 @@ TEST_P(CyqloneFactorTest, factor) {
 
     const int log_n_threads = 2;
 
-    using Solver     = CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
+    using Solver     = v2::CyqloneSolver<4, real_t, v2::StorageOrder::RowMajor>;
     const index_t lP = log_n_threads + Solver::lvl;
     const index_t ny = 50, ny_0 = 25, ny_N = 25;
     OCPDim dim{.N_horiz = 97, .nx = 40, .nu = 30, .ny = ny, .ny_N = ny_N};
@@ -53,16 +53,16 @@ TEST_P(CyqloneFactorTest, factor) {
 
     const index_t nyM = std::max(ny, ny_0 + ny_N);
     std::vector<real_t> Σ_lin((N - 1) * ny + ny_0 + ny_N);
-    Solver::matrix λ{{.depth = solver.ceil_N, .rows = dim.nx, .cols = 1}},
-        ux{{.depth = solver.ceil_N, .rows = nux, .cols = 1}},
-        Mᵀλ{{.depth = solver.ceil_N, .rows = nux, .cols = 1}},
-        DCux{{.depth = solver.ceil_N, .rows = nyM, .cols = 1}},
-        DCᵀΣDCux{{.depth = solver.ceil_N, .rows = nux, .cols = 1}},
-        grad{{.depth = solver.ceil_N, .rows = nux, .cols = 1}},
-        Mxb{{.depth = solver.ceil_N, .rows = dim.nx, .cols = 1}},
-        Σ{{.depth = solver.ceil_N, .rows = dim.ny, .cols = 1}},
-        Σ2{{.depth = solver.ceil_N, .rows = dim.ny, .cols = 1}},
-        ΔΣ{{.depth = solver.ceil_N, .rows = dim.ny, .cols = 1}};
+    Solver::matrix λ{{.depth = solver.ceil_N(), .rows = dim.nx, .cols = 1}},
+        ux{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
+        Mᵀλ{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
+        DCux{{.depth = solver.ceil_N(), .rows = nyM, .cols = 1}},
+        DCᵀΣDCux{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
+        grad{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
+        Mxb{{.depth = solver.ceil_N(), .rows = dim.nx, .cols = 1}},
+        Σ{{.depth = solver.ceil_N(), .rows = dim.ny, .cols = 1}},
+        Σ2{{.depth = solver.ceil_N(), .rows = dim.ny, .cols = 1}},
+        ΔΣ{{.depth = solver.ceil_N(), .rows = dim.ny, .cols = 1}};
     std::ranges::generate(λ, [&] { return uni(rng); });
     std::ranges::generate(ux, [&] { return uni(rng); });
     std::ranges::generate(Σ_lin, [&] { return std::exp2(uni(rng)); });
@@ -89,7 +89,8 @@ TEST_P(CyqloneFactorTest, factor) {
 #if WITH_UPDATES
             solver.update(ctx, ΔΣ);
 #endif
-            solver.solve(ctx, ux, λ);
+            solver.solve_forward(ctx, ux, λ);
+            solver.solve_reverse(ctx, ux, λ);
             solver.residual_dynamics_constr(ctx, ux, λ_initial, Mxb);
             solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
             solver.cost_gradient(ctx, ux, -1, ux_initial, 0, grad);
@@ -111,7 +112,8 @@ TEST_P(CyqloneFactorTest, factor) {
 #if WITH_UPDATES
         solver.update(ctx, ΔΣ);
 #endif
-        solver.solve(ctx, ux, λ);
+        solver.solve_forward(ctx, ux, λ);
+        solver.solve_reverse(ctx, ux, λ);
         solver.residual_dynamics_constr(ctx, ux, λ_initial, Mxb);
         solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
         solver.cost_gradient(ctx, ux, -1, ux_initial, 0, grad);

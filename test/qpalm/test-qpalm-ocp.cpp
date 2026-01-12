@@ -49,7 +49,7 @@ TEST(QPALM, cyqlone) {
     auto cocp          = cyqlone::CyqloneStorage<>::build(ocp.ocp);
     const bool verbose = true;
     auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(cocp, {},
-                                                           {.log_processors  = 5,
+                                                           {.processors      = 8,
                                                             .print_residuals = verbose,
                                                             .print_precision = 17,
                                                             .pcg_print_resid = verbose});
@@ -106,7 +106,7 @@ TEST(QPALM, cyqloneSpringsMasses) try {
     auto cocp = cyqlone::CyqloneStorage<>::build(ocp);
     const bool verbose = false;
     auto &&backend     = qp::make_qpalm_cyqlone_backend<4>(
-        cocp, {}, {.log_processors = 4, .print_residuals = verbose, .pcg_print_resid = verbose});
+        cocp, {}, {.processors = 8, .print_residuals = verbose, .pcg_print_resid = verbose});
     qp::Solver<qp::CyqloneBackend<4> *> qpalm{
         backend.get(),
         {.max_outer_iter = 500, .max_total_inner_iter = 1000, .verbose = verbose},
@@ -173,7 +173,7 @@ TEST(QPALM, ocpBackend) {
     auto cocp      = cyqlone::CyqloneStorage<>::build(ocp.ocp, q_grad, ocp.rhs_eq, ocp.rhs_ineq_lb,
                                                       ocp.rhs_ineq_ub);
     auto &&backend = qp::make_qpalm_cyqlone_backend<4>(
-        cocp, {}, {.log_processors = 3, .print_residuals = true, .pcg_print_resid = true});
+        cocp, {}, {.processors = 4, .print_residuals = true, .pcg_print_resid = true});
 
     // Build quadratic program
     auto qp = qp::LinearOCPSparseQP::build(ocp.ocp);

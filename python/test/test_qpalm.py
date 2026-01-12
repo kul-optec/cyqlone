@@ -8,9 +8,9 @@ import scipy.sparse as spa
 
 @pytest.mark.parametrize("seed", [12345, 54321, 10101])
 def test_cyqlone_qpalm(seed):
-    lP = 3
-    P = 1 << lP
-    N = P * 12
+    p = 4
+    v = 4
+    N = p * v * 3
     nx, nu = 19, 11
     ny, ny_N = 5, 5
     rng = np.random.default_rng(seed=seed)
@@ -45,13 +45,15 @@ def test_cyqlone_qpalm(seed):
         rhs_ub=rhs_ub,
     )
     backend_settings = CyqloneBackendSettings()
-    backend_settings.log_processors = lP + 2
+    backend_settings.processors = p
     backend_settings.print_residuals = True
     qpalm_settings = Settings()
     qpalm_settings.verbose = True
+    qpalm_settings.max_outer_iter = 30
     qpalm_settings.tolerance = 1e-10
     qpalm_settings.dual_tolerance = 1e-10
     qpalm_settings.eq_constr_tolerance = 1e-10
+    qpalm_settings.print_linesearch_inputs = True
     solver = QPALM_Cyqlone(ocp, backend_settings, qpalm_settings)
     solver()
     assert solver() == SolverStatus.Converged
@@ -107,3 +109,6 @@ def test_cyqlone_qpalm(seed):
     Q = spa.tril(qp.Q) + spa.tril(qp.Q, -1).T
     assert la.norm(Ax - np.clip(Ax, b_l, b_u), np.inf) < qpalm_settings.dual_tolerance
     assert la.norm(Q @ x + ocp.qr + qp.A.T @ y, np.inf) < 10 * qpalm_settings.tolerance
+
+if __name__ == "__main__":
+    test_cyqlone_qpalm(12345)

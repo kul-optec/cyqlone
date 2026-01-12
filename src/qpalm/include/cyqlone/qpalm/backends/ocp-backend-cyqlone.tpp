@@ -1,11 +1,11 @@
 #pragma once
 
 #include <cyqlone/config.hpp>
-#include <cyqlone/cyqlone.hpp>
 #include <cyqlone/neumaier.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/implementation/breakpoint.hpp>
 #include <cyqlone/reduce.hpp>
+#include <cyqlone/v2/cyqlone.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 #include <batmat/linalg/copy.hpp>
@@ -38,10 +38,9 @@ namespace datapar = batmat::datapar;
 
 template <index_t VL, StorageOrder DefaultOrder>
 struct CyqloneBackend {
-    using OCP_t                 = cyqlone::CyqloneSolver<VL, real_t, DefaultOrder>;
+    using OCP_t                 = cyqlone::v2::CyqloneSolver<VL, real_t, DefaultOrder>;
     using Context               = typename OCP_t::Context;
     using storage_t             = typename OCP_t::template matrix<>;
-    using mask_storage_t        = typename OCP_t::template mask_matrix<>;
     using simd                  = typename OCP_t::compact_blas::simd;
     static constexpr auto norms = cyqlone::norms<real_t, simd>{};
     // clang-format off
@@ -50,6 +49,33 @@ struct CyqloneBackend {
     struct ineq_constr_vec_t : storage_t { friend CyqloneBackend; ineq_constr_vec_t() = default; private: ineq_constr_vec_t(storage_t &&o) : storage_t{std::move(o)} {} friend auto simdify(ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
     struct active_set_t      : storage_t { friend CyqloneBackend; active_set_t() = default;      private: active_set_t(storage_t &&o)      : storage_t{std::move(o)} {} friend auto simdify(active_set_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const active_set_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
     // clang-format on
+
+    struct Timings {
+        using type    = DefaultTimings;
+        using timed_t = guanaqo::Timed<batmat::DefaultTimings>;
+        type breakpoints{};
+        type calc_y_hat{};
+        type calc_y_hat_AT{};
+        type update_active_set_change{};
+        type update_factorization{};
+        type factor{};
+        type solve{};
+        type solve_MT{};
+        type solve_A{};
+        type solve_grad{};
+        type solve_resid{};
+        type recompute_outer_grad{};
+        type recompute_outer_A{};
+        type recompute_outer_AT{};
+        type recompute_outer_MT{};
+        type recompute_outer_norm{};
+        type recompute_inner_grad{};
+        type recompute_inner_A{};
+        type recompute_inner_MT{};
+        type ineq_constr_resid{};
+        type ineq_constr_viol{};
+        type ineq_constr_resid_al{};
+    };
 
     OCP_t ocp;
     CyqloneBackendSettings settings;
@@ -66,11 +92,11 @@ struct CyqloneBackend {
 
     bool reset_factorization = true;
     index_t num_updates      = 0;
-    std::unique_ptr<typename OCP_t::Timings> ocp_timings;
+    std::unique_ptr<Timings> ocp_timings;
 
     CyqloneBackend(const CyqloneStorage<> &ocp, CyqloneData data,
                    const CyqloneBackendSettings &settings)
-        : ocp{OCP_t::build(ocp, settings.log_processors)}, settings{settings} {
+        : ocp{OCP_t::build(ocp, settings.processors)}, settings{settings} {
         this->ocp.pcg_max_iter                     = settings.pcg_max_iter;
         this->ocp.pcg_tolerance                    = settings.pcg_tolerance;
         this->ocp.pcg_print_resid                  = settings.pcg_print_resid;
@@ -99,7 +125,7 @@ struct CyqloneBackend {
             this->ocp.pack_dynamics(data.initial_equality_multipliers, λ0->view());
         }
         if (settings.detailed_timings)
-            ocp_timings = std::make_unique<typename OCP_t::Timings>();
+            ocp_timings = std::make_unique<Timings>();
     }
 
     void update_data(const CyqloneStorage<> &ocp) {
@@ -121,8 +147,8 @@ struct CyqloneBackend {
 
     void warm_start(const var_vec_t &x, const ineq_constr_vec_t &y, const eq_constr_vec_t &λ) {
         const auto k_to_l = [&](index_t k) {
-            const auto num_stages = ocp.ceil_N >> ocp.lP;
-            const auto i          = (ocp.ceil_N - k) % num_stages;
+            const auto num_stages = ocp.n;
+            const auto i          = (ocp.ceil_N() - k) % num_stages;
             const auto k1         = (k + i) / num_stages;
             const auto k2         = k1 >> (ocp.lP - ocp.lvl);
             const auto v          = k2 % (1 << ocp.lvl);
@@ -233,8 +259,8 @@ struct CyqloneBackend {
 
     // e = Ax - clamp(Ax, b_min, b_max)
     void ineq_constr_resid(Context &ctx, const ineq_constr_vec_t &Ax, ineq_constr_vec_t &e) const {
-        auto t                   = get_timed(&OCP_t::Timings::ineq_constr_resid);
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        auto t                   = get_timed(&Timings::ineq_constr_resid);
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -244,7 +270,7 @@ struct CyqloneBackend {
     }
 
     void project_multipliers_ineq(Context &ctx, ineq_constr_vec_t &y) const {
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -265,11 +291,11 @@ struct CyqloneBackend {
 
     real_t ineq_constr_viol(Context &ctx, const ineq_constr_vec_t &Ax) const {
         GUANAQO_TRACE("ineq_constr_viol", 0);
-        auto t = get_timed(&OCP_t::Timings::ineq_constr_viol);
+        auto t = get_timed(&Timings::ineq_constr_viol);
         using std::clamp;
         using std::isfinite;
         auto nrm_simd            = norms.zero_simd();
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -290,11 +316,11 @@ struct CyqloneBackend {
                                 const ineq_constr_vec_t &ŷ, const ineq_constr_vec_t &Σ,
                                 ineq_constr_vec_t &e) {
         GUANAQO_TRACE("ineq_constr_resid_al", 0);
-        auto t = get_timed(&OCP_t::Timings::ineq_constr_resid_al);
+        auto t = get_timed(&Timings::ineq_constr_resid_al);
         using std::clamp;
         using std::isfinite;
         auto nrm_simd            = norms.zero_simd();
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -417,14 +443,14 @@ struct CyqloneBackend {
                                   const ineq_constr_vec_t &Σ, const ineq_constr_vec_t &y,
                                   const ineq_constr_vec_t &Ad, const ineq_constr_vec_t &Ax,
                                   const ineq_constr_vec_t &b_min, const ineq_constr_vec_t &b_max) {
-        auto t = get_timed(&OCP_t::Timings::breakpoints);
+        auto t = get_timed(&Timings::breakpoints);
         using std::isfinite;
         using std::sqrt;
         // Allocate memory
         const index_t ny_M       = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
-        const index_t m          = ocp.ceil_N * ny_M;
+        const index_t m          = ocp.ceil_N() * ny_M;
         const index_t P          = 1 << (ocp.lP - ocp.lvl);
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         if (ctx.is_master()) {
             breakpoints.resize(2 * m);
             breakpoints_temp.resize(2 * m);
@@ -518,7 +544,7 @@ struct CyqloneBackend {
     void xaxpy(Context &ctx, real_t a, const T &x, U &y) {
         const auto x_            = simdify(x);
         const auto y_            = simdify(y);
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -529,7 +555,7 @@ struct CyqloneBackend {
     template <class T, class U>
     void xcopy(Context &ctx, const T &x, U &y) const {
         BATMAT_ASSERT(x.depth() == y.depth());
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -539,7 +565,7 @@ struct CyqloneBackend {
 
     template <class T, class U>
     void set_constant(Context &ctx, T &x, const U &y) const {
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -549,7 +575,7 @@ struct CyqloneBackend {
 
     [[nodiscard]] real_t dot(Context &ctx, const var_vec_t &a, const var_vec_t &b) const {
         real_t sum               = 0;
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -561,7 +587,7 @@ struct CyqloneBackend {
     template <class T>
     [[nodiscard]] auto norm_inf_l1_sq(Context &ctx, const T &x) const {
         auto nrm_simd            = norms.zero_simd();
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -586,7 +612,7 @@ struct CyqloneBackend {
     template <class T>
     [[nodiscard]] real_t norm_squared(Context &ctx, const T &x) const {
         real_t sum               = 0;
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -597,7 +623,7 @@ struct CyqloneBackend {
 
     template <class T>
     void scale(Context &ctx, real_t s, T &x) const {
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -613,10 +639,10 @@ struct CyqloneBackend {
                        active_set_t &J) {
         using std::clamp;
         index_t count_J_local    = 0;
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         {
-            auto t = get_timed(&OCP_t::Timings::calc_y_hat);
+            auto t = get_timed(&Timings::calc_y_hat);
             for (index_t i = 0; i < num_stages; ++i) {
                 const index_t di = ti * num_stages + i;
                 GUANAQO_TRACE("calc_ŷ_Aᵀŷ", di);
@@ -645,7 +671,7 @@ struct CyqloneBackend {
                 }
             }
         }
-        auto t = get_timed(&OCP_t::Timings::calc_y_hat_AT);
+        auto t = get_timed(&Timings::calc_y_hat_AT);
         mat_vec_AT(ctx, ŷ, Aᵀŷ);
         return ctx.reduce(count_J_local, index_t{});
     }
@@ -656,7 +682,7 @@ struct CyqloneBackend {
         using std::clamp;
         using std::isfinite;
         auto nrm_simd            = norms.zero_simd();
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -701,14 +727,14 @@ struct CyqloneBackend {
         BATMAT_ASSERT(J.rows() == J_old.rows() && J.cols() == J_old.cols());
         BATMAT_ASSERT(J.depth() == J_old.depth());
         BATMAT_ASSERT(J.cols() == 1);
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         index_t num_different    = 0;
         {
             GUANAQO_TRACE("active_set_change", 0);
             for (index_t i = 0; i < num_stages; ++i)
                 num_different += [&] {
-                    auto t           = get_timed(&OCP_t::Timings::update_active_set_change);
+                    auto t           = get_timed(&Timings::update_active_set_change);
                     const index_t di = ti * num_stages + i;
                     auto Ji          = simdify(J.batch(di));
                     auto J_oldi      = simdify(J_old.batch(di));
@@ -746,7 +772,7 @@ struct CyqloneBackend {
             OCP_t::compact_blas::xsub_copy(simdify(ΔΣ.batch(di)), simdify(J.batch(di)),
                                            simdify(J_old.batch(di)));
         }
-        auto t = get_timed(&OCP_t::Timings::update_factorization);
+        auto t = get_timed(&Timings::update_factorization);
         ocp.update(ctx, ΔΣ);
         return num_different;
     }
@@ -755,15 +781,15 @@ struct CyqloneBackend {
                          const eq_constr_vec_t &λ, var_vec_t &grad, ineq_constr_vec_t &Ax,
                          var_vec_t &Mᵀλ) {
         {
-            auto t = get_timed(&OCP_t::Timings::recompute_inner_grad);
+            auto t = get_timed(&Timings::recompute_inner_grad);
             grad_f_regularized(ctx, S, x, x_outer, grad);
         }
         {
-            auto t = get_timed(&OCP_t::Timings::recompute_inner_A);
+            auto t = get_timed(&Timings::recompute_inner_A);
             mat_vec_A(ctx, x, Ax);
         }
         {
-            auto t = get_timed(&OCP_t::Timings::recompute_inner_MT);
+            auto t = get_timed(&Timings::recompute_inner_MT);
             mat_vec_MT(ctx, λ, Mᵀλ);
         }
     }
@@ -772,23 +798,23 @@ struct CyqloneBackend {
                            const eq_constr_vec_t &λ, var_vec_t &grad, ineq_constr_vec_t &Ax,
                            var_vec_t &Aᵀŷ, var_vec_t &Mᵀλ) {
         {
-            auto t = get_timed(&OCP_t::Timings::recompute_outer_grad);
+            auto t = get_timed(&Timings::recompute_outer_grad);
             grad_f(ctx, x, grad); // ∇f = Q * x + q
         }
         {
-            auto t = get_timed(&OCP_t::Timings::recompute_outer_A);
+            auto t = get_timed(&Timings::recompute_outer_A);
             mat_vec_A(ctx, x, Ax); // Ax = A * x
         }
         {
-            auto t = get_timed(&OCP_t::Timings::recompute_outer_AT);
+            auto t = get_timed(&Timings::recompute_outer_AT);
             mat_vec_AT(ctx, ŷ, Aᵀŷ); // Aᵀŷ = Aᵀ * ŷ
         }
         {
-            auto t = get_timed(&OCP_t::Timings::recompute_outer_MT);
+            auto t = get_timed(&Timings::recompute_outer_MT);
             mat_vec_MT(ctx, λ, Mᵀλ); // Mᵀλ = Mᵀ * λ
         }
         {
-            auto t = get_timed(&OCP_t::Timings::recompute_outer_norm);
+            auto t = get_timed(&Timings::recompute_outer_norm);
             return unscaled_aug_lagr_norm(ctx, grad, Mᵀλ, Aᵀŷ);
         }
     }
@@ -803,25 +829,13 @@ struct CyqloneBackend {
                const active_set_t &J, //
                var_vec_t &d, var_vec_t &ξ, ineq_constr_vec_t &Ad, eq_constr_vec_t &Δλ,
                var_vec_t &MᵀΔλ) {
-        if (reset_factorization) {
-            // std::cout << "                                     -- Fact reset\n";
-            auto t = get_timed(&OCP_t::Timings::factor);
-            ocp.factor(ctx, S, J);
-            ctx.arrive_and_wait(__LINE__);
-            if (ctx.is_master()) {
-                reset_factorization = false;
-                num_updates         = 0;
-                ++stats.num_factor;
-            }
-            ctx.arrive_and_wait(__LINE__);
-        }
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             OCP_t::compact_blas::xadd_neg_copy(simdify(d.batch(di)), simdify(grad.batch(di)),
                                                simdify(Mᵀλ.batch(di)), simdify(Aᵀŷ.batch(di)));
-            OCP_t::compact_blas::xadd_neg_copy(simdify(Δλ.batch(di)), simdify(Mxb.batch(di)));
+            OCP_t::compact_blas::xadd_copy(simdify(Δλ.batch(di)), simdify(Mxb.batch(di)));
         }
         if (settings.print_residuals) {
             int prec                      = settings.print_precision;
@@ -847,22 +861,37 @@ struct CyqloneBackend {
                           << "\n";
             }
         }
-        {
-            auto t = get_timed(&OCP_t::Timings::solve);
-            ocp.solve(ctx, d, Δλ);
+        if (reset_factorization) {
+            // std::cout << "                                     -- Fact reset\n";
+            auto t = get_timed(&Timings::factor);
+            ocp.factor_solve(ctx, S, J, d, Δλ);
+            ctx.arrive_and_wait(__LINE__);
+            if (ctx.is_master()) {
+                reset_factorization = false;
+                num_updates         = 0;
+                ++stats.num_factor;
+            }
+            ctx.arrive_and_wait(__LINE__);
+        } else {
+            auto t = get_timed(&Timings::solve);
+            ocp.solve_forward(ctx, d, Δλ);
         }
         {
-            auto t = get_timed(&OCP_t::Timings::solve_MT);
+            auto t = get_timed(&Timings::solve);
+            ocp.solve_reverse(ctx, d, Δλ);
+        }
+        {
+            auto t = get_timed(&Timings::solve_MT);
             mat_vec_MT(ctx, Δλ, MᵀΔλ);
         }
         // Ad ← A d
         {
-            auto t = get_timed(&OCP_t::Timings::solve_A);
+            auto t = get_timed(&Timings::solve_A);
             mat_vec_A(ctx, d, Ad);
         }
         // ξ ← Q d + S⁻¹ d
         {
-            auto t = get_timed(&OCP_t::Timings::solve_grad);
+            auto t = get_timed(&Timings::solve_grad);
             ocp.cost_gradient(ctx, d, 1 / S, d, 0, ξ);
         }
 
@@ -872,7 +901,7 @@ struct CyqloneBackend {
                 temp_eq   = eq_constr_vec();
                 temp_ineq = ineq_constr_vec();
             }
-            auto tm = get_timed(&OCP_t::Timings::solve_resid);
+            auto tm = get_timed(&Timings::solve_resid);
             ctx.arrive_and_wait(__LINE__);
             int prec = settings.print_precision;
             using std::abs;
@@ -951,7 +980,7 @@ struct CyqloneBackend {
                       var_vec_t &MᵀΔλ) {
         if (reset_factorization) {
             // std::cout << "                                     -- Fact reset\n";
-            auto t = get_timed(&OCP_t::Timings::factor);
+            auto t = get_timed(&Timings::factor);
             ocp.factor(ctx, S, J);
             ctx.arrive_and_wait(__LINE__);
             if (ctx.is_master()) {
@@ -961,7 +990,7 @@ struct CyqloneBackend {
             }
             ctx.arrive_and_wait(__LINE__);
         }
-        const index_t num_stages = ocp.ceil_N >> ocp.lP; // number of stages per thread
+        const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
@@ -970,24 +999,24 @@ struct CyqloneBackend {
             OCP_t::compact_blas::xadd_neg_copy(simdify(Δλ.batch(di)), simdify(Mxb.batch(di)));
         }
         {
-            auto t = get_timed(&OCP_t::Timings::solve);
+            auto t = get_timed(&Timings::solve);
             ocp.solve(ctx, d, Δλ);
         }
 
         int count = 1000000;
         while (true) {
             {
-                auto t = get_timed(&OCP_t::Timings::solve_MT);
+                auto t = get_timed(&Timings::solve_MT);
                 mat_vec_MT(ctx, Δλ, MᵀΔλ);
             }
             // Ad ← A d
             {
-                auto t = get_timed(&OCP_t::Timings::solve_A);
+                auto t = get_timed(&Timings::solve_A);
                 mat_vec_A(ctx, d, Ad);
             }
             // ξ ← Q d + S⁻¹ d
             {
-                auto t = get_timed(&OCP_t::Timings::solve_grad);
+                auto t = get_timed(&Timings::solve_grad);
                 ocp.cost_gradient(ctx, d, 0, d, 0, ξ);
             }
 
@@ -1037,7 +1066,7 @@ struct CyqloneBackend {
                           << guanaqo::float_to_str(inf_res, prec) << "\n";
 
             {
-                auto t = get_timed(&OCP_t::Timings::solve);
+                auto t = get_timed(&Timings::solve);
                 ocp.solve(ctx, res, res_eq);
             }
             for (index_t i = 0; i < num_stages; ++i) {
@@ -1050,8 +1079,8 @@ struct CyqloneBackend {
         }
     }
 
-    auto get_timed(typename OCP_t::Timings::type OCP_t::Timings::*member) const {
-        return ocp_timings ? std::optional<typename OCP_t::Timings::timed_t>((*ocp_timings).*member)
+    auto get_timed(Timings::type Timings::*member) const {
+        return ocp_timings ? std::optional<typename Timings::timed_t>((*ocp_timings).*member)
                            : std::nullopt;
     }
 
@@ -1059,7 +1088,7 @@ struct CyqloneBackend {
     Stats stats = {};
     Stats clear_stats() { return std::exchange(stats, {}); }
 
-    std::map<std::string, typename OCP_t::Timings::type> clear_timings() {
+    std::map<std::string, typename Timings::type> clear_timings() {
         if (!ocp_timings)
             return {};
         const auto t = std::exchange(*ocp_timings, {});
