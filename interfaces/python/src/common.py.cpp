@@ -505,6 +505,7 @@ void register_settings(nb::module_ &m) {
                 &cyqlone::qpalm::CyqloneBackendSettings::changing_constr_factor)
         .def_rw("max_update_count", &cyqlone::qpalm::CyqloneBackendSettings::max_update_count)
         .def_rw("detailed_timings", &cyqlone::qpalm::CyqloneBackendSettings::detailed_timings)
+        .def_rw("enable_prefetching", &cyqlone::qpalm::CyqloneBackendSettings::enable_prefetching)
         .def_rw("pcg_max_iter", &cyqlone::qpalm::CyqloneBackendSettings::pcg_max_iter)
         .def_rw("pcg_tolerance", &cyqlone::qpalm::CyqloneBackendSettings::pcg_tolerance)
         .def_rw("pcg_print_resid", &cyqlone::qpalm::CyqloneBackendSettings::pcg_print_resid)

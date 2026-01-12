@@ -13,6 +13,7 @@
 #include <batmat/matrix/matrix.hpp>
 #include <batmat/openmp.h>
 #include <batmat/simd.hpp>
+#include <batmat/unroll.h>
 #include <guanaqo/trace.hpp>
 
 #include "../compact.hpp" // TODO
@@ -106,6 +107,7 @@ struct CyqloneSolver {
     using compact_blas_default =
         cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>, default_order>;
 
+    bool enable_prefetching        = true;
     index_t pcg_max_iter           = 100;
     value_type pcg_tolerance       = std::numeric_limits<value_type>::epsilon() / 10;
     bool pcg_print_resid           = false;
@@ -465,6 +467,46 @@ struct CyqloneSolver {
     void solve_u_backward(index_t l, index_t biU, mut_view<> λ, mut_view<> w) const;
     void solve_y_backward(index_t l, index_t biY, mut_view<> λ) const;
     void solve_λ_backward(index_t biL, mut_view<> λ, view<> w) const;
+    template <StorageOrder O>
+    void prefetch(batch_view<O> X) const {
+        if (!enable_prefetching)
+            return;
+        const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / vl, 1);
+        if constexpr (O == StorageOrder::RowMajor)
+            for (index_t r = 0; r < X.rows(); ++r)
+                BATMAT_UNROLLED_IVDEP_FOR (8, index_t c = 0; c < X.cols(); c += inner_stride)
+                    __builtin_prefetch(&X(0, r, c), 0, 2);
+        else
+            for (index_t c = 0; c < X.cols(); ++c)
+                BATMAT_UNROLLED_IVDEP_FOR (8, index_t r = 0; r < X.rows(); r += inner_stride)
+                    __builtin_prefetch(&X(0, r, c), 0, 2);
+    }
+    template <StorageOrder O>
+    void prefetch_L(batch_view<O> X) const {
+        if (!enable_prefetching)
+            return;
+        const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / vl, 1);
+        if constexpr (O == StorageOrder::RowMajor)
+            for (index_t r = 0; r < X.rows(); ++r)
+                BATMAT_UNROLLED_IVDEP_FOR (8, index_t c = 0; c <= r; c += inner_stride)
+                    __builtin_prefetch(&X(0, r, c), 0, 2);
+        else
+            for (index_t c = 0; c < X.cols(); ++c)
+                BATMAT_UNROLLED_IVDEP_FOR (8, index_t r = c; r < X.rows(); r += inner_stride)
+                    __builtin_prefetch(&X(0, r, c), 0, 2);
+    }
+    void prefetch_L(index_t bi) const {
+        GUANAQO_TRACE("prefetch L", bi);
+        prefetch_L(cr_L.batch(bi));
+    }
+    void prefetch_U(index_t biU) const {
+        GUANAQO_TRACE("prefetch U", biU);
+        prefetch(cr_U.batch(biU));
+    }
+    void prefetch_Y(index_t biY) const {
+        GUANAQO_TRACE("prefetch Y", biY);
+        prefetch(cr_Y.batch(biY));
+    }
 
     void update_riccati(Context &ctx, view<> Σ);
     void update_L(index_t l, index_t bi);

@@ -33,6 +33,7 @@ struct CyqloneBackendSettings {
     double changing_constr_factor  = 0.05;
     index_t max_update_count       = 5;
     bool detailed_timings          = false;
+    bool enable_prefetching        = true;
     index_t pcg_max_iter           = 100;
     real_t pcg_tolerance           = std::numeric_limits<real_t>::epsilon() / 10;
     bool pcg_print_resid           = false;

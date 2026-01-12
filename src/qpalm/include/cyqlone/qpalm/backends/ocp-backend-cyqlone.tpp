@@ -97,6 +97,7 @@ struct CyqloneBackend {
     CyqloneBackend(const CyqloneStorage<> &ocp, CyqloneData data,
                    const CyqloneBackendSettings &settings)
         : ocp{OCP_t::build(ocp, settings.processors)}, settings{settings} {
+        this->ocp.enable_prefetching               = settings.enable_prefetching;
         this->ocp.pcg_max_iter                     = settings.pcg_max_iter;
         this->ocp.pcg_tolerance                    = settings.pcg_tolerance;
         this->ocp.pcg_print_resid                  = settings.pcg_print_resid;

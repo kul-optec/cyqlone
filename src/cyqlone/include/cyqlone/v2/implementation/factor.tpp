@@ -116,16 +116,39 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
     for (index_t l = lp(); l-- > 0;) {
         const auto c_     = cr_thread_assignment(l, c);
         const index_t i_u = add_wrap_ceil_p(c_, 1), i_y = sub_wrap_ceil_p(c_, (1 << l) - 1);
-        if (l < lp() - 1) {        // λ(0) was already computed during forward solve
-            ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
-            if (ν2p(i_y) == l + 1)
+        if (l < lp() - 1) {              // λ(0) was already computed during forward solve
+            auto wait_uy = ctx.arrive(); // wait for Uᵀλ, Yᵀλ
+            if (ν2p(i_y) == l + 1) {
+                ctx.wait(std::move(wait_uy));
                 solve_λ_backward(i_y, λ, work);
+            } else if (ν2p(i_u) == l) {
+                prefetch_U(i_u);
+                ctx.wait(std::move(wait_uy));
+            } else {
+                if (ν2p(i_y) == l)
+                    prefetch_Y(i_y);
+                ctx.wait(std::move(wait_uy));
+            }
         }
-        ctx.arrive_and_wait(); // wait for λ
-        if (ν2p(i_u) == l)
+        auto wait_λ = ctx.arrive(); // wait for λ
+        if (ν2p(i_u) == l) {
+            ctx.wait(std::move(wait_λ));
             solve_u_backward(l, i_u, λ, work);
-        else if (ν2p(i_y) == l)
+        } else if (ν2p(i_y) == l) {
+            ctx.wait(std::move(wait_λ));
             solve_y_backward(l, i_y, λ);
+        } else {
+            if (l > 0) {
+                const auto l_next = l - 1, c_next = cr_thread_assignment(l_next, c);
+                const index_t i_u_next = add_wrap_ceil_p(c_next, 1),
+                              i_y_next = sub_wrap_ceil_p(c_next, (1 << l_next) - 1);
+                if (ν2p(i_y_next) == l_next + 1) {
+                    prefetch_U(i_u_next);
+                    prefetch_L(i_y_next);
+                }
+            }
+            ctx.wait(std::move(wait_λ));
+        }
     }
     ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
     if (ν2p(c) == 0)
