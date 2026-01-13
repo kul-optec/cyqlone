@@ -122,11 +122,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
                 ctx.wait(std::move(wait_uy));
                 solve_λ_backward(i_y, λ, work);
             } else if (ν2p(i_u) == l) {
-                prefetch_U(i_u);
+                prefetch_U(l, i_u);
                 ctx.wait(std::move(wait_uy));
             } else {
                 if (ν2p(i_y) == l)
-                    prefetch_Y(i_y);
+                    prefetch_Y(l, i_y);
                 ctx.wait(std::move(wait_uy));
             }
         }
@@ -143,7 +143,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
                 const index_t i_u_next = add_wrap_ceil_p(c_next, 1),
                               i_y_next = sub_wrap_ceil_p(c_next, (1 << l_next) - 1);
                 if (ν2p(i_y_next) == l_next + 1) {
-                    prefetch_U(i_u_next);
+                    prefetch_U(l_next, i_u_next);
                     prefetch_L(i_y_next);
                 }
             }

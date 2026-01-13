@@ -432,8 +432,8 @@ struct CyqloneSolver {
     template <bool Factor = true, bool Solve = true>
     void compute_schur(Context &ctx, mut_view<> ux, mut_view<> λ);
     [[nodiscard]] index_t cr_thread_assignment(index_t l, index_t c) const;
-    void factor_U(index_t l, index_t biU);
-    void factor_Y(index_t l, index_t biY);
+    void factor_U(index_t l, index_t iU);
+    void factor_Y(index_t l, index_t iY);
     void factor_L(index_t l, index_t bi);
     void update_K(index_t l, index_t bi);
     void factor_pcr();
@@ -444,8 +444,8 @@ struct CyqloneSolver {
     void factor_solve(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
     void factor(Context &ctx, value_type γ, view<> Σ);
 
-    void solve_u_forward(index_t l, index_t biU, mut_view<> λ) const;
-    void solve_y_forward(index_t l, index_t biY, mut_view<> λ, mut_view<> w) const;
+    void solve_u_forward(index_t l, index_t iU, mut_view<> λ) const;
+    void solve_y_forward(index_t l, index_t iY, mut_view<> λ, mut_view<> w) const;
     void solve_λ_forward(index_t l, index_t biL, mut_view<> λ, view<> w) const;
     void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ);
 
@@ -464,8 +464,8 @@ struct CyqloneSolver {
     void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ);
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve_u_backward(index_t l, index_t biU, mut_view<> λ, mut_view<> w) const;
-    void solve_y_backward(index_t l, index_t biY, mut_view<> λ) const;
+    void solve_u_backward(index_t l, index_t iU, mut_view<> λ, mut_view<> w) const;
+    void solve_y_backward(index_t l, index_t iY, mut_view<> λ) const;
     void solve_λ_backward(index_t biL, mut_view<> λ, view<> w) const;
     template <StorageOrder O>
     void prefetch(batch_view<O> X) const {
@@ -499,19 +499,23 @@ struct CyqloneSolver {
         GUANAQO_TRACE("prefetch L", bi);
         prefetch_L(cr_L.batch(bi));
     }
-    void prefetch_U(index_t biU) const {
-        GUANAQO_TRACE("prefetch U", biU);
-        prefetch(cr_U.batch(biU));
+    void prefetch_U([[maybe_unused]] index_t l, index_t iU) const {
+        if (VL == 1 && iU >= p)
+            return;
+        GUANAQO_TRACE("prefetch U", iU);
+        prefetch(cr_U.batch(iU));
     }
-    void prefetch_Y(index_t biY) const {
-        GUANAQO_TRACE("prefetch Y", biY);
-        prefetch(cr_Y.batch(biY));
+    void prefetch_Y(index_t l, index_t iY) const {
+        if (VL == 1 && iY + (1 << l) >= p)
+            return;
+        GUANAQO_TRACE("prefetch Y", iY);
+        prefetch(cr_Y.batch(iY));
     }
 
     void update_riccati(Context &ctx, view<> Σ);
-    void update_L(index_t l, index_t bi);
-    void update_U(index_t l, index_t bi);
-    void update_Y(index_t l, index_t bi);
+    void update_L(index_t l, index_t iL);
+    void update_U(index_t l, index_t iU);
+    void update_Y(index_t l, index_t iY);
     void update(Context &ctx, view<> ΔΣ);
 
     template <index_t Level>
