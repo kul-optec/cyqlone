@@ -1,5 +1,6 @@
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp>
 #include <cyqlone/qpalm/implementation/solver.tpp>
+#include <batmat/config.hpp>
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
@@ -16,11 +17,9 @@ namespace CYQLONE_NS(cyqlone::qpalm) {
     template void update_qpalm_cyqlone_backend<vl, order>(CyqloneBackend<vl, order> &,             \
                                                           const LinearOCPStorage &ocp)
 
-CYQLONE_INSTANTIATE_QPALM_Cyqlone(8, StorageOrder::ColMajor);
-CYQLONE_INSTANTIATE_QPALM_Cyqlone(4, StorageOrder::ColMajor);
-CYQLONE_INSTANTIATE_QPALM_Cyqlone(1, StorageOrder::ColMajor);
-CYQLONE_INSTANTIATE_QPALM_Cyqlone(8, StorageOrder::RowMajor);
-CYQLONE_INSTANTIATE_QPALM_Cyqlone(4, StorageOrder::RowMajor);
-CYQLONE_INSTANTIATE_QPALM_Cyqlone(1, StorageOrder::RowMajor);
+#define CYQLONE_INSTANTIATE_SOLVER(VL)                                                             \
+    CYQLONE_INSTANTIATE_QPALM_Cyqlone(VL, StorageOrder::ColMajor);                                 \
+    CYQLONE_INSTANTIATE_QPALM_Cyqlone(VL, StorageOrder::RowMajor);
+BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_SOLVER)
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)

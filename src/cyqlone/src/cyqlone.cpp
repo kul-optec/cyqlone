@@ -11,17 +11,9 @@
 
 namespace CYQLONE_NS(cyqlone) {
 
-template struct CyqloneSolver<1, real_t, StorageOrder::ColMajor>;
-template struct CyqloneSolver<4, real_t, StorageOrder::ColMajor>;
-template struct CyqloneSolver<8, real_t, StorageOrder::ColMajor>;
+#define CYQLONE_INSTANTIATE_SOLVER(T, VL)                                                          \
+    template class CyqloneSolver<VL, T, StorageOrder::ColMajor>;                                   \
+    template class CyqloneSolver<VL, T, StorageOrder::RowMajor>;
+BATMAT_FOREACH_DTYPE_VL(CYQLONE_INSTANTIATE_SOLVER)
 
-template struct CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
-template struct CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
-template struct CyqloneSolver<8, real_t, StorageOrder::RowMajor>;
-
-#if BATMAT_WITH_SINGLE
-template struct CyqloneSolver<16, float, StorageOrder::ColMajor>;
-template struct CyqloneSolver<16, float, StorageOrder::RowMajor>;
-#endif
-
-} // namespace CYQLONE_NAMESPACE
+} // namespace CYQLONE_NS(cyqlone)

@@ -111,9 +111,16 @@ void print_matrix_batches(std::string_view name, const M &matrix) {
 }
 
 int main() {
+    using std::abs;
     using namespace cyqlone;
-    using T             = double;
+    using T = double;
+#if BATMAT_HAS_DOUBLE_VL_8
     constexpr index_t N = 8; // number of blocks
+#elif BATMAT_HAS_DOUBLE_VL_4
+    constexpr index_t N = 4; // number of blocks
+#else
+#error "No suitable vector length available"
+#endif
     constexpr index_t n = 5; // block size
 
     using Solver = PCRFactorTest<N, T, StorageOrder::ColMajor>;
