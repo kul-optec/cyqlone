@@ -41,36 +41,36 @@ struct SolverImplementation {
         backend.set_constant(ctx, Σ, Σ0);
     }
 
-    static index_t update_penalty_y(backend_type &backend, ineq_vec_t &Σ, const ineq_vec_t &e,
-                                    const ineq_vec_t &e_old, const Settings &settings) {
-        GUANAQO_TRACE("update_penalty_y", 0);
-        using std::abs;
-        using std::fmax;
-        using std::fmin;
-        using std::views::zip;
-        const real_t min_denom  = 1e-6;
-        const real_t norm_inf_e = fmax(min_denom, backend.norm_inf(e));
-        index_t num_changed     = 0;
-        for (auto &&[ei, ei_old, Σi] : zip(e, e_old, Σ)) {
-            bool insufficient_progress = abs(ei) > settings.θ * abs(ei_old);
-            real_t update_factor = insufficient_progress ? settings.Δy * abs(ei) / norm_inf_e : 1;
-            update_factor *= settings.Δy_always;
-            real_t Σ_new = Σi * update_factor;
-            Σ_new        = fmax(Σi * settings.Δy_always, fmin(Σ_new, settings.max_penalty_y));
-            num_changed += Σ_new != Σi;
-            Σi = Σ_new;
-        }
-        return num_changed;
-    }
-
     static index_t update_penalty_y(Backend::Context &ctx, backend_type &backend, ineq_vec_t &Σ,
                                     const ineq_vec_t &e, const ineq_vec_t &e_old,
                                     const Settings &settings) {
-        ctx.arrive_and_wait();
-        index_t num_changed = 0;
-        if (ctx.is_master())
-            num_changed = update_penalty_y(backend, Σ, e, e_old, settings);
-        return ctx.broadcast(num_changed);
+        if constexpr (requires { &backend_type::update_penalty_y; }) {
+            return backend.update_penalty_y(ctx, Σ, e, e_old,
+                                            {.θ             = settings.θ,
+                                             .Δy            = settings.Δy,
+                                             .Δy_always     = settings.Δy_always,
+                                             .max_penalty_y = settings.max_penalty_y});
+        } else {
+            GUANAQO_TRACE("update_penalty_y", 0);
+            using std::abs;
+            using std::fmax;
+            using std::fmin;
+            using std::views::zip;
+            const real_t min_denom  = 1e-6;
+            const real_t norm_inf_e = fmax(min_denom, backend.norm_inf(ctx, e));
+            index_t num_changed     = 0;
+            for (auto &&[ei, ei_old, Σi] : zip(e, e_old, Σ)) {
+                bool insufficient_progress = abs(ei) > settings.θ * abs(ei_old);
+                real_t update_factor =
+                    insufficient_progress ? settings.Δy * abs(ei) / norm_inf_e : 1;
+                update_factor *= settings.Δy_always;
+                real_t Σ_new = Σi * update_factor;
+                Σ_new        = fmax(Σi * settings.Δy_always, fmin(Σ_new, settings.max_penalty_y));
+                num_changed += Σ_new != Σi;
+                Σi = Σ_new;
+            }
+            return num_changed;
+        }
     }
 
     static real_t update_penalty_x(real_t S, const Settings &settings) {

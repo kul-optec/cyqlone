@@ -75,6 +75,7 @@ struct CyqloneBackend {
         type ineq_constr_resid{};
         type ineq_constr_viol{};
         type ineq_constr_resid_al{};
+        type update_penalty_y{};
     };
 
     OCP_t ocp;
@@ -395,6 +396,41 @@ struct CyqloneBackend {
         return {f, std::move(grad_f)};
     }
 
+    struct PenaltySettings {
+        real_t θ;
+        real_t Δy, Δy_always;
+        real_t max_penalty_y;
+    };
+
+    index_t update_penalty_y(Context &ctx, ineq_constr_vec_t &Σ, const ineq_constr_vec_t &e,
+                             const ineq_constr_vec_t &e_old, const PenaltySettings &settings) {
+        GUANAQO_TRACE("update_penalty_y", 0);
+        auto t                   = get_timed(&Timings::update_penalty_y);
+        const index_t num_stages = ocp.n; // number of stages per thread
+        const index_t ti         = ctx.index;
+        const real_t min_denom   = 1e-6;
+        const real_t norm_inf_e  = fmax(min_denom, norm_inf(ctx, e));
+        index_t num_changed      = 0;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            auto ei = e.batch(di), ei_old = e_old.batch(di), Σi = Σ.batch(di);
+            for (index_t j = 0; j < ei.rows(); ++j) {
+                auto eij                   = batmat::datapar::aligned_load<simd>(&ei(0, j, 0)),
+                     eij_old               = batmat::datapar::aligned_load<simd>(&ei_old(0, j, 0)),
+                     Σij                   = batmat::datapar::aligned_load<simd>(&Σi(0, j, 0));
+                auto insufficient_progress = abs(eij) >= settings.θ * abs(eij_old);
+                simd update_factor{1};
+                where(insufficient_progress, update_factor) = settings.Δy * abs(eij) / norm_inf_e;
+                update_factor *= settings.Δy_always;
+                auto Σ_new = Σij * update_factor;
+                Σ_new = fmax(Σij * settings.Δy_always, fmin(Σ_new, simd{settings.max_penalty_y}));
+                num_changed += popcount(Σ_new != Σij);
+                batmat::datapar::aligned_store(Σ_new, &Σi(0, j, 0));
+            }
+        }
+        return ctx.reduce(num_changed, index_t{0}, std::plus<>{});
+    }
+
     void update_regularization_changed(Context &ctx, real_t S_new, real_t S_old) {
         if (S_new != S_old) {
             ctx.arrive_and_wait(__LINE__);
@@ -587,9 +623,10 @@ struct CyqloneBackend {
 
     template <class T>
     [[nodiscard]] auto norm_inf_l1_sq(Context &ctx, const T &x) const {
-        auto nrm_simd            = norms.zero_simd();
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        GUANAQO_TRACE("norm_inf_l1_sq", 0, 4 * x.batch_size() * x.rows() * num_stages);
+        auto nrm_simd    = norms.zero_simd();
+        const index_t ti = ctx.index;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             nrm_simd         = OCP_t::compact_blas::xreduce(nrm_simd, norms, std::identity{},
@@ -1115,6 +1152,7 @@ struct CyqloneBackend {
             {"ineq_constr_resid", t.ineq_constr_resid},
             {"ineq_constr_viol", t.ineq_constr_viol},
             {"ineq_constr_resid_al", t.ineq_constr_resid_al},
+            {"update_penalty_y", t.update_penalty_y},
         };
     }
 };
