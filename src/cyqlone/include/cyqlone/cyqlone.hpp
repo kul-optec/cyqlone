@@ -98,6 +98,7 @@ struct CyqloneSolver {
     SolveMethod solve_method       = SolveMethod::StairPCG;
     double pcr_max_update_fraction = 0.6;
     double cr_max_update_fraction  = 0.9;
+    bool enable_prefetching        = false; // TODO: implement
 
     [[nodiscard]] std::string get_params_string() const {
         std::string_view solve = solve_method == SolveMethod::PCR        ? "pcr"

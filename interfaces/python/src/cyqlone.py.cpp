@@ -413,21 +413,11 @@ struct overloaded : Ts... {
 
 } // namespace CYQLONE_NS(cyqlone)
 
-NB_MODULE(MODULE_NAME, m) {
-    auto simd8  = m.def_submodule("simd8");
-    auto simd4  = m.def_submodule("simd4");
-    auto scalar = m.def_submodule("scalar");
-    cyqlone::register_qpalm_cyqlone<8>(simd8);
-    cyqlone::register_qpalm_cyqlone<4>(simd4);
-    cyqlone::register_qpalm_cyqlone<1>(scalar);
-    cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<8>>(simd8);
-    cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<4>>(simd4);
-    cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<1>>(scalar);
+#define CYQLONE_INSTANTIATE_MODULE(VL)                                                             \
+    auto m##VL = m.def_submodule(VL == 1 ? "scalar" : "simd" #VL);                                 \
+    cyqlone::register_qpalm_cyqlone<VL>(m##VL);                                                    \
+    cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<VL>>(m##VL);                           \
+    auto m##VL##_v2 = m##VL.def_submodule("v2");                                                   \
+    cyqlone::register_cyqlone_solver<cyqlone::v2::CyqloneSolver<VL>>(m##VL##_v2);
 
-    auto simd8_v2  = simd8.def_submodule("v2");
-    auto simd4_v2  = simd4.def_submodule("v2");
-    auto scalar_v2 = scalar.def_submodule("v2");
-    cyqlone::register_cyqlone_solver<cyqlone::v2::CyqloneSolver<8>>(simd8_v2);
-    cyqlone::register_cyqlone_solver<cyqlone::v2::CyqloneSolver<4>>(simd4_v2);
-    cyqlone::register_cyqlone_solver<cyqlone::v2::CyqloneSolver<1>>(scalar_v2);
-}
+NB_MODULE(MODULE_NAME, m) { BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_MODULE) }
