@@ -1,4 +1,4 @@
-#include <cyqlone/cyqlone.hpp>
+#include <cyqlone/v2/cyqlone.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/loop.hpp>
 #include <batmat/openmp.h>
@@ -82,7 +82,7 @@ auto generate_ocp(benchmark::State &state) {
 }
 
 template <int VL>
-auto build_cyqlone_solver(const OCPDataRiccati &ocp_ric, index_t lP) {
+auto build_cyqlone_solver(const OCPDataRiccati &ocp_ric, index_t p) {
     using namespace ::batmat::linalg;
     using namespace ::cyqlone;
     LinearOCPStorage ocp{.dim{.N_horiz = ocp_ric.N,
@@ -103,9 +103,9 @@ auto build_cyqlone_solver(const OCPDataRiccati &ocp_ric, index_t lP) {
     }
     as_eigen(ocp.C(N)) = ocp_ric.C(N);
     as_eigen(ocp.Q(N)) = ocp_ric.Q(N);
-    using Solver       = CyqloneSolver<VL, real_t, StorageOrder::RowMajor>;
+    using Solver       = v2::CyqloneSolver<VL, real_t, v2::StorageOrder::RowMajor>;
     auto cocp          = CyqloneStorage<real_t>::build(ocp);
-    return Solver::build(cocp, lP + Solver::lvl);
+    return Solver::build(cocp, p);
 }
 
 void bm_factor_riccati(benchmark::State &state) {
@@ -199,8 +199,8 @@ template <int VL>
 void bm_factor_cyqlone(benchmark::State &state) {
     using batmat::linalg::StorageOrder;
     auto [ocp, Σ]                           = generate_ocp(state);
-    const auto lP                           = static_cast<index_t>(state.range(4));
-    auto solver                             = build_cyqlone_solver<VL>(ocp, lP);
+    const auto p                            = static_cast<index_t>(state.range(4));
+    auto solver                             = build_cyqlone_solver<VL>(ocp, p);
     solver.parallel_ctx->barrier.spin_count = std::numeric_limits<uint32_t>::max();
     GUANAQO_IF_ITT(solver.parallel_ctx->run(
         [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
@@ -241,11 +241,12 @@ OCP_BENCHMARK(bm_factor_schur);
 #if WITH_BLASFEO
 OCP_BENCHMARK(bm_factor_riccati_blasfeo);
 #endif
-OCP_BENCHMARK(bm_factor_cyqlone<4>);
-OCP_BENCHMARK(bm_factor_cyqlone<8>);
-// OCP_BENCHMARK(bm_solve_cyqlone);
+#define CYQLONE_FACTOR_BENCHMARK(VL) OCP_BENCHMARK(bm_factor_cyqlone<VL>);
+BATMAT_FOREACH_VL_DOUBLE(CYQLONE_FACTOR_BENCHMARK)
+#define CYQLONE_SOLVE_BENCHMARK(VL) OCP_BENCHMARK(bm_solve_cyqlone<VL>);
+// BATMAT_FOREACH_VL_DOUBLE(CYQLONE_SOLVE_BENCHMARK)
 
-enum class BenchmarkType { None, vary_N, vary_N_pow_2, vary_nu, vary_ny, vary_nx_frac };
+enum class BenchmarkType { None, vary_N, vary_N_pow_2, vary_nx, vary_nu, vary_ny, vary_nx_frac };
 
 int main(int argc, char **argv) {
     if (argc < 1)
@@ -253,8 +254,7 @@ int main(int argc, char **argv) {
     // Parse command-line arguments
     std::vector<char *> argvv{argv, argv + argc};
     int64_t N = 32, nx = 16, nu = 8, ny = 8, step = 1,
-            lP = BATMAT_OMP_IF_ELSE(
-                std::bit_width(static_cast<unsigned>(omp_get_num_threads())) - 1, 0);
+            p          = BATMAT_OMP_IF_ELSE(omp_get_num_threads(), 0);
     BenchmarkType type = BenchmarkType::None;
     for (auto it = argvv.begin(); it != argvv.end();) {
         std::string_view arg = *it;
@@ -268,12 +268,14 @@ int main(int argc, char **argv) {
             ny = std::stoi(std::string(arg.substr(flag.size())));
         else if (std::string_view flag = "--step="; arg.starts_with(flag))
             step = std::stoi(std::string(arg.substr(flag.size())));
-        else if (std::string_view flag = "--lP="; arg.starts_with(flag))
-            lP = std::stoi(std::string(arg.substr(flag.size())));
+        else if (std::string_view flag = "--p="; arg.starts_with(flag))
+            p = std::stoi(std::string(arg.substr(flag.size())));
         else if (arg == "--vary-N")
             type = BenchmarkType::vary_N;
         else if (arg == "--vary-N-pow-2")
             type = BenchmarkType::vary_N_pow_2;
+        else if (arg == "--vary-nx")
+            type = BenchmarkType::vary_nx;
         else if (arg == "--vary-nu")
             type = BenchmarkType::vary_nu;
         else if (arg == "--vary-ny")
@@ -289,29 +291,33 @@ int main(int argc, char **argv) {
 
     for (auto *bm : benchmarks) {
         bm->MeasureProcessCPUTime()->UseRealTime();
-        bm->ArgNames({"N", "nx", "nu", "ny", "lP"});
+        bm->ArgNames({"N", "nx", "nu", "ny", "p"});
         switch (type) {
-            case BenchmarkType::None: bm->Args({N, nx, nu, ny, lP}); break;
+            case BenchmarkType::None: bm->Args({N, nx, nu, ny, p}); break;
             case BenchmarkType::vary_N:
                 for (int64_t i = step; i <= N; i += step)
-                    bm->Args({i, nx, nu, ny, lP});
+                    bm->Args({i, nx, nu, ny, p});
                 break;
             case BenchmarkType::vary_N_pow_2:
                 for (int64_t i = 8; i <= N; i <<= step)
                     for (int64_t lPi = 0; 1 << (lPi + 2) <= i; lPi += 1)
                         bm->Args({i, nx, nu, ny, lPi});
                 break;
+            case BenchmarkType::vary_nx:
+                for (int64_t i = step; i <= nx; i += step)
+                    bm->Args({N, i, nu, ny, p});
+                break;
             case BenchmarkType::vary_nu:
                 for (int64_t i = step; i <= nu; i += step)
-                    bm->Args({N, nx, i, ny, lP});
+                    bm->Args({N, nx, i, ny, p});
                 break;
             case BenchmarkType::vary_ny:
                 for (int64_t i = step; i <= ny; i += step)
-                    bm->Args({N, nx, nu, i, lP});
+                    bm->Args({N, nx, nu, i, p});
                 break;
             case BenchmarkType::vary_nx_frac:
                 for (int64_t i = step; i <= nx; i += step)
-                    bm->Args({N, i, (i * nu + (nx - 1) / 2) / nx, ny, lP});
+                    bm->Args({N, i, std::max<int64_t>(1, i * nu + (nx - 1) / 2) / nx, ny, p});
                 break;
             default: BATMAT_ASSUME(false);
         }
