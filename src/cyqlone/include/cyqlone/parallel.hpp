@@ -169,21 +169,14 @@ struct Context {
 
     template <class T>
     T broadcast(T x, index_t src = 0) {
-        void *dest   = shared.workspace.data();
-        size_t space = shared.workspace.size();
-        bool ok      = std::align(alignof(T), sizeof(T), dest, space);
-        BATMAT_ASSERT(ok);
-        if (index == src)
-            new (dest) T(std::move(x));
-        arrive_and_wait();
-        x = *std::launder(reinterpret_cast<T *>(dest));
-        arrive_and_wait(); // Ensure that the workspace is not used before everyone is done
-        return x;
+        return shared.barrier.broadcast(static_cast<uint32_t>(index), std::move(x),
+                                        static_cast<uint32_t>(src));
     }
 
     template <class F, class... Args>
     auto call_broadcast(F &&f, Args &&...args) -> std::invoke_result_t<F, Args...> {
-        using T      = std::invoke_result_t<F, Args...>;
+        using T = std::invoke_result_t<F, Args...>;
+#if 0 // TODO: compare performance, optimize barrier.broadcast()
         void *dest   = shared.workspace.data();
         size_t space = shared.workspace.size();
         bool ok      = std::align(alignof(T), sizeof(T), dest, space);
@@ -194,23 +187,22 @@ struct Context {
         T r = *std::launder(reinterpret_cast<T *>(dest));
         arrive_and_wait(); // Ensure that the workspace is not used before everyone is done
         return r;
+#else
+        if (is_master())
+            return broadcast(std::invoke(std::forward<F>(f), std::forward<Args>(args)...), 0);
+        else
+            return broadcast(T{}, 0);
+#endif
     }
 
     template <class T, class F>
-    T reduce(T x, T init, F func) {
-        auto dest = get_workspace_ptr<T>(index);
-        new (dest) T(std::move(x));
-        arrive_and_wait();
-        // TODO: use a tree reduction
-        for (index_t i = 0; i < num_thr; ++i)
-            init = func(init, *get_workspace_ptr<T>(i));
-        arrive_and_wait(); // Ensure that the workspace is not used before everyone is done
-        return init;
+    T reduce(T x, F func) {
+        return shared.barrier.reduce(static_cast<uint32_t>(index), std::move(x), std::move(func));
     }
 
     template <class T>
-    T reduce(T x, T init) {
-        return reduce(std::move(x), std::move(init), std::plus<>{});
+    T reduce(T x) {
+        return reduce(std::move(x), std::plus<>{});
     }
 };
 

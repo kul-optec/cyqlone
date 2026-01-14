@@ -311,57 +311,62 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
 
             // Perform exact line search
             bool force_τ_1_first_iter = (inner_iter + inner) == 0;
-            real_t τ                  = 1 / scal_d;
-            index_t iτ                = -999999;
+            typename decltype(linesearch)::Result ls{.τ = 1 / scal_d, .index = 999999999};
             if (force_τ_1_active_set || force_τ_1_dir_deriv || force_τ_1_first_iter) {
                 if (settings.verbose && !force_τ_1_first_iter && ctx.is_master())
                     std::cout << "    \x1b[0;33mWarning\x1b[0m: Forcing line "
                                  "search τ=1\n";
             } else {
-                std::tie(τ, iτ) = timed(timings.line_search, [&] {
-                    real_t η = backend.dot(ctx, d, ξ), β = backend.dot(ctx, d, grad);
-                    if (settings.linesearch_include_multipliers) {
-                        real_t dMᵀΔλ = backend.dot(ctx, d, MᵀΔλ), dMᵀλ = backend.dot(ctx, d, Mᵀλ);
-                        if (settings.print_linesearch_inputs && ctx.is_master()) {
-                            std::cout << "                η = " << η << "\n"
-                                      << "        <d, MᵀΔλ> = " << dMᵀΔλ << "\n"
-                                      << "                β = " << β << "\n"
-                                      << "        <d, Mᵀλ> = " << dMᵀλ << "\n";
+                ls = timed(timings.line_search, [&] {
+                    auto [η, β] = [&] {
+                        if (settings.linesearch_include_multipliers) {
+                            auto [η, β, dMᵀΔλ, dMᵀλ] =
+                                backend.dots(ctx, d, ξ, d, grad, d, MᵀΔλ, d, Mᵀλ);
+                            if (settings.print_linesearch_inputs && ctx.is_master())
+                                std::cout << "                η = " << η << "\n"
+                                          << "        <d, MᵀΔλ> = " << dMᵀΔλ << "\n"
+                                          << "                β = " << β << "\n"
+                                          << "        <d, Mᵀλ> = " << dMᵀλ << "\n";
+                            return std::make_pair(η + dMᵀΔλ, β + dMᵀλ);
+                        } else {
+                            auto [η, β] = backend.dots(ctx, d, ξ, d, grad);
+                            if (settings.print_linesearch_inputs && ctx.is_master())
+                                std::cout << "        η = " << η << "\n"
+                                          << "        β = " << β << "\n";
+                            return std::make_pair(η, β);
                         }
-                        η += dMᵀΔλ;
-                        β += dMᵀλ;
-                    }
+                    }();
                     return linesearch(ctx, backend, η, β, Σ, y, Ad, Ax, backend.Ax_min(),
                                       backend.Ax_max());
                 });
             }
 
             if (detailed_stats) {
-                detailed_stats->entries.back().linesearch_step_size        = τ;
-                detailed_stats->entries.back().linesearch_breakpoint_index = iτ;
+                detailed_stats->entries.back().linesearch_step_size        = ls.τ;
+                detailed_stats->entries.back().linesearch_breakpoint_index = ls.index;
             }
 
             const real_t τ_min = 1e-8 / scal_d, τ_max = 1e2 / scal_d;
             if (settings.verbose && ctx.is_master()) {
                 int prec          = settings.print_precision;
                 const auto eps    = cbrt(std::numeric_limits<real_t>::epsilon());
-                const char *color = abs(1 - τ) < eps ? "\x1b[0;32m" /* green */
-                                    : τ > τ_max      ? "\x1b[0;35m" /* pink */
-                                    : τ > τ_min      ? "\x1b[0;33m" /* yellow */
-                                                     : "\x1b[0;31m" /* red */;
+                const char *color = abs(1 - ls.τ) < eps ? "\x1b[0;32m" /* green */
+                                    : ls.τ > τ_max      ? "\x1b[0;35m" /* pink */
+                                    : ls.τ > τ_min      ? "\x1b[0;33m" /* yellow */
+                                                        : "\x1b[0;31m" /* red */;
                 std::cout << "    inner " << std::setw(4) << inner << " (" << std::setw(4)
                           << (inner_iter + inner) << "): #J = " << std::setw(6) << nJ
                           << ", #ΔJ = " << std::setw(6) << active_set_change
                           << ", stationarity=" << float_to_str(stationarity, prec)
                           << ", eq constr resid=" << float_to_str(eq_resid, prec) << ", τ=" << color
-                          << float_to_str(τ) << "\x1b[0m (" << iτ << ")\n";
+                          << float_to_str(ls.τ) << "\x1b[0m (" << ls.index << ")\n";
             }
-            τ = std::clamp(τ, τ_min, τ_max);
+            ls.τ = std::clamp(ls.τ, τ_min, τ_max);
 
             { // Apply step
                 GUANAQO_TRACE("apply step", inner);
-                backend.xaxpy(ctx, τ, d, x);
-                backend.xaxpy(ctx, τ, Δλ, λ);
+                backend.xaxpy(ctx, ls.τ, d, x);
+                backend.xaxpy(ctx, ls.τ, Δλ, λ);
             }
 
             // Optionally recompute Ax and ∇f
@@ -370,9 +375,9 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                       [&] { backend.recompute_inner(ctx, S, x_outer, x, λ, grad, Ax, Mᵀλ); });
             } else {
                 GUANAQO_TRACE("apply step derived", inner);
-                backend.xaxpy(ctx, τ, Ad, Ax);
-                backend.xaxpy(ctx, τ, MᵀΔλ, Mᵀλ);
-                backend.xaxpy(ctx, τ, ξ, grad);
+                backend.xaxpy(ctx, ls.τ, Ad, Ax);
+                backend.xaxpy(ctx, ls.τ, MᵀΔλ, Mᵀλ);
+                backend.xaxpy(ctx, ls.τ, ξ, grad);
             }
 
             // Compute new equality constraint residual

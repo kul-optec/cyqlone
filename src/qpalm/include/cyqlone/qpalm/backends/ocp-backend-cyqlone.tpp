@@ -310,7 +310,7 @@ struct CyqloneBackend {
                 std::identity{}, simdify(Ax.batch(di))),
             simdify(b_min_strided.batch(di)), simdify(b_max_strided.batch(di));
         }
-        auto nrm = ctx.reduce(norms(nrm_simd), norms.zero(), norms);
+        auto nrm = ctx.reduce(norms(nrm_simd), norms);
         return isfinite(nrm.asum) ? nrm.max : nrm.asum;
     }
 
@@ -336,7 +336,7 @@ struct CyqloneBackend {
                 },
                 std::identity{}, simdify(y.batch(di)), simdify(ŷ.batch(di)), simdify(Σ.batch(di)));
         }
-        auto nrm = ctx.reduce(norms(nrm_simd), norms.zero(), norms);
+        auto nrm = ctx.reduce(norms(nrm_simd), norms);
         return isfinite(nrm.asum) ? nrm.max : nrm.asum;
     }
 
@@ -428,7 +428,7 @@ struct CyqloneBackend {
                 batmat::datapar::aligned_store(Σ_new, &Σi(0, j, 0));
             }
         }
-        return ctx.reduce(num_changed, index_t{0}, std::plus<>{});
+        return ctx.reduce(num_changed, std::plus<>{});
     }
 
     void update_regularization_changed(Context &ctx, real_t S_new, real_t S_old) {
@@ -618,7 +618,34 @@ struct CyqloneBackend {
             const index_t di = ti * num_stages + i;
             sum += OCP_t::compact_blas::xdot(simdify(a.batch(di)), simdify(b.batch(di)));
         }
-        return ctx.reduce(sum, real_t{});
+        return ctx.reduce(sum);
+    }
+
+    template <class... Args>
+    void local_dots(std::span<real_t, 1 + sizeof...(Args) / 2> out, const auto &a, const auto &b,
+                    const Args &...others) const {
+        out[0] += OCP_t::compact_blas::xdot(simdify(a), simdify(b));
+        if constexpr (sizeof...(Args) > 0)
+            local_dots(out.template subspan<1>(), others...);
+    }
+
+    template <class... Args>
+    [[nodiscard]] std::array<real_t, sizeof...(Args) / 2> dots(Context &ctx,
+                                                               const Args &...args) const {
+        using local_sums_t = std::array<real_t, sizeof...(Args) / 2>;
+        local_sums_t local_sums{};
+        const index_t num_stages = ocp.n; // number of stages per thread
+        const index_t ti         = ctx.index;
+        for (index_t i = 0; i < num_stages; ++i) {
+            const index_t di = ti * num_stages + i;
+            local_dots(local_sums, args.batch(di)...);
+        }
+        return ctx.reduce(local_sums, [](local_sums_t a, local_sums_t b) {
+            local_sums_t c{};
+            for (size_t i = 0; i < a.size(); ++i)
+                c[i] = a[i] + b[i];
+            return c;
+        });
     }
 
     template <class T>
@@ -632,7 +659,7 @@ struct CyqloneBackend {
             nrm_simd         = OCP_t::compact_blas::xreduce(nrm_simd, norms, std::identity{},
                                                             simdify(x.batch(di)));
         }
-        return ctx.reduce(norms(nrm_simd), norms.zero(), norms);
+        return ctx.reduce(norms(nrm_simd), norms);
     }
 
     template <class T>
@@ -640,11 +667,6 @@ struct CyqloneBackend {
         using std::isfinite;
         auto nrm = norm_inf_l1_sq(ctx, x);
         return isfinite(nrm.asum) ? nrm.max : nrm.asum;
-    }
-
-    template <class T>
-    [[nodiscard]] real_t norm_inf(const T &x) const {
-        return OCP_t::compact_blas::xnrminf(simdify(x));
     }
 
     template <class T>
@@ -656,7 +678,7 @@ struct CyqloneBackend {
             const index_t di = ti * num_stages + i;
             sum += OCP_t::compact_blas::xnrm2sq(simdify(x.batch(di)));
         }
-        return ctx.reduce(sum, real_t{});
+        return ctx.reduce(sum);
     }
 
     template <class T>
@@ -711,7 +733,7 @@ struct CyqloneBackend {
         }
         auto t = get_timed(&Timings::calc_y_hat_AT);
         mat_vec_AT(ctx, ŷ, Aᵀŷ);
-        return ctx.reduce(count_J_local, index_t{});
+        return ctx.reduce(count_J_local);
     }
 
     real_t unscaled_aug_lagr_norm(Context &ctx, const var_vec_t &grad_f, const var_vec_t &Mᵀλ,
@@ -733,7 +755,7 @@ struct CyqloneBackend {
                 std::identity{}, simdify(grad_f.batch(di)), simdify(Mᵀλ.batch(di)),
                 simdify(Aᵀŷ.batch(di)));
         }
-        auto nrm = ctx.reduce(norms(nrm_simd), norms.zero(), norms);
+        auto nrm = ctx.reduce(norms(nrm_simd), norms);
         return isfinite(nrm.asum) ? nrm.max : nrm.asum;
     }
 
@@ -780,7 +802,7 @@ struct CyqloneBackend {
                                               std::plus<>{}, std::not_equal_to<>{});
                 }();
         }
-        num_different = ctx.reduce(num_different, index_t{});
+        num_different = ctx.reduce(num_different);
         // If there are no changing constraints, or if we were going to
         // re-factorize anyway, we don't need to do anything.
         if (num_different == 0 || reset_factorization)
@@ -974,9 +996,9 @@ struct CyqloneBackend {
                     grad_norm_sq += reduce(simd{gi} * simd{gi});
                 }
             }
-            r_norm_sq    = ctx.reduce(r_norm_sq, real_t{});
-            grad_norm_sq = ctx.reduce(grad_norm_sq, real_t{});
-            r_norm_inf = ctx.reduce(r_norm_inf, real_t{}, [](auto a, auto b) { return max(a, b); });
+            r_norm_sq    = ctx.reduce(r_norm_sq);
+            grad_norm_sq = ctx.reduce(grad_norm_sq);
+            r_norm_inf   = ctx.reduce(r_norm_inf, [](auto a, auto b) { return max(a, b); });
             if (!isfinite(r_norm_sq))
                 r_norm_inf = r_norm_sq;
             if (ctx.is_master())
