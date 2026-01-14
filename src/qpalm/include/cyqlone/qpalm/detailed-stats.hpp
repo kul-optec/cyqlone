@@ -16,7 +16,7 @@ struct DetailedStats {
         unsigned outer_iter, inner_iter;
         real_t stationarity, ineq_constr_viol, eq_constr_viol;
         real_t linesearch_step_size;
-        index_t linesearch_breakpoint_index;
+        size_t linesearch_breakpoint_index;
         index_t num_active_constr, num_changing_constr;
         ExitReason exit_reason;
     };
