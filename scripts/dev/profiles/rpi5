@@ -1,0 +1,44 @@
+# Common options
+{% set my_profiles = os.path.join(profile_dir, "..", "..", "ci", "conan-profiles", "profiles") %}
+include({{ os.path.join(my_profiles, "platform", "aarch64-rpi3-linux-gnu.profile") }})
+include({{ os.path.join(my_profiles, "sccache", "only-self.profile") }})
+include({{ os.path.join(my_profiles, "color", "gcc.profile") }})
+include({{ os.path.join(my_profiles, "link", "lto-auto.profile") }})
+include({{ os.path.join(my_profiles, "link", "static.profile") }})
+include({{ os.path.join(my_profiles, "visibility", "hidden.profile") }})
+
+# Platform-specific options
+{% set my_profiles = os.path.join(profile_dir, "..", "..", "ci", "profiles") %}
+include({{ os.path.join(my_profiles, "cortex-a76.profile") }})
+
+[tool_requires]
+!zlib/*:mold/2.40.1
+cmake/4.2.0
+blasfeo/*: cmake/[<4]
+ninja/1.12.1
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja
+!zlib/*:tools.build:exelinkflags+=["-fuse-ld=mold"]
+!zlib/*:tools.build:sharedlinkflags+=["-fuse-ld=mold"]
+tools.build.cross_building:cross_build=True
+tools.build.cross_building:can_run=False
+&:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_EXPORT_COMPILE_COMMANDS": "On"}
+&:tools.cmake.cmaketoolchain:extra_variables*={"BATMAT_WITH_ACCURATE_BUILD_TIME": "Off"}
+hyhound/*:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_UNITY_BUILD": "On"}
+hyhound/*:tools.build:skip_test=True
+hpipm/*:tools.build:cflags+=["-fvisibility=default"]
+tools.cmake.cmake_layout:build_folder_vars=["const.rpi5"]
+
+[options]
+guanaqo/*:with_blas=True
+guanaqo/*:with_mkl=False
+guanaqo/*:blas_index_type=long long
+guanaqo/*:with_itt=False
+guanaqo/*:with_tracing=False
+guanaqo/*:with_openmp=True
+batmat/*:with_openmp=True
+batmat/*:with_benchmarks=True
+batmat/*:with_blasfeo=True
+batmat/*:vector_lengths_double=1,2,4
+batmat/*:vector_lengths_float=
