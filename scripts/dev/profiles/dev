@@ -24,8 +24,8 @@ include({{ os.path.join(my_profiles, "generic.profile") }})
 {% set mkl_root = os.getenv("MKLROOT") or os.path.join(os.getenv("HOME"), "intel/oneapi/mkl/latest") %}
 
 [tool_requires]
-mold/2.40.1
-cmake/4.1.2
+!zlib/*:mold/2.40.1
+cmake/4.2.0
 blasfeo/*: cmake/[<4]
 ninja/1.12.1
 
@@ -35,8 +35,8 @@ VTUNE_PROFILER_DIR={{ os.getenv("VTUNE_PROFILER_DIR") or os.path.join(os.getenv(
 
 [conf]
 tools.cmake.cmaketoolchain:generator=Ninja
-tools.build:exelinkflags+=["-fuse-ld=mold"]
-tools.build:sharedlinkflags+=["-fuse-ld=mold"]
+!zlib/*:tools.build:exelinkflags+=["-fuse-ld=mold"]
+!zlib/*:tools.build:sharedlinkflags+=["-fuse-ld=mold"]
 tools.build.cross_building:cross_build=True
 tools.build.cross_building:can_run=True
 tools.cmake.cmaketoolchain:extra_variables*={"MKL_ROOT": "{{ mkl_root }}"}
