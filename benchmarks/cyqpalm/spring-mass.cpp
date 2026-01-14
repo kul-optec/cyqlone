@@ -17,6 +17,16 @@
 
 #include "hpipm.hpp"
 
+#if BATMAT_HAS_DOUBLE_VL_2 && defined(__ARM_NEON)
+constexpr cyqlone::index_t v = 2;
+#elif BATMAT_HAS_DOUBLE_VL_4
+constexpr cyqlone::index_t v = 4;
+#elif BATMAT_HAS_DOUBLE_VL_2
+constexpr cyqlone::index_t v = 2;
+#else
+constexpr cyqlone::index_t v = 1;
+#endif
+
 auto counter(auto x) {
     return benchmark::Counter{static_cast<double>(x), benchmark::Counter::kDefaults};
 }
@@ -264,23 +274,23 @@ std::generator<Solver> get_solvers(const Options &opts) {
         backend.solve_method = cyqlone::SolveMethod::PCR;
     if (opts.warm) {
         backend.strategy = qp::WarmStartingStrategy::Zeros;
-        co_yield {std::format("cyqlone(v=4,p={},zero)", backend.processors),
+        co_yield {std::format("cyqlone(v={},p={},zero)", v, backend.processors),
                   [=](benchmark::State &state, const SpringMassParams &params) {
-                      run_benchmark<4>(state, params, backend, settings, true);
+                      run_benchmark<v>(state, params, backend, settings, true);
                   }};
         settings.initial_penalty_y       = 1e4;
         settings.initial_inner_tolerance = 1e-4;
         if (opts.warm_copy) {
             backend.strategy = qp::WarmStartingStrategy::Copy;
-            co_yield {std::format("cyqlone(v=4,p={},copy)", backend.processors),
+            co_yield {std::format("cyqlone(v={},p={},copy)", v, backend.processors),
                       [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<4>(state, params, backend, settings, true);
+                          run_benchmark<v>(state, params, backend, settings, true);
                       }};
         }
         backend.strategy = qp::WarmStartingStrategy::Shift;
-        co_yield {std::format("cyqlone(v=4,p={},shift)", backend.processors),
+        co_yield {std::format("cyqlone(v={},p={},shift)", v, backend.processors),
                   [=](benchmark::State &state, const SpringMassParams &params) {
-                      run_benchmark<4>(state, params, backend, settings, true);
+                      run_benchmark<v>(state, params, backend, settings, true);
                   }};
 #if WITH_HPIPM
         if (opts.hpipm) {
@@ -299,27 +309,31 @@ std::generator<Solver> get_solvers(const Options &opts) {
 #endif
     } else {
         if (opts.rm)
-            co_yield {std::format("cyqlone(v=4,p={},rm)", backend.processors),
+            co_yield {std::format("cyqlone(v={},p={},rm)", v, backend.processors),
                       [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<4, RowMajor>(state, params, backend, settings);
+                          run_benchmark<v, RowMajor>(state, params, backend, settings);
                       }};
         if (opts.cm)
-            co_yield {std::format("cyqlone(v=4,p={},cm)", backend.processors),
+            co_yield {std::format("cyqlone(v={},p={},cm)", v, backend.processors),
                       [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<4, ColMajor>(state, params, backend, settings);
+                          run_benchmark<v, ColMajor>(state, params, backend, settings);
                       }};
         if (opts.v8) {
+#if BATMAT_HAS_DOUBLE_VL_8
             co_yield {std::format("cyqlone(v=8,p={},cm)", backend.processors),
                       [=](benchmark::State &state, const SpringMassParams &params) {
                           run_benchmark<8, ColMajor>(state, params, backend, settings);
                       }};
+#else
+            throw std::runtime_error("Vector length 8 not supported on this architecture");
+#endif
         }
         if (opts.no_updates) {
             backend.max_update_count = 0;
-            co_yield {std::format("cyqlone(v=4,p={},upd={})", backend.processors,
+            co_yield {std::format("cyqlone(v={},p={},upd={})", v, backend.processors,
                                   backend.max_update_count),
                       [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<4>(state, params, backend, settings);
+                          run_benchmark<v>(state, params, backend, settings);
                       }};
         }
 #if WITH_HPIPM
