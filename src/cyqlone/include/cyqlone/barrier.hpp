@@ -81,7 +81,7 @@ class TreeBarrier {
     uint32_t expected;
     std::unique_ptr<State[]> state;
     std::unique_ptr<Storage[]> storage;
-    Storage broadcast;
+    Storage broadcast_storage;
     [[no_unique_address]] CompletionFn completion;
     alignas(cache_line_size) std::atomic<BarrierPhase> phase{};
 
@@ -131,7 +131,7 @@ class TreeBarrier {
         uint32_t level_size = expected; // Total sum in this level of the tree
         for (size_t level = 0;; ++level) {
             if (level_size <= 1) {
-                broadcast.store(value);
+                broadcast_storage.store(value);
                 return true;
             }
             BATMAT_ASSUME(level < 32);
@@ -263,7 +263,16 @@ class TreeBarrier {
             phase.notify_all();
         }
         wait(arrival_token{cur_phase});
-        return broadcast.template load<T>();
+        return broadcast_storage.template load<T>();
+    }
+
+    template <class T>
+    [[nodiscard]] T broadcast(uint32_t thread_id, T x, uint32_t src = 0) {
+        // TODO: optimized implementation without as many copies
+        if (thread_id == src)
+            return reduce(thread_id, std::move(x), [](const T &a, const T &) { return a; });
+        else
+            return reduce(thread_id, T{}, [](const T &, const T &b) { return b; });
     }
 };
 
