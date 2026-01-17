@@ -77,6 +77,13 @@ benchmark_scaling() {
         --benchmark_min_time=0.05s --benchmark_out=benchmark-scaling.json
 }
 
+# Clean up build files and benchmark results
+clean() {
+    set -x
+    rm -rf conan.json build CMakeUserPresets.json
+    rm -f benchmark-grid.json benchmark-scaling.json
+}
+
 main() {
     local cmd="${1:-help}"
     case "${cmd}" in
@@ -96,11 +103,13 @@ main() {
             benchmark_scaling
             ;;
         all)
-            setup_deps
             build
             benchmark_quick
             benchmark_grid
             benchmark_scaling
+            ;;
+        clean)
+            clean
             ;;
         help|*)
             echo "Usage: $0 {deps|build|benchmark-quick|benchmark-grid|benchmark-scaling|all}"
@@ -109,9 +118,10 @@ main() {
             echo "  deps                    - Set up Conan dependencies"
             echo "  build                   - Build the benchmark project"
             echo "  benchmark-quick         - Run quick benchmark (sanity check)"
-            echo "  benchmark-grid          - Run grid benchmark (long)"
-            echo "  benchmark-scaling       - Run scaling benchmark"
-            echo "  all                     - Run all commands in sequence"
+            echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"
+            echo "  benchmark-scaling       - Run scaling benchmark (takes a couple of minutes)"
+            echo "  all                     - Run all commands above in sequence"
+            echo "  clean                   - Remove all build files and benchmark results"
             echo ""
             echo "Environment variables:"
             echo "  NPROC        - number of processors to use for the benchmark (default: 8)"
