@@ -1,6 +1,16 @@
-# Common options
 {% set my_profiles = os.path.join(profile_dir, "..", "..", "ci", "conan-profiles", "profiles") %}
+
+# Determine machine architecture and select custom toolchain for the platform (or use default)
+{% set machine = os.getenv("DEV_MACHINE", os.popen("uname -m").read().strip()) %}
+{% if machine in ["x86_64", "AMD64"] %}
 include({{ os.path.join(my_profiles, "platform", "x86_64-bionic-linux-gnu.profile") }})
+{% elif machine == "aarch64" %}
+include({{ os.path.join(my_profiles, "platform", "aarch64-rpi3-linux-gnu.profile") }})
+{% else %}
+include(default)
+{% endif %}
+
+# Common options
 include({{ os.path.join(my_profiles, "sccache", "only-self.profile") }})
 include({{ os.path.join(my_profiles, "color", "gcc.profile") }})
 include({{ os.path.join(my_profiles, "link", "lto-auto.profile") }})
@@ -9,30 +19,27 @@ include({{ os.path.join(my_profiles, "visibility", "hidden.profile") }})
 
 # Platform-specific options
 {% set my_profiles = os.path.join(profile_dir, "..", "..", "ci", "profiles") %}
-{% set lscpu = os.popen("lscpu").read() %}
-{% if "Intel(R) Core(TM) Ultra 7 2" in lscpu %}
-include({{ os.path.join(my_profiles, "arrowlake.profile") }})
-{% elif "avx512f" in lscpu %}
-include({{ os.path.join(my_profiles, "avx512.profile") }})
-{% elif "avx2" in lscpu %}
-include({{ os.path.join(my_profiles, "avx2.profile") }})
-{% else %}
-include({{ os.path.join(my_profiles, "generic.profile") }})
-{% endif %}
+include({{ os.path.join(my_profiles, os.getenv("DEV_ARCH", "native") + ".profile") }})
 
 # System dependencies
 {% set mkl_root = os.getenv("MKLROOT") or os.path.join(os.getenv("HOME"), "intel/oneapi/mkl/latest") %}
-
-[tool_requires]
-!zlib/*:mold/2.40.1
-cmake/4.2.0
-blasfeo/*: cmake/[<4]
-ninja/1.12.1
 
 [buildenv]
 MKLROOT={{ mkl_root }}
 VTUNE_PROFILER_DIR={{ os.getenv("VTUNE_PROFILER_DIR") or os.path.join(os.getenv("HOME"), "intel/oneapi/vtune/latest")}}
 
+# Inject additional tools
+[tool_requires]
+!zlib/*:mold/2.40.1
+cmake/4.2.1
+blasfeo/*: cmake/[<4]
+ninja/1.12.1
+
+# Build settings: use Ninja, enable cross-building for better reproducibility, pass MKLROOT path,
+# enable compile_commands.json generation, disable accurate build time stamps to speed up re-builds,
+# enable unity/jumbo builds for hyhound to speed up its compilation, and skip its slow tests.
+# HPIPM does not export its symbols by default, so we set its visibility to "default" (i.e., public)
+# since it is set to "hidden" globally by "hidden.profile".
 [conf]
 tools.cmake.cmaketoolchain:generator=Ninja
 !zlib/*:tools.build:exelinkflags+=["-fuse-ld=mold"]
@@ -40,8 +47,10 @@ tools.cmake.cmaketoolchain:generator=Ninja
 tools.build.cross_building:cross_build=True
 tools.build.cross_building:can_run=True
 tools.cmake.cmaketoolchain:extra_variables*={"MKL_ROOT": "{{ mkl_root }}"}
+# Package-specific configurations
 &:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_EXPORT_COMPILE_COMMANDS": "On"}
 &:tools.cmake.cmaketoolchain:extra_variables*={"BATMAT_WITH_ACCURATE_BUILD_TIME": "Off"}
+&:tools.cmake.cmaketoolchain:extra_variables*={"CYQLONE_WITH_ACCURATE_BUILD_TIME": "Off"}
 hyhound/*:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_UNITY_BUILD": "On"}
 hyhound/*:tools.build:skip_test=True
 hpipm/*:tools.build:cflags+=["-fvisibility=default"]
@@ -56,3 +65,5 @@ guanaqo/*:with_openmp=True
 batmat/*:with_openmp=True
 batmat/*:with_benchmarks=True
 batmat/*:with_blasfeo=True
+cyqlone/*:with_benchmarks=True
+cyqlone/*:with_blasfeo=True
