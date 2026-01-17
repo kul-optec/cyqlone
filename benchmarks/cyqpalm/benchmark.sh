@@ -16,8 +16,9 @@ setup_deps() {
     conan remote add --force cyqlone "${CYQLONE_ROOT}/scripts/ci/conan-recipes"
     conan config install "${CYQLONE_ROOT}/scripts/ci/conan-profiles/settings_user.yml"
     conan export "${CYQLONE_ROOT}"
-    conan install . -pr:h "${CYQLONE_ROOT}/scripts/dev/profiles/dev" -s:b compiler.cppstd=20 \
-        -c tools.build:skip_test=True --build=missing --format=json > conan.json
+    conan install . -pr:h "${CYQLONE_ROOT}/scripts/dev/profiles/dev" \
+        -c tools.build:skip_test=True -o guanaqo/\*:with_mkl=False \
+        -s:b compiler.cppstd=20 --build=missing --format=json > conan.json
 }
 
 # Build the benchmark project
