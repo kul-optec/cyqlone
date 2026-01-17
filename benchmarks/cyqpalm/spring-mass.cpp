@@ -278,6 +278,15 @@ std::generator<Solver> get_solvers(const Options &opts) {
                   [=](benchmark::State &state, const SpringMassParams &params) {
                       run_benchmark<v>(state, params, backend, settings, true);
                   }};
+        if (opts.no_updates) {
+            auto t = std::exchange(backend.max_update_count, 0);
+            co_yield {std::format("cyqlone(v={},p={},zero,upd={})", v, backend.processors,
+                                  backend.max_update_count),
+                      [=](benchmark::State &state, const SpringMassParams &params) {
+                          run_benchmark<v>(state, params, backend, settings, true);
+                      }};
+            backend.max_update_count = t;
+        }
         settings.initial_penalty_y       = 1e4;
         settings.initial_inner_tolerance = 1e-4;
         if (opts.warm_copy) {
@@ -292,6 +301,15 @@ std::generator<Solver> get_solvers(const Options &opts) {
                   [=](benchmark::State &state, const SpringMassParams &params) {
                       run_benchmark<v>(state, params, backend, settings, true);
                   }};
+        if (opts.no_updates) {
+            auto t = std::exchange(backend.max_update_count, 0);
+            co_yield {std::format("cyqlone(v={},p={},shift,upd={})", v, backend.processors,
+                                  backend.max_update_count),
+                      [=](benchmark::State &state, const SpringMassParams &params) {
+                          run_benchmark<v>(state, params, backend, settings, true);
+                      }};
+            backend.max_update_count = t;
+        }
 #if WITH_HPIPM
         if (opts.hpipm) {
             co_yield {"hpipm(zero)", [=](benchmark::State &state, const SpringMassParams &params) {
