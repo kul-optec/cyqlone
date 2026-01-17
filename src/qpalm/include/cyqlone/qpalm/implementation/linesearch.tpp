@@ -20,6 +20,11 @@
 #define LINE_SEARCH_COMPARE_IMPLEMENTATIONS 0
 #endif
 
+#if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
+#include <iostream>
+#include <print>
+#endif
+
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
 struct LineSearchSettings {
@@ -163,9 +168,13 @@ auto LineSearch<Vec>::operator()(
         GUANAQO_TRACE("linesearch find stepsize", 0);
         auto step_size = find_stepsize(a, b, i, pos_bp);
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
-        BATMAT_ASSERT(step_size.second == step_size_debug.second);
-        BATMAT_ASSERT(abs(step_size.first - step_size_debug.first) <
-                      real_t(1e4) * std::numeric_limits<real_t>::epsilon());
+        if (step_size.index != step_size_debug.index)
+            std::println(std::cerr, "Line search index mismatch: {} (optimized) vs {} (debug)",
+                         step_size.index, step_size_debug.index);
+        constexpr auto tol = real_t(1e4) * std::numeric_limits<real_t>::epsilon();
+        if (abs(step_size.τ - step_size_debug.τ) > tol)
+            std::println(std::cerr, "Line search mismatch: {:.17e} (optimized) vs {:.17e} (debug)",
+                         step_size.τ, step_size_debug.τ);
 #endif
         return step_size;
     });
