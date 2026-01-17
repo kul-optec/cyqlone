@@ -123,7 +123,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
         batmat::linalg::copy(WY, WY, with_rotate<+rot0>);
         hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL, //
                             pcr_Y.batch(l), WY, WY,   //
-                            pcr_U.batch(l), WU, WU, Σ, ml, 0);
+                            pcr_U.batch(l), WU, WU, Σ, ml);
     } else {
         batmat::linalg::copy(WYU, WYU, with_rotate<rot0>); // TODO: fuse with hyhound_diag
         hyhound_diag(tril(pcr_L.batch(l)), WYU, Σ);
