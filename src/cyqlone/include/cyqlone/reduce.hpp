@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cyqlone/config.hpp>
+#include <batmat/simd.hpp>
 #include <cmath>
 
 namespace cyqlone {
@@ -29,7 +30,12 @@ struct norms : norms<T> {
     }
 
     result operator()(result_simd accum) const {
+#if BATMAT_WITH_GSI_HPC_SIMD
+        using batmat::datapar::hmax;
         return {hmax(accum.max), reduce(accum.asum), reduce(accum.sumsq)};
+#else
+        return {hmax(accum.max), reduce(accum.asum), reduce(accum.sumsq)};
+#endif
     }
 
     using norms<T>::zero;

@@ -318,6 +318,7 @@ auto CompactBLAS<T, Abi, O>::xnrm2sq(batch_view x) -> value_type {
 
 template <class T, class Abi, StorageOrder O>
 auto CompactBLAS<T, Abi, O>::xnrminf(single_batch_view x) -> value_type {
+    using batmat::datapar::hmax;
     using std::abs;
     using std::fma;
     using std::isfinite;

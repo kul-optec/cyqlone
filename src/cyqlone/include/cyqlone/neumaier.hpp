@@ -25,8 +25,13 @@ class NeumaierSum {
                 compensation += (v - t) + sum;
         } else {
             auto m = abs(sum) >= abs(v);
-            where(m, compensation) += (sum - t) + v; // TODO: support GSI-HPC/simd
+#if BATMAT_WITH_GSI_HPC_SIMD
+            compensation =
+                select(m, compensation + ((sum - t) + v), compensation + ((v - t) + sum));
+#else
+            where(m, compensation) += (sum - t) + v;
             where(!m, compensation) += (v - t) + sum;
+#endif
         }
         sum = t;
         return *this;

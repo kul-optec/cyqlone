@@ -284,8 +284,13 @@ struct CyqloneBackend {
                 const auto b_min_ij = batmat::datapar::aligned_load<simd>(&b_min_i(0, j, 0)),
                            b_max_ij = batmat::datapar::aligned_load<simd>(&b_max_i(0, j, 0));
                 // If upper bound is infinite, multiplier cannot be positive
+#if BATMAT_WITH_GSI_HPC_SIMD
+                yij = select(isfinite(b_min_ij), yij, fmax(yij, simd{0}));
+                yij = select(isfinite(b_max_ij), yij, fmin(yij, simd{0}));
+#else
                 where(!isfinite(b_min_ij), yij) = fmax(yij, simd{0});
                 where(!isfinite(b_max_ij), yij) = fmin(yij, simd{0});
+#endif
                 batmat::datapar::aligned_store(yij, &yi(0, j, 0));
             }
         }
@@ -419,12 +424,21 @@ struct CyqloneBackend {
                      eij_old               = batmat::datapar::aligned_load<simd>(&ei_old(0, j, 0)),
                      Σij                   = batmat::datapar::aligned_load<simd>(&Σi(0, j, 0));
                 auto insufficient_progress = abs(eij) >= settings.θ * abs(eij_old);
+#if BATMAT_WITH_GSI_HPC_SIMD
+                simd update_factor =
+                    select(insufficient_progress, settings.Δy * abs(eij) / norm_inf_e, simd{1});
+#else
                 simd update_factor{1};
                 where(insufficient_progress, update_factor) = settings.Δy * abs(eij) / norm_inf_e;
+#endif
                 update_factor *= settings.Δy_always;
                 auto Σ_new = Σij * update_factor;
                 Σ_new = fmax(Σij * settings.Δy_always, fmin(Σ_new, simd{settings.max_penalty_y}));
+#if BATMAT_WITH_GSI_HPC_SIMD
+                num_changed += reduce_count(Σ_new != Σij);
+#else
                 num_changed += popcount(Σ_new != Σij);
+#endif
                 batmat::datapar::aligned_store(Σ_new, &Σi(0, j, 0));
             }
         }
@@ -519,7 +533,7 @@ struct CyqloneBackend {
                 const auto δ2 = s * Adi, δ1 = -δ2;
                 const auto α1 = (yi + Σi * (Axi - li)) / s, α2 = (Σi * (ui - Axi) - yi) / s;
                 const auto t1 = α1 / δ1, t2 = α2 / δ2;
-                BATMAT_FULLY_UNROLLED_FOR (index_t v = 0; v < VL; ++v) {
+                BATMAT_FULLY_UNROLLED_FOR (int v = 0; v < VL; ++v) {
                     *(isfinite(t1[v]) ? fin++ : --inf) = {.t = t1[v], .δ = δ1[v]};
                     *(isfinite(t2[v]) ? fin++ : --inf) = {.t = t2[v], .δ = δ2[v]};
                 }
@@ -724,10 +738,18 @@ struct CyqloneBackend {
                     auto ŷi = yi + Σi * (Axi - z);
 #endif
                     datapar::aligned_store(ŷi, &ŷ.batch(di)(0, r, 0));
+#if BATMAT_WITH_GSI_HPC_SIMD
+                    simd ΣJi = select(Ji, Σi, simd{0});
+#else
                     simd ΣJi{};
                     where(Ji, ΣJi) = Σi;
+#endif
                     datapar::aligned_store(ΣJi, &J.batch(di)(0, r, 0));
+#if BATMAT_WITH_GSI_HPC_SIMD
+                    count_J_local += static_cast<index_t>(reduce_count(Ji));
+#else
                     count_J_local += static_cast<index_t>(popcount(Ji));
+#endif
                 }
             }
         }
@@ -963,6 +985,7 @@ struct CyqloneBackend {
             auto tm = get_timed(&Timings::solve_resid);
             ctx.arrive_and_wait(__LINE__);
             int prec = settings.print_precision;
+            using batmat::datapar::hmax;
             using std::abs;
             using std::isfinite;
             using std::max;
