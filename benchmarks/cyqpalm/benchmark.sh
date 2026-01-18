@@ -12,6 +12,7 @@ export CONAN_HOME="${CYQLONE_ROOT}/.conan2"
 setup_deps() {
     local dev_profile="${CYQLONE_ROOT}/scripts/dev/profiles/dev"
     local clang_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile"
+    local icx_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/icx-linux.profile"
     local profiles=("-pr:h" "${dev_profile}")
     local with_mkl=False
     local editable=0
@@ -20,6 +21,7 @@ setup_deps() {
             --gcc) ;;
             --clang*) export TTTAPA_CONAN_PROFILES_CLANG_SUFFIX="${1#--clang}"
                       profiles=("-pr:h" "${dev_profile}" "-pr:h" "${clang_profile}") ;;
+            --icx) profiles=("-pr:h" "${dev_profile}" "-pr:h" "${icx_profile}") ;;
             --with-mkl) with_mkl=True ;;
             --editable|-e) editable=1 ;;
             *) echo "Unknown compiler option '$1'" >&2; exit 1 ;;
