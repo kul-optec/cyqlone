@@ -1,14 +1,16 @@
-# Links libstdc++ and libgcc statically (but not libgcc_eh)
+# Links libgfortran and libquadmath statically
 
 [settings]
 compiler.static-libgfortran=True
-compiler.static-libstdc++=True
+compiler.static-libquadmath=True
 
 [conf]
-tools.build:exelinkflags+=["-static-libstdc++"]
-tools.build:sharedlinkflags+=["-static-libstdc++"]
-tools.cmake.cmaketoolchain:user_toolchain=+['{{ os.path.join(profile_dir, "static-libgcc.cmake") }}']
+tools.build:exelinkflags+=["-static-libgfortran", "-static-libquadmath"]
+tools.build:sharedlinkflags+=["-static-libgfortran", "-static-libquadmath"]
 tools.cmake.cmaketoolchain:extra_variables*={'CMAKE_MODULE_LINKER_FLAGS_INIT': '${CMAKE_SHARED_LINKER_FLAGS_INIT}'}
 tools.cmake.cmaketoolchain:extra_variables*={'CMAKE_MODULE_LINKER_FLAGS_DEBUG_INIT': '${CMAKE_SHARED_LINKER_FLAGS_DEBUG_INIT}'}
 tools.cmake.cmaketoolchain:extra_variables*={'CMAKE_MODULE_LINKER_FLAGS_RELEASE_INIT': '${CMAKE_SHARED_LINKER_FLAGS_RELEASE_INIT}'}
 tools.cmake.cmaketoolchain:extra_variables*={'CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO_INIT': '${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO_INIT}'}
+
+[options]
+coinmumps/*:static_fortran_libs=True
