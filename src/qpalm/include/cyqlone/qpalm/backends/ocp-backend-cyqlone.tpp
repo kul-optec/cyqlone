@@ -418,7 +418,8 @@ struct CyqloneBackend {
         index_t num_changed      = 0;
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            auto ei = e.batch(di), ei_old = e_old.batch(di), Σi = Σ.batch(di);
+            auto Σi          = Σ.batch(di);
+            auto ei = e.batch(di), ei_old = e_old.batch(di);
             for (index_t j = 0; j < ei.rows(); ++j) {
                 auto eij                   = batmat::datapar::aligned_load<simd>(&ei(0, j, 0)),
                      eij_old               = batmat::datapar::aligned_load<simd>(&ei_old(0, j, 0)),
