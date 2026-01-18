@@ -9,7 +9,6 @@
 #include <cyqlone-version.h>
 #include <guanaqo-version.h>
 #include <hyhound-version.h>
-#include <omp.h>
 
 #include <guanaqo/trace.hpp>
 #include <hyhound/ocp/riccati.hpp>
