@@ -6,12 +6,23 @@ arch:
     toolchain-cpu: [null, armv8, armv7]
   x86_64:
     microarch: [null, ANY]
+  armv8:
+    microarch: [null, ANY]
 
 compiler:
   gcc:
     static-libs: [null, ANY]
+    static-libgcc: [null, ANY]
+    static-libstdc++: [null, ANY]
+    static-libgfortran: [null, ANY]
+    static-libquadmath: [null, ANY]
     hidden: [null, ANY]
     harden: [null, ANY]
+    sanitizers: [null, ANY]
+    asan: [null, ANY]
+    lsan: [null, ANY]
+    tsan: [null, ANY]
+    ubsan: [null, ANY]
   clang:
     libcxx:
       libstdc++11:
@@ -19,5 +30,12 @@ compiler:
       libstdc++:
         gcc_version: [null, ANY]
     static-libs: [null, ANY]
+    static-libgcc: [null, ANY]
+    static-libstdc++: [null, ANY]
     hidden: [null, ANY]
     harden: [null, ANY]
+    sanitizers: [null, ANY]
+    asan: [null, ANY]
+    lsan: [null, ANY]
+    tsan: [null, ANY]
+    ubsan: [null, ANY]
