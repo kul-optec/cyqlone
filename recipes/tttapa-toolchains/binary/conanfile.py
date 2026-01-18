@@ -15,12 +15,18 @@ arch:
     toolchain-cpu: [null, armv8, armv7]
 ```
 
-For Clang with a specific libstdc++ version, add the following to
+For Clang or Intel icx with a specific libstdc++ version, add the following to
 `settings_user.yml`:
 
 ```yaml
 compiler:
   clang:
+    libcxx:
+      libstdc++11:
+        gcc_version: [null, ANY]
+      libstdc++:
+        gcc_version: [null, ANY]
+  intel-cc:
     libcxx:
       libstdc++11:
         gcc_version: [null, ANY]
@@ -122,11 +128,11 @@ class ToolchainsConan(ConanFile):
         """Get GCC version based on target compiler."""
         if self.settings_target.compiler == "gcc":
             tgt_version = str(self.settings_target.compiler.version)
-        elif self.settings_target.compiler == "clang":
+        elif self.settings_target.compiler in ("clang", "intel-cc"):
             tgt_version = self.settings_target.get_safe("compiler.libcxx.gcc_version", default=None)
         else:
             msg = f"Unsupported compiler '{self.settings_target.compiler}'. "
-            msg += "This toolchain only supports GCC and Clang."
+            msg += "This toolchain only supports GCC, Clang, and Intel icx."
             raise ConanInvalidConfiguration(msg)
         return self._resolve_gcc_version(tgt_version)
 
@@ -169,6 +175,14 @@ class ToolchainsConan(ConanFile):
         gcc_version = self._get_gcc_version()
         self._validate_triplet_availability(gcc_version)
 
+    def _validate_icx(self):
+        mode = self.settings_target.get_safe("compiler.mode")
+        if mode != "icx":
+            msg = f"The Intel compiler mode is set to '{mode}', but this "
+            msg += "toolchain only supports 'icx' mode."
+            raise ConanInvalidConfiguration(msg)
+        self._validate_clang()
+
     def validate(self):
         if self.settings.arch != "x86_64" or self.settings.os != "Linux":
             msg = f"This toolchain is not compatible with {self.settings.os}-{self.settings.arch}. "
@@ -179,9 +193,11 @@ class ToolchainsConan(ConanFile):
             self._validate_gcc()
         elif self.settings_target.compiler == "clang":
             self._validate_clang()
+        elif self.settings_target.compiler == "intel-cc":
+            self._validate_icx()
         else:
             msg = f"The compiler is set to '{self.settings_target.compiler}', but this "
-            msg += "toolchain only supports GCC and Clang."
+            msg += "toolchain only supports GCC, Clang, and Intel icx."
             raise ConanInvalidConfiguration(msg)
 
     def package(self):
@@ -214,7 +230,7 @@ class ToolchainsConan(ConanFile):
             for f in self.info.settings_target.compiler.fields:
                 if f != "version":
                     delattr(self.info.settings_target.compiler, f)
-        elif self.info.settings_target.compiler == "clang":
+        elif self.info.settings_target.compiler in ("clang", "intel-cc"):
             for f in self.info.settings_target.compiler.fields:
                 if f != "libcxx":
                     delattr(self.info.settings_target.compiler, f)
@@ -280,9 +296,9 @@ class ToolchainsConan(ConanFile):
     def package_info(self):
         if self.settings_target.compiler == "gcc":
             self._package_info_gcc()
-        elif self.settings_target.compiler == "clang":
+        elif self.settings_target.compiler in ("clang", "intel-cc"):
             self._package_info_clang()
         else:
             msg = f"Unsupported compiler '{self.settings_target.compiler}'. "
-            msg += "This toolchain only supports GCC and Clang."
+            msg += "This toolchain only supports GCC, Clang, and Intel icx."
             raise ConanInvalidConfiguration(msg)
