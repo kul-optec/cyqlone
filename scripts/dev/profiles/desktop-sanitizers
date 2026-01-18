@@ -1,2 +1,0 @@
-include({{ os.path.join(profile_dir, "desktop") }})
-include({{ os.path.join(profile_dir, "sanitizers") }})

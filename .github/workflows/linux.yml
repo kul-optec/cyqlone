@@ -10,7 +10,7 @@ jobs:
       matrix:
         gcc: ["15"]
         build_type: ["Debug"]
-        profile: ["laptop"]
+        profile: ["ci"]
       fail-fast: false
     runs-on: ubuntu-24.04
     env:
@@ -27,13 +27,9 @@ jobs:
 
     - name: Build
       run: >
-        conan create . --build=missing -pr scripts/dev/profiles/${{ matrix.profile }}
+        conan create . --build=missing -pr scripts/ci/profiles/${{ matrix.profile }}.profile
         -s compiler.version=${{ matrix.gcc }}
         -s build_type=${{ matrix.build_type }}
-        -c \*:tools.build:skip_test=True
-        -c \&:tools.build:skip_test=False
-        -o \&:with_benchmarks=True
-        -c '&:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_C_COMPILER_LAUNCHER": "sccache"}'
-        -c '&:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_CXX_COMPILER_LAUNCHER": "sccache"}'
+        -s:b compiler.cppstd=20
 
     - run: conan cache clean

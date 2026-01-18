@@ -2,7 +2,8 @@
 # level. We assume that consumer-level AVX-512-capable CPUs are more common than server-level ones,
 # so we select the rocketlake microarchitecture for tuning. HPC users should consider building from
 # source with a profile better suited to their hardware.
-include({{ os.path.join(profile_dir, "x86-64-v4.profile") }})
+{% set arch_dir = os.path.join(profile_dir, "..", "conan-profiles", "profiles", "arch") %}
+include({{ os.path.join(arch_dir, "linux", "x86-64-v4.profile") }})
 [settings]
 arch.microarch=rocketlake
 [conf]
