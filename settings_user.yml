@@ -39,3 +39,20 @@ compiler:
     lsan: [null, ANY]
     tsan: [null, ANY]
     ubsan: [null, ANY]
+  intel-cc:
+    version: [ANY]
+    libcxx:
+      libstdc++11:
+        gcc_version: [null, ANY]
+      libstdc++:
+        gcc_version: [null, ANY]
+    static-libs: [null, ANY]
+    static-libgcc: [null, ANY]
+    static-libstdc++: [null, ANY]
+    hidden: [null, ANY]
+    harden: [null, ANY]
+    sanitizers: [null, ANY]
+    asan: [null, ANY]
+    lsan: [null, ANY]
+    tsan: [null, ANY]
+    ubsan: [null, ANY]
