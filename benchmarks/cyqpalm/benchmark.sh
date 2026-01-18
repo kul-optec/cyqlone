@@ -5,8 +5,8 @@ set -euo pipefail
 CYQLONE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 export CONAN_HOME="${CYQLONE_ROOT}/.conan2"
 # User-configurable variables with defaults
-: "${TASKSET_CPU:=taskset -c 0-7}"
-: "${NPROC:=8}"
+: "${TASKSET_CPU:=taskset -c 0-7}"  # Default to binding to CPU cores 0-7
+: "${NPROC:=8}" # Default to using 8 processors (p parameter in the paper)
 
 # Set up Conan and install the dependencies
 setup_deps() {
