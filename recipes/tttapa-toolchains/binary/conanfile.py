@@ -14,8 +14,25 @@ arch:
   armv7hf:
     toolchain-cpu: [null, armv8, armv7]
 ```
+
+For Clang with a specific libstdc++ version, add the following to
+`settings_user.yml`:
+
+```yaml
+compiler:
+  clang:
+    libcxx:
+      libstdc++11:
+        gcc_version: [null, ANY]
+      libstdc++:
+        gcc_version: [null, ANY]
+```
+
+You can then configure the version using e.g. `compiler.libcxx.gcc_version=15`
+in your profile.
 """
 
+import glob
 import os
 import shlex
 
@@ -31,6 +48,20 @@ class ToolchainsConan(ConanFile):
     description = "GCC cross-compilers."
     homepage = "https://github.com/tttapa/toolchains"
     settings = "os", "arch"
+
+    # Target triplet metadata
+    _TARGET_METADATA = {
+        "x86_64-focal-linux-gnu": {"processor": "x86_64", "bitness": 64},
+        "x86_64-bionic-linux-gnu": {"processor": "x86_64", "bitness": 64},
+        "x86_64-centos7-linux-gnu": {"processor": "x86_64", "bitness": 64},
+        "aarch64-rpi3-linux-gnu": {"processor": "aarch64", "bitness": 64},
+        "armv8-rpi3-linux-gnueabihf": {
+            "processor": "armv7l",
+            "bitness": 32,
+        },  # armv8l does not exist
+        "armv7-neon-linux-gnueabihf": {"processor": "armv7l", "bitness": 32},
+        "armv6-rpi-linux-gnueabihf": {"processor": "armv6l", "bitness": 32},
+    }
 
     def _get_target_triplet(self) -> tuple[str, str, str]:
         default_cpu = {
@@ -70,9 +101,11 @@ class ToolchainsConan(ConanFile):
         triplet += (os,)
         return triplet
 
-    def _get_gcc_version(self) -> str:
-        tgt_gcc_version = str(self.settings_target.compiler.version)
+    def _resolve_gcc_version(self, tgt_gcc_version: str | None) -> str:
+        """Resolve GCC version from exact or partial version string."""
         possible_versions = self.conan_data["sources"][self.version]
+        if tgt_gcc_version is None:
+            return max(possible_versions, key=Version)
         if tgt_gcc_version in possible_versions:
             return tgt_gcc_version
         for p in possible_versions:
@@ -85,20 +118,33 @@ class ToolchainsConan(ConanFile):
         msg += f"Only the following versions are supported for the compiler: {', '.join(possible_versions)}"
         raise ConanInvalidConfiguration(msg)
 
-    def validate(self):
-        if self.settings.arch != "x86_64" or self.settings.os != "Linux":
-            msg = f"This toolchain is not compatible with {self.settings.os}-{self.settings.arch}. "
-            msg += "It can only run on Linux-x86_64."
+    def _get_gcc_version(self) -> str:
+        """Get GCC version based on target compiler."""
+        if self.settings_target.compiler == "gcc":
+            tgt_version = str(self.settings_target.compiler.version)
+        elif self.settings_target.compiler == "clang":
+            tgt_version = self.settings_target.get_safe("compiler.libcxx.gcc_version", default=None)
+        else:
+            msg = f"Unsupported compiler '{self.settings_target.compiler}'. "
+            msg += "This toolchain only supports GCC and Clang."
             raise ConanInvalidConfiguration(msg)
+        return self._resolve_gcc_version(tgt_version)
 
-        if self.settings_target.compiler != "gcc":
-            msg = f"The compiler is set to '{self.settings_target.compiler}', but this "
-            msg += "toolchain only supports building with GCC."
-            raise ConanInvalidConfiguration(msg)
+    def _get_gcc_dir(self, toolchain_dir, triple, version, bitness):
+        """Find GCC installation directory (for Clang)."""
+        lib_dirs = ["lib64", "lib"] if bitness == 64 else ["lib32", "lib"]
+        gcc_dirs = ["gcc", "gcc-cross"]
+        matches = []
+        for lib in lib_dirs:
+            for gcc in gcc_dirs:
+                pattern = os.path.join(toolchain_dir, lib, gcc, triple, f"{version}*")
+                found = glob.glob(pattern)
+                matches.extend(found)
+        return matches
 
-        gcc_version = self._get_gcc_version()
-        target_trip = self._get_target_triplet()
-        target_trip_str = "-".join(target_trip)
+    def _validate_triplet_availability(self, gcc_version: str):
+        """Check if the target triplet is available for the given GCC version."""
+        target_trip_str = "-".join(self._get_target_triplet())
         sources = self.conan_data["sources"][self.version]
         try:
             sources[gcc_version]["Linux-x86_64"][target_trip_str]
@@ -106,6 +152,37 @@ class ToolchainsConan(ConanFile):
             msg = f"Unsupported toolchain target triplet '{target_trip_str}' "
             msg += f"for GCC version {gcc_version}."
             raise ConanInvalidConfiguration(msg) from e
+
+    def _validate_gcc(self):
+        """Validate settings when using GCC compiler."""
+        gcc_version = self._get_gcc_version()
+        self._validate_triplet_availability(gcc_version)
+
+    def _validate_clang(self):
+        """Validate settings when using Clang compiler."""
+        libcxx = self.settings_target.get_safe("compiler.libcxx")
+        if libcxx is None or str(libcxx) not in ("libstdc++11", "libstdc++"):
+            msg = f"The C++ standard library is set to '{libcxx}', but this "
+            msg += "toolchain only supports libstdc++11 or libstdc++."
+            raise ConanInvalidConfiguration(msg)
+
+        gcc_version = self._get_gcc_version()
+        self._validate_triplet_availability(gcc_version)
+
+    def validate(self):
+        if self.settings.arch != "x86_64" or self.settings.os != "Linux":
+            msg = f"This toolchain is not compatible with {self.settings.os}-{self.settings.arch}. "
+            msg += "It can only run on Linux-x86_64."
+            raise ConanInvalidConfiguration(msg)
+
+        if self.settings_target.compiler == "gcc":
+            self._validate_gcc()
+        elif self.settings_target.compiler == "clang":
+            self._validate_clang()
+        else:
+            msg = f"The compiler is set to '{self.settings_target.compiler}', but this "
+            msg += "toolchain only supports GCC and Clang."
+            raise ConanInvalidConfiguration(msg)
 
     def package(self):
         host = f"{self.settings.os}-{self.settings.arch}"
@@ -121,42 +198,91 @@ class ToolchainsConan(ConanFile):
         self.run(f"chmod -R +w {shlex.quote(self.package_folder)}")
 
     def package_id(self):
+        # Only include settings that actually affect the package
+        # Use a whitelist approach to ignore any custom sub-settings
         self.info.settings_target = self.settings_target.copy()
-        self.info.settings_target.rm_safe("build_type")
-        self.info.settings_target.rm_safe("compiler.libcxx")
-        self.info.settings_target.rm_safe("compiler.cppstd")
-        self.info.settings_target.rm_safe("compiler.cstd")
+        for f in self.info.settings_target.fields:
+            if f not in ("os", "arch", "compiler"):
+                delattr(self.info.settings_target, f)
+        for f in self.info.settings_target.arch.fields:
+            if f != "toolchain-cpu":
+                delattr(self.info.settings_target.arch, f)
+        for f in self.info.settings_target.os.fields:
+            if f != "toolchain-vendor":
+                delattr(self.info.settings_target.os, f)
+        if self.info.settings_target.compiler == "gcc":
+            for f in self.info.settings_target.compiler.fields:
+                if f != "version":
+                    delattr(self.info.settings_target.compiler, f)
+        elif self.info.settings_target.compiler == "clang":
+            for f in self.info.settings_target.compiler.fields:
+                if f != "libcxx":
+                    delattr(self.info.settings_target.compiler, f)
+                else:
+                    for g in self.info.settings_target.compiler.libcxx.fields:
+                        if g != "gcc_version":
+                            delattr(self.info.settings_target.compiler.libcxx, g)
 
-    def package_info(self):
-        target = "-".join(self._get_target_triplet())
-        bindir = os.path.join(self.package_folder, target, "bin")
-        self.buildenv_info.prepend_path("PATH", bindir)
-        libname = {
-            "x86_64-focal-linux-gnu": "lib64",
-            "x86_64-bionic-linux-gnu": "lib64",
-            "x86_64-centos7-linux-gnu": "lib64",
-            "aarch64-rpi3-linux-gnu": "lib64",
-            "armv8-rpi3-linux-gnueabihf": "lib",
-            "armv7-neon-linux-gnueabihf": "lib",
-            "armv6-rpi-linux-gnueabihf": "lib",
-        }[target]
-        libdir = os.path.join(self.package_folder, target, target, libname)
-        processor = {
-            "x86_64-focal-linux-gnu": "x86_64",
-            "x86_64-bionic-linux-gnu": "x86_64",
-            "x86_64-centos7-linux-gnu": "x86_64",
-            "aarch64-rpi3-linux-gnu": "aarch64",
-            "armv8-rpi3-linux-gnueabihf": "armv7l",  # armv8l does not exist
-            "armv7-neon-linux-gnueabihf": "armv7l",
-            "armv6-rpi-linux-gnueabihf": "armv6l",
-        }[target]
+    def _get_target_processor(self, target: str) -> str:
+        """Get CMake system processor for target."""
+        return self._TARGET_METADATA[target]["processor"]
+
+    def _get_target_bitness(self, target: str) -> int:
+        """Get target bitness (32 or 64)."""
+        return self._TARGET_METADATA[target]["bitness"]
+
+    def _configure_common_package_info(self, target: str):
+        """Configure common package_info settings for both GCC and Clang."""
+        processor = self._get_target_processor(target)
         self.conf_info.define("tools.cmake.cmaketoolchain:system_name", "Linux")
         self.conf_info.define("tools.cmake.cmaketoolchain:system_processor", processor)
         self.conf_info.define("tools.gnu:host_triplet", target)
+        self.conf_info.define("tools.build.cross_building:cross_build", True)
+
+    def _package_info_gcc(self):
+        """Configure package_info for GCC compiler."""
+        target = "-".join(self._get_target_triplet())
+        self._configure_common_package_info(target)
+        bindir = os.path.join(self.package_folder, target, "bin")
+        self.buildenv_info.prepend_path("PATH", bindir)
         compilers = {
             "c": f"{target}-gcc",
             "cpp": f"{target}-g++",
             "fortran": f"{target}-gfortran",
         }
         self.conf_info.update("tools.build:compiler_executables", compilers)
-        self.conf_info.define("tools.build.cross_building:cross_build", True)
+
+    def _package_info_clang(self):
+        """Configure package_info for Clang compiler."""
+        target = "-".join(self._get_target_triplet())
+        self._configure_common_package_info(target)
+        toolchain_dir = os.path.join(self.package_folder, target)
+        bitness = self._get_target_bitness(target)
+        link_flags = []
+        toolchain_flags = []
+        if Version(self.settings_target.compiler.version).major >= 16:
+            gcc_version = self._get_gcc_version()
+            toolchain_install_dirs = self._get_gcc_dir(toolchain_dir, target, gcc_version, bitness)
+            toolchain_flags += ["--gcc-install-dir=" + toolchain_install_dirs[0]]
+            link_flags += ["-L" + toolchain_install_dirs[0]]
+        else:
+            toolchain_flags += [
+                "--gcc-toolchain=" + toolchain_dir,
+                "--gcc-triple=" + target,
+            ]
+        sysroot = os.path.join(toolchain_dir, target, "sysroot")
+        self.conf_info.define("tools.build:sysroot", sysroot)
+        self.conf_info.append("tools.build:cflags", toolchain_flags)
+        self.conf_info.append("tools.build:cxxflags", toolchain_flags)
+        self.conf_info.append("tools.build:exelinkflags", link_flags)
+        self.conf_info.append("tools.build:sharedlinkflags", link_flags)
+
+    def package_info(self):
+        if self.settings_target.compiler == "gcc":
+            self._package_info_gcc()
+        elif self.settings_target.compiler == "clang":
+            self._package_info_clang()
+        else:
+            msg = f"Unsupported compiler '{self.settings_target.compiler}'. "
+            msg += "This toolchain only supports GCC and Clang."
+            raise ConanInvalidConfiguration(msg)

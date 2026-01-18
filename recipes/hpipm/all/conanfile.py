@@ -56,6 +56,8 @@ class HpipmRecipe(ConanFile):
         deps.generate()
         tc = CMakeToolchain(self)
         tc.variables["HPIPM_FIND_BLASFEO"] = True
+        if self.settings.arch not in ["x86", "x86_64"]:
+            tc.cache_variables["TARGET"] = "GENERIC"
         tc.generate()
 
     def build(self):
