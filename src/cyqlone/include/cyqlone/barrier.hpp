@@ -92,6 +92,11 @@ class TreeBarrier {
     State::ticket_t &get_local_line(uint32_t thread_id) noexcept {
         return state[thread_id >> 1].tickets[State::num_levels - 3 - (thread_id & 1)];
     }
+    void sanity_check_arrival(uint32_t thread_id, BarrierPhase cur_phase) noexcept {
+        if (get_local_phase(thread_id).fetch_add(1, std::memory_order_relaxed) !=
+            static_cast<ticket_value_type>(cur_phase))
+            BATMAT_ASSERT(!"This thread has already arrived in this phase");
+    }
 #endif
 
     bool arrive_impl(BarrierPhase old_phase, uint32_t thread_id) {
@@ -180,9 +185,7 @@ class TreeBarrier {
         BATMAT_ASSUME(thread_id < expected);
         const auto cur_phase = phase.load(std::memory_order_relaxed);
 #if CYQLONE_SANITY_CHECKS_BARRIER
-        if (get_local_phase(thread_id).fetch_add(1, std::memory_order_relaxed) !=
-            static_cast<ticket_value_type>(cur_phase))
-            BATMAT_ASSERT(!"This thread has already arrived in this phase");
+        sanity_check_arrival(thread_id, cur_phase);
 #endif
         if (arrive_impl(cur_phase, thread_id)) {
             completion();
@@ -197,9 +200,7 @@ class TreeBarrier {
         BATMAT_ASSUME(thread_id < expected);
         const auto cur_phase = phase.load(std::memory_order_relaxed);
 #if CYQLONE_SANITY_CHECKS_BARRIER
-        if (get_local_phase(thread_id).fetch_add(1, std::memory_order_relaxed) !=
-            static_cast<ticket_value_type>(cur_phase))
-            BATMAT_ASSERT(!"This thread has already arrived in this phase");
+        sanity_check_arrival(thread_id, cur_phase);
 #endif
 #if CYQLONE_SANITY_CHECKS_BARRIER
         get_local_line(thread_id).store(static_cast<ticket_value_type>(line),
@@ -256,6 +257,9 @@ class TreeBarrier {
     [[nodiscard]] T reduce(uint32_t thread_id, T x, F reduce) {
         BATMAT_ASSUME(thread_id < expected);
         const auto cur_phase = phase.load(std::memory_order_relaxed);
+#if CYQLONE_SANITY_CHECKS_BARRIER
+        sanity_check_arrival(thread_id, cur_phase);
+#endif
         if (arrive_impl(cur_phase, thread_id, std::move(x), std::move(reduce))) {
             completion();
             auto next_phase = static_cast<BarrierPhase>(static_cast<PhaseType>(cur_phase) + 1);
