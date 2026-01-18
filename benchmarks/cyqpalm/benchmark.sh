@@ -14,12 +14,14 @@ setup_deps() {
     local clang_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile"
     local profiles=("-pr:h" "${dev_profile}")
     local with_mkl=False
+    local editable=0
     while [[ $# -gt 0 ]]; do
         case $1 in
             --gcc) ;;
             --clang*) export TTTAPA_CONAN_PROFILES_CLANG_SUFFIX="${1#--clang}"
                       profiles=("-pr:h" "${dev_profile}" "-pr:h" "${clang_profile}") ;;
             --with-mkl) with_mkl=True ;;
+            --editable|-e) editable=1 ;;
             *) echo "Unknown compiler option '$1'" >&2; exit 1 ;;
         esac
         shift
@@ -29,10 +31,22 @@ setup_deps() {
     conan profile detect -e
     conan remote add --force cyqlone "${CYQLONE_ROOT}/scripts/ci/conan-recipes"
     conan config install "${CYQLONE_ROOT}/scripts/ci/conan-profiles/settings_user.yml"
-    conan export "${CYQLONE_ROOT}"
-    conan install . "${profiles[@]}" \
-        -c tools.build:skip_test=True -o guanaqo/\*:with_mkl=$with_mkl \
-        -s:b compiler.cppstd=20 --build=missing --format=json > conan.json
+    local conan_args=(
+        "${profiles[@]}"
+        -c tools.build:skip_test=True
+        -o guanaqo/\*:with_mkl=$with_mkl
+        -s:b compiler.cppstd=20
+        --build=missing
+    )
+    if [[ $editable -eq 1 ]]; then
+        find "${CYQLONE_ROOT}/build" -name CMakeCache.txt -delete ||:
+        conan build "${CYQLONE_ROOT}" "${conan_args[@]}"
+        conan editable add "${CYQLONE_ROOT}"
+    else
+        conan editable remove "${CYQLONE_ROOT}" ||:
+        conan export "${CYQLONE_ROOT}"
+    fi
+    conan install . "${conan_args[@]}" --format=json > conan.json
 }
 
 # Build the benchmark project
@@ -120,6 +134,7 @@ main() {
             benchmark_scaling
             ;;
         all)
+            setup_deps "$@"
             build
             benchmark_quick
             benchmark_grid
