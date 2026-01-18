@@ -76,21 +76,6 @@ benchmark_quick() {
         --benchmark_min_time=0.1s
 }
 
-# Run the M×N grid benchmark
-benchmark_grid() {
-    build_folder="$(jq -r '.graph.nodes."0".build_folder' conan.json)"
-    generators_folder="$(jq -r '.graph.nodes."0".generators_folder' conan.json)"
-    set -x +u
-    source "${generators_folder}/conanrun.sh"
-    set -u
-    ${TASKSET_CPU} "${build_folder}/spring-mass" \
-        --problem wang-boyd-2008 --warm -I 150 -p "${NPROC}" --cm \
-        -N 32 -N 64 -N 96 -N 128 -N 160 -N 192 -N 224 -N 256 \
-        -M 6 -M 12 -M 18 -M 24 -M 30 \
-        --benchmark_repetitions=3 --benchmark_report_aggregates_only \
-        --benchmark_min_time=0.05s --benchmark_out=benchmark-grid.json
-}
-
 # Run the horizon scaling benchmark
 benchmark_scaling() {
     build_folder="$(jq -r '.graph.nodes."0".build_folder' conan.json)"
@@ -105,6 +90,21 @@ benchmark_scaling() {
         -M 12 \
         --benchmark_repetitions=3 --benchmark_report_aggregates_only \
         --benchmark_min_time=0.05s --benchmark_out=benchmark-scaling.json
+}
+
+# Run the M×N grid benchmark
+benchmark_grid() {
+    build_folder="$(jq -r '.graph.nodes."0".build_folder' conan.json)"
+    generators_folder="$(jq -r '.graph.nodes."0".generators_folder' conan.json)"
+    set -x +u
+    source "${generators_folder}/conanrun.sh"
+    set -u
+    ${TASKSET_CPU} "${build_folder}/spring-mass" \
+        --problem wang-boyd-2008 --warm -I 150 -p "${NPROC}" --cm \
+        -N 32 -N 64 -N 96 -N 128 -N 160 -N 192 -N 224 -N 256 \
+        -M 6 -M 12 -M 18 -M 24 -M 30 \
+        --benchmark_repetitions=3 --benchmark_report_aggregates_only \
+        --benchmark_min_time=0.05s --benchmark_out=benchmark-grid.json
 }
 
 # Clean up build files and benchmark results
@@ -127,18 +127,18 @@ main() {
         benchmark-quick)
             benchmark_quick
             ;;
-        benchmark-grid)
-            benchmark_grid
-            ;;
         benchmark-scaling)
             benchmark_scaling
+            ;;
+        benchmark-grid)
+            benchmark_grid
             ;;
         all)
             setup_deps "$@"
             build
             benchmark_quick
-            benchmark_grid
             benchmark_scaling
+            benchmark_grid
             ;;
         clean)
             clean
@@ -150,8 +150,8 @@ main() {
             echo "  deps                    - Set up Conan dependencies"                             >&2
             echo "  build                   - Build the benchmark project"                           >&2
             echo "  benchmark-quick         - Run quick benchmark (sanity check)"                    >&2
-            echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"          >&2
             echo "  benchmark-scaling       - Run scaling benchmark (takes a couple of minutes)"     >&2
+            echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"          >&2
             echo "  all                     - Run all commands above in sequence"                    >&2
             echo "  clean                   - Remove all build files and benchmark results"          >&2
             echo ""                                                                                  >&2
