@@ -272,11 +272,22 @@ class TreeBarrier {
 
     template <class T>
     [[nodiscard]] T broadcast(uint32_t thread_id, T x, uint32_t src = 0) {
-        // TODO: optimized implementation without as many copies
+        BATMAT_ASSUME(thread_id < expected);
+        const auto cur_phase = phase.load(std::memory_order_relaxed);
+#if CYQLONE_SANITY_CHECKS_BARRIER
+        sanity_check_arrival(thread_id, cur_phase);
+#endif
         if (thread_id == src)
-            return reduce(thread_id, std::move(x), [](const T &a, const T &) { return a; });
-        else
-            return reduce(thread_id, T{}, [](const T &, const T &b) { return b; });
+            storage[thread_id].store(x);
+        if (arrive_impl(cur_phase, thread_id)) {
+            completion();
+            broadcast_storage.store(storage[src].template load<T>());
+            auto next_phase = static_cast<BarrierPhase>(static_cast<PhaseType>(cur_phase) + 1);
+            phase.store(next_phase, std::memory_order_release);
+            phase.notify_all();
+        }
+        wait(arrival_token{cur_phase});
+        return broadcast_storage.template load<T>();
     }
 };
 
