@@ -90,6 +90,8 @@ class guanaqoRecipe(ConanFile):
             self.requires("ittapi/3.24.4", transitive_headers=True)
         if self.options.get_safe("with_blas") and not self.options.get_safe("with_mkl"):
             self.requires("openblas/0.3.30", transitive_headers=True)
+        if self.options.get_safe("with_openmp") and self.settings.compiler == "clang":
+            self.requires(f"llvm-openmp/[~{self.settings.compiler.version}]")
         self.test_requires("gtest/1.17.0")
         self.test_requires("eigen/[~3.4 || ~5.0]")
 

@@ -24,11 +24,12 @@ class PythonTestConan(ConanFile):
         python_dev = self.dependencies.direct_host[python_dev_name]
         cmake = CMake(self)
         version = Version(required_version)
+        with_gil = python_dev.options.get_safe("disable_gil", False)
         vars = {
             "PYTHON_DEV_PACKAGE_FOLDER": python_dev.package_folder,
             "PYTHON_DEV_VERSION": f"{version.major}.{version.minor}.{version.patch}",
             "PYTHON_DEV_WITH_BIN": "On" if python_dev.options.with_bin else "Off",
-            "PYTHON_DEV_DISABLE_GIL": "On" if python_dev.options.disable_gil else "Off",
+            "PYTHON_DEV_DISABLE_GIL": "On" if with_gil else "Off",
         }
         if python_dev.options.with_bin:
             vars["PYTHON_DEV_LIB_EXT"] = "so" if python_dev.options.shared else "a"

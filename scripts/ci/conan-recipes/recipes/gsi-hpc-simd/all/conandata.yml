@@ -7,3 +7,5 @@ patches:
       base_path: simd
     - patch_file: patches/0009.patch
       base_path: simd
+    - patch_file: patches/0010-isfinite.patch
+      base_path: simd
