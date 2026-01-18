@@ -10,20 +10,36 @@ export CONAN_HOME="${CYQLONE_ROOT}/.conan2"
 
 # Set up Conan and install the dependencies
 setup_deps() {
+    local dev_profile="${CYQLONE_ROOT}/scripts/dev/profiles/dev"
+    local clang_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile"
+    local profiles=("-pr:h" "${dev_profile}")
+    local with_mkl=False
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --gcc) ;;
+            --clang*) export TTTAPA_CONAN_PROFILES_CLANG_SUFFIX="${1#--clang}"
+                      profiles=("-pr:h" "${dev_profile}" "-pr:h" "${clang_profile}") ;;
+            --with-mkl) with_mkl=True ;;
+            *) echo "Unknown compiler option '$1'" >&2; exit 1 ;;
+        esac
+        shift
+    done
     set -x
     mkdir -p "${CONAN_HOME}"
     conan profile detect -e
     conan remote add --force cyqlone "${CYQLONE_ROOT}/scripts/ci/conan-recipes"
     conan config install "${CYQLONE_ROOT}/scripts/ci/conan-profiles/settings_user.yml"
     conan export "${CYQLONE_ROOT}"
-    conan install . -pr:h "${CYQLONE_ROOT}/scripts/dev/profiles/dev" \
-        -c tools.build:skip_test=True -o guanaqo/\*:with_mkl=False \
+    conan install . "${profiles[@]}" \
+        -c tools.build:skip_test=True -o guanaqo/\*:with_mkl=$with_mkl \
         -s:b compiler.cppstd=20 --build=missing --format=json > conan.json
 }
 
 # Build the benchmark project
 build() {
-    if [[ ! -f conan.json ]]; then setup_deps; fi
+    if [[ ! -f CMakeUserPresets.json ]] || [[ ! -f conan.json ]]; then
+        echo "Conan files not found, please run deps first." >&2; exit 1
+    fi
     generators_folder="$(jq -r '.graph.nodes."0".generators_folder' conan.json)"
     set -x +u
     source "${generators_folder}/conanbuild.sh"
@@ -86,9 +102,10 @@ clean() {
 
 main() {
     local cmd="${1:-help}"
+    shift
     case "${cmd}" in
         deps)
-            setup_deps
+            setup_deps "$@"
             ;;
         build)
             build
@@ -112,20 +129,20 @@ main() {
             clean
             ;;
         help|*)
-            echo "Usage: $0 {deps|build|benchmark-quick|benchmark-grid|benchmark-scaling|all}"
-            echo ""
-            echo "Commands:"
-            echo "  deps                    - Set up Conan dependencies"
-            echo "  build                   - Build the benchmark project"
-            echo "  benchmark-quick         - Run quick benchmark (sanity check)"
-            echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"
-            echo "  benchmark-scaling       - Run scaling benchmark (takes a couple of minutes)"
-            echo "  all                     - Run all commands above in sequence"
-            echo "  clean                   - Remove all build files and benchmark results"
-            echo ""
-            echo "Environment variables:"
-            echo "  NPROC        - number of processors to use for the benchmark (default: 8)"
-            echo "  TASKSET_CPU  - taskset command to bind CPU cores (default: taskset -c 0-7)"
+            echo "Usage: $0 {deps|build|benchmark-quick|benchmark-grid|benchmark-scaling|all}"       >&2
+            echo ""                                                                                  >&2
+            echo "Commands:"                                                                         >&2
+            echo "  deps                    - Set up Conan dependencies"                             >&2
+            echo "  build                   - Build the benchmark project"                           >&2
+            echo "  benchmark-quick         - Run quick benchmark (sanity check)"                    >&2
+            echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"          >&2
+            echo "  benchmark-scaling       - Run scaling benchmark (takes a couple of minutes)"     >&2
+            echo "  all                     - Run all commands above in sequence"                    >&2
+            echo "  clean                   - Remove all build files and benchmark results"          >&2
+            echo ""                                                                                  >&2
+            echo "Environment variables:"                                                            >&2
+            echo "  NPROC        - number of processors to use for the benchmark (default: 8)"       >&2
+            echo "  TASKSET_CPU  - taskset command to bind CPU cores (default: taskset -c 0-7)"      >&2
             exit 1
             ;;
     esac
