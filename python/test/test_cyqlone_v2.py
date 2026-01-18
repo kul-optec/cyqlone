@@ -175,10 +175,11 @@ def run_test_cyqlone_factor_solve(params):
     Σ = np.zeros(solver.num_general_constraints)
     Σ_packed = solver.pack_constraints(Σ)
 
-    for _ in range(5):
-        ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
-    cyqlone.reset_trace_log()
-    solver.log_thread_names()
+    if hasattr(cyqlone, "reset_trace_log"):
+        for _ in range(5):
+            ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
+        cyqlone.reset_trace_log()
+        solver.log_thread_names()
     ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
     solver.solve_reverse(ux, λ)
 
@@ -192,7 +193,8 @@ def run_test_cyqlone_factor_solve(params):
         raise
     finally:
         print()
-        cyqlone.dump_trace_log(f"traces/test_cyqlone_v2_trace-{solver.params_string}.csv")
+        if hasattr(cyqlone, "reset_trace_log"):
+            cyqlone.dump_trace_log(f"traces/test_cyqlone_v2_trace-{solver.params_string}.csv")
 
     resid = solver.residual_dynamics_constr(ux, cocp)
     r = solver.unpack_dynamics(resid).reshape((ocp.N_horiz, ocp.nx))
@@ -207,8 +209,6 @@ def run_test_cyqlone_mat_vec(params):
     Σ = np.zeros(solver.num_general_constraints)
     Σ_packed = solver.pack_constraints(Σ)
 
-    cyqlone.reset_trace_log()
-    solver.log_thread_names()
     ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
     u, x = extract_solution(solver, ocp, ux)
     λs = extract_multipliers(solver, ocp, λ, u)
