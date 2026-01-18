@@ -46,7 +46,7 @@ setup_deps() {
         conan editable remove "${CYQLONE_ROOT}" ||:
         conan export "${CYQLONE_ROOT}"
     fi
-    conan install . "${conan_args[@]}" --format=json > conan.json
+    conan install . "${conan_args[@]}" --lockfile-partial --format=json > conan.json
 }
 
 # Build the benchmark project
