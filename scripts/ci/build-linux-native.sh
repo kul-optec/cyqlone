@@ -23,6 +23,9 @@ conan.cmake.args+=["--fresh"]
 conan.cmake.build_args+=["--verbose"]
 conan.cmake.options.CYQLONE_WITH_PY_STUBS=true
 EOF
+if [ "$(uname -m)" = "x86_64" ]; then
+    echo "conan.profile_host+=[\"$profiles/arch/linux/x86-64-v3.profile\"]" >> "$pbc_config"
+fi
 
 # Build the Python package
 python3 -m pip install -U build
