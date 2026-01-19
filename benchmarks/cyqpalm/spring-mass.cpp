@@ -14,6 +14,8 @@
 #include <format>
 #include <generator>
 #include <random>
+#include <stdexcept>
+#include <utility>
 
 #include "hpipm.hpp"
 
@@ -48,15 +50,20 @@ const std::map<std::string, ProblemType> problem_type_map{
 };
 
 struct Options {
-    bool warm       = false;
-    bool no_updates = false;
-    int parallelism = 8;
-    bool rm         = false;
-    bool cm         = true;
-    bool pcr        = true;
-    bool hpipm      = true;
-    bool v8         = false;
-    bool warm_copy  = false;
+    bool cold         = true;
+    bool warm_shift   = true;
+    bool warm_copy    = false;
+    bool no_updates   = false;
+    int parallelism   = 8;
+    int vector_length = v;
+    bool rm           = false;
+    bool cm           = true;
+    bool pcr          = true;
+#if WITH_HPIPM
+    bool hpipm = true;
+#else
+    bool hpipm = false;
+#endif
     std::vector<int> horizon{32, 64, 96, 128, 192, 256};
     std::vector<int> masses{6, 12, 30};
     uint64_t num_instances         = 50;
@@ -65,6 +72,9 @@ struct Options {
     double pcr_max_update_fraction = 0.25;
     double cr_max_update_fraction  = 0.9;
     double changing_constr_factor  = 0.01;
+    bool custom_reporter           = true;
+    bool print_extra               = false;
+    bool use_color                 = false;
 };
 
 namespace qp = cyqlone::qpalm;
@@ -102,7 +112,7 @@ void stress(const SpringMassParams &params, qp::CyqloneBackendSettings backend_s
     }
 }
 
-template <index_t VL, qp::StorageOrder Order = qp::StorageOrder::RowMajor>
+template <index_t VL, qp::StorageOrder Order>
 void run_benchmark(benchmark::State &state, const SpringMassParams &params,
                    qp::CyqloneBackendSettings backend_settings, qp::Settings settings,
                    bool warm = false) {
@@ -145,23 +155,23 @@ void run_benchmark(benchmark::State &state, const SpringMassParams &params,
                                               qpalm.get_equality_multipliers());
     auto kkt_error = problem.ocp.compute_kkt_error(sol);
 
-    state.counters["inner_iter"]             = counter(qpalm.stats->inner_iter);
-    state.counters["outer_iter"]             = counter(qpalm.stats->outer_iter);
-    state.counters["num_factor"]             = counter(qpalm.stats_backend->num_factor);
-    state.counters["num_updates"]            = counter(qpalm.stats_backend->num_updates);
-    state.counters["rank_updates"]           = counter(qpalm.stats_backend->rank_updates);
-    state.counters["status"]                 = counter(status);
-    state.counters["success"]                = counter(status == qp::SolverStatus::Converged);
-    state.counters["time_solve"]             = counter_avg(time_solve);
-    state.counters["time_active_set_change"] = counter_avg(time_active_set_change);
-    state.counters["time_line_search"]       = counter_avg(time_line_search);
-    state.counters["time_recompute_outer"]   = counter_avg(time_recompute_outer);
-    state.counters["time_recompute_inner"]   = counter_avg(time_recompute_inner);
-    state.counters["time_mat_vec"]           = counter_avg(time_mat_vec);
-    state.counters["stationarity"]           = counter(kkt_error.stationarity);
-    state.counters["equality_residual"]      = counter(kkt_error.equality_residual);
-    state.counters["inequality_residual"]    = counter(kkt_error.inequality_residual);
-    state.counters["complementarity"]        = counter(kkt_error.complementarity);
+    state.counters["status"]              = counter(status);
+    state.counters["success"]             = counter(status == qp::SolverStatus::Converged);
+    state.counters["iter"]                = counter(qpalm.stats->inner_iter);
+    state.counters["outer_iter"]          = counter(qpalm.stats->outer_iter);
+    state.counters["num_factor"]          = counter(qpalm.stats_backend->num_factor);
+    state.counters["num_upd"]             = counter(qpalm.stats_backend->num_updates);
+    state.counters["rank_upd"]            = counter(qpalm.stats_backend->rank_updates);
+    state.counters["t_solve"]             = counter_avg(time_solve);
+    state.counters["t_active_set_change"] = counter_avg(time_active_set_change);
+    state.counters["t_line_search"]       = counter_avg(time_line_search);
+    state.counters["t_recompute_outer"]   = counter_avg(time_recompute_outer);
+    state.counters["t_recompute_inner"]   = counter_avg(time_recompute_inner);
+    state.counters["t_mat_vec"]           = counter_avg(time_mat_vec);
+    state.counters["res_dual"]            = counter(kkt_error.stationarity);
+    state.counters["res_eq"]              = counter(kkt_error.equality_residual);
+    state.counters["res_ineq"]            = counter(kkt_error.inequality_residual);
+    state.counters["compl"]               = counter(kkt_error.complementarity);
 }
 
 enum class WarmStartHPIPM {
@@ -194,20 +204,20 @@ void run_benchmark_hpipm(benchmark::State &state, const SpringMassParams &params
         auto time_solve = solve_hpipm(*qp_data, *solver_data);
         state.SetIterationTime(seconds(time_solve).count());
     }
-    auto sol                              = get_solution_hpipm(*solver_data);
-    auto kkt_error                        = problem.ocp.compute_kkt_error(sol);
-    auto stats                            = get_stats_hpipm(*solver_data);
-    state.counters["iter"]                = counter(stats.iter);
-    state.counters["status"]              = counter(stats.status);
-    state.counters["success"]             = counter(stats.status == 0);
-    state.counters["max_res_stat"]        = counter(stats.max_res_stat);
-    state.counters["max_res_eq"]          = counter(stats.max_res_eq);
-    state.counters["max_res_ineq"]        = counter(stats.max_res_ineq);
-    state.counters["max_res_comp"]        = counter(stats.max_res_comp);
-    state.counters["stationarity"]        = counter(kkt_error.stationarity);
-    state.counters["equality_residual"]   = counter(kkt_error.equality_residual);
-    state.counters["inequality_residual"] = counter(kkt_error.inequality_residual);
-    state.counters["complementarity"]     = counter(kkt_error.complementarity);
+    auto sol                       = get_solution_hpipm(*solver_data);
+    auto kkt_error                 = problem.ocp.compute_kkt_error(sol);
+    auto stats                     = get_stats_hpipm(*solver_data);
+    state.counters["status"]       = counter(stats.status);
+    state.counters["success"]      = counter(stats.status == 0);
+    state.counters["iter"]         = counter(stats.iter);
+    state.counters["max_res_stat"] = counter(stats.max_res_stat);
+    state.counters["max_res_eq"]   = counter(stats.max_res_eq);
+    state.counters["max_res_ineq"] = counter(stats.max_res_ineq);
+    state.counters["max_res_comp"] = counter(stats.max_res_comp);
+    state.counters["res_dual"]     = counter(kkt_error.stationarity);
+    state.counters["res_eq"]       = counter(kkt_error.equality_residual);
+    state.counters["res_ineq"]     = counter(kkt_error.inequality_residual);
+    state.counters["compl"]        = counter(kkt_error.complementarity);
 }
 #endif
 
@@ -255,8 +265,19 @@ struct Solver {
     std::function<void(benchmark::State &, SpringMassParams)> run;
 };
 
-std::generator<Solver> get_solvers(const Options &opts) {
-    using enum qp::StorageOrder;
+std::string_view order(qp::StorageOrder o) { return o == qp::StorageOrder::RowMajor ? "rm" : "cm"; }
+
+template <index_t VL, qp::StorageOrder O>
+std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
+    static constexpr auto cyqlone_solver = [](std::string_view name,
+                                              const qp::CyqloneBackendSettings &backend,
+                                              const qp::Settings &settings) {
+        return Solver{
+            std::format("cyqlone(p={},v={},{},{})", backend.processors, VL, order(O), name),
+            [=](benchmark::State &state, const SpringMassParams &params) {
+                run_benchmark<VL, O>(state, params, backend, settings, true);
+            }};
+    };
     qp::CyqloneBackendSettings backend{
         .processors              = opts.parallelism,
         .changing_constr_factor  = opts.changing_constr_factor,
@@ -270,119 +291,123 @@ std::generator<Solver> get_solvers(const Options &opts) {
         .initial_penalty_y = 20,
         .verbose           = false,
     };
+    qp::CyqloneBackendSettings backend_no_upd = backend;
+    backend_no_upd.max_update_count           = 0;
+    qp::Settings settings_warm                = settings;
+    settings_warm.initial_penalty_y           = 1e4;
+    settings_warm.initial_inner_tolerance     = 1e-4;
     if (opts.pcr)
         backend.solve_method = cyqlone::SolveMethod::PCR;
-    if (opts.warm) {
-        backend.strategy = qp::WarmStartingStrategy::Zeros;
-        co_yield {std::format("cyqlone(v={},p={},zero)", v, backend.processors),
-                  [=](benchmark::State &state, const SpringMassParams &params) {
-                      run_benchmark<v>(state, params, backend, settings, true);
-                  }};
-        if (opts.no_updates) {
-            auto t = std::exchange(backend.max_update_count, 0);
-            co_yield {std::format("cyqlone(v={},p={},zero,upd={})", v, backend.processors,
-                                  backend.max_update_count),
-                      [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<v>(state, params, backend, settings, true);
-                      }};
-            backend.max_update_count = t;
-        }
-        settings.initial_penalty_y       = 1e4;
-        settings.initial_inner_tolerance = 1e-4;
-        if (opts.warm_copy) {
-            backend.strategy = qp::WarmStartingStrategy::Copy;
-            co_yield {std::format("cyqlone(v={},p={},copy)", v, backend.processors),
-                      [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<v>(state, params, backend, settings, true);
-                      }};
-        }
-        backend.strategy = qp::WarmStartingStrategy::Shift;
-        co_yield {std::format("cyqlone(v={},p={},shift)", v, backend.processors),
-                  [=](benchmark::State &state, const SpringMassParams &params) {
-                      run_benchmark<v>(state, params, backend, settings, true);
-                  }};
-        if (opts.no_updates) {
-            auto t = std::exchange(backend.max_update_count, 0);
-            co_yield {std::format("cyqlone(v={},p={},shift,upd={})", v, backend.processors,
-                                  backend.max_update_count),
-                      [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<v>(state, params, backend, settings, true);
-                      }};
-            backend.max_update_count = t;
-        }
+    if (opts.cold) {
+        backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Zeros;
+        co_yield cyqlone_solver("zero", backend, settings);
+        if (opts.no_updates)
+            co_yield cyqlone_solver("zero,upd=0", backend_no_upd, settings);
+    }
+    if (opts.warm_shift) {
+        backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Shift;
+        co_yield cyqlone_solver("shift", backend, settings_warm);
+        if (opts.no_updates)
+            co_yield cyqlone_solver("shift,upd=0", backend_no_upd, settings_warm);
+    }
+    if (opts.warm_copy) {
+        backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Copy;
+        co_yield cyqlone_solver("copy", backend, settings_warm);
+        if (opts.no_updates)
+            co_yield cyqlone_solver("copy,upd=0", backend_no_upd, settings_warm);
+    }
+}
+
+std::generator<Solver> get_hpipm_solvers(const Options &opts) {
+    if (opts.hpipm) {
 #if WITH_HPIPM
-        if (opts.hpipm) {
+        if (opts.cold)
             co_yield {"hpipm(zero)", [=](benchmark::State &state, const SpringMassParams &params) {
                           run_benchmark_hpipm(state, params, WarmStartHPIPM::WarmZero);
                       }};
-            if (opts.warm_copy)
-                co_yield {"hpipm(copy)",
-                          [=](benchmark::State &state, const SpringMassParams &params) {
-                              run_benchmark_hpipm(state, params, WarmStartHPIPM::WarmCopy);
-                          }};
+        if (opts.warm_shift)
             co_yield {"hpipm(shift)", [=](benchmark::State &state, const SpringMassParams &params) {
                           run_benchmark_hpipm(state, params, WarmStartHPIPM::WarmShift);
                       }};
-        }
-#endif
-    } else {
-        if (opts.rm)
-            co_yield {std::format("cyqlone(v={},p={},rm)", v, backend.processors),
-                      [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<v, RowMajor>(state, params, backend, settings);
-                      }};
-        if (opts.cm)
-            co_yield {std::format("cyqlone(v={},p={},cm)", v, backend.processors),
-                      [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<v, ColMajor>(state, params, backend, settings);
-                      }};
-        if (opts.v8) {
-#if BATMAT_HAS_DOUBLE_VL_8
-            co_yield {std::format("cyqlone(v=8,p={},cm)", backend.processors),
-                      [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<8, ColMajor>(state, params, backend, settings);
+        if (opts.warm_copy)
+            co_yield {"hpipm(copy)", [=](benchmark::State &state, const SpringMassParams &params) {
+                          run_benchmark_hpipm(state, params, WarmStartHPIPM::WarmCopy);
                       }};
 #else
-            throw std::runtime_error("Vector length 8 not supported on this architecture");
-#endif
-        }
-        if (opts.no_updates) {
-            backend.max_update_count = 0;
-            co_yield {std::format("cyqlone(v={},p={},upd={})", v, backend.processors,
-                                  backend.max_update_count),
-                      [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark<v>(state, params, backend, settings);
-                      }};
-        }
-#if WITH_HPIPM
-        if (opts.hpipm) {
-            co_yield {"hpipm", [=](benchmark::State &state, const SpringMassParams &params) {
-                          run_benchmark_hpipm(state, params);
-                      }};
-        }
+        throw std::invalid_argument("HPIPM support not enabled in this build");
 #endif
     }
 }
 
-void register_benchmarks(const Options &opts) {
-    for (auto problem : get_spring_mass_params(opts))
-        for (auto solver : get_solvers(opts))
-            benchmark::RegisterBenchmark(std::format("{} - {}", problem.name, solver.name),
+using std::ranges::elements_of;
+
+template <qp::StorageOrder Order>
+std::generator<Solver> get_cyqlone_solvers_vl(const Options &opts) {
+    if (opts.vector_length == 0)
+        co_return;
+#define CYQ_X(VL)                                                                                  \
+    else if (opts.vector_length == VL) co_yield elements_of(get_cyqlone_solvers<VL, Order>(opts));
+    BATMAT_FOREACH_VL_DOUBLE(CYQ_X)
+#undef CYQ_X
+    else
+#define CYQ_X(VL) " " #VL
+        throw std::invalid_argument(
+            "Unsupported vector length. Supported lengths:" BATMAT_FOREACH_VL_DOUBLE(CYQ_X));
+#undef CYQ_X
+}
+
+std::generator<Solver> get_solvers(const Options &opts) {
+    co_yield elements_of(get_hpipm_solvers(opts));
+    if (opts.rm)
+        co_yield elements_of(get_cyqlone_solvers_vl<qp::StorageOrder::RowMajor>(opts));
+    if (opts.cm)
+        co_yield elements_of(get_cyqlone_solvers_vl<qp::StorageOrder::ColMajor>(opts));
+}
+
+auto register_benchmarks(const Options &opts) {
+    size_t max_problem_name_len = 0;
+    size_t max_solver_name_len  = 0;
+    for (auto problem : get_spring_mass_params(opts)) {
+        max_problem_name_len = std::max(max_problem_name_len, problem.name.size());
+        for (auto solver : get_solvers(opts)) {
+            max_solver_name_len = std::max(max_solver_name_len, solver.name.size());
+            benchmark::RegisterBenchmark(std::format("{}@{}", problem.name, solver.name),
                                          [params = problem.params, run = std::move(solver.run)](
                                              benchmark::State &state) { run(state, params); })
                 ->MeasureProcessCPUTime()
                 ->UseManualTime()
                 ->Unit(benchmark::kMillisecond)
+                ->ComputeStatistics("max", [](auto &v) { return *std::ranges::max_element(v); })
                 ->ComputeStatistics("min", [](auto &v) { return *std::ranges::min_element(v); })
-                ->ComputeStatistics("max", [](auto &v) { return *std::ranges::max_element(v); });
+                ->GetName();
+        }
+    }
+    return std::make_pair(max_problem_name_len, max_solver_name_len);
 }
 
-int main(int argc, char **argv) try {
-    char *const program = argv[0];
-    Options opts;
-    CLI::App app{"Spring-Mass Benchmarks"};
+std::unique_ptr<benchmark::BenchmarkReporter> make_custom_reporter(size_t problem_name_width,
+                                                                   size_t solver_name_width,
+                                                                   bool print_extra,
+                                                                   bool with_color);
+
+void register_options(const char *program, CLI::App &app, Options &opts) {
+    if (std::getenv("NO_COLOR"))
+        opts.use_color = false;
+    else if (std::getenv("CLICOLOR_FORCE"))
+        opts.use_color = true;
+    else
+        opts.use_color = isatty(fileno(stdout)) == 1;
+    app.usage(std::string(program) + " [options] -- [benchmark options]");
+    app.footer(std::format("Benchmark options are passed to the Google Benchmark framework. "
+                           "Use {} -- --help or see "
+                           "https://google.github.io/benchmark/user_guide.html for details.",
+                           program));
     app.allow_extras();
-    app.add_flag("--warm,!--cold", opts.warm, "Benchmark with warm starting");
+    app.add_flag("--cold,!--no-cold", opts.cold, "Benchmark with cold starting");
+    app.add_flag("--warm-shift,!--no-warm-shift", opts.warm_shift,
+                 "Benchmark with warm starting (shift)");
+    app.add_flag("--warm-copy,!--no-warm-copy", opts.warm_copy,
+                 "Benchmark with warm starting (copy)");
     app.add_option("--horizon,-N", opts.horizon, "Specify a horizon length to benchmark");
     app.add_option("--masses,-M", opts.masses, "Specify the number of masses to benchmark");
     app.add_option("--num-instances,-I", opts.num_instances,
@@ -391,11 +416,12 @@ int main(int argc, char **argv) try {
     app.add_flag("--no-updates", opts.no_updates, "Compare to the Cyqlone backend without updates");
     app.add_option("--parallelism,-p", opts.parallelism,
                    "The number of threads to use in the Cyqlone backend");
+    app.add_option("--vector-length,-v", opts.vector_length,
+                   "The vector length to use in the Cyqlone backend");
     app.add_flag("--rm,!--no-rm", opts.rm, "Use row-major (default) storage");
     app.add_flag("--cm,!--no-cm", opts.cm, "Use column-major storage");
     app.add_flag("--pcr,!--pcg", opts.pcr, "Use parallel cyclic reduction in the Cyqlone backend");
     app.add_flag("--hpipm,!--no-hpipm", opts.hpipm, "Use HPIPM solver for comparison");
-    app.add_flag("--v8,!--no-v8", opts.v8, "Include vector length 8 for the Cyqlone backend");
     app.add_option("--problem", opts.problem_type, "Problem type to benchmark")
         ->transform(CLI::CheckedTransformer(problem_type_map, CLI::ignore_case));
     app.add_option("--pcr-max-update-fraction", opts.pcr_max_update_fraction,
@@ -404,14 +430,14 @@ int main(int argc, char **argv) try {
                    "Maximum update rank fraction when using CR");
     app.add_option("--changing-constr-factor", opts.changing_constr_factor,
                    "Changing constraints factor for the Cyqlone backend");
-    try {
-        app.parse(argc, argv);
-    } catch (const CLI::ParseError &e) {
-        return app.exit(e);
-    }
+    app.add_flag("--print-extra,!--no-print-extra", opts.print_extra,
+                 "Print additional counters in the benchmark report");
+    app.add_flag("--custom-reporter,!--no-custom-reporter", opts.custom_reporter,
+                 "Use custom benchmark reporter");
+    app.add_flag("--color,!--no-color", opts.use_color, "Enable/disable colored output");
+}
 
-    register_benchmarks(opts);
-    std::vector bm_args = app.remaining(true);
+int initialize_google_benchmark(char *program, auto bm_args) {
     if (!bm_args.empty() && bm_args.front() == "--")
         bm_args.erase(bm_args.begin());
     std::vector<char *> bm_argv(bm_args.size() + 2);
@@ -421,6 +447,10 @@ int main(int argc, char **argv) try {
     benchmark::Initialize(&bm_argc, bm_argv.data());
     if (benchmark::ReportUnrecognizedArguments(bm_argc, bm_argv.data()))
         return 1;
+    return 0;
+}
+
+void register_context() {
 #if BATMAT_WITH_OPENMP
     benchmark::AddCustomContext("OMP_NUM_THREADS", std::to_string(omp_get_max_threads()));
 #endif
@@ -428,6 +458,15 @@ int main(int argc, char **argv) try {
     benchmark::AddCustomContext("batmat_commit_hash", batmat_commit_hash);
     benchmark::AddCustomContext("cyqlone_build_time", cyqlone_build_time);
     benchmark::AddCustomContext("cyqlone_commit_hash", cyqlone_commit_hash);
+#if defined(__INTEL_LLVM_COMPILER)
+    benchmark::AddCustomContext("compiler", "intel-llvm");
+#elif defined(__clang__)
+    benchmark::AddCustomContext("compiler", "clang");
+#elif defined(__GNUC__)
+    benchmark::AddCustomContext("compiler", "gcc");
+#elif defined(_MSC_VER)
+    benchmark::AddCustomContext("compiler", "msvc");
+#endif
 #if defined(__AVX512F__)
     benchmark::AddCustomContext("arch", "avx512f");
 #elif defined(__AVX2__)
@@ -436,8 +475,30 @@ int main(int argc, char **argv) try {
     benchmark::AddCustomContext("arch", "avx");
 #elif defined(__SSE3__)
     benchmark::AddCustomContext("arch", "sse3");
+#elif defined(__ARM_NEON)
+    benchmark::AddCustomContext("arch", "neon");
 #endif
-    benchmark::RunSpecifiedBenchmarks();
+}
+
+int main(int argc, char **argv) try {
+    char *const program = argv[0];
+    CLI::App app{"CyQPALM and Cyqlone Spring-Mass Benchmarks"};
+    Options opts;
+    register_options(program, app, opts);
+    try {
+        app.parse(argc, argv);
+    } catch (const CLI::ParseError &e) {
+        return app.exit(e);
+    }
+    auto [problem_name_width, solver_name_width] = register_benchmarks(opts);
+    if (auto err = initialize_google_benchmark(program, app.remaining(true)); err != 0)
+        return err;
+    register_context();
+    auto reporter = opts.custom_reporter
+                        ? make_custom_reporter(problem_name_width, solver_name_width + 2,
+                                               opts.print_extra, opts.use_color)
+                        : nullptr;
+    benchmark::RunSpecifiedBenchmarks(reporter.get());
     benchmark::Shutdown();
 } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;

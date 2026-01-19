@@ -15,10 +15,13 @@ deps() {
     local clang_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile"
     local icx_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/icx-linux.profile"
     local profiles=("-pr:h" "${dev_profile}")
-    local with_mkl=False
-    local editable=0
-    local lock=0
+    local with_mkl=False; local editable=0; local lock=0
+    local extra_args=()
     while [[ $# -gt 0 ]]; do
+        if [[ $1 = "--" ]]; then
+            shift; extra_args+=("$@")
+            break
+        fi
         case $1 in
             --gcc) ;;
             --clang*) export TTTAPA_CONAN_PROFILES_CLANG_SUFFIX="${1#--clang}"
@@ -41,7 +44,7 @@ deps() {
         shift
     done
     if ! which conan &> /dev/null; then
-        echo "Conan not found in PATH. Please install Conan 2.x and try again." >&2
+        echo "Conan not found in PATH. Please install Conan 2.x and try again. https://conan.io" >&2
         exit 1
     fi
     set -x
@@ -56,6 +59,7 @@ deps() {
         -s:b compiler.cppstd=20
         --build=missing
         --lockfile-partial
+        "${extra_args[@]}"
     )
     if [[ $editable -eq 1 ]]; then
         find "${CYQLONE_ROOT}/build" -name CMakeCache.txt -delete ||:
@@ -72,62 +76,84 @@ deps() {
     conan install . "${conan_args[@]}" --format=json > conan.json
 }
 
+# Wrapper for jq that downloads a binary if not found
+_jq() {
+    local jq_url="https://github.com/jqlang/jq/releases/download/jq-1.8.1/"
+    local dest="${CYQLONE_ROOT}/.local/bin"
+    export PATH="$dest:${PATH}"
+    if ! which jq &> /dev/null; then
+        echo "jq not found in PATH. Downloading ..." >&2
+        case "$(uname -s)-$(uname -m)" in
+            Linux-x86_64) jq_url+="jq-linux-amd64" ;;
+            Linux-aarch64) jq_url+="jq-linux-arm64" ;;
+            Darwin-x86_64) jq_url+="jq-macos-amd64" ;;
+            Darwin-arm64)  jq_url+="jq-macos-arm64" ;;
+            *) echo "Unsupported platform. Please install jq manually." >&2; exit 1 ;;
+        esac
+        mkdir -p "$dest"; [ -f "$dest/.gitignore" ] || echo '*' > "$dest/.gitignore"
+        wget -O "$dest/jq" "${jq_url}"; chmod +x "$dest/jq"
+    fi
+    jq "$@"
+}
+
 # Build the benchmark project
 build() {
     if [[ ! -f CMakeUserPresets.json ]] || [[ ! -f conan.json ]]; then
-        echo "Conan files not found, please run deps first." >&2; exit 1
+        echo "Conan files not found, please run the deps step first." >&2; exit 1
     fi
-    generators_folder="$(jq -r '.graph.nodes."0".generators_folder' conan.json)"
-    set -x +u
+    generators_folder="$(_jq -r '.graph.nodes."0".generators_folder' conan.json)"
+    set +ux
     source "${generators_folder}/conanbuild.sh"
-    set -u
+    set -ux
     cmake --fresh --preset conan-release
     cmake --build --preset conan-release
 }
 
+# Run a benchmark command
+benchmark() {
+    if [[ ! -f CMakeUserPresets.json ]] || [[ ! -f conan.json ]]; then
+        echo "Conan files not found, please run the deps and build steps first." >&2; exit 1
+    fi
+    build_folder="$(_jq -r '.graph.nodes."0".build_folder' conan.json)"
+    generators_folder="$(_jq -r '.graph.nodes."0".generators_folder' conan.json)"
+    set +ux
+    source "${generators_folder}/conanrun.sh"
+    set -ux
+    if [[ ! -x "${build_folder}/spring-mass" ]]; then
+        echo "Benchmark executable not found, please run the build step first." >&2; exit 1
+    fi
+    echo $0
+    exec ${TASKSET_CPU} "${build_folder}/spring-mass" "$@"
+}
+
 # Run the quick benchmark as a sanity check
 benchmark_quick() {
-    build_folder="$(jq -r '.graph.nodes."0".build_folder' conan.json)"
-    generators_folder="$(jq -r '.graph.nodes."0".generators_folder' conan.json)"
-    set -x +u
-    source "${generators_folder}/conanrun.sh"
-    set -u
-    ${TASKSET_CPU} "${build_folder}/spring-mass" \
-        --problem wang-boyd-2008 --warm -I 1 -p "${NPROC}" --cm \
+    benchmark \
+        --problem wang-boyd-2008 --cold --warm-shift -I 1 -p "${NPROC}" --cm \
         -N 256 -M 12 \
         --benchmark_repetitions=11 --benchmark_report_aggregates_only \
-        --benchmark_min_time=0.1s
+        --benchmark_min_time=0.1s "$@"
 }
 
 # Run the horizon scaling benchmark
 benchmark_scaling() {
-    build_folder="$(jq -r '.graph.nodes."0".build_folder' conan.json)"
-    generators_folder="$(jq -r '.graph.nodes."0".generators_folder' conan.json)"
-    set -x +u
-    source "${generators_folder}/conanrun.sh"
-    set -u
-    ${TASKSET_CPU} "${build_folder}/spring-mass" \
-        --problem wang-boyd-2008 --warm -I 20 -p "${NPROC}" --cm --no-updates \
+    benchmark \
+        --problem wang-boyd-2008 --cold --warm-shift -I 20 -p "${NPROC}" --cm --no-updates \
         -N 32  -N 64  -N 96  -N 128 -N 160 -N 192 -N 224 -N 256 \
         -N 288 -N 320 -N 352 -N 384 -N 416 -N 448 -N 480 -N 512 \
         -M 12 \
         --benchmark_repetitions=3 --benchmark_report_aggregates_only \
-        --benchmark_min_time=0.05s --benchmark_out=benchmark-scaling.json
+        --benchmark_min_time=0.05s --benchmark_out=benchmark-scaling.json "$@"
 }
 
 # Run the M×N grid benchmark
 benchmark_grid() {
-    build_folder="$(jq -r '.graph.nodes."0".build_folder' conan.json)"
-    generators_folder="$(jq -r '.graph.nodes."0".generators_folder' conan.json)"
-    set -x +u
-    source "${generators_folder}/conanrun.sh"
-    set -u
-    ${TASKSET_CPU} "${build_folder}/spring-mass" \
-        --problem wang-boyd-2008 --warm -I 150 -p "${NPROC}" --cm \
+    benchmark \
+        --problem wang-boyd-2008 --cold --warm-shift -I 150 -p "${NPROC}" --cm \
         -N 32 -N 64 -N 96 -N 128 -N 160 -N 192 -N 224 -N 256 \
         -M 6 -M 12 -M 18 -M 24 -M 30 \
         --benchmark_repetitions=3 --benchmark_report_aggregates_only \
-        --benchmark_min_time=0.05s --benchmark_out=benchmark-grid.json
+        --benchmark_min_time=0.05s --benchmark_out=benchmark-grid.json "$@"
 }
 
 # Clean up build files and benchmark results
@@ -148,32 +174,36 @@ main() {
         build)
             build ;;
         benchmark-quick)
-            benchmark_quick ;;
+            benchmark_quick "$@" ;;
         benchmark-scaling)
-            benchmark_scaling ;;
+            benchmark_scaling "$@" ;;
         benchmark-grid)
-            benchmark_grid ;;
+            benchmark_grid "$@" ;;
         all)
             deps "$@"
             build
             benchmark_quick
             benchmark_scaling
             benchmark_grid ;;
+        benchmark)
+            benchmark "$@" ;;
         clean)
             clean ;;
         help|*)
             echo "Usage: $0 {deps|build|benchmark-quick|benchmark-scaling|benchmark-grid|all}"      >&2
             echo ""                                                                                 >&2
             echo "Commands:"                                                                        >&2
-            echo "  deps                    - Install the dependencies (using Conan)"               >&2
+            echo "  deps [...]              - Install the dependencies (using Conan)"               >&2
             echo "  build                   - Build the benchmark project"                          >&2
             echo "  benchmark-quick         - Run quick benchmark (sanity check)"                   >&2
             echo "  benchmark-scaling       - Run scaling benchmark (takes a couple of minutes)"    >&2
             echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"         >&2
             echo "  all                     - Run all commands above in sequence"                   >&2
+            echo "  benchmark [...]         - Run a custom benchmark"                               >&2
             echo "  clean                   - Remove all build files and benchmark results"         >&2
             echo ""                                                                                 >&2
             echo "Use $0 deps --help for more information on dependency installation options."      >&2
+            echo "Use $0 benchmark --help for the available benchmark parameters."                  >&2
             echo ""                                                                                 >&2
             echo "Environment variables:"                                                           >&2
             echo "  NPROC        - number of processors to use for the benchmark (default: 8)"      >&2

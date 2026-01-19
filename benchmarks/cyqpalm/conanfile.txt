@@ -3,6 +3,7 @@ cyqlone/0.0.1
 hpipm/tttapa.20251105
 benchmark/1.9.4
 cli11/2.6.0
+fmt/12.1.0
 
 [generators]
 CMakeDeps
