@@ -17,7 +17,7 @@ class CustomReporter : public benchmark::BenchmarkReporter {
   public:
     explicit CustomReporter(size_t problem_name_width, size_t solver_name_width,
                             bool print_extra = true, bool with_color = true)
-        : problem_name_width(problem_name_width), solver_name_width(solver_name_width),
+        : max_problem_name_width(problem_name_width), max_solver_name_width(solver_name_width),
           print_extra(print_extra), with_color(with_color) {}
 
     bool ReportContext(const Context &context) override { return true; }
@@ -72,7 +72,7 @@ class CustomReporter : public benchmark::BenchmarkReporter {
     }
 
     size_t max_name_width() const {
-        return std::max(problem_name_width, solver_name_width + 1 + aggregate_width);
+        return std::max(max_problem_name_width, max_solver_name_width + 1 + aggregate_width);
     }
 
     void PrintHeader(const std::string &problem_name) const {
@@ -92,18 +92,21 @@ class CustomReporter : public benchmark::BenchmarkReporter {
     void PrintRunData(const Run &run, const std::string &solver_name) const {
         // Handle skipped/error runs
         if (run.skipped != benchmark::internal::NotSkipped) {
-            fmt::print($(fg(fmt::color::red)), "{:>{}}", solver_name, solver_name_width);
+            fmt::print($(fg(fmt::color::red)), "{:>{}}", solver_name, max_solver_name_width);
             fmt::print(" skipped: {}\n", run.skip_message);
             return;
         }
-        // Format time and CPU time
-        const char *time_unit = GetTimeUnitString(run.time_unit);
-        std::string time_str  = fmt::format("{:.2f} {}", run.GetAdjustedRealTime(), time_unit);
-        std::string cpu_str   = fmt::format("{:.2f} {}", run.GetAdjustedCPUTime(), time_unit);
         // Aggregate name
         bool aggregate             = (run.run_type == Run::RT_Aggregate);
         bool median                = aggregate && run.aggregate_name == "median";
         std::string aggregate_name = aggregate ? "[" + run.aggregate_name + "]" : "";
+        // Format time and CPU time
+        bool unit_time   = !aggregate || run.aggregate_unit == benchmark::StatisticUnit::kTime;
+        const char *unit = unit_time ? GetTimeUnitString(run.time_unit) : "%";
+        auto real_time   = unit_time ? run.GetAdjustedRealTime() : 100 * run.real_accumulated_time;
+        auto cpu_time    = unit_time ? run.GetAdjustedCPUTime() : 100 * run.cpu_accumulated_time;
+        std::string time_str = fmt::format("{:.2f} {:<2}", real_time, unit);
+        std::string cpu_str  = fmt::format("{:.2f} {:<2}", cpu_time, unit);
         // Check if success counter exists and is not 1
         bool failed = false;
         if (auto s = run.counters.find("success"); s != run.counters.end())
@@ -113,6 +116,7 @@ class CustomReporter : public benchmark::BenchmarkReporter {
         auto name_color = failed ? fmt::color::red : fmt::color::lime_green;
         auto emph = median ? (fmt::emphasis::italic | fmt::emphasis::bold) : fmt::text_style{};
         // Name, times and iterations
+        auto solver_name_width = max_name_width() - aggregate_width - 1;
         fmt::print("{:>{}} {:<{}}", styled(solver_name, $(emph | fg(name_color))),
                    solver_name_width, aggregate_name, aggregate_width);
         fmt::print(" ");
@@ -140,7 +144,7 @@ class CustomReporter : public benchmark::BenchmarkReporter {
             if (!std::ranges::contains(fields, name, &Field::name))
                 extra_counters.emplace_back(FormatExtraCounter(name, counter));
         if (!extra_counters.empty()) {
-            fmt::print("{:<{}}                                ", "", solver_name_width);
+            fmt::print("{:<{}}                                ", "", max_solver_name_width);
             fmt::print($(fg(fmt::color::light_gray)), "(");
             for (size_t i = 0; i < extra_counters.size(); ++i) {
                 if (i > 0)
@@ -173,8 +177,8 @@ class CustomReporter : public benchmark::BenchmarkReporter {
 
     bool with_color;
     bool print_extra;
-    size_t solver_name_width;
-    size_t problem_name_width;
+    size_t max_solver_name_width;
+    size_t max_problem_name_width;
     size_t aggregate_width = 9; // Width for aggregate name column (including brackets)
     size_t time_width      = 12;
     std::string current_problem_name_;

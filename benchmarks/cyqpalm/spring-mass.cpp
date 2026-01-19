@@ -11,11 +11,13 @@
 #include <batmat-version.h>
 #include <cyqlone-version.h>
 #include <algorithm>
+#include <filesystem>
 #include <format>
 #include <generator>
 #include <random>
 #include <stdexcept>
 #include <utility>
+namespace fs = std::filesystem;
 
 #include "hpipm.hpp"
 
@@ -75,6 +77,7 @@ struct Options {
     bool custom_reporter           = true;
     bool print_extra               = false;
     bool use_color                 = false;
+    std::string export_problem{};
 };
 
 namespace qp = cyqlone::qpalm;
@@ -95,30 +98,13 @@ qp::problems::SpringMassProblem create_problem(const SpringMassParams &params) {
     return problem;
 }
 
-template <index_t VL, qp::StorageOrder Order = qp::StorageOrder::RowMajor>
-void stress(const SpringMassParams &params, qp::CyqloneBackendSettings backend_settings,
-            qp::Settings settings, bool warm = false) {
-    auto problem = create_problem(params);
-    // Build a QPALM Cyqlone solver
-    auto ocp     = cyqlone::CyqloneStorage<>::build(problem.ocp);
-    auto backend = qp::make_qpalm_cyqlone_backend<VL, Order>(ocp, {}, backend_settings);
-    qp::Solver<qp::CyqloneBackend<VL, Order> *> qpalm{backend.get(), settings};
-    qpalm();
-    const auto inner_iter = qpalm.stats->inner_iter;
-    for (index_t i = 0; i < 1000; ++i) {
-        qpalm();
-        if (qpalm.stats->inner_iter != inner_iter)
-            throw std::runtime_error("Inconsistent inner iterations detected");
-    }
-}
-
 template <index_t VL, qp::StorageOrder Order>
 void run_benchmark(benchmark::State &state, const SpringMassParams &params,
                    qp::CyqloneBackendSettings backend_settings, qp::Settings settings,
                    bool warm = false) {
+    if (backend_settings.processors < 2)
+        return state.SkipWithMessage("Fewer than 2 processors are currently not supported.");
     auto problem = create_problem(params);
-    if (problem.ocp.dim.N_horiz <= (backend_settings.processors >> 1))
-        state.SkipWithMessage("Problem too small for the selected number of processors");
     // Build a QPALM Cyqlone solver
     auto ocp     = cyqlone::CyqloneStorage<>::build(problem.ocp);
     auto backend = qp::make_qpalm_cyqlone_backend<VL, Order>(ocp, {}, backend_settings);
@@ -258,6 +244,21 @@ std::generator<Problem> get_spring_mass_params(const Options &opts) {
                         break;
                     default: throw std::runtime_error("Unknown problem type");
                 }
+}
+
+void export_problem(const Options &opts) {
+    if (opts.export_problem.empty())
+        return;
+    for (const auto &params : get_spring_mass_params(opts)) {
+        auto problem      = create_problem(params.params);
+        fs::path filename = opts.export_problem;
+        if (fs::is_directory(filename))
+            filename /= params.name + ".mat";
+        auto mat = cyqlone::create_mat(filename);
+        cyqlone::add_to_mat(mat.get(), problem.ocp);
+        std::cout << "Exported problem " << params.name << " to " << filename << std::endl;
+        break;
+    }
 }
 
 struct Solver {
@@ -430,10 +431,12 @@ void register_options(const char *program, CLI::App &app, Options &opts) {
                    "Maximum update rank fraction when using CR");
     app.add_option("--changing-constr-factor", opts.changing_constr_factor,
                    "Changing constraints factor for the Cyqlone backend");
-    app.add_flag("--print-extra,!--no-print-extra", opts.print_extra,
-                 "Print additional counters in the benchmark report");
+    app.add_option("--export-problem", opts.export_problem,
+                   "Export a single problem instance to a .mat file");
     app.add_flag("--custom-reporter,!--no-custom-reporter", opts.custom_reporter,
                  "Use custom benchmark reporter");
+    app.add_flag("--print-extra,!--no-print-extra", opts.print_extra,
+                 "Print additional counters in the benchmark report");
     app.add_flag("--color,!--no-color", opts.use_color, "Enable/disable colored output");
 }
 
@@ -490,6 +493,7 @@ int main(int argc, char **argv) try {
     } catch (const CLI::ParseError &e) {
         return app.exit(e);
     }
+    export_problem(opts);
     auto [problem_name_width, solver_name_width] = register_benchmarks(opts);
     if (auto err = initialize_google_benchmark(program, app.remaining(true)); err != 0)
         return err;
