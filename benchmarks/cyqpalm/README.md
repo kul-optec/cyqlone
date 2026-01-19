@@ -7,8 +7,10 @@ dependencies:
 ./benchmark.sh deps --gcc
 # -- or --
 ./benchmark.sh deps --clang   # or use e.g. --clang-21 for a specific version
+# -- or --
+./benchmark.sh deps --icx
 ```
-Ǹext, build the benchmark project:
+Next, build the benchmark project:
 ```sh
 ./benchmark.sh build
 ```
@@ -17,7 +19,7 @@ By default, the benchmarks run on the first eight CPUs available on your system.
 (e.g. if fewer CPUs are available or if the first eight logical CPUs are hyperthreads on four
 physical cores), configure the following environment variables:
 ```sh
-export NPROC=4 # number of CPUs to use (p parameter in the paper)
+export NPROC=4                      # number of CPUs to use (p parameter in the paper)
 export TASKSET_CPU="taskset -c 0-3" # which CPUs to use (here: first four)
 ```
 Using `taskset` to pin the benchmark processes to specific CPUs helps reduce variability in the

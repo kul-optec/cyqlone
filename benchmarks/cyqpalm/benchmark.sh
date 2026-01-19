@@ -2,14 +2,15 @@
 set -euo pipefail
 
 # Paths and environment setup
-CYQLONE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$(dirname "${BASH_SOURCE[0]}")"
+CYQLONE_ROOT="$(cd ../.. && pwd)"
 export CONAN_HOME="${CYQLONE_ROOT}/.conan2"
 # User-configurable variables with defaults
 : "${TASKSET_CPU:=taskset -c 0-7}"  # Default to binding to CPU cores 0-7
 : "${NPROC:=8}" # Default to using 8 processors (p parameter in the paper)
 
 # Set up Conan and install the dependencies
-setup_deps() {
+deps() {
     local dev_profile="${CYQLONE_ROOT}/scripts/dev/profiles/dev"
     local clang_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile"
     local icx_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/icx-linux.profile"
@@ -26,10 +27,23 @@ setup_deps() {
             --with-mkl) with_mkl=True ;;
             --editable|-e) editable=1 ;;
             --lock) lock=1 ;;
-            *) echo "Unknown compiler option '$1'" >&2; exit 1 ;;
+            --help|-h)
+                echo "Usage: $0 {deps|all} [--gcc|--clang|--icx] [--with-mkl] [--editable|-e] [--lock]" >&2;
+                echo "  --gcc            Use GCC toolchain (default)"                                   >&2;
+                echo "  --clang[-SUFFIX] Use Clang toolchain, optional SUFFIX for specific versions"    >&2;
+                echo "  --icx            Use Intel oneAPI DPC++/C++ Compiler toolchain"                 >&2;
+                echo "  --with-mkl       Build with MKL support (OpenBLAS is used by default)"          >&2;
+                echo "  --editable,-e    Set up Cyqlone as editable Conan package (for development)"    >&2;
+                echo "  --lock           Create or update the Conan lockfile"                           >&2;
+                exit 0 ;;
+            *) echo "Unknown option '$1'. Use $0 deps --help for usage information." >&2; exit 1 ;;
         esac
         shift
     done
+    if ! which conan &> /dev/null; then
+        echo "Conan not found in PATH. Please install Conan 2.x and try again." >&2
+        exit 1
+    fi
     set -x
     mkdir -p "${CONAN_HOME}"
     conan profile detect -e
@@ -125,50 +139,46 @@ clean() {
 
 main() {
     local cmd="${1:-help}"
-    shift
+    set +e
+    shift; exit=$?
+    set -e
     case "${cmd}" in
         deps)
-            setup_deps "$@"
-            ;;
+            deps "$@" ;;
         build)
-            build
-            ;;
+            build ;;
         benchmark-quick)
-            benchmark_quick
-            ;;
+            benchmark_quick ;;
         benchmark-scaling)
-            benchmark_scaling
-            ;;
+            benchmark_scaling ;;
         benchmark-grid)
-            benchmark_grid
-            ;;
+            benchmark_grid ;;
         all)
-            setup_deps "$@"
+            deps "$@"
             build
             benchmark_quick
             benchmark_scaling
-            benchmark_grid
-            ;;
+            benchmark_grid ;;
         clean)
-            clean
-            ;;
+            clean ;;
         help|*)
-            echo "Usage: $0 {deps|build|benchmark-quick|benchmark-grid|benchmark-scaling|all}"       >&2
-            echo ""                                                                                  >&2
-            echo "Commands:"                                                                         >&2
-            echo "  deps                    - Set up Conan dependencies"                             >&2
-            echo "  build                   - Build the benchmark project"                           >&2
-            echo "  benchmark-quick         - Run quick benchmark (sanity check)"                    >&2
-            echo "  benchmark-scaling       - Run scaling benchmark (takes a couple of minutes)"     >&2
-            echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"          >&2
-            echo "  all                     - Run all commands above in sequence"                    >&2
-            echo "  clean                   - Remove all build files and benchmark results"          >&2
-            echo ""                                                                                  >&2
-            echo "Environment variables:"                                                            >&2
-            echo "  NPROC        - number of processors to use for the benchmark (default: 8)"       >&2
-            echo "  TASKSET_CPU  - taskset command to bind CPU cores (default: taskset -c 0-7)"      >&2
-            exit 1
-            ;;
+            echo "Usage: $0 {deps|build|benchmark-quick|benchmark-scaling|benchmark-grid|all}"      >&2
+            echo ""                                                                                 >&2
+            echo "Commands:"                                                                        >&2
+            echo "  deps                    - Install the dependencies (using Conan)"               >&2
+            echo "  build                   - Build the benchmark project"                          >&2
+            echo "  benchmark-quick         - Run quick benchmark (sanity check)"                   >&2
+            echo "  benchmark-scaling       - Run scaling benchmark (takes a couple of minutes)"    >&2
+            echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"         >&2
+            echo "  all                     - Run all commands above in sequence"                   >&2
+            echo "  clean                   - Remove all build files and benchmark results"         >&2
+            echo ""                                                                                 >&2
+            echo "Use $0 deps --help for more information on dependency installation options."      >&2
+            echo ""                                                                                 >&2
+            echo "Environment variables:"                                                           >&2
+            echo "  NPROC        - number of processors to use for the benchmark (default: 8)"      >&2
+            echo "  TASKSET_CPU  - taskset command to bind CPU cores (default: taskset -c 0-7)"     >&2
+            exit $exit ;;
     esac
 }
 
