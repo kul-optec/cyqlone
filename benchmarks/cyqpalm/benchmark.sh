@@ -16,6 +16,7 @@ setup_deps() {
     local profiles=("-pr:h" "${dev_profile}")
     local with_mkl=False
     local editable=0
+    local lock=0
     while [[ $# -gt 0 ]]; do
         case $1 in
             --gcc) ;;
@@ -24,6 +25,7 @@ setup_deps() {
             --icx) profiles=("-pr:h" "${dev_profile}" "-pr:h" "${icx_profile}") ;;
             --with-mkl) with_mkl=True ;;
             --editable|-e) editable=1 ;;
+            --lock) lock=1 ;;
             *) echo "Unknown compiler option '$1'" >&2; exit 1 ;;
         esac
         shift
@@ -39,6 +41,7 @@ setup_deps() {
         -o guanaqo/\*:with_mkl=$with_mkl
         -s:b compiler.cppstd=20
         --build=missing
+        --lockfile-partial
     )
     if [[ $editable -eq 1 ]]; then
         find "${CYQLONE_ROOT}/build" -name CMakeCache.txt -delete ||:
@@ -48,7 +51,11 @@ setup_deps() {
         conan editable remove "${CYQLONE_ROOT}" ||:
         conan export "${CYQLONE_ROOT}"
     fi
-    conan install . "${conan_args[@]}" --lockfile-partial --format=json > conan.json
+    if [[ $lock -eq 1 ]]; then
+        conan lock create . "${conan_args[@]}"
+        conan lock remove --requires="cyqlone/*"
+    fi
+    conan install . "${conan_args[@]}" --format=json > conan.json
 }
 
 # Build the benchmark project
