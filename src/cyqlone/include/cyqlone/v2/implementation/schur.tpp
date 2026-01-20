@@ -35,11 +35,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
     // 13|  W = [ LB(jₙ) ... LB(j₁) LA(j₁) ]    -- The order here is [ LA(j₁) LB(jₙ) ... LB(j₁) ]
     auto W = riccati_LAB.batch(c).right_cols(nx + nu * n);
     if constexpr (Factor) {
-        auto R̂ŜQ̂ = riccati_LH.batch(c);
-        auto LQ  = tril(R̂ŜQ̂.bottom_right(nx, nx));
+        auto LH = riccati_LH.batch(c);
+        auto LQ = tril(LH.bottom_right(nx, nx));
         //  9|  T(c) = LQ(j₁)⁻ᵀ
         BATMAT_ASSERT(nu >= 1); // T = LQ⁻ᵀ is upper triangular, stored one row up from LQ itself
-        auto Tc = triu(R̂ŜQ̂.right_cols(nx).middle_rows(nu - 1, nx));
+        auto Tc = triu(LH.right_cols(nx).middle_rows(nu - 1, nx));
         {
             GUANAQO_TRACE("Invert Q", c);
             trtri(LQ, Tc.transposed());

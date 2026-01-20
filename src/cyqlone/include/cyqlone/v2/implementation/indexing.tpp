@@ -80,6 +80,12 @@ auto CyqloneSolver<VL, T, DefaultOrder>::get_linear_batch_offset(index_t biA) co
     return (((1 << levA) - 1) << (lP - levA)) + get_index_in_level(biA);
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::ν2(index_t bi) const {
+    BATMAT_ASSUME(bi > 0);
+    auto ui = static_cast<std::make_unsigned_t<index_t>>(bi);
+    return static_cast<index_t>(std::countr_zero(ui));
+}
+template <index_t VL, class T, StorageOrder DefaultOrder>
 [[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::ν2p(index_t bi) const {
     BATMAT_ASSUME(bi >= 0);
     return bi == 0 ? lp() : get_level(bi);

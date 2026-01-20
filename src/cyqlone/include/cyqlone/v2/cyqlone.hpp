@@ -75,6 +75,7 @@ struct CyqloneSolver {
     const index_t n = (N_horiz + p * vl - 1) / (p * vl);
 
     [[nodiscard]] index_t ceil_N() const { return n * p * vl; }
+    [[nodiscard]] index_t ν2(index_t bi) const;
     [[nodiscard]] index_t ν2p(index_t bi) const;
     [[nodiscard]] index_t add_wrap_N(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_N(index_t a, index_t b) const;
@@ -239,7 +240,7 @@ struct CyqloneSolver {
 
     /// Update rank (number of changing constraints) per thread. Replaced by their partial sums
     /// over all threads before the update of the Schur complement.
-    std::vector<index_t> nJs = std::vector<index_t>(p);
+    std::vector<index_t> m_update = std::vector<index_t>(p);
     /// Compressed representation of the nonzero diagonal elements of the matrix Σ, populated
     /// for each thread separately during the factorization update of the Riccati recursion, and
     /// later compressed across all threads into @ref work_update_Σ so it can be applied to the
@@ -510,6 +511,47 @@ struct CyqloneSolver {
             return;
         GUANAQO_TRACE("prefetch Y", iY);
         prefetch(cr_Y.batch(iY));
+    }
+
+    auto cols_Ups_fwd(index_t l, index_t i) const {
+        const index_t offset = 1 << l;
+        return cols_Ups_bwd(l, sub_wrap_p(i, offset));
+    }
+
+    auto cols_Ups_bwd(index_t l, index_t i) const {
+        const index_t offset = 1 << l;
+        // We want the start index of the next block (at i + offset)
+        // minus one because m_update is an inclusive sum
+        const index_t i_end = std::min(i + offset - 1, p - 1);
+        const index_t end   = m_update[i_end];
+        if (i == 0)
+            return std::make_pair(0, end);
+        BATMAT_ASSUME(i >= offset);
+        const index_t i_start = i - offset;
+        const index_t start   = m_update[i_start];
+        return std::make_pair(start, end);
+    }
+
+    auto work_Ups_fwd(index_t l, index_t i) {
+        BATMAT_ASSUME(ν2p(i) >= l);
+        auto [start, end] = cols_Ups_fwd(l, i);
+        const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+        return work_update.batch(w & 3).middle_cols(start, end - start);
+        // static constexpr index_t lut[]{2, 0, 1, 0};
+        // index_t w = l + lut[(i >> l) & 3];
+    }
+
+    auto work_Ups_bwd(index_t l, index_t i) {
+        BATMAT_ASSUME(ν2p(i) >= l);
+        auto [start, end] = cols_Ups_bwd(l, i);
+        const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+        return work_update.batch(w & 3).middle_cols(start, end - start);
+    }
+
+    auto work_Σ_cr(index_t l, index_t i) {
+        BATMAT_ASSUME(ν2p(i) >= l);
+        auto [start, end] = cols_Ups_fwd(l, i);
+        return work_update_Σ.batch(0).middle_rows(start, end - start);
     }
 
     void update_riccati(Context &ctx, view<> Σ);
