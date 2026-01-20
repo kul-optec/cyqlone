@@ -307,6 +307,11 @@ class TreeBarrier {
     void arrive_and_wait(uint32_t thread_id) { wait(arrive(thread_id)); }
     /// Convenience function to arrive and wait in a single call (with optional sanity check).
     void arrive_and_wait(uint32_t thread_id, int line) { wait(arrive(thread_id, line)); }
+    /// Convenience function to arrive and wait in a single call (with custom completion).
+    template <class C>
+    void arrive_and_wait_with_completion(uint32_t thread_id, C &&custom_completion) {
+        wait(arrive_with_completion(thread_id, std::forward<C>(custom_completion)));
+    }
 
     /// Combining tree reduction across all threads. Deterministic application order for a given
     /// number of threads.

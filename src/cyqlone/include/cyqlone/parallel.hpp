@@ -204,6 +204,15 @@ struct Context {
     T reduce(T x) {
         return reduce(std::move(x), std::plus<>{});
     }
+
+    /// Wait for all threads to reach this point, then run the given function on a single thread
+    /// before releasing all threads again. Changes by all threads are visible during the call to
+    /// @p f and changes made by @p f are visible to all threads after this function returns.
+    template <class F>
+    void run_single_sync(F &&f) {
+        shared.barrier.arrive_and_wait_with_completion(static_cast<uint32_t>(index),
+                                                       std::forward<F>(f));
+    }
 };
 
 template <class F>
