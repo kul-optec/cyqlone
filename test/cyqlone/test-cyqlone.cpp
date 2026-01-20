@@ -25,10 +25,7 @@ TEST_P(CyqloneFactorTest, factor) {
     using namespace cyqlone;
     using batmat::linalg::simdify;
 
-    const int log_n_threads = 2;
-
     using Solver     = v2::CyqloneSolver<4, real_t, v2::StorageOrder::RowMajor>;
-    const index_t lP = log_n_threads + Solver::lvl;
     const index_t ny = 50, ny_0 = 25, ny_N = 25;
     OCPDim dim{.N_horiz = 97, .nx = 40, .nu = 30, .ny = ny, .ny_N = ny_N};
     const index_t nux = dim.nu + dim.nx, N = dim.N_horiz;
@@ -42,7 +39,7 @@ TEST_P(CyqloneFactorTest, factor) {
     std::generate_n(ocp.b_min().data, ocp.b_min().rows, [&] { return uni(rng); });
     std::generate_n(ocp.b_max().data, ocp.b_max().rows, [&] { return uni(rng); });
     auto cocp           = CyqloneStorage<real_t>::build(ocp);
-    Solver solver       = Solver::build(cocp, lP);
+    Solver solver       = Solver::build(cocp, 8);
     solver.solve_method = GetParam();
 
     // Spin a bit longer to get more deterministic timings
