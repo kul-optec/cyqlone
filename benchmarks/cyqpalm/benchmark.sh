@@ -6,6 +6,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 CYQLONE_ROOT="$(cd ../.. && pwd)"
 export CONAN_HOME="${CYQLONE_ROOT}/.conan2"
 # User-configurable variables with defaults
+: "${CONF_PRESET:=conan-release}"
+: "${BUILD_PRESET:=conan-release}"
 : "${TASKSET_CPU:=taskset -c 0-7}"  # Default to binding to CPU cores 0-7
 : "${NPROC:=8}" # Default to using 8 processors (p parameter in the paper)
 
@@ -105,8 +107,8 @@ build() {
     set +ux
     source "${generators_folder}/conanbuild.sh"
     set -ux
-    cmake --fresh --preset conan-release
-    cmake --build --preset conan-release
+    cmake --fresh --preset ${CONF_PRESET}
+    cmake --build --preset ${BUILD_PRESET}
 }
 
 # Run a benchmark command
@@ -206,6 +208,8 @@ main() {
             echo "Use $0 benchmark --help for the available benchmark parameters."                  >&2
             echo ""                                                                                 >&2
             echo "Environment variables:"                                                           >&2
+            echo "  CONF_PRESET  - name of the CMake configure preset (default: conan-release)"     >&2
+            echo "  BUILD_PRESET - name of the CMake build preset (default: conan-release)"         >&2
             echo "  NPROC        - number of processors to use for the benchmark (default: 8)"      >&2
             echo "  TASKSET_CPU  - taskset command to bind CPU cores (default: taskset -c 0-7)"     >&2
             exit $exit ;;
