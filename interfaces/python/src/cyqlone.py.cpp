@@ -416,7 +416,6 @@ struct overloaded : Ts... {
 #define CYQLONE_INSTANTIATE_MODULE(VL)                                                             \
     auto m##VL = m.def_submodule(VL == 1 ? "scalar" : "simd" #VL);                                 \
     cyqlone::register_qpalm_cyqlone<VL>(m##VL);                                                    \
-    cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<VL>>(m##VL);                           \
     auto m##VL##_v2 = m##VL.def_submodule("v2");                                                   \
     cyqlone::register_cyqlone_solver<cyqlone::v2::CyqloneSolver<VL>>(m##VL##_v2);
 

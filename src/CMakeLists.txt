@@ -5,7 +5,6 @@ find_package(batmat REQUIRED)
 # Main library
 # ------------------------------------------------------------------------------
 add_library(cyqlone
-    "cyqlone/src/cyqlone.cpp"
     "cyqlone/src/v2/cyqlone.cpp"
     "cyqlone/src/cyqlone-storage.cpp"
     "cyqlone/src/ocp.cpp"
@@ -16,20 +15,11 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/compact.hpp"
           "cyqlone/include/cyqlone/ocp.hpp"
           "cyqlone/include/cyqlone/random-ocp.hpp"
-          "cyqlone/include/cyqlone/cyqlone.hpp"
           "cyqlone/include/cyqlone/cyqlone-params.hpp"
           "cyqlone/include/cyqlone/cyqlone-storage.hpp"
           "cyqlone/include/cyqlone/neumaier.hpp"
           "cyqlone/include/cyqlone/compact/elementwise.tpp"
           "cyqlone/include/cyqlone/compact/pack.tpp"
-          "cyqlone/include/cyqlone/implementation/data.tpp"
-          "cyqlone/include/cyqlone/implementation/factor.tpp"
-          "cyqlone/include/cyqlone/implementation/indexing.tpp"
-          "cyqlone/include/cyqlone/implementation/mat-vec.tpp"
-          "cyqlone/include/cyqlone/implementation/pcg.tpp"
-          "cyqlone/include/cyqlone/implementation/solve.tpp"
-          "cyqlone/include/cyqlone/implementation/sparse.tpp"
-          "cyqlone/include/cyqlone/implementation/update.tpp"
           "cyqlone/include/cyqlone/v2/cyqlone.hpp"
           "cyqlone/include/cyqlone/v2/implementation/indexing.tpp"
           "cyqlone/include/cyqlone/v2/implementation/update.tpp"
@@ -42,7 +32,6 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/v2/implementation/riccati.tpp"
           "cyqlone/include/cyqlone/v2/implementation/data.tpp"
           "cyqlone/include/cyqlone/v2/implementation/sparse.tpp"
-          # TODO: v2 files
           "cyqlone/include/cyqlone/parallel.hpp"
           "cyqlone/include/cyqlone/timing.hpp"
           "cyqlone/include/cyqlone/barrier.hpp"
