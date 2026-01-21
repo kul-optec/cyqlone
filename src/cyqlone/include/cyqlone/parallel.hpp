@@ -29,7 +29,8 @@ struct SharedContext {
     struct completion_type {
         void operator()() const noexcept {
             auto trace = guanaqo::get_trace_logger().trace("barrier-complete", 0);
-            trace.log  = nullptr;
+            if (auto l = std::exchange(trace.log, nullptr)) // no duration logging in destructor
+                l->duration = std::chrono::nanoseconds(0);
         }
     };
 #else

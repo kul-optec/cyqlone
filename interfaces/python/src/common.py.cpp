@@ -7,6 +7,7 @@
 #include <cyqlone/qpalm/solver.hpp>
 #include <cyqlone/qpalm/status.hpp>
 #include <cyqlone/timing.hpp>
+#include <cyqlone/tracing.hpp>
 #include <batmat-version.h>
 #include <cyqlone-version.h>
 
@@ -623,5 +624,15 @@ NB_MODULE(MODULE_NAME, m) {
                 csv << log << '\n';
         },
         "filename"_a);
+#if CYQLONE_WITH_ZLIB
+    m.def(
+        "dump_trace_log_chrome",
+        [](const std::filesystem::path &filename) {
+            if (filename.has_parent_path())
+                std::filesystem::create_directories(filename.parent_path());
+            cyqlone::write_chrome_trace(filename, guanaqo::get_trace_logger().get_logs());
+        },
+        "filename"_a);
+#endif
 #endif
 }

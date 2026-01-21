@@ -1,6 +1,9 @@
 include(cmake/Library.cmake)
 find_package(guanaqo REQUIRED COMPONENTS BLAS)
 find_package(batmat REQUIRED)
+if (CYQLONE_WITH_ZLIB)
+    find_package(ZLIB REQUIRED)
+endif()
 
 # Main library
 # ------------------------------------------------------------------------------
@@ -8,6 +11,7 @@ add_library(cyqlone
     "cyqlone/src/v2/cyqlone.cpp"
     "cyqlone/src/cyqlone-storage.cpp"
     "cyqlone/src/ocp.cpp"
+    "cyqlone/src/tracing.cpp"
 )
 target_sources(cyqlone PUBLIC FILE_SET HEADERS
     BASE_DIRS "cyqlone/include"
@@ -34,6 +38,7 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/v2/implementation/sparse.tpp"
           "cyqlone/include/cyqlone/parallel.hpp"
           "cyqlone/include/cyqlone/timing.hpp"
+          "cyqlone/include/cyqlone/tracing.hpp"
           "cyqlone/include/cyqlone/barrier.hpp"
           "cyqlone/include/cyqlone/reduce.hpp"
 )
@@ -43,7 +48,8 @@ cyqlone_configure_library(cyqlone)
 target_compile_definitions(cyqlone PUBLIC
     $<$<BOOL:${CYQLONE_COMPENSATE_SUM_LINE_SEARCH}>:CYQLONE_COMPENSATE_SUM_LINE_SEARCH>
     $<$<BOOL:${CYQLONE_QUADRUPLE_SUM_LINE_SEARCH}>:CYQLONE_QUADRUPLE_SUM_LINE_SEARCH>
-    $<$<BOOL:${CYQLONE_WITH_MATIO}>:CYQLONE_WITH_MATIO>)
+    $<$<BOOL:${CYQLONE_WITH_MATIO}>:CYQLONE_WITH_MATIO>
+    $<$<BOOL:${CYQLONE_WITH_ZLIB}>:CYQLONE_WITH_ZLIB>)
 if (CYQLONE_WITH_MATIO)
     find_package(matio REQUIRED)
     target_sources(cyqlone PRIVATE "cyqlone/src/matio.cpp")
@@ -51,6 +57,9 @@ if (CYQLONE_WITH_MATIO)
         BASE_DIRS "cyqlone/include"
         FILES "cyqlone/include/cyqlone/matio.hpp")
     target_link_libraries(cyqlone PUBLIC matio::matio)
+endif()
+if (CYQLONE_WITH_ZLIB)
+    target_link_libraries(cyqlone PRIVATE ZLIB::ZLIB)
 endif()
 
 # QPALM solver

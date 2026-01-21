@@ -35,6 +35,8 @@ option(CYQLONE_WITH_PYTHON_ARCH_SPECIFIC_ONLY
     "Disable the common parts of the Python interface" Off)
 option(CYQLONE_WITH_MATIO
     "Use the matio library to save OCPs to .mat files" Off)
+option(CYQLONE_WITH_ZLIB
+    "Use the zlib library to export compressed Chrome tracing files" Off)
 option(CYQLONE_WITH_SKA_SORT
     "Use the radix sort implementation provided by skarupke/ska_sort" Off)
 # Developer options
