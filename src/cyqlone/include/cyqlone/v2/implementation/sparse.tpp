@@ -60,7 +60,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value
         for (index_t ti = 0; ti < p; ++ti) {
             const index_t k0 = ti * num_stages + vi * vstride;
             const auto biA   = ti + vi * p;
-            const auto biI   = sub_wrap_P(biA, 1);
+            const auto biI   = sub_wrap_ceil_P(biA, 1);
             const auto sλA   = sλ + nx * get_linear_batch_offset(biA);
             const auto sλI   = sλ + nx * get_linear_batch_offset(biI);
             // TODO: handle case if lev > or >= lp()
@@ -230,7 +230,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
         for (index_t ti = 0; ti < num_proc; ++ti) {
             const index_t k0 = ti * num_stages + vi * vstride;
             const auto biA   = ti + vi * num_proc;
-            const auto biI   = sub_wrap_P(biA, 1);
+            const auto biI   = sub_wrap_ceil_P(biA, 1);
             const auto sλA   = sλ + nx * get_linear_batch_offset(biA);
             const auto sλI   = sλ + nx * get_linear_batch_offset(biI);
             auto B̂           = riccati_LAB.batch(ti).right_cols(num_stages * nu);

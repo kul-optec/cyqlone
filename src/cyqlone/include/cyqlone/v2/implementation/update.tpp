@@ -8,101 +8,126 @@
 #include <batmat/linalg/hyhound.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <batmat/loop.hpp>
+#include <guanaqo/print.hpp>
 
+#include <iostream>
+#include <mutex>
 #include <numeric>
 
 namespace CYQLONE_NS(cyqlone)::v2 {
 
 using namespace batmat::linalg;
 
+std::mutex dbg_mtx;
+
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t iL) {
-    if (iL == 0) { // Last level
+void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
+    std::lock_guard lck{dbg_mtx};
+    std::println("update_L l={} i={}", l, i);
+    const index_t offset = 1 << l, i_bwd = sub_wrap_ceil_p(i, offset),
+                  i_fwd = add_wrap_ceil_p(i, offset);
+    auto L              = tril(cr_L.batch(i));
+    auto UpQ            = work_Q_cr(l, i);
+    auto Σ              = work_Σ_Q(l, i);
+    auto WQ             = work_hyh.batch(i);
+    if (l == lp()) {
+        std::println("update_L last level l={} i={}", l, i);
+        for (index_t l = 0; l < vl; ++l) {
+            guanaqo::print_python(std::cout << "UpQ[" << l << "] =", UpQ(l));
+        }
+    }
+    // if (l + 1 == lp()) { // Last level
+    //     GUANAQO_TRACE("Update L", i);
+    //     auto U           = cr_U.batch(i);
+    //     auto Up_fwd      = work_Ups_fwd(l, i_fwd);
+    //     auto Up_bwd      = work_Ups_bwd(l, i_bwd);
+    //     auto Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
+    //     BATMAT_ASSUME(Up_bwd_next.data == Up_bwd.data); // should be the same in the last level
+    //     if constexpr (VL == 1) {
+    //         Up_fwd.set_constant(0); // TODO
+    //         hyhound_diag_2(L, UpQ, U, Up_bwd_next, Σ);
+    //     } else {
+    //         hyhound_diag(L, UpQ, Σ, WQ);
+    //         batmat::linalg::copy(Up_fwd, Up_fwd, with_rotate<-1>);
+    //         hyhound_diag_apply(U, Up_bwd_next, //
+    //                            UpQ, Σ, WQ, 0);
+    //     }
+    //     return;
+    // }
+    if (i == 0) { // Last level
         const index_t j0 = 0, j1 = m_update.back(), nj = j1 - j0;
-        auto W        = work_update.middle_cols(j0, nj);
-        auto wΣ       = work_update_Σ.batch(0).middle_rows(j0, nj);
+        auto W      = work_update.middle_cols(j0, nj);
+        auto wΣ     = work_update_Σ.batch(0).middle_rows(j0, nj);
+        auto Υ0_bwd = W.batch((l + 2) & 3), Υ0_fwd = W.batch(l & 3);
+        auto M0       = tril(cr_L.batch(0));
+        auto L0       = tril(pcr_L.batch(0));
         bool update   = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
         bool update_y = static_cast<double>(nj) < cr_max_update_fraction * static_cast<double>(nx);
         bool do_update_pcr = solve_method == SolveMethod::PCR && update;
         if (do_update_pcr)
-            update_pcr(W.batch(l & 3), W.batch((l + 2) & 3), wΣ);
-        GUANAQO_TRACE("Update L", iL);
+            update_pcr(Υ0_fwd, Υ0_bwd, wΣ);
+        GUANAQO_TRACE("Update L", i);
         // TODO: could be optimized further by recomputing if nj is larger than nx
         if (update_y || p >> 1 == 0)
-            gemm_diag_add(W.batch(l & 3), W.batch((l + 2) & 3).transposed(), cr_Y.batch(0), wΣ);
+            gemm_diag_add(Υ0_fwd, Υ0_bwd.transposed(), cr_Y.batch(0), wΣ);
         else
             gemm_neg(cr_Y.batch(p >> 1), cr_U.batch(p >> 1).transposed(), cr_Y.batch(0));
         if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(W.batch((l + 2) & 3), tril(cr_L.batch(0)), wΣ);
+            syrk_diag_add(Υ0_bwd, M0, wΣ);
         if (!do_update_pcr)
-            hyhound_diag(tril(pcr_L.batch(0)), W.batch((l + 2) & 3), wΣ);
+            hyhound_diag(L0, Υ0_bwd, wΣ);
         batmat::linalg::copy(wΣ, wΣ, with_rotate<-1>);
-        batmat::linalg::copy(W.batch(l & 3), W.batch(l & 3), with_rotate<-1>);
+        batmat::linalg::copy(Υ0_fwd, Υ0_fwd, with_rotate<-1>);
         if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(W.batch(l & 3), tril(cr_L.batch(0)), wΣ);
+            syrk_diag_add(Υ0_fwd, M0, wΣ);
         if (!do_update_pcr)
-            hyhound_diag(tril(pcr_L.batch(0)), W.batch(l & 3), wΣ);
-        // TODO: we should actually merge these two xshhud calls to
-        //       make sure that the intermediate matrix does not become
-        //       indefinite (although this shouldn't be an issue for
-        //       QPALM)
+            hyhound_diag(L0, Υ0_fwd, wΣ);
+        // TODO: we should actually merge these two hyhound_diag calls to make sure that the
+        //       intermediate matrix does not become indefinite (although this shouldn't be an issue
+        //       for QPALM)
         if (solve_method == SolveMethod::PCR && !update)
             factor_pcr();
     } else {
-        GUANAQO_TRACE("Update L", iL);
-        const index_t offset = 1 << l;
-        const index_t j0     = iL == offset ? 0 : m_update[iL - 1 - offset],
-                      j1 = m_update[std::min(iL - 1 + offset, p - 1)], nj = j1 - j0;
-        auto UpL = work_update.middle_cols(j0, nj).batch(l & 3);
-        auto Σ   = work_update_Σ.batch(0).middle_rows(j0, nj);
-        auto WQ  = work_hyh.batch(iL);
+        GUANAQO_TRACE("Update L", i);
         // (L̃ | 0) = (L | Υ→ Υ← ) Q̆
-        hyhound_diag(tril(cr_L.batch(iL)), UpL, Σ, WQ);
+        hyhound_diag(L, UpQ, Σ, WQ);
     }
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t iU) {
+void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
+    std::lock_guard lck{dbg_mtx};
+    std::println("update_U l={} i={}", l, i);
     if constexpr (VL == 1)
-        if (iU >= p) // happens in cases where p is not a power of two
+        if (i >= p) // happens in cases where p is not a power of two
             return;
-    GUANAQO_TRACE("Update U", iU);
-    const index_t offset = 1 << l, i = iU >> (l + 1),
-                  j0 = iU == offset ? 0 : m_update[iU - 1 - offset],
-                  j1 = m_update[std::min(iU - 1 + offset, p - 1)], nj = j1 - j0,
-                  jsplit = m_update[iU - 1] - j0;
-    // alternating batches to make optimal use of the workspace
-    static constexpr index_t w1b[]{2, 1, 2, 1};
-    static constexpr index_t w2b[]{3, 1, 2, 1};
-    auto W   = work_update.middle_cols(j0, nj);
-    auto UpL = W.batch(l & 3);
-    auto Σ   = work_update_Σ.batch(0).middle_rows(j0, nj);
-    auto WQ  = work_hyh.batch(iU);
-    hyhound_diag_apply(cr_U.batch(iU), W.batch((l + w1b[i & 3]) & 3), //
-                       W.batch((l + w2b[i & 3]) & 3),                 //
-                       UpL, Σ, WQ, 0, jsplit);
+    GUANAQO_TRACE("Update U", i);
+    const index_t offset = 1 << l, i_bwd = sub_wrap_ceil_P(i, offset);
+    auto UpQ    = work_Q_cr(l, i);
+    auto ΣQ     = work_Σ_Q(l, i);
+    auto WQ     = work_hyh.batch(i);
+    auto U      = cr_U.batch(i);
+    auto Up_bwd = work_Ups_bwd(l, i_bwd), Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
+    hyhound_diag_apply(U, Up_bwd, Up_bwd_next, //
+                       UpQ, ΣQ, WQ, 0);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t iY) {
+void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
+    std::lock_guard lck{dbg_mtx};
+    std::println("update_Y l={} i={}", l, i);
     if constexpr (VL == 1)
-        if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
+        if (i + (1 << l) >= p) // Y(i)=0 for scalar case
             return;
-    GUANAQO_TRACE("Update Y", iY);
-    const index_t offset = 1 << l, i = iY >> (l + 1),
-                  j0 = iY == offset ? 0 : m_update[iY - 1 - offset],
-                  j1 = m_update[std::min(iY - 1 + offset, p - 1)], nj = j1 - j0,
-                  jsplit = m_update[iY - 1] - j0;
-    // alternating batches to make optimal use of the workspace
-    static constexpr index_t w1b[]{1, 2, 1, 2};
-    static constexpr index_t w2b[]{1, 2, 1, 3};
-    auto W   = work_update.middle_cols(j0, nj);
-    auto UpL = W.batch(l & 3);
-    auto Σ   = work_update_Σ.batch(0).middle_rows(j0, nj);
-    auto WQ  = work_hyh.batch(iY);
-    hyhound_diag_apply(cr_Y.batch(iY), W.batch((l + w1b[i & 3]) & 3), //
-                       W.batch((l + w2b[i & 3]) & 3),                 //
-                       UpL, Σ, WQ, jsplit, -1);
+    GUANAQO_TRACE("Update Y", i);
+    const index_t offset = 1 << l, i_fwd = add_wrap_ceil_P(i, offset);
+    auto UpQ    = work_Q_cr(l, i);
+    auto ΣQ     = work_Σ_Q(l, i);
+    auto WQ     = work_hyh.batch(i);
+    auto Y      = cr_Y.batch(i);
+    auto Up_fwd = work_Ups_fwd(l, i_fwd), Up_fwd_next = work_Ups_fwd(l + 1, i_fwd);
+    hyhound_diag_apply(Y, Up_fwd, Up_fwd_next, //
+                       UpQ, ΣQ, WQ, Up_fwd_next.cols() - Up_fwd.cols());
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -131,9 +156,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
         batmat::linalg::copy(WU.left_cols(ml), WL.right_cols(ml), with_rotate<+rot0>);
         batmat::linalg::copy(WU, WU, with_rotate<-rot1>); // TODO: fuse with hyhound_diag_cyclic
         batmat::linalg::copy(WY, WY, with_rotate<+rot0>);
-        hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL, //
-                            pcr_Y.batch(l), WY, WY,   //
-                            pcr_U.batch(l), WU, WU, Σ, ml);
+        hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL,              //
+                            pcr_Y.batch(l), WY.right_cols(ml), WY, //
+                            pcr_U.batch(l), WU.left_cols(ml), WU, Σ);
     } else {
         batmat::linalg::copy(WYU, WYU, with_rotate<rot0>); // TODO: fuse with hyhound_diag
         hyhound_diag(tril(pcr_L.batch(l)), WYU, Σ);
@@ -167,21 +192,30 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
-    const index_t ti = ctx.index;
+    const index_t c = ctx.index;
+    //  2|  Υ˃(c;0), Υ˂(c-1;0), 𝒮(c;0) = update-block-column-riccati(c)
+    //  3|  update-schur(c)
     update_riccati(ctx, ΔΣ);
-    ctx.arrive_and_wait();
-    if (ν2p(ti) == 0)
-        update_L(0, ti);
-    for (index_t l = 0; l < lP - lvl; ++l) {
-        ctx.arrive_and_wait();
-        const auto biU = add_wrap_ceil_p(ti, 1), biY = sub_wrap_ceil_p(ti, (1 << l) - 1);
-        if (ν2p(biU) == l)
-            update_U(l, biU);
-        else if (ν2p(biY) == l)
-            update_Y(l, biY);
-        ctx.arrive_and_wait();
-        if (ν2p(biY) == l + 1)
-            update_L(l + 1, biY);
+    //  5|  -- sync --
+    ctx.arrive_and_wait(); // wait for Υ˃, Υ˂
+    //  6|  if ν₂(c) = 0:  update-L(0, c)
+    if (ν2p(c) == 0)
+        update_L(0, c);
+    //  7|  for l = 0 ... log₂(P)-1
+    for (index_t l = 0; l < lp(); ++l) {
+        const auto c_ = cr_thread_assignment(l, c);
+        //  8|  iU = c+1, iY = c+1-2^l
+        const auto iU = add_wrap_ceil_p(c_, 1), iY = sub_wrap_ceil_p(c_, (1 << l) - 1);
+        //  9|  -- sync --
+        ctx.arrive_and_wait(); // wait for Q̆
+        if (ν2p(iU) == l)
+            update_U(l, iU);
+        else if (ν2p(iY) == l)
+            update_Y(l, iY);
+        // 12|  -- sync --
+        ctx.arrive_and_wait(); // wait for Υ˃, Υ˂
+        if (ν2p(iY) == l + 1)
+            update_L(l + 1, iY);
     }
 }
 
@@ -287,10 +321,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             ctx.run_single_sync(
                 [this] { std::inclusive_scan(begin(m_update), end(m_update), begin(m_update)); });
             if (mj > 0) {
+                std::lock_guard lck{dbg_mtx};
+                std::println("Total update rank m={}, mj={}, c={}", m_update.back(), mj, c);
                 GUANAQO_TRACE("Riccati update Q", j);
                 auto Tc    = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
                 auto Υ_fwd = work_Ups_fwd(0, c), Υ_bwd_prev = work_Ups_bwd(0, c_prev);
-                auto 𝒮cr = work_Σ_cr(0, c); // mathscr{S}_c in the paper
+                auto 𝒮cr = work_Σ_fwd(0, c); // mathscr{S}_c in the paper
                 // 12|  [ L̃Q(j)  0 ] = [ LQ(j)  Φx(j) ] Q̆x(j),  blkdiag(I, 𝑆(j))-orthogonal
                 // Fused with:
                 // 14|  [ L̃A(j₁)  Υ˃(c)   ] = [ LA(j₁)  Φλ(j₁) ] Q̆x(j₁),

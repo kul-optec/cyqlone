@@ -22,6 +22,7 @@
 #include <bit>
 #include <cassert>
 #include <limits>
+#include <print>
 #include <utility>
 
 namespace CYQLONE_NS(cyqlone)::v2 {
@@ -77,13 +78,15 @@ struct CyqloneSolver {
     [[nodiscard]] index_t ceil_N() const { return n * p * vl; }
     [[nodiscard]] index_t ν2(index_t bi) const;
     [[nodiscard]] index_t ν2p(index_t bi) const;
+    [[nodiscard]] index_t ν2P(index_t bi) const;
     [[nodiscard]] index_t add_wrap_N(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_N(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_p(index_t a, index_t b) const;
     [[nodiscard]] index_t add_wrap_p(index_t a, index_t b) const;
     [[nodiscard]] index_t sub_wrap_ceil_p(index_t a, index_t b) const;
     [[nodiscard]] index_t add_wrap_ceil_p(index_t a, index_t b) const;
-    [[nodiscard]] index_t sub_wrap_P(index_t a, index_t b) const;
+    [[nodiscard]] index_t sub_wrap_ceil_P(index_t a, index_t b) const;
+    [[nodiscard]] index_t add_wrap_ceil_P(index_t a, index_t b) const;
     [[nodiscard]] index_t get_linear_batch_offset(index_t biA) const;
 
     static constexpr auto default_order = DefaultOrder;
@@ -515,7 +518,9 @@ struct CyqloneSolver {
 
     auto cols_Ups_fwd(index_t l, index_t i) const {
         const index_t offset = 1 << l;
-        return cols_Ups_bwd(l, sub_wrap_p(i, offset));
+        auto [b, e]          = cols_Ups_bwd(l, sub_wrap_p(i, offset));
+        // std::println("fwd l={} i={} => [{}, {})", l, i, b, e);
+        return std::make_pair(b, e);
     }
 
     auto cols_Ups_bwd(index_t l, index_t i) const {
@@ -527,30 +532,53 @@ struct CyqloneSolver {
         if (i == 0)
             return std::make_pair(0, end);
         BATMAT_ASSUME(i >= offset);
-        const index_t i_start = i - offset;
+        const index_t i_start = i - 1;
         const index_t start   = m_update[i_start];
+        // std::println("bwd l={} i={} => [{}, {})", l, i, start, end);
         return std::make_pair(start, end);
     }
 
+    auto cols_Q_cr(index_t l, index_t i) const {
+        return std::make_pair(cols_Ups_fwd(l, i).first, cols_Ups_bwd(l, i).second);
+    }
+
     auto work_Ups_fwd(index_t l, index_t i) {
-        BATMAT_ASSUME(ν2p(i) >= l);
-        auto [start, end] = cols_Ups_fwd(l, i);
-        const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+        const index_t ceil_p = 1 << lp();
+        BATMAT_ASSUME(ν2p(i % ceil_p) >= l);
+        auto [start, end] = cols_Ups_fwd(l, i % ceil_p);
+        const index_t w   = std::min(l + 2, ν2P(i));
+        std::println("work_Ups_fwd l={} i={} => [{}, {}) @ {} [{}]", l, i, start, end, w, w & 3);
         return work_update.batch(w & 3).middle_cols(start, end - start);
         // static constexpr index_t lut[]{2, 0, 1, 0};
         // index_t w = l + lut[(i >> l) & 3];
     }
 
     auto work_Ups_bwd(index_t l, index_t i) {
-        BATMAT_ASSUME(ν2p(i) >= l);
-        auto [start, end] = cols_Ups_bwd(l, i);
-        const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+        const index_t ceil_p = 1 << lp();
+        BATMAT_ASSUME(ν2p(i % ceil_p) >= l);
+        auto [start, end] = cols_Ups_bwd(l, i % ceil_p);
+        const index_t w   = std::min(l + 2, ν2P(i));
+        std::println("work_Ups_bwd l={} i={} => [{}, {}) @ {} [{}]", l, i, start, end, w, w & 3);
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 
-    auto work_Σ_cr(index_t l, index_t i) {
+    auto work_Q_cr(index_t l, index_t i) {
+        BATMAT_ASSUME(ν2p(i) >= l);
+        auto [start, end] = cols_Q_cr(l, i);
+        const index_t w   = l == lp() ? l + lv() : l;
+        std::println("work_Q_cr l={} i={} => [{}, {}) @ {} [{}]", l, i, start, end, w, w & 3);
+        return work_update.batch(w & 3).middle_cols(start, end - start);
+    }
+
+    auto work_Σ_fwd(index_t l, index_t i) {
         BATMAT_ASSUME(ν2p(i) >= l);
         auto [start, end] = cols_Ups_fwd(l, i);
+        return work_update_Σ.batch(0).middle_rows(start, end - start);
+    }
+
+    auto work_Σ_Q(index_t l, index_t i) {
+        BATMAT_ASSUME(ν2p(i) >= l);
+        auto [start, end] = cols_Q_cr(l, i);
         return work_update_Σ.batch(0).middle_rows(start, end - start);
     }
 

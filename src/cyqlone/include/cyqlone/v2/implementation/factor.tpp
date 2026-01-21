@@ -151,7 +151,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
         }
     }
     ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
-    if (ν2p(c) == 0)
+    if (ν2p(c) == 0 && p != 1)
         solve_λ_backward(c, λ, work);
     ctx.arrive_and_wait(); // wait for λ(c-1)
     solve_riccati_reverse(ctx, ux, λ, work);
