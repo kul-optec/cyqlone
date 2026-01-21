@@ -142,7 +142,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['ubuntu-latest', 'ubuntu-24.04-arm']
+        os: ['ubuntu-latest']  # 'ubuntu-24.04-arm' not yet supported in private repositories
         python: ['python']
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
         include:
@@ -151,15 +151,15 @@ jobs:
             python-version: '3.14'
             image-suffix: ''  # Set this to '-rc' to test pre-releases
             host: 'x86_64-bionic-linux-gnu'
-          - os: 'ubuntu-24.04-arm'
-            python: 'python'
-            python-version: '3.14'
-            image-suffix: ''  # Set this to '-rc' to test pre-releases
-            host: 'aarch64-rpi3-linux-gnu'
+          # - os: 'ubuntu-24.04-arm'
+          #   python: 'python'
+          #   python-version: '3.14'
+          #   image-suffix: ''  # Set this to '-rc' to test pre-releases
+          #   host: 'aarch64-rpi3-linux-gnu'
           - os: 'ubuntu-latest'
             host: 'x86_64-bionic-linux-gnu'
-          - os: 'ubuntu-24.04-arm'
-            host: 'aarch64-rpi3-linux-gnu'
+          # - os: 'ubuntu-24.04-arm'
+          #   host: 'aarch64-rpi3-linux-gnu'
 
     steps:
       - name: Checkout
