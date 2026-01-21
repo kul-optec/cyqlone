@@ -13,10 +13,6 @@
 #include <batmat/linalg/trtri.hpp>
 #include <utility>
 
-#ifndef CYQLONE_FACTOR_DO_PREFETCH
-#define CYQLONE_FACTOR_DO_PREFETCH 0
-#endif
-
 namespace CYQLONE_NS(cyqlone)::v2 {
 
 using namespace batmat::linalg;

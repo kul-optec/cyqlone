@@ -75,7 +75,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
                 trmm(Tc_next, Tc_next.transposed(), M, with_rotate_C<-1>, with_rotate_D<-1>);
         }
         //      And finally backward in time, optionally fused with the factorization.
-        if (lP == lvl) { // no multi-threading
+        if (p == 1) { // no multi-threading
             GUANAQO_TRACE("Factor M last", c);
             // 14|  M(c) = M(c)˂ + M(c)˃ = M(c)˂ + WWᵀ
             syrk_add(W, M);
@@ -105,7 +105,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
         }
         {
             GUANAQO_TRACE("Solve λ", dn);
-            if (ν2p(i_fwd) == 0)
+            if (ν2p(i_fwd) == 0 && p != 1)
                 trsm(M, λ.batch(dn));
         }
     }

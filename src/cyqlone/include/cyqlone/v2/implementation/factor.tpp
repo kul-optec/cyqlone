@@ -70,7 +70,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
     if constexpr (Factor) {
         if (solve_method == SolveMethod::PCR) {
             ctx.arrive_and_wait(); // wait for off-diagonal block
-            if (ν2p(c + 1) + 1 == lp())
+            if (ν2p(c + 1) + 1 == lp() || p == 1)
                 factor_pcr();
         }
     }
@@ -78,11 +78,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
         if (solve_method == SolveMethod::PCR) {
             if constexpr (!Factor)
                 ctx.arrive_and_wait(); // wait for off-diagonal block TODO: necessary?
-            if (ν2p(c + 1) + 1 == lp())
+            if (ν2p(c + 1) + 1 == lp() || p == 1)
                 solve_pcr(λ.batch(0), work_pcg.batch(0).left_cols(1));
         } else {
             ctx.arrive_and_wait(); // wait for off-diagonal block
-            if (ν2p(c + 1) + 1 == lp())
+            if (ν2p(c + 1) + 1 == lp() || p == 1)
                 solve_pcg(λ.batch(0), work_pcg.batch(0));
         }
     }
