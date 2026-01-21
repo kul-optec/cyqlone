@@ -586,6 +586,17 @@ NB_MODULE(MODULE_NAME, m) {
     m.attr("batmat_version")     = BATMAT_VERSION_FULL;
     m.attr("batmat_build_time")  = BATMAT_BUILD_TIME;
     m.attr("batmat_commit_hash") = BATMAT_COMMIT_HASH;
+#if CYQLONE_WITH_TRACING
+    m.attr("with_tracing") = true;
+#else
+    m.attr("with_tracing") = false;
+#endif
+#if CYQLONE_WITH_ZLIB
+    m.attr("with_zlib") = true;
+#else
+    m.attr("with_zlib") = false;
+#endif
+
     register_ocp(m);
     register_settings(m);
 
@@ -624,7 +635,6 @@ NB_MODULE(MODULE_NAME, m) {
                 csv << log << '\n';
         },
         "filename"_a);
-#if CYQLONE_WITH_ZLIB
     m.def(
         "dump_trace_log_chrome",
         [](const std::filesystem::path &filename) {
@@ -633,6 +643,5 @@ NB_MODULE(MODULE_NAME, m) {
             cyqlone::write_chrome_trace(filename, guanaqo::get_trace_logger().get_logs());
         },
         "filename"_a);
-#endif
 #endif
 }

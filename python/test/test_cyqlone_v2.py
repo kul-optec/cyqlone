@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable, Union
 import cyqlone
 import numpy as np
@@ -171,11 +172,11 @@ def plot_kkt_residuals(r, gx, gu):
 
 def run_test_cyqlone_factor_solve(params):
     _, ocp, cocp, solver = prepare_test(params)
-    print(solver.__class__.__qualname__, solver.params_string)
+    print(solver.__class__.__qualname__, solver.params_string, flush=True)
     Σ = np.zeros(solver.num_general_constraints)
     Σ_packed = solver.pack_constraints(Σ)
 
-    if hasattr(cyqlone, "reset_trace_log"):
+    if cyqlone.with_tracing:
         for _ in range(5):
             ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
         cyqlone.reset_trace_log()
@@ -193,8 +194,12 @@ def run_test_cyqlone_factor_solve(params):
         raise
     finally:
         print()
-        if hasattr(cyqlone, "reset_trace_log"):
-            cyqlone.dump_trace_log(f"traces/test_cyqlone_v2_trace-{solver.params_string}.csv")
+        if cyqlone.with_tracing:
+            cyqlone.dump_trace_log(tr := f"traces/test-{solver.params_string}.csv")
+            print(Path(tr))
+            ext = ".json.gz" if cyqlone.with_zlib else ".json"
+            cyqlone.dump_trace_log_chrome(tr := f"traces/test-{solver.params_string}{ext}")
+            print(Path(tr).absolute())
 
     resid = solver.residual_dynamics_constr(ux, cocp)
     r = solver.unpack_dynamics(resid).reshape((ocp.N_horiz, ocp.nx))
@@ -252,9 +257,9 @@ SIMD_SOLVERS = {
     8: cyqlone.simd8.v2.CyqloneSolver,
 }
 SIMD_P_COMBOS = {
-    1: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 64],
-    4: [2, 4, 8, 16, 64],  # TODO: add p=1
-    8: [2, 4, 8, 16, 64],  # TODO: add p=1
+    1: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 64],
+    4: [1, 2, 4, 8, 16, 64],
+    8: [1, 2, 4, 8, 16, 64],
 }
 SOLVER_P_COMBOS = [(SIMD_SOLVERS[v], v, p) for v in [1, 4, 8] for p in SIMD_P_COMBOS[v]]
 SOLVER_P_ID = [f"{solver.__qualname__}-v{v}-p{p}" for solver, v, p in SOLVER_P_COMBOS]
