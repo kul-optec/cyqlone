@@ -22,7 +22,6 @@
 #include <bit>
 #include <cassert>
 #include <limits>
-#include <print>
 #include <utility>
 
 namespace CYQLONE_NS(cyqlone)::v2 {
@@ -518,9 +517,7 @@ struct CyqloneSolver {
 
     auto cols_Ups_fwd(index_t l, index_t i) const {
         const index_t offset = 1 << l;
-        auto [b, e]          = cols_Ups_bwd(l, sub_wrap_p(i, offset));
-        // std::println("fwd l={} i={} => [{}, {})", l, i, b, e);
-        return std::make_pair(b, e);
+        return cols_Ups_bwd(l, sub_wrap_p(i, offset));
     }
 
     auto cols_Ups_bwd(index_t l, index_t i) const {
@@ -534,7 +531,6 @@ struct CyqloneSolver {
         BATMAT_ASSUME(i >= offset);
         const index_t i_start = i - 1;
         const index_t start   = m_update[i_start];
-        // std::println("bwd l={} i={} => [{}, {})", l, i, start, end);
         return std::make_pair(start, end);
     }
 
@@ -547,10 +543,7 @@ struct CyqloneSolver {
         BATMAT_ASSUME(ν2p(i % ceil_p) >= l);
         auto [start, end] = cols_Ups_fwd(l, i % ceil_p);
         const index_t w   = std::min(l + 2, ν2P(i));
-        std::println("work_Ups_fwd l={} i={} => [{}, {}) @ {} [{}]", l, i, start, end, w, w & 3);
         return work_update.batch(w & 3).middle_cols(start, end - start);
-        // static constexpr index_t lut[]{2, 0, 1, 0};
-        // index_t w = l + lut[(i >> l) & 3];
     }
 
     auto work_Ups_bwd(index_t l, index_t i) {
@@ -558,7 +551,6 @@ struct CyqloneSolver {
         BATMAT_ASSUME(ν2p(i % ceil_p) >= l);
         auto [start, end] = cols_Ups_bwd(l, i % ceil_p);
         const index_t w   = std::min(l + 2, ν2P(i));
-        std::println("work_Ups_bwd l={} i={} => [{}, {}) @ {} [{}]", l, i, start, end, w, w & 3);
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 
@@ -566,7 +558,6 @@ struct CyqloneSolver {
         BATMAT_ASSUME(ν2p(i) >= l);
         auto [start, end] = cols_Q_cr(l, i);
         const index_t w   = l == lp() ? l + lv() : l;
-        std::println("work_Q_cr l={} i={} => [{}, {}) @ {} [{}]", l, i, start, end, w, w & 3);
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 

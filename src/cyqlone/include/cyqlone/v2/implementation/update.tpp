@@ -8,21 +8,24 @@
 #include <batmat/linalg/hyhound.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <batmat/loop.hpp>
-#include <guanaqo/print.hpp>
 
-#include <iostream>
-#include <mutex>
 #include <numeric>
 
 namespace CYQLONE_NS(cyqlone)::v2 {
 
 using namespace batmat::linalg;
 
-std::mutex dbg_mtx;
+// Algorithm 4 “Cyqlone factorization updates”
+//
+// Differences compared to the pseudo-code in the paper:
+//   - The update of the last has been modified to allow for vectorization (v>1).
+//   - The indices in the cyclic reduction levels are reduced modulo P (=p·v) instead of modulo p,
+//     as is done during the factorization. This is to account for the vectorization in the
+//     workspace assignment: we do not want Υ˂(0) and Υ˃(0) to alias in the last level. (When v=1,
+//     this makes no difference, since then P=p, and Υ˃(0)=0.)
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
-    std::lock_guard lck{dbg_mtx};
     if (l < lp()) {
         GUANAQO_TRACE("Update L", i);
         auto L   = tril(cr_L.batch(i));
@@ -89,12 +92,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
         if (!do_update_pcr)
             hyhound_diag(L0, Υ0_bwd, Σ);
         // Rotate and repeat for the forward update.
-        batmat::linalg::copy(Σ, Σ, with_rotate<-1>);
-        batmat::linalg::copy(Υ0_fwd, Υ0_fwd, with_rotate<-1>);
-        if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(Υ0_fwd, M0, Σ);
-        if (!do_update_pcr)
-            hyhound_diag(L0, Υ0_fwd, Σ);
+        if (VL > 1) {
+            batmat::linalg::copy(Σ, Σ, with_rotate<-1>);
+            batmat::linalg::copy(Υ0_fwd, Υ0_fwd, with_rotate<-1>);
+            if (solve_method == SolveMethod::PCR)
+                syrk_diag_add(Υ0_fwd, M0, Σ);
+            if (!do_update_pcr)
+                hyhound_diag(L0, Υ0_fwd, Σ);
+        }
         // TODO: we should actually merge these two hyhound_diag calls to make sure that the
         //       intermediate matrix after the backward update does not become indefinite
         //       (although this shouldn't be an issue for QPALM, at least not in exact arithmetic).
@@ -107,38 +112,36 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
-    std::lock_guard lck{dbg_mtx};
-    std::println("update_U l={} i={}", l, i);
     if constexpr (VL == 1)
         if (i >= p) // happens in cases where p is not a power of two
             return;
     GUANAQO_TRACE("Update U", i);
-    const index_t offset = 1 << l, i_bwd = sub_wrap_ceil_P(i, offset);
-    auto UpQ    = work_Q_cr(l, i);
-    auto ΣQ     = work_Σ_Q(l, i);
-    auto WQ     = work_hyh.batch(i);
-    auto U      = cr_U.batch(i);
+    const index_t i_bwd = sub_wrap_ceil_P(i, 1 << l);
+    auto UpQ            = work_Q_cr(l, i);
+    auto Σ              = work_Σ_Q(l, i);
+    auto WQ             = work_hyh.batch(i);
+    auto U              = cr_U.batch(i);
     auto Up_bwd = work_Ups_bwd(l, i_bwd), Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
+    // 18|  [ Ũ(i) | Υ˂(i-2^l;l+1) ] = [ U(i) | Υ˂(i-2^l;l)  0 ] Q̆(i)
     hyhound_diag_apply(U, Up_bwd, Up_bwd_next, //
-                       UpQ, ΣQ, WQ, 0);
+                       UpQ, Σ, WQ, 0);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
-    std::lock_guard lck{dbg_mtx};
-    std::println("update_Y l={} i={}", l, i);
     if constexpr (VL == 1)
         if (i + (1 << l) >= p) // Y(i)=0 for scalar case
             return;
     GUANAQO_TRACE("Update Y", i);
-    const index_t offset = 1 << l, i_fwd = add_wrap_ceil_P(i, offset);
-    auto UpQ    = work_Q_cr(l, i);
-    auto ΣQ     = work_Σ_Q(l, i);
-    auto WQ     = work_hyh.batch(i);
-    auto Y      = cr_Y.batch(i);
+    const index_t i_fwd = add_wrap_ceil_P(i, 1 << l);
+    auto UpQ            = work_Q_cr(l, i);
+    auto Σ              = work_Σ_Q(l, i);
+    auto WQ             = work_hyh.batch(i);
+    auto Y              = cr_Y.batch(i);
     auto Up_fwd = work_Ups_fwd(l, i_fwd), Up_fwd_next = work_Ups_fwd(l + 1, i_fwd);
+    // 20|  [ Ỹ(i) | Υ˃(i+2^l;l+1) ] = [ Y(i) | 0  Υ˃(i+2^l;l) ] Q̆(i)
     hyhound_diag_apply(Y, Up_fwd, Up_fwd_next, //
-                       UpQ, ΣQ, WQ, Up_fwd_next.cols() - Up_fwd.cols());
+                       UpQ, Σ, WQ, Up_fwd_next.cols() - Up_fwd.cols());
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -219,12 +222,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
         const auto iU = add_wrap_ceil_p(c_, 1), iY = sub_wrap_ceil_p(c_, (1 << l) - 1);
         //  9|  -- sync --
         ctx.arrive_and_wait(); // wait for Q̆
+        // 10|  if ν₂(iU) = l:  update-U(l, iU)
         if (ν2p(iU) == l)
             update_U(l, iU);
+        // 11|  elif ν₂(iY) = l:  update-Y(l, iY)
         else if (ν2p(iY) == l)
             update_Y(l, iY);
         // 12|  -- sync --
         ctx.arrive_and_wait(); // wait for Υ˃, Υ˂
+        // 13|  if ν₂(iY) = l+1:  update-L(l+1, iY)
         if (ν2p(iY) == l + 1)
             update_L(l + 1, iY);
     }
@@ -332,26 +338,26 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             ctx.run_single_sync(
                 [this] { std::inclusive_scan(begin(m_update), end(m_update), begin(m_update)); });
             if (mj > 0) {
-                std::lock_guard lck{dbg_mtx};
-                std::println("Total update rank m={}, mj={}, c={}", m_update.back(), mj, c);
                 GUANAQO_TRACE("Riccati update Q", j);
-                auto Tc    = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
-                auto Υ_fwd = work_Ups_fwd(0, c), Υ_bwd_prev = work_Ups_bwd(0, c_prev);
+                auto Tc = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
+                const index_t i_fwd = add_wrap_ceil_P(c_prev, 1), i_bwd = c_prev;
+                const bool rot = c == 0;
+                auto Υ_fwd = work_Ups_fwd(0, i_fwd), Υ_bwd_prev = work_Ups_bwd(0, i_bwd);
                 auto 𝒮cr = work_Σ_fwd(0, c); // mathscr{S}_c in the paper
                 // 12|  [ L̃Q(j)  0 ] = [ LQ(j)  Φx(j) ] Q̆x(j),  blkdiag(I, 𝑆(j))-orthogonal
                 // Fused with:
                 // 14|  [ L̃A(j₁)  Υ˃(c)   ] = [ LA(j₁)  Φλ(j₁) ] Q̆x(j₁),
                 //   |  [ -T̃(c)   Υ˂(c-1) ]   [ -T(c)     0    ]
-                hyhound_diag_riccati(LQ, Φx,                  //
-                                     Acl, Φλ, Υ_fwd,          //
-                                     Tc, /*0*/ Υ_bwd_prev,    // note the lack of a minus sign ...
-                                     𝑆.top_rows(mj), c == 0); //
-                compact_blas::xneg(simdify(Υ_bwd_prev));      // which is fixed here (TODO: fuse)
+                hyhound_diag_riccati(LQ, Φx,               //
+                                     Acl, Φλ, Υ_fwd,       //
+                                     Tc, /*0*/ Υ_bwd_prev, // note the lack of a minus sign ...
+                                     𝑆.top_rows(mj), rot); //
+                compact_blas::xneg(simdify(Υ_bwd_prev));   // which is fixed here (TODO: fuse)
                 // 13|  𝒮(c) = 𝑆(j₁)
-                c == 0 ? compact_blas::template xadd_neg_copy<-1>(simdify(𝒮cr),
-                                                                  simdify(𝑆.top_rows(mj)))
-                       : compact_blas::template xadd_neg_copy<+0>(simdify(𝒮cr),
-                                                                  simdify(𝑆.top_rows(mj)));
+                rot ? compact_blas::template xadd_neg_copy<-1>(simdify(𝒮cr),
+                                                               simdify(𝑆.top_rows(mj)))
+                    : compact_blas::template xadd_neg_copy<+0>(simdify(𝒮cr),
+                                                               simdify(𝑆.top_rows(mj)));
                 // We negate 𝒮(c) because in the CR update, we need blkdiag(-I, 𝒮(c))-orthogonal
                 // or blkdiag(I, -𝒮(c))-orthogonal transformations.
             }
