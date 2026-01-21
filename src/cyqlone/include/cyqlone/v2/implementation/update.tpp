@@ -23,75 +23,86 @@ std::mutex dbg_mtx;
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     std::lock_guard lck{dbg_mtx};
-    std::println("update_L l={} i={}", l, i);
-    const index_t offset = 1 << l, i_bwd = sub_wrap_ceil_p(i, offset),
-                  i_fwd = add_wrap_ceil_p(i, offset);
-    auto L              = tril(cr_L.batch(i));
-    auto UpQ            = work_Q_cr(l, i);
-    auto Σ              = work_Σ_Q(l, i);
-    auto WQ             = work_hyh.batch(i);
-    if (l == lp()) {
-        std::println("update_L last level l={} i={}", l, i);
-        for (index_t l = 0; l < vl; ++l) {
-            guanaqo::print_python(std::cout << "UpQ[" << l << "] =", UpQ(l));
-        }
-    }
-    // if (l + 1 == lp()) { // Last level
-    //     GUANAQO_TRACE("Update L", i);
-    //     auto U           = cr_U.batch(i);
-    //     auto Up_fwd      = work_Ups_fwd(l, i_fwd);
-    //     auto Up_bwd      = work_Ups_bwd(l, i_bwd);
-    //     auto Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
-    //     BATMAT_ASSUME(Up_bwd_next.data == Up_bwd.data); // should be the same in the last level
-    //     if constexpr (VL == 1) {
-    //         Up_fwd.set_constant(0); // TODO
-    //         hyhound_diag_2(L, UpQ, U, Up_bwd_next, Σ);
-    //     } else {
-    //         hyhound_diag(L, UpQ, Σ, WQ);
-    //         batmat::linalg::copy(Up_fwd, Up_fwd, with_rotate<-1>);
-    //         hyhound_diag_apply(U, Up_bwd_next, //
-    //                            UpQ, Σ, WQ, 0);
-    //     }
-    //     return;
-    // }
-    if (i == 0) { // Last level
-        const index_t j0 = 0, j1 = m_update.back(), nj = j1 - j0;
-        auto W      = work_update.middle_cols(j0, nj);
-        auto wΣ     = work_update_Σ.batch(0).middle_rows(j0, nj);
-        auto Υ0_bwd = W.batch((l + 2) & 3), Υ0_fwd = W.batch(l & 3);
-        auto M0       = tril(cr_L.batch(0));
-        auto L0       = tril(pcr_L.batch(0));
-        bool update   = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
-        bool update_y = static_cast<double>(nj) < cr_max_update_fraction * static_cast<double>(nx);
-        bool do_update_pcr = solve_method == SolveMethod::PCR && update;
-        if (do_update_pcr)
-            update_pcr(Υ0_fwd, Υ0_bwd, wΣ);
+    if (l < lp()) {
         GUANAQO_TRACE("Update L", i);
-        // TODO: could be optimized further by recomputing if nj is larger than nx
-        if (update_y || p >> 1 == 0)
-            gemm_diag_add(Υ0_fwd, Υ0_bwd.transposed(), cr_Y.batch(0), wΣ);
+        auto L   = tril(cr_L.batch(i));
+        auto UpQ = work_Q_cr(l, i);
+        auto Σ   = work_Σ_Q(l, i);
+        auto WQ  = work_hyh.batch(i);
+        // 16|  [ L̃(i) | 0 ] = [ L(i) | Υ˃(i)  Υ˂(i) ] Q̆(i),  blkdiag(-I, 𝒮(i;l+1))-orthogonal
+        hyhound_diag(L, UpQ, Σ, WQ);
+        return;
+    }
+
+    // Last level
+    auto Σ      = work_Σ_fwd(l, 0);
+    auto Υ0_bwd = work_Ups_bwd(l, 0), Υ0_fwd = work_Ups_fwd(l, 1 << l);
+    auto M0 = tril(cr_L.batch(0)), L0 = tril(pcr_L.batch(0));
+    auto Y0   = cr_Y.batch(0);
+    auto Ypen = cr_Y.batch(p / 2), Upen = cr_U.batch(p / 2); // Subdiag blocks of penultimate level
+
+    // For p=2, v=4, the update of the last level looks like:
+    //
+    // [ Υ˂(0)                Υ˃(0) | L(0)                   ]
+    // [ Υ˃(2)  Υ˂(2)               | Y(0)  L(2)             ]
+    // [        Υ˃(4)  Υ˂(4)        |       Y(2)  L(4)       ]
+    // [               Υ˃(6)  Υ˂(6) |             Y(4)  L(6) ]
+    //
+    // where the blocks are stored as follows:
+    //  Υ0_bwd = [ Υ˂(0)  Υ˂(2)  Υ˂(4)  Υ˂(6) ]
+    //  Υ0_fwd = [ Υ˃(2)  Υ˃(4)  Υ˃(6)  Υ˃(0) ]
+    //  L0     = [ L(0)   L(2)   L(4)   L(6) ]
+    //  Y0     = [ Y(0)   Y(2)   Y(4)   -    ]
+    //
+    // Note that Υ˂ and Υ˃ are aligned by column, not by row. To apply the updates (row-wise),
+    // we therefore need to rotate Υ0_fwd by one block to the right first.
+
+    // Check the rank to decide whether to update or recompute
+    const index_t nj = Σ.rows();
+    bool update      = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
+    bool update_y    = static_cast<double>(nj) < cr_max_update_fraction * static_cast<double>(nx);
+    bool do_update_pcr = solve_method == SolveMethod::PCR && update;
+
+    // Perform the PCR update
+    if (do_update_pcr)
+        update_pcr(Υ0_fwd, Υ0_bwd, Σ);
+
+    { // Update or recompute the matrices Y(0), M(0) and L(0) in the last CR level
+        GUANAQO_TRACE("Update L", i);
+        // Update or recompute the subdiagonal block Y of the last CR level.
+        // If there's only a single thread, we always update because there is no previous CR level
+        // to recompute from (we would need to recompute the Riccati products, which is slow).
+        // Otherwise, we only update if the rank is sufficiently low.
+        if (update_y || p == 1)
+            gemm_diag_add(Υ0_fwd, Υ0_bwd.transposed(), Y0, Σ);
         else
-            gemm_neg(cr_Y.batch(p >> 1), cr_U.batch(p >> 1).transposed(), cr_Y.batch(0));
+            gemm_neg(Ypen, Upen.transposed(), Y0);
+        // TODO: do we actually need Y(0) for PCR?
+
+        // Make sure the diagonal block M of the last CR level is up to date (it is needed for PCR).
+        // This is done in two steps, the backward and the forward updates, the latter of which
+        // requires a rotation first.
         if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(Υ0_bwd, M0, wΣ);
+            syrk_diag_add(Υ0_bwd, M0, Σ);
+        // When using PCG, we need the Cholesky factors L(0) of M(0) for the preconditioner, so
+        // update them here. Like with the update of M(0), we do this in two steps.
         if (!do_update_pcr)
-            hyhound_diag(L0, Υ0_bwd, wΣ);
-        batmat::linalg::copy(wΣ, wΣ, with_rotate<-1>);
+            hyhound_diag(L0, Υ0_bwd, Σ);
+        // Rotate and repeat for the forward update.
+        batmat::linalg::copy(Σ, Σ, with_rotate<-1>);
         batmat::linalg::copy(Υ0_fwd, Υ0_fwd, with_rotate<-1>);
         if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(Υ0_fwd, M0, wΣ);
+            syrk_diag_add(Υ0_fwd, M0, Σ);
         if (!do_update_pcr)
-            hyhound_diag(L0, Υ0_fwd, wΣ);
+            hyhound_diag(L0, Υ0_fwd, Σ);
         // TODO: we should actually merge these two hyhound_diag calls to make sure that the
-        //       intermediate matrix does not become indefinite (although this shouldn't be an issue
-        //       for QPALM)
-        if (solve_method == SolveMethod::PCR && !update)
-            factor_pcr();
-    } else {
-        GUANAQO_TRACE("Update L", i);
-        // (L̃ | 0) = (L | Υ→ Υ← ) Q̆
-        hyhound_diag(L, UpQ, Σ, WQ);
+        //       intermediate matrix after the backward update does not become indefinite
+        //       (although this shouldn't be an issue for QPALM, at least not in exact arithmetic).
     }
+
+    // Finally, recompute the PCR factorization if we did not do an update.
+    if (solve_method == SolveMethod::PCR && !update)
+        factor_pcr();
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
