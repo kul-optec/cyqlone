@@ -545,7 +545,7 @@ struct CyqloneSolver {
         const index_t ceil_p = 1 << lp();
         BATMAT_ASSUME(ν2p(i % ceil_p) >= l);
         auto [start, end] = cols_Ups_fwd(l, i % ceil_p);
-        const index_t w   = std::min(l + 2, ν2P(i));
+        const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 
@@ -553,7 +553,7 @@ struct CyqloneSolver {
         const index_t ceil_p = 1 << lp();
         BATMAT_ASSUME(ν2p(i % ceil_p) >= l);
         auto [start, end] = cols_Ups_bwd(l, i % ceil_p);
-        const index_t w   = std::min(l + 2, ν2P(i));
+        const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 
