@@ -105,6 +105,7 @@ struct CyqloneBackend {
         this->ocp.solve_method                     = settings.solve_method;
         this->ocp.pcr_max_update_fraction          = settings.pcr_max_update_fraction;
         this->ocp.cr_max_update_fraction           = settings.cr_max_update_fraction;
+        this->ocp.parallel_solve_cr_threshold      = settings.parallel_solve_cr_threshold;
         this->ocp.parallel_ctx->barrier.spin_count = settings.spin_count;
         b_min_strided                              = ineq_constr_vec();
         b_max_strided                              = ineq_constr_vec();

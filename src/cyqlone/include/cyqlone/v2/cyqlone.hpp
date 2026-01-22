@@ -110,13 +110,14 @@ struct CyqloneSolver {
     using compact_blas_default =
         cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>, default_order>;
 
-    bool enable_prefetching        = true;
-    index_t pcg_max_iter           = 100;
-    value_type pcg_tolerance       = std::numeric_limits<value_type>::epsilon() / 10;
-    bool pcg_print_resid           = false;
-    SolveMethod solve_method       = SolveMethod::StairPCG;
-    double pcr_max_update_fraction = 0.6;
-    double cr_max_update_fraction  = 0.9;
+    bool enable_prefetching             = true;
+    index_t pcg_max_iter                = 100;
+    value_type pcg_tolerance            = std::numeric_limits<value_type>::epsilon() / 10;
+    bool pcg_print_resid                = false;
+    SolveMethod solve_method            = SolveMethod::StairPCG;
+    double pcr_max_update_fraction      = 0.6;
+    double cr_max_update_fraction       = 0.9;
+    index_t parallel_solve_cr_threshold = 10;
 
     [[nodiscard]] std::string get_params_string() const {
         std::string_view solve = solve_method == SolveMethod::PCR        ? "pcr"
@@ -467,6 +468,8 @@ struct CyqloneSolver {
     void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ);
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
+    void solve_reverse_cr_parallel(Context &ctx, mut_view<> λ, mut_view<> work) const;
+    void solve_reverse_cr_serial(mut_view<> λ, mut_view<> work) const;
     void solve_u_backward(index_t l, index_t iU, mut_view<> λ, mut_view<> w) const;
     void solve_y_backward(index_t l, index_t iY, mut_view<> λ) const;
     void solve_λ_backward(index_t biL, mut_view<> λ, view<> w) const;

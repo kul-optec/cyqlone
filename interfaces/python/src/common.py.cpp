@@ -515,6 +515,8 @@ void register_settings(nb::module_ &m) {
                 &cyqlone::qpalm::CyqloneBackendSettings::pcr_max_update_fraction)
         .def_rw("cr_max_update_fraction",
                 &cyqlone::qpalm::CyqloneBackendSettings::cr_max_update_fraction)
+        .def_rw("parallel_solve_cr_threshold",
+                &cyqlone::qpalm::CyqloneBackendSettings::parallel_solve_cr_threshold)
         .def_rw("spin_count", &cyqlone::qpalm::CyqloneBackendSettings::spin_count)
         .def_rw("strategy", &cyqlone::qpalm::CyqloneBackendSettings::strategy);
     nb::class_<cyqlone::qpalm::Settings>(m, "Settings")

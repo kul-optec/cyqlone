@@ -106,6 +106,7 @@ void register_cyqlone_solver(nb::module_ &m) {
         .def_rw("solve_method", &Solver::solve_method)
         .def_rw("pcr_max_update_fraction", &Solver::pcr_max_update_fraction)
         .def_rw("cr_max_update_fraction", &Solver::cr_max_update_fraction)
+        .def_rw("parallel_solve_cr_threshold", &Solver::parallel_solve_cr_threshold)
         .def(
             "initialize_rhs",
             [](Solver &self, const CyqloneStorage<> &ocp, np_batched_view<VL, real_t> rhs) {

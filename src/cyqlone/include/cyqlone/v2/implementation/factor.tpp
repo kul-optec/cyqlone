@@ -105,13 +105,25 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
 // Algorithm 5 “Solution of a symmetric block-tridiagonal system using cyclic reduction (CR)”
 // §3.2 Cyclic reduction of block-tridiagonal linear systems
 //
-// The reverse solve routine below closely follows the structure of the corresponding factorization
+// The reverse solve routines below closely follow the structure of the corresponding factorization
 // and forward solve routines, but in reverse order. An iterative approach is used instead of
 // recursion. Note that the evaluation of λ(0) is performed during the forward solve step.
+// Depending on the problem size, either a parallel or serial version of the CR solve is used.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
                                                        mut_view<> work) const {
+    if (nx >= parallel_solve_cr_threshold && p > 1) {
+        solve_reverse_cr_parallel(ctx, λ, work);
+    } else if (ν2p(ctx.index + 1) + 1 == lp() || p == 1)
+        solve_reverse_cr_serial(λ, work);
+    ctx.arrive_and_wait(); // wait for λ(c-1)
+    solve_riccati_reverse(ctx, ux, λ, work);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_cr_parallel(Context &ctx, mut_view<> λ,
+                                                                   mut_view<> work) const {
     const index_t c = ctx.index;
     for (index_t l = lp(); l-- > 0;) {
         const auto c_     = cr_thread_assignment(l, c);
@@ -153,8 +165,30 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
     ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
     if (ν2p(c) == 0 && p != 1)
         solve_λ_backward(c, λ, work);
-    ctx.arrive_and_wait(); // wait for λ(c-1)
-    solve_riccati_reverse(ctx, ux, λ, work);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_cr_serial(mut_view<> λ,
+                                                                 mut_view<> work) const {
+    for (index_t l = lp(); l-- > 0;) {
+        for (index_t c = 0; c < p; ++c) {
+            const index_t i_y = sub_wrap_ceil_p(c, (1 << l) - 1);
+            if (l < lp() - 1) { // λ(0) was already computed during forward solve
+                if (ν2p(i_y) == l + 1)
+                    solve_λ_backward(i_y, λ, work);
+            }
+        }
+        for (index_t c = 0; c < p; ++c) {
+            const index_t i_u = add_wrap_ceil_p(c, 1), i_y = sub_wrap_ceil_p(c, (1 << l) - 1);
+            if (ν2p(i_u) == l)
+                solve_u_backward(l, i_u, λ, work);
+            else if (ν2p(i_y) == l)
+                solve_y_backward(l, i_y, λ);
+        }
+    }
+    for (index_t c = 0; c < p; ++c)
+        if (ν2p(c) == 0 && p != 1)
+            solve_λ_backward(c, λ, work);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

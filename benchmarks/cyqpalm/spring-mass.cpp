@@ -68,15 +68,16 @@ struct Options {
 #endif
     std::vector<int> horizon{32, 64, 96, 128, 192, 256};
     std::vector<int> masses{6, 12, 30};
-    uint64_t num_instances         = 50;
-    uint64_t seed                  = 0;
-    ProblemType problem_type       = ProblemType::WangBoyd2008;
-    double pcr_max_update_fraction = 0.25;
-    double cr_max_update_fraction  = 0.9;
-    double changing_constr_factor  = 0.01;
-    bool custom_reporter           = true;
-    bool print_extra               = false;
-    bool use_color                 = false;
+    uint64_t num_instances          = 50;
+    uint64_t seed                   = 0;
+    ProblemType problem_type        = ProblemType::WangBoyd2008;
+    double pcr_max_update_fraction  = 0.25;
+    double cr_max_update_fraction   = 0.9;
+    int parallel_solve_cr_threshold = 10;
+    double changing_constr_factor   = 0.01;
+    bool custom_reporter            = true;
+    bool print_extra                = false;
+    bool use_color                  = false;
     std::string export_problem{};
 };
 
@@ -280,11 +281,12 @@ std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
             }};
     };
     qp::CyqloneBackendSettings backend{
-        .processors              = opts.parallelism,
-        .changing_constr_factor  = opts.changing_constr_factor,
-        .max_update_count        = 20,
-        .pcr_max_update_fraction = opts.pcr_max_update_fraction,
-        .cr_max_update_fraction  = opts.cr_max_update_fraction,
+        .processors                  = opts.parallelism,
+        .changing_constr_factor      = opts.changing_constr_factor,
+        .max_update_count            = 20,
+        .pcr_max_update_fraction     = opts.pcr_max_update_fraction,
+        .cr_max_update_fraction      = opts.cr_max_update_fraction,
+        .parallel_solve_cr_threshold = opts.parallel_solve_cr_threshold,
     };
     qp::Settings settings{
         .tolerance         = 1e-8,
@@ -431,6 +433,8 @@ void register_options(const char *program, CLI::App &app, Options &opts) {
                    "Maximum update rank fraction when using CR");
     app.add_option("--changing-constr-factor", opts.changing_constr_factor,
                    "Changing constraints factor for the Cyqlone backend");
+    app.add_option("--parallel-solve-cr-threshold", opts.parallel_solve_cr_threshold,
+                   "Parallel solve CR threshold for the Cyqlone backend");
     app.add_option("--export-problem", opts.export_problem,
                    "Export a single problem instance to a .mat file");
     app.add_flag("--custom-reporter,!--no-custom-reporter", opts.custom_reporter,
