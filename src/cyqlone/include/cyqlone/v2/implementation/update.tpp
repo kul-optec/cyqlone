@@ -64,7 +64,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     const index_t nj = Σ.rows();
     bool update      = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
     bool update_y    = static_cast<double>(nj) < cr_max_update_fraction * static_cast<double>(nx);
-    bool do_update_pcr = solve_method == SolveMethod::PCR && update;
+    bool do_update_pcr   = solve_method == SolveMethod::PCR && update;
+    bool do_refactor_pcr = solve_method == SolveMethod::PCR && !update;
+
+    // Scalar case: Υ˃(0)=0 and Y(0)=0.
+    if constexpr (VL == 1) {
+        syrk_diag_add(Υ0_bwd, M0, Σ);
+        hyhound_diag(L0, Υ0_bwd, Σ);
+        return;
+    }
 
     // Perform the PCR update
     if (do_update_pcr)
@@ -92,21 +100,19 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
         if (!do_update_pcr)
             hyhound_diag(L0, Υ0_bwd, Σ);
         // Rotate and repeat for the forward update.
-        if (VL > 1) {
-            batmat::linalg::copy(Σ, Σ, with_rotate<-1>);
-            batmat::linalg::copy(Υ0_fwd, Υ0_fwd, with_rotate<-1>);
-            if (solve_method == SolveMethod::PCR)
-                syrk_diag_add(Υ0_fwd, M0, Σ);
-            if (!do_update_pcr)
-                hyhound_diag(L0, Υ0_fwd, Σ);
-        }
+        batmat::linalg::copy(Σ, Σ, with_rotate<-1>);
+        batmat::linalg::copy(Υ0_fwd, Υ0_fwd, with_rotate<-1>);
+        if (solve_method == SolveMethod::PCR)
+            syrk_diag_add(Υ0_fwd, M0, Σ);
+        if (!do_update_pcr)
+            hyhound_diag(L0, Υ0_fwd, Σ);
         // TODO: we should actually merge these two hyhound_diag calls to make sure that the
         //       intermediate matrix after the backward update does not become indefinite
         //       (although this shouldn't be an issue for QPALM, at least not in exact arithmetic).
     }
 
     // Finally, recompute the PCR factorization if we did not do an update.
-    if (solve_method == SolveMethod::PCR && !update)
+    if (do_refactor_pcr)
         factor_pcr();
 }
 
