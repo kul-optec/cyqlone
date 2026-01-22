@@ -83,19 +83,21 @@ auto LineSearch<Vec>::find_stepsize(ABSum_t a, ABSum_t b, size_t i0, std::span<B
         if (partition_1) {
             auto cmp  = [](Breakpoint p1, Breakpoint p2) { return p1.t < p2.t; };
             auto gt_1 = partition_min(pos_bp, [](Breakpoint p) { return p.t <= 1; }, cmp);
-            auto mid  = std::ranges::begin(gt_1);
+            if (!gt_1.empty()) {
+                auto mid = std::ranges::begin(gt_1);
 #if LINE_SEARCH_COMPARE_IMPLEMENTATIONS
-            BATMAT_ASSERT(mid == std::ranges::min_element(gt_1, cmp));
+                BATMAT_ASSERT(mid == std::ranges::min_element(gt_1, cmp));
 #endif
-            auto i_mid = static_cast<std::size_t>(mid - std::ranges::begin(pos_bp));
-            return std::make_pair(i_mid, mid);
-        } else {
-            auto i_mid = pos_bp.size() / 4;
-            auto mid   = std::ranges::next(pos_bp.begin(), static_cast<std::ptrdiff_t>(i_mid));
-            nth_element(pos_bp, mid, [](Breakpoint b) { return b.t; });
-            return std::make_pair(i_mid, mid);
+                auto i_mid = static_cast<std::size_t>(mid - std::ranges::begin(pos_bp));
+                return std::make_pair(i_mid, mid);
+            }
         }
+        auto i_mid = pos_bp.size() / 4;
+        auto mid   = std::ranges::next(pos_bp.begin(), static_cast<std::ptrdiff_t>(i_mid));
+        nth_element(pos_bp, mid, [](Breakpoint b) { return b.t; });
+        return std::make_pair(i_mid, mid);
     }();
+    BATMAT_ASSERT(i_mid < pos_bp.size());
     auto left = pos_bp.first(i_mid + 1), right = pos_bp.subspan(i_mid); // Both halves contain mid
 
     // Recursive update formula for a_j and b_j (see notes)
