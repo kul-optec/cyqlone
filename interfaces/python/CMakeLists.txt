@@ -103,6 +103,12 @@ if (NOT CYQLONE_WITH_PYTHON_ARCH_SPECIFIC_ONLY)
         EXCLUDE_FROM_ALL
         COMPONENT python_modules
         DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME})
+    install(IMPORTED_RUNTIME_ARTIFACTS _common RUNTIME_DEPENDENCY_SET cyqlone_common_runtime_deps)
+    install(RUNTIME_DEPENDENCY_SET cyqlone_common_runtime_deps
+        COMPONENT python_modules
+        PRE_INCLUDE_REGEXES ".*guanaqo.*"
+        PRE_EXCLUDE_REGEXES ".*"
+        LIBRARY DESTINATION ${PY_BUILD_CMAKE_IMPORT_NAME})
 endif()
 
 # Generate stubs for the Python module
