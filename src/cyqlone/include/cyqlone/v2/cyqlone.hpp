@@ -530,7 +530,7 @@ struct CyqloneSolver {
         const index_t i_end = std::min(i + offset - 1, p - 1);
         const index_t end   = m_update[i_end];
         if (i == 0)
-            return std::make_pair(0, end);
+            return std::make_pair(index_t{0}, end);
         BATMAT_ASSUME(i >= offset);
         const index_t i_start = i - 1;
         const index_t start   = m_update[i_start];

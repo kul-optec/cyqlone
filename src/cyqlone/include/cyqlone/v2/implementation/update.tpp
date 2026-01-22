@@ -67,13 +67,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     bool do_update_pcr   = solve_method == SolveMethod::PCR && update;
     bool do_refactor_pcr = solve_method == SolveMethod::PCR && !update;
 
-    // Scalar case: Υ˃(0)=0 and Y(0)=0.
-    if constexpr (VL == 1) {
-        syrk_diag_add(Υ0_bwd, M0, Σ);
-        hyhound_diag(L0, Υ0_bwd, Σ);
-        return;
-    }
-
     // Perform the PCR update
     if (do_update_pcr)
         update_pcr(Υ0_fwd, Υ0_bwd, Σ);
@@ -88,7 +81,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
             gemm_diag_add(Υ0_fwd, Υ0_bwd.transposed(), Y0, Σ);
         else
             gemm_neg(Ypen, Upen.transposed(), Y0);
-        // TODO: do we actually need Y(0) for PCR?
+        // If at some point in the future we need to refactor PCR, we may need Y(0). So we just
+        // always update it here. Alternatively, we could recompute it when needed, but that would
+        // complicate the bookkeeping. Besides, we need Y(0) for the PCG case anyway.
 
         // Make sure the diagonal block M of the last CR level is up to date (it is needed for PCR).
         // This is done in two steps, the backward and the forward updates, the latter of which
@@ -116,13 +111,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
         factor_pcr();
 }
 
+// TODO: Υ˃(0) and Υ˂(0) are always complementary in their sparsity patterns. Can we exploit this?
+//       This only holds at the very last level (so the last CR level if v=1 or the last PCR level
+//       if v>1). The sparsity pattern is a bit odd and it doesn't match the current column
+//       partitioning, though.
+
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
     if constexpr (VL == 1)
         if (i >= p) // happens in cases where p is not a power of two
             return;
     GUANAQO_TRACE("Update U", i);
-    const index_t i_bwd = sub_wrap_ceil_P(i, 1 << l);
+    const index_t i_bwd = i - (1 << l);
     auto UpQ            = work_Q_cr(l, i);
     auto Σ              = work_Σ_Q(l, i);
     auto WQ             = work_hyh.batch(i);
@@ -136,10 +136,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
     if constexpr (VL == 1)
-        if (i + (1 << l) >= p) // Y(i)=0 for scalar case
+        if (i + (1 << l) > p)
             return;
     GUANAQO_TRACE("Update Y", i);
-    const index_t i_fwd = add_wrap_ceil_P(i, 1 << l);
+    const index_t i_fwd = i + (1 << l);
     auto UpQ            = work_Q_cr(l, i);
     auto Σ              = work_Σ_Q(l, i);
     auto WQ             = work_hyh.batch(i);
@@ -337,6 +337,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                 hyhound_diag(LQ, Φx, 𝑆.top_rows(mj));
             }
         } else {
+#ifndef NDEBUG
+            if (ctx.is_master())
+                work_update.set_constant(std::numeric_limits<T>::quiet_NaN());
+#endif
             const auto c_prev = sub_wrap_p(c, 1); // c-1
             // Communicate the update ranks mj to all threads and compute the partial sums (i.e. the
             // column offsets in the global update workspace we'll write Υ(c) and Υ(c-1) to)
@@ -346,7 +350,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             if (mj > 0) {
                 GUANAQO_TRACE("Riccati update Q", j);
                 auto Tc = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
-                const index_t i_fwd = add_wrap_ceil_P(c_prev, 1), i_bwd = c_prev;
+                const index_t i_fwd = c_prev + 1, i_bwd = c_prev;
                 const bool rot = c == 0;
                 auto Υ_fwd = work_Ups_fwd(0, i_fwd), Υ_bwd_prev = work_Ups_bwd(0, i_bwd);
                 auto 𝒮cr = work_Σ_fwd(0, c); // mathscr{S}_c in the paper
