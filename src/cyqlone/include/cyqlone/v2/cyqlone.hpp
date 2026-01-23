@@ -519,21 +519,28 @@ struct CyqloneSolver {
     }
 
     auto cols_Ups_fwd(index_t l, index_t i) const {
+        BATMAT_ASSUME(ν2p(i) >= l); // i % offset = 0
         const index_t offset = 1 << l;
-        return cols_Ups_bwd(l, sub_wrap_p(i, offset));
+        // Current block ends at i (or at p if i == 0),
+        // minus one because m_update is an inclusive sum.
+        const index_t ip  = i == 0 ? p : i;
+        const index_t end = m_update[ip - 1];
+        // Current block starts at the previous multiple of offset.
+        const index_t i_start = (ip - 1) & ~(offset - 1);
+        const index_t start   = i_start > 0 ? m_update[i_start - 1] : 0;
+        return std::make_pair(start, end);
     }
 
     auto cols_Ups_bwd(index_t l, index_t i) const {
+        BATMAT_ASSUME(ν2p(i) >= l); // i % offset = 0
         const index_t offset = 1 << l;
-        // We want the start index of the next block (at i + offset)
-        // minus one because m_update is an inclusive sum
-        const index_t i_end = std::min(i + offset - 1, p - 1);
-        const index_t end   = m_update[i_end];
-        if (i == 0)
-            return std::make_pair(index_t{0}, end);
-        BATMAT_ASSUME(i >= offset);
-        const index_t i_start = i - 1;
-        const index_t start   = m_update[i_start];
+        // The start index of the next block (at i + offset),
+        // minus one because m_update is an inclusive sum.
+        // If p is not a power of two, we need to clamp to p.
+        const index_t i_end = std::min(i + offset, p);
+        const index_t end   = m_update[i_end - 1];
+        // The start index of the current block is i.
+        const index_t start = i > 0 ? m_update[i - 1] : 0;
         return std::make_pair(start, end);
     }
 
@@ -542,17 +549,13 @@ struct CyqloneSolver {
     }
 
     auto work_Ups_fwd(index_t l, index_t i) {
-        const index_t ceil_p = 1 << lp();
-        BATMAT_ASSUME(ν2p(i % ceil_p) >= l);
-        auto [start, end] = cols_Ups_fwd(l, i % ceil_p);
-        const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+        auto [start, end] = cols_Ups_fwd(l, i);
+        index_t w         = l == lp() ? l : i == 0 ? l + 2 : std::min(l + 2, ν2(i));
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 
     auto work_Ups_bwd(index_t l, index_t i) {
-        const index_t ceil_p = 1 << lp();
-        BATMAT_ASSUME(ν2p(i % ceil_p) >= l);
-        auto [start, end] = cols_Ups_bwd(l, i % ceil_p);
+        auto [start, end] = cols_Ups_bwd(l, i);
         const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }

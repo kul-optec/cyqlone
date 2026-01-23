@@ -38,11 +38,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     }
 
     // Last level
-    auto Σ      = work_Σ_fwd(l, 0);
-    auto Υ0_bwd = work_Ups_bwd(l, 0), Υ0_fwd = work_Ups_fwd(l, 1 << l);
+    auto Σ_bwd = work_Σ_bwd(l, 0), Σ_fwd = work_Σ_fwd(l, 0);
+    auto Υ0_bwd = work_Ups_bwd(l, 0), Υ0_fwd = work_Ups_fwd(l, 0);
     auto M0 = tril(cr_L.batch(0)), L0 = tril(pcr_L.batch(0));
     auto Y0   = cr_Y.batch(0);
     auto Ypen = cr_Y.batch(p / 2), Upen = cr_U.batch(p / 2); // Subdiag blocks of penultimate level
+    BATMAT_ASSERT(Σ_bwd.rows() == Σ_fwd.rows() || p != (1 << lp()));
 
     // For p=2, v=4, the update of the last level looks like:
     //
@@ -61,7 +62,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     // we therefore need to rotate Υ0_fwd by one block to the right first.
 
     // Check the rank to decide whether to update or recompute
-    const index_t nj = Σ.rows();
+    const index_t nj = std::max(Σ_fwd.rows(), Σ_bwd.rows());
     bool update      = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
     bool update_y    = static_cast<double>(nj) < cr_max_update_fraction * static_cast<double>(nx);
     bool do_update_pcr   = solve_method == SolveMethod::PCR && update;
@@ -69,7 +70,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 
     // Perform the PCR update
     if (do_update_pcr)
-        update_pcr(Υ0_fwd, Υ0_bwd, Σ);
+        update_pcr(Υ0_fwd, Υ0_bwd, Σ_fwd);
 
     { // Update or recompute the matrices Y(0), M(0) and L(0) in the last CR level
         GUANAQO_TRACE("Update L", i);
@@ -77,10 +78,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
         // If there's only a single thread, we always update because there is no previous CR level
         // to recompute from (we would need to recompute the Riccati products, which is slow).
         // Otherwise, we only update if the rank is sufficiently low.
-        if (update_y || p == 1)
-            gemm_diag_add(Υ0_fwd, Υ0_bwd.transposed(), Y0, Σ);
-        else
-            gemm_neg(Ypen, Upen.transposed(), Y0);
+        if constexpr (VL > 1) {
+            if (update_y || p == 1)
+                gemm_diag_add(Υ0_fwd, Υ0_bwd.transposed(), Y0, Σ_fwd);
+            else
+                gemm_neg(Ypen, Upen.transposed(), Y0);
+        }
         // If at some point in the future we need to refactor PCR, we may need Y(0). So we just
         // always update it here. Alternatively, we could recompute it when needed, but that would
         // complicate the bookkeeping. Besides, we need Y(0) for the PCG case anyway.
@@ -89,18 +92,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
         // This is done in two steps, the backward and the forward updates, the latter of which
         // requires a rotation first.
         if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(Υ0_bwd, M0, Σ);
+            syrk_diag_add(Υ0_bwd, M0, Σ_bwd);
         // When using PCG, we need the Cholesky factors L(0) of M(0) for the preconditioner, so
         // update them here. Like with the update of M(0), we do this in two steps.
         if (!do_update_pcr)
-            hyhound_diag(L0, Υ0_bwd, Σ);
+            hyhound_diag(L0, Υ0_bwd, Σ_bwd);
         // Rotate and repeat for the forward update.
-        batmat::linalg::copy(Σ, Σ, with_rotate<-1>);
+        batmat::linalg::copy(Σ_fwd, Σ_fwd, with_rotate<-1>);
         batmat::linalg::copy(Υ0_fwd, Υ0_fwd, with_rotate<-1>);
         if (solve_method == SolveMethod::PCR)
-            syrk_diag_add(Υ0_fwd, M0, Σ);
+            syrk_diag_add(Υ0_fwd, M0, Σ_fwd);
         if (!do_update_pcr)
-            hyhound_diag(L0, Υ0_fwd, Σ);
+            hyhound_diag(L0, Υ0_fwd, Σ_fwd);
         // TODO: we should actually merge these two hyhound_diag calls to make sure that the
         //       intermediate matrix after the backward update does not become indefinite
         //       (although this shouldn't be an issue for QPALM, at least not in exact arithmetic).
@@ -118,16 +121,21 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
-    if constexpr (VL == 1)
-        if (i >= p) // happens in cases where p is not a power of two
-            return;
     GUANAQO_TRACE("Update U", i);
-    const index_t i_bwd = i - (1 << l);
-    auto UpQ            = work_Q_cr(l, i);
-    auto Σ              = work_Σ_Q(l, i);
-    auto WQ             = work_hyh.batch(i);
-    auto U              = cr_U.batch(i);
+    const index_t i_bwd = sub_wrap_ceil_p(i, 1 << l);
     auto Up_bwd = work_Ups_bwd(l, i_bwd), Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
+    if constexpr (VL == 1)
+        if (i >= p) { // happens in cases where p is not a power of two
+            const index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
+            auto Up_fwd = work_Ups_fwd(l, i_fwd), Up_fwd_next = work_Ups_fwd(l + 1, i_fwd);
+            copy(Up_bwd, Up_bwd_next);
+            copy(Up_fwd, Up_fwd_next);
+            return;
+        }
+    auto UpQ = work_Q_cr(l, i);
+    auto Σ   = work_Σ_Q(l, i);
+    auto WQ  = work_hyh.batch(i);
+    auto U   = cr_U.batch(i);
     // 18|  [ Ũ(i) | Υ˂(i-2^l;l+1) ] = [ U(i) | Υ˂(i-2^l;l)  0 ] Q̆(i)
     hyhound_diag_apply(U, Up_bwd, Up_bwd_next, //
                        UpQ, Σ, WQ, 0);
@@ -135,11 +143,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
-    if constexpr (VL == 1)
-        if (i + (1 << l) > p)
-            return;
     GUANAQO_TRACE("Update Y", i);
-    const index_t i_fwd = i + (1 << l);
+    const index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
     auto UpQ            = work_Q_cr(l, i);
     auto Σ              = work_Σ_Q(l, i);
     auto WQ             = work_hyh.batch(i);
@@ -196,6 +201,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
     work_update_pcr_Σ.set_constant(std::numeric_limits<T>::quiet_NaN());
     work_update_pcr_UY.set_constant(std::numeric_limits<T>::quiet_NaN());
 #endif
+    if constexpr (VL == 1)
+        return;
     index_t m = fwd.cols();
     BATMAT_ASSUME(m == bwd.cols());
     auto WYU = work_update_pcr_UY.left_cols(2 * VL * m).batch(0);
@@ -350,7 +357,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             if (mj > 0) {
                 GUANAQO_TRACE("Riccati update Q", j);
                 auto Tc = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
-                const index_t i_fwd = c_prev + 1, i_bwd = c_prev;
+                const index_t i_fwd = c, i_bwd = c_prev;
                 const bool rot = c == 0;
                 auto Υ_fwd = work_Ups_fwd(0, i_fwd), Υ_bwd_prev = work_Ups_bwd(0, i_bwd);
                 auto 𝒮cr = work_Σ_fwd(0, c); // mathscr{S}_c in the paper

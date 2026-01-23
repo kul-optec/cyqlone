@@ -21,6 +21,274 @@ using cyqlone::real_t;
 
 class CyqloneFactorTest : public testing::TestWithParam<cyqlone::SolveMethod> {};
 
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 1  >>> <<<                          |  L₁                                // 1˃  [0, 1)    1˂  [1, 2)
+// 3          >>> <<<                  |      L₃                            // 3˃  [2, 3)    3˂  [3, 4)
+// 5                  >>> <<<          |          L₅                        // 5˃  [4, 5)    5˂  [5, 6)
+// 7                          >>> <00  |              L₇                    // 7˃  [6, 7)    7˂  [7, 8)
+// 2      >>> <<<                      |  Y₁  U₃          L₂                // 2˃  [1, 2)    2˂  [2, 3)
+// 6                      >>> <<<      |          Y₅  U₇      L₆            // 6˃  [5, 6)    6˂  [6, 7)
+// 4              >>> <<<              |      Y₃  U₅      Y₂  U₆  L₄        // 4˃  [3, 4)    4˂  [4, 5)
+// 0  <<<                         0>>  |  U₁          00  U₂  00  U₄  L₀    // 0˃  [7, 8)    0˂  [0, 1)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 2  >>>>>>> <<<<<<<                  |  L₂                // 2˃  [0, 2)    2˂  [2, 4)
+// 6                  >>>>>>> <<<<<00  |      L₆            // 6˃  [4, 6)    6˂  [6, 8)
+// 4          >>>>>>> <<<<<<<          |  Y₂  U₆  L₄        // 4˃  [2, 4)    4˂  [4, 6)
+// 0  <<<<<<<                 00000>>  |  U₂  00  U₄  L₀    // 0˃  [6, 8)    0˂  [0, 2)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 4  >>>>>>>>>>>>>>> <<<<<<<<<<<<<00  |  L₄        // 4˃  [0, 4)    4˂  [4, 8)
+// 0  <<<<<<<<<<<<<<< 0000000000000>>  |  U₄  L₀    // 0˃  [4, 8)    0˂  [0, 4)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 0  <<<<<<<<<<<<<<< >>>>>>>>>>>>>>>  |  L₀    // 0˃  [4, 8)    0˂  [0, 4)
+
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 1  >>> <<<                            // 1˃  [0, 1)    1˂  [1, 2)
+// 3          >>> <<<                    // 3˃  [2, 3)    3˂  [3, 4)
+// 5                  >>> <<<            // 5˃  [4, 5)    5˂  [5, 6)
+// 7                          >>> <<<    // 7˃  [6, 7)    7˂  [7, 8)
+// 2      >>> <<<                        // 2˃  [1, 2)    2˂  [2, 3)
+// 6                      >>> <<<        // 6˃  [5, 6)    6˂  [6, 7)
+// 4              >>> <<<                // 4˃  [3, 4)    4˂  [4, 5)
+// 0  <<<                         >>>    // 0˃  [7, 8)    0˂  [0, 1)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 2  >>>>>>> <<<<<<<                    // 2˃  [0, 2)    2˂  [2, 4)
+// 6                  >>>>>>> <<<<<<<    // 6˃  [4, 6)    6˂  [6, 8)
+// 4          >>>>>>> <<<<<<<            // 4˃  [2, 4)    4˂  [4, 6)
+// 0  <<<<<<<                 >>>>>>>    // 0˃  [6, 8)    0˂  [0, 2)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 4  >>>>>>>>>>>>>>> <<<<<<<<<<<<<<<    // 4˃  [0, 4)    4˂  [4, 8)
+// 0  <<<<<<<<<<<<<<< >>>>>>>>>>>>>>>    // 0˃  [4, 8)    0˂  [0, 4)
+TEST(CyqloneTest, updateIndices8) {
+    using namespace cyqlone;
+
+    const index_t p  = 8;
+    using Solver     = v2::CyqloneSolver<1, real_t, v2::StorageOrder::RowMajor>;
+    const index_t ny = 1, ny_0 = 1, ny_N = 0;
+    OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
+    auto ocp = generate_random_ocp(dim);
+    ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
+    auto cocp     = CyqloneStorage<real_t>::build(ocp);
+    Solver solver = Solver::build(cocp, p);
+    std::ranges::iota(solver.m_update, index_t{1});
+
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 7), std::make_pair(6, 7));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 7), std::make_pair(7, 8));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 6), std::make_pair(5, 6));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 6), std::make_pair(6, 7));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 0), std::make_pair(7, 8));
+
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 6), std::make_pair(4, 6));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 6), std::make_pair(6, 8));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 0), std::make_pair(6, 8));
+}
+
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 1  >>> <<<                            // 1˃  [0, 1)    1˂  [1, 2)
+// 3          >>> <<<                    // 3˃  [2, 3)    3˂  [3, 4)
+// 5                  >>> <<<            // 5˃  [4, 5)    5˂  [5, 6)
+// x
+// 2      >>> <<<                        // 2˃  [1, 2)    2˂  [2, 3)
+// 6                      >>> <<<        // 6˃  [5, 6)    6˂  [6, 7)
+// 4              >>> <<<                // 4˃  [3, 4)    4˂  [4, 5)
+// 0  <<<                     >>>        // 0˃  [6, 7)    0˂  [0, 1)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 2  >>>>>>> <<<<<<<                    // 2˃  [0, 2)    2˂  [2, 4)
+// 6                  >>>>>>> <<<        // 6˃  [4, 6)    6˂  [6, 7)
+// 4          >>>>>>> <<<<<<<            // 4˃  [2, 4)    4˂  [4, 6)
+// 0  <<<<<<<                 >>>        // 0˃  [6, 7)    0˂  [0, 2)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 4  >>>>>>>>>>>>>>> <<<<<<<<<<<        // 4˃  [0, 4)    4˂  [4, 7)
+// 0  <<<<<<<<<<<<<<< >>>>>>>>>>>        // 0˃  [4, 7)    0˂  [0, 4)
+TEST(CyqloneTest, updateIndices7) {
+    using namespace cyqlone;
+
+    const index_t p  = 7;
+    using Solver     = v2::CyqloneSolver<1, real_t, v2::StorageOrder::RowMajor>;
+    const index_t ny = 1, ny_0 = 1, ny_N = 0;
+    OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
+    auto ocp = generate_random_ocp(dim);
+    ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
+    auto cocp     = CyqloneStorage<real_t>::build(ocp);
+    Solver solver = Solver::build(cocp, p);
+    std::ranges::iota(solver.m_update, index_t{1});
+
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 6), std::make_pair(5, 6));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 6), std::make_pair(6, 7));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 0), std::make_pair(6, 7));
+
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 6), std::make_pair(4, 6));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 6), std::make_pair(6, 7));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 0), std::make_pair(6, 7));
+
+    EXPECT_EQ(solver.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(2, 4), std::make_pair(4, 7));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
+    EXPECT_EQ(solver.cols_Ups_fwd(2, 0), std::make_pair(4, 7));
+}
+
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 1  >>> <<<                            // 1˃  [0, 1)    1˂  [1, 2)
+// 3          >>> <<<                    // 3˃  [2, 3)    3˂  [3, 4)
+// 5                  >>> <<<            // 5˃  [4, 5)    5˂  [5, 6)
+// x
+// 2      >>> <<<                        // 2˃  [1, 2)    2˂  [2, 3)
+// x
+// 4              >>> <<<                // 4˃  [3, 4)    4˂  [4, 5)
+// 0  <<<                 >>>            // 0˃  [5, 6)    0˂  [0, 1)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 2  >>>>>>> <<<<<<<                    // 2˃  [0, 2)    2˂  [2, 4)
+// x
+// 4          >>>>>>> <<<<<<<            // 4˃  [2, 4)    4˂  [4, 6)
+// 0  <<<<<<<         >>>>>>>            // 0˃  [4, 6)    0˂  [0, 2)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 4  >>>>>>>>>>>>>>> <<<<<<<            // 4˃  [0, 4)    4˂  [4, 6)
+// 0  <<<<<<<<<<<<<<< >>>>>>>            // 0˃  [4, 6)    0˂  [0, 4)
+TEST(CyqloneTest, updateIndices6) {
+    using namespace cyqlone;
+
+    const index_t p  = 6;
+    using Solver     = v2::CyqloneSolver<1, real_t, v2::StorageOrder::RowMajor>;
+    const index_t ny = 1, ny_0 = 1, ny_N = 0;
+    OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
+    auto ocp = generate_random_ocp(dim);
+    ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
+    auto cocp     = CyqloneStorage<real_t>::build(ocp);
+    Solver solver = Solver::build(cocp, p);
+    std::ranges::iota(solver.m_update, index_t{1});
+
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 0), std::make_pair(5, 6));
+
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 0), std::make_pair(4, 6));
+
+    EXPECT_EQ(solver.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(2, 4), std::make_pair(4, 6));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
+    EXPECT_EQ(solver.cols_Ups_fwd(2, 0), std::make_pair(4, 6));
+}
+
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 1  >>> <<<                            // 1˃  [0, 1)    1˂  [1, 2)
+// 3          >>> <<<                    // 3˃  [2, 3)    3˂  [3, 4)
+// x
+// x
+// 2      >>> <<<                        // 2˃  [1, 2)    2˂  [2, 3)
+// x
+// 4              >>> <<<                // 4˃  [3, 4)    4˂  [4, 5)
+// 0  <<<             >>>                // 0˃  [4, 5)    0˂  [0, 1)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 2  >>>>>>> <<<<<<<                    // 2˃  [0, 2)    2˂  [2, 4)
+// x
+// 4          >>>>>>> <<<                // 4˃  [2, 4)    4˂  [4, 5)
+// 0  <<<<<<<         >>>                // 0˃  [4, 5)    0˂  [0, 2)
+//
+//    (0) (1) (2) (3) (4) (5) (6) (7)
+// 4  >>>>>>>>>>>>>>> <<<                // 4˃  [0, 4)    4˂  [4, 5)
+// 0  <<<<<<<<<<<<<<< >>>                // 0˃  [4, 5)    0˂  [0, 4)
+TEST(CyqloneTest, updateIndices5) {
+    using namespace cyqlone;
+
+    const index_t p  = 5;
+    using Solver     = v2::CyqloneSolver<1, real_t, v2::StorageOrder::RowMajor>;
+    const index_t ny = 1, ny_0 = 1, ny_N = 0;
+    OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
+    auto ocp = generate_random_ocp(dim);
+    ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
+    auto cocp     = CyqloneStorage<real_t>::build(ocp);
+    Solver solver = Solver::build(cocp, p);
+    std::ranges::iota(solver.m_update, index_t{1});
+
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_fwd(0, 0), std::make_pair(4, 5));
+
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
+
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(1, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_fwd(1, 0), std::make_pair(4, 5));
+
+    EXPECT_EQ(solver.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
+    EXPECT_EQ(solver.cols_Ups_bwd(2, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
+    EXPECT_EQ(solver.cols_Ups_fwd(2, 0), std::make_pair(4, 5));
+}
+
 TEST_P(CyqloneFactorTest, factor) {
     using namespace cyqlone;
     using batmat::linalg::simdify;
