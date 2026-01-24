@@ -172,14 +172,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_cr_serial(mut_view<> λ,
                                                                  mut_view<> work) const {
     for (index_t l = lp(); l-- > 0;) {
         for (index_t c = 0; c < p; ++c) {
-            const index_t i_y = sub_wrap_ceil_p(c, (1 << l) - 1);
+            const index_t c_  = cr_thread_assignment(l, c);
+            const index_t i_y = sub_wrap_ceil_p(c_, (1 << l) - 1);
             if (l < lp() - 1) { // λ(0) was already computed during forward solve
                 if (ν2p(i_y) == l + 1)
                     solve_λ_backward(i_y, λ, work);
             }
         }
         for (index_t c = 0; c < p; ++c) {
-            const index_t i_u = add_wrap_ceil_p(c, 1), i_y = sub_wrap_ceil_p(c, (1 << l) - 1);
+            const index_t c_  = cr_thread_assignment(l, c);
+            const index_t i_u = add_wrap_ceil_p(c_, 1), i_y = sub_wrap_ceil_p(c_, (1 << l) - 1);
             if (ν2p(i_u) == l)
                 solve_u_backward(l, i_u, λ, work);
             else if (ν2p(i_y) == l)
