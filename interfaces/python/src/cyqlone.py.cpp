@@ -108,6 +108,12 @@ void register_cyqlone_solver(nb::module_ &m) {
         .def_rw("cr_max_update_fraction", &Solver::cr_max_update_fraction)
         .def_rw("parallel_solve_cr_threshold", &Solver::parallel_solve_cr_threshold)
         .def(
+            "set_barrier_spin_count",
+            [](Solver &self, uint32_t spin_count) {
+                return self.set_barrier_spin_count(spin_count);
+            },
+            "spin_count"_a)
+        .def(
             "initialize_rhs",
             [](Solver &self, const CyqloneStorage<> &ocp, np_batched_view<VL, real_t> rhs) {
                 auto rhs_vw = view_as_batched(rhs);

@@ -119,6 +119,12 @@ struct CyqloneSolver {
     double cr_max_update_fraction       = 0.9;
     index_t parallel_solve_cr_threshold = 10;
 
+    uint32_t set_barrier_spin_count(uint32_t spin_count) {
+        auto &barrier = parallel_ctx->barrier;
+        static_assert(std::is_same_v<decltype(barrier.spin_count), decltype(spin_count)>);
+        return std::exchange(barrier.spin_count, spin_count);
+    }
+
     [[nodiscard]] std::string get_params_string() const {
         std::string_view solve = solve_method == SolveMethod::PCR        ? "pcr"
                                  : solve_method == SolveMethod::StairPCG ? "pcg=stair"
