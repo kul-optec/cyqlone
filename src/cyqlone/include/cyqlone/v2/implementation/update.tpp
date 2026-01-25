@@ -38,12 +38,29 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     }
 
     // Last level
-    auto Σ_bwd = work_Σ_bwd(l, 0), Σ_fwd = work_Σ_fwd(l, 0);
-    auto Υ0_bwd = work_Ups_bwd(l, 0), Υ0_fwd = work_Ups_fwd(l, 0);
     auto M0 = tril(cr_L.batch(0)), L0 = tril(pcr_L.batch(0));
     auto Y0   = cr_Y.batch(0);
     auto Ypen = cr_Y.batch(p / 2), Upen = cr_U.batch(p / 2); // Subdiag blocks of penultimate level
-    BATMAT_ASSERT(Σ_bwd.rows() == Σ_fwd.rows() || p != (1 << lp()));
+
+    if (m_update_u0 > 0)
+        m_update[p - 1] += m_update_u0; // Make room for the updates from D(0)
+    auto Υ0_bwd = work_Ups_bwd(l, 0), Υ0_fwd = work_Ups_fwd(l, 0);
+    auto Σ_bwd = work_Σ_bwd(l, 0), Σ_fwd = work_Σ_fwd(l, 0);
+    BATMAT_ASSERT(Σ_bwd.rows() == Σ_fwd.rows() || m_update_u0 > 0);
+    // Include contributions from D(0) if needed
+    if (m_update_u0 >= 0) {
+        BATMAT_ASSERT(VL == 1); // handling D(0) separately is only possible in the scalar case
+        // Υ˃(0) = 0, so no forward update
+        Υ0_fwd.reassign(Υ0_fwd.left_cols(0));
+        Σ_fwd.reassign(Σ_fwd.top_rows(0));
+        // Copy the update contributions from D(0) in the rightmost columns of Υ0_bwd
+        auto Υ2  = riccati_Υ2.batch(0);
+        auto Φλ0 = Υ2.bottom_right(nx, ny_0).left_cols(m_update_u0);
+        auto 𝑆   = work_Σ.batch(0);
+        auto 𝑆u0 = 𝑆.bottom_rows(ny_0).top_rows(m_update_u0);
+        compact_blas::xadd_neg_copy(simdify(Σ_bwd.bottom_rows(m_update_u0)), simdify(𝑆u0));
+        copy(Φλ0, Υ0_bwd.right_cols(m_update_u0));
+    }
 
     // For p=2, v=4, the update of the last level looks like:
     //
@@ -65,12 +82,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     const index_t nj = std::max(Σ_fwd.rows(), Σ_bwd.rows());
     bool update      = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
     bool update_y    = static_cast<double>(nj) < cr_max_update_fraction * static_cast<double>(nx);
-    bool do_update_pcr   = solve_method == SolveMethod::PCR && update;
+    bool do_update_pcr   = solve_method == SolveMethod::PCR && update && VL > 1;
     bool do_refactor_pcr = solve_method == SolveMethod::PCR && !update;
 
     // Perform the PCR update
     if (do_update_pcr)
-        update_pcr(Υ0_fwd, Υ0_bwd, Σ_fwd);
+        update_pcr(Υ0_fwd, Υ0_bwd, Σ_bwd);
 
     { // Update or recompute the matrices Y(0), M(0) and L(0) in the last CR level
         GUANAQO_TRACE("Update L", i);
@@ -136,6 +153,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
             index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
             if (i_fwd >= p)
                 i_fwd = 0;
+            if (i_fwd == 0 && m_update_u0 >= 0)
+                return; // Υ˃(0) = 0
             auto Up_fwd = work_Ups_fwd(l, i_fwd), Up_fwd_next = work_Ups_fwd(l + 1, i_fwd);
             if (Up_fwd.data != Up_fwd_next.data)
                 copy(Up_fwd, Up_fwd_next);
@@ -156,6 +175,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
     index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
     if (i_fwd >= p)
         i_fwd = 0;
+    if (i_fwd == 0 && m_update_u0 >= 0)
+        return; // Υ˃(0) = 0
     auto UpQ    = work_Q_cr(l, i);
     auto Σ      = work_Σ_Q(l, i);
     auto WQ     = work_hyh.batch(i);
@@ -206,7 +227,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
 // TODO: write down the pseudocode for this algorithm in the appendix of the paper?
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view<> bwd,
-                                                    batch_view<> Σfwd) {
+                                                    batch_view<> Σbwd) {
 #ifndef NDEBUG
     work_update_pcr_L.set_constant(std::numeric_limits<T>::quiet_NaN());
     work_update_pcr_Σ.set_constant(std::numeric_limits<T>::quiet_NaN());
@@ -220,7 +241,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
     auto Σ   = work_update_pcr_Σ.top_rows(2 * VL * m).batch(0);
     batmat::linalg::copy(bwd, WU.left_cols(m));
     batmat::linalg::copy(fwd, WY.right_cols(m));
-    batmat::linalg::copy(Σfwd, Σ.top_rows(m));
+    batmat::linalg::copy(Σbwd, Σ.top_rows(m));
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template update_pcr_level<Levels>(m, WYU, Σ), ...);
     }(std::make_integer_sequence<index_t, CyqloneSolver::lvl + 1>{});
@@ -390,7 +411,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             const auto c_prev = sub_wrap_p(c, 1); // c-1
             // Communicate the update ranks mj to all threads and compute the partial sums (i.e. the
             // column offsets in the global update workspace we'll write Υ(c) and Υ(c-1) to)
-            m_update[c_prev] = mj + mu0;
+            m_update[c_prev] = mj;
+            if (c == 0)
+                m_update_u0 = isolate_u0 ? mu0 : -1;
             ctx.run_single_sync(
                 [this] { std::inclusive_scan(begin(m_update), end(m_update), begin(m_update)); });
             const index_t i_fwd = c, i_bwd = c_prev;
@@ -417,17 +440,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                                                                simdify(𝑆.top_rows(mj)));
                 // We negate 𝒮(c) because in the CR update, we need blkdiag(-I, 𝒮(c))-orthogonal
                 // or blkdiag(I, -𝒮(c))-orthogonal transformations.
-            }
-            if (mu0 > 0) { // special case to exploit structure for first stage when v=1
-                GUANAQO_TRACE("Riccati update B0", j);
-                auto Υ_fwd      = work_Ups_fwd(0, i_fwd).right_cols(mu0),
-                     Υ_bwd_prev = work_Ups_bwd(0, i_bwd).right_cols(mu0);
-                auto 𝒮cr        = work_Σ_fwd(0, i_fwd).bottom_rows(mu0);
-                copy(Υλ0, Υ_fwd);
-                Υ_bwd_prev.set_constant(0);
-                compact_blas::xadd_neg_copy(simdify(𝒮cr), simdify(𝑆u0));
-                // TODO: we shouldn't include Φλ0 in the CR updates,
-                //       just apply it to L(0)/M(0) at the end.
             }
         }
     }

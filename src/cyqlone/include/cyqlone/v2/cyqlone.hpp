@@ -250,6 +250,8 @@ struct CyqloneSolver {
     /// Update rank (number of changing constraints) per thread. Replaced by their partial sums
     /// over all threads before the update of the Schur complement.
     std::vector<index_t> m_update = std::vector<index_t>(p);
+    /// Update rank from D(0). Negative if D(0) is not handled separately.
+    index_t m_update_u0 = -1;
     /// Compressed representation of the nonzero diagonal elements of the matrix Σ, populated
     /// for each thread separately during the factorization update of the Riccati recursion, and
     /// later compressed across all threads into @ref work_update_Σ so it can be applied to the
