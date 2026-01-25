@@ -520,13 +520,13 @@ struct CyqloneSolver {
 
     auto cols_Ups_fwd(index_t l, index_t i) const {
         BATMAT_ASSUME(ν2p(i) >= l); // i % offset = 0
-        const index_t offset = 1 << l;
+        const index_t offset = 1 << l, floor_mask = offset - 1;
         // Current block ends at i (or at p if i == 0),
         // minus one because m_update is an inclusive sum.
         const index_t ip  = i == 0 ? p : i;
         const index_t end = m_update[ip - 1];
         // Current block starts at the previous multiple of offset.
-        const index_t i_start = (ip - 1) & ~(offset - 1);
+        const index_t i_start = (ip - 1) & ~floor_mask;
         const index_t start   = i_start > 0 ? m_update[i_start - 1] : 0;
         return std::make_pair(start, end);
     }
@@ -544,37 +544,54 @@ struct CyqloneSolver {
         return std::make_pair(start, end);
     }
 
+    auto work_Ups_fwd_w(index_t l, index_t i) {
+        const index_t offset = 1 << l, floor_mask = offset - 1;
+        if (i == 0 && l + 2 <= lp()) {
+            i = (p - 1) & ~floor_mask; // beginning of the last block
+            i += offset;               // make sure we don't overlap with it
+        }
+        return i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+    }
+
+    auto work_Ups_bwd_w(index_t l, index_t i) {
+        if (l == lp())
+            return l; // Keep Υ˃(0) @ [l+2] and Υ˂(0) @ [l] in separate workspaces at the last level
+        return i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+    }
+
     auto cols_Q_cr(index_t l, index_t i) const {
         return std::make_pair(cols_Ups_fwd(l, i).first, cols_Ups_bwd(l, i).second);
     }
 
     auto work_Ups_fwd(index_t l, index_t i) {
         auto [start, end] = cols_Ups_fwd(l, i);
-        index_t w         = l == lp() ? l : i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+        index_t w         = work_Ups_fwd_w(l, i);
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 
     auto work_Ups_bwd(index_t l, index_t i) {
         auto [start, end] = cols_Ups_bwd(l, i);
-        const index_t w   = i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+        const index_t w   = work_Ups_bwd_w(l, i);
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 
     auto work_Q_cr(index_t l, index_t i) {
-        BATMAT_ASSUME(ν2p(i) >= l);
         auto [start, end] = cols_Q_cr(l, i);
-        const index_t w   = l == lp() ? l + lv() : l;
+        const index_t w   = l;
         return work_update.batch(w & 3).middle_cols(start, end - start);
     }
 
     auto work_Σ_fwd(index_t l, index_t i) {
-        BATMAT_ASSUME(ν2p(i) >= l);
         auto [start, end] = cols_Ups_fwd(l, i);
         return work_update_Σ.batch(0).middle_rows(start, end - start);
     }
 
+    auto work_Σ_bwd(index_t l, index_t i) {
+        auto [start, end] = cols_Ups_bwd(l, i);
+        return work_update_Σ.batch(0).middle_rows(start, end - start);
+    }
+
     auto work_Σ_Q(index_t l, index_t i) {
-        BATMAT_ASSUME(ν2p(i) >= l);
         auto [start, end] = cols_Q_cr(l, i);
         return work_update_Σ.batch(0).middle_rows(start, end - start);
     }

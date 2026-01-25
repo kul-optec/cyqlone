@@ -116,8 +116,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 
 // TODO: Υ˃(0) and Υ˂(0) are always complementary in their sparsity patterns. Can we exploit this?
 //       This only holds at the very last level (so the last CR level if v=1 or the last PCR level
-//       if v>1). The sparsity pattern is a bit odd and it doesn't match the current column
-//       partitioning, though.
+//       if v>1). The sparsity pattern depends on the number of changing constraints on u(0), and it
+//       doesn't match the current column partitioning, though. An easy fix would be to store the
+//       updates for u(0) and x(N) separately, since those on u(0) do not affect any other stages,
+//       they just need to be applied to LB(0) and L(0), which can be handled as special cases.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
@@ -126,10 +128,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
     auto Up_bwd = work_Ups_bwd(l, i_bwd), Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
     if constexpr (VL == 1)
         if (i >= p) { // happens in cases where p is not a power of two
-            const index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
+            // There's no matrix Q̆(i) to apply, just copy the update matrices forward
+            if (Up_bwd.data != Up_bwd_next.data)
+                copy(Up_bwd, Up_bwd_next);
+            // If the number of threads is odd, then update_Y won't be called for this column i,
+            // so we need to copy the forward update matrices here as well.
+            index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
+            if (i_fwd >= p)
+                i_fwd = 0;
             auto Up_fwd = work_Ups_fwd(l, i_fwd), Up_fwd_next = work_Ups_fwd(l + 1, i_fwd);
-            copy(Up_bwd, Up_bwd_next);
-            copy(Up_fwd, Up_fwd_next);
+            if (Up_fwd.data != Up_fwd_next.data)
+                copy(Up_fwd, Up_fwd_next);
             return;
         }
     auto UpQ = work_Q_cr(l, i);
@@ -144,11 +153,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
     GUANAQO_TRACE("Update Y", i);
-    const index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
-    auto UpQ            = work_Q_cr(l, i);
-    auto Σ              = work_Σ_Q(l, i);
-    auto WQ             = work_hyh.batch(i);
-    auto Y              = cr_Y.batch(i);
+    index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
+    if (i_fwd >= p)
+        i_fwd = 0;
+    auto UpQ    = work_Q_cr(l, i);
+    auto Σ      = work_Σ_Q(l, i);
+    auto WQ     = work_hyh.batch(i);
+    auto Y      = cr_Y.batch(i);
     auto Up_fwd = work_Ups_fwd(l, i_fwd), Up_fwd_next = work_Ups_fwd(l + 1, i_fwd);
     // 20|  [ Ỹ(i) | Υ˃(i+2^l;l+1) ] = [ Y(i) | 0  Υ˃(i+2^l;l) ] Q̆(i)
     hyhound_diag_apply(Y, Up_fwd, Up_fwd_next, //
@@ -201,8 +212,6 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
     work_update_pcr_Σ.set_constant(std::numeric_limits<T>::quiet_NaN());
     work_update_pcr_UY.set_constant(std::numeric_limits<T>::quiet_NaN());
 #endif
-    if constexpr (VL == 1)
-        return;
     index_t m = fwd.cols();
     BATMAT_ASSUME(m == bwd.cols());
     auto WYU = work_update_pcr_UY.left_cols(2 * VL * m).batch(0);

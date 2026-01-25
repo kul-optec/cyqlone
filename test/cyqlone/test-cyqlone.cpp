@@ -293,12 +293,13 @@ TEST_P(CyqloneFactorTest, factor) {
     using namespace cyqlone;
     using batmat::linalg::simdify;
 
+    const index_t p  = 8;
     using Solver     = v2::CyqloneSolver<4, real_t, v2::StorageOrder::RowMajor>;
     const index_t ny = 50, ny_0 = 25, ny_N = 25;
     OCPDim dim{.N_horiz = 97, .nx = 40, .nu = 30, .ny = ny, .ny_N = ny_N};
     const index_t nux = dim.nu + dim.nx, N = dim.N_horiz;
     auto ocp = generate_random_ocp(dim);
-    ocp.D(0).bottom_rows(ny_0).set_constant(0);
+    ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     std::mt19937 rng(102030405);
     std::uniform_real_distribution<real_t> uni(-1, 1);
     std::bernoulli_distribution bern(0.01);
@@ -307,7 +308,7 @@ TEST_P(CyqloneFactorTest, factor) {
     std::generate_n(ocp.b_min().data, ocp.b_min().rows, [&] { return uni(rng); });
     std::generate_n(ocp.b_max().data, ocp.b_max().rows, [&] { return uni(rng); });
     auto cocp           = CyqloneStorage<real_t>::build(ocp);
-    Solver solver       = Solver::build(cocp, 8);
+    Solver solver       = Solver::build(cocp, p);
     solver.solve_method = GetParam();
 
     // Spin a bit longer to get more deterministic timings
