@@ -208,6 +208,53 @@ def run_test_cyqlone_factor_solve(params):
         assert la.norm(r[j], np.inf) < 1e-8
 
 
+def run_test_cyqlone_factor_update_solve(params):
+    rng, ocp, cocp, solver = prepare_test(params)
+    print(solver.__class__.__qualname__, solver.params_string, flush=True)
+    Σ = 2 ** rng.uniform(-2, 2, solver.num_general_constraints)
+    Σ_packed = solver.pack_constraints(Σ)
+
+    if cyqlone.with_tracing:
+        for _ in range(5):
+            ux, λ = solver.factor_solve(np.inf, Σ_packed, cocp)
+        cyqlone.reset_trace_log()
+        solver.log_thread_names()
+    solver.factor(np.inf, Σ_packed)
+    mask = rng.uniform(0, 1, Σ_packed.shape) < 0.9
+    Σ_packed[mask] *= -1  # Remove most of the penalty terms
+    Σ_packed[~mask] *= 0
+    solver.update(Σ_packed)
+    Σ_packed = solver.pack_constraints(Σ)
+    Σ_packed[~mask] *= -1  # Remove the remaining penalty terms
+    Σ_packed[mask] *= 0
+    solver.update(Σ_packed)
+    ux, λ = solver.solve_forward(cocp)
+    solver.solve_reverse(ux, λ)
+
+    u, x = extract_solution(solver, ocp, ux)
+    λs = extract_multipliers(solver, ocp, λ, u)
+    r, gx, gu = compute_kkt_residuals(ocp, u, x, λs)
+    try:
+        check_kkt_residuals(ocp.N_horiz, r, gx, gu)
+    except AssertionError:
+        plot_kkt_residuals(r, gx, gu)
+        raise
+    finally:
+        print()
+        if cyqlone.with_tracing:
+            cyqlone.dump_trace_log(tr := f"traces/test-{solver.params_string}.csv")
+            print(Path(tr))
+            ext = ".json.gz" if cyqlone.with_zlib else ".json"
+            cyqlone.dump_trace_log_chrome(tr := f"traces/test-{solver.params_string}{ext}")
+            print(Path(tr).absolute())
+
+    resid = solver.residual_dynamics_constr(ux, cocp)
+    r = solver.unpack_dynamics(resid).reshape((ocp.N_horiz, ocp.nx))
+    for j in range(ocp.N_horiz):
+        print(j, " " * 6, end="\r")
+        assert la.norm(r[j], np.inf) < 1e-8
+
+
 def run_test_cyqlone_mat_vec(params):
     _, ocp, cocp, solver = prepare_test(params)
     print(solver.__class__.__qualname__, solver.params_string)
@@ -243,10 +290,10 @@ def run_test_cyqlone_mat_vec(params):
     assert la.norm(gN_ref - gN, np.inf) < 1e-10
 
 
-def run_with_shorter_N(test_func, p, base_N, seed, solver):
+def run_with_shorter_N(test_func, p, base_N, seed, solver, **kwargs):
     """Run test function for N, N-1, N-2, N-3."""
     for offset in range(min(4, base_N)):
-        test_func(Params(p=p, N=base_N - offset, seed=seed, solver=solver))
+        test_func(Params(p=p, N=base_N - offset, seed=seed, solver=solver, **kwargs))
 
 
 SEEDS = [12345, 54321, 10101]
@@ -257,7 +304,7 @@ SIMD_SOLVERS = {
     8: cyqlone.simd8.v2.CyqloneSolver,
 }
 SIMD_P_COMBOS = {
-    1: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 64],
+    1: list(range(1, 67)),
     4: [1, 2, 4, 8, 16, 64],
     8: [1, 2, 4, 8, 16, 64],
 }
@@ -271,6 +318,14 @@ SOLVER_P_ID = [f"{solver.__qualname__}-v{v}-p{p}" for solver, v, p in SOLVER_P_C
 def test_cyqlone_factor_solve(solver, v, p, n, seed):
     N = v * n * p
     run_with_shorter_N(run_test_cyqlone_factor_solve, p, N, seed, solver=solver)
+
+
+@pytest.mark.parametrize("solver,v,p", SOLVER_P_COMBOS, ids=SOLVER_P_ID)
+@pytest.mark.parametrize("n", [1, 2, 3])
+@pytest.mark.parametrize("seed", SEEDS)
+def test_cyqlone_factor_update_solve(solver, v, p, n, seed):
+    N = v * n * p
+    run_with_shorter_N(run_test_cyqlone_factor_update_solve, p, N, seed, solver=solver)
 
 
 @pytest.mark.parametrize("solver,v,p", SOLVER_P_COMBOS, ids=SOLVER_P_ID)

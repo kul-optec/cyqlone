@@ -241,6 +241,13 @@ void register_cyqlone_solver(nb::module_ &m) {
             },
             "S"_a, "Σ"_a.noconvert(), "ocp"_a)
         .def(
+            "update",
+            [](Solver &self, np_batched_view<VL, const real_t> ΔΣ) {
+                auto ΔΣ_vw = view_as_batched(ΔΣ);
+                self.parallel_ctx->run([&](auto &ctx) { self.update(ctx, ΔΣ_vw); });
+            },
+            "ΔΣ"_a.noconvert())
+        .def(
             "residual_dynamics_constr",
             [](Solver &self, np_batched_view<VL, const real_t> x,
                np_batched_view<VL, const real_t> b) {
@@ -281,6 +288,16 @@ void register_cyqlone_solver(nb::module_ &m) {
                 self.parallel_ctx->run([&](auto &ctx) { self.solve_forward(ctx, ux_vw, λ_vw); });
             },
             "ux"_a.noconvert(), "λ"_a.noconvert())
+        .def(
+            "solve_forward",
+            [](Solver &self, const CyqloneStorage<> &ocp) {
+                auto ux = self.initialize_gradient(ocp);
+                Solver::compact_blas::xneg(batmat::linalg::simdify(ux)); // TODO: remove
+                auto λ = self.initialize_rhs(ocp);
+                self.parallel_ctx->run([&](auto &ctx) { self.solve_forward(ctx, ux, λ); });
+                return std::make_tuple(np_copy(std::move(ux)), np_copy(std::move(λ)));
+            },
+            "ocp"_a)
         .def(
             "solve_reverse",
             [](Solver &self, np_batched_view<VL, real_t> ux, np_batched_view<VL, real_t> λ) {
