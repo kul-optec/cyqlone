@@ -278,14 +278,22 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
     const index_t dn  = c * n; // data batch index
     const index_t jn  = c * n; // stage index
     const index_t nux = nu + nx, nyM = std::max(ny, ny_0 + ny_N);
-    // TODO: special case nyM for c == 0
     auto LHs = riccati_LH.batch(c);
     auto B̂s = riccati_LAB.batch(c).right_cols(n * nu), Âs = riccati_LAB.batch(c).left_cols(n * nx);
     auto Υ1 = riccati_Υ1.batch(c), Υ2 = riccati_Υ2.batch(c);
     auto 𝑆 = work_Σ.batch(c); // mathcal{S}_j in the paper
 
-    index_t m = 0; // Total update rank so far
-    {
+    // u(0) is mostly independent, since there is no coupling S(0) or A(0). Without batching, we
+    // can handle it as a special case. This not only saves computation during the Riccati update,
+    // but also introduces structural zeros that can be exploited during the CR updates.
+    // Its contribution just has to be applied to LB(0) (which is done in this function), and to
+    // M(0)/L(0) (which is done in update_L).
+    const bool isolate_u0 = VL == 1 && dn == 0;
+
+    index_t m    = 0; // Total update rank so far
+    index_t mu0  = 0; // Update rank for u(0)
+    auto Υ_first = Υ2.left_cols(nyM);
+    if (!isolate_u0) {
         GUANAQO_TRACE("Riccati update compress", jn);
         //  4|  [ Υu(jₙ) ]   [ D(jₙ)ᵀ ]
         //   |  [ Υx(jₙ) ] = [ C(jₙ)ᵀ ],    𝑆(jₙ) = ΔΣ(jₙ)
@@ -293,31 +301,53 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
         //  6|  m(j) = rank 𝑆(j)
         // Note that we only need to consider the columns corresponding to changing constraints,
         // i.e. where ΔΣ is nonzero, which is why we compress them.
-        auto Υ_first = Υ2.left_cols(nyM);
-        auto Υux     = Υ_first.top_rows(nu + nx); // we don't know the number of columns yet
-        m            = compress_masks(data_Gᵀ.batch(dn), ΔΣ.batch(dn), Υux, 𝑆.top_rows(nyM));
-        auto Υλ      = Υ_first.bottom_left(nx, m);
+        auto Υux = Υ_first.top_rows(nu + nx); // we don't know the number of columns yet
+        m        = compress_masks(data_Gᵀ.batch(dn), ΔΣ.batch(dn), Υux, 𝑆.top_rows(nyM));
+        auto Υλ  = Υ_first.bottom_left(nx, m);
         Υλ.set_constant(0);
+    } else {
+        // Exploit the block-diagonal structure of G₀:
+        //   G₀ = [ D₀ 0 ]  ny_0
+        //        [ 0  Cₙ]  ny_N
+        auto D0ᵀ = data_Gᵀ.batch(dn).top_left(nu, ny_0),
+             C0ᵀ = data_Gᵀ.batch(dn).bottom_rows(nx).middle_cols(ny_0, ny_N);
+        auto Υu0 = Υ2.top_right(nu, ny_0);
+        mu0      = compress_masks(D0ᵀ, ΔΣ.batch(dn).top_rows(ny_0), Υu0, 𝑆.bottom_rows(ny_0));
+        auto Υx  = Υ_first.middle_rows(nu, nx).left_cols(ny_N);
+        m        = compress_masks(C0ᵀ, ΔΣ.batch(dn).middle_rows(ny_0, ny_N), Υx, 𝑆.top_rows(ny_N));
+        auto Υλ = Υ_first.bottom_left(nx, m), Υλ0 = Υ2.bottom_right(nx, ny_0).left_cols(mu0);
+        Υλ.set_constant(0);
+        Υλ0.set_constant(0);
     }
+    auto Υu0 = Υ2.top_right(nu, ny_0).left_cols(mu0),
+         Υλ0 = Υ2.bottom_right(nx, ny_0).left_cols(mu0);
+    auto 𝑆u0 = 𝑆.bottom_rows(ny_0).top_rows(mu0);
 
     // Iterate over all stages in the interval (in reverse order)
     for (index_t i = 0; i < n; ++i) {
         //  5|  for j = jₙ downto j₁
         index_t j = sub_wrap_N(jn, i);
         auto LH = LHs.middle_cols(i * nux, nux), LRS = LH.left_cols(nu);
-        auto LQ = tril(LH.bottom_right(nx, nx));
+        auto LR = tril(LRS.top_rows(nu)), LQ = tril(LH.bottom_right(nx, nx));
         auto LB = B̂s.middle_cols(i * nu, nu), Acl = Âs.middle_cols(i * nx, nx);
 
         index_t mj = m;
         auto Υ     = (i & 1 ? Υ1 : Υ2).left_cols(mj); // alternate between Υ1 and Υ2 workspaces
         auto Υux = Υ.top_rows(nu + nx), Υλ = Υ.bottom_rows(nx);
-        if (mj > 0) {
+        if (!isolate_u0 || i != 0) {
+            GUANAQO_TRACE("Riccati update RS", j);
+            if (mj > 0)
+                //  7|  [ L̃R(j)    0   ]   [ LR(j)  Υu(j) ]
+                //   |  [ L̃S(j)  Φx(j) ] = [ LS(j)  Υx(j) ] Q̆u(j),  blkdiag(I, 𝑆(j))-orthogonal
+                //   |  [ L̃B(j)  Φλ(j) ]   [ LB(j)  Υλ(j) ]
+                hyhound_diag_2(tril(LRS), Υux, //
+                               LB, Υλ, 𝑆.top_rows(mj));
+        } else {
             GUANAQO_TRACE("Riccati update R", j);
-            //  7|  [ L̃R(j)    0   ]   [ LR(j)  Υu(j) ]
-            //   |  [ L̃S(j)  Φx(j) ] = [ LS(j)  Υx(j) ] Q̆u(j),  blkdiag(I, 𝑆(j))-orthogonal
-            //   |  [ L̃B(j)  Φλ(j) ]   [ LB(j)  Υλ(j) ]
-            hyhound_diag_2(tril(LRS), Υux, //
-                           LB, Υλ, 𝑆.top_rows(mj));
+            if (mu0 > 0)
+                // Same as above, but using LS(j) = 0 = L̃S(j), Υx(j) = 0 = Φx(j)
+                hyhound_diag_2(LR, Υu0, //
+                               LB, Υλ0, 𝑆u0);
         }
         auto Φx = Υ.middle_rows(nu, nx), Φλ = Υ.bottom_rows(nx);
         //  8|  if j > j₁
@@ -360,16 +390,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             const auto c_prev = sub_wrap_p(c, 1); // c-1
             // Communicate the update ranks mj to all threads and compute the partial sums (i.e. the
             // column offsets in the global update workspace we'll write Υ(c) and Υ(c-1) to)
-            m_update[c_prev] = mj;
+            m_update[c_prev] = mj + mu0;
             ctx.run_single_sync(
                 [this] { std::inclusive_scan(begin(m_update), end(m_update), begin(m_update)); });
+            const index_t i_fwd = c, i_bwd = c_prev;
+            const bool rot = c == 0;
             if (mj > 0) {
                 GUANAQO_TRACE("Riccati update Q", j);
-                auto Tc = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
-                const index_t i_fwd = c, i_bwd = c_prev;
-                const bool rot = c == 0;
-                auto Υ_fwd = work_Ups_fwd(0, i_fwd), Υ_bwd_prev = work_Ups_bwd(0, i_bwd);
-                auto 𝒮cr = work_Σ_fwd(0, c); // mathscr{S}_c in the paper
+                auto Tc    = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
+                auto Υ_fwd = work_Ups_fwd(0, i_fwd).left_cols(mj),
+                     Υ_bwd_prev = work_Ups_bwd(0, i_bwd).left_cols(mj);
+                auto 𝒮cr        = work_Σ_fwd(0, i_fwd).top_rows(mj); // mathscr{S}_c in the paper
                 // 12|  [ L̃Q(j)  0 ] = [ LQ(j)  Φx(j) ] Q̆x(j),  blkdiag(I, 𝑆(j))-orthogonal
                 // Fused with:
                 // 14|  [ L̃A(j₁)  Υ˃(c)   ] = [ LA(j₁)  Φλ(j₁) ] Q̆x(j₁),
@@ -386,6 +417,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                                                                simdify(𝑆.top_rows(mj)));
                 // We negate 𝒮(c) because in the CR update, we need blkdiag(-I, 𝒮(c))-orthogonal
                 // or blkdiag(I, -𝒮(c))-orthogonal transformations.
+            }
+            if (mu0 > 0) { // special case to exploit structure for first stage when v=1
+                GUANAQO_TRACE("Riccati update B0", j);
+                auto Υ_fwd      = work_Ups_fwd(0, i_fwd).right_cols(mu0),
+                     Υ_bwd_prev = work_Ups_bwd(0, i_bwd).right_cols(mu0);
+                auto 𝒮cr        = work_Σ_fwd(0, i_fwd).bottom_rows(mu0);
+                copy(Υλ0, Υ_fwd);
+                Υ_bwd_prev.set_constant(0);
+                compact_blas::xadd_neg_copy(simdify(𝒮cr), simdify(𝑆u0));
+                // TODO: we shouldn't include Φλ0 in the CR updates,
+                //       just apply it to L(0)/M(0) at the end.
             }
         }
     }
