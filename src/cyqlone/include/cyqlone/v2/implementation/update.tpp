@@ -290,6 +290,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
 //    compressing the relevant columns of Dᵀ and Cᵀ into Υu and Υx respectively.
 //  - A global communication step is used at the end to compute the total update rank for the entire
 //    problem, and to partition the workspace for Υ˃ and Υ˂ to prepare for the CR phase.
+//  - The update for u(0) is handled as a special case to exploit its mostly independent structure.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
@@ -443,6 +444,106 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             }
         }
     }
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] std::pair<index_t, index_t>
+CyqloneSolver<VL, T, DefaultOrder>::cols_Ups_fwd(index_t l, index_t i) const {
+    BATMAT_ASSUME(ν2p(i) >= l); // i % offset = 0
+    const index_t offset = 1 << l, floor_mask = offset - 1;
+    // Current block ends at i (or at p if i == 0),
+    // minus one because m_update is an inclusive sum.
+    const index_t ip  = i == 0 ? p : i;
+    const index_t end = m_update[ip - 1];
+    // Current block starts at the previous multiple of offset.
+    const index_t i_start = (ip - 1) & ~floor_mask;
+    const index_t start   = i_start > 0 ? m_update[i_start - 1] : 0;
+    return {start, end};
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] std::pair<index_t, index_t>
+CyqloneSolver<VL, T, DefaultOrder>::cols_Ups_bwd(index_t l, index_t i) const {
+    BATMAT_ASSUME(ν2p(i) >= l); // i % offset = 0
+    const index_t offset = 1 << l;
+    // The start index of the next block (at i + offset),
+    // minus one because m_update is an inclusive sum.
+    // If p is not a power of two, we need to clamp to p.
+    const index_t i_end = std::min(i + offset, p);
+    const index_t end   = m_update[i_end - 1];
+    // The start index of the current block is i.
+    const index_t start = i > 0 ? m_update[i - 1] : 0;
+    return {start, end};
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] std::pair<index_t, index_t>
+CyqloneSolver<VL, T, DefaultOrder>::cols_Q_cr(index_t l, index_t i) const {
+    return {cols_Ups_fwd(l, i).first, cols_Ups_bwd(l, i).second};
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::work_Ups_fwd_w(index_t l,
+                                                                         index_t i) const {
+    const index_t offset = 1 << l, floor_mask = offset - 1;
+    if (i == 0 && l + 2 <= lp()) {
+        i = (p - 1) & ~floor_mask; // beginning of the last block
+        i += offset;               // make sure we don't overlap with it
+    }
+    return i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::work_Ups_bwd_w(index_t l,
+                                                                         index_t i) const {
+    if (l == lp())
+        return l; // Keep Υ˃(0) @ [l+2] and Υ˂(0) @ [l] in separate workspaces at the last level
+    return i == 0 ? l + 2 : std::min(l + 2, ν2(i));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Ups_fwd(index_t l, index_t i)
+    -> mut_batch_view<column_major> {
+    auto [start, end] = cols_Ups_fwd(l, i);
+    index_t w         = work_Ups_fwd_w(l, i);
+    return work_update.batch(w & 3).middle_cols(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Ups_bwd(index_t l, index_t i)
+    -> mut_batch_view<column_major> {
+    auto [start, end] = cols_Ups_bwd(l, i);
+    const index_t w   = work_Ups_bwd_w(l, i);
+    return work_update.batch(w & 3).middle_cols(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Q_cr(index_t l, index_t i)
+    -> mut_batch_view<column_major> {
+    auto [start, end] = cols_Q_cr(l, i);
+    const index_t w   = l;
+    return work_update.batch(w & 3).middle_cols(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Σ_fwd(index_t l, index_t i)
+    -> mut_batch_view<column_major> {
+    auto [start, end] = cols_Ups_fwd(l, i);
+    return work_update_Σ.batch(0).middle_rows(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Σ_bwd(index_t l, index_t i)
+    -> mut_batch_view<column_major> {
+    auto [start, end] = cols_Ups_bwd(l, i);
+    return work_update_Σ.batch(0).middle_rows(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Σ_Q(index_t l, index_t i)
+    -> mut_batch_view<column_major> {
+    auto [start, end] = cols_Q_cr(l, i);
+    return work_update_Σ.batch(0).middle_rows(start, end - start);
 }
 
 } // namespace CYQLONE_NS(cyqlone)::v2
