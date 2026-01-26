@@ -295,7 +295,7 @@ TEST_P(CyqloneFactorTest, factor) {
 
     const index_t p  = 8;
     using Solver     = v2::CyqloneSolver<4, real_t, v2::StorageOrder::RowMajor>;
-    const index_t ny = 50, ny_0 = 25, ny_N = 25;
+    const index_t ny = 50, ny_0 = 25, ny_N = 25, nyM = std::max(ny, ny_0 + ny_N);
     OCPDim dim{.N_horiz = 97, .nx = 40, .nu = 30, .ny = ny, .ny_N = ny_N};
     const index_t nux = dim.nu + dim.nx, N = dim.N_horiz;
     auto ocp = generate_random_ocp(dim);
@@ -317,7 +317,6 @@ TEST_P(CyqloneFactorTest, factor) {
     GUANAQO_IF_ITT(solver.parallel_ctx->run(
         [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
 
-    const index_t nyM = std::max(ny, ny_0 + ny_N);
     std::vector<real_t> Σ_lin((N - 1) * ny + ny_0 + ny_N);
     Solver::matrix λ{{.depth = solver.ceil_N(), .rows = dim.nx, .cols = 1}},
         ux{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
@@ -326,9 +325,9 @@ TEST_P(CyqloneFactorTest, factor) {
         DCᵀΣDCux{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
         grad{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
         Mxb{{.depth = solver.ceil_N(), .rows = dim.nx, .cols = 1}},
-        Σ{{.depth = solver.ceil_N(), .rows = dim.ny, .cols = 1}},
-        Σ2{{.depth = solver.ceil_N(), .rows = dim.ny, .cols = 1}},
-        ΔΣ{{.depth = solver.ceil_N(), .rows = dim.ny, .cols = 1}};
+        Σ{{.depth = solver.ceil_N(), .rows = nyM, .cols = 1}},
+        Σ2{{.depth = solver.ceil_N(), .rows = nyM, .cols = 1}},
+        ΔΣ{{.depth = solver.ceil_N(), .rows = nyM, .cols = 1}};
     std::ranges::generate(λ, [&] { return uni(rng); });
     std::ranges::generate(ux, [&] { return uni(rng); });
     std::ranges::generate(Σ_lin, [&] { return std::exp2(uni(rng)); });

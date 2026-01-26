@@ -526,6 +526,9 @@ struct CyqloneSolver {
         prefetch(cr_Y.batch(iY));
     }
 
+    /// @name Factorization updates
+    /// @{
+
     /// Get the column range in the workspace for update matrix Υ˃(i;l).
     [[nodiscard]] std::pair<index_t, index_t> cols_Ups_fwd(index_t l, index_t i) const;
     /// Get the column range in the workspace for update matrix Υ˂(i;l).
@@ -552,15 +555,27 @@ struct CyqloneSolver {
     /// Q̆(i;l).
     [[nodiscard]] mut_batch_view<column_major> work_Σ_Q(index_t l, index_t i);
 
+    /// Update the modified Riccati factorization of a single block column as described by
+    /// Algorithm 3 in the paper.
     void update_riccati(Context &ctx, view<> Σ);
-    void update_L(index_t l, index_t iL);
-    void update_U(index_t l, index_t iU);
-    void update_Y(index_t l, index_t iY);
+    /// Update the diagonal block L(i) at level l of the CR factorization. Also computes and stores
+    /// the hyperbolic Householder transformation Q̆(i) used to update the subdiagonal blocks U & Y.
+    void update_L(index_t l, index_t i);
+    /// Update the subdiagonal block U(i) at level l of the CR factorization by applying Q̆(i).
+    void update_U(index_t l, index_t i);
+    /// Update the subdiagonal block Y(i) at level l of the CR factorization by applying Q̆(i).
+    void update_Y(index_t l, index_t i);
+    /// Perform factorization updates of the entire Cyqlone factorization as described by
+    /// Algorithm 4 in the paper.
     void update(Context &ctx, view<> ΔΣ);
 
+    /// Update a single level of the PCR factorization.
     template <index_t Level>
     void update_pcr_level(index_t m, mut_batch_view<> WYU, mut_batch_view<> WΣ);
+    /// Update the PCR factorization.
     void update_pcr(batch_view<> fwd, batch_view<> bwd, batch_view<> Σ);
+
+    /// @}
 
     [[nodiscard]] SparseMatrix build_sparse(const CyqloneStorage<value_type> &ocp,
                                             std::span<const value_type> Σ) const;

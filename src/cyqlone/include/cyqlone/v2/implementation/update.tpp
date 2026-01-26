@@ -190,9 +190,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
     const index_t ml = m << l;
     GUANAQO_TRACE("Update PCR", l);
     auto Σ = WΣ.top_rows(2 * ml);
-    //  WL = [ Υ˃[0]  | Υ˂[0]  ]
-    //  WY = [   0    | Υ˃[+1] ]
-    //  WU = [ Υ˂[-1] |   0    ]
+    //  WL = [ Υ˃(0)  | Υ˂(0)  ]
+    //  WY = [   0    | Υ˃(+1) ]
+    //  WU = [ Υ˂(-1) |   0    ]
     batmat::linalg::copy(Σ.top_rows(ml), Σ.bottom_rows(ml), with_rotate<+rot0>);
     batmat::linalg::copy(Σ.top_rows(ml), Σ.top_rows(ml), with_rotate<-rot1>);
     if constexpr (l < lvl) {
