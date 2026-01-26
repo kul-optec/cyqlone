@@ -18,11 +18,11 @@ using namespace batmat::linalg;
 // Algorithm 4 “Cyqlone factorization updates”
 //
 // Differences compared to the pseudo-code in the paper:
-//   - The update of the last has been modified to allow for vectorization (v>1).
-//   - The indices in the cyclic reduction levels are reduced modulo P (=p·v) instead of modulo p,
-//     as is done during the factorization. This is to account for the vectorization in the
-//     workspace assignment: we do not want Υ˂(0) and Υ˃(0) to alias in the last level. (When v=1,
-//     this makes no difference, since then P=p, and Υ˃(0)=0.)
+//   - The update of the last has been modified to allow for vectorization (v>1), updating the
+//     PCR factorization if necessary.
+//   - A heuristic rank check is used to decide whether to update or re-factorize the last level.
+//   - The update matrices Y˃(0) are skipped when they are zero (i.e. when the updates to u(0) are
+//     handled separately). This saves some unnecessary computation in the scalar case.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
@@ -124,19 +124,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
         // TODO: we should actually merge these two hyhound_diag calls to make sure that the
         //       intermediate matrix after the backward update does not become indefinite
         //       (although this shouldn't be an issue for QPALM, at least not in exact arithmetic).
+        //       We already have the code for this in update_pcr_level.
     }
 
     // Finally, recompute the PCR factorization if we did not do an update.
     if (do_refactor_pcr)
         factor_pcr();
 }
-
-// TODO: Υ˃(0) and Υ˂(0) are always complementary in their sparsity patterns. Can we exploit this?
-//       This only holds at the very last level (so the last CR level if v=1 or the last PCR level
-//       if v>1). The sparsity pattern depends on the number of changing constraints on u(0), and it
-//       doesn't match the current column partitioning, though. An easy fix would be to store the
-//       updates for u(0) and x(N) separately, since those on u(0) do not affect any other stages,
-//       they just need to be applied to LB(0) and L(0), which can be handled as special cases.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
@@ -196,11 +190,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
     const index_t ml = m << l;
     GUANAQO_TRACE("Update PCR", l);
     auto Σ = WΣ.top_rows(2 * ml);
-    /*
-     WL = [ Υ→[0]  | Υ←[0]  ]
-     WY = [   0    | Υ→[+1] ]
-     WU = [ Υ←[-1] |   0    ]
-     */
+    //  WL = [ Υ˃[0]  | Υ˂[0]  ]
+    //  WY = [   0    | Υ˃[+1] ]
+    //  WU = [ Υ˂[-1] |   0    ]
     batmat::linalg::copy(Σ.top_rows(ml), Σ.bottom_rows(ml), with_rotate<+rot0>);
     batmat::linalg::copy(Σ.top_rows(ml), Σ.top_rows(ml), with_rotate<-rot1>);
     if constexpr (l < lvl) {
@@ -220,8 +212,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
         batmat::linalg::copy(WYU, WYU, with_rotate<rot0>); // TODO: fuse with hyhound_diag
         hyhound_diag(tril(pcr_L.batch(l)), WYU, Σ);
     }
-    // TODO: In the last level, we could maybe have WY and WU overlap (given proper masking
-    //       in hyhound_diag_cyclic). The arrays WU and WY are suspiciously complementary ...
+    // TODO: Can we exploit the complementary sparsity patterns of Υ˃(0) and Υ˂(0) in the last level
+    //       of PCR? Right now, this is only done for the scalar case (v=1).
 }
 
 // TODO: write down the pseudocode for this algorithm in the appendix of the paper?
@@ -291,6 +283,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
 //  - A global communication step is used at the end to compute the total update rank for the entire
 //    problem, and to partition the workspace for Υ˃ and Υ˂ to prepare for the CR phase.
 //  - The update for u(0) is handled as a special case to exploit its mostly independent structure.
+//  - If the number of processors p is not a power of two, the workspace allocation of Υ˃(0) needs
+//    to be adjusted to ensure that it does not overlap with Υ˂(p-2^l). Note that this is only
+//    necessary when u(0) is not isolated. See work_Ups_fwd_w.
+//  - In the vectorized case, Υ˃(0) and Υ˂(0) are stored in different workspaces in the last level
+//    of CR, since this is not actually the last level of the full reduction (PCR handles the rest).
+//    See work_Ups_bwd_w.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
@@ -303,18 +301,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
     auto LHs = riccati_LH.batch(c);
     auto B̂s = riccati_LAB.batch(c).right_cols(n * nu), Âs = riccati_LAB.batch(c).left_cols(n * nx);
     auto Υ1 = riccati_Υ1.batch(c), Υ2 = riccati_Υ2.batch(c);
-    auto 𝑆 = work_Σ.batch(c); // mathcal{S}_j in the paper
+    auto 𝑆 = work_Σ.batch(c); // \mathcal{S}_j in the paper
 
-    // u(0) is mostly independent, since there is no coupling S(0) or A(0). Without batching, we
-    // can handle it as a special case. This not only saves computation during the Riccati update,
-    // but also introduces structural zeros that can be exploited during the CR updates.
+    // u(0) is mostly independent, since there is no coupling S(0) or A(0). Without vectorization
+    // (v=1), we can handle it as a special case. This not only saves computation during the Riccati
+    // update, but also introduces structural zeros that can be exploited during the CR updates.
     // Its contribution just has to be applied to LB(0) (which is done in this function), and to
     // M(0)/L(0) (which is done in update_L).
     const bool isolate_u0 = VL == 1 && dn == 0;
 
     index_t m    = 0; // Total update rank so far
     index_t mu0  = 0; // Update rank for u(0)
-    auto Υ_first = Υ2.left_cols(nyM);
+    auto Υ_first = Υ2.left_cols(nyM), Υu0_first = Υ2.right_cols(ny_0);
     if (!isolate_u0) {
         GUANAQO_TRACE("Riccati update compress", jn);
         //  4|  [ Υu(jₙ) ]   [ D(jₙ)ᵀ ]
@@ -324,25 +322,25 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
         // Note that we only need to consider the columns corresponding to changing constraints,
         // i.e. where ΔΣ is nonzero, which is why we compress them.
         auto Υux = Υ_first.top_rows(nu + nx); // we don't know the number of columns yet
-        m        = compress_masks(data_Gᵀ.batch(dn), ΔΣ.batch(dn), Υux, 𝑆.top_rows(nyM));
+        m        = compress_masks(data_Gᵀ.batch(dn), ΔΣ.batch(dn), //
+                                  Υux, 𝑆.top_rows(nyM));
         auto Υλ  = Υ_first.bottom_left(nx, m);
         Υλ.set_constant(0);
     } else {
-        // Exploit the block-diagonal structure of G₀:
-        //   G₀ = [ D₀ 0 ]  ny_0
-        //        [ 0  Cₙ]  ny_N
+        // Exploit the block-diagonal structure of G₀ = [ D₀ 0 ]  ny_0
+        //                                              [ 0  Cₙ]  ny_N
         auto D0ᵀ = data_Gᵀ.batch(dn).top_left(nu, ny_0),
              C0ᵀ = data_Gᵀ.batch(dn).bottom_rows(nx).middle_cols(ny_0, ny_N);
-        auto Υu0 = Υ2.top_right(nu, ny_0);
-        mu0      = compress_masks(D0ᵀ, ΔΣ.batch(dn).top_rows(ny_0), Υu0, 𝑆.bottom_rows(ny_0));
-        auto Υx  = Υ_first.middle_rows(nu, nx).left_cols(ny_N);
-        m        = compress_masks(C0ᵀ, ΔΣ.batch(dn).middle_rows(ny_0, ny_N), Υx, 𝑆.top_rows(ny_N));
-        auto Υλ = Υ_first.bottom_left(nx, m), Υλ0 = Υ2.bottom_right(nx, ny_0).left_cols(mu0);
+        auto Υu0 = Υu0_first.top_rows(nu), Υx = Υ_first.middle_rows(nu, nx).left_cols(ny_N);
+        mu0     = compress_masks(D0ᵀ, ΔΣ.batch(dn).top_rows(ny_0), //
+                                 Υu0, 𝑆.bottom_rows(ny_0));
+        m       = compress_masks(C0ᵀ, ΔΣ.batch(dn).middle_rows(ny_0, ny_N), //
+                                 Υx, 𝑆.top_rows(ny_N));
+        auto Υλ = Υ_first.bottom_left(nx, m), Υλ0 = Υu0_first.bottom_left(nx, mu0);
         Υλ.set_constant(0);
         Υλ0.set_constant(0);
     }
-    auto Υu0 = Υ2.top_right(nu, ny_0).left_cols(mu0),
-         Υλ0 = Υ2.bottom_right(nx, ny_0).left_cols(mu0);
+    auto Υu0 = Υu0_first.top_left(nu, mu0), Υλ0 = Υu0_first.bottom_left(nx, mu0);
     auto 𝑆u0 = 𝑆.bottom_rows(ny_0).top_rows(mu0);
 
     // Iterate over all stages in the interval (in reverse order)
@@ -413,7 +411,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             // Communicate the update ranks mj to all threads and compute the partial sums (i.e. the
             // column offsets in the global update workspace we'll write Υ(c) and Υ(c-1) to)
             m_update[c_prev] = mj;
-            if (c == 0)
+            if (dn == 0)
                 m_update_u0 = isolate_u0 ? mu0 : -1;
             ctx.run_single_sync(
                 [this] { std::inclusive_scan(begin(m_update), end(m_update), begin(m_update)); });
@@ -424,7 +422,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                 auto Tc    = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
                 auto Υ_fwd = work_Ups_fwd(0, i_fwd).left_cols(mj),
                      Υ_bwd_prev = work_Ups_bwd(0, i_bwd).left_cols(mj);
-                auto 𝒮cr        = work_Σ_fwd(0, i_fwd).top_rows(mj); // mathscr{S}_c in the paper
+                auto 𝒮cr        = work_Σ_fwd(0, i_fwd).top_rows(mj); // \mathscr{S}_c in the paper
                 // 12|  [ L̃Q(j)  0 ] = [ LQ(j)  Φx(j) ] Q̆x(j),  blkdiag(I, 𝑆(j))-orthogonal
                 // Fused with:
                 // 14|  [ L̃A(j₁)  Υ˃(c)   ] = [ LA(j₁)  Φλ(j₁) ] Q̆x(j₁),
