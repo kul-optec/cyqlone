@@ -41,10 +41,11 @@ in your profile.
 import glob
 import os
 import shlex
+from contextlib import suppress
 
 from conan import ConanFile
 from conan.tools.files import get
-from conan.errors import ConanInvalidConfiguration
+from conan.errors import ConanInvalidConfiguration, ConanException
 from conan.tools.scm import Version
 
 
@@ -213,31 +214,30 @@ class ToolchainsConan(ConanFile):
         )
         self.run(f"chmod -R +w {shlex.quote(self.package_folder)}")
 
+    def _del_settings_except(self, obj, *keep_fields):
+        """Remove all fields from obj except those in keep_fields."""
+        fields = None
+        with suppress(ConanException):
+            fields = obj.fields  # even hasattr(obj, "fields", None) raises ConanException
+        if fields is not None:
+            for f in tuple(fields):
+                if f not in keep_fields:
+                    delattr(obj, f)
+
     def package_id(self):
         # Only include settings that actually affect the package
         # Use a whitelist approach to ignore any custom sub-settings
         self.info.settings_target = self.settings_target.copy()
-        for f in self.info.settings_target.fields:
-            if f not in ("os", "arch", "compiler"):
-                delattr(self.info.settings_target, f)
-        for f in self.info.settings_target.arch.fields:
-            if f != "toolchain-cpu":
-                delattr(self.info.settings_target.arch, f)
-        for f in self.info.settings_target.os.fields:
-            if f != "toolchain-vendor":
-                delattr(self.info.settings_target.os, f)
+        assert hasattr(self.info.settings_target, "fields")
+        self._del_settings_except(self.info.settings_target, "os", "arch", "compiler")
+        self._del_settings_except(self.info.settings_target.arch, "toolchain-cpu")
+        self._del_settings_except(self.info.settings_target.os, "toolchain-vendor")
         if self.info.settings_target.compiler == "gcc":
-            for f in self.info.settings_target.compiler.fields:
-                if f != "version":
-                    delattr(self.info.settings_target.compiler, f)
+            self._del_settings_except(self.info.settings_target.compiler, "version")
         elif self.info.settings_target.compiler in ("clang", "intel-cc"):
-            for f in self.info.settings_target.compiler.fields:
-                if f != "libcxx":
-                    delattr(self.info.settings_target.compiler, f)
-                else:
-                    for g in self.info.settings_target.compiler.libcxx.fields:
-                        if g != "gcc_version":
-                            delattr(self.info.settings_target.compiler.libcxx, g)
+            self._del_settings_except(self.info.settings_target.compiler, "libcxx")
+            if self.info.settings_target.compiler.get_safe("libcxx") is not None:
+                self._del_settings_except(self.info.settings_target.compiler.libcxx, "gcc_version")
 
     def _get_target_processor(self, target: str) -> str:
         """Get CMake system processor for target."""
