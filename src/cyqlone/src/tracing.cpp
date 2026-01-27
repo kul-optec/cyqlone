@@ -4,7 +4,6 @@
 
 #include <batmat/assume.hpp>
 #include <chrono>
-#include <cstdint>
 #include <cstring>
 #include <filesystem>
 #include <format>
@@ -68,7 +67,7 @@ inline std::function<void(std::string_view)> get_writer(const fs::path &path) {
         if (!file || !file->is_open())
             throw std::runtime_error("Failed to open file " + path.string() + " for writing");
         return [file = std::move(file)](std::string_view sv) {
-            file->write(sv.data(), sv.size()); // TODO: check bad bit
+            file->write(sv.data(), static_cast<ptrdiff_t>(sv.size())); // TODO: check bad bit
         };
     } else {
         throw std::runtime_error("Unsupported file extension: should be .json or .json.gz");
@@ -104,7 +103,7 @@ void write_chrome_trace(const fs::path &path, std::span<const guanaqo::TraceLogg
                 std::string_view cat = is_barrier_event(log) ? "barrier" : "trace";
                 if (log.duration.count() > 0)
                     return std::format_to_n( //
-                        buf.data(), buf.size(),
+                        buf.data(), static_cast<ptrdiff_t>(buf.size()),
                         "{}{{\"name\":\"{}\",\"cat\":\"{}\",\"ph\":\"X\",\"ts\":{},"
                                "\"pid\":0,\"tid\":{},\"dur\":{},"
                                "\"args\":{{\"instance\":{}}}}}",
@@ -112,7 +111,7 @@ void write_chrome_trace(const fs::path &path, std::span<const guanaqo::TraceLogg
                         dur_us, log.instance);
                 else
                     return std::format_to_n( //
-                        buf.data(), buf.size(),
+                        buf.data(), static_cast<ptrdiff_t>(buf.size()),
                         "{}{{\"name\":\"{}\",\"cat\":\"{}\",\"ph\":\"i\",\"ts\":{},"
                                "\"pid\":0,\"tid\":{},"
                                "\"args\":{{\"instance\":{}}}}}",
@@ -121,7 +120,7 @@ void write_chrome_trace(const fs::path &path, std::span<const guanaqo::TraceLogg
             } else {
                 std::string_view cat = "gflops";
                 return std::format_to_n( //
-                    buf.data(), buf.size(),
+                    buf.data(), static_cast<ptrdiff_t>(buf.size()),
                     "{}{{\"name\":\"{}\",\"cat\":\"{}\",\"ph\":\"X\",\"ts\":{},"
                            "\"pid\":0,\"tid\":{},\"dur\":{},"
                            "\"args\":{{\"instance\":{},\"flop_count\":{},\"gflops\":{:.6f}}}}}",
