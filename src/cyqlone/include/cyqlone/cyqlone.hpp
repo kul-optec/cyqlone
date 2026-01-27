@@ -16,7 +16,7 @@
 #include <batmat/unroll.h>
 #include <guanaqo/trace.hpp>
 
-#include "../compact.hpp" // TODO
+#include "compact.hpp" // TODO
 
 #include <algorithm>
 #include <bit>
@@ -24,7 +24,7 @@
 #include <limits>
 #include <utility>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using batmat::matrix::StorageOrder;
 
@@ -606,4 +606,4 @@ void scale(T0 scalar, guanaqo::MatrixView<T1, I1, S1, O1> src,
 }
 } // namespace detail
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

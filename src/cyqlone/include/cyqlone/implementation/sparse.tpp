@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <batmat/assume.hpp>
 #include <guanaqo/blas/hl-blas-interface.hpp>
@@ -8,7 +8,7 @@
 #include <batmat/linalg/copy.hpp>
 #include <batmat/linalg/trtri.hpp>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -358,4 +358,4 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const -> SparseMatr
     return std::move(mat).build();
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <batmat/linalg/compress.hpp>
 #include <batmat/linalg/gemm-diag.hpp>
@@ -8,7 +8,7 @@
 #include <batmat/linalg/shift.hpp>
 #include <batmat/linalg/trsm.hpp>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 
@@ -215,4 +215,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
     }
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

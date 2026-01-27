@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/linalg/gemm.hpp>
@@ -11,7 +11,7 @@
 #define CYQLONE_FACTOR_DO_PREFETCH 0
 #endif
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 
@@ -238,4 +238,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<
     trsm(tril(cr_L.batch(iL)).transposed(), λ.batch(diL));
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

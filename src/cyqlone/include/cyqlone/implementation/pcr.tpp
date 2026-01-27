@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/loop.hpp>
@@ -13,7 +13,7 @@
 #include <batmat/linalg/trtri.hpp>
 #include <utility>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 
@@ -88,4 +88,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
     gemv_sub(U, work_pcr, λ, with_rotate_C<-r>, with_rotate_D<-r>, with_mask_D<-r>);
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

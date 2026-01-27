@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/linalg/compress.hpp>
@@ -11,7 +11,7 @@
 
 #include <numeric>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 
@@ -544,4 +544,4 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
     return work_update_Σ.batch(0).middle_rows(start, end - start);
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

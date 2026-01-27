@@ -1,6 +1,6 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 // Algorithm 2 “Cyqlone factorization”
 // §4 “Cyqlone: Parallel factorization and solution of KKT systems with optimal control structure”
@@ -222,4 +222,4 @@ index_t CyqloneSolver<VL, T, DefaultOrder>::cr_thread_assignment(index_t l, inde
     return c;
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

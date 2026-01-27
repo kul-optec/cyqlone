@@ -56,7 +56,7 @@ MΔz        = -(b + Mz)
 """
 
 Solver = Union[
-    cyqlone.scalar.v2.CyqloneSolver, cyqlone.simd4.v2.CyqloneSolver, cyqlone.simd8.v2.CyqloneSolver
+    cyqlone.scalar.CyqloneSolver, cyqlone.simd4.CyqloneSolver, cyqlone.simd8.CyqloneSolver
 ]
 
 
@@ -95,7 +95,7 @@ class Params:
     ny: int = 17
     ny_N: int = 7
     seed: int = 12345
-    solver: Callable[[cyqlone.CyqloneOCP, int], Solver] = cyqlone.scalar.v2.CyqloneSolver
+    solver: Callable[[cyqlone.CyqloneOCP, int], Solver] = cyqlone.scalar.CyqloneSolver
 
 
 def prepare_test(params: Params):
@@ -299,9 +299,9 @@ def run_with_shorter_N(test_func, p, base_N, seed, solver, **kwargs):
 SEEDS = [12345, 54321, 10101]
 SEEDS = [12345]
 SIMD_SOLVERS = {
-    1: cyqlone.scalar.v2.CyqloneSolver,
-    4: cyqlone.simd4.v2.CyqloneSolver,
-    8: cyqlone.simd8.v2.CyqloneSolver,
+    1: cyqlone.scalar.CyqloneSolver,
+    4: cyqlone.simd4.CyqloneSolver,
+    8: cyqlone.simd8.CyqloneSolver,
 }
 SIMD_P_COMBOS = {
     1: list(range(1, 67)),
@@ -339,5 +339,5 @@ def test_cyqlone_mat_vec(solver, v, p, n, seed):
 if __name__ == "__main__":
     plot_on_failure = True
     run_test_cyqlone_mat_vec(
-        Params(p=2, N=8, seed=12345, nx=1, nu=1, solver=cyqlone.simd4.v2.CyqloneSolver)
+        Params(p=2, N=8, seed=12345, nx=1, nu=1, solver=cyqlone.simd4.CyqloneSolver)
     )

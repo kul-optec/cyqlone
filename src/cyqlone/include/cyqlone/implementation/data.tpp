@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/linalg/simdify.hpp>
@@ -8,7 +8,7 @@
 #include <batmat/thread-pool.hpp>
 #endif
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using batmat::linalg::simdify;
 
@@ -399,4 +399,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y,
     }
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

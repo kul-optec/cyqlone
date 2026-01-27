@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <cyqlone/random-ocp.hpp>
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <guanaqo/print.hpp>
 #include <guanaqo/trace.hpp>
@@ -67,7 +67,7 @@ TEST(CyqloneTest, updateIndices8) {
     using namespace cyqlone;
 
     const index_t p  = 8;
-    using Solver     = v2::CyqloneSolver<1, real_t, v2::StorageOrder::RowMajor>;
+    using Solver     = CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
     const index_t ny = 1, ny_0 = 1, ny_N = 0;
     OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
     auto ocp = generate_random_ocp(dim);
@@ -128,7 +128,7 @@ TEST(CyqloneTest, updateIndices7) {
     using namespace cyqlone;
 
     const index_t p  = 7;
-    using Solver     = v2::CyqloneSolver<1, real_t, v2::StorageOrder::RowMajor>;
+    using Solver     = CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
     const index_t ny = 1, ny_0 = 1, ny_N = 0;
     OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
     auto ocp = generate_random_ocp(dim);
@@ -193,7 +193,7 @@ TEST(CyqloneTest, updateIndices6) {
     using namespace cyqlone;
 
     const index_t p  = 6;
-    using Solver     = v2::CyqloneSolver<1, real_t, v2::StorageOrder::RowMajor>;
+    using Solver     = CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
     const index_t ny = 1, ny_0 = 1, ny_N = 0;
     OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
     auto ocp = generate_random_ocp(dim);
@@ -254,7 +254,7 @@ TEST(CyqloneTest, updateIndices5) {
     using namespace cyqlone;
 
     const index_t p  = 5;
-    using Solver     = v2::CyqloneSolver<1, real_t, v2::StorageOrder::RowMajor>;
+    using Solver     = CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
     const index_t ny = 1, ny_0 = 1, ny_N = 0;
     OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
     auto ocp = generate_random_ocp(dim);
@@ -294,7 +294,7 @@ TEST_P(CyqloneFactorTest, factor) {
     using batmat::linalg::simdify;
 
     const index_t p  = 8;
-    using Solver     = v2::CyqloneSolver<4, real_t, v2::StorageOrder::RowMajor>;
+    using Solver     = CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
     const index_t ny = 50, ny_0 = 25, ny_N = 25, nyM = std::max(ny, ny_0 + ny_N);
     OCPDim dim{.N_horiz = 97, .nx = 40, .nu = 30, .ny = ny, .ny_N = ny_N};
     const index_t nux = dim.nu + dim.nx, N = dim.N_horiz;

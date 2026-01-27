@@ -5,7 +5,7 @@
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/implementation/breakpoint.hpp>
 #include <cyqlone/reduce.hpp>
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 #include <batmat/linalg/copy.hpp>
@@ -38,7 +38,7 @@ namespace datapar = batmat::datapar;
 
 template <index_t VL, StorageOrder DefaultOrder>
 struct CyqloneBackend {
-    using OCP_t                 = cyqlone::v2::CyqloneSolver<VL, real_t, DefaultOrder>;
+    using OCP_t                 = cyqlone::CyqloneSolver<VL, real_t, DefaultOrder>;
     using Context               = typename OCP_t::Context;
     using storage_t             = typename OCP_t::template matrix<>;
     using simd                  = typename OCP_t::compact_blas::simd;

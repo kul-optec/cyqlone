@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 #include <batmat/assume.hpp>
 #include <batmat/loop.hpp>
 #include <batmat/openmp.h>
@@ -102,7 +102,7 @@ auto build_cyqlone_solver(const OCPDataRiccati &ocp_ric, index_t p) {
     }
     as_eigen(ocp.C(N)) = ocp_ric.C(N);
     as_eigen(ocp.Q(N)) = ocp_ric.Q(N);
-    using Solver       = v2::CyqloneSolver<VL, real_t, v2::StorageOrder::RowMajor>;
+    using Solver       = CyqloneSolver<VL, real_t, StorageOrder::RowMajor>;
     auto cocp          = CyqloneStorage<real_t>::build(ocp);
     return Solver::build(cocp, p);
 }

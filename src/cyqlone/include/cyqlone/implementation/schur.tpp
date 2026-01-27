@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/linalg/gemm.hpp>
@@ -9,7 +9,7 @@
 #include <batmat/linalg/trtri.hpp>
 #include <utility>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 
@@ -111,4 +111,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
     }
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

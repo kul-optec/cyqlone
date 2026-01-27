@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/linalg/gemv.hpp>
@@ -7,7 +7,7 @@
 #include <batmat/linalg/uview.hpp>
 #include <batmat/loop.hpp>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 
@@ -202,4 +202,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_remove_regularization(
     }
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)

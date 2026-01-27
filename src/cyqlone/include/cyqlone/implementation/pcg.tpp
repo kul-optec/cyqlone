@@ -1,4 +1,4 @@
-#include <cyqlone/v2/cyqlone.hpp>
+#include <cyqlone/cyqlone.hpp>
 
 #include <print>
 
@@ -8,7 +8,7 @@
 #include <batmat/linalg/syomv.hpp>
 #include <batmat/linalg/trsm.hpp>
 
-namespace CYQLONE_NS(cyqlone)::v2 {
+namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 
@@ -80,4 +80,4 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_pcg(mut_batch_view<> λ,
     }
 }
 
-} // namespace CYQLONE_NS(cyqlone)::v2
+} // namespace CYQLONE_NS(cyqlone)
