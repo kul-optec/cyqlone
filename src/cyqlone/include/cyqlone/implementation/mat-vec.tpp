@@ -132,8 +132,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(view<> y,
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, value_type a,
-                                                       view<> q, value_type b,
+void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, value_type α,
+                                                       view<> q, value_type β,
                                                        mut_view<> grad_f) const {
     const index_t c  = ctx.index;
     const index_t dn = c * n; // data batch index
@@ -142,8 +142,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, 
         [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
         GUANAQO_TRACE("cost_gradient", j);
         index_t di = dn + i;
-        if (a != 0 || b != 1)
-            compact_blas::xaxpby(a, simdify(q.batch(di)), b, simdify(grad_f.batch(di)));
+        if (α != 0 || β != 1)
+            compact_blas::xaxpby(α, simdify(q.batch(di)), β, simdify(grad_f.batch(di)));
         symv_add(tril(data_H.batch(di)), ux.batch(di), grad_f.batch(di));
     }
 }

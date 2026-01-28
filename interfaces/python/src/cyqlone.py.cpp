@@ -104,7 +104,7 @@ void register_cyqlone_solver(nb::module_ &m) {
         .def_rw("pcg_print_resid", &Solver::pcg_print_resid)
         .def_rw("solve_method", &Solver::solve_method)
         .def_rw("pcr_max_update_fraction", &Solver::pcr_max_update_fraction)
-        .def_rw("cr_max_update_fraction", &Solver::cr_max_update_fraction)
+        .def_rw("cr_max_update_fraction_Y0", &Solver::cr_max_update_fraction_Y0)
         .def_rw("parallel_solve_cr_threshold", &Solver::parallel_solve_cr_threshold)
         .def(
             "set_barrier_spin_count",

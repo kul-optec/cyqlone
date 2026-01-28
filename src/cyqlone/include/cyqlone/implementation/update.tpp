@@ -81,7 +81,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     // Check the rank to decide whether to update or recompute
     const index_t nj = std::max(Σ_fwd.rows(), Σ_bwd.rows());
     bool update      = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
-    bool update_y    = static_cast<double>(nj) < cr_max_update_fraction * static_cast<double>(nx);
+    bool update_y = static_cast<double>(nj) < cr_max_update_fraction_Y0 * static_cast<double>(nx);
     bool do_update_pcr   = solve_method == SolveMethod::PCR && update && VL > 1;
     bool do_refactor_pcr = solve_method == SolveMethod::PCR && !update;
 

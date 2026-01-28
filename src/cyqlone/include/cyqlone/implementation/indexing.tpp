@@ -44,23 +44,23 @@ auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_p(index_t a, index_t b) const 
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_ceil_p(index_t a, index_t b) const -> index_t {
-    const index_t ceil_p = 1 << lp();
-    BATMAT_ASSUME(ceil_p > 0);
+    const index_t c = ceil_p();
+    BATMAT_ASSUME(c > 0);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
-    BATMAT_ASSUME(a < ceil_p);
+    BATMAT_ASSUME(a < c);
     a -= b;
-    return a < 0 ? a + ceil_p : a;
+    return a < 0 ? a + c : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_ceil_p(index_t a, index_t b) const -> index_t {
-    const index_t ceil_p = 1 << lp();
-    BATMAT_ASSUME(ceil_p > 0);
+    const index_t c = ceil_p();
+    BATMAT_ASSUME(c > 0);
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
-    BATMAT_ASSUME(a < ceil_p);
+    BATMAT_ASSUME(a < c);
     a += b;
-    return a >= ceil_p ? a - ceil_p : a;
+    return a >= c ? a - c : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_ceil_P(index_t a, index_t b) const -> index_t {
@@ -98,11 +98,6 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 [[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::ν2p(index_t bi) const {
     BATMAT_ASSUME(bi >= 0);
     return bi == 0 ? lp() : ν2(bi);
-}
-template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::ν2P(index_t bi) const {
-    BATMAT_ASSUME(bi >= 0);
-    return bi == 0 ? lP : ν2(bi);
 }
 
 } // namespace CYQLONE_NS(cyqlone)

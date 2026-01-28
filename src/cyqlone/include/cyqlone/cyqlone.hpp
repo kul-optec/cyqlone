@@ -34,18 +34,19 @@ using batmat::matrix::StorageOrder;
     return std::has_single_bit(un);
 }
 
-[[nodiscard]] constexpr index_t get_depth(index_t n) {
+[[nodiscard]] constexpr index_t ceil_log2(index_t n) {
     BATMAT_ASSUME(n > 0);
     auto un = static_cast<std::make_unsigned_t<index_t>>(n);
     return static_cast<index_t>(std::bit_width(un - 1));
 }
 
+// TODO: replace by ν2
 [[nodiscard]] constexpr index_t get_level(index_t i) {
     BATMAT_ASSUME(i > 0);
     auto ui = static_cast<std::make_unsigned_t<index_t>>(i);
     return static_cast<index_t>(std::countr_zero(ui));
 }
-
+// TODO: move to indexing.tpp or data.tpp?
 [[nodiscard]] constexpr index_t get_index_in_level(index_t i) {
     if (i == 0)
         return 0;
@@ -55,51 +56,119 @@ using batmat::matrix::StorageOrder;
 
 template <index_t VL = 4, class T = real_t, StorageOrder DefaultOrder = StorageOrder::ColMajor>
 struct CyqloneSolver {
-    using value_type             = T;
-    using vl_t                   = std::integral_constant<index_t, VL>;
-    using align_t                = std::integral_constant<index_t, VL * alignof(T)>;
-    static constexpr index_t vl  = VL;
-    static constexpr index_t lvl = get_depth(vl);
+    using value_type = T;
 
-    const index_t N_horiz;
-    const index_t nx, nu, ny, ny_0, ny_N;
+    /// @name Problem dimensions
+    /// @{
+
+    const index_t N_horiz; ///< Horizon length of the optimal control problem.
+    const index_t nx;      ///< Number of states of the OCP.
+    const index_t nu;      ///< Number of controls of the OCP.
+    const index_t ny;      ///< Number of general constraints of the OCP per stage.
+    const index_t ny_0;    ///< Number of general constraints at stage 0, D(0) u(0).
+    const index_t ny_N;    ///< Number of general constraints at the final stage, C(N) x(N).
+
+    /// Get the total number of primal variables in the OCP.
+    /// @note The actual number of variable stored in Cyqlone's internal data structures may be
+    ///       larger.
+    [[nodiscard]] index_t num_variables() const { return N_horiz * (nu + nx); }
+    /// Get the total number of dynamics constraints in the OCP.
+    /// @note The actual number of constraints stored in Cyqlone's internal data structures may be
+    ///       larger.
+    [[nodiscard]] index_t num_dynamics_constraints() const { return N_horiz * nx; }
+    /// Get the total number of general constraints in the OCP.
+    /// @note The actual number of constraints stored in Cyqlone's internal data structures may be
+    ///       larger.
+    [[nodiscard]] index_t num_general_constraints() const {
+        return (N_horiz - 1) * ny + ny_0 + ny_N;
+    }
+
+    /// @}
+
+    /// @name Parallelization and vectorization
+    /// @{
+
+    /// Vector length.
+    static constexpr index_t vl = VL;
+    /// log₂(VL), logarithm of the vector length.
+    [[deprecated("use lv() instead")]] static constexpr index_t lvl = ceil_log2(vl);
+    using vl_t    = std::integral_constant<index_t, vl>;
+    using align_t = std::integral_constant<index_t, vl * alignof(value_type)>;
+
     /// Number of processors/threads
     const index_t p = 8;
-    [[nodiscard]] constexpr index_t lp() const { return get_depth(p); }
-    [[nodiscard]] static constexpr index_t lv() { return lvl; }
+    /// log₂(p), logarithm of the number of processors/threads, rounded up.
+    [[nodiscard]] constexpr index_t lp() const { return ceil_log2(p); }
+    /// The number of processors @ref p rounded up to the next power of two.
+    [[nodiscard]] constexpr index_t ceil_p() const { return 1 << lp(); }
+    /// log₂(VL), logarithm of the vector length.
+    [[nodiscard]] static constexpr index_t lv() { return ceil_log2(vl); }
+    /// log₂(P), logarithm of the number of parallel execution units
+    /// (number of processors × vector length), rounded up.
+    [[deprecated("should not be a member variable")]] const index_t lP = lp() + lv();
 
-    /// log2(P), logarithm of the number of parallel execution units
-    /// (number of processors × vector length)
-    const index_t lP = lp() + lv();
     /// Number of stages per thread per lane (rounded up)
     const index_t n = (N_horiz + p * vl - 1) / (p * vl);
 
+    using SharedContext                         = parallel::SharedContext;
+    using Context                               = parallel::Context<SharedContext>;
+    std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
+
+    /// @}
+
+    /// @name Indexing utilities
+    /// @{
+
+    /// Horizon length, rounded up to a multiple of the number of parallel execution units.
     [[nodiscard]] index_t ceil_N() const { return n * p * vl; }
-    [[nodiscard]] index_t ν2(index_t bi) const;
-    [[nodiscard]] index_t ν2p(index_t bi) const;
-    [[nodiscard]] index_t ν2P(index_t bi) const;
+    /// 2-adic valuation ν₂.
+    [[nodiscard]] index_t ν2(index_t i) const;
+    /// 2-adic valuation modulo p, i.e. `ν2p(0) = ν2p(p) = lp()`.
+    [[nodiscard]] index_t ν2p(index_t i) const;
+    /// Add @p b to @p a modulo @ref N_horiz.
     [[nodiscard]] index_t add_wrap_N(index_t a, index_t b) const;
+    /// Subtract @p b from @p a modulo @ref N_horiz.
     [[nodiscard]] index_t sub_wrap_N(index_t a, index_t b) const;
-    [[nodiscard]] index_t sub_wrap_p(index_t a, index_t b) const;
+    /// Add @p b to @p a modulo @ref p.
     [[nodiscard]] index_t add_wrap_p(index_t a, index_t b) const;
-    [[nodiscard]] index_t sub_wrap_ceil_p(index_t a, index_t b) const;
+    /// Subtract @p b from @p a modulo @ref p.
+    [[nodiscard]] index_t sub_wrap_p(index_t a, index_t b) const;
+    /// Add @p b to @p a modulo @ref ceil_p().
     [[nodiscard]] index_t add_wrap_ceil_p(index_t a, index_t b) const;
+    /// Subtract @p b from @p a modulo @ref ceil_p().
+    [[nodiscard]] index_t sub_wrap_ceil_p(index_t a, index_t b) const;
+
+    /// @todo refactor sparse.tpp
     [[nodiscard]] index_t sub_wrap_ceil_P(index_t a, index_t b) const;
+    /// @todo refactor sparse.tpp
     [[nodiscard]] index_t add_wrap_ceil_P(index_t a, index_t b) const;
+    /// @todo refactor sparse.tpp
     [[nodiscard]] index_t get_linear_batch_offset(index_t biA) const;
 
-    static constexpr auto default_order = DefaultOrder;
-    static constexpr auto column_major  = StorageOrder::ColMajor;
+    /// @}
 
+    /// @name Matrix data structures
+    /// @{
+
+    /// Default storage order for most matrices.
+    static constexpr auto default_order = DefaultOrder;
+    /// Column-major storage order for column vectors and update matrices.
+    static constexpr auto column_major = StorageOrder::ColMajor;
+
+    /// Owning type for a batch of matrices (with batch size v).
     template <StorageOrder O = column_major>
     using matrix = batmat::matrix::Matrix<value_type, index_t, vl_t, index_t, O, align_t>;
+    /// Non-owning immutable view type for @ref matrix.
     template <StorageOrder O = column_major>
     using view = batmat::matrix::View<const value_type, index_t, vl_t, index_t, index_t, O>;
+    /// Non-owning mutable view type for @ref matrix.
     template <StorageOrder O = column_major>
     using mut_view     = batmat::matrix::View<value_type, index_t, vl_t, index_t, index_t, O>;
     using layer_stride = batmat::matrix::DefaultStride;
+    /// Non-owning immutable view type for a single batch of v matrices.
     template <StorageOrder O = column_major>
     using batch_view = batmat::matrix::View<const value_type, index_t, vl_t, vl_t, layer_stride, O>;
+    /// Non-owning mutable view type for a single batch of v matrices.
     template <StorageOrder O = column_major>
     using mut_batch_view = batmat::matrix::View<value_type, index_t, vl_t, vl_t, layer_stride, O>;
 
@@ -110,33 +179,52 @@ struct CyqloneSolver {
     using compact_blas_default =
         cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>, default_order>;
 
-    bool enable_prefetching             = true;
-    index_t pcg_max_iter                = 100;
-    value_type pcg_tolerance            = std::numeric_limits<value_type>::epsilon() / 10;
-    bool pcg_print_resid                = false;
-    SolveMethod solve_method            = SolveMethod::StairPCG;
-    double pcr_max_update_fraction      = 0.6;
-    double cr_max_update_fraction       = 0.9;
+    /// @}
+
+    /// @name Solver parameters
+    /// @{
+
+    /// Use prefetching during the reverse CR solve phase.
+    bool enable_prefetching = true;
+    /// Maximum number of preconditioned conjugate gradient iterations.
+    index_t pcg_max_iter = 100;
+    /// Tolerance for the preconditioned conjugate gradient solver.
+    value_type pcg_tolerance = std::numeric_limits<value_type>::epsilon() / 10;
+    /// Enable printing of the residuals during PCG.
+    bool pcg_print_resid = false;
+    /// Algorithm to use for solving the final reduced block tridiagonal system.
+    SolveMethod solve_method = SolveMethod::StairPCG;
+    /// Tuning parameter for deciding when to update or re-factor the PCR factorization.
+    /// If the update rank exceeds this fraction of @ref nx, the PCR factorization is recomputed
+    double pcr_max_update_fraction = 0.6;
+    /// Tuning parameter for deciding when to update or re-factor the last subdiagonal blocks in the
+    /// CR factorization.
+    /// If the update rank exceeds this fraction of @ref nx, the last subdiagonal blocks are
+    /// recomputed.
+    /// @todo Add option to switch at any level of CR, not just the last one.
+    double cr_max_update_fraction_Y0 = 0.9;
+    /// Threshold on @ref nx for switching to a serial implementation of the reverse CR solve.
     index_t parallel_solve_cr_threshold = 10;
 
+    /// Configure the barrier spin count used in parallel synchronization before falling back to a
+    /// futex wait.
     uint32_t set_barrier_spin_count(uint32_t spin_count) {
         auto &barrier = parallel_ctx->barrier;
         static_assert(std::is_same_v<decltype(barrier.spin_count), decltype(spin_count)>);
         return std::exchange(barrier.spin_count, spin_count);
     }
 
+    /// Get a string representation of the main solver parameters. Used mainly for file names.
     [[nodiscard]] std::string get_params_string() const {
         std::string_view solve = solve_method == SolveMethod::PCR        ? "pcr"
                                  : solve_method == SolveMethod::StairPCG ? "pcg=stair"
                                                                          : "pcg=jacobi";
         std::string_view order = default_order == StorageOrder::RowMajor ? "rm" : "cm";
-        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz, p, VL,
+        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz, p, vl,
                            solve, order);
     }
 
-    using SharedContext                         = parallel::SharedContext;
-    using Context                               = parallel::Context<SharedContext>;
-    std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
+    /// @}
 
     // Note: the cumbersome IILE initialization syntax is to work around a GCC bug
     //       https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116015
@@ -223,19 +311,19 @@ struct CyqloneSolver {
     /// diagonal blocks cr_L(0) and subdiagonal blocks cr_Y(0). Note that pcr_L(0) should be
     /// initialized with the Cholesky factors of cr_L(0) before performing PCR.
     matrix<default_order> pcr_L = [this] {
-        return matrix<default_order>{{.depth = VL * (lvl + 1), .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = vl * (lv() + 1), .rows = nx, .cols = nx}};
     }();
     /// Subdiagonal blocks Y of the PCR Cholesky factorizations.
     matrix<default_order> pcr_Y = [this] {
-        return matrix<default_order>{{.depth = VL * lvl, .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = vl * lv(), .rows = nx, .cols = nx}};
     }();
     /// Subdiagonal blocks U of the PCR Cholesky factorizations.
     matrix<default_order> pcr_U = [this] {
-        return matrix<default_order>{{.depth = VL * lvl, .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = vl * lv(), .rows = nx, .cols = nx}};
     }();
     /// Workspace to store the diagonal blocks during the PCR factorization.
     matrix<default_order> pcr_M = [this] {
-        return matrix<default_order>{{.depth = VL, .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = vl, .rows = nx, .cols = nx}};
     }();
     /// Temporary workspace for CG vectors.
     matrix<column_major> work_pcg = [this] {
@@ -279,7 +367,7 @@ struct CyqloneSolver {
     /// @todo Consider reusing @ref work_Σ directly.
     matrix<column_major> work_update_Σ = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = 1 << lvl, .rows = n * p * nyM, .cols = 1}};
+        return matrix<column_major>{{.depth = vl, .rows = n * p * nyM, .cols = 1}};
     }();
     /// Workspace to store the update matrices Ξ(Υ) for the factorization update of the Schur
     /// complement. They get wider at higher levels of the CR tree, because more stages are merged.
@@ -299,12 +387,12 @@ struct CyqloneSolver {
     /// next level. Since only four workspaces are ever used concurrently, we can cycle through them
     /// cyclically, hence the modulo 4 in the indexing above.
     /// The update matrices do not move "horizontally" in memory, the column index for each rank-1
-    /// update is computed based on the values in @ref nJs at the beginning of the procedure,
+    /// update is computed based on the values in @ref m_update at the beginning of the procedure,
     /// ensuring that update matrices applied to L are contiguous, even though they consist of the
     /// concatenation of two update matrices from the previous level.
     matrix<column_major> work_update = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = 4 << lvl, .rows = nx, .cols = n * p * nyM}};
+        return matrix<column_major>{{.depth = 4 * vl, .rows = nx, .cols = n * p * nyM}};
     }();
     /// Storage for the hyperbolic Householder transformations during the factorization update of
     /// the Schur complement. Together with the reflector vectors stored in @ref work_update, these
@@ -323,26 +411,31 @@ struct CyqloneSolver {
     /// @todo Reuse @ref work_update_Σ?
     matrix<column_major> work_update_pcr_Σ = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = VL, .rows = 2 * N_horiz * nyM, .cols = 1}};
+        return matrix<column_major>{{.depth = vl, .rows = 2 * N_horiz * nyM, .cols = 1}};
     }();
     /// Update matrices to apply to the diagonal blocks L during the factorization update of the PCR
     /// factorization of the last block of the Schur complement.
     /// @todo Merge with @ref work_update?
     matrix<column_major> work_update_pcr_L = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = VL, .rows = nx, .cols = N_horiz * nyM}};
+        return matrix<column_major>{{.depth = vl, .rows = nx, .cols = N_horiz * nyM}};
     }();
     /// Update matrices to apply to the subdiagonal blocks U and Y during the factorization update
     /// of the PCR factorization of the last block of the Schur complement.
     /// @todo Merge with @ref work_update?
     matrix<column_major> work_update_pcr_UY = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = VL, .rows = nx, .cols = 2 * N_horiz * nyM}};
+        return matrix<column_major>{{.depth = vl, .rows = nx, .cols = 2 * N_horiz * nyM}};
     }();
 
     /// @}
 
-    /// Constraints on u(0) and x(N) should be independent.
+    /// @name Packing and unpacking of OCP data to Cyqlone storage format
+    /// @{
+
+    /// Initialize a Cyqlone solver for the given OCP.
+    ///
+    /// Note: constraints on u(0) and x(N) should be independent.
     ///
     ///                  nx  nu
     ///    ocp.CD(0) = [ 0 | D ] ny₀
@@ -350,27 +443,42 @@ struct CyqloneSolver {
     ///
     /// Since ocp.D(0) and ocp.C(N) will be merged, the top ny₀ rows of ocp.C(N)
     /// should be zero.
+    ///
+    /// @todo Create documentation page about the different OCP representations and storage formats.
     static CyqloneSolver build(const CyqloneStorage<value_type> &ocp, index_t p);
+    /// Update the internal data structures to reflect changes in the OCP data (without changing
+    /// the problem size).
     void update_data(const CyqloneStorage<value_type> &ocp);
+    /// Initialize the right-hand side vector for the dynamics constraints of the OCP, using the
+    /// custom Cyqlone storage format.
     void initialize_rhs(const CyqloneStorage<value_type> &ocp, mut_view<> rhs) const;
+    /// @copydoc initialize_rhs
     matrix<> initialize_rhs(const CyqloneStorage<value_type> &ocp) const {
         matrix<> rhs = initialize_dynamics_constraints();
         initialize_rhs(ocp, rhs);
         return rhs;
     }
+    /// Initialize the gradient vector for the OCP cost function, using the custom Cyqlone storage
+    /// format.
     void initialize_gradient(const CyqloneStorage<value_type> &ocp, mut_view<> grad) const;
+    /// @copydoc initialize_gradient
     matrix<> initialize_gradient(const CyqloneStorage<value_type> &ocp) const {
         matrix<> grad = initialize_variables();
         initialize_gradient(ocp, grad);
         return grad;
     }
+    /// Initialize the lower and upper bounds for the general constraints of the OCP, using the
+    /// custom Cyqlone storage format.
     void initialize_bounds(const CyqloneStorage<value_type> &ocp, mut_view<> b_min,
                            mut_view<> b_max) const;
+    /// @copydoc initialize_bounds
     std::pair<matrix<>, matrix<>> initialize_bounds(const CyqloneStorage<value_type> &ocp) const {
         std::pair b{initialize_general_constraints(), initialize_general_constraints()};
         initialize_bounds(ocp, b.first, b.second);
         return b;
     }
+
+    /// @todo check and document behavior when `N_horiz != ceil_N()`.
     void pack_variables(std::span<const value_type> ux_lin, mut_view<> ux) const;
     matrix<> pack_variables(std::span<const value_type> ux_lin) const {
         matrix<> ux = initialize_variables();
@@ -409,35 +517,69 @@ struct CyqloneSolver {
         return y_lin;
     }
 
-    [[nodiscard]] index_t num_variables() const { return N_horiz * (nu + nx); }
-    [[nodiscard]] index_t num_dynamics_constraints() const { return N_horiz * nx; }
-    [[nodiscard]] index_t num_general_constraints() const {
-        return (N_horiz - 1) * ny + ny_0 + ny_N;
-    }
-
+    /// Get a zero-initialized matrix for the primal variables u and x.
     matrix<> initialize_variables() const {
         return matrix<>{{.depth = ceil_N(), .rows = nu + nx, .cols = 1}};
     }
+    /// Get a zero-initialized matrix for the dynamics constraints (or their multipliers).
     matrix<> initialize_dynamics_constraints() const {
         return matrix<>{{.depth = ceil_N(), .rows = nx, .cols = 1}};
     }
+    /// Get a zero-initialized matrix for the general constraints (or their multipliers).
     matrix<> initialize_general_constraints() const {
         return matrix<>{{.depth = ceil_N(), .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
     }
 
+    /// @}
+
+    /// @name OCP cost gradient and constraints evaluation
+    /// @{
+
+    /// Compute Mx + b, where M is the dynamics constraint Jacobian matrix of the OCP.
+    /// In other words, evaluate the residuals for all stages, i.e.,
+    /// @f$ A_j x^j + B_j u^j - x^{j+1} + b^j @f$.
     void residual_dynamics_constr(Context &ctx, view<> x, view<> b, mut_view<> Mxb) const;
+    /// Compute Mᵀλ, where M is the dynamics constraint Jacobian matrix of the OCP.
+    /// Optionally add the result to the existing contents of Mᵀλ by setting @p accum to true.
     void transposed_dynamics_constr(Context &ctx, view<> λ, mut_view<> Mᵀλ,
                                     bool accum = false) const;
+    /// Compute the general constraints Gx, where G is the general constraint Jacobian matrix of the
+    /// OCP. In other words, evaluate the constraints for all stages, i.e.,
+    /// @f$ C_j x^j + D_j u^j @f$.
     void general_constr(Context &ctx, view<> ux, mut_view<> DCux) const;
+    /// Compute Gᵀy, where G is the general constraint Jacobian matrix of the OCP.
     void transposed_general_constr(Context &ctx, view<> y, mut_view<> DCᵀy) const;
+    /// @copydoc transposed_general_constr
     void transposed_general_constr(view<> y, mut_view<> DCᵀy) const;
-    /// grad_f ← Q ux + a q + b grad_f
-    void cost_gradient(Context &ctx, view<> ux, value_type a, view<> q, value_type b,
+    /// Compute the cost gradient, with optional scaling factors.
+    /// grad_f ← Q ux + α q + β grad_f
+    void cost_gradient(Context &ctx, view<> ux, value_type α, view<> q, value_type β,
                        mut_view<> grad_f) const;
+    /// Compute the regularized cost gradient, with regularization parameter γ⁻¹, with respect to
+    /// the point @p ux0.
     void cost_gradient_regularized(Context &ctx, value_type γ, view<> ux, view<> ux0, view<> q,
                                    mut_view<> grad_f) const;
+    /// Subtract the regularization term from the cost gradient.
     void cost_gradient_remove_regularization(Context &ctx, value_type γ, view<> x, view<> x0,
                                              mut_view<> grad_f) const;
+
+    /// @}
+
+    /// @name Factorization and solve routines
+    /// @{
+
+    void factor_solve(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
+    void factor(Context &ctx, value_type γ, view<> Σ);
+    void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ);
+    void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ);
+    /// Perform factorization updates of the Cyqlone factorization as described by
+    /// Algorithm 4 in the paper.
+    void update(Context &ctx, view<> ΔΣ);
+
+    /// @}
+
+    /// @name Low-level factorization and forward solve routines
+    /// @{
 
     template <bool Factor = true, bool Solve = true>
     void factor_riccati_solve(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
@@ -448,23 +590,31 @@ struct CyqloneSolver {
     void factor_Y(index_t l, index_t iY);
     void factor_L(index_t l, index_t bi);
     void update_K(index_t l, index_t bi);
+
+    void solve_u_forward(index_t l, index_t iU, mut_view<> λ) const;
+    void solve_y_forward(index_t l, index_t iY, mut_view<> λ, mut_view<> w) const;
+    void solve_λ_forward(index_t l, index_t biL, mut_view<> λ, view<> w) const;
+
+    /// @}
+
+    /// @name Low-level factorization and forward solve routines for parallel cyclic reduction
+    /// @{
+
     void factor_pcr();
     template <index_t Level>
     void factor_pcr_level();
     template <bool Factor = true, bool Solve = true>
     void factor_solve_impl(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
-    void factor_solve(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
-    void factor(Context &ctx, value_type γ, view<> Σ);
-
-    void solve_u_forward(index_t l, index_t iU, mut_view<> λ) const;
-    void solve_y_forward(index_t l, index_t iY, mut_view<> λ, mut_view<> w) const;
-    void solve_λ_forward(index_t l, index_t biL, mut_view<> λ, view<> w) const;
-    void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ);
 
     template <index_t Level>
     void solve_pcr_level(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
     void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
     void solve_pcr(mut_batch_view<> λ) { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
+
+    /// @}
+
+    /// @name Low-level preconditioned conjugate gradient routines
+    /// @{
 
     value_type mul_Mv(batch_view<> p, mut_batch_view<> Mp, batch_view<default_order> L,
                       batch_view<default_order> K) const;
@@ -473,14 +623,71 @@ struct CyqloneSolver {
     void solve_pcg(mut_batch_view<> λ, mut_batch_view<> work_pcg) const;
     void solve_pcg(mut_batch_view<> λ) { solve_pcg(λ, work_pcg.batch(0)); }
 
+    /// @}
+
+    /// @name Low-level reverse solve routines
+    /// @{
+
     void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ);
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
     void solve_reverse_cr_parallel(Context &ctx, mut_view<> λ, mut_view<> work) const;
     void solve_reverse_cr_serial(mut_view<> λ, mut_view<> work) const;
     void solve_u_backward(index_t l, index_t iU, mut_view<> λ, mut_view<> w) const;
     void solve_y_backward(index_t l, index_t iY, mut_view<> λ) const;
     void solve_λ_backward(index_t biL, mut_view<> λ, view<> w) const;
+
+    /// @}
+
+    /// @name Low-level factorization update routines
+    /// @{
+
+    /// Get the column range in the workspace for update matrix Υ˃(i;l).
+    [[nodiscard]] std::pair<index_t, index_t> cols_Ups_fwd(index_t l, index_t i) const;
+    /// Get the column range in the workspace for update matrix Υ˂(i;l).
+    [[nodiscard]] std::pair<index_t, index_t> cols_Ups_bwd(index_t l, index_t i) const;
+    /// Get the column range in the workspace for update matrices [ Υ˃(i;l)  Υ˂(i;l) ] and for the
+    /// hyperbolic Householder reflector vectors representing Q̆(i).
+    [[nodiscard]] std::pair<index_t, index_t> cols_Q_cr(index_t l, index_t i) const;
+    /// Get the index in the workspace for update matrices Υ˃(i;l).
+    [[nodiscard]] index_t work_Ups_fwd_w(index_t l, index_t i) const;
+    /// Get the index in the workspace for update matrices Υ˂(i;l).
+    [[nodiscard]] index_t work_Ups_bwd_w(index_t l, index_t i) const;
+    /// Get the workspace for update matrix Υ˃(i;l).
+    [[nodiscard]] mut_batch_view<column_major> work_Ups_fwd(index_t l, index_t i);
+    /// Get the workspace for update matrix Υ˂(i;l).
+    [[nodiscard]] mut_batch_view<column_major> work_Ups_bwd(index_t l, index_t i);
+    /// Get the workspace for update matrices [ Υ˃(i;l)  Υ˂(i;l) ] and for the
+    /// hyperbolic Householder reflector vectors representing Q̆(i).
+    [[nodiscard]] mut_batch_view<column_major> work_Q_cr(index_t l, index_t i);
+    /// Get the diagonal update coefficients corresponding to matrix Υ˃(i;l).
+    [[nodiscard]] mut_batch_view<column_major> work_Σ_fwd(index_t l, index_t i);
+    /// Get the diagonal update coefficients corresponding to matrix Υ˂(i;l).
+    [[nodiscard]] mut_batch_view<column_major> work_Σ_bwd(index_t l, index_t i);
+    /// Get the diagonal update coefficients corresponding to matrices [ Υ˃(i;l)  Υ˂(i;l) ] and Q̆(i).
+    [[nodiscard]] mut_batch_view<column_major> work_Σ_Q(index_t l, index_t i);
+
+    /// Update the modified Riccati factorization of a single block column as described by
+    /// Algorithm 3 in the paper.
+    void update_riccati(Context &ctx, view<> Σ);
+    /// Update the diagonal block L(i) at level l of the CR factorization. Also computes and stores
+    /// the hyperbolic Householder transformation Q̆(i) used to update the subdiagonal blocks U & Y.
+    void update_L(index_t l, index_t i);
+    /// Update the subdiagonal block U(i) at level l of the CR factorization by applying Q̆(i).
+    void update_U(index_t l, index_t i);
+    /// Update the subdiagonal block Y(i) at level l of the CR factorization by applying Q̆(i).
+    void update_Y(index_t l, index_t i);
+
+    /// Update a single level of the PCR factorization.
+    template <index_t Level>
+    void update_pcr_level(index_t m, mut_batch_view<> WYU, mut_batch_view<> WΣ);
+    /// Update the PCR factorization.
+    void update_pcr(batch_view<> fwd, batch_view<> bwd, batch_view<> Σ);
+
+    /// @}
+
+    /// @name Prefetching
+    /// @{
+
     template <StorageOrder O>
     void prefetch(batch_view<O> X) const {
         if (!enable_prefetching)
@@ -526,65 +733,23 @@ struct CyqloneSolver {
         prefetch(cr_Y.batch(iY));
     }
 
-    /// @name Factorization updates
-    /// @{
-
-    /// Get the column range in the workspace for update matrix Υ˃(i;l).
-    [[nodiscard]] std::pair<index_t, index_t> cols_Ups_fwd(index_t l, index_t i) const;
-    /// Get the column range in the workspace for update matrix Υ˂(i;l).
-    [[nodiscard]] std::pair<index_t, index_t> cols_Ups_bwd(index_t l, index_t i) const;
-    /// Get the column range in the workspace for update matrices [ Υ˃(i;l)  Υ˂(i;l) ] and for the
-    /// hyperbolic Householder reflector vectors representing Q̆(i;l).
-    [[nodiscard]] std::pair<index_t, index_t> cols_Q_cr(index_t l, index_t i) const;
-    /// Get the index in the workspace for update matrices Υ˃(i;l).
-    [[nodiscard]] index_t work_Ups_fwd_w(index_t l, index_t i) const;
-    /// Get the index in the workspace for update matrices Υ˂(i;l).
-    [[nodiscard]] index_t work_Ups_bwd_w(index_t l, index_t i) const;
-    /// Get the workspace for update matrix Υ˃(i;l).
-    [[nodiscard]] mut_batch_view<column_major> work_Ups_fwd(index_t l, index_t i);
-    /// Get the workspace for update matrix Υ˂(i;l).
-    [[nodiscard]] mut_batch_view<column_major> work_Ups_bwd(index_t l, index_t i);
-    /// Get the workspace for update matrices [ Υ˃(i;l)  Υ˂(i;l) ] and for the
-    /// hyperbolic Householder reflector vectors representing Q̆(i;l).
-    [[nodiscard]] mut_batch_view<column_major> work_Q_cr(index_t l, index_t i);
-    /// Get the diagonal update coefficients corresponding to matrix Υ˃(i;l).
-    [[nodiscard]] mut_batch_view<column_major> work_Σ_fwd(index_t l, index_t i);
-    /// Get the diagonal update coefficients corresponding to matrix Υ˂(i;l).
-    [[nodiscard]] mut_batch_view<column_major> work_Σ_bwd(index_t l, index_t i);
-    /// Get the diagonal update coefficients corresponding to matrices [ Υ˃(i;l)  Υ˂(i;l) ] and
-    /// Q̆(i;l).
-    [[nodiscard]] mut_batch_view<column_major> work_Σ_Q(index_t l, index_t i);
-
-    /// Update the modified Riccati factorization of a single block column as described by
-    /// Algorithm 3 in the paper.
-    void update_riccati(Context &ctx, view<> Σ);
-    /// Update the diagonal block L(i) at level l of the CR factorization. Also computes and stores
-    /// the hyperbolic Householder transformation Q̆(i) used to update the subdiagonal blocks U & Y.
-    void update_L(index_t l, index_t i);
-    /// Update the subdiagonal block U(i) at level l of the CR factorization by applying Q̆(i).
-    void update_U(index_t l, index_t i);
-    /// Update the subdiagonal block Y(i) at level l of the CR factorization by applying Q̆(i).
-    void update_Y(index_t l, index_t i);
-    /// Perform factorization updates of the entire Cyqlone factorization as described by
-    /// Algorithm 4 in the paper.
-    void update(Context &ctx, view<> ΔΣ);
-
-    /// Update a single level of the PCR factorization.
-    template <index_t Level>
-    void update_pcr_level(index_t m, mut_batch_view<> WYU, mut_batch_view<> WΣ);
-    /// Update the PCR factorization.
-    void update_pcr(batch_view<> fwd, batch_view<> bwd, batch_view<> Σ);
-
     /// @}
+
+    /// @name Build sparse representations for debugging and testing
+    /// @{
 
     [[nodiscard]] SparseMatrix build_sparse(const CyqloneStorage<value_type> &ocp,
                                             std::span<const value_type> Σ) const;
     [[nodiscard]] std::vector<value_type> build_rhs(view<> ux, view<> λ) const;
     [[nodiscard]] SparseMatrix build_sparse_factor() const;
     [[nodiscard]] SparseMatrix build_sparse_diag() const;
+
+    /// @}
 };
 
 namespace detail {
+// TODO: Move elsewhere
+/// Simple (inefficient) matrix copy that supports slices with non-unit strides.
 template <class T1, class I1, class S1, guanaqo::StorageOrder O1, class T2, class I2, class S2,
           guanaqo::StorageOrder O2>
 void copy(guanaqo::MatrixView<T1, I1, S1, O1> src, guanaqo::MatrixView<T2, I2, S2, O2> dst) {
@@ -596,6 +761,7 @@ void copy(guanaqo::MatrixView<T1, I1, S1, O1> src, guanaqo::MatrixView<T2, I2, S
 }
 template <class T0, class T1, class I1, class S1, guanaqo::StorageOrder O1, class T2, class I2,
           class S2, guanaqo::StorageOrder O2>
+/// Simple (inefficient) scaled matrix copy that supports slices with non-unit strides.
 void scale(T0 scalar, guanaqo::MatrixView<T1, I1, S1, O1> src,
            guanaqo::MatrixView<T2, I2, S2, O2> dst) {
     assert(src.rows == dst.rows);
