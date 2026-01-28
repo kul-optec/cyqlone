@@ -80,7 +80,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_data(const CyqloneStorage<value_
         const index_t di0 = c * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k = sub_wrap_N(k0 + vi * p * n, i);
                 if (k == 0) {
                     if (ceil_N() == N_horiz) {
@@ -128,7 +128,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<val
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k = sub_wrap_N(k0 + vi * p * n, i);
                 if (k < N_horiz) {
                     rhs.batch(di)(vi) = ocp.data_c(k);
@@ -152,7 +152,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(const CyqloneStorag
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k = sub_wrap_N(k0 + vi * p * n, i);
                 if (k == 0) {
                     if (ceil_N() == N_horiz) {
@@ -191,7 +191,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(const CyqloneStorage<
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k       = sub_wrap_N(k0 + vi * p * n, i);
                 auto b_min_i = b_min.batch(di)(vi), b_max_i = b_max.batch(di)(vi);
                 if (k == 0) {
@@ -226,7 +226,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_variables(std::span<const value_ty
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k       = sub_wrap_N(k0 + vi * p * n, i);
                 using crview = guanaqo::MatrixView<const value_type, index_t>;
                 if (k == 0) {
@@ -265,7 +265,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_variables(view<> ux,
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k      = sub_wrap_N(k0 + vi * p * n, i);
                 using rview = guanaqo::MatrixView<value_type, index_t>;
                 if (k == 0) {
@@ -300,7 +300,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_dynamics(std::span<const value_typ
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k       = sub_wrap_N(k0 + vi * p * n, i);
                 using crview = guanaqo::MatrixView<const value_type, index_t>;
                 if (k < N_horiz) {
@@ -326,7 +326,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_dynamics(view<> λ,
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k      = sub_wrap_N(k0 + vi * p * n, i);
                 using rview = guanaqo::MatrixView<value_type, index_t>;
                 if (k < N_horiz) {
@@ -349,7 +349,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_constraints(std::span<const value_
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k       = sub_wrap_N(k0 + vi * p * n, i);
                 using crview = guanaqo::MatrixView<const value_type, index_t>;
                 if (k == 0) {
@@ -383,7 +383,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y,
         const index_t di0 = ti * n;
         for (index_t i = 0; i < n; ++i) {
             index_t di = di0 + i;
-            for (index_t vi = 0; vi < vl; ++vi) {
+            for (index_t vi = 0; vi < v; ++vi) {
                 auto k      = sub_wrap_N(k0 + vi * p * n, i);
                 using rview = guanaqo::MatrixView<value_type, index_t>;
                 if (k == 0) {

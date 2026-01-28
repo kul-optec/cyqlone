@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include <cyqlone/random-ocp.hpp>
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/random-ocp.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <guanaqo/print.hpp>
 #include <guanaqo/trace.hpp>
@@ -69,7 +69,7 @@ TEST(CyqloneTest, updateIndices8) {
     const index_t p  = 8;
     using Solver     = CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
     const index_t ny = 1, ny_0 = 1, ny_N = 0;
-    OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
+    OCPDim dim{.N_horiz = p * Solver::v, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
     auto ocp = generate_random_ocp(dim);
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     auto cocp     = CyqloneStorage<real_t>::build(ocp);
@@ -130,7 +130,7 @@ TEST(CyqloneTest, updateIndices7) {
     const index_t p  = 7;
     using Solver     = CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
     const index_t ny = 1, ny_0 = 1, ny_N = 0;
-    OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
+    OCPDim dim{.N_horiz = p * Solver::v, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
     auto ocp = generate_random_ocp(dim);
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     auto cocp     = CyqloneStorage<real_t>::build(ocp);
@@ -195,7 +195,7 @@ TEST(CyqloneTest, updateIndices6) {
     const index_t p  = 6;
     using Solver     = CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
     const index_t ny = 1, ny_0 = 1, ny_N = 0;
-    OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
+    OCPDim dim{.N_horiz = p * Solver::v, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
     auto ocp = generate_random_ocp(dim);
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     auto cocp     = CyqloneStorage<real_t>::build(ocp);
@@ -256,7 +256,7 @@ TEST(CyqloneTest, updateIndices5) {
     const index_t p  = 5;
     using Solver     = CyqloneSolver<1, real_t, StorageOrder::RowMajor>;
     const index_t ny = 1, ny_0 = 1, ny_N = 0;
-    OCPDim dim{.N_horiz = p * Solver::vl, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
+    OCPDim dim{.N_horiz = p * Solver::v, .nx = 1, .nu = 1, .ny = ny, .ny_N = ny_N};
     auto ocp = generate_random_ocp(dim);
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     auto cocp     = CyqloneStorage<real_t>::build(ocp);

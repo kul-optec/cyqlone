@@ -4,22 +4,22 @@
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
-#define CYQLONE_INSTANTIATE_QPALM_Cyqlone(vl, order)                                               \
+#define CYQLONE_INSTANTIATE_QPALM_Cyqlone(v, order)                                                \
                                                                                                    \
-    template class Solver<CyqloneBackend<vl, order> *>;                                            \
-    template class Solver<unique_CyqloneBackend<vl, order>>;                                       \
-    template struct unique_CyqloneBackend<vl, order>;                                              \
+    template class Solver<CyqloneBackend<v, order> *>;                                             \
+    template class Solver<unique_CyqloneBackend<v, order>>;                                        \
+    template struct unique_CyqloneBackend<v, order>;                                               \
                                                                                                    \
-    template unique_CyqloneBackend<vl, order> make_qpalm_cyqlone_backend<vl, order>(               \
+    template unique_CyqloneBackend<v, order> make_qpalm_cyqlone_backend<v, order>(                 \
         const CyqloneStorage<> &ocp, CyqloneData data, const CyqloneBackendSettings &settings);    \
-    template void update_qpalm_cyqlone_backend<vl, order>(CyqloneBackend<vl, order> &,             \
-                                                          const CyqloneStorage<> &ocp);            \
-    template void update_qpalm_cyqlone_backend<vl, order>(CyqloneBackend<vl, order> &,             \
-                                                          const LinearOCPStorage &ocp)
+    template void update_qpalm_cyqlone_backend<v, order>(CyqloneBackend<v, order> &,               \
+                                                         const CyqloneStorage<> &ocp);             \
+    template void update_qpalm_cyqlone_backend<v, order>(CyqloneBackend<v, order> &,               \
+                                                         const LinearOCPStorage &ocp)
 
-#define CYQLONE_INSTANTIATE_SOLVER(VL)                                                             \
-    CYQLONE_INSTANTIATE_QPALM_Cyqlone(VL, StorageOrder::ColMajor);                                 \
-    CYQLONE_INSTANTIATE_QPALM_Cyqlone(VL, StorageOrder::RowMajor);
+#define CYQLONE_INSTANTIATE_SOLVER(v)                                                              \
+    CYQLONE_INSTANTIATE_QPALM_Cyqlone(v, StorageOrder::ColMajor);                                  \
+    CYQLONE_INSTANTIATE_QPALM_Cyqlone(v, StorageOrder::RowMajor);
 BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_SOLVER)
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)

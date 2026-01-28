@@ -37,7 +37,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, 
         } else {
             ctx.wait(std::move(arrival)); // x_next comes from next thread
             auto x_next = x.batch(d1_next).bottom_rows(nx);
-            if (c_next > 0 || vl == 1)
+            if (c_next > 0 || v == 1)
                 compact_blas::template xsub<+0>(simdify(Mxbj), simdify(x_next));
             else
                 compact_blas::template xsub<-1>(simdify(Mxbj), simdify(x_next));
@@ -64,7 +64,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
         auto BAj = data_F.batch(di), Bj = BAj.left_cols(nu);
         auto λj   = λ.batch(di);
         auto Mᵀλj = Mᵀλ.batch(di);
-        if (vl > 1 || c > 0 || i > 0) {
+        if (v > 1 || c > 0 || i > 0) {
             accum ? gemv_add(BAj.transposed(), λj, Mᵀλj) //
                   : gemv(BAj.transposed(), λj, Mᵀλj);
         } else {
@@ -80,7 +80,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
         } else {
             ctx.wait(std::move(arrival)); // λ_prev comes from previous thread
             auto λ_prev = λ.batch(dn_prev);
-            if (c > 0 || vl == 1)
+            if (c > 0 || v == 1)
                 compact_blas::template xsub<0>(simdify(Mᵀλj.bottom_rows(nx)), simdify(λ_prev));
             else
                 compact_blas::template xsub<1>(simdify(Mᵀλj.bottom_rows(nx)), simdify(λ_prev));

@@ -89,7 +89,7 @@ struct CyqloneSolver {
     /// @{
 
     /// Vector length.
-    static constexpr index_t vl = VL;
+    static constexpr index_t v = VL;
     /// Number of processors/threads
     const index_t p = 8;
     /// log₂(p), logarithm of the number of processors/threads, rounded up.
@@ -99,13 +99,13 @@ struct CyqloneSolver {
     /// The number of parallel execution units P rounded up to the next power of two.
     [[nodiscard]] constexpr index_t ceil_P() const { return 1 << (lp() + lv()); }
     /// log₂(v), logarithm of the vector length.
-    [[nodiscard]] static constexpr index_t lv() { return ceil_log2(vl); }
+    [[nodiscard]] static constexpr index_t lv() { return ceil_log2(v); }
 
     /// Number of stages per thread per vector lane (rounded up)
-    const index_t n = (N_horiz + p * vl - 1) / (p * vl);
+    const index_t n = (N_horiz + p * v - 1) / (p * v);
 
-    using vl_t          = std::integral_constant<index_t, vl>;
-    using align_t       = std::integral_constant<index_t, vl * alignof(value_type)>;
+    using vl_t          = std::integral_constant<index_t, v>;
+    using align_t       = std::integral_constant<index_t, v * alignof(value_type)>;
     using SharedContext = parallel::SharedContext;
     using Context       = parallel::Context<SharedContext>;
     std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
@@ -116,7 +116,7 @@ struct CyqloneSolver {
     /// @{
 
     /// Horizon length, rounded up to a multiple of the number of parallel execution units.
-    [[nodiscard]] index_t ceil_N() const { return n * p * vl; }
+    [[nodiscard]] index_t ceil_N() const { return n * p * v; }
     /// 2-adic valuation ν₂.
     [[nodiscard]] index_t ν2(index_t i) const;
     /// 2-adic valuation modulo p, i.e. `ν2p(0) = ν2p(p) = lp()`.
@@ -216,7 +216,7 @@ struct CyqloneSolver {
                                  : solve_method == SolveMethod::StairPCG ? "pcg=stair"
                                                                          : "pcg=jacobi";
         std::string_view order = default_order == StorageOrder::RowMajor ? "rm" : "cm";
-        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz, p, vl,
+        return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz, p, v,
                            solve, order);
     }
 
@@ -250,24 +250,24 @@ struct CyqloneSolver {
     /// Cholesky factors of the Hessian blocks for the Riccati recursion.
     /// LH(j) = [ LR(j)  0;  LS(j)  LQ(j) ]
     matrix<default_order> riccati_LH = [this] {
-        return matrix<default_order>{{.depth = p * vl, .rows = nu + nx, .cols = n * (nu + nx)}};
+        return matrix<default_order>{{.depth = p * v, .rows = nu + nx, .cols = n * (nu + nx)}};
     }();
     /// Storage for the matrices LB(j), Acl(j) and LA(j₁) for the Riccati recursion.
     /// Grouped per thread, with layout [ Acl(jₙ) ... Acl(j₂) LA(j₁) | LB(jₙ) ... LB(j₁) ], so that
     /// LA(j₁) and LB(j) are contiguous (useful when evaluating the Schur complement).
     matrix<default_order> riccati_LAB = [this] {
-        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = n * nx + n * nu}};
+        return matrix<default_order>{{.depth = p * v, .rows = nx, .cols = n * nx + n * nu}};
     }();
     /// Temporary storage for the V(j) = [ B(j)ᵀ LQ(j);  A(j)ᵀ LQ(j) ] matrices during the Riccati
     /// recursion. The workspace is wider than just V to also accommodate the active constraint
     /// Jacobians, since both are used to update the Hessian blocks during the Riccati recursion.
     matrix<default_order> riccati_V = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<default_order>{{.depth = p * vl, .rows = nu + nx, .cols = nx + nyM}};
+        return matrix<default_order>{{.depth = p * v, .rows = nu + nx, .cols = nx + nyM}};
     }();
     /// Temporary workspace for the Riccati solve phase.
     matrix<column_major> riccati_work = [this] {
-        return matrix<column_major>{{.depth = p * vl, .rows = nx, .cols = 1}};
+        return matrix<column_major>{{.depth = p * v, .rows = nx, .cols = 1}};
     }();
 
     /// @}
@@ -280,22 +280,22 @@ struct CyqloneSolver {
     /// factorized in-place. After the (batched) CR phase, cr_L(0) still contains M(0), and L(0)
     /// is stored in pcr_L(0).
     matrix<default_order> cr_L = [this] {
-        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = p * v, .rows = nx, .cols = nx}};
     }();
     /// Subdiagonal blocks U of the Cholesky factor of the Schur complement (used during CR).
     /// These matrices are associated with coupling backward in time (K˂).
     matrix<default_order> cr_U = [this] {
-        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = p * v, .rows = nx, .cols = nx}};
     }();
     /// Subdiagonal blocks Y of the Cholesky factor of the Schur complement (used during CR).
     /// These matrices are associated with coupling forward in time (K˃).
     matrix<default_order> cr_Y = [this] {
-        return matrix<default_order>{{.depth = p * vl, .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = p * v, .rows = nx, .cols = nx}};
     }();
     /// Temporary workspace for the CR solve phase to enable parallel evaluation of matrix-vector
     /// products with U and Y without data races.
     matrix<column_major> work_cr = [this] {
-        return matrix<column_major>{{.depth = p * vl, .rows = nx, .cols = 1}};
+        return matrix<column_major>{{.depth = p * v, .rows = nx, .cols = 1}};
     }();
 
     /// @}
@@ -307,23 +307,23 @@ struct CyqloneSolver {
     /// diagonal blocks cr_L(0) and subdiagonal blocks cr_Y(0). Note that pcr_L(0) should be
     /// initialized with the Cholesky factors of cr_L(0) before performing PCR.
     matrix<default_order> pcr_L = [this] {
-        return matrix<default_order>{{.depth = vl * (lv() + 1), .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = v * (lv() + 1), .rows = nx, .cols = nx}};
     }();
     /// Subdiagonal blocks Y of the PCR Cholesky factorizations.
     matrix<default_order> pcr_Y = [this] {
-        return matrix<default_order>{{.depth = vl * lv(), .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = v * lv(), .rows = nx, .cols = nx}};
     }();
     /// Subdiagonal blocks U of the PCR Cholesky factorizations.
     matrix<default_order> pcr_U = [this] {
-        return matrix<default_order>{{.depth = vl * lv(), .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = v * lv(), .rows = nx, .cols = nx}};
     }();
     /// Workspace to store the diagonal blocks during the PCR factorization.
     matrix<default_order> pcr_M = [this] {
-        return matrix<default_order>{{.depth = vl, .rows = nx, .cols = nx}};
+        return matrix<default_order>{{.depth = v, .rows = nx, .cols = nx}};
     }();
     /// Temporary workspace for CG vectors.
     matrix<column_major> work_pcg = [this] {
-        return matrix<column_major>{{.depth = vl, .rows = nx, .cols = 4}};
+        return matrix<column_major>{{.depth = v, .rows = nx, .cols = 4}};
     }();
 
     /// @}
@@ -342,19 +342,19 @@ struct CyqloneSolver {
     /// Schur complement.
     matrix<column_major> work_Σ = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = p * vl, .rows = n * nyM, .cols = 1}};
+        return matrix<column_major>{{.depth = p * v, .rows = n * nyM, .cols = 1}};
     }();
     /// Workspace to store the update matrices Υu, Υx, Υλ, Φu, Φx and Φλ during the factorization
     /// update of the Riccati recursion.
     /// Both @ref riccati_Υ1 and @ref riccati_Υ2 are used alternately.
     matrix<column_major> riccati_Υ1 = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = p * vl, .rows = nu + nx + nx, .cols = n * nyM}};
+        return matrix<column_major>{{.depth = p * v, .rows = nu + nx + nx, .cols = n * nyM}};
     }();
     /// Alternate workspace to @ref riccati_Υ1.
     matrix<column_major> riccati_Υ2 = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = p * vl, .rows = nu + nx + nx, .cols = n * nyM}};
+        return matrix<column_major>{{.depth = p * v, .rows = nu + nx + nx, .cols = n * nyM}};
     }();
 
     /// Compressed reprentation of the nonzero diagonal elements of the matrix Σ, with their indices
@@ -363,7 +363,7 @@ struct CyqloneSolver {
     /// @todo Consider reusing @ref work_Σ directly.
     matrix<column_major> work_update_Σ = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = vl, .rows = n * p * nyM, .cols = 1}};
+        return matrix<column_major>{{.depth = v, .rows = n * p * nyM, .cols = 1}};
     }();
     /// Workspace to store the update matrices Ξ(Υ) for the factorization update of the Schur
     /// complement. They get wider at higher levels of the CR tree, because more stages are merged.
@@ -388,18 +388,18 @@ struct CyqloneSolver {
     /// concatenation of two update matrices from the previous level.
     matrix<column_major> work_update = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = 4 * vl, .rows = nx, .cols = n * p * nyM}};
+        return matrix<column_major>{{.depth = 4 * v, .rows = nx, .cols = n * p * nyM}};
     }();
     /// Storage for the hyperbolic Householder transformations during the factorization update of
     /// the Schur complement. Together with the reflector vectors stored in @ref work_update, these
     /// form the matrices Q̆ that are applied to the subdiagonal blocks U, and Y.
     /// The dimensions depend on the block size used by the linear algebra, and is architecture
     /// dependent.
-    /// @todo We may only need half as many (p * vl / 2).
+    /// @todo We may only need half as many (p * v / 2).
     matrix<column_major> work_hyh = [this] {
         using namespace batmat::linalg;
         const auto [r, c] = hyhound_size_W(tril(cr_L.batch(0)));
-        return matrix<column_major>{{.depth = p * vl, .rows = r, .cols = c}};
+        return matrix<column_major>{{.depth = p * v, .rows = r, .cols = c}};
     }();
 
     /// Two copies of @ref work_update_Σ, with different rotations for use during the factorization
@@ -407,21 +407,21 @@ struct CyqloneSolver {
     /// @todo Reuse @ref work_update_Σ?
     matrix<column_major> work_update_pcr_Σ = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = vl, .rows = 2 * N_horiz * nyM, .cols = 1}};
+        return matrix<column_major>{{.depth = v, .rows = 2 * N_horiz * nyM, .cols = 1}};
     }();
     /// Update matrices to apply to the diagonal blocks L during the factorization update of the PCR
     /// factorization of the last block of the Schur complement.
     /// @todo Merge with @ref work_update?
     matrix<column_major> work_update_pcr_L = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = vl, .rows = nx, .cols = N_horiz * nyM}};
+        return matrix<column_major>{{.depth = v, .rows = nx, .cols = N_horiz * nyM}};
     }();
     /// Update matrices to apply to the subdiagonal blocks U and Y during the factorization update
     /// of the PCR factorization of the last block of the Schur complement.
     /// @todo Merge with @ref work_update?
     matrix<column_major> work_update_pcr_UY = [this] {
         const auto nyM = std::max(ny, ny_0 + ny_N);
-        return matrix<column_major>{{.depth = vl, .rows = nx, .cols = 2 * N_horiz * nyM}};
+        return matrix<column_major>{{.depth = v, .rows = nx, .cols = 2 * N_horiz * nyM}};
     }();
 
     /// @}
