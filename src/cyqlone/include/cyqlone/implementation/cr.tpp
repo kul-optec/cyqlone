@@ -238,4 +238,60 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<
     trsm(tril(cr_L.batch(iL)).transposed(), λ.batch(diL));
 }
 
+// Prefetching
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+template <StorageOrder O>
+void CyqloneSolver<VL, T, DefaultOrder>::prefetch(batch_view<O> X) const {
+    if (!enable_prefetching)
+        return;
+    const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / vl, 1);
+    if constexpr (O == StorageOrder::RowMajor)
+        for (index_t r = 0; r < X.rows(); ++r)
+            BATMAT_UNROLLED_IVDEP_FOR (8, index_t c = 0; c < X.cols(); c += inner_stride)
+                __builtin_prefetch(&X(0, r, c), 0, 2);
+    else
+        for (index_t c = 0; c < X.cols(); ++c)
+            BATMAT_UNROLLED_IVDEP_FOR (8, index_t r = 0; r < X.rows(); r += inner_stride)
+                __builtin_prefetch(&X(0, r, c), 0, 2);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+template <StorageOrder O>
+void CyqloneSolver<VL, T, DefaultOrder>::prefetch_L(batch_view<O> X) const {
+    if (!enable_prefetching)
+        return;
+    const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / vl, 1);
+    if constexpr (O == StorageOrder::RowMajor)
+        for (index_t r = 0; r < X.rows(); ++r)
+            BATMAT_UNROLLED_IVDEP_FOR (8, index_t c = 0; c <= r; c += inner_stride)
+                __builtin_prefetch(&X(0, r, c), 0, 2);
+    else
+        for (index_t c = 0; c < X.cols(); ++c)
+            BATMAT_UNROLLED_IVDEP_FOR (8, index_t r = c; r < X.rows(); r += inner_stride)
+                __builtin_prefetch(&X(0, r, c), 0, 2);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::prefetch_L(index_t bi) const {
+    GUANAQO_TRACE("prefetch L", bi);
+    prefetch_L(cr_L.batch(bi));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::prefetch_U([[maybe_unused]] index_t l, index_t iU) const {
+    if (VL == 1 && iU >= p)
+        return;
+    GUANAQO_TRACE("prefetch U", iU);
+    prefetch(cr_U.batch(iU));
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::prefetch_Y(index_t l, index_t iY) const {
+    if (VL == 1 && iY + (1 << l) >= p)
+        return;
+    GUANAQO_TRACE("prefetch Y", iY);
+    prefetch(cr_Y.batch(iY));
+}
+
 } // namespace CYQLONE_NS(cyqlone)
