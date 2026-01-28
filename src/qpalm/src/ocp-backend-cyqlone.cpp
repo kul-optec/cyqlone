@@ -15,11 +15,9 @@ namespace CYQLONE_NS(cyqlone::qpalm) {
     template void update_qpalm_cyqlone_backend<v, order>(CyqloneBackend<v, order> &,               \
                                                          const CyqloneStorage<> &ocp);             \
     template void update_qpalm_cyqlone_backend<v, order>(CyqloneBackend<v, order> &,               \
-                                                         const LinearOCPStorage &ocp)
+                                                         const LinearOCPStorage &ocp);
 
-#define CYQLONE_INSTANTIATE_SOLVER(v)                                                              \
-    CYQLONE_INSTANTIATE_QPALM_Cyqlone(v, StorageOrder::ColMajor);                                  \
-    CYQLONE_INSTANTIATE_QPALM_Cyqlone(v, StorageOrder::RowMajor);
-BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_SOLVER)
+BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_QPALM_Cyqlone, StorageOrder::ColMajor)
+BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_QPALM_Cyqlone, StorageOrder::RowMajor)
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)
