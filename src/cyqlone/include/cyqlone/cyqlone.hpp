@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <bit>
 #include <cassert>
-#include <limits>
 #include <utility>
 
 namespace CYQLONE_NS(cyqlone) {
@@ -180,27 +179,8 @@ struct CyqloneSolver {
     /// @name Solver parameters
     /// @{
 
-    /// Use prefetching during the reverse CR solve phase.
-    bool enable_prefetching = true;
-    /// Maximum number of preconditioned conjugate gradient iterations.
-    index_t pcg_max_iter = 100;
-    /// Tolerance for the preconditioned conjugate gradient solver.
-    value_type pcg_tolerance = std::numeric_limits<value_type>::epsilon() / 10;
-    /// Enable printing of the residuals during PCG.
-    bool pcg_print_resid = false;
-    /// Algorithm to use for solving the final reduced block tridiagonal system.
-    SolveMethod solve_method = SolveMethod::StairPCG;
-    /// Tuning parameter for deciding when to update or re-factor the PCR factorization.
-    /// If the update rank exceeds this fraction of @ref nx, the PCR factorization is recomputed
-    double pcr_max_update_fraction = 0.6;
-    /// Tuning parameter for deciding when to update or re-factor the last subdiagonal blocks in the
-    /// CR factorization.
-    /// If the update rank exceeds this fraction of @ref nx, the last subdiagonal blocks are
-    /// recomputed.
-    /// @todo Add option to switch at any level of CR, not just the last one.
-    double cr_max_update_fraction_Y0 = 0.9;
-    /// Threshold on @ref nx for switching to a serial implementation of the reverse CR solve.
-    index_t parallel_solve_cr_threshold = 10;
+    /// Solver parameters and settings.
+    CyqloneParams<value_type> params{};
 
     /// Configure the barrier spin count used in parallel synchronization before falling back to a
     /// futex wait.
@@ -212,9 +192,9 @@ struct CyqloneSolver {
 
     /// Get a string representation of the main solver parameters. Used mainly for file names.
     [[nodiscard]] std::string get_params_string() const {
-        std::string_view solve = solve_method == SolveMethod::PCR        ? "pcr"
-                                 : solve_method == SolveMethod::StairPCG ? "pcg=stair"
-                                                                         : "pcg=jacobi";
+        std::string_view solve = params.solve_method == SolveMethod::PCR        ? "pcr"
+                                 : params.solve_method == SolveMethod::StairPCG ? "pcg=stair"
+                                                                                : "pcg=jacobi";
         std::string_view order = default_order == StorageOrder::RowMajor ? "rm" : "cm";
         return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz, p, v,
                            solve, order);

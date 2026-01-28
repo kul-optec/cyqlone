@@ -281,12 +281,15 @@ std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
             }};
     };
     qp::CyqloneBackendSettings backend{
-        .processors                  = opts.parallelism,
-        .changing_constr_factor      = opts.changing_constr_factor,
-        .max_update_count            = 20,
-        .pcr_max_update_fraction     = opts.pcr_max_update_fraction,
-        .cr_max_update_fraction      = opts.cr_max_update_fraction,
-        .parallel_solve_cr_threshold = opts.parallel_solve_cr_threshold,
+        .processors             = opts.parallelism,
+        .changing_constr_factor = opts.changing_constr_factor,
+        .max_update_count       = 20,
+        .params =
+            {
+                .pcr_max_update_fraction      = opts.pcr_max_update_fraction,
+                .cr_max_update_fraction_Y0    = opts.cr_max_update_fraction,
+                .parallel_solve_cr_threshold  = opts.parallel_solve_cr_threshold,
+            },
     };
     qp::Settings settings{
         .tolerance         = 1e-8,
@@ -300,7 +303,7 @@ std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
     settings_warm.initial_penalty_y           = 1e4;
     settings_warm.initial_inner_tolerance     = 1e-4;
     if (opts.pcr)
-        backend.solve_method = cyqlone::SolveMethod::PCR;
+        backend.params.solve_method = cyqlone::SolveMethod::PCR;
     if (opts.cold) {
         backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Zeros;
         co_yield cyqlone_solver("zero", backend, settings);

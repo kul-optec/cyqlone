@@ -98,14 +98,7 @@ struct CyqloneBackend {
     CyqloneBackend(const CyqloneStorage<> &ocp, CyqloneData data,
                    const CyqloneBackendSettings &settings)
         : ocp{OCP_t::build(ocp, settings.processors)}, settings{settings} {
-        this->ocp.enable_prefetching               = settings.enable_prefetching;
-        this->ocp.pcg_max_iter                     = settings.pcg_max_iter;
-        this->ocp.pcg_tolerance                    = settings.pcg_tolerance;
-        this->ocp.pcg_print_resid                  = settings.pcg_print_resid;
-        this->ocp.solve_method                     = settings.solve_method;
-        this->ocp.pcr_max_update_fraction          = settings.pcr_max_update_fraction;
-        this->ocp.cr_max_update_fraction_Y0        = settings.cr_max_update_fraction;
-        this->ocp.parallel_solve_cr_threshold      = settings.parallel_solve_cr_threshold;
+        this->ocp.params                           = settings.params;
         this->ocp.parallel_ctx->barrier.spin_count = settings.spin_count;
         b_min_strided                              = ineq_constr_vec();
         b_max_strided                              = ineq_constr_vec();

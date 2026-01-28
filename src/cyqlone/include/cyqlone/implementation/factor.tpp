@@ -68,14 +68,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
     }
     // Factor or solve the last level using PCR or PCG
     if constexpr (Factor) {
-        if (solve_method == SolveMethod::PCR) {
+        if (params.solve_method == SolveMethod::PCR) {
             ctx.arrive_and_wait(); // wait for off-diagonal block
             if (ν2p(c + 1) + 1 == lp() || p == 1)
                 factor_pcr();
         }
     }
     if constexpr (Solve) {
-        if (solve_method == SolveMethod::PCR) {
+        if (params.solve_method == SolveMethod::PCR) {
             if constexpr (!Factor)
                 ctx.arrive_and_wait(); // wait for off-diagonal block TODO: necessary?
             if (ν2p(c + 1) + 1 == lp() || p == 1)
@@ -113,7 +113,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
                                                        mut_view<> work) const {
-    if (nx >= parallel_solve_cr_threshold && p > 1) {
+    if (nx >= params.parallel_solve_cr_threshold && p > 1) {
         solve_reverse_cr_parallel(ctx, λ, work);
     } else if (ν2p(ctx.index + 1) + 1 == lp() || p == 1)
         solve_reverse_cr_serial(λ, work);

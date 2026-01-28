@@ -243,7 +243,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <StorageOrder O>
 void CyqloneSolver<VL, T, DefaultOrder>::prefetch(batch_view<O> X) const {
-    if (!enable_prefetching)
+    if (!params.enable_prefetching)
         return;
     const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / v, 1);
     if constexpr (O == StorageOrder::RowMajor)
@@ -259,7 +259,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::prefetch(batch_view<O> X) const {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <StorageOrder O>
 void CyqloneSolver<VL, T, DefaultOrder>::prefetch_L(batch_view<O> X) const {
-    if (!enable_prefetching)
+    if (!params.enable_prefetching)
         return;
     const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / v, 1);
     if constexpr (O == StorageOrder::RowMajor)

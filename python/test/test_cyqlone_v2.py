@@ -103,7 +103,7 @@ def prepare_test(params: Params):
     ocp = random_ocp(params.N, params.nx, params.nu, params.ny, params.ny_N, rng)
     cocp = cyqlone.CyqloneOCP(ocp)
     solver = params.solver(cocp, params.p)
-    solver.solve_method = cyqlone.SolveMethod.PCR
+    solver.params.solve_method = cyqlone.SolveMethod.PCR
     return rng, ocp, cocp, solver
 
 

@@ -79,11 +79,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     // we therefore need to rotate Υ0_fwd by one block to the right first.
 
     // Check the rank to decide whether to update or recompute
-    const index_t nj = std::max(Σ_fwd.rows(), Σ_bwd.rows());
-    bool update      = static_cast<double>(nj) < pcr_max_update_fraction * static_cast<double>(nx);
-    bool update_y = static_cast<double>(nj) < cr_max_update_fraction_Y0 * static_cast<double>(nx);
-    bool do_update_pcr   = solve_method == SolveMethod::PCR && update && VL > 1;
-    bool do_refactor_pcr = solve_method == SolveMethod::PCR && !update;
+    const index_t nj      = std::max(Σ_fwd.rows(), Σ_bwd.rows());
+    auto pcr_update_thres = params.pcr_max_update_fraction * static_cast<double>(nx);
+    auto y0_update_thres  = params.cr_max_update_fraction_Y0 * static_cast<double>(nx);
+    bool update           = static_cast<double>(nj) < pcr_update_thres;
+    bool update_y         = static_cast<double>(nj) < y0_update_thres;
+    bool do_update_pcr    = params.solve_method == SolveMethod::PCR && update && VL > 1;
+    bool do_refactor_pcr  = params.solve_method == SolveMethod::PCR && !update;
 
     // Perform the PCR update
     if (do_update_pcr)
@@ -108,7 +110,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
         // Make sure the diagonal block M of the last CR level is up to date (it is needed for PCR).
         // This is done in two steps, the backward and the forward updates, the latter of which
         // requires a rotation first.
-        if (solve_method == SolveMethod::PCR)
+        if (params.solve_method == SolveMethod::PCR)
             syrk_diag_add(Υ0_bwd, M0, Σ_bwd);
         // When using PCG, we need the Cholesky factors L(0) of M(0) for the preconditioner, so
         // update them here. Like with the update of M(0), we do this in two steps.
@@ -117,7 +119,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
         // Rotate and repeat for the forward update.
         batmat::linalg::copy(Σ_fwd, Σ_fwd, with_rotate<-1>);
         batmat::linalg::copy(Υ0_fwd, Υ0_fwd, with_rotate<-1>);
-        if (solve_method == SolveMethod::PCR)
+        if (params.solve_method == SolveMethod::PCR)
             syrk_diag_add(Υ0_fwd, M0, Σ_fwd);
         if (!do_update_pcr)
             hyhound_diag(L0, Υ0_fwd, Σ_fwd);

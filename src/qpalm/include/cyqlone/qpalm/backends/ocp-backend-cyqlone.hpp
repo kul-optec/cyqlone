@@ -30,19 +30,12 @@ struct CyqloneBackendSettings {
     bool print_residuals = false;
     int print_precision  = 3;
     // bool init_x0               = false; // TODO
-    double changing_constr_factor       = 0.05;
-    index_t max_update_count            = 5;
-    bool detailed_timings               = false;
-    bool enable_prefetching             = true;
-    index_t pcg_max_iter                = 100;
-    real_t pcg_tolerance                = std::numeric_limits<real_t>::epsilon() / 10;
-    bool pcg_print_resid                = false;
-    SolveMethod solve_method            = SolveMethod::StairPCG;
-    double pcr_max_update_fraction      = 0.6;
-    double cr_max_update_fraction       = 0.9;
-    index_t parallel_solve_cr_threshold = 10;
-    uint32_t spin_count                 = std::numeric_limits<uint32_t>::max();
-    WarmStartingStrategy strategy       = WarmStartingStrategy::Copy;
+    double changing_constr_factor = 0.05;
+    index_t max_update_count      = 5;
+    bool detailed_timings         = false;
+    cyqlone::CyqloneParams<real_t> params{};
+    uint32_t spin_count           = std::numeric_limits<uint32_t>::max();
+    WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };
 
 struct CyqloneBackendStats {

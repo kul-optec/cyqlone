@@ -36,7 +36,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::mul_precond(batch_view<> r, mut_batch_v
     -> value_type {
     // Stair: z = Φ⁻¹ r = L⁻ᵀL⁻¹ r - L⁻ᵀL⁻¹ K L⁻ᵀL⁻¹ r = L⁻ᵀL⁻¹(r - K L⁻ᵀL⁻¹ r)
     copy(r, z);
-    if (solve_method == SolveMethod::StairPCG) {
+    if (params.solve_method == SolveMethod::StairPCG) {
         trsm(tril(L), r, w);
         trsm(triu(L.transposed()), w); // w = L⁻ᵀL⁻¹ r
         syomv_neg(tril(K), w, z);      // z -= K L⁻ᵀL⁻¹ r
@@ -61,15 +61,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_pcg(mut_batch_view<> λ,
         copy(z, p);
         return rᵀz;
     }();
-    const auto ε2 = pcg_tolerance * pcg_tolerance;
-    for (index_t it = 0; it < pcg_max_iter; ++it) {
+    const auto ε2 = params.pcg_tolerance * params.pcg_tolerance;
+    for (index_t it = 0; it < params.pcg_max_iter; ++it) {
         GUANAQO_TRACE("PCG", it + 1);
         value_type pᵀMp = mul_Mv(p, Mp, M, K);
         value_type α    = rᵀz / pᵀMp;
         compact_blas::xaxpy(+α, simdify(p), simdify(λ));
         compact_blas::xaxpy(-α, simdify(Mp), simdify(r));
         value_type r2 = compact_blas::xdot(simdify(r), simdify(r));
-        if (pcg_print_resid)
+        if (params.pcg_print_resid)
             std::println("{:>4}) pcg resid = {:15.6e}", it, std::sqrt(r2));
         if (r2 < ε2)
             break;

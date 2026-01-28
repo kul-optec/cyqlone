@@ -307,9 +307,9 @@ TEST_P(CyqloneFactorTest, factor) {
     std::generate_n(ocp.b().data, ocp.b().rows, [&] { return uni(rng); });
     std::generate_n(ocp.b_min().data, ocp.b_min().rows, [&] { return uni(rng); });
     std::generate_n(ocp.b_max().data, ocp.b_max().rows, [&] { return uni(rng); });
-    auto cocp           = CyqloneStorage<real_t>::build(ocp);
-    Solver solver       = Solver::build(cocp, p);
-    solver.solve_method = GetParam();
+    auto cocp                  = CyqloneStorage<real_t>::build(ocp);
+    Solver solver              = Solver::build(cocp, p);
+    solver.params.solve_method = GetParam();
 
     // Spin a bit longer to get more deterministic timings
     solver.parallel_ctx->barrier.spin_count = std::numeric_limits<uint32_t>::max();
