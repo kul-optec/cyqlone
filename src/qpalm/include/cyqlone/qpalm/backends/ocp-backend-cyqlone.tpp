@@ -149,14 +149,15 @@ struct CyqloneBackend {
     }
 
     void warm_start(const var_vec_t &x, const ineq_constr_vec_t &y, const eq_constr_vec_t &λ) {
+        // TODO: this does not handle the case N_horiz != ceil_N() correctly
         const auto k_to_l = [&](index_t k) {
             const auto num_stages = ocp.n;
             const auto i          = (ocp.ceil_N() - k) % num_stages;
             const auto k1         = (k + i) / num_stages;
-            const auto k2         = k1 >> (ocp.lP - ocp.lvl);
-            const auto v          = k2 % (1 << ocp.lvl);
-            const auto t          = k1 - (k2 << (ocp.lP - ocp.lvl));
-            return ((num_stages * t + i) << ocp.lvl) + v;
+            const auto k2         = k1 >> ocp.lp();
+            const auto v          = k2 % (1 << ocp.lv());
+            const auto t          = k1 - (k2 << ocp.lp());
+            return ((num_stages * t + i) << ocp.lv()) + v;
         };
 
         switch (settings.strategy) {
@@ -502,18 +503,18 @@ struct CyqloneBackend {
         // Allocate memory
         const index_t ny_M       = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
         const index_t m          = ocp.ceil_N() * ny_M;
-        const index_t P          = 1 << (ocp.lP - ocp.lvl);
-        const index_t num_stages = ocp.n; // number of stages per thread
+        const index_t p          = 1 << ocp.lp(); // number of threads
+        const index_t num_stages = ocp.n;         // number of stages per thread
         if (ctx.is_master()) {
             breakpoints.resize(2 * m);
             breakpoints_temp.resize(2 * m);
-            thread_indices.resize(P);
-            thread_sums.resize(2 * P);
+            thread_indices.resize(p);
+            thread_sums.resize(2 * p);
         }
         ctx.arrive_and_wait(__LINE__); // TODO: allocate ahead of time to avoid barrier
         // Parallelization and vectorization
-        auto as = std::span{thread_sums}.first(P), bs = std::span{thread_sums}.subspan(P);
-        auto thr_parts = std::span{thread_indices}.subspan(0, P);
+        auto as = std::span{thread_sums}.first(p), bs = std::span{thread_sums}.subspan(p);
+        auto thr_parts = std::span{thread_indices}.subspan(0, p);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
         std::span<Breakpoint> neg_bp, pos_bp;
         const index_t ti        = ctx.index;
@@ -554,7 +555,7 @@ struct CyqloneBackend {
         thr_parts[ti][1]    = large - fin_0;
         thr_parts[ti][2]    = fin - fin_0;
         thr_parts[ti][3]    = inf_0 - fin_0;
-        auto thr_parts_done = ctx.arrive();
+        auto thr_parts_done = ctx.arrive(); // TODO: use custom completion handler
         // Compute the partial sums
         PartitionedBreakpoints pos_neg_bp{.neg_bp = std::span{fin_0, pos},
                                           .pos_bp = std::span{pos, fin}};

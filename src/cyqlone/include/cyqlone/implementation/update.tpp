@@ -195,7 +195,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
     //  WU = [ Υ˂(-1) |   0    ]
     batmat::linalg::copy(Σ.top_rows(ml), Σ.bottom_rows(ml), with_rotate<+rot0>);
     batmat::linalg::copy(Σ.top_rows(ml), Σ.top_rows(ml), with_rotate<-rot1>);
-    if constexpr (l < lvl) {
+    if constexpr (l < lv()) {
         auto WL = work_update_pcr_L.left_cols(2 * ml).batch(0);
         auto WU = WYU.right_cols(VL * m).left_cols(2 * ml);
         auto WY = WYU.left_cols(VL * m).right_cols(2 * ml);
@@ -236,7 +236,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
     batmat::linalg::copy(Σbwd, Σ.top_rows(m));
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template update_pcr_level<Levels>(m, WYU, Σ), ...);
-    }(std::make_integer_sequence<index_t, CyqloneSolver::lvl + 1>{});
+    }(std::make_integer_sequence<index_t, CyqloneSolver::lv() + 1>{});
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

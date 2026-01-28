@@ -64,29 +64,29 @@ auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_ceil_p(index_t a, index_t b) c
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_ceil_P(index_t a, index_t b) const -> index_t {
-    const index_t ceil_P = (1 << lP);
+    const index_t c = ceil_P();
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
-    BATMAT_ASSUME(a < ceil_P);
+    BATMAT_ASSUME(a < c);
     a -= b;
-    return a < 0 ? a + ceil_P : a;
+    return a < 0 ? a + c : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_ceil_P(index_t a, index_t b) const -> index_t {
-    const index_t ceil_P = (1 << lP);
+    const index_t c = ceil_P();
     BATMAT_ASSUME(a >= 0);
     BATMAT_ASSUME(b >= 0);
-    BATMAT_ASSUME(a < ceil_P);
+    BATMAT_ASSUME(a < c);
     a += b;
-    return a >= ceil_P ? a - ceil_P : a;
+    return a >= c ? a - c : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 auto CyqloneSolver<VL, T, DefaultOrder>::get_linear_batch_offset(index_t biA) const -> index_t {
-    const auto levA = biA > 0 ? get_level(biA) : lP;
+    const auto levA = biA > 0 ? get_level(biA) : lp() + lv();
     const auto levP = lp();
     if (levA >= levP)
-        return (((1 << levP) - 1) << (lP - levP)) + (biA >> levP);
-    return (((1 << levA) - 1) << (lP - levA)) + get_index_in_level(biA);
+        return (((1 << levP) - 1) << (lp() + lv() - levP)) + (biA >> levP);
+    return (((1 << levA) - 1) << (lp() + lv() - levA)) + get_index_in_level(biA);
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
 [[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::ν2(index_t bi) const {

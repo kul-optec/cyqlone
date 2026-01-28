@@ -84,16 +84,16 @@ void register_cyqlone_solver(nb::module_ &m) {
     solver //
         .def(
             "__init__",
-            [](Solver &self, const CyqloneStorage<> &ocp, index_t lP) {
-                new (&self) Solver(Solver::build(ocp, lP));
+            [](Solver &self, const CyqloneStorage<> &ocp, index_t p) {
+                new (&self) Solver(Solver::build(ocp, p));
             },
-            "ocp"_a, "lP"_a)
+            "ocp"_a, "p"_a)
         .def(
             "__init__",
-            [](Solver &self, const PythonOCP &ocp, index_t lP) {
-                new (&self) Solver(Solver::build(CyqloneStorage<>::build(ocp.ocp), lP));
+            [](Solver &self, const PythonOCP &ocp, index_t p) {
+                new (&self) Solver(Solver::build(CyqloneStorage<>::build(ocp.ocp), p));
             },
-            "ocp"_a, "lP"_a)
+            "ocp"_a, "p"_a)
         .def_prop_ro("params_string", [](const Solver &self) { return self.get_params_string(); })
         .def_prop_ro("num_variables", &Solver::num_variables)
         .def_prop_ro("num_dynamics_constraints", &Solver::num_dynamics_constraints)

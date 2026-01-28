@@ -30,7 +30,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr() {
     [this]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template factor_pcr_level<Levels>(), ...);
-    }(std::make_integer_sequence<index_t, CyqloneSolver::lvl>{});
+    }(std::make_integer_sequence<index_t, lv()>{});
 }
 
 // The level is a template parameter to allow for compile-time vector rotations.
@@ -55,7 +55,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     syrk_sub(Y, tril(M_next), with_rotate_C<+r>, with_rotate_D<+r>);
     //  3|  L(k)⁺ = chol(M(k)⁺)    -- for the next level
     potrf(tril(M_next), tril(pcr_L.batch(Level + 1)));
-    if constexpr (Level + 1 < lvl) {
+    if constexpr (Level + 1 < lv()) {
         auto K_next = pcr_Y.batch(Level + 1);
         // 11|  K(k)⁺ = -Y(k+2^l) U(k+2^l)ᵀ    -- implemented as K(k-2^l)⁺ = -Y(k) U(k)ᵀ
         gemm_neg(Y, U.transposed(), K_next, {}, with_rotate_C<-r>, with_rotate_D<-r>);
@@ -67,11 +67,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
                                                    mut_batch_view<> work_pcr) const {
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template solve_pcr_level<Levels>(λ, work_pcr), ...);
-    }(std::make_integer_sequence<index_t, lvl>{});
-    GUANAQO_TRACE("Solve PCR", lvl);
+    }(std::make_integer_sequence<index_t, lv()>{});
+    GUANAQO_TRACE("Solve PCR", lv());
     //  5|  x(k) = L(k)⁻ᵀ L(k)⁻¹ b(k)
-    trsm(tril(pcr_L.batch(lvl)), λ);
-    trsm(triu(pcr_L.batch(lvl).transposed()), λ);
+    trsm(tril(pcr_L.batch(lv())), λ);
+    trsm(triu(pcr_L.batch(lv()).transposed()), λ);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>

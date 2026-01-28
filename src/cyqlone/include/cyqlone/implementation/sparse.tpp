@@ -147,7 +147,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -
             rhs[s + c] = λ.batch(di)(vi)(c, 0);
         s += nx;
     };
-    if (lP != lvl) {
+    if (p != 1) {
         for (index_t i = 0; i < ((p * vl) >> 1); ++i)
             cyclic_block(2 * i + 1);
         for (index_t l = 1; l < lp(); ++l) {
@@ -313,7 +313,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
         }
         s += nx;
     };
-    if (lP != lvl) {
+    if (p != 1) {
         for (index_t i = 0; i < ((p * vl) >> 1); ++i)
             cyclic_block(2 * i + 1, 1);
         for (index_t l = 1; l < lp(); ++l) {

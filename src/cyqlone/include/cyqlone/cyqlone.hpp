@@ -90,28 +90,24 @@ struct CyqloneSolver {
 
     /// Vector length.
     static constexpr index_t vl = VL;
-    /// log₂(VL), logarithm of the vector length.
-    [[deprecated("use lv() instead")]] static constexpr index_t lvl = ceil_log2(vl);
-    using vl_t    = std::integral_constant<index_t, vl>;
-    using align_t = std::integral_constant<index_t, vl * alignof(value_type)>;
-
     /// Number of processors/threads
     const index_t p = 8;
     /// log₂(p), logarithm of the number of processors/threads, rounded up.
     [[nodiscard]] constexpr index_t lp() const { return ceil_log2(p); }
     /// The number of processors @ref p rounded up to the next power of two.
     [[nodiscard]] constexpr index_t ceil_p() const { return 1 << lp(); }
-    /// log₂(VL), logarithm of the vector length.
+    /// The number of parallel execution units P rounded up to the next power of two.
+    [[nodiscard]] constexpr index_t ceil_P() const { return 1 << (lp() + lv()); }
+    /// log₂(v), logarithm of the vector length.
     [[nodiscard]] static constexpr index_t lv() { return ceil_log2(vl); }
-    /// log₂(P), logarithm of the number of parallel execution units
-    /// (number of processors × vector length), rounded up.
-    [[deprecated("should not be a member variable")]] const index_t lP = lp() + lv();
 
-    /// Number of stages per thread per lane (rounded up)
+    /// Number of stages per thread per vector lane (rounded up)
     const index_t n = (N_horiz + p * vl - 1) / (p * vl);
 
-    using SharedContext                         = parallel::SharedContext;
-    using Context                               = parallel::Context<SharedContext>;
+    using vl_t          = std::integral_constant<index_t, vl>;
+    using align_t       = std::integral_constant<index_t, vl * alignof(value_type)>;
+    using SharedContext = parallel::SharedContext;
+    using Context       = parallel::Context<SharedContext>;
     std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
 
     /// @}
