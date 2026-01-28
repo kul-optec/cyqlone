@@ -54,7 +54,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
             GUANAQO_TRACE("Compute first Y", i_bwd);
             if (i_fwd > 0)
                 trmm_neg(LA1, Tc.transposed(), cr_Y.batch(i_bwd));
-            else if constexpr (VL > 1)
+            else if constexpr (vl > 1)
                 trmm_neg(LA1, Tc.transposed(), cr_Y.batch(i_bwd), //
                          with_rotate_C<-1>, with_rotate_D<-1>, with_mask_D<-1>);
         }
@@ -69,7 +69,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
         auto Tc_next = triu(R̂ŜQ̂_next.right_cols(nx).middle_rows(nu - 1, nx));
         {
             GUANAQO_TRACE("Compute TTᵀ", c_next);
-            if (c_next > 0 || VL == 1)
+            if (c_next > 0 || vl == 1)
                 trmm(Tc_next, Tc_next.transposed(), M);
             else
                 trmm(Tc_next, Tc_next.transposed(), M, with_rotate_C<-1>, with_rotate_D<-1>);
@@ -98,7 +98,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
         {
             GUANAQO_TRACE("Update λ", dn);
             auto x_next = ux.batch(d1_next).bottom_rows(nx);
-            if (c_next > 0 || VL == 1)
+            if (c_next > 0 || vl == 1)
                 compact_blas::template xsub<+0>(simdify(λ.batch(dn)), simdify(x_next));
             else
                 compact_blas::template xsub<-1>(simdify(λ.batch(dn)), simdify(x_next));
