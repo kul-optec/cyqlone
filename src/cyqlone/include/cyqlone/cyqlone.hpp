@@ -429,82 +429,40 @@ struct CyqloneSolver {
     /// custom Cyqlone storage format.
     void initialize_rhs(const CyqloneStorage<value_type> &ocp, mut_view<> rhs) const;
     /// @copydoc initialize_rhs
-    matrix<> initialize_rhs(const CyqloneStorage<value_type> &ocp) const {
-        matrix<> rhs = initialize_dynamics_constraints();
-        initialize_rhs(ocp, rhs);
-        return rhs;
-    }
+    matrix<> initialize_rhs(const CyqloneStorage<value_type> &ocp) const;
     /// Initialize the gradient vector for the OCP cost function, using the custom Cyqlone storage
     /// format.
     void initialize_gradient(const CyqloneStorage<value_type> &ocp, mut_view<> grad) const;
     /// @copydoc initialize_gradient
-    matrix<> initialize_gradient(const CyqloneStorage<value_type> &ocp) const {
-        matrix<> grad = initialize_variables();
-        initialize_gradient(ocp, grad);
-        return grad;
-    }
+    matrix<> initialize_gradient(const CyqloneStorage<value_type> &ocp) const;
     /// Initialize the lower and upper bounds for the general constraints of the OCP, using the
     /// custom Cyqlone storage format.
     void initialize_bounds(const CyqloneStorage<value_type> &ocp, mut_view<> b_min,
                            mut_view<> b_max) const;
     /// @copydoc initialize_bounds
-    std::pair<matrix<>, matrix<>> initialize_bounds(const CyqloneStorage<value_type> &ocp) const {
-        std::pair b{initialize_general_constraints(), initialize_general_constraints()};
-        initialize_bounds(ocp, b.first, b.second);
-        return b;
-    }
+    std::pair<matrix<>, matrix<>> initialize_bounds(const CyqloneStorage<value_type> &ocp) const;
 
     /// @todo check and document behavior when `N_horiz != ceil_N()`.
     void pack_variables(std::span<const value_type> ux_lin, mut_view<> ux) const;
-    matrix<> pack_variables(std::span<const value_type> ux_lin) const {
-        matrix<> ux = initialize_variables();
-        pack_variables(ux_lin, ux);
-        return ux;
-    }
+    matrix<> pack_variables(std::span<const value_type> ux_lin) const;
     void unpack_variables(view<> ux, std::span<value_type> ux_lin) const;
-    std::vector<value_type> unpack_variables(view<> ux) const {
-        std::vector<value_type> ux_lin(num_variables());
-        unpack_variables(ux, ux_lin);
-        return ux_lin;
-    }
+    std::vector<value_type> unpack_variables(view<> ux) const;
     void pack_dynamics(std::span<const value_type> λ_lin, mut_view<> λ) const;
-    matrix<> pack_dynamics(std::span<const value_type> λ_lin) const {
-        matrix<> λ = initialize_dynamics_constraints();
-        pack_dynamics(λ_lin, λ);
-        return λ;
-    }
+    matrix<> pack_dynamics(std::span<const value_type> λ_lin) const;
     void unpack_dynamics(view<> λ, std::span<value_type> λ_lin) const;
-    std::vector<value_type> unpack_dynamics(view<> λ) const {
-        std::vector<value_type> λ_lin(num_dynamics_constraints());
-        unpack_dynamics(λ, λ_lin);
-        return λ_lin;
-    }
+    std::vector<value_type> unpack_dynamics(view<> λ) const;
     void pack_constraints(std::span<const value_type> y_lin, mut_view<> y,
                           value_type fill = 0) const;
-    matrix<> pack_constraints(std::span<const value_type> y_lin, value_type fill = 0) const {
-        matrix<> y = initialize_general_constraints();
-        pack_constraints(y_lin, y, fill);
-        return y;
-    }
+    matrix<> pack_constraints(std::span<const value_type> y_lin, value_type fill = 0) const;
     void unpack_constraints(view<> y, std::span<value_type> y_lin) const;
-    std::vector<value_type> unpack_constraints(view<> y) const {
-        std::vector<value_type> y_lin(num_general_constraints());
-        unpack_constraints(y, y_lin);
-        return y_lin;
-    }
+    std::vector<value_type> unpack_constraints(view<> y) const;
 
     /// Get a zero-initialized matrix for the primal variables u and x.
-    matrix<> initialize_variables() const {
-        return matrix<>{{.depth = ceil_N(), .rows = nu + nx, .cols = 1}};
-    }
+    matrix<> initialize_variables() const;
     /// Get a zero-initialized matrix for the dynamics constraints (or their multipliers).
-    matrix<> initialize_dynamics_constraints() const {
-        return matrix<>{{.depth = ceil_N(), .rows = nx, .cols = 1}};
-    }
+    matrix<> initialize_dynamics_constraints() const;
     /// Get a zero-initialized matrix for the general constraints (or their multipliers).
-    matrix<> initialize_general_constraints() const {
-        return matrix<>{{.depth = ceil_N(), .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
-    }
+    matrix<> initialize_general_constraints() const;
 
     /// @}
 
@@ -669,7 +627,7 @@ struct CyqloneSolver {
     template <StorageOrder O>
     void prefetch_L(batch_view<O> X) const;
     void prefetch_L(index_t bi) const;
-    void prefetch_U([[maybe_unused]] index_t l, index_t iU) const;
+    void prefetch_U(index_t l, index_t iU) const;
     void prefetch_Y(index_t l, index_t iY) const;
 
     /// @}
@@ -685,30 +643,5 @@ struct CyqloneSolver {
 
     /// @}
 };
-
-namespace detail {
-// TODO: Move elsewhere
-/// Simple (inefficient) matrix copy that supports slices with non-unit strides.
-template <class T1, class I1, class S1, guanaqo::StorageOrder O1, class T2, class I2, class S2,
-          guanaqo::StorageOrder O2>
-void copy(guanaqo::MatrixView<T1, I1, S1, O1> src, guanaqo::MatrixView<T2, I2, S2, O2> dst) {
-    assert(src.rows == dst.rows);
-    assert(src.cols == dst.cols);
-    for (index_t r = 0; r < src.rows; ++r) // TODO: optimize
-        for (index_t c = 0; c < src.cols; ++c)
-            dst(r, c) = src(r, c);
-}
-template <class T0, class T1, class I1, class S1, guanaqo::StorageOrder O1, class T2, class I2,
-          class S2, guanaqo::StorageOrder O2>
-/// Simple (inefficient) scaled matrix copy that supports slices with non-unit strides.
-void scale(T0 scalar, guanaqo::MatrixView<T1, I1, S1, O1> src,
-           guanaqo::MatrixView<T2, I2, S2, O2> dst) {
-    assert(src.rows == dst.rows);
-    assert(src.cols == dst.cols);
-    for (index_t r = 0; r < src.rows; ++r) // TODO: optimize
-        for (index_t c = 0; c < src.cols; ++c)
-            dst(r, c) = scalar * src(r, c);
-}
-} // namespace detail
 
 } // namespace CYQLONE_NS(cyqlone)
