@@ -15,6 +15,8 @@
 namespace CYQLONE_NS(cyqlone) {
 
 #define CYQLONE_INSTANTIATE_SOLVER(T, VL)                                                          \
+    template class TricyqleSolver<VL, T, StorageOrder::ColMajor>;                                  \
+    template class TricyqleSolver<VL, T, StorageOrder::RowMajor>;                                  \
     template class CyqloneSolver<VL, T, StorageOrder::ColMajor>;                                   \
     template class CyqloneSolver<VL, T, StorageOrder::RowMajor>;
 BATMAT_FOREACH_DTYPE_VL(CYQLONE_INSTANTIATE_SOLVER)

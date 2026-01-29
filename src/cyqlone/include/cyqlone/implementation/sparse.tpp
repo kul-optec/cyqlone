@@ -173,17 +173,17 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
     const index_t nn         = ceil_N() * nuxx;
     const index_t sλ         = nn - (nx * p * v);
     SparseMatrixBuilder mat{.rows = nn, .cols = nn, .symmetry = Symmetry::Unsymmetric};
-    matrix AinvQᵀ{{
+    matrix<> AinvQᵀ{{
         .depth = v * p,
         .rows  = nx,
         .cols  = num_stages * nx,
     }};
-    matrix invQᵀ{{
+    matrix<> invQᵀ{{
         .depth = v * p,
         .rows  = nx,
         .cols  = num_stages * nx,
     }};
-    matrix LBA{{
+    matrix<> LBA{{
         .depth = v * p,
         .rows  = nu + nx,
         .cols  = (num_stages - 1) * nx,
@@ -291,12 +291,12 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
         const index_t vi = i / p;
         for (index_t c = 0; c < nx; ++c) {
             for (index_t r = c; r < nx; ++r)
-                mat.add(s + r, s + c, cr_L.batch(bi)(vi)(r, c));
+                mat.add(s + r, s + c, tricyqle.cr_L.batch(bi)(vi)(r, c));
             if (i + offset < v * p)
                 for (index_t r = 0; r < nx; ++r)
-                    mat.add(sY + r, s + c, cr_Y.batch(bi)(vi)(r, c));
+                    mat.add(sY + r, s + c, tricyqle.cr_Y.batch(bi)(vi)(r, c));
             for (index_t r = 0; r < nx; ++r)
-                mat.add(sU + r, s + c, cr_U.batch(bi)(vi)(r, c));
+                mat.add(sU + r, s + c, tricyqle.cr_U.batch(bi)(vi)(r, c));
         }
         s += nx;
     };
@@ -306,10 +306,10 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
         const index_t vi = i / p;
         for (index_t c = 0; c < nx; ++c) {
             for (index_t r = c; r < nx; ++r)
-                mat.add(s + r, s + c, pcr_L.batch(0)(vi)(r, c));
+                mat.add(s + r, s + c, tricyqle.pcr_L.batch(0)(vi)(r, c));
             if (i + offset < v * p)
                 for (index_t r = 0; r < nx; ++r)
-                    mat.add(sY + r, s + c, cr_Y.batch(bi)(vi)(r, c));
+                    mat.add(sY + r, s + c, tricyqle.cr_Y.batch(bi)(vi)(r, c));
         }
         s += nx;
     };

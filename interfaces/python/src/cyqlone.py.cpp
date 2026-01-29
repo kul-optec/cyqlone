@@ -215,7 +215,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             "factor",
             [](Solver &self, real_t S, np_batched_view<v, const real_t> Σ) {
                 auto Σ_vw = view_as_batched(Σ);
-                self.parallel_ctx->run([&](auto &ctx) { self.factor(ctx, S, Σ_vw); });
+                self.run([&](auto &ctx) { self.factor(ctx, S, Σ_vw); });
             },
             "S"_a, "Σ"_a.noconvert())
         .def(
@@ -225,8 +225,7 @@ void register_cyqlone_solver(nb::module_ &m) {
                 auto Σ_vw  = view_as_batched(Σ);
                 auto ux_vw = view_as_batched(ux);
                 auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run(
-                    [&](auto &ctx) { self.factor_solve(ctx, S, Σ_vw, ux_vw, λ_vw); });
+                self.run([&](auto &ctx) { self.factor_solve(ctx, S, Σ_vw, ux_vw, λ_vw); });
             },
             "S"_a, "Σ"_a.noconvert(), "ux"_a.noconvert(), "λ"_a.noconvert())
         .def(
@@ -237,7 +236,7 @@ void register_cyqlone_solver(nb::module_ &m) {
                 auto ux   = self.initialize_gradient(ocp);
                 Solver::compact_blas::xneg(batmat::linalg::simdify(ux)); // TODO: remove
                 auto λ = self.initialize_rhs(ocp);
-                self.parallel_ctx->run([&](auto &ctx) { self.factor_solve(ctx, S, Σ_vw, ux, λ); });
+                self.run([&](auto &ctx) { self.factor_solve(ctx, S, Σ_vw, ux, λ); });
                 return std::make_tuple(np_copy(std::move(ux)), np_copy(std::move(λ)));
             },
             "S"_a, "Σ"_a.noconvert(), "ocp"_a)
@@ -245,7 +244,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             "update",
             [](Solver &self, np_batched_view<v, const real_t> ΔΣ) {
                 auto ΔΣ_vw = view_as_batched(ΔΣ);
-                self.parallel_ctx->run([&](auto &ctx) { self.update(ctx, ΔΣ_vw); });
+                self.run([&](auto &ctx) { self.update(ctx, ΔΣ_vw); });
             },
             "ΔΣ"_a.noconvert())
         .def(
@@ -255,8 +254,7 @@ void register_cyqlone_solver(nb::module_ &m) {
                 auto x_vw = view_as_batched(x);
                 auto b_vw = view_as_batched(b);
                 auto Mxb  = self.initialize_dynamics_constraints();
-                self.parallel_ctx->run(
-                    [&](auto &ctx) { self.residual_dynamics_constr(ctx, x_vw, b_vw, Mxb); });
+                self.run([&](auto &ctx) { self.residual_dynamics_constr(ctx, x_vw, b_vw, Mxb); });
                 return np_copy(std::move(Mxb));
             },
             "ux"_a.noconvert(), "b"_a.noconvert())
@@ -266,8 +264,7 @@ void register_cyqlone_solver(nb::module_ &m) {
                 auto x_vw = view_as_batched(x);
                 auto b    = self.initialize_rhs(ocp);
                 auto Mxb  = self.initialize_dynamics_constraints();
-                self.parallel_ctx->run(
-                    [&](auto &ctx) { self.residual_dynamics_constr(ctx, x_vw, b, Mxb); });
+                self.run([&](auto &ctx) { self.residual_dynamics_constr(ctx, x_vw, b, Mxb); });
                 return np_copy(std::move(Mxb));
             },
             "ux"_a.noconvert(), "b"_a.noconvert())
@@ -276,8 +273,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             [](Solver &self, np_batched_view<v, const real_t> λ) {
                 auto λ_vw = view_as_batched(λ);
                 auto Mᵀλ  = self.initialize_variables();
-                self.parallel_ctx->run(
-                    [&](auto &ctx) { self.transposed_dynamics_constr(ctx, λ_vw, Mᵀλ); });
+                self.run([&](auto &ctx) { self.transposed_dynamics_constr(ctx, λ_vw, Mᵀλ); });
                 return np_copy(std::move(Mᵀλ));
             },
             "λ"_a.noconvert())
@@ -286,7 +282,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             [](Solver &self, np_batched_view<v, real_t> ux, np_batched_view<v, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);
                 auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run([&](auto &ctx) { self.solve_forward(ctx, ux_vw, λ_vw); });
+                self.run([&](auto &ctx) { self.solve_forward(ctx, ux_vw, λ_vw); });
             },
             "ux"_a.noconvert(), "λ"_a.noconvert())
         .def(
@@ -295,7 +291,7 @@ void register_cyqlone_solver(nb::module_ &m) {
                 auto ux = self.initialize_gradient(ocp);
                 Solver::compact_blas::xneg(batmat::linalg::simdify(ux)); // TODO: remove
                 auto λ = self.initialize_rhs(ocp);
-                self.parallel_ctx->run([&](auto &ctx) { self.solve_forward(ctx, ux, λ); });
+                self.run([&](auto &ctx) { self.solve_forward(ctx, ux, λ); });
                 return std::make_tuple(np_copy(std::move(ux)), np_copy(std::move(λ)));
             },
             "ocp"_a)
@@ -304,7 +300,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             [](Solver &self, np_batched_view<v, real_t> ux, np_batched_view<v, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);
                 auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run(
+                self.run(
                     [&](auto &ctx) { self.solve_reverse(ctx, ux_vw, λ_vw, self.riccati_work); });
             },
             "ux"_a.noconvert(), "λ"_a.noconvert())
@@ -322,7 +318,7 @@ void register_cyqlone_solver(nb::module_ &m) {
 
 #if GUANAQO_WITH_TRACING
     solver.def("log_thread_names", [](Solver &self) {
-        self.parallel_ctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
+        self.run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
     });
 #endif
 
@@ -332,7 +328,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             [](Solver &self, np_batched_view<v, real_t> ux, np_batched_view<v, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);
                 auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run([&](auto &ctx) { self.solve(ctx, ux_vw, λ_vw); });
+                self.run([&](auto &ctx) { self.solve(ctx, ux_vw, λ_vw); });
             },
             "ux"_a.noconvert(), "λ"_a.noconvert());
     if constexpr (requires { &Solver::solve_forward_new; })
@@ -341,8 +337,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             [](Solver &self, np_batched_view<v, real_t> ux, np_batched_view<v, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);
                 auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run(
-                    [&](auto &ctx) { self.solve_forward_new(ctx, ux_vw, λ_vw); });
+                self.run([&](auto &ctx) { self.solve_forward_new(ctx, ux_vw, λ_vw); });
             },
             "ux"_a.noconvert(), "λ"_a.noconvert());
     if constexpr (requires { &Solver::solve_reverse_new; })
@@ -351,7 +346,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             [](Solver &self, np_batched_view<v, real_t> ux, np_batched_view<v, real_t> λ) {
                 auto ux_vw = view_as_batched(ux);
                 auto λ_vw  = view_as_batched(λ);
-                self.parallel_ctx->run([&](auto &ctx) {
+                self.run([&](auto &ctx) {
                     self.solve_reverse_new(ctx, ux_vw, λ_vw, self.riccati_work);
                 });
             },

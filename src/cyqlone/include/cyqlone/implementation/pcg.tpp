@@ -18,7 +18,7 @@ using namespace batmat::linalg;
 // vectorized matrix-vector products for M(v) and its preconditioner.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::mul_Mv(batch_view<> p, mut_batch_view<> Mp,
+auto TricyqleSolver<VL, T, DefaultOrder>::mul_Mv(batch_view<> p, mut_batch_view<> Mp,
                                                 batch_view<default_order> L,
                                                 batch_view<default_order> K) const -> value_type {
     // Mp = M p = LLᵀ p + K p
@@ -29,7 +29,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::mul_Mv(batch_view<> p, mut_batch_view<>
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::mul_precond(batch_view<> r, mut_batch_view<> z,
+auto TricyqleSolver<VL, T, DefaultOrder>::mul_precond(batch_view<> r, mut_batch_view<> z,
                                                      mut_batch_view<> w,
                                                      batch_view<default_order> L,
                                                      batch_view<default_order> K) const
@@ -48,7 +48,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::mul_precond(batch_view<> r, mut_batch_v
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_pcg(mut_batch_view<> λ,
+void TricyqleSolver<VL, T, DefaultOrder>::solve_pcg(mut_batch_view<> λ,
                                                    mut_batch_view<> work_pcg) const {
     auto r = work_pcg.middle_cols(0, 1), z = work_pcg.middle_cols(1, 1),
          p = work_pcg.middle_cols(2, 1), Mp = work_pcg.middle_cols(3, 1);

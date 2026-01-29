@@ -74,35 +74,35 @@ TEST(CyqloneTest, updateIndices8) {
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     auto cocp     = CyqloneStorage<real_t>::build(ocp);
     Solver solver = Solver::build(cocp, p);
-    std::ranges::iota(solver.m_update, index_t{1});
+    std::ranges::iota(solver.tricyqle.m_update, index_t{1});
 
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 7), std::make_pair(6, 7));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 7), std::make_pair(7, 8));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 7), std::make_pair(6, 7));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 7), std::make_pair(7, 8));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 6), std::make_pair(5, 6));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 6), std::make_pair(6, 7));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 0), std::make_pair(7, 8));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 6), std::make_pair(5, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 6), std::make_pair(6, 7));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 0), std::make_pair(7, 8));
 
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 6), std::make_pair(4, 6));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 6), std::make_pair(6, 8));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 6), std::make_pair(4, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 6), std::make_pair(6, 8));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 0), std::make_pair(6, 8));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 0), std::make_pair(6, 8));
 }
 
 //    (0) (1) (2) (3) (4) (5) (6) (7)
@@ -135,39 +135,39 @@ TEST(CyqloneTest, updateIndices7) {
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     auto cocp     = CyqloneStorage<real_t>::build(ocp);
     Solver solver = Solver::build(cocp, p);
-    std::ranges::iota(solver.m_update, index_t{1});
+    std::ranges::iota(solver.tricyqle.m_update, index_t{1});
 
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 6), std::make_pair(5, 6));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 6), std::make_pair(6, 7));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 0), std::make_pair(6, 7));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 6), std::make_pair(5, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 6), std::make_pair(6, 7));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 0), std::make_pair(6, 7));
 
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 6), std::make_pair(4, 6));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 6), std::make_pair(6, 7));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 6), std::make_pair(4, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 6), std::make_pair(6, 7));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 0), std::make_pair(6, 7));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 0), std::make_pair(6, 7));
 
-    EXPECT_EQ(solver.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(2, 4), std::make_pair(4, 7));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(2, 4), std::make_pair(4, 7));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
-    EXPECT_EQ(solver.cols_Ups_fwd(2, 0), std::make_pair(4, 7));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(2, 0), std::make_pair(4, 7));
 }
 
 //    (0) (1) (2) (3) (4) (5) (6) (7)
@@ -200,35 +200,35 @@ TEST(CyqloneTest, updateIndices6) {
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     auto cocp     = CyqloneStorage<real_t>::build(ocp);
     Solver solver = Solver::build(cocp, p);
-    std::ranges::iota(solver.m_update, index_t{1});
+    std::ranges::iota(solver.tricyqle.m_update, index_t{1});
 
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 5), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 5), std::make_pair(5, 6));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 0), std::make_pair(5, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 0), std::make_pair(5, 6));
 
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 0), std::make_pair(4, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 4), std::make_pair(4, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 0), std::make_pair(4, 6));
 
-    EXPECT_EQ(solver.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(2, 4), std::make_pair(4, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(2, 4), std::make_pair(4, 6));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
-    EXPECT_EQ(solver.cols_Ups_fwd(2, 0), std::make_pair(4, 6));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(2, 0), std::make_pair(4, 6));
 }
 
 //    (0) (1) (2) (3) (4) (5) (6) (7)
@@ -261,32 +261,32 @@ TEST(CyqloneTest, updateIndices5) {
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
     auto cocp     = CyqloneStorage<real_t>::build(ocp);
     Solver solver = Solver::build(cocp, p);
-    std::ranges::iota(solver.m_update, index_t{1});
+    std::ranges::iota(solver.tricyqle.m_update, index_t{1});
 
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 1), std::make_pair(0, 1));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 1), std::make_pair(1, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 3), std::make_pair(2, 3));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 3), std::make_pair(3, 4));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_fwd(0, 0), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 0), std::make_pair(0, 1));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 2), std::make_pair(1, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 2), std::make_pair(2, 3));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 4), std::make_pair(3, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(0, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(0, 0), std::make_pair(4, 5));
 
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 2), std::make_pair(0, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 2), std::make_pair(2, 4));
 
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(1, 4), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_fwd(1, 0), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 0), std::make_pair(0, 2));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 4), std::make_pair(2, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(1, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(1, 0), std::make_pair(4, 5));
 
-    EXPECT_EQ(solver.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
-    EXPECT_EQ(solver.cols_Ups_bwd(2, 4), std::make_pair(4, 5));
-    EXPECT_EQ(solver.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
-    EXPECT_EQ(solver.cols_Ups_fwd(2, 0), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(2, 4), std::make_pair(0, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(2, 4), std::make_pair(4, 5));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_bwd(2, 0), std::make_pair(0, 4));
+    EXPECT_EQ(solver.tricyqle.cols_Ups_fwd(2, 0), std::make_pair(4, 5));
 }
 
 TEST_P(CyqloneFactorTest, factor) {
@@ -312,9 +312,9 @@ TEST_P(CyqloneFactorTest, factor) {
     solver.params.solve_method = GetParam();
 
     // Spin a bit longer to get more deterministic timings
-    solver.parallel_ctx->barrier.spin_count = std::numeric_limits<uint32_t>::max();
+    solver.set_barrier_spin_count(std::numeric_limits<uint32_t>::max());
 
-    GUANAQO_IF_ITT(solver.parallel_ctx->run(
+    GUANAQO_IF_ITT(solver.run(
         [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
 
     std::vector<real_t> Σ_lin((N - 1) * ny + ny_0 + ny_N);
@@ -349,7 +349,7 @@ TEST_P(CyqloneFactorTest, factor) {
 
     const auto ux_initial = ux, λ_initial = λ;
     for (int i = 0; i < 50; ++i) {
-        solver.parallel_ctx->run([&](auto &ctx) {
+        solver.run([&](auto &ctx) {
             solver.factor(ctx, 1e100, Σ);
 #if WITH_UPDATES
             solver.update(ctx, ΔΣ);
@@ -372,7 +372,7 @@ TEST_P(CyqloneFactorTest, factor) {
 #if GUANAQO_WITH_TRACING
     guanaqo::get_trace_logger().reset();
 #endif
-    solver.parallel_ctx->run([&](auto &ctx) {
+    solver.run([&](auto &ctx) {
         solver.factor(ctx, 1e100, Σ);
 #if WITH_UPDATES
         solver.update(ctx, ΔΣ);
@@ -442,7 +442,7 @@ TEST_P(CyqloneFactorTest, factor) {
             f << guanaqo::float_to_str(x) << '\n';
     }
 
-    solver.parallel_ctx->run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2); });
+    solver.run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2); });
     if (std::ofstream f("sparse_refactor.csv"); f) {
         auto sp = solver.build_sparse_factor();
         for (auto [r, c, x] : sp.iter_coo())

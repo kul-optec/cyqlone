@@ -98,13 +98,13 @@ struct CyqloneBackend {
     CyqloneBackend(const CyqloneStorage<> &ocp, CyqloneData data,
                    const CyqloneBackendSettings &settings)
         : ocp{OCP_t::build(ocp, settings.processors)}, settings{settings} {
-        this->ocp.params                           = settings.params;
-        this->ocp.parallel_ctx->barrier.spin_count = settings.spin_count;
-        b_min_strided                              = ineq_constr_vec();
-        b_max_strided                              = ineq_constr_vec();
-        ΔΣ                                         = ineq_constr_vec();
-        b_eq_strided                               = eq_constr_vec();
-        grad_strided                               = var_vec();
+        this->ocp.params = settings.params;
+        this->ocp.set_barrier_spin_count(settings.spin_count);
+        b_min_strided = ineq_constr_vec();
+        b_max_strided = ineq_constr_vec();
+        ΔΣ            = ineq_constr_vec();
+        b_eq_strided  = eq_constr_vec();
+        grad_strided  = var_vec();
         this->ocp.initialize_rhs(ocp, b_eq_strided);
         this->ocp.initialize_gradient(ocp, grad_strided);
         this->ocp.initialize_bounds(ocp, b_min_strided, b_max_strided);

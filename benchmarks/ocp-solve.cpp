@@ -197,16 +197,16 @@ void bm_update_schur(benchmark::State &state) {
 template <int VL>
 void bm_factor_cyqlone(benchmark::State &state) {
     using batmat::linalg::StorageOrder;
-    auto [ocp, Σ]                           = generate_ocp(state);
-    const auto p                            = static_cast<index_t>(state.range(4));
-    auto solver                             = build_cyqlone_solver<VL>(ocp, p);
-    solver.parallel_ctx->barrier.spin_count = std::numeric_limits<uint32_t>::max();
-    GUANAQO_IF_ITT(solver.parallel_ctx->run(
+    auto [ocp, Σ] = generate_ocp(state);
+    const auto p  = static_cast<index_t>(state.range(4));
+    auto solver   = build_cyqlone_solver<VL>(ocp, p);
+    solver.set_barrier_spin_count(std::numeric_limits<uint32_t>::max());
+    GUANAQO_IF_ITT(solver.run(
         [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
     auto Σ_packed = solver.initialize_general_constraints();
     solver.pack_constraints(as_span(Σ.reshaped()), Σ_packed);
     const auto do_factor = [&] {
-        solver.parallel_ctx->run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ_packed); });
+        solver.run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ_packed); });
     };
     for (auto _ : state)
         do_factor();

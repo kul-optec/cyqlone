@@ -25,7 +25,7 @@ using namespace batmat::linalg;
 //     handled separately). This saves some unnecessary computation in the scalar case.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
+void TricyqleSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     if (l < lp()) {
         GUANAQO_TRACE("Update L", i);
         auto L   = tril(cr_L.batch(i));
@@ -42,25 +42,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     auto Y0   = cr_Y.batch(0);
     auto Ypen = cr_Y.batch(p / 2), Upen = cr_U.batch(p / 2); // Subdiag blocks of penultimate level
 
-    if (m_update_u0 > 0)
-        m_update[p - 1] += m_update_u0; // Make room for the updates from D(0)
-    auto Υ0_bwd = work_Ups_bwd(l, 0), Υ0_fwd = work_Ups_fwd(l, 0);
-    auto Σ_bwd = work_Σ_bwd(l, 0), Σ_fwd = work_Σ_fwd(l, 0);
-    BATMAT_ASSERT(Σ_bwd.rows() == Σ_fwd.rows() || m_update_u0 > 0);
-    // Include contributions from D(0) if needed
-    if (m_update_u0 >= 0) {
-        BATMAT_ASSERT(VL == 1); // handling D(0) separately is only possible in the scalar case
-        // Υ˃(0) = 0, so no forward update
-        Υ0_fwd.reassign(Υ0_fwd.left_cols(0));
-        Σ_fwd.reassign(Σ_fwd.top_rows(0));
-        // Copy the update contributions from D(0) in the rightmost columns of Υ0_bwd
-        auto Υ2  = riccati_Υ2.batch(0);
-        auto Φλ0 = Υ2.bottom_right(nx, ny_0).left_cols(m_update_u0);
-        auto 𝑆   = work_Σ.batch(0);
-        auto 𝑆u0 = 𝑆.bottom_rows(ny_0).top_rows(m_update_u0);
-        compact_blas::xadd_neg_copy(simdify(Σ_bwd.bottom_rows(m_update_u0)), simdify(𝑆u0));
-        copy(Φλ0, Υ0_bwd.right_cols(m_update_u0));
-    }
+    auto Υ0_bwd = work_Ups_bwd_last(), Υ0_fwd = work_Ups_fwd_last();
+    auto Σ_bwd = work_Σ_bwd_last(), Σ_fwd = work_Σ_fwd_last();
+    BATMAT_ASSERT(Σ_bwd.rows() == Σ_fwd.rows() || m_update_u0 >= 0);
 
     // For p=2, v=4, the update of the last level looks like:
     //
@@ -80,8 +64,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 
     // Check the rank to decide whether to update or recompute
     const index_t nj      = std::max(Σ_fwd.rows(), Σ_bwd.rows());
-    auto pcr_update_thres = params.pcr_max_update_fraction * static_cast<double>(nx);
-    auto y0_update_thres  = params.cr_max_update_fraction_Y0 * static_cast<double>(nx);
+    auto pcr_update_thres = params.pcr_max_update_fraction * static_cast<double>(block_size);
+    auto y0_update_thres  = params.cr_max_update_fraction_Y0 * static_cast<double>(block_size);
     bool update           = static_cast<double>(nj) < pcr_update_thres;
     bool update_y         = static_cast<double>(nj) < y0_update_thres;
     bool do_update_pcr    = params.solve_method == SolveMethod::PCR && update && VL > 1;
@@ -135,7 +119,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
+void TricyqleSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
     GUANAQO_TRACE("Update U", i);
     const index_t i_bwd = sub_wrap_ceil_p(i, 1 << l);
     auto Up_bwd = work_Ups_bwd(l, i_bwd), Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
@@ -166,7 +150,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
+void TricyqleSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
     GUANAQO_TRACE("Update Y", i);
     index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
     if (i_fwd >= p)
@@ -185,8 +169,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
-void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_view<> WYU,
-                                                          mut_batch_view<> WΣ) {
+void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_view<> WYU,
+                                                           mut_batch_view<> WΣ) {
     constexpr index_t l    = Level;
     constexpr index_t rot0 = l == 0 ? 0 : 1 << (l - 1), rot1 = l == 0 ? 1 : 1 << (l - 1);
     const index_t ml = m << l;
@@ -220,8 +204,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_v
 
 // TODO: write down the pseudocode for this algorithm in the appendix of the paper?
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view<> bwd,
-                                                    batch_view<> Σbwd) {
+void TricyqleSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view<> bwd,
+                                                     batch_view<> Σbwd) {
 #ifndef NDEBUG
     work_update_pcr_L.set_constant(std::numeric_limits<T>::quiet_NaN());
     work_update_pcr_Σ.set_constant(std::numeric_limits<T>::quiet_NaN());
@@ -238,17 +222,22 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_view
     batmat::linalg::copy(Σbwd, Σ.top_rows(m));
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template update_pcr_level<Levels>(m, WYU, Σ), ...);
-    }(std::make_integer_sequence<index_t, CyqloneSolver::lv() + 1>{});
+    }(std::make_integer_sequence<index_t, TricyqleSolver::lv() + 1>{});
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
-    const index_t c = ctx.index;
     //  2|  Υ˃(c;0), Υ˂(c-1;0), 𝒮(c;0) = update-block-column-riccati(c)
     //  3|  update-schur(c)
     update_riccati(ctx, ΔΣ);
     //  5|  -- sync --
-    ctx.arrive_and_wait(); // wait for Υ˃, Υ˂
+    ctx.arrive_and_wait();   // wait for Υ˃, Υ˂
+    tricyqle.update_cr(ctx); // Update the block-tridiagonal Schur complement using CR
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::update_cr(Context &ctx) {
+    const index_t c = ctx.index;
     //  6|  if ν₂(c) = 0:  update-L(0, c)
     if (ν2p(c) == 0)
         update_L(0, c);
@@ -301,7 +290,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
     const index_t jn  = c * n; // stage index
     const index_t nux = nu + nx, nyM = std::max(ny, ny_0 + ny_N);
     auto LHs = riccati_LH.batch(c);
-    auto B̂s = riccati_LAB.batch(c).right_cols(n * nu), Âs = riccati_LAB.batch(c).left_cols(n * nx);
+    auto B̂s  = riccati_LAB.batch(c).right_cols(n * nu),
+         Âs  = riccati_LAB.batch(c).left_cols(n * nx);
     auto Υ1 = riccati_Υ1.batch(c), Υ2 = riccati_Υ2.batch(c);
     auto 𝑆 = work_Σ.batch(c); // \mathcal{S}_j in the paper
 
@@ -410,21 +400,17 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                 work_update.set_constant(std::numeric_limits<T>::quiet_NaN());
 #endif
             const auto c_prev = sub_wrap_p(c, 1); // c-1
-            // Communicate the update ranks mj to all threads and compute the partial sums (i.e. the
-            // column offsets in the global update workspace we'll write Υ(c) and Υ(c-1) to)
-            m_update[c_prev] = mj;
-            if (dn == 0)
-                m_update_u0 = isolate_u0 ? mu0 : -1;
-            ctx.run_single_sync(
-                [this] { std::inclusive_scan(begin(m_update), end(m_update), begin(m_update)); });
+            // Communicate the update ranks mj to all threads and compute the column offsets in the
+            // global update workspace we'll write Υ(c) and Υ(c-1) to.
+            tricyqle.set_thread_update_rank(ctx, c_prev, mj);
             const index_t i_fwd = c, i_bwd = c_prev;
             const bool rot = c == 0;
             if (mj > 0) {
                 GUANAQO_TRACE("Riccati update Q", j);
                 auto Tc    = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
-                auto Υ_fwd = work_Ups_fwd(0, i_fwd).left_cols(mj),
-                     Υ_bwd_prev = work_Ups_bwd(0, i_bwd).left_cols(mj);
-                auto 𝒮cr        = work_Σ_fwd(0, i_fwd).top_rows(mj); // \mathscr{S}_c in the paper
+                auto Υ_fwd = tricyqle.work_Ups_fwd(0, i_fwd).left_cols(mj),
+                     Υ_bwd_prev = tricyqle.work_Ups_bwd(0, i_bwd).left_cols(mj);
+                auto 𝒮cr = tricyqle.work_Σ_fwd(0, i_fwd).top_rows(mj); // \mathscr{S}_c in the paper
                 // 12|  [ L̃Q(j)  0 ] = [ LQ(j)  Φx(j) ] Q̆x(j),  blkdiag(I, 𝑆(j))-orthogonal
                 // Fused with:
                 // 14|  [ L̃A(j₁)  Υ˃(c)   ] = [ LA(j₁)  Φλ(j₁) ] Q̆x(j₁),
@@ -442,13 +428,41 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                 // We negate 𝒮(c) because in the CR update, we need blkdiag(-I, 𝒮(c))-orthogonal
                 // or blkdiag(I, -𝒮(c))-orthogonal transformations.
             }
+            if (dn == 0) {
+                // Add the contribution from the isolated update for u(0) as well
+                if (isolate_u0) {
+                    tricyqle.set_update_rank_extra(mu0);
+                    copy(Υλ0, tricyqle.work_Ups_extra());
+                    compact_blas::xadd_neg_copy(simdify(tricyqle.work_Σ_extra()), simdify(𝑆u0));
+                } else {
+                    tricyqle.clear_update_rank_extra();
+                }
+            }
         }
     }
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::set_thread_update_rank(Context &ctx, index_t c,
+                                                                 index_t m) {
+    m_update[c] = m;
+    ctx.run_single_sync(
+        [this] { std::inclusive_scan(begin(m_update), end(m_update), begin(m_update)); });
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::set_update_rank_extra(index_t m) {
+    m_update_u0 = m;
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::clear_update_rank_extra() {
+    m_update_u0 = -1;
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
 [[nodiscard]] std::pair<index_t, index_t>
-CyqloneSolver<VL, T, DefaultOrder>::cols_Ups_fwd(index_t l, index_t i) const {
+TricyqleSolver<VL, T, DefaultOrder>::cols_Ups_fwd(index_t l, index_t i) const {
     BATMAT_ASSUME(ν2p(i) >= l); // i % offset = 0
     const index_t offset = 1 << l, floor_mask = offset - 1;
     // Current block ends at i (or at p if i == 0),
@@ -463,7 +477,7 @@ CyqloneSolver<VL, T, DefaultOrder>::cols_Ups_fwd(index_t l, index_t i) const {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 [[nodiscard]] std::pair<index_t, index_t>
-CyqloneSolver<VL, T, DefaultOrder>::cols_Ups_bwd(index_t l, index_t i) const {
+TricyqleSolver<VL, T, DefaultOrder>::cols_Ups_bwd(index_t l, index_t i) const {
     BATMAT_ASSUME(ν2p(i) >= l); // i % offset = 0
     const index_t offset = 1 << l;
     // The start index of the next block (at i + offset),
@@ -478,13 +492,13 @@ CyqloneSolver<VL, T, DefaultOrder>::cols_Ups_bwd(index_t l, index_t i) const {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 [[nodiscard]] std::pair<index_t, index_t>
-CyqloneSolver<VL, T, DefaultOrder>::cols_Q_cr(index_t l, index_t i) const {
+TricyqleSolver<VL, T, DefaultOrder>::cols_Q_cr(index_t l, index_t i) const {
     return {cols_Ups_fwd(l, i).first, cols_Ups_bwd(l, i).second};
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::work_Ups_fwd_w(index_t l,
-                                                                         index_t i) const {
+[[nodiscard]] index_t TricyqleSolver<VL, T, DefaultOrder>::work_Ups_fwd_w(index_t l,
+                                                                          index_t i) const {
     const index_t offset = 1 << l, floor_mask = offset - 1;
     if (i == 0 && l + 2 <= lp()) {
         i = (p - 1) & ~floor_mask; // beginning of the last block
@@ -494,15 +508,15 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] index_t CyqloneSolver<VL, T, DefaultOrder>::work_Ups_bwd_w(index_t l,
-                                                                         index_t i) const {
+[[nodiscard]] index_t TricyqleSolver<VL, T, DefaultOrder>::work_Ups_bwd_w(index_t l,
+                                                                          index_t i) const {
     if (l == lp())
         return l; // Keep Υ˃(0) @ [l+2] and Υ˂(0) @ [l] in separate workspaces at the last level
     return i == 0 ? l + 2 : std::min(l + 2, ν2(i));
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Ups_fwd(index_t l, index_t i)
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Ups_fwd(index_t l, index_t i)
     -> mut_batch_view<column_major> {
     auto [start, end] = cols_Ups_fwd(l, i);
     index_t w         = work_Ups_fwd_w(l, i);
@@ -510,7 +524,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Ups_bwd(index_t l, index_t i)
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Ups_bwd(index_t l, index_t i)
     -> mut_batch_view<column_major> {
     auto [start, end] = cols_Ups_bwd(l, i);
     const index_t w   = work_Ups_bwd_w(l, i);
@@ -518,7 +532,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Q_cr(index_t l, index_t i)
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Q_cr(index_t l, index_t i)
     -> mut_batch_view<column_major> {
     auto [start, end] = cols_Q_cr(l, i);
     const index_t w   = l;
@@ -526,24 +540,80 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Σ_fwd(index_t l, index_t i)
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Σ_fwd(index_t l, index_t i)
     -> mut_batch_view<column_major> {
     auto [start, end] = cols_Ups_fwd(l, i);
     return work_update_Σ.batch(0).middle_rows(start, end - start);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Σ_bwd(index_t l, index_t i)
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Σ_bwd(index_t l, index_t i)
     -> mut_batch_view<column_major> {
     auto [start, end] = cols_Ups_bwd(l, i);
     return work_update_Σ.batch(0).middle_rows(start, end - start);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-[[nodiscard]] auto CyqloneSolver<VL, T, DefaultOrder>::work_Σ_Q(index_t l, index_t i)
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Σ_Q(index_t l, index_t i)
     -> mut_batch_view<column_major> {
     auto [start, end] = cols_Q_cr(l, i);
     return work_update_Σ.batch(0).middle_rows(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Ups_fwd_last()
+    -> mut_batch_view<column_major> {
+    const index_t l = lp(), i = 0;
+    auto [start, end] = cols_Ups_fwd(l, i);
+    index_t w         = work_Ups_fwd_w(l, i);
+    if (m_update_u0 >= 0)
+        return work_update.batch(w & 3).middle_cols(start, 0);
+    return work_update.batch(w & 3).middle_cols(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Ups_bwd_last()
+    -> mut_batch_view<column_major> {
+    const index_t l = lp(), i = 0;
+    auto [start, end] = cols_Ups_bwd(l, i);
+    const index_t w   = work_Ups_bwd_w(l, i);
+    if (m_update_u0 >= 0)
+        end += m_update_u0; // include extra columns in Υ˂(0) in the last level
+    return work_update.batch(w & 3).middle_cols(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Σ_fwd_last()
+    -> mut_batch_view<column_major> {
+    const index_t l = lp(), i = 0;
+    auto [start, end] = cols_Ups_fwd(l, i);
+    if (m_update_u0 >= 0)
+        return work_update_Σ.batch(0).middle_rows(start, 0);
+    return work_update_Σ.batch(0).middle_rows(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Σ_bwd_last()
+    -> mut_batch_view<column_major> {
+    const index_t l = lp(), i = 0;
+    auto [start, end] = cols_Ups_bwd(l, i);
+    if (m_update_u0 >= 0)
+        end += m_update_u0;
+    return work_update_Σ.batch(0).middle_rows(start, end - start);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Ups_extra()
+    -> mut_batch_view<column_major> {
+    BATMAT_ASSERT(m_update_u0 >= 0);
+    return work_Ups_bwd_last().right_cols(m_update_u0);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+[[nodiscard]] auto TricyqleSolver<VL, T, DefaultOrder>::work_Σ_extra()
+    -> mut_batch_view<column_major> {
+    BATMAT_ASSERT(m_update_u0 >= 0);
+    return work_Σ_bwd_last().bottom_rows(m_update_u0);
 }
 
 } // namespace CYQLONE_NS(cyqlone)

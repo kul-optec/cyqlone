@@ -32,7 +32,7 @@ using namespace batmat::linalg;
 
 // 20|  U(iU) = K˂(iU) L(iU)⁻ᵀ
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, index_t iU) {
+void TricyqleSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, index_t iU) {
     if constexpr (v == 1)
         if (iU >= p) // happens in cases where p is not a power of two
             return;
@@ -42,7 +42,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, in
 
 // 21|  Y(iY) = K˃(iY) L(iY)⁻ᵀ
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, index_t iY) {
+void TricyqleSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, index_t iY) {
     if constexpr (v == 1)
         if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
             return;
@@ -51,7 +51,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, in
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t i) {
+void TricyqleSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t i) {
     const index_t i_prev = sub_wrap_ceil_p(i, 1 << l), i_next = add_wrap_ceil_p(i, 1 << l);
     if constexpr (v == 1)
         if (i + (1 << l) >= p) // Y(i)=0 for scalar case
@@ -73,7 +73,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t i) {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
+void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
     const index_t offset = 1 << l;
     const index_t iU     = add_wrap_ceil_p(i, offset);
     const index_t iY     = sub_wrap_ceil_p(i, offset);
@@ -147,13 +147,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
 //  - The last level is not handled here, because it is solved using PCG or PCR.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU,
-                                                         mut_view<> λ) const {
+void TricyqleSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU, mut_view<> λ,
+                                                          index_t stride) const {
     if constexpr (v == 1)
         if (iU >= p) // happens in cases where p is not a power of two
             return;
     const index_t iL  = sub_wrap_ceil_p(iU, 1 << l); // = k, iU = k+2^l
-    const index_t diU = iU * n, diL = iL * n;
+    const index_t diU = iU * stride, diL = iL * stride;
     // 16|  b(0)⁺ = b(0) - U(2^l) b̃(2^l)
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
     GUANAQO_TRACE("Subtract Ub", iL);
@@ -161,22 +161,22 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU,
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY, mut_view<> λ,
-                                                         mut_view<> w) const {
+void TricyqleSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY, mut_view<> λ,
+                                                          mut_view<> w, index_t stride) const {
     if constexpr (v == 1)
         if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
             return;
     const index_t iL  = add_wrap_ceil_p(iY, 1 << l); // = k, iY = k-2^l
-    const index_t diY = iY * n;
+    const index_t diY = iY * stride;
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
     GUANAQO_TRACE("Subtract Yb", iL);
     gemv(cr_Y.batch(iY), λ.batch(diY), w.batch(iL));
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL, mut_view<> λ,
-                                                         view<> w) const {
-    const index_t diL = iL * n;
+void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL, mut_view<> λ,
+                                                           view<> w, index_t stride) const {
+    const index_t diL = iL * stride;
     const index_t iY  = sub_wrap_ceil_p(iL, 1 << l);
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
     if (v > 1 || iY + (1 << l) < p) { // Equilvalent to iL >= (1 << l), but kept for clarity
@@ -194,13 +194,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL,
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU, mut_view<> λ,
-                                                          mut_view<> w) const {
+void TricyqleSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU, mut_view<> λ,
+                                                           mut_view<> w, index_t stride) const {
     if constexpr (v == 1)
         if (iU >= p) // happens in cases where p is not a power of two
             return;
     const index_t iL  = sub_wrap_ceil_p(iU, 1 << l); // = k, iU = k+2^l
-    const index_t diL = iL * n;
+    const index_t diL = iL * stride;
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     GUANAQO_TRACE("Subtract Uᵀb", iL);
     // w[iU] = U[iU]ᵀ λ[diL]
@@ -208,13 +208,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU,
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY,
-                                                          mut_view<> λ) const {
+void TricyqleSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY, mut_view<> λ,
+                                                           index_t stride) const {
     if constexpr (v == 1)
         if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
             return;
     const index_t iL  = add_wrap_ceil_p(iY, 1 << l); // = k, iY = k-2^l
-    const index_t diL = iL * n, diY = iY * n;
+    const index_t diL = iL * stride, diY = iY * stride;
     auto Y = cr_Y.batch(iY);
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     GUANAQO_TRACE("Subtract Yᵀb", iL);
@@ -224,9 +224,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY,
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<> λ,
-                                                          view<> w) const {
-    const index_t diL = iL * n; // iL = k
+void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<> λ, view<> w,
+                                                            index_t stride) const {
+    const index_t diL = iL * stride; // iL = k
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     { // λ[diL] -= w[iL]
         GUANAQO_TRACE("Subtract work b", iL);
@@ -242,7 +242,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <StorageOrder O>
-void CyqloneSolver<VL, T, DefaultOrder>::prefetch(batch_view<O> X) const {
+void TricyqleSolver<VL, T, DefaultOrder>::prefetch(batch_view<O> X) const {
     if (!params.enable_prefetching)
         return;
     const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / v, 1);
@@ -258,7 +258,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::prefetch(batch_view<O> X) const {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <StorageOrder O>
-void CyqloneSolver<VL, T, DefaultOrder>::prefetch_L(batch_view<O> X) const {
+void TricyqleSolver<VL, T, DefaultOrder>::prefetch_L(batch_view<O> X) const {
     if (!params.enable_prefetching)
         return;
     const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / v, 1);
@@ -273,13 +273,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::prefetch_L(batch_view<O> X) const {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::prefetch_L(index_t bi) const {
+void TricyqleSolver<VL, T, DefaultOrder>::prefetch_L(index_t bi) const {
     GUANAQO_TRACE("prefetch L", bi);
     prefetch_L(cr_L.batch(bi));
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::prefetch_U([[maybe_unused]] index_t l, index_t iU) const {
+void TricyqleSolver<VL, T, DefaultOrder>::prefetch_U([[maybe_unused]] index_t l, index_t iU) const {
     if (v == 1 && iU >= p)
         return;
     GUANAQO_TRACE("prefetch U", iU);
@@ -287,7 +287,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::prefetch_U([[maybe_unused]] index_t l, 
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::prefetch_Y(index_t l, index_t iY) const {
+void TricyqleSolver<VL, T, DefaultOrder>::prefetch_Y(index_t l, index_t iY) const {
     if (v == 1 && iY + (1 << l) >= p)
         return;
     GUANAQO_TRACE("prefetch Y", iY);

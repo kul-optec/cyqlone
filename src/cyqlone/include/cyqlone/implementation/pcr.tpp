@@ -27,7 +27,7 @@ using namespace batmat::linalg;
 //  - The solution step is separated from the factorization step.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr() {
+void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr() {
     [this]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template factor_pcr_level<Levels>(), ...);
     }(std::make_integer_sequence<index_t, lv()>{});
@@ -37,7 +37,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr() {
 // The number of levels is small, so this should not bloat the code too much.
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
-void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
+void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     GUANAQO_TRACE("Factor PCR", Level);
     auto M      = Level == 0 ? cr_L.batch(0) : pcr_M.batch(0);
     auto K      = Level == 0 ? cr_Y.batch(0) : pcr_Y.batch(Level);
@@ -63,8 +63,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_pcr_level() {
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
-                                                   mut_batch_view<> work_pcr) const {
+void TricyqleSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
+                                                    mut_batch_view<> work_pcr) const {
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template solve_pcr_level<Levels>(λ, work_pcr), ...);
     }(std::make_integer_sequence<index_t, lv()>{});
@@ -76,8 +76,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
-                                                         mut_batch_view<> work_pcr) const {
+void TricyqleSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
+                                                          mut_batch_view<> work_pcr) const {
     GUANAQO_TRACE("Solve PCR", Level);
     auto L = pcr_L.batch(Level), Y = pcr_Y.batch(Level), U = pcr_U.batch(Level);
     static constexpr auto r = 1 << Level;

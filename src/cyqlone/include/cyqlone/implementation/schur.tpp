@@ -31,7 +31,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
     const auto dn = c * n, dn_next = c_next * n, d1_next = dn_next + n - 1;
     //  8|  i˃ = c,  i˂ = c-1
     const index_t i_fwd = c, i_bwd = sub_wrap_ceil_p(c, 1);
-    auto M = tril(cr_L.batch(c));
+    auto M = tril(tricyqle.cr_L.batch(c));
     // 13|  W = [ LB(jₙ) ... LB(j₁) LA(j₁) ]    -- The order here is [ LA(j₁) LB(jₙ) ... LB(j₁) ]
     auto W = riccati_LAB.batch(c).right_cols(nx + nu * n);
     if constexpr (Factor) {
@@ -49,13 +49,13 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
         // 10|  if ν2(i˂) > ν2(i˃)    K˂(i˃) = -T(c) LA(j₁)ᵀ    else    K˃(i˂) = -LA(j₁) T(c)ᵀ
         if (ν2p(i_bwd) > ν2p(i_fwd)) {
             GUANAQO_TRACE("Compute first U", i_fwd);
-            trmm_neg(Tc, LA1.transposed(), cr_U.batch(i_fwd));
+            trmm_neg(Tc, LA1.transposed(), tricyqle.cr_U.batch(i_fwd));
         } else {
             GUANAQO_TRACE("Compute first Y", i_bwd);
             if (i_fwd > 0)
-                trmm_neg(LA1, Tc.transposed(), cr_Y.batch(i_bwd));
+                trmm_neg(LA1, Tc.transposed(), tricyqle.cr_Y.batch(i_bwd));
             else if constexpr (v > 1)
-                trmm_neg(LA1, Tc.transposed(), cr_Y.batch(i_bwd), //
+                trmm_neg(LA1, Tc.transposed(), tricyqle.cr_Y.batch(i_bwd), //
                          with_rotate_C<-1>, with_rotate_D<-1>, with_mask_D<-1>);
         }
         // 11|  -- sync --
@@ -77,10 +77,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
         //      And finally backward in time, optionally fused with the factorization.
         if (p == 1) { // no multi-threading
             GUANAQO_TRACE("Factor M last", c);
+            auto L0 = tril(tricyqle.pcr_L.batch(0));
             // 14|  M(c) = M(c)˂ + M(c)˃ = M(c)˂ + WWᵀ
             syrk_add(W, M);
             // 16|  L(c) = chol(M(c))
-            potrf(M, tril(pcr_L.batch(0))); // Final block is stored separately (for PCR/PCG later)
+            potrf(M, L0); // Final block is stored separately (for PCR/PCG later)
         } else if (ν2p(i_fwd) == 0) {
             GUANAQO_TRACE("Factor M", c);
             // 14|  M(c) = M(c)˂ + M(c)˃ = M(c)˂ + WWᵀ

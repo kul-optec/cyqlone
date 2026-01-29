@@ -23,13 +23,19 @@ template <bool Factor, bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
 void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_type γ, view<> Σ,
                                                            mut_view<> ux, mut_view<> λ) {
-    const index_t c = ctx.index;
     //  2|  factor-block-column-riccati(c)    -- steps 1 and 2
     factor_riccati_solve<Factor, Solve>(ctx, γ, Σ, ux, λ);
     //  3|  compute-schur(c)                  -- step 3
     compute_schur<Factor, Solve>(ctx, ux, λ);
     //  4|  factor-schur(c)                   -- step 4
+    tricyqle.template factor_solve_cr<Factor, Solve>(ctx, λ, n);
+}
 
+template <index_t VL, class T, StorageOrder DefaultOrder>
+template <bool Factor, bool Solve>
+void TricyqleSolver<VL, T, DefaultOrder>::factor_solve_cr(Context &ctx, mut_view<> λ,
+                                                           index_t stride) {
+    const index_t c = ctx.index;
     // 17|  for l = 0 ... log₂(P)-1
     for (index_t l = 0; l < lp(); ++l) { // Recursion level of cyclic reduction
         const auto c_ = cr_thread_assignment(l, c);
@@ -42,14 +48,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
             if constexpr (Factor)
                 factor_U(l, iU);
             if constexpr (Solve)
-                solve_u_forward(l, iU, λ);
+                solve_u_forward(l, iU, λ, stride);
         }
         // 21|  elif ν₂(iY) = l:  Y(iY) = K˃(iY) L(iY)⁻ᵀ
         else if (ν2p(iY) == l) {
             if constexpr (Factor)
                 factor_Y(l, iY);
             if constexpr (Solve)
-                solve_y_forward(l, iY, λ, work_cr);
+                solve_y_forward(l, iY, λ, work_cr, stride);
         }
         // 22|  -- sync --
         ctx.arrive_and_wait(); // Wait for U, Y
@@ -58,7 +64,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
             if constexpr (Factor)
                 factor_L(l, iY);
             if constexpr (Solve)
-                solve_λ_forward(l, iY, λ, work_cr);
+                solve_λ_forward(l, iY, λ, work_cr, stride);
         }
         // 24|  elif ν₂(iY) = l:  update-K(l, iY)
         else if (ν2p(iY) == l) {
@@ -113,17 +119,18 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
                                                        mut_view<> work) const {
-    if (nx >= params.parallel_solve_cr_threshold && p > 1) {
-        solve_reverse_cr_parallel(ctx, λ, work);
-    } else if (ν2p(ctx.index + 1) + 1 == lp() || p == 1)
-        solve_reverse_cr_serial(λ, work);
+    if (nx >= params.parallel_solve_cr_threshold && p > 1)
+        tricyqle.solve_reverse_cr_parallel(ctx, λ, work, n);
+    else if (ν2p(ctx.index + 1) + 1 == lp() || p == 1)
+        tricyqle.solve_reverse_cr_serial(λ, work, n);
     ctx.arrive_and_wait(); // wait for λ(c-1)
     solve_riccati_reverse(ctx, ux, λ, work);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_cr_parallel(Context &ctx, mut_view<> λ,
-                                                                   mut_view<> work) const {
+void TricyqleSolver<VL, T, DefaultOrder>::solve_reverse_cr_parallel(Context &ctx, mut_view<> λ,
+                                                                     mut_view<> work,
+                                                                     index_t stride) const {
     const index_t c = ctx.index;
     for (index_t l = lp(); l-- > 0;) {
         const auto c_     = cr_thread_assignment(l, c);
@@ -132,7 +139,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_cr_parallel(Context &ctx,
             auto wait_uy = ctx.arrive(); // wait for Uᵀλ, Yᵀλ
             if (ν2p(i_y) == l + 1) {
                 ctx.wait(std::move(wait_uy));
-                solve_λ_backward(i_y, λ, work);
+                solve_λ_backward(i_y, λ, work, stride);
             } else if (ν2p(i_u) == l) {
                 prefetch_U(l, i_u);
                 ctx.wait(std::move(wait_uy));
@@ -145,10 +152,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_cr_parallel(Context &ctx,
         auto wait_λ = ctx.arrive(); // wait for λ
         if (ν2p(i_u) == l) {
             ctx.wait(std::move(wait_λ));
-            solve_u_backward(l, i_u, λ, work);
+            solve_u_backward(l, i_u, λ, work, stride);
         } else if (ν2p(i_y) == l) {
             ctx.wait(std::move(wait_λ));
-            solve_y_backward(l, i_y, λ);
+            solve_y_backward(l, i_y, λ, stride);
         } else {
             if (l > 0) {
                 const auto l_next = l - 1, c_next = cr_thread_assignment(l_next, c);
@@ -164,33 +171,33 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_cr_parallel(Context &ctx,
     }
     ctx.arrive_and_wait(); // wait for Uᵀλ, Yᵀλ
     if (ν2p(c) == 0 && p != 1)
-        solve_λ_backward(c, λ, work);
+        solve_λ_backward(c, λ, work, stride);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_cr_serial(mut_view<> λ,
-                                                                 mut_view<> work) const {
+void TricyqleSolver<VL, T, DefaultOrder>::solve_reverse_cr_serial(mut_view<> λ, mut_view<> work,
+                                                                   index_t stride) const {
     for (index_t l = lp(); l-- > 0;) {
         for (index_t c = 0; c < p; ++c) {
             const index_t c_  = cr_thread_assignment(l, c);
             const index_t i_y = sub_wrap_ceil_p(c_, (1 << l) - 1);
             if (l < lp() - 1) { // λ(0) was already computed during forward solve
                 if (ν2p(i_y) == l + 1)
-                    solve_λ_backward(i_y, λ, work);
+                    solve_λ_backward(i_y, λ, work, stride);
             }
         }
         for (index_t c = 0; c < p; ++c) {
             const index_t c_  = cr_thread_assignment(l, c);
             const index_t i_u = add_wrap_ceil_p(c_, 1), i_y = sub_wrap_ceil_p(c_, (1 << l) - 1);
             if (ν2p(i_u) == l)
-                solve_u_backward(l, i_u, λ, work);
+                solve_u_backward(l, i_u, λ, work, stride);
             else if (ν2p(i_y) == l)
-                solve_y_backward(l, i_y, λ);
+                solve_y_backward(l, i_y, λ, stride);
         }
     }
     for (index_t c = 0; c < p; ++c)
         if (ν2p(c) == 0 && p != 1)
-            solve_λ_backward(c, λ, work);
+            solve_λ_backward(c, λ, work, stride);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -209,7 +216,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> 
 /// work during CR, as there is no coupling between the last and first stages (at least not in the
 /// scalar case).
 template <index_t VL, class T, StorageOrder DefaultOrder>
-index_t CyqloneSolver<VL, T, DefaultOrder>::cr_thread_assignment(index_t l, index_t c) const {
+index_t TricyqleSolver<VL, T, DefaultOrder>::cr_thread_assignment(index_t l, index_t c) const {
     // Index of the last diagonal block M or L that may need to be handled in this level
     const auto iL = c & ~index_t{(1 << l) - 1};
     // Only remap the last two threads: c == p - 1 for odd p; c == p - 2 or c == p - 1 for even p

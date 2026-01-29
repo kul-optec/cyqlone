@@ -119,7 +119,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
                 auto xi = ux.batch(di).bottom_rows(nx), ux_next = ux.batch(di_next),
                      λ_next = λ.batch(di_next), λ_last = λ.batch(dn);
                 gemv_add(Acl, λ_next, λ_last); // λ(jn) += Â λ(j-1)
-                auto w = work_cr.batch(c).left_cols(1);
+                auto w = tricyqle.work_cr.batch(c).left_cols(1);
                 trmm(tril(Q).transposed(), λ_next, w); // w = LQᵀ(j) λ(j-1)
                 trmm(tril(Q), w);                      // w = LQ(j) LQᵀ(j) λ(j-1)
                 compact_blas::xsub_copy(simdify(w), simdify(xi),
