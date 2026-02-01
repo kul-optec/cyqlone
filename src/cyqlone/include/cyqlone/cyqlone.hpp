@@ -58,7 +58,7 @@ using batmat::matrix::StorageOrder;
 template <index_t VL = 4, class T = real_t, StorageOrder DefaultOrder = StorageOrder::ColMajor>
 struct TricyqleSolver {
     using value_type = T;
-    using Params     = CyqloneParams<value_type>;
+    using Params     = TricyqleParams<value_type>;
 
     /// @name Problem dimensions
     /// @{
@@ -71,8 +71,14 @@ struct TricyqleSolver {
     /// @name Solver parameters
     /// @{
 
-    /// Solver parameters (reference to CyqloneSolver params for solver-specific settings).
-    const Params &params;
+    /// Solver parameters for Tricyqle-specific settings.
+    Params params{};
+
+    /// Get the current solver parameters.
+    [[nodiscard]] Params get_params() const { return params; }
+
+    /// Update the solver parameters.
+    void update_params(const Params &new_params) { params = new_params; }
 
     /// @}
 
@@ -284,6 +290,7 @@ struct TricyqleSolver {
     /// @name Low-level reverse solve routines
     /// @{
 
+    void solve_reverse_cr(Context &ctx, mut_view<> λ, mut_view<> work, index_t stride) const;
     void solve_reverse_cr_parallel(Context &ctx, mut_view<> λ, mut_view<> work,
                                    index_t stride) const;
     void solve_reverse_cr_serial(mut_view<> λ, mut_view<> work, index_t stride) const;
@@ -472,6 +479,22 @@ struct CyqloneSolver {
     /// Solver parameters and settings.
     CyqloneParams<value_type> params{};
 
+    /// Get the current Cyqlone solver parameters.
+    [[nodiscard]] CyqloneParams<value_type> get_params() const { return params; }
+
+    /// Update the Cyqlone solver parameters.
+    void update_params(const CyqloneParams<value_type> &new_params) { params = new_params; }
+
+    /// Get the current Tricyqle solver parameters.
+    [[nodiscard]] TricyqleParams<value_type> get_tricyqle_params() const {
+        return tricyqle.get_params();
+    }
+
+    /// Update the Tricyqle solver parameters.
+    void update_tricyqle_params(const TricyqleParams<value_type> &new_params) {
+        tricyqle.update_params(new_params);
+    }
+
     /// Configure the barrier spin count used in parallel synchronization before falling back to a
     /// futex wait.
     uint32_t set_barrier_spin_count(uint32_t spin_count) {
@@ -482,10 +505,12 @@ struct CyqloneSolver {
 
     /// Get a string representation of the main solver parameters. Used mainly for file names.
     [[nodiscard]] std::string get_params_string() const {
-        std::string_view solve = params.solve_method == SolveMethod::PCR        ? "pcr"
-                                 : params.solve_method == SolveMethod::StairPCG ? "pcg=stair"
-                                                                                : "pcg=jacobi";
-        std::string_view order = default_order == StorageOrder::RowMajor ? "rm" : "cm";
+        const auto &tricyqle_params = get_tricyqle_params();
+        std::string_view solve      = tricyqle_params.solve_method == SolveMethod::PCR ? "pcr"
+                                      : tricyqle_params.solve_method == SolveMethod::StairPCG
+                                          ? "pcg=stair"
+                                          : "pcg=jacobi";
+        std::string_view order      = default_order == StorageOrder::RowMajor ? "rm" : "cm";
         return std::format("nx={}-nu={}-ny={}-N={}-p={}-v={}-{}-{}", nx, nu, ny, N_horiz, p, v,
                            solve, order);
     }
@@ -499,7 +524,6 @@ struct CyqloneSolver {
     tricyqle_t tricyqle{
         .block_size = nx,
         .max_rank   = std::max(ny, ny_0 + ny_N) * N_horiz,
-        .params     = params,
         .p          = p,
     };
 

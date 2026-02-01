@@ -303,7 +303,7 @@ std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
     settings_warm.initial_penalty_y           = 1e4;
     settings_warm.initial_inner_tolerance     = 1e-4;
     if (opts.pcr)
-        backend.params.solve_method = cyqlone::SolveMethod::PCR;
+        backend.tricyqle_params.solve_method = cyqlone::SolveMethod::PCR;
     if (opts.cold) {
         backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Zeros;
         co_yield cyqlone_solver("zero", backend, settings);

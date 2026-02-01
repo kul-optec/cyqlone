@@ -23,9 +23,9 @@ inline const char *enum_name(SolveMethod s) {
     throw std::out_of_range("invalid value for cyqlone::SolveMethod");
 }
 
-/// Parameters and settings for the Cyqlone solver.
+/// Parameters and settings for the Tricyqle block-tridiagonal solver.
 template <class T = real_t>
-struct CyqloneParams {
+struct TricyqleParams {
     using value_type = T;
 
     /// Use prefetching during the reverse CR solve phase.
@@ -49,6 +49,14 @@ struct CyqloneParams {
     double cr_max_update_fraction_Y0 = 0.9;
     /// Threshold on nx for switching to a serial implementation of the reverse CR solve.
     index_t parallel_solve_cr_threshold = 10;
+};
+
+/// Parameters and settings for the Cyqlone solver.
+template <class T = real_t>
+struct CyqloneParams {
+    using value_type = T;
+
+    // Currently empty, but kept for future Cyqlone-specific parameters
 };
 
 } // namespace cyqlone

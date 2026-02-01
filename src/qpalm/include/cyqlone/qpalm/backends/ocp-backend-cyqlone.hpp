@@ -33,7 +33,7 @@ struct CyqloneBackendSettings {
     double changing_constr_factor = 0.05;
     index_t max_update_count      = 5;
     bool detailed_timings         = false;
-    cyqlone::CyqloneParams<real_t> params{};
+    cyqlone::TricyqleParams<real_t> tricyqle_params{};
     uint32_t spin_count           = std::numeric_limits<uint32_t>::max();
     WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };

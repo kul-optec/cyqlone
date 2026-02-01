@@ -98,7 +98,7 @@ struct CyqloneBackend {
     CyqloneBackend(const CyqloneStorage<> &ocp, CyqloneData data,
                    const CyqloneBackendSettings &settings)
         : ocp{OCP_t::build(ocp, settings.processors)}, settings{settings} {
-        this->ocp.params = settings.params;
+        this->ocp.update_tricyqle_params(settings.tricyqle_params);
         this->ocp.set_barrier_spin_count(settings.spin_count);
         b_min_strided = ineq_constr_vec();
         b_max_strided = ineq_constr_vec();

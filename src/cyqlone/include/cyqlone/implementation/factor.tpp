@@ -34,7 +34,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_solve_impl(Context &ctx, value_t
 template <index_t VL, class T, StorageOrder DefaultOrder>
 template <bool Factor, bool Solve>
 void TricyqleSolver<VL, T, DefaultOrder>::factor_solve_cr(Context &ctx, mut_view<> λ,
-                                                           index_t stride) {
+                                                          index_t stride) {
     const index_t c = ctx.index;
     // 17|  for l = 0 ... log₂(P)-1
     for (index_t l = 0; l < lp(); ++l) { // Recursion level of cyclic reduction
@@ -119,18 +119,24 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
                                                        mut_view<> work) const {
-    if (nx >= params.parallel_solve_cr_threshold && p > 1)
-        tricyqle.solve_reverse_cr_parallel(ctx, λ, work, n);
-    else if (ν2p(ctx.index + 1) + 1 == lp() || p == 1)
-        tricyqle.solve_reverse_cr_serial(λ, work, n);
+    tricyqle.solve_reverse_cr(ctx, λ, work, n);
     ctx.arrive_and_wait(); // wait for λ(c-1)
     solve_riccati_reverse(ctx, ux, λ, work);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::solve_reverse_cr(Context &ctx, mut_view<> λ,
+                                                           mut_view<> work, index_t stride) const {
+    if (block_size >= params.parallel_solve_cr_threshold && p > 1)
+        solve_reverse_cr_parallel(ctx, λ, work, stride);
+    else if (ν2p(ctx.index + 1) + 1 == lp() || p == 1)
+        solve_reverse_cr_serial(λ, work, stride);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::solve_reverse_cr_parallel(Context &ctx, mut_view<> λ,
-                                                                     mut_view<> work,
-                                                                     index_t stride) const {
+                                                                    mut_view<> work,
+                                                                    index_t stride) const {
     const index_t c = ctx.index;
     for (index_t l = lp(); l-- > 0;) {
         const auto c_     = cr_thread_assignment(l, c);
@@ -176,7 +182,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_reverse_cr_parallel(Context &ctx
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::solve_reverse_cr_serial(mut_view<> λ, mut_view<> work,
-                                                                   index_t stride) const {
+                                                                  index_t stride) const {
     for (index_t l = lp(); l-- > 0;) {
         for (index_t c = 0; c < p; ++c) {
             const index_t c_  = cr_thread_assignment(l, c);
