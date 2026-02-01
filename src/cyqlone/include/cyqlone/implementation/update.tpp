@@ -397,7 +397,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Î”Î
         } else {
 #ifndef NDEBUG
             if (ctx.is_master())
-                work_update.set_constant(std::numeric_limits<T>::quiet_NaN());
+                tricyqle.work_update.set_constant(std::numeric_limits<T>::quiet_NaN());
 #endif
             const auto c_prev = sub_wrap_p(c, 1); // c-1
             // Communicate the update ranks mj to all threads and compute the column offsets in the
