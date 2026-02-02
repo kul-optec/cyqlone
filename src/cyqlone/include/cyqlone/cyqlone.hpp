@@ -264,6 +264,7 @@ struct TricyqleSolver {
     /// @name Low-level PCR factorization and solve routines
     /// @{
 
+    static constexpr bool merge_last_level_pcr = true;
     void factor_pcr();
     template <index_t Level>
     void factor_pcr_level();

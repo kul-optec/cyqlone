@@ -11,6 +11,8 @@
 #include <batmat/linalg/shift.hpp>
 #include <batmat/linalg/trsm.hpp>
 #include <batmat/linalg/trtri.hpp>
+#include <batmat/ops/rotate.hpp>
+#include <batmat/simd.hpp>
 #include <utility>
 
 namespace CYQLONE_NS(cyqlone) {
@@ -44,21 +46,42 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     auto M_next = pcr_M.batch(0);
     auto L = pcr_L.batch(Level), Y = pcr_Y.batch(Level), U = pcr_U.batch(Level);
     static constexpr auto r = 1 << Level; // 2^l
+
+    if constexpr (Level + 1 == lv() && merge_last_level_pcr) {
+        // In the last level, we only have a single sub-diagonal block, which is computed as
+        // K(k) = -Y(k+2^l) U(k+2^l)ᵀ - U(k-2^l) Y(k-2^l)ᵀ. Since 2^l = -2^l mod v, we only need to
+        // compute one term, and then add its transpose, K(k) ← K(k) + K(k+2^l)ᵀ. Because the right
+        // half of K is zero in the absence of coupling between the first and last blocks, we can
+        // perform the transposition in-place.
+        using namespace batmat::datapar;
+        using simd_half = deduced_simd<T, v / 2>;
+        for (index_t j = 0; j < K.cols(); ++j)
+            for (index_t i = 0; i < K.rows(); ++i)
+                aligned_store(aligned_load<simd_half>(&K(0, j, i)), &K(v / 2, i, j));
+    }
+
     //  8|  U(k) = K(k-2^l)ᵀ L(k)⁻ᵀ
     trsm(K.transposed(), triu(L.transposed()), U, with_rotate_A<-r>);
     //  7|  Y(k) = K(k) L(k)⁻ᵀ
-    trsm(K, triu(L.transposed()), Y);
+    if constexpr (Level + 1 < lv() || !merge_last_level_pcr)
+        trsm(K, triu(L.transposed()), Y);
     // 10|  M(k)⁺ = M(k) - Y(k-2^l) Y(k-2^l)ᵀ - U(k+2^l) U(k+2^l)ᵀ
     //      -- implemented as M(k-2^l)⁺ = M(k-2^l) - Y(k) Y(k)ᵀ
     syrk_sub(U, tril(M), tril(M_next), with_rotate_C<-r>, with_rotate_D<-r>);
     //      -- followed by    M(k+2^l)⁺ -= U(k) U(k)ᵀ
-    syrk_sub(Y, tril(M_next), with_rotate_C<+r>, with_rotate_D<+r>);
+    if constexpr (Level + 1 < lv() || !merge_last_level_pcr)
+        syrk_sub(Y, tril(M_next), with_rotate_C<+r>, with_rotate_D<+r>);
     //  3|  L(k)⁺ = chol(M(k)⁺)    -- for the next level
     potrf(tril(M_next), tril(pcr_L.batch(Level + 1)));
     if constexpr (Level + 1 < lv()) {
         auto K_next = pcr_Y.batch(Level + 1);
         // 11|  K(k)⁺ = -Y(k+2^l) U(k+2^l)ᵀ    -- implemented as K(k-2^l)⁺ = -Y(k) U(k)ᵀ
         gemm_neg(Y, U.transposed(), K_next, {}, with_rotate_C<-r>, with_rotate_D<-r>);
+        // TODO: we could store K_next in U instead of Y, so the last level would not need extra
+        //       storage. But this is more complex, as we need to transpose it here, so we can
+        //       perform the trsm in the next level in-place (which is not possible if the input
+        //       and output are transposed).
+        // TODO: check if we need with_mask_D<-r> here.
     }
 }
 
@@ -84,8 +107,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
     //  9|  b̃(k) = L(k)⁻¹ b(k)
     trsm(tril(L), λ, work_pcr); // w = L⁻¹ λ
     // 12|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
-    gemv_sub(Y, work_pcr, λ, with_rotate_C<+r>, with_rotate_D<+r>, with_mask_D<+r>);
-    gemv_sub(U, work_pcr, λ, with_rotate_C<-r>, with_rotate_D<-r>, with_mask_D<-r>);
+    if constexpr (Level + 1 < lv() || !merge_last_level_pcr)
+        gemv_sub(Y, work_pcr, λ, with_rotate_C<+r>, with_rotate_D<+r>);
+    gemv_sub(U, work_pcr, λ, with_rotate_C<-r>, with_rotate_D<-r>);
 }
 
 } // namespace CYQLONE_NS(cyqlone)
