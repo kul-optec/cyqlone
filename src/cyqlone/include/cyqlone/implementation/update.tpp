@@ -183,8 +183,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_
         //  WY = [   0    | Υ˃(+1) ]
         //  WU = [ Υ˂(-1) |   0    ]
         auto WL  = work_update_pcr_L.left_cols(2 * ml).batch(0);
-        auto WU0 = WYU.left_cols(VL * m / 2).left_cols(2 * ml);
-        auto W0Y = WYU.right_cols(VL * m / 2).right_cols(2 * ml);
+        auto WU0 = WYU.right_cols(VL * m / 2).left_cols(2 * ml);
+        auto W0Y = WYU.left_cols(VL * m / 2).right_cols(2 * ml);
         auto WY  = W0Y.right_cols(ml);
         auto WU  = WU0.left_cols(ml);
         batmat::linalg::copy(WY, WL.left_cols(ml));
@@ -201,15 +201,14 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_
         //           S(-1)    S(0)
         //  WL =  [ Υ˃(0)  | Υ˂(0)  ]
         //  WYU = [ Υ˃(+1) | Υ˂(-1) |
-        auto WL = work_update_pcr_L.left_cols(2 * ml).batch(0);
-        auto WU = WYU;
-        batmat::linalg::copy(WU.right_cols(ml), WL.left_cols(ml));
-        batmat::linalg::copy(WU.left_cols(ml), WL.right_cols(ml));
+        auto WL = WYU;
+        auto WU = work_update_pcr_L.left_cols(2 * ml).batch(0);
         // shift element k±2^l to position k
-        batmat::linalg::copy(WU, WU, with_rotate<rot>);
+        batmat::linalg::copy(WL.left_cols(ml), WU.right_cols(ml), with_rotate<rot>);
+        batmat::linalg::copy(WL.right_cols(ml), WU.left_cols(ml), with_rotate<rot>);
         hyhound_diag_2(tril(pcr_L.batch(l)), WL, pcr_U.batch(l), WU, Σ);
         batmat::linalg::copy(WU, WU, with_rotate<rot>); // undo shifts
-        batmat::linalg::copy(Σ, Σ, with_rotate<rot>);
+        batmat::linalg::copy(Σ, Σ, with_rotate<+rot>);
         // Final diagonal block
         hyhound_diag(tril(pcr_L.batch(l + 1)), WU, Σ);
     }
@@ -227,8 +226,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_vie
     index_t m = fwd.cols();
     BATMAT_ASSUME(m == bwd.cols());
     auto WYU = work_update_pcr_UY.left_cols(VL * m).batch(0);
-    auto WY  = WYU.right_cols(VL * m / 2); // WY and WU start in the middle of WYU and grow outwards
-    auto WU  = WYU.left_cols(VL * m / 2);
+    auto WY  = WYU.left_cols(VL * m / 2); // WY and WU start in the middle of WYU and grow outwards
+    auto WU  = WYU.right_cols(VL * m / 2);
     auto Σ   = work_update_pcr_Σ.top_rows(VL * m).batch(0);
     batmat::linalg::copy(bwd, WU.left_cols(m));
     batmat::linalg::copy(fwd, WY.right_cols(m), with_rotate<-1>);
