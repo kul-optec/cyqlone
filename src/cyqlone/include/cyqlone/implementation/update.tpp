@@ -171,35 +171,47 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
 void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_view<> WYU,
                                                            mut_batch_view<> WΣ) {
-    constexpr index_t l    = Level;
-    constexpr index_t rot0 = l == 0 ? 0 : 1 << (l - 1), rot1 = l == 0 ? 1 : 1 << (l - 1);
-    const index_t ml = m << l;
+    constexpr index_t l   = Level;
+    constexpr index_t rot = 1 << l;
+    const index_t ml      = m << l;
     GUANAQO_TRACE("Update PCR", l);
-    auto Σ = WΣ.top_rows(2 * ml);
-    //  WL = [ Υ˃(0)  | Υ˂(0)  ]
-    //  WY = [   0    | Υ˃(+1) ]
-    //  WU = [ Υ˂(-1) |   0    ]
-    batmat::linalg::copy(Σ.top_rows(ml), Σ.bottom_rows(ml), with_rotate<+rot0>);
-    batmat::linalg::copy(Σ.top_rows(ml), Σ.top_rows(ml), with_rotate<-rot1>);
-    if constexpr (l < lv()) {
-        auto WL = work_update_pcr_L.left_cols(2 * ml).batch(0);
-        auto WU = WYU.right_cols(VL * m).left_cols(2 * ml);
-        auto WY = WYU.left_cols(VL * m).right_cols(2 * ml);
-        // Note that [ WY WU ] is contiguous (although this does not really help us since they have
-        // different rotations)
-        batmat::linalg::copy(WY.right_cols(ml), WL.left_cols(ml), with_rotate<-rot1>);
-        batmat::linalg::copy(WU.left_cols(ml), WL.right_cols(ml), with_rotate<+rot0>);
-        batmat::linalg::copy(WU, WU, with_rotate<-rot1>); // TODO: fuse with hyhound_diag_cyclic
-        batmat::linalg::copy(WY, WY, with_rotate<+rot0>);
-        hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL,              //
-                            pcr_Y.batch(l), WY.right_cols(ml), WY, //
-                            pcr_U.batch(l), WU.left_cols(ml), WU, Σ);
+    auto Σ = WΣ.bottom_rows(2 * ml);
+    batmat::linalg::copy(Σ.bottom_rows(ml), Σ.top_rows(ml), with_rotate<-rot>);
+    if constexpr (l + 1 < lv()) {
+        //          S(-1)    S(0)
+        //  WL = [ Υ˃(0)  | Υ˂(0)  ]
+        //  WY = [   0    | Υ˃(+1) ]
+        //  WU = [ Υ˂(-1) |   0    ]
+        auto WL  = work_update_pcr_L.left_cols(2 * ml).batch(0);
+        auto WU0 = WYU.right_cols(VL * m / 2).left_cols(2 * ml);
+        auto W0Y = WYU.left_cols(VL * m / 2).right_cols(2 * ml);
+        auto WY  = W0Y.right_cols(ml);
+        auto WU  = WU0.left_cols(ml);
+        batmat::linalg::copy(WY, WL.left_cols(ml));
+        batmat::linalg::copy(WU, WL.right_cols(ml));
+        batmat::linalg::copy(WU, WU, with_rotate<-rot>); // shift element k-2^l to position k
+        batmat::linalg::copy(WY, WY, with_rotate<+rot>); // shift element k+2^l to position k
+        hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL,    //
+                            pcr_Y.batch(l), WY, W0Y,     //
+                            pcr_U.batch(l), WU, WU0, Σ);
+        batmat::linalg::copy(WU0, WU0, with_rotate<+rot>); // undo shifts
+        batmat::linalg::copy(W0Y, W0Y, with_rotate<-rot>);
+        batmat::linalg::copy(Σ, Σ, with_rotate<+rot>);
     } else {
-        batmat::linalg::copy(WYU, WYU, with_rotate<rot0>); // TODO: fuse with hyhound_diag
-        hyhound_diag(tril(pcr_L.batch(l)), WYU, Σ);
+        //           S(-1)    S(0)
+        //  WL =  [ Υ˃(0)  | Υ˂(0)  ]
+        //  WYU = [ Υ˃(+1) | Υ˂(-1) |
+        auto WL = WYU;
+        auto WU = work_update_pcr_L.left_cols(2 * ml).batch(0);
+        // shift element k±2^l to position k
+        batmat::linalg::copy(WL.left_cols(ml), WU.right_cols(ml), with_rotate<rot>);
+        batmat::linalg::copy(WL.right_cols(ml), WU.left_cols(ml), with_rotate<rot>);
+        hyhound_diag_2(tril(pcr_L.batch(l)), WL, pcr_U.batch(l), WU, Σ);
+        batmat::linalg::copy(WU, WU, with_rotate<rot>); // undo shifts
+        batmat::linalg::copy(Σ, Σ, with_rotate<+rot>);
+        // Final diagonal block
+        hyhound_diag(tril(pcr_L.batch(l + 1)), WU, Σ);
     }
-    // TODO: Can we exploit the complementary sparsity patterns of Υ˃(0) and Υ˂(0) in the last level
-    //       of PCR? Right now, this is only done for the scalar case (v=1).
 }
 
 // TODO: write down the pseudocode for this algorithm in the appendix of the paper?
@@ -213,16 +225,16 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_vie
 #endif
     index_t m = fwd.cols();
     BATMAT_ASSUME(m == bwd.cols());
-    auto WYU = work_update_pcr_UY.left_cols(2 * VL * m).batch(0);
-    auto WY  = WYU.left_cols(VL * m); // WY and WU start in the middle of WYU and grow outwards
-    auto WU  = WYU.right_cols(VL * m);
-    auto Σ   = work_update_pcr_Σ.top_rows(2 * VL * m).batch(0);
+    auto WYU = work_update_pcr_UY.left_cols(VL * m).batch(0);
+    auto WY  = WYU.left_cols(VL * m / 2); // WY and WU start in the middle of WYU and grow outwards
+    auto WU  = WYU.right_cols(VL * m / 2);
+    auto Σ   = work_update_pcr_Σ.top_rows(VL * m).batch(0);
     batmat::linalg::copy(bwd, WU.left_cols(m));
-    batmat::linalg::copy(fwd, WY.right_cols(m));
-    batmat::linalg::copy(Σbwd, Σ.top_rows(m));
+    batmat::linalg::copy(fwd, WY.right_cols(m), with_rotate<-1>);
+    batmat::linalg::copy(Σbwd, Σ.bottom_rows(m));
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template update_pcr_level<Levels>(m, WYU, Σ), ...);
-    }(std::make_integer_sequence<index_t, TricyqleSolver::lv() + 1>{});
+    }(std::make_integer_sequence<index_t, TricyqleSolver::lv()>{});
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
