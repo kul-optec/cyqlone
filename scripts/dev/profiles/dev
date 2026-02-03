@@ -19,6 +19,7 @@ include({{ os.path.join(my_profiles, "link", "mold.profile") }})
 include({{ os.path.join(my_profiles, "visibility", "hidden.profile") }})
 include({{ os.path.join(my_profiles, "tools", "ninja.profile") }})
 include({{ os.path.join(my_profiles, "system-deps", "mkl.profile") }})
+include({{ os.path.join(my_profiles, "test", "only-self.profile") }})
 
 # Platform-specific options
 {% set arch_profile = os.getenv("DEV_ARCH", "native") + ".profile" %}
@@ -26,7 +27,7 @@ include({{ os.path.join(my_profiles, "arch", "linux", arch_profile) }})
 
 # Inject additional tools
 [tool_requires]
-cmake/4.2.1
+cmake/4.2.3
 blasfeo/*: cmake/[<4]
 
 # Build settings: enable cross-building for better reproducibility, link to the Fortran runtime to
