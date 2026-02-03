@@ -171,9 +171,14 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 template <index_t Level>
 void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_view<> WYU,
                                                            mut_batch_view<> WΣ) {
-    constexpr index_t l   = Level;
-    constexpr index_t rot = 1 << l;
-    const index_t ml      = m << l;
+    constexpr index_t l = Level;
+    // The algorithm requires the update matrices that are not reduced in the current level to be
+    // offset by 2^l. We could do this by first rotating them by 2^l, applying the Householder
+    // transformations, and then rotating them back. However, this would be inefficient, so instead
+    // we leave the workspace rotated by 2^l from the previous level, and adjust the rotations in
+    // the next level.
+    constexpr index_t rot = 1 << l, prev_rot = rot >> 1;
+    const index_t ml = m << l;
     GUANAQO_TRACE("Update PCR", l);
     auto Σ = WΣ.bottom_rows(2 * ml);
     batmat::linalg::copy(Σ.bottom_rows(ml), Σ.top_rows(ml), with_rotate<-rot>);
@@ -187,32 +192,36 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_
         auto W0Y = WYU.left_cols(VL * m / 2).right_cols(2 * ml);
         auto WY  = W0Y.right_cols(ml);
         auto WU  = WU0.left_cols(ml);
-        batmat::linalg::copy(WY, WL.left_cols(ml));
-        batmat::linalg::copy(WU, WL.right_cols(ml));
-        batmat::linalg::copy(WU, WU, with_rotate<-rot>); // shift element k-2^l to position k
-        batmat::linalg::copy(WY, WY, with_rotate<+rot>); // shift element k+2^l to position k
+        // undo workspace rotation
+        batmat::linalg::copy(WY, WL.left_cols(ml), with_rotate<-prev_rot>);
+        batmat::linalg::copy(WU, WL.right_cols(ml), with_rotate<+prev_rot>);
+        // rotate element k-2^l to position k (but the workspace is already at -prev_rot)
+        batmat::linalg::copy(WU, WU, with_rotate<-rot + prev_rot>);
+        // rotate element k+2^l to position k (but the workspace is already at +prev_rot)
+        batmat::linalg::copy(WY, WY, with_rotate<+rot - prev_rot>);
         // [ L̃(k;l) |       0       ]   [ L(k;l) | Υ˃(k;l)      Υ˂(k;l)     ]
         // [ Ũ(k;l) | Υ˂(k-2^l;l+1) ] = [ U(k;l) | Υ˂(k-2^l;l)     0        ] Q̆(k;l)
         // [ Ỹ(k;l) | Υ˃(k+2^l;l+1) ] = [ Y(k;l) |    0         Υ˃(k+2^l;l) ]
-        hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL,    //
-                            pcr_Y.batch(l), WY, W0Y,     //
+        hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL, //
+                            pcr_Y.batch(l), WY, W0Y,  //
                             pcr_U.batch(l), WU, WU0, Σ);
-        batmat::linalg::copy(WU0, WU0, with_rotate<+rot>); // undo shifts
-        batmat::linalg::copy(W0Y, W0Y, with_rotate<-rot>);
         batmat::linalg::copy(Σ, Σ, with_rotate<+rot>);
     } else {
+        auto WL = WYU;
+        auto WU = work_update_pcr_L.left_cols(2 * ml).batch(0);
+        // undo workspace rotation
+        batmat::linalg::copy(WYU.left_cols(ml), WL.left_cols(ml), with_rotate<-prev_rot>);
+        batmat::linalg::copy(WYU.right_cols(ml), WL.right_cols(ml), with_rotate<+prev_rot>);
         //           S(-1)    S(0)
         //  WL =  [ Υ˃(0)  | Υ˂(0)  ]
         //  WYU = [ Υ˃(+1) | Υ˂(-1) |
-        auto WL = WYU;
-        auto WU = work_update_pcr_L.left_cols(2 * ml).batch(0);
-        // shift element k±2^l to position k
+        // rotate element k±2^l to position k
         batmat::linalg::copy(WL.left_cols(ml), WU.right_cols(ml), with_rotate<rot>);
         batmat::linalg::copy(WL.right_cols(ml), WU.left_cols(ml), with_rotate<rot>);
         // [ L̃(k;l) |       0       ]   [ L(k;l) | Υ˃(k;l)      Υ˂(k;l)     ]
         // [ Ũ(k;l) | Υ˂(k-2^l;l+1) ] = [ U(k;l) | Υ˂(k-2^l;l)  Υ˃(k+2^l;l) ] Q̆(k;l)
         hyhound_diag_2(tril(pcr_L.batch(l)), WL, pcr_U.batch(l), WU, Σ);
-        batmat::linalg::copy(WU, WU, with_rotate<rot>); // undo shifts
+        batmat::linalg::copy(WU, WU, with_rotate<rot>); // undo rotation
         batmat::linalg::copy(Σ, Σ, with_rotate<+rot>);
         // Final diagonal block
         // [ L̃(k;l+1) |   0   ] = [ L(k;l+1) | Υ˃(k;l+1)  Υ˂(k;l+1) ] Q̆(k;l+1)
