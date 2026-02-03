@@ -48,7 +48,7 @@ void trace(auto &&fun, const auto &name, const auto &params, T *solver = nullptr
     fun();
     if constexpr (!std::is_void_v<T>)
         if (solver)
-            solver->parallel_ctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
+            solver->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
     std::filesystem::create_directories(out_dir);
     std::ofstream csv{out_file};
     guanaqo::TraceLogger::write_column_headings(csv) << '\n';

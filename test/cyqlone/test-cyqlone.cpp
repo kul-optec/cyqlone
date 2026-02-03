@@ -2,6 +2,7 @@
 
 #include <cyqlone/cyqlone.hpp>
 #include <cyqlone/random-ocp.hpp>
+#include <cyqlone/tracing.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <guanaqo/print.hpp>
 #include <guanaqo/trace.hpp>
@@ -307,10 +308,12 @@ TEST_P(CyqloneFactorTest, factor) {
     std::generate_n(ocp.b().data, ocp.b().rows, [&] { return uni(rng); });
     std::generate_n(ocp.b_min().data, ocp.b_min().rows, [&] { return uni(rng); });
     std::generate_n(ocp.b_max().data, ocp.b_max().rows, [&] { return uni(rng); });
-    auto cocp                  = CyqloneStorage<real_t>::build(ocp);
-    Solver solver              = Solver::build(cocp, p);
-    auto tricyqle_params       = solver.get_tricyqle_params();
-    tricyqle_params.solve_method = GetParam();
+    auto cocp                                 = CyqloneStorage<real_t>::build(ocp);
+    Solver solver                             = Solver::build(cocp, p);
+    auto tricyqle_params                      = solver.get_tricyqle_params();
+    tricyqle_params.solve_method              = GetParam();
+    tricyqle_params.cr_max_update_fraction_Y0 = 9999;
+    tricyqle_params.pcr_max_update_fraction   = 9999;
     solver.update_tricyqle_params(tricyqle_params);
 
     // Spin a bit longer to get more deterministic timings
@@ -404,7 +407,7 @@ TEST_P(CyqloneFactorTest, factor) {
 
 #if GUANAQO_WITH_TRACING
     {
-        solver.parallel_ctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
+        solver.run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
         std::string name = std::format("factor_cyclic_new.csv");
         std::filesystem::path out_dir{"traces"};
         out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
@@ -412,9 +415,12 @@ TEST_P(CyqloneFactorTest, factor) {
         std::filesystem::create_directories(out_dir);
         std::ofstream csv{out_dir / name};
         guanaqo::TraceLogger::write_column_headings(csv) << '\n';
-        for (const auto &log : guanaqo::get_trace_logger().get_logs())
+        auto logs = guanaqo::get_trace_logger().get_logs();
+        for (const auto &log : logs)
             csv << log << '\n';
         std::cout << (out_dir / name) << std::endl;
+        write_chrome_trace((out_dir / name).replace_extension("json.gz"), logs);
+        std::cout << (out_dir / name).replace_extension("json.gz") << std::endl;
     }
 #endif
 
