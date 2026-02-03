@@ -52,15 +52,15 @@ const std::map<std::string, ProblemType> problem_type_map{
 };
 
 struct Options {
-    bool cold         = true;
-    bool warm_shift   = true;
-    bool warm_copy    = false;
-    bool no_updates   = false;
-    int parallelism   = 8;
-    int vector_length = v;
-    bool rm           = false;
-    bool cm           = true;
-    bool pcr          = true;
+    bool cold                      = true;
+    bool warm_shift                = true;
+    bool warm_copy                 = false;
+    bool no_updates                = false;
+    std::vector<int> parallelism   = {8};
+    std::vector<int> vector_length = {v};
+    bool rm                        = false;
+    bool cm                        = true;
+    bool pcr                       = true;
 #if WITH_HPIPM
     bool hpipm = true;
 #else
@@ -104,8 +104,8 @@ template <index_t VL, qp::StorageOrder Order>
 void run_benchmark(benchmark::State &state, const SpringMassParams &params,
                    qp::CyqloneBackendSettings backend_settings, qp::Settings settings,
                    bool warm = false) {
-    if (backend_settings.processors < 2)
-        return state.SkipWithMessage("Fewer than 2 processors are currently not supported.");
+    if (backend_settings.processors < 1)
+        return state.SkipWithMessage("Number of processors must be at least 1.");
     auto problem = create_problem(params);
     // Build a QPALM Cyqlone solver
     auto ocp     = cyqlone::CyqloneStorage<>::build(problem.ocp);
@@ -281,48 +281,50 @@ std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
                 run_benchmark<VL, O>(state, params, backend, settings, true);
             }};
     };
-    qp::CyqloneBackendSettings backend{
-        .processors             = opts.parallelism,
-        .changing_constr_factor = opts.changing_constr_factor,
-        .max_update_count       = 20,
-        .tricyqle_params =
-            {
-                .pcr_max_update_fraction       = opts.pcr_max_update_fraction,
-                .cr_max_update_fraction_Y0     = opts.cr_max_update_fraction,
-                .parallel_solve_cr_threshold   = opts.parallel_solve_cr_threshold,
-                .parallel_factor_pcr_threshold = opts.parallel_factor_pcr_threshold,
-            },
-    };
-    qp::Settings settings{
-        .tolerance         = 1e-8,
-        .dual_tolerance    = 1e-8,
-        .initial_penalty_y = 20,
-        .verbose           = false,
-    };
-    qp::CyqloneBackendSettings backend_no_upd = backend;
-    backend_no_upd.max_update_count           = 0;
-    qp::Settings settings_warm                = settings;
-    settings_warm.initial_penalty_y           = 1e4;
-    settings_warm.initial_inner_tolerance     = 1e-4;
-    if (opts.pcr)
-        backend.tricyqle_params.solve_method = cyqlone::SolveMethod::PCR;
-    if (opts.cold) {
-        backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Zeros;
-        co_yield cyqlone_solver("zero", backend, settings);
-        if (opts.no_updates)
-            co_yield cyqlone_solver("zero,upd=0", backend_no_upd, settings);
-    }
-    if (opts.warm_shift) {
-        backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Shift;
-        co_yield cyqlone_solver("shift", backend, settings_warm);
-        if (opts.no_updates)
-            co_yield cyqlone_solver("shift,upd=0", backend_no_upd, settings_warm);
-    }
-    if (opts.warm_copy) {
-        backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Copy;
-        co_yield cyqlone_solver("copy", backend, settings_warm);
-        if (opts.no_updates)
-            co_yield cyqlone_solver("copy,upd=0", backend_no_upd, settings_warm);
+    for (auto p : opts.parallelism) {
+        qp::CyqloneBackendSettings backend{
+            .processors             = p,
+            .changing_constr_factor = opts.changing_constr_factor,
+            .max_update_count       = 20,
+            .tricyqle_params =
+                {
+                    .pcr_max_update_fraction       = opts.pcr_max_update_fraction,
+                    .cr_max_update_fraction_Y0     = opts.cr_max_update_fraction,
+                    .parallel_solve_cr_threshold   = opts.parallel_solve_cr_threshold,
+                    .parallel_factor_pcr_threshold = opts.parallel_factor_pcr_threshold,
+                },
+        };
+        qp::Settings settings{
+            .tolerance         = 1e-8,
+            .dual_tolerance    = 1e-8,
+            .initial_penalty_y = 20,
+            .verbose           = false,
+        };
+        qp::CyqloneBackendSettings backend_no_upd = backend;
+        backend_no_upd.max_update_count           = 0;
+        qp::Settings settings_warm                = settings;
+        settings_warm.initial_penalty_y           = 1e4;
+        settings_warm.initial_inner_tolerance     = 1e-4;
+        if (opts.pcr)
+            backend.tricyqle_params.solve_method = cyqlone::SolveMethod::PCR;
+        if (opts.cold) {
+            backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Zeros;
+            co_yield cyqlone_solver("zero", backend, settings);
+            if (opts.no_updates)
+                co_yield cyqlone_solver("zero,upd=0", backend_no_upd, settings);
+        }
+        if (opts.warm_shift) {
+            backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Shift;
+            co_yield cyqlone_solver("shift", backend, settings_warm);
+            if (opts.no_updates)
+                co_yield cyqlone_solver("shift,upd=0", backend_no_upd, settings_warm);
+        }
+        if (opts.warm_copy) {
+            backend.strategy = backend_no_upd.strategy = qp::WarmStartingStrategy::Copy;
+            co_yield cyqlone_solver("copy", backend, settings_warm);
+            if (opts.no_updates)
+                co_yield cyqlone_solver("copy,upd=0", backend_no_upd, settings_warm);
+        }
     }
 }
 
@@ -351,17 +353,18 @@ using std::ranges::elements_of;
 
 template <qp::StorageOrder Order>
 std::generator<Solver> get_cyqlone_solvers_vl(const Options &opts) {
-    if (opts.vector_length == 0)
-        co_return;
-#define CYQ_X(VL)                                                                                  \
-    else if (opts.vector_length == VL) co_yield elements_of(get_cyqlone_solvers<VL, Order>(opts));
-    BATMAT_FOREACH_VL_DOUBLE(CYQ_X)
+    for (auto v : opts.vector_length) {
+        if (v == 0)
+            co_return;
+#define CYQ_X(VL) else if (v == VL) co_yield elements_of(get_cyqlone_solvers<VL, Order>(opts));
+        BATMAT_FOREACH_VL_DOUBLE(CYQ_X)
 #undef CYQ_X
-    else
+        else
 #define CYQ_X(VL) " " #VL
-        throw std::invalid_argument(
-            "Unsupported vector length. Supported lengths:" BATMAT_FOREACH_VL_DOUBLE(CYQ_X));
+            throw std::invalid_argument(
+                "Unsupported vector length. Supported lengths:" BATMAT_FOREACH_VL_DOUBLE(CYQ_X));
 #undef CYQ_X
+    }
 }
 
 std::generator<Solver> get_solvers(const Options &opts) {
@@ -405,6 +408,9 @@ void register_options(const char *program, CLI::App &app, Options &opts) {
         opts.use_color = true;
     else
         opts.use_color = isatty(fileno(stdout)) == 1;
+#if BATMAT_WITH_OPENMP
+    opts.parallelism = {omp_get_max_threads()};
+#endif
     app.usage(std::string(program) + " [options] -- [benchmark options]");
     app.footer(std::format("Benchmark options are passed to the Google Benchmark framework. "
                            "Use {} -- --help or see "

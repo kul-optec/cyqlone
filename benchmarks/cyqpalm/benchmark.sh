@@ -217,3 +217,14 @@ main() {
 }
 
 main "$@"
+
+# To cross-compile for e.g. a Raspberry Pi 5, use:
+# DEV_MACHINE=aarch64 DEV_ARCH=cortex-a76 ./benchmark.sh deps -- -c tools.cmake.cmake_layout:build_folder_vars+='["const.rpi5"]'
+# CONF_PRESET=conan-rpi5-release BUILD_PRESET=conan-rpi5-release ./benchmark.sh build
+# file build/rpi5/Release/spring-mass
+#
+# When using Clang, you can link libomp.so statically using:
+# ./benchmark.sh deps --clang-21 -- -o llvm-openmp/\*:shared=False
+# Since the shared option does not affect the package ID of dependent packages, you may have to
+# rebuild the downstream packages as well:
+# ./benchmark.sh deps --clang-21 -- -o llvm-openmp/\*:shared=False --build=llvm-openmp/\* --build=cascade
