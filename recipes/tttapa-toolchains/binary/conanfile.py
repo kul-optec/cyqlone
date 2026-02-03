@@ -292,6 +292,14 @@ class ToolchainsConan(ConanFile):
         self.conf_info.append("tools.build:cxxflags", toolchain_flags)
         self.conf_info.append("tools.build:exelinkflags", link_flags)
         self.conf_info.append("tools.build:sharedlinkflags", link_flags)
+        self.conf_info.update(
+            "tools.cmake.cmaketoolchain:extra_variables",
+            {
+                "CMAKE_C_COMPILER_TARGET": target,
+                "CMAKE_CXX_COMPILER_TARGET": target,
+                "CMAKE_ASM_COMPILER_TARGET": target,
+            },
+        )
 
     def package_info(self):
         if self.settings_target.compiler == "gcc":
