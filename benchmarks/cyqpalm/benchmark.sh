@@ -148,6 +148,19 @@ benchmark_scaling() {
         --benchmark_min_time=0.05s --benchmark_out=benchmark-scaling.json "$@"
 }
 
+# Run the states scaling benchmark
+benchmark_scaling_states() {
+    benchmark \
+        --problem wang-boyd-2008 --cold --warm-shift -I 5 -p 1 -p "${NPROC}" -v 4 -v 8 \
+        --cm --no-warm-shift \
+        -N 48 \
+        -M1 -M2 -M3 -M4 -M5 -M6 -M7 -M8 -M9 -M10 \
+        -M11 -M12 -M13 -M14 -M15 -M16 -M17 -M18 -M19 -M20 \
+        -M21 -M22 -M23 -M24 -M25 -M26 -M27 -M28 -M29 -M30 \
+        --benchmark_repetitions=3 --benchmark_report_aggregates_only \
+        --benchmark_min_time=0.01s --benchmark_out=benchmark-scaling-states.json "$@"
+}
+
 # Run the M×N grid benchmark
 benchmark_grid() {
     benchmark \
@@ -158,11 +171,24 @@ benchmark_grid() {
         --benchmark_min_time=0.05s --benchmark_out=benchmark-grid.json "$@"
 }
 
+# Plot the results of the horizon scaling benchmark
+plot_scaling() {
+    python3 plot-scaling.py benchmark-scaling.json \
+        --output benchmark-scaling.pdf "$@"
+}
+
+# Plot the results of the states scaling benchmark
+plot_scaling_states() {
+    python3 plot-scaling.py benchmark-scaling-states.json \
+        --output benchmark-scaling-states.pdf --xvar=M --log "$@"
+}
+
 # Clean up build files and benchmark results
 clean() {
     set -x
     rm -rf conan.json build CMakeUserPresets.json
-    rm -f benchmark-grid.json benchmark-scaling.json
+    rm -f benchmark-grid.json benchmark-scaling.json benchmark-scaling-states.json
+    rm -f benchmark-scaling.pdf benchmark-scaling-states.pdf
 }
 
 main() {
@@ -179,14 +205,23 @@ main() {
             benchmark_quick "$@" ;;
         benchmark-scaling)
             benchmark_scaling "$@" ;;
+        benchmark-scaling-states)
+            benchmark_scaling_states "$@" ;;
         benchmark-grid)
             benchmark_grid "$@" ;;
+        plot-scaling)
+            plot_scaling "$@" ;;
+        plot-scaling-states)
+            plot_scaling_states "$@" ;;
         all)
             deps "$@"
             build
             benchmark_quick
             benchmark_scaling
-            benchmark_grid ;;
+            benchmark_scaling_states
+            benchmark_grid
+            plot_scaling
+            plot_scaling_states ;;
         benchmark)
             benchmark "$@" ;;
         clean)
@@ -195,14 +230,17 @@ main() {
             echo "Usage: $0 {deps|build|benchmark-quick|benchmark-scaling|benchmark-grid|all}"      >&2
             echo ""                                                                                 >&2
             echo "Commands:"                                                                        >&2
-            echo "  deps [...]              - Install the dependencies (using Conan)"               >&2
-            echo "  build                   - Build the benchmark project"                          >&2
-            echo "  benchmark-quick         - Run quick benchmark (sanity check)"                   >&2
-            echo "  benchmark-scaling       - Run scaling benchmark (takes a couple of minutes)"    >&2
-            echo "  benchmark-grid          - Run grid benchmark (takes a couple of hours)"         >&2
-            echo "  all                     - Run all commands above in sequence"                   >&2
-            echo "  benchmark [...]         - Run a custom benchmark"                               >&2
-            echo "  clean                   - Remove all build files and benchmark results"         >&2
+            echo "  deps [...]                - Install the dependencies (using Conan)"             >&2
+            echo "  build                     - Build the benchmark project"                        >&2
+            echo "  benchmark-quick           - Run quick benchmark (sanity check)"                 >&2
+            echo "  benchmark-scaling         - Run horizon scaling benchmark (couple of minutes)"  >&2
+            echo "  benchmark-scaling-states  - Run states scaling benchmark (couple of minutes)"   >&2
+            echo "  benchmark-grid            - Run grid benchmark (couple of hours)"               >&2
+            echo "  plot-scaling              - Plot the results of the horizon scaling benchmark"  >&2
+            echo "  plot-scaling-states       - Plot the results of the states scaling benchmark"   >&2
+            echo "  all                       - Run all commands above in sequence"                 >&2
+            echo "  benchmark [...]           - Run a custom benchmark"                             >&2
+            echo "  clean                     - Remove all build files and benchmark results"       >&2
             echo ""                                                                                 >&2
             echo "Use $0 deps --help for more information on dependency installation options."      >&2
             echo "Use $0 benchmark --help for the available benchmark parameters."                  >&2
