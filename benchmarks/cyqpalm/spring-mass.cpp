@@ -103,7 +103,7 @@ qp::problems::SpringMassProblem create_problem(const SpringMassParams &params) {
 template <index_t VL, qp::StorageOrder Order>
 void run_benchmark(benchmark::State &state, const SpringMassParams &params,
                    qp::CyqloneBackendSettings backend_settings, qp::Settings settings,
-                   bool warm = false) {
+                   bool warm = false) try {
     if (backend_settings.processors < 1)
         return state.SkipWithMessage("Number of processors must be at least 1.");
     auto problem = create_problem(params);
@@ -160,6 +160,8 @@ void run_benchmark(benchmark::State &state, const SpringMassParams &params,
     state.counters["res_eq"]              = counter(kkt_error.equality_residual);
     state.counters["res_ineq"]            = counter(kkt_error.inequality_residual);
     state.counters["compl"]               = counter(kkt_error.complementarity);
+} catch (const std::exception &e) {
+    state.SkipWithError(e.what());
 }
 
 enum class WarmStartHPIPM {

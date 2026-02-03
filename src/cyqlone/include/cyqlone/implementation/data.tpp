@@ -40,7 +40,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 CyqloneSolver<VL, T, DefaultOrder>
 CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp, index_t p) {
     BATMAT_ASSERT(p > 0);
-    BATMAT_ASSERT(VL == 1 || is_pow_2(p));
+    BATMAT_ASSERT(v == 1 || is_pow_2(p));
     CyqloneSolver<VL, T, DefaultOrder> res{
         .N_horiz = ocp.N_horiz,
         .nx      = ocp.nx,
