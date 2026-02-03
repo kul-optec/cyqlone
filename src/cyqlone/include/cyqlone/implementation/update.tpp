@@ -181,6 +181,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_
     const index_t ml = m << l;
     GUANAQO_TRACE("Update PCR", l);
     auto Σ = WΣ.bottom_rows(2 * ml);
+    if constexpr (prev_rot != 0)
+        batmat::linalg::copy(Σ.bottom_rows(ml), Σ.bottom_rows(ml), with_rotate<+prev_rot>);
     batmat::linalg::copy(Σ.bottom_rows(ml), Σ.top_rows(ml), with_rotate<-rot>);
     if constexpr (l + 1 < lv()) {
         //          S(-1)    S(0)
@@ -205,7 +207,6 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_
         hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL, //
                             pcr_Y.batch(l), WY, W0Y,  //
                             pcr_U.batch(l), WU, WU0, Σ);
-        batmat::linalg::copy(Σ, Σ, with_rotate<+rot>);
     } else {
         auto WL = WYU;
         auto WU = work_update_pcr_L.left_cols(2 * ml).batch(0);
