@@ -19,7 +19,7 @@
     "build_requires": [
         "zlib/1.3.1#cac0f6daea041b0ccf42934163defb20%1765284699.337",
         "xxhash/0.8.2#7856c968c985b2981b707ee8f2413b2b%1743678661.519",
-        "tttapa-toolchains/1.2.0#21579ae3fa2b4bbe5e8aafac682dfd42%1770122639.514708",
+        "tttapa-toolchains/1.2.0#cf1326badfa2b01f0c3937241ed7c3a1%1770124269.444169",
         "ninja/1.13.2#c8c5dc2a52ed6e4e42a66d75b4717ceb%1764096931.974",
         "mold/2.40.1#a357733ec40ef4c0cb35c3f6e60154b4%1750152619.896",
         "cmake/4.2.3#c5c10d4c90874997553970589940ab9c%1769792867.095",
