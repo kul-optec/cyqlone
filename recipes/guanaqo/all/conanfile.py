@@ -94,6 +94,8 @@ class guanaqoRecipe(ConanFile):
             self.requires(f"llvm-openmp/[~{self.settings.compiler.version}]")
         self.test_requires("gtest/1.17.0")
         self.test_requires("eigen/[~3.4 || ~5.0]")
+        if self.conf.get("user.guanaqo:with_python_tests", default=False, check_type=bool):
+            self.test_requires("nanobind/2.10.2")
 
     def build_requirements(self):
         self.tool_requires("cmake/[>=3.24 <5]")
@@ -113,6 +115,8 @@ class guanaqoRecipe(ConanFile):
             )
         if can_run(self):
             tc.variables["GUANAQO_FORCE_TEST_DISCOVERY"] = True
+        if self.conf.get("user.guanaqo:with_python_tests", default=False, check_type=bool):
+            tc.variables["GUANAQO_WITH_PYTHON_TESTS"] = True
         tc.generate()
 
     def build(self):

@@ -1,4 +1,7 @@
 sources:
+  "1.1.1":
+    url: "https://github.com/kul-optec/hyhound/archive/refs/tags/1.1.1.zip"
+    sha256: "d276b2b6653f6eb4238fd471ba4bde38886cf8372fe41ce81d9f55983e0fb1b1"
   "1.1.0":
     url: "https://github.com/kul-optec/hyhound/archive/refs/tags/1.1.0.zip"
     sha256: "dff8457ebcb34a2a2b4fea3316a1496d754c31cd409dee5f1af2b893249877fb"
