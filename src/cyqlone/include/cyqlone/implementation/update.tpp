@@ -191,6 +191,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_
         batmat::linalg::copy(WU, WL.right_cols(ml));
         batmat::linalg::copy(WU, WU, with_rotate<-rot>); // shift element k-2^l to position k
         batmat::linalg::copy(WY, WY, with_rotate<+rot>); // shift element k+2^l to position k
+        // [ L̃(k;l) |       0       ]   [ L(k;l) | Υ˃(k;l)      Υ˂(k;l)     ]
+        // [ Ũ(k;l) | Υ˂(k-2^l;l+1) ] = [ U(k;l) | Υ˂(k-2^l;l)     0        ] Q̆(k;l)
+        // [ Ỹ(k;l) | Υ˃(k+2^l;l+1) ] = [ Y(k;l) |    0         Υ˃(k+2^l;l) ]
         hyhound_diag_cyclic(tril(pcr_L.batch(l)), WL,    //
                             pcr_Y.batch(l), WY, W0Y,     //
                             pcr_U.batch(l), WU, WU0, Σ);
@@ -206,10 +209,13 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr_level(index_t m, mut_batch_
         // shift element k±2^l to position k
         batmat::linalg::copy(WL.left_cols(ml), WU.right_cols(ml), with_rotate<rot>);
         batmat::linalg::copy(WL.right_cols(ml), WU.left_cols(ml), with_rotate<rot>);
+        // [ L̃(k;l) |       0       ]   [ L(k;l) | Υ˃(k;l)      Υ˂(k;l)     ]
+        // [ Ũ(k;l) | Υ˂(k-2^l;l+1) ] = [ U(k;l) | Υ˂(k-2^l;l)  Υ˃(k+2^l;l) ] Q̆(k;l)
         hyhound_diag_2(tril(pcr_L.batch(l)), WL, pcr_U.batch(l), WU, Σ);
         batmat::linalg::copy(WU, WU, with_rotate<rot>); // undo shifts
         batmat::linalg::copy(Σ, Σ, with_rotate<+rot>);
         // Final diagonal block
+        // [ L̃(k;l+1) |   0   ] = [ L(k;l+1) | Υ˃(k;l+1)  Υ˂(k;l+1) ] Q̆(k;l+1)
         hyhound_diag(tril(pcr_L.batch(l + 1)), WU, Σ);
     }
 }
