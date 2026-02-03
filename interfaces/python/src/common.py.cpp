@@ -270,17 +270,18 @@ void register_ocp(nb::module_ &m) {
 }
 
 void register_settings(nb::module_ &m) {
-    nb::class_<cyqlone::CyqloneParams<>>(m, "CyqloneParams")
+    nb::class_<cyqlone::TricyqleParams<>>(m, "TricyqleParams")
         .def(nb::init<>())
-        .def_rw("enable_prefetching", &cyqlone::CyqloneParams<>::enable_prefetching)
-        .def_rw("pcg_max_iter", &cyqlone::CyqloneParams<>::pcg_max_iter)
-        .def_rw("pcg_tolerance", &cyqlone::CyqloneParams<>::pcg_tolerance)
-        .def_rw("pcg_print_resid", &cyqlone::CyqloneParams<>::pcg_print_resid)
-        .def_rw("solve_method", &cyqlone::CyqloneParams<>::solve_method)
-        .def_rw("pcr_max_update_fraction", &cyqlone::CyqloneParams<>::pcr_max_update_fraction)
-        .def_rw("cr_max_update_fraction_Y0", &cyqlone::CyqloneParams<>::cr_max_update_fraction_Y0)
+        .def_rw("enable_prefetching", &cyqlone::TricyqleParams<>::enable_prefetching)
+        .def_rw("pcg_max_iter", &cyqlone::TricyqleParams<>::pcg_max_iter)
+        .def_rw("pcg_tolerance", &cyqlone::TricyqleParams<>::pcg_tolerance)
+        .def_rw("pcg_print_resid", &cyqlone::TricyqleParams<>::pcg_print_resid)
+        .def_rw("solve_method", &cyqlone::TricyqleParams<>::solve_method)
+        .def_rw("pcr_max_update_fraction", &cyqlone::TricyqleParams<>::pcr_max_update_fraction)
+        .def_rw("cr_max_update_fraction_Y0", &cyqlone::TricyqleParams<>::cr_max_update_fraction_Y0)
         .def_rw("parallel_solve_cr_threshold",
-                &cyqlone::CyqloneParams<>::parallel_solve_cr_threshold);
+                &cyqlone::TricyqleParams<>::parallel_solve_cr_threshold);
+    nb::class_<cyqlone::CyqloneParams<>>(m, "CyqloneParams").def(nb::init<>());
     nb::enum_<cyqlone::qpalm::SolverStatus>(m, "SolverStatus")
         .value("Busy", cyqlone::qpalm::SolverStatus::Busy)
         .value("Converged", cyqlone::qpalm::SolverStatus::Converged)
@@ -517,13 +518,7 @@ void register_settings(nb::module_ &m) {
                 &cyqlone::qpalm::CyqloneBackendSettings::changing_constr_factor)
         .def_rw("max_update_count", &cyqlone::qpalm::CyqloneBackendSettings::max_update_count)
         .def_rw("detailed_timings", &cyqlone::qpalm::CyqloneBackendSettings::detailed_timings)
-        .def_prop_rw(
-            "params",
-            [](cyqlone::qpalm::CyqloneBackendSettings &self) -> auto & { return self.params; },
-            [](cyqlone::qpalm::CyqloneBackendSettings &self, const cyqlone::CyqloneParams<> &p) {
-                self.params = p;
-            },
-            nb::rv_policy::reference_internal)
+        .def_rw("tricyqle_params", &cyqlone::qpalm::CyqloneBackendSettings::tricyqle_params)
         .def_rw("spin_count", &cyqlone::qpalm::CyqloneBackendSettings::spin_count)
         .def_rw("strategy", &cyqlone::qpalm::CyqloneBackendSettings::strategy);
     nb::class_<cyqlone::qpalm::Settings>(m, "Settings")

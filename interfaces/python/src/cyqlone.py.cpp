@@ -99,8 +99,10 @@ void register_cyqlone_solver(nb::module_ &m) {
         .def_prop_ro("num_dynamics_constraints", &Solver::num_dynamics_constraints)
         .def_prop_ro("num_general_constraints", &Solver::num_general_constraints)
         .def_prop_rw(
-            "params", [](Solver &self) -> auto & { return self.params; },
-            [](Solver &self, const cyqlone::CyqloneParams<> &p) { self.params = p; },
+            "params", [](Solver &self) -> auto & { return self.tricyqle.params; },
+            [](Solver &self, const cyqlone::TricyqleParams<> &p) {
+                self.update_tricyqle_params(p);
+            },
             nb::rv_policy::reference_internal)
         .def(
             "set_barrier_spin_count",
