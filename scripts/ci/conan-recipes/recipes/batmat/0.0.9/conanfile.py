@@ -84,16 +84,16 @@ class BatmatRecipe(ConanFile):
         cmake_layout(self)
 
     def requirements(self):
-        self.requires("guanaqo/1.0.0-alpha.21", transitive_headers=True, transitive_libs=True)
+        self.requires("guanaqo/1.0.0-alpha.22", transitive_headers=True, transitive_libs=True)
         if self.options.get_safe("with_benchmarks"):
             self.requires("benchmark/1.9.4")
-            self.requires("hyhound/1.1.0")
+            self.requires("hyhound/1.1.1")
         if self.options.get_safe("with_openmp") and self.settings.compiler == "clang":
             self.requires(f"llvm-openmp/[~{self.settings.compiler.version}]")
         if self.options.get_safe("with_gsi_hpc_simd"):
             self.requires("gsi-hpc-simd/tttapa.20250625", transitive_headers=True)
         if self.options.get_safe("with_blasfeo"):
-            self.requires("blasfeo/0.1.4.2")
+            self.requires("blasfeo/tttapa.20260119")
 
     def build_requirements(self):
         self.test_requires("eigen/[~5.0]")
