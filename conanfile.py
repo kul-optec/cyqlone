@@ -70,8 +70,8 @@ class CyqloneRecipe(ConanFile):
     generators = ("CMakeDeps",)
 
     def requirements(self):
-        self.requires("guanaqo/1.0.0-alpha.21", transitive_headers=True, transitive_libs=True)
-        self.requires("batmat/0.0.11", transitive_headers=True, transitive_libs=True)
+        self.requires("guanaqo/1.0.0-alpha.22", transitive_headers=True, transitive_libs=True)
+        self.requires("batmat/0.0.12", transitive_headers=True, transitive_libs=True)
         if self.options.get_safe("with_zlib"):
             self.requires("zlib/[~1]")
         if self.options.get_safe("with_python"):
@@ -85,7 +85,7 @@ class CyqloneRecipe(ConanFile):
         else:
             self.test_requires("eigen/[~3.4 || ~5.0]")
         if self.options.get_safe("with_blasfeo"):
-            self.requires("blasfeo/0.1.4.2")
+            self.requires("blasfeo/tttapa.20260119")
         if self.options.get_safe("with_general_qpalm"):
             self.requires("qpalm/1.2.6")
         if self.options.get_safe("with_ska_sort"):
@@ -94,7 +94,7 @@ class CyqloneRecipe(ConanFile):
             self.requires("matio/1.5.27", transitive_headers=True)
         if self.options.get_safe("with_benchmarks"):
             self.requires("benchmark/1.9.4")
-            self.requires("hyhound/1.1.0")
+            self.requires("hyhound/1.1.1")
         self.test_requires("gtest/1.17.0")
 
     def config_options(self):
