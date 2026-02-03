@@ -280,7 +280,8 @@ void register_settings(nb::module_ &m) {
         .def_rw("pcr_max_update_fraction", &cyqlone::TricyqleParams<>::pcr_max_update_fraction)
         .def_rw("cr_max_update_fraction_Y0", &cyqlone::TricyqleParams<>::cr_max_update_fraction_Y0)
         .def_rw("parallel_solve_cr_threshold",
-                &cyqlone::TricyqleParams<>::parallel_solve_cr_threshold);
+                &cyqlone::TricyqleParams<>::parallel_solve_cr_threshold)
+        .def_rw("pcr_serial", &cyqlone::TricyqleParams<>::pcr_serial);
     nb::class_<cyqlone::CyqloneParams<>>(m, "CyqloneParams").def(nb::init<>());
     nb::enum_<cyqlone::qpalm::SolverStatus>(m, "SolverStatus")
         .value("Busy", cyqlone::qpalm::SolverStatus::Busy)

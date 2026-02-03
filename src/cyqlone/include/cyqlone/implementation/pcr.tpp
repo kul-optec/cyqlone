@@ -35,6 +35,13 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr() {
     }(std::make_integer_sequence<index_t, lv()>{});
 }
 
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_parallel(Context &ctx) {
+    [this, &ctx]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
+        (this->template factor_pcr_level_parallel<Levels>(ctx), ...);
+    }(std::make_integer_sequence<index_t, lv()>{});
+}
+
 // The level is a template parameter to allow for compile-time vector rotations.
 // The number of levels is small, so this should not bloat the code too much.
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -48,6 +55,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     static constexpr auto r = 1 << Level; // 2^l
 
     if constexpr (Level + 1 == lv() && merge_last_level_pcr) {
+        GUANAQO_TRACE("Merge last PCR level", Level, K.depth() / 2 * K.rows() * K.cols());
         // In the last level, we only have a single sub-diagonal block, which is computed as
         // K(k) = -Y(k+2^l) U(k+2^l)ᵀ - U(k-2^l) Y(k-2^l)ᵀ. Since 2^l = -2^l mod v, we only need to
         // compute one term, and then add its transpose, K(k) ← K(k) + K(k+2^l)ᵀ. Because the right
@@ -82,6 +90,67 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level() {
         //       perform the trsm in the next level in-place (which is not possible if the input
         //       and output are transposed).
         // TODO: check if we need with_mask_D<-r> here.
+    }
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t Level>
+void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level_parallel(Context &ctx) {
+    auto M      = Level == 0 ? cr_L.batch(0) : pcr_M.batch(0);
+    auto K      = Level == 0 ? cr_Y.batch(0) : pcr_L.batch(Level + 1);
+    auto M_next = pcr_M.batch(0);
+    auto L = pcr_L.batch(Level), Y = pcr_Y.batch(Level), U = pcr_U.batch(Level);
+    static constexpr auto r = 1 << Level; // 2^l
+
+    BATMAT_ASSUME(ctx.num_thr >= 2);
+    const bool primary   = ν2p(ctx.index + 1) + 1 == lp(),
+               secondary = ν2p(ctx.index + 1 + p / 2) + 1 == lp();
+
+    if (Level > 0)
+        ctx.arrive_and_wait(); // wait for L and K
+
+    if (primary) {
+        GUANAQO_TRACE("Factor PCR U", Level);
+        //  8|  U(k) = K(k-2^l)ᵀ L(k)⁻ᵀ
+        trsm(K.transposed(), triu(L.transposed()), U, with_rotate_A<-r>);
+    } else if (secondary && Level + 1 < lv()) {
+        GUANAQO_TRACE("Factor PCR Y", Level);
+        //  7|  Y(k) = K(k) L(k)⁻ᵀ
+        trsm(K, triu(L.transposed()), Y);
+    }
+
+    if (Level + 1 < lv())
+        ctx.arrive_and_wait(); // wait for U and Y
+
+    if (primary) {
+        GUANAQO_TRACE("Factor PCR L", Level);
+        // 10|  M(k)⁺ = M(k) - Y(k-2^l) Y(k-2^l)ᵀ - U(k+2^l) U(k+2^l)ᵀ
+        //      -- implemented as M(k-2^l)⁺ = M(k-2^l) - Y(k) Y(k)ᵀ
+        syrk_sub(U, tril(M), tril(M_next), with_rotate_C<-r>, with_rotate_D<-r>);
+        //      -- followed by    M(k+2^l)⁺ -= U(k) U(k)ᵀ
+        if constexpr (Level + 1 < lv() || !merge_last_level_pcr)
+            syrk_sub(Y, tril(M_next), with_rotate_C<+r>, with_rotate_D<+r>);
+        //  3|  L(k)⁺ = chol(M(k)⁺)    -- for the next level
+        potrf(tril(M_next), tril(pcr_L.batch(Level + 1)));
+    } else if (secondary && Level + 1 < lv()) {
+        GUANAQO_TRACE("Factor PCR K", Level);
+        auto K_next = pcr_L.batch(Level + 2);
+        // 11|  K(k)⁺ = -Y(k+2^l) U(k+2^l)ᵀ    -- implemented as K(k-2^l)⁺ = -Y(k) U(k)ᵀ
+        gemm_neg(Y, U.transposed(), K_next, {}, with_rotate_C<-r>, with_rotate_D<-r>);
+        if (Level + 2 == lv()) {
+            GUANAQO_TRACE("Merge last PCR level", Level,
+                          K_next.depth() / 2 * K_next.rows() * K_next.cols());
+            // In the last level, we only have a single sub-diagonal block, which is computed as
+            // K(k) = -Y(k+2^l) U(k+2^l)ᵀ - U(k-2^l) Y(k-2^l)ᵀ. Since 2^l = -2^l mod v, we only need
+            // to compute one term, and then add its transpose, K(k) ← K(k) + K(k+2^l)ᵀ. Because the
+            // right half of K is zero in the absence of coupling between the first and last blocks,
+            // we can perform the transposition in-place.
+            using namespace batmat::datapar;
+            using simd_half = deduced_simd<T, v / 2>;
+            for (index_t j = 0; j < K_next.cols(); ++j)
+                for (index_t i = 0; i < K_next.rows(); ++i)
+                    aligned_store(aligned_load<simd_half>(&K_next(0, j, i)), &K_next(v / 2, i, j));
+        }
     }
 }
 

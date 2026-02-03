@@ -268,6 +268,9 @@ struct TricyqleSolver {
     void factor_pcr();
     template <index_t Level>
     void factor_pcr_level();
+    void factor_pcr_parallel(Context &ctx);
+    template <index_t Level>
+    void factor_pcr_level_parallel(Context &ctx);
 
     template <index_t Level>
     void solve_pcr_level(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;

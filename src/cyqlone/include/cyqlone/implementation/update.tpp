@@ -115,7 +115,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 
     // Finally, recompute the PCR factorization if we did not do an update.
     if (do_refactor_pcr)
-        factor_pcr();
+        factor_pcr(); // TODO: use parallel variant
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -318,8 +318,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
     const index_t jn  = c * n; // stage index
     const index_t nux = nu + nx, nyM = std::max(ny, ny_0 + ny_N);
     auto LHs = riccati_LH.batch(c);
-    auto B̂s  = riccati_LAB.batch(c).right_cols(n * nu),
-         Âs  = riccati_LAB.batch(c).left_cols(n * nx);
+    auto B̂s = riccati_LAB.batch(c).right_cols(n * nu), Âs = riccati_LAB.batch(c).left_cols(n * nx);
     auto Υ1 = riccati_Υ1.batch(c), Υ2 = riccati_Υ2.batch(c);
     auto 𝑆 = work_Σ.batch(c); // \mathcal{S}_j in the paper
 

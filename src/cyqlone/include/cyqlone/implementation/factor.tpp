@@ -76,7 +76,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_solve_cr(Context &ctx, mut_view
     if constexpr (Factor) {
         if (params.solve_method == SolveMethod::PCR) {
             ctx.arrive_and_wait(); // wait for off-diagonal block
-            if (ν2p(c + 1) + 1 == lp() || p == 1)
+            if (!params.pcr_serial && p > 1)
+                factor_pcr_parallel(ctx);
+            else if (ν2p(c + 1) + 1 == lp() || p == 1)
                 factor_pcr();
         }
     }
