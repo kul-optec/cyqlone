@@ -201,11 +201,14 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             };
 
             // Check inner loop termination
-            bool first_iter  = outer_iter == 0 && inner == 0;
-            bool check_eq    = first_iter || settings.recompute_eq_res;
-            eq_resid         = check_eq ? backend.unscaled_eq_constr_viol(ctx, Mxb) : 0;
+            bool first_iter = outer_iter == 0 && inner == 0;
+            bool check_eq   = first_iter || settings.recompute_eq_res;
+            {
+                GUANAQO_TRACE("compute residuals", inner_iter + inner);
+                eq_resid     = check_eq ? backend.unscaled_eq_constr_viol(ctx, Mxb) : 0;
+                stationarity = backend.unscaled_aug_lagr_norm(ctx, grad, Mᵀλ, Aᵀŷ);
+            }
             real_t eq_tol    = settings.eq_constr_tolerance;
-            stationarity     = backend.unscaled_aug_lagr_norm(ctx, grad, Mᵀλ, Aᵀŷ);
             bool out_of_iter = inner >= remaining_iter;
             bool out_of_time = clock_t::now() >= start_time + settings.max_time;
             bool inf_err     = !isfinite(stationarity + eq_resid);
@@ -249,6 +252,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
 
             // Check if the active set changed
             auto active_set_change = timed(timings.active_set_change, [&] {
+                GUANAQO_TRACE("active_set_change", inner_iter + inner);
                 return backend.active_set_change(ctx, S, Σ, active_set, active_set_old);
             });
             swap(active_set, active_set_old);
@@ -282,6 +286,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
 
             // Solve the Newton system
             timed(timings.solve, [&] {
+                GUANAQO_TRACE("solve", inner_iter + inner);
                 backend.solve(ctx, x, grad, Mᵀλ, Aᵀŷ, Mxb, S, Σ, active_set_old, //
                               d, ξ, Ad, Δλ, MᵀΔλ);
             });
@@ -318,6 +323,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                                  "search τ=1\n";
             } else {
                 ls = timed(timings.line_search, [&] {
+                    GUANAQO_TRACE("line_search", inner_iter + inner);
                     auto [η, β] = [&] {
                         if (settings.linesearch_include_multipliers) {
                             auto [η, β, dMᵀΔλ, dMᵀλ] =
@@ -371,10 +377,12 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
 
             // Optionally recompute Ax and ∇f
             if (settings.recompute_inner) {
-                timed(timings.recompute_inner,
-                      [&] { backend.recompute_inner(ctx, S, x_outer, x, λ, grad, Ax, Mᵀλ); });
+                timed(timings.recompute_inner, [&] {
+                    GUANAQO_TRACE("recompute_inner", inner_iter + inner);
+                    backend.recompute_inner(ctx, S, x_outer, x, λ, grad, Ax, Mᵀλ);
+                });
             } else {
-                GUANAQO_TRACE("apply step derived", inner);
+                GUANAQO_TRACE("apply step derived", inner_iter + inner);
                 backend.xaxpy(ctx, ls.τ, Ad, Ax);
                 backend.xaxpy(ctx, ls.τ, MᵀΔλ, Mᵀλ);
                 backend.xaxpy(ctx, ls.τ, ξ, grad);
@@ -396,6 +404,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
 
         if (settings.recompute) {
             stationarity = timed(timings.recompute_outer, [&] {
+                GUANAQO_TRACE("recompute_outer", outer_iter);
                 return backend.recompute_outer(ctx, x, ŷ, λ, grad, Ax, Aᵀŷ, Mᵀλ);
             });
         }
@@ -461,8 +470,11 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             });
         }
         // Update multipliers
-        swap(y, ŷ);
-        backend.project_multipliers_ineq(ctx, y);
+        {
+            GUANAQO_TRACE("update multipliers", outer_iter);
+            swap(y, ŷ);
+            backend.project_multipliers_ineq(ctx, y);
+        }
         // Update tolerances
         inner_tol = std::max(inner_tol * settings.ρ, settings.tolerance);
     }

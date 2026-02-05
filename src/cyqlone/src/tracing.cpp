@@ -39,6 +39,16 @@ inline bool is_barrier_event(const guanaqo::TraceLogger::Log &log) {
     return std::strncmp(log.name, prefix.data(), prefix.size()) == 0;
 }
 
+inline bool is_read_event(const guanaqo::TraceLogger::Log &log) {
+    static constexpr std::string_view prefix = "r:";
+    return std::strncmp(log.name, prefix.data(), prefix.size()) == 0;
+}
+
+inline bool is_write_event(const guanaqo::TraceLogger::Log &log) {
+    static constexpr std::string_view prefix = "w:";
+    return std::strncmp(log.name, prefix.data(), prefix.size()) == 0;
+}
+
 #if CYQLONE_WITH_ZLIB
 struct gzfile_deleter {
     void operator()(gzFile f) const noexcept { gzclose(f); }
@@ -74,13 +84,15 @@ inline std::function<void(std::string_view)> get_writer(const fs::path &path) {
     }
 }
 
-void write_chrome_trace(const fs::path &path, std::span<const guanaqo::TraceLogger::Log> logs) {
+void write_chrome_trace(const fs::path &path, std::span<const guanaqo::TraceLogger::Log> logs,
+                        const TracingOptions &opts) {
     using namespace std::string_view_literals;
     auto writer = get_writer(path);
     std::string buf(4095, '\0');
     bool first = true;
     writer("{\"traceEvents\":["sv);
     std::map<std::size_t, std::size_t> thread_ids;
+    std::map<std::size_t, uint64_t> thread_flops;
     std::size_t num_threads = 0;
     for (const auto &log : logs)
         if (log.name == "thread_id"sv && thread_ids.try_emplace(log.thread_id, log.instance).second)
@@ -95,37 +107,68 @@ void write_chrome_trace(const fs::path &path, std::span<const guanaqo::TraceLogg
     for (const auto &log : logs) {
         if (log.name == "thread_id"sv)
             continue;
+        if (opts.no_barrier && is_barrier_event(log))
+            continue;
         BATMAT_ASSERT(!std::string_view{log.name}.contains('\"')); // TODO: proper escaping
         const auto ts_us  = ns_to_us(log.start_time);
         const auto dur_us = ns_to_us(log.duration);
+        auto tid          = get_thread_id(log.thread_id);
         auto entry        = [&] {
-            if (log.flop_count == -1) {
+            if (is_read_event(log)) {
+                return std::format_to_n( //
+                    buf.data(), static_cast<ptrdiff_t>(buf.size()),
+                    "{}{{\"cat\":\"{}\",\"id\":{},\"ph\":\"f\",\"ts\":{:.3f},"
+                           "\"pid\":0,\"tid\":{}}}",
+                    first ? "\n" : ",\n", std::string_view{log.name}.substr(2), log.instance, ts_us,
+                    tid);
+            } else if (is_write_event(log)) {
+                return std::format_to_n( //
+                    buf.data(), static_cast<ptrdiff_t>(buf.size()),
+                    "{}{{\"cat\":\"{}\",\"id\":{},\"ph\":\"s\",\"ts\":{:.3f},"
+                           "\"pid\":0,\"tid\":{}}}",
+                    first ? "\n" : ",\n", std::string_view{log.name}.substr(2), log.instance, ts_us,
+                    tid);
+            } else if (log.flop_count == -1) {
                 std::string_view cat = is_barrier_event(log) ? "barrier" : "trace";
                 if (log.duration.count() > 0)
                     return std::format_to_n( //
                         buf.data(), static_cast<ptrdiff_t>(buf.size()),
-                        "{}{{\"name\":\"{}\",\"cat\":\"{}\",\"ph\":\"X\",\"ts\":{},"
-                               "\"pid\":0,\"tid\":{},\"dur\":{},"
+                        "{}{{\"name\":\"{}\",\"cat\":\"{}\",\"ph\":\"X\",\"ts\":{:.3f},"
+                               "\"pid\":0,\"tid\":{},\"dur\":{:.3f},"
                                "\"args\":{{\"instance\":{}}}}}",
-                        first ? "\n" : ",\n", log.name, cat, ts_us, get_thread_id(log.thread_id),
-                        dur_us, log.instance);
+                        first ? "\n" : ",\n", log.name, cat, ts_us, tid, dur_us, log.instance);
                 else
                     return std::format_to_n( //
                         buf.data(), static_cast<ptrdiff_t>(buf.size()),
-                        "{}{{\"name\":\"{}\",\"cat\":\"{}\",\"ph\":\"i\",\"ts\":{},"
+                        "{}{{\"name\":\"{}\",\"cat\":\"{}\",\"ph\":\"i\",\"ts\":{:.3f},"
                                "\"pid\":0,\"tid\":{},"
                                "\"args\":{{\"instance\":{}}}}}",
-                        first ? "\n" : ",\n", log.name, cat, ts_us, get_thread_id(log.thread_id),
-                        log.instance);
+                        first ? "\n" : ",\n", log.name, cat, ts_us, tid, log.instance);
             } else {
-                std::string_view cat = "gflops";
+                uint64_t &total_flops = thread_flops[tid];
+                auto old_flops        = 1e-9 * static_cast<double>(total_flops);
+                auto new_flops        = 1e-9 * static_cast<double>(total_flops += log.flop_count);
                 return std::format_to_n( //
                     buf.data(), static_cast<ptrdiff_t>(buf.size()),
-                    "{}{{\"name\":\"{}\",\"cat\":\"{}\",\"ph\":\"X\",\"ts\":{},"
-                           "\"pid\":0,\"tid\":{},\"dur\":{},"
-                           "\"args\":{{\"instance\":{},\"flop_count\":{},\"gflops\":{:.6f}}}}}",
-                    first ? "\n" : ",\n", log.name, cat, ts_us, get_thread_id(log.thread_id),
-                    dur_us, log.instance, log.flop_count, gflops(log));
+                    "{0}{{\"name\":\"{1}\",\"cat\":\"gflops\",\"ph\":\"X\",\"ts\":{2:.3f},"
+                           "\"pid\":0,\"tid\":{3},\"dur\":{4:.3f},\"args\":{{\"instance\":{5},"
+                           "\"flop_count\":{6},\"gflops\":{7:.6f}}}}},\n"
+                           "  {{\"name\":\"gflops_{3}\",\"cat\":\"{1}\",\"ph\":\"C\",\"ts\":{2:.3f},"
+                           "\"pid\":0,\"tid\":{3},\"args\":{{\"gflop_count\":{8:.9f}}}}},\n"
+                           "  {{\"name\":\"gflops_{3}\",\"cat\":\"{1}\",\"ph\":\"C\",\"ts\":{9:.3f},"
+                           "\"pid\":0,\"tid\":{3},\"args\":{{\"gflop_count\":{10:.9f}}}}}",
+                    first ? "\n" : ",\n", // 0
+                    log.name,             // 1
+                    ts_us,                // 2
+                    tid,                  // 3
+                    dur_us,               // 4
+                    log.instance,         // 5
+                    log.flop_count,       // 6
+                    gflops(log),          // 7
+                    old_flops,            // 8
+                    ts_us + dur_us,       // 9
+                    new_flops             // 10
+                );
             }
         }();
         writer(std::string_view{buf.data(), static_cast<size_t>(entry.size)});

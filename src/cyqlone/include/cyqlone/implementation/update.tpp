@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/tracing.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/linalg/compress.hpp>
@@ -27,7 +28,11 @@ using namespace batmat::linalg;
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     if (l < lp()) {
+        CYQ_TRACE_READ(Upf, i, 0);
+        CYQ_TRACE_READ(Upb, i, 0);
         GUANAQO_TRACE("Update L", i);
+        CYQ_TRACE_WRITE(Q, i, 0);
+        CYQ_TRACE_WRITE(Q, i, 1);
         auto L   = tril(cr_L.batch(i));
         auto UpQ = work_Q_cr(l, i);
         auto Σ   = work_Σ_Q(l, i);
@@ -71,6 +76,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
     bool do_update_pcr    = params.solve_method == SolveMethod::PCR && update && VL > 1;
     bool do_refactor_pcr  = params.solve_method == SolveMethod::PCR && !update;
 
+    CYQ_TRACE_READ(Upf, 0, 0);
+    CYQ_TRACE_READ(Upb, 0, 0);
     // Perform the PCR update
     if (do_update_pcr)
         update_pcr(Υ0_fwd, Υ0_bwd, Σ_bwd);
@@ -120,8 +127,11 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
-    GUANAQO_TRACE("Update U", i);
     const index_t i_bwd = sub_wrap_ceil_p(i, 1 << l);
+    CYQ_TRACE_READ(Upb, i_bwd, 0);
+    CYQ_TRACE_READ(Q, i, 1);
+    GUANAQO_TRACE("Update U", i);
+    CYQ_TRACE_WRITE(Upb, i_bwd, 0);
     auto Up_bwd = work_Ups_bwd(l, i_bwd), Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
     if constexpr (VL == 1)
         if (i >= p) { // happens in cases where p is not a power of two
@@ -151,8 +161,11 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::update_Y(index_t l, index_t i) {
-    GUANAQO_TRACE("Update Y", i);
     index_t i_fwd = add_wrap_ceil_p(i, 1 << l);
+    CYQ_TRACE_READ(Upf, i_fwd, 0);
+    CYQ_TRACE_READ(Q, i, 0);
+    GUANAQO_TRACE("Update Y", i);
+    CYQ_TRACE_WRITE(Upf, i_fwd, 0);
     if (i_fwd >= p)
         i_fwd = 0;
     if (i_fwd == 0 && m_update_u0 >= 0)
@@ -432,8 +445,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
             tricyqle.set_thread_update_rank(ctx, c_prev, mj);
             const index_t i_fwd = c, i_bwd = c_prev;
             const bool rot = c == 0;
+            GUANAQO_TRACE("Riccati update Q", j);
+            CYQ_TRACE_WRITE(Upf, i_fwd, 0);
+            CYQ_TRACE_WRITE(Upb, i_bwd, 0);
             if (mj > 0) {
-                GUANAQO_TRACE("Riccati update Q", j);
                 auto Tc    = LH.block(nu - 1, nu, nx, nx); // T(c) = LQ(j₁)⁻ᵀ, see compute_schur
                 auto Υ_fwd = tricyqle.work_Ups_fwd(0, i_fwd).left_cols(mj),
                      Υ_bwd_prev = tricyqle.work_Ups_bwd(0, i_bwd).left_cols(mj);

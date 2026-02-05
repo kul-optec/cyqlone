@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/tracing.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/linalg/gemm.hpp>
@@ -36,7 +37,11 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, i
     if constexpr (v == 1)
         if (iU >= p) // happens in cases where p is not a power of two
             return;
+    CYQ_TRACE_READ(Kb, iU, 0);
+    CYQ_TRACE_READ(L, iU, 1);
     GUANAQO_TRACE("Trsm U", iU);
+    CYQ_TRACE_WRITE(U, iU, 0);
+    CYQ_TRACE_WRITE(U, iU, 1);
     trsm(cr_U.batch(iU), tril(cr_L.batch(iU)).transposed());
 }
 
@@ -46,7 +51,11 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, i
     if constexpr (v == 1)
         if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
             return;
+    CYQ_TRACE_READ(Kf, iY, 0);
+    CYQ_TRACE_READ(L, iY, 0);
     GUANAQO_TRACE("Trsm Y", iY);
+    CYQ_TRACE_WRITE(Y, iY, 0);
+    CYQ_TRACE_WRITE(Y, iY, 1);
     trsm(cr_Y.batch(iY), tril(cr_L.batch(iY)).transposed());
 }
 
@@ -61,13 +70,17 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t i) {
         for (index_t r = 0; r < cr_U.rows(); r += 16)
             __builtin_prefetch(&cr_U.batch(i)(0, r, c), 0, 3);
 #endif
+    CYQ_TRACE_READ(U, i, 1);
+    CYQ_TRACE_READ(Y, i, 1);
     if (ν2p(i_prev) > ν2p(i_next)) {
         // 31|  K˂(i˃) = -U(i) Y(i)ᵀ
         GUANAQO_TRACE("Compute U", i_next);
+        CYQ_TRACE_WRITE(Kb, i_next, 0);
         gemm_neg(cr_U.batch(i), cr_Y.batch(i).transposed(), cr_U.batch(i_next));
     } else {
         // 31|  K˃(i˂) = -Y(i) U(i)ᵀ
         GUANAQO_TRACE("Compute Y", i_prev);
+        CYQ_TRACE_WRITE(Kf, i_prev, 0);
         gemm_neg(cr_Y.batch(i), cr_U.batch(i).transposed(), cr_Y.batch(i_prev));
     }
 }
@@ -83,7 +96,15 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
     const bool factor_next = ν2p(i) == l + 1;
     if constexpr (v == 1) {
         if (i == 0) { // Y(iY)=0 for M on the first thread
+            CYQ_TRACE_READ(M, i, 0);
+            CYQ_TRACE_READ(U, iU, 0);
             GUANAQO_TRACE("Subtract UUᵀ", i);
+            if (factor_next) {
+                CYQ_TRACE_WRITE(L, i, 0);
+                CYQ_TRACE_WRITE(L, i, 1);
+            } else {
+                CYQ_TRACE_WRITE(M, i, 0);
+            }
             auto U = cr_U.batch(iU);
             // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
             // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
@@ -91,7 +112,15 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
                         : syrk_sub(U, M);
             return;
         } else if (iU >= p) { // happens in cases where p is not a power of two
+            CYQ_TRACE_READ(M, i, 0);
+            CYQ_TRACE_READ(Y, iY, 0);
             GUANAQO_TRACE("Subtract YYᵀ", i);
+            if (factor_next) {
+                CYQ_TRACE_WRITE(L, i, 0);
+                CYQ_TRACE_WRITE(L, i, 1);
+            } else {
+                CYQ_TRACE_WRITE(M, i, 0);
+            }
             auto Y = cr_Y.batch(iY);
             // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
             // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
@@ -107,17 +136,27 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
             __builtin_prefetch(&cr_Y.batch(iY)(0, r, c), 0, 3);
 #endif
     {
+        CYQ_TRACE_READ(M, i, 0);
+        CYQ_TRACE_READ(U, iU, 0);
         GUANAQO_TRACE("Subtract UUᵀ", i);
+        CYQ_TRACE_WRITE(M, i, 0);
         // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
         syrk_sub(U, M);
     }
     if (factor_next && i != 0) {
+        CYQ_TRACE_READ(M, i, 0);
+        CYQ_TRACE_READ(Y, iY, 0);
         GUANAQO_TRACE("Factor M", i);
+        CYQ_TRACE_WRITE(L, i, 0);
+        CYQ_TRACE_WRITE(L, i, 1);
         // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
         // 28|  if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
         syrk_sub_potrf(Y, M); // chol(M - YYᵀ)
     } else {
+        CYQ_TRACE_READ(M, i, 0);
+        CYQ_TRACE_READ(Y, iY, 0);
         GUANAQO_TRACE("Subtract YYᵀ", i);
+        CYQ_TRACE_WRITE(M, i, 0);
         // 27|  M(i)⁺ = M(i) - U(iU) U(iU)ᵀ - Y(iY) Y(iY)ᵀ
         if (i != 0)
             syrk_sub(Y, M);
@@ -126,7 +165,10 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
     }
     // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
     if (factor_next && i == 0) {
+        CYQ_TRACE_READ(M, i, 0);
         GUANAQO_TRACE("Factor M", i);
+        CYQ_TRACE_WRITE(L, i, 0);
+        CYQ_TRACE_WRITE(L, i, 1);
         potrf(M, L0);
     }
 }
