@@ -35,7 +35,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
     // (if this ever changes, increase the size of riccati_V).
     constexpr bool no_keep_V = true;
     using batmat::linalg::compress_masks_sqrt;
-    const index_t c = ctx.index;
+    const index_t c = riccati_thread_assignment(ctx);
     //  3|  j₁ = n(c-1)+1, jₙ = nc
     const index_t dn  = c * n;                                    // data batch index
     const index_t jn  = c * n;                                    // stage index
@@ -154,7 +154,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut_view<> ux,
                                                                mut_view<> λ,
                                                                mut_view<> work) const {
-    const index_t c       = ctx.index;
+    const index_t c       = riccati_thread_assignment(ctx);
     const index_t c_prev  = sub_wrap_p(c, 1);
     const index_t jn      = c * n;      // stage index
     const index_t dn      = c * n;      // jₙ data batch index

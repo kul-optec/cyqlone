@@ -719,6 +719,7 @@ struct CyqloneSolver {
     /// @name Low-level factorization and forward solve routines
     /// @{
 
+    index_t riccati_thread_assignment(Context &ctx) const { return add_wrap_p(ctx.index, 1); }
     template <bool Factor = true, bool Solve = true>
     void factor_riccati_solve(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
     template <bool Factor = true, bool Solve = true>

@@ -258,7 +258,7 @@ struct CyqloneBackend {
     void ineq_constr_resid(Context &ctx, const ineq_constr_vec_t &Ax, ineq_constr_vec_t &e) const {
         auto t                   = get_timed(&Timings::ineq_constr_resid);
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             OCP_t::compact_blas::proj_diff(simdify(Ax.batch(di)), simdify(b_min_strided.batch(di)),
@@ -268,7 +268,7 @@ struct CyqloneBackend {
 
     void project_multipliers_ineq(Context &ctx, ineq_constr_vec_t &y) const {
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             auto yi          = simdify(y.batch(di));
@@ -298,7 +298,7 @@ struct CyqloneBackend {
         using std::isfinite;
         auto nrm_simd            = norms.zero_simd();
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             nrm_simd         = OCP_t::compact_blas::xreduce(
@@ -323,7 +323,7 @@ struct CyqloneBackend {
         using std::isfinite;
         auto nrm_simd            = norms.zero_simd();
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             nrm_simd         = OCP_t::compact_blas::xreduce_enumerate(
@@ -407,7 +407,7 @@ struct CyqloneBackend {
         GUANAQO_TRACE("update_penalty_y", 0);
         auto t                   = get_timed(&Timings::update_penalty_y);
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         const real_t min_denom   = 1e-6;
         const real_t norm_inf_e  = fmax(min_denom, norm_inf(ctx, e));
         index_t num_changed      = 0;
@@ -510,7 +510,7 @@ struct CyqloneBackend {
         auto thr_parts = std::span{thread_indices}.subspan(0, p);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
         std::span<Breakpoint> neg_bp, pos_bp;
-        const index_t ti        = ctx.index;
+        const index_t ti        = ocp.riccati_thread_assignment(ctx);
         Breakpoint *const fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
         Breakpoint *const inf_0 = fin_0 + 2 * num_stages * ny_M * VL;
         Breakpoint *fin = fin_0, *inf = inf_0;
@@ -592,7 +592,7 @@ struct CyqloneBackend {
         const auto x_            = simdify(x);
         const auto y_            = simdify(y);
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             OCP_t::compact_blas::xaxpy(a, x_.batch(di), y_.batch(di));
@@ -603,7 +603,7 @@ struct CyqloneBackend {
     void xcopy(Context &ctx, const T &x, U &y) const {
         BATMAT_ASSERT(x.depth() == y.depth());
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             batmat::linalg::copy(x.batch(di), y.batch(di));
@@ -613,7 +613,7 @@ struct CyqloneBackend {
     template <class T, class U>
     void set_constant(Context &ctx, T &x, const U &y) const {
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             batmat::linalg::fill(y, x.batch(di));
@@ -623,7 +623,7 @@ struct CyqloneBackend {
     [[nodiscard]] real_t dot(Context &ctx, const var_vec_t &a, const var_vec_t &b) const {
         real_t sum               = 0;
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             sum += OCP_t::compact_blas::xdot(simdify(a.batch(di)), simdify(b.batch(di)));
@@ -645,7 +645,7 @@ struct CyqloneBackend {
         using local_sums_t = std::array<real_t, sizeof...(Args) / 2>;
         local_sums_t local_sums{};
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             local_dots(local_sums, args.batch(di)...);
@@ -663,7 +663,7 @@ struct CyqloneBackend {
         const index_t num_stages = ocp.n; // number of stages per thread
         GUANAQO_TRACE("norm_inf_l1_sq", 0, 4 * x.batch_size() * x.rows() * num_stages);
         auto nrm_simd    = norms.zero_simd();
-        const index_t ti = ctx.index;
+        const index_t ti = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             nrm_simd         = OCP_t::compact_blas::xreduce(nrm_simd, norms, std::identity{},
@@ -683,7 +683,7 @@ struct CyqloneBackend {
     [[nodiscard]] real_t norm_squared(Context &ctx, const T &x) const {
         real_t sum               = 0;
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             sum += OCP_t::compact_blas::xnrm2sq(simdify(x.batch(di)));
@@ -694,7 +694,7 @@ struct CyqloneBackend {
     template <class T>
     void scale(Context &ctx, real_t s, T &x) const {
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             OCP_t::compact_blas::xaxpby(real_t{}, simdify(x.batch(di)), s, simdify(x.batch(di)));
@@ -710,7 +710,7 @@ struct CyqloneBackend {
         using std::clamp;
         index_t count_J_local    = 0;
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         {
             auto t = get_timed(&Timings::calc_y_hat);
             for (index_t i = 0; i < num_stages; ++i) {
@@ -761,7 +761,7 @@ struct CyqloneBackend {
         using std::isfinite;
         auto nrm_simd            = norms.zero_simd();
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             nrm_simd         = OCP_t::compact_blas::xreduce(
@@ -806,7 +806,7 @@ struct CyqloneBackend {
         BATMAT_ASSERT(J.depth() == J_old.depth());
         BATMAT_ASSERT(J.cols() == 1);
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         index_t num_different    = 0;
         {
             GUANAQO_TRACE("active_set_change", 0);
@@ -908,7 +908,7 @@ struct CyqloneBackend {
                var_vec_t &d, var_vec_t &ξ, ineq_constr_vec_t &Ad, eq_constr_vec_t &Δλ,
                var_vec_t &MᵀΔλ) {
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             OCP_t::compact_blas::xadd_neg_copy(simdify(d.batch(di)), simdify(grad.batch(di)),
@@ -1069,7 +1069,7 @@ struct CyqloneBackend {
             ctx.arrive_and_wait(__LINE__);
         }
         const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ctx.index;
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
             OCP_t::compact_blas::xadd_neg_copy(simdify(d.batch(di)), simdify(grad.batch(di)),

@@ -25,7 +25,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 template <bool Factor, bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
 void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> ux, mut_view<> λ) {
-    const index_t c   = ctx.index;
+    const index_t c   = riccati_thread_assignment(ctx);
     const auto c_next = add_wrap_p(c, 1);
     //  7|  j₁ = n(c-1)+1,  jₙ = nc
     const auto dn = c * n, dn_next = c_next * n, d1_next = dn_next + n - 1;

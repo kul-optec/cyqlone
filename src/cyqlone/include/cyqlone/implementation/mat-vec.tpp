@@ -16,7 +16,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, 
                                                                   mut_view<> Mxb) const {
     // (Mx + b)(j) = A(j) x(j) + B(j) u(j) - x(j+1) + b(j)
     auto arrival          = ctx.arrive();
-    const index_t c       = ctx.index;
+    const index_t c       = riccati_thread_assignment(ctx);
     const index_t dn      = c * n; // data batch index
     const index_t jn      = c * n; // stage index
     const index_t c_next  = add_wrap_p(c, 1);
@@ -52,7 +52,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
     // (Mᵀλ)(j) = [ B(j)ᵀ ] λ(j) - [ 0 ] λ(j-1)
     //            [ A(j)ᵀ ]        [ I ]
     auto arrival          = ctx.arrive();
-    const index_t c       = ctx.index;
+    const index_t c       = riccati_thread_assignment(ctx);
     const index_t dn      = c * n; // data batch index
     const index_t jn      = c * n; // stage index
     const index_t c_prev  = sub_wrap_p(c, 1);
@@ -91,7 +91,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::general_constr(Context &ctx, view<> ux,
                                                         mut_view<> DCux) const {
-    const index_t c  = ctx.index;
+    const index_t c  = riccati_thread_assignment(ctx);
     const index_t dn = c * n; // data batch index
     const index_t jn = c * n; // stage index
     for (index_t i = 0; i < n; ++i) {
@@ -105,7 +105,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::general_constr(Context &ctx, view<> ux,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(Context &ctx, view<> y,
                                                                    mut_view<> DCᵀy) const {
-    const index_t c  = ctx.index;
+    const index_t c  = riccati_thread_assignment(ctx);
     const index_t dn = c * n; // data batch index
     const index_t jn = c * n; // stage index
     for (index_t i = 0; i < n; ++i) {
@@ -135,7 +135,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, value_type α,
                                                        view<> q, value_type β,
                                                        mut_view<> grad_f) const {
-    const index_t c  = ctx.index;
+    const index_t c  = riccati_thread_assignment(ctx);
     const index_t dn = c * n; // data batch index
     const index_t jn = c * n; // stage index
     for (index_t i = 0; i < n; ++i) {
@@ -152,7 +152,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx, value_type γ,
                                                                    view<> ux, view<> ux0, view<> q,
                                                                    mut_view<> grad_f) const {
-    const index_t c  = ctx.index;
+    const index_t c  = riccati_thread_assignment(ctx);
     using abi        = batmat::linalg::simdified_abi_t<decltype(ux.batch(0))>;
     using simd_types = batmat::linalg::simd_view_types<T, abi>;
     using simd       = simd_types::simd;
@@ -179,7 +179,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx,
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_remove_regularization(
     Context &ctx, value_type γ, view<> ux, view<> ux0, mut_view<> grad_f) const {
-    const index_t c  = ctx.index;
+    const index_t c  = riccati_thread_assignment(ctx);
     using abi        = batmat::linalg::simdified_abi_t<decltype(ux.batch(0))>;
     using simd_types = batmat::linalg::simd_view_types<T, abi>;
     using simd       = simd_types::simd;

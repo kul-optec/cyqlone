@@ -312,7 +312,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_cr(Context &ctx) {
 template <index_t VL, class T, StorageOrder DefaultOrder>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
 void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> ΔΣ) {
-    const index_t c = ctx.index;
+    const index_t c = riccati_thread_assignment(ctx);
     //  3|  j₁ = n(c-1)+1, jₙ = nc
     const index_t dn  = c * n; // data batch index
     const index_t jn  = c * n; // stage index
