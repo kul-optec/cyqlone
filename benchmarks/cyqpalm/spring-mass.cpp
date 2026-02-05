@@ -6,6 +6,7 @@
 #include <cyqlone/qpalm/settings.hpp>
 #include <cyqlone/qpalm/solver.hpp>
 #include <cyqlone/qpalm/status.hpp>
+#include <cyqlone/tracing.hpp>
 #include <CLI/CLI.hpp>
 #include <batmat/openmp.h>
 #include <batmat-version.h>
@@ -14,6 +15,8 @@
 #include <filesystem>
 #include <format>
 #include <generator>
+#include <map>
+#include <optional>
 #include <random>
 #include <stdexcept>
 #include <utility>
@@ -79,6 +82,7 @@ struct Options {
     bool custom_reporter              = true;
     bool print_extra                  = false;
     bool use_color                    = false;
+    bool trace                        = false;
     std::string export_problem{};
 };
 
@@ -100,10 +104,48 @@ qp::problems::SpringMassProblem create_problem(const SpringMassParams &params) {
     return problem;
 }
 
+#if GUANAQO_WITH_TRACING
+std::map<std::string, fs::path> traces;
+void disable_tracing() { guanaqo::get_trace_logger().logs.resize(0); }
+void trace_run(auto &&fun, const auto &name) {
+    std::string filename = std::format("{}.csv", name);
+    std::filesystem::path out_dir{"traces"};
+    out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
+    std::filesystem::path out_file = out_dir / filename;
+    if (auto [_, ins] = traces.try_emplace(name, out_file); !ins)
+        return;
+    guanaqo::get_trace_logger().reset();
+    guanaqo::get_trace_logger().logs.resize(0);
+    guanaqo::get_trace_logger().logs.reserve(1'048'576);
+    fun(); // warmup
+    guanaqo::get_trace_logger().reset();
+    guanaqo::get_trace_logger().logs.resize(1'048'576);
+    fun();
+    std::filesystem::create_directories(out_dir);
+    std::ofstream csv{out_file};
+    auto logs = guanaqo::get_trace_logger().get_logs();
+    guanaqo::TraceLogger::write_column_headings(csv) << '\n';
+    for (const auto &log : logs)
+        csv << log << '\n';
+#if CYQLONE_WITH_ZLIB
+    cyqlone::write_chrome_trace(out_file.replace_extension(".json.gz"), logs);
+#endif
+}
+void print_traces(std::ostream &os) {
+    for (const auto &[_, pth] : traces)
+        os << pth << '\n';
+}
+#else
+void disable_tracing() {}
+void trace_run(auto &&, const auto &) {}
+void print_traces(std::ostream &) {}
+#endif
+
 template <index_t VL, qp::StorageOrder Order>
-void run_benchmark(benchmark::State &state, const SpringMassParams &params,
-                   qp::CyqloneBackendSettings backend_settings, qp::Settings settings,
-                   bool warm = false) try {
+void run_benchmark(benchmark::State &state, [[maybe_unused]] const std::string &param_name,
+                   const SpringMassParams &params, qp::CyqloneBackendSettings backend_settings,
+                   qp::Settings settings, bool warm = false, bool trace = false) try {
+    disable_tracing(); // No tracing during the actual benchmark
     if (backend_settings.processors < 1)
         return state.SkipWithMessage("Number of processors must be at least 1.");
     auto problem = create_problem(params);
@@ -138,6 +180,8 @@ void run_benchmark(benchmark::State &state, const SpringMassParams &params,
         time_mat_vec += seconds(qpalm.stats->timings.mat_vec_MT.wall_time).count();
         time_mat_vec += seconds(qpalm.stats->timings.mat_vec_Q.wall_time).count();
     }
+    if (trace)
+        trace_run([&] { qpalm(); }, param_name);
     auto sol       = ocp.reconstruct_solution(problem.ocp, qpalm.get_solution(),
                                               qpalm.get_inequality_multipliers(),
                                               qpalm.get_equality_multipliers());
@@ -274,14 +318,15 @@ std::string_view order(qp::StorageOrder o) { return o == qp::StorageOrder::RowMa
 
 template <index_t VL, qp::StorageOrder O>
 std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
-    static constexpr auto cyqlone_solver = [](std::string_view name,
-                                              const qp::CyqloneBackendSettings &backend,
-                                              const qp::Settings &settings) {
-        return Solver{
-            std::format("cyqlone(p={},v={},{},{})", backend.processors, VL, order(O), name),
-            [=](benchmark::State &state, const SpringMassParams &params) {
-                run_benchmark<VL, O>(state, params, backend, settings, true);
-            }};
+    const auto cyqlone_solver = [trace{opts.trace}](std::string_view name,
+                                                    const qp::CyqloneBackendSettings &backend,
+                                                    const qp::Settings &settings) {
+        const auto param_name =
+            std::format("cyqlone(p={},v={},{},{})", backend.processors, VL, order(O), name);
+        return Solver{param_name, [=](benchmark::State &state, const SpringMassParams &params) {
+                          run_benchmark<VL, O>(state, param_name, params, backend, settings, true,
+                                               trace);
+                      }};
     };
     for (auto p : opts.parallelism) {
         qp::CyqloneBackendSettings backend{
@@ -452,6 +497,7 @@ void register_options(const char *program, CLI::App &app, Options &opts) {
                    "Parallel PCR factorization threshold for the Cyqlone backend");
     app.add_option("--export-problem", opts.export_problem,
                    "Export a single problem instance to a .mat file");
+    app.add_flag("--trace,!--no-trace", opts.trace, "Enable tracing of CyQPALM solver runs");
     app.add_flag("--custom-reporter,!--no-custom-reporter", opts.custom_reporter,
                  "Use custom benchmark reporter");
     app.add_flag("--print-extra,!--no-print-extra", opts.print_extra,
@@ -522,6 +568,7 @@ int main(int argc, char **argv) try {
                                                opts.print_extra, opts.use_color)
                         : nullptr;
     benchmark::RunSpecifiedBenchmarks(reporter.get());
+    print_traces(std::cout);
     benchmark::Shutdown();
 } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << std::endl;
