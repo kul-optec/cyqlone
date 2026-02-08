@@ -9,6 +9,8 @@
 #include <cyqlone/tracing.hpp>
 #include <CLI/CLI.hpp>
 #include <batmat/openmp.h>
+#include <guanaqo/pcm/counters.hpp>
+#include <guanaqo/perfetto/trace.hpp>
 #include <batmat-version.h>
 #include <cyqlone-version.h>
 #include <algorithm>
@@ -108,12 +110,23 @@ qp::problems::SpringMassProblem create_problem(const SpringMassParams &params) {
 std::map<std::string, fs::path> traces;
 void disable_tracing() { guanaqo::get_trace_logger().logs.resize(0); }
 void trace_run(auto &&fun, const auto &name) {
-    std::string filename = std::format("{}.csv", name);
     std::filesystem::path out_dir{"traces"};
     out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
-    std::filesystem::path out_file = out_dir / filename;
+    std::filesystem::path out_file = out_dir / name;
     if (auto [_, ins] = traces.try_emplace(name, out_file); !ins)
         return;
+#if GUANAQO_WITH_PERFETTO
+#if GUANAQO_WITH_PCM_TRACING
+    guanaqo::pcm::enable_counters();
+#endif
+    fun(); // warmup
+    auto trace = guanaqo::trace::start_tracing(2 * 1024 * 1024);
+    fun();
+#if GUANAQO_WITH_PCM_TRACING
+    guanaqo::pcm::disable_counters();
+#endif
+    guanaqo::trace::stop_tracing(std::move(trace), out_file.replace_extension(".pftrace"));
+#else
     guanaqo::get_trace_logger().reset();
     guanaqo::get_trace_logger().logs.resize(0);
     guanaqo::get_trace_logger().logs.reserve(1'048'576);
@@ -122,13 +135,14 @@ void trace_run(auto &&fun, const auto &name) {
     guanaqo::get_trace_logger().logs.resize(1'048'576);
     fun();
     std::filesystem::create_directories(out_dir);
-    std::ofstream csv{out_file};
+    std::ofstream csv{out_file.replace_extension(".csv")};
     auto logs = guanaqo::get_trace_logger().get_logs();
     guanaqo::TraceLogger::write_column_headings(csv) << '\n';
     for (const auto &log : logs)
         csv << log << '\n';
 #if CYQLONE_WITH_ZLIB
     cyqlone::write_chrome_trace(out_file.replace_extension(".json.gz"), logs);
+#endif
 #endif
 }
 void print_traces(std::ostream &os) {
@@ -549,6 +563,9 @@ void register_context() {
 }
 
 int main(int argc, char **argv) try {
+#if GUANAQO_WITH_PERFETTO
+    guanaqo::trace::initialize_tracing();
+#endif
     char *const program = argv[0];
     CLI::App app{"CyQPALM and Cyqlone Spring-Mass Benchmarks"};
     Options opts;
