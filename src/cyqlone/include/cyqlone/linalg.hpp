@@ -17,25 +17,41 @@ using namespace batmat::linalg;
 
 namespace detail {
 
+template <class T, class Abi, StorageOrder O, class F, class X, class... Xs>
+[[gnu::always_inline]] inline void iter_elems(F &&fun, X &&x, Xs &&...xs) {
+    using types = simd_view_types<T, Abi>;
+    if constexpr (O == StorageOrder::ColMajor) {
+        for (index_t c = 0; c < x.cols(); ++c)
+            for (index_t r = 0; r < x.rows(); ++r)
+                fun(types::aligned_load(&x(0, r, c)), types::aligned_load(&xs(0, r, c))...);
+    } else {
+        for (index_t r = 0; r < x.rows(); ++r)
+            for (index_t c = 0; c < x.cols(); ++c)
+                fun(types::aligned_load(&x(0, r, c)), types::aligned_load(&xs(0, r, c))...);
+    }
+}
+
+template <class T, class Abi, StorageOrder O, class F, class X, class... Xs>
+[[gnu::always_inline]] inline void iter_elems_store(F &&fun, X &&x, Xs &&...xs) {
+    using types = simd_view_types<T, Abi>;
+    if constexpr (O == StorageOrder::ColMajor) {
+        for (index_t c = 0; c < x.cols(); ++c)
+            for (index_t r = 0; r < x.rows(); ++r)
+                types::aligned_store(fun(types::aligned_load(&xs(0, r, c))...), &x(0, r, c));
+    } else {
+        for (index_t r = 0; r < x.rows(); ++r)
+            for (index_t c = 0; c < x.cols(); ++c)
+                types::aligned_store(fun(types::aligned_load(&xs(0, r, c))...), &x(0, r, c));
+    }
+}
+
 template <class T, class Abi, StorageOrder O0, class Tinit, class F, class R, class... Args>
 auto reduce(Tinit init, F fun, R reduce, view<const T, Abi, O0> x0, const Args &...xs) {
-    using types     = simd_view_types<T, Abi>;
-    const index_t m = x0.rows(), n = x0.cols();
     BATMAT_ASSERT(((x0.rows() == xs.rows()) && ...));
     BATMAT_ASSERT(((x0.cols() == xs.cols()) && ...));
     BATMAT_ASSERT(((x0.depth() == xs.depth()) && ...));
     BATMAT_ASSERT(((x0.batch_size() == xs.batch_size()) && ...));
-    const auto process_elem = [&](index_t r, index_t c) {
-        return fun(init, types::aligned_load(&x0(0, r, c)), types::aligned_load(&xs(0, r, c))...);
-    };
-    if constexpr (O0 == StorageOrder::ColMajor)
-        for (index_t c = 0; c < n; ++c)
-            for (index_t r = 0; r < m; ++r)
-                init = process_elem(r, c);
-    else
-        for (index_t r = 0; r < m; ++r)
-            for (index_t c = 0; c < n; ++c)
-                init = process_elem(r, c);
+    iter_elems<T, Abi, O0>([&](auto... args) { init = fun(init, args...); }, x0, xs...);
     return reduce(init);
 }
 
@@ -72,20 +88,7 @@ template <class T, class Abi, StorageOrder OA, StorageOrder OB, StorageOrder OC>
     BATMAT_ASSERT(A.cols() == B.cols());
     BATMAT_ASSERT(A.rows() == C.rows());
     BATMAT_ASSERT(A.cols() == C.cols());
-    using types             = simd_view_types<T, Abi>;
-    const auto process_elem = [&](index_t r, index_t c) {
-        const auto Ai = types::aligned_load(&A(0, r, c));
-        const auto Bi = types::aligned_load(&B(0, r, c));
-        types::aligned_store(Ai * Bi, &C(0, r, c));
-    };
-    if constexpr (OC == StorageOrder::ColMajor)
-        for (index_t c = 0; c < A.cols(); ++c)
-            for (index_t r = 0; r < A.rows(); ++r)
-                process_elem(r, c);
-    else
-        for (index_t r = 0; r < A.rows(); ++r)
-            for (index_t c = 0; c < A.cols(); ++c)
-                process_elem(r, c);
+    iter_elems_store<T, Abi, OC>([&](auto Ai, auto Bi) { return Ai * Bi; }, C, A, B);
 }
 
 /// Elementwise clamping z = max(lo, min(x, hi)).
@@ -98,21 +101,8 @@ template <class T, class Abi, StorageOrder O>
     BATMAT_ASSERT(x.cols() == hi.cols());
     BATMAT_ASSERT(x.rows() == z.rows());
     BATMAT_ASSERT(x.cols() == z.cols());
-    using types             = simd_view_types<T, Abi>;
-    const auto process_elem = [&](index_t r, index_t c) {
-        const auto xi  = types::aligned_load(&x(0, r, c));
-        const auto loi = types::aligned_load(&lo(0, r, c));
-        const auto hii = types::aligned_load(&hi(0, r, c));
-        types::aligned_store(fmax(loi, fmin(xi, hii)), &z(0, r, c));
-    };
-    if constexpr (O == StorageOrder::ColMajor)
-        for (index_t c = 0; c < x.cols(); ++c)
-            for (index_t r = 0; r < x.rows(); ++r)
-                process_elem(r, c);
-    else
-        for (index_t r = 0; r < x.rows(); ++r)
-            for (index_t c = 0; c < x.cols(); ++c)
-                process_elem(r, c);
+    const auto clamp = [&](auto xi, auto loi, auto hii) { return fmax(loi, fmin(xi, hii)); };
+    iter_elems_store<T, Abi, O>(clamp, z, x, lo, hi);
 }
 
 /// Elementwise clamping residual z = x - max(lo, min(x, hi)).
@@ -125,47 +115,35 @@ template <class T, class Abi, StorageOrder O>
     BATMAT_ASSERT(x.cols() == hi.cols());
     BATMAT_ASSERT(x.rows() == z.rows());
     BATMAT_ASSERT(x.cols() == z.cols());
-    using types             = simd_view_types<T, Abi>;
-    const auto process_elem = [&](index_t r, index_t c) {
-        const auto xi  = types::aligned_load(&x(0, r, c));
-        const auto loi = types::aligned_load(&lo(0, r, c));
-        const auto hii = types::aligned_load(&hi(0, r, c));
-        // x - clamp(x, lo, hi) = clamp(0, x - hi, x - lo)
-        types::aligned_store(fmax(xi - hii, fmin(typename types::simd{0}, xi - loi)), &z(0, r, c));
+    using simd             = batmat::datapar::simd<T, Abi>;
+    const auto clamp_resid = [&](auto xi, auto loi, auto hii) {
+        return fmax(xi - hii, fmin(simd{0}, xi - loi));
     };
-    if constexpr (O == StorageOrder::ColMajor)
-        for (index_t c = 0; c < x.cols(); ++c)
-            for (index_t r = 0; r < x.rows(); ++r)
-                process_elem(r, c);
-    else
-        for (index_t r = 0; r < x.rows(); ++r)
-            for (index_t c = 0; c < x.cols(); ++c)
-                process_elem(r, c);
+    iter_elems_store<T, Abi, O>(clamp_resid, z, x, lo, hi);
 }
 
 /// Linear combination of vectors z = beta * z + sum_i alpha_i * x_i.
-template <class T, class Abi, T beta, StorageOrder O, class... Xs>
+template <class T, class Abi, T Beta, StorageOrder O, class... Xs>
 [[gnu::flatten]] void gaxpby(view<T, Abi, O> z, const std::array<T, sizeof...(Xs)> &alphas,
                              const Xs &...xs) {
     BATMAT_ASSERT(((z.rows() == xs.rows()) && ...));
     BATMAT_ASSERT(((z.cols() == xs.cols()) && ...));
-    using types             = simd_view_types<T, Abi>;
-    const auto process_elem = [&](index_t r, index_t c) {
-        std::array xis{types::aligned_load(&xs(0, r, c))...};
-        auto zi = beta != 0 ? beta * types::aligned_load(&z(0, r, c)) : typename types::simd{0};
-        [&]<std::size_t... Is>(std::index_sequence<Is...>) {
-            zi += ((xis[Is] * alphas[Is]) + ...);
-        }(std::make_index_sequence<sizeof...(Xs)>());
-        types::aligned_store(zi, &z(0, r, c));
-    };
-    if constexpr (O == StorageOrder::ColMajor)
-        for (index_t c = 0; c < z.cols(); ++c)
-            for (index_t r = 0; r < z.rows(); ++r)
-                process_elem(r, c);
+    if constexpr (Beta == 0)
+        iter_elems_store<T, Abi, O>(
+            [&](auto... xis) {
+                return [&]<std::size_t... Is>(std::index_sequence<Is...>, auto... xis) {
+                    return ((xis * alphas[Is]) + ...);
+                }(std::make_index_sequence<sizeof...(Xs)>(), xis...);
+            },
+            z, xs...);
     else
-        for (index_t r = 0; r < z.rows(); ++r)
-            for (index_t c = 0; c < z.cols(); ++c)
-                process_elem(r, c);
+        iter_elems_store<T, Abi, O>(
+            [&](auto zi, auto... xis) {
+                return [&]<std::size_t... Is>(std::index_sequence<Is...>, auto... xis) {
+                    return zi * Beta + ((xis * alphas[Is]) + ...);
+                }(std::make_index_sequence<sizeof...(Xs)>(), xis...);
+            },
+            z, z, xs...);
 }
 
 /// Negate a matrix or vector.
@@ -176,19 +154,7 @@ template <class T, class Abi, int Rotate, StorageOrder O>
     BATMAT_ASSERT(A.rows() == B.rows());
     BATMAT_ASSERT(A.cols() == B.cols());
     using batmat::ops::rotl;
-    using types             = simd_view_types<T, Abi>;
-    const auto process_elem = [&](index_t r, index_t c) {
-        const auto Ai = types::aligned_load(&A(0, r, c));
-        types::aligned_store(-rotl<Rotate>(Ai), &B(0, r, c));
-    };
-    if constexpr (O == StorageOrder::ColMajor)
-        for (index_t c = 0; c < A.cols(); ++c)
-            for (index_t r = 0; r < A.rows(); ++r)
-                process_elem(r, c);
-    else
-        for (index_t r = 0; r < A.rows(); ++r)
-            for (index_t c = 0; c < A.cols(); ++c)
-                process_elem(r, c);
+    iter_elems_store<T, Abi, O>([&](auto Ai) { return -rotl<Rotate>(Ai); }, B, A);
 }
 
 /// Subtract two matrices or vectors C = A - B.
@@ -199,20 +165,7 @@ template <class T, class Abi, int Rotate, StorageOrder O>
     BATMAT_ASSERT(A.rows() == C.rows());
     BATMAT_ASSERT(A.cols() == C.cols());
     using batmat::ops::rotl;
-    using types             = simd_view_types<T, Abi>;
-    const auto process_elem = [&](index_t r, index_t c) {
-        const auto Ai = types::aligned_load(&A(0, r, c));
-        const auto Bi = types::aligned_load(&B(0, r, c));
-        types::aligned_store(Ai - rotl<Rotate>(Bi), &C(0, r, c));
-    };
-    if constexpr (O == StorageOrder::ColMajor)
-        for (index_t c = 0; c < A.cols(); ++c)
-            for (index_t r = 0; r < A.rows(); ++r)
-                process_elem(r, c);
-    else
-        for (index_t r = 0; r < A.rows(); ++r)
-            for (index_t c = 0; c < A.cols(); ++c)
-                process_elem(r, c);
+    iter_elems_store<T, Abi, O>([&](auto Ai, auto Bi) { return Ai - rotl<Rotate>(Bi); }, C, A, B);
 }
 
 /// Add two matrices or vectors C = A + B.
@@ -223,20 +176,7 @@ template <class T, class Abi, int Rotate, StorageOrder O>
     BATMAT_ASSERT(A.rows() == C.rows());
     BATMAT_ASSERT(A.cols() == C.cols());
     using batmat::ops::rotl;
-    using types             = simd_view_types<T, Abi>;
-    const auto process_elem = [&](index_t r, index_t c) {
-        const auto Ai = types::aligned_load(&A(0, r, c));
-        const auto Bi = types::aligned_load(&B(0, r, c));
-        types::aligned_store(Ai + rotl<Rotate>(Bi), &C(0, r, c));
-    };
-    if constexpr (O == StorageOrder::ColMajor)
-        for (index_t c = 0; c < A.cols(); ++c)
-            for (index_t r = 0; r < A.rows(); ++r)
-                process_elem(r, c);
-    else
-        for (index_t r = 0; r < A.rows(); ++r)
-            for (index_t c = 0; c < A.cols(); ++c)
-                process_elem(r, c);
+    iter_elems_store<T, Abi, O>([&](auto Ai, auto Bi) { return Ai + rotl<Rotate>(Bi); }, C, A, B);
 }
 
 } // namespace detail
