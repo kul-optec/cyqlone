@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <cyqlone/compact.hpp>
 #include <cyqlone/cyqlone.hpp>
 #include <cyqlone/linalg.hpp>
 #include <cyqlone/random-ocp.hpp>
@@ -367,11 +366,7 @@ TEST_P(CyqloneFactorTest, factor) {
             solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
             solver.cost_gradient(ctx, ux, -1, ux_initial, 0, grad);
             solver.general_constr(ctx, ux, DCux);
-            ctx.arrive_and_wait();
-            if (ctx.is_master()) // TODO
-                for (index_t b = 0; b < DCux.num_batches(); ++b)
-                    cyqlone::linalg::hadamard(DCux.batch(b), Σ2.batch(b));
-            ctx.arrive_and_wait();
+            ctx.run_single_sync([&] { cyqlone::linalg::hadamard(DCux, Σ2); });
             solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);
         });
         ux.view() = ux_initial.view();
@@ -391,27 +386,19 @@ TEST_P(CyqloneFactorTest, factor) {
         solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
         solver.cost_gradient(ctx, ux, -1, ux_initial, 0, grad);
         solver.general_constr(ctx, ux, DCux);
-        ctx.arrive_and_wait();
-        if (ctx.is_master()) // TODO
-            for (index_t b = 0; b < DCux.num_batches(); ++b)
-                cyqlone::linalg::hadamard(DCux.batch(b), Σ2.batch(b));
-        ctx.arrive_and_wait();
+        ctx.run_single_sync([&] { cyqlone::linalg::hadamard(DCux, Σ2); });
         solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);
     });
 
-    using compact_blas =
-        cyqlone::compact::CompactBLAS<real_t, batmat::datapar::deduced_abi<real_t, Solver::v>,
-                                      StorageOrder::ColMajor>; // TODO: remove
     using std::pow;
     const auto ε = pow(std::numeric_limits<real_t>::epsilon(), 0.6);
-    for (index_t b = 0; b < Mxb.num_batches(); ++b)
-        cyqlone::linalg::axpy(grad.batch(b), {1, 1}, DCᵀΣDCux.batch(b), Mᵀλ.batch(b));
+    cyqlone::linalg::axpy(grad, {1, 1}, DCᵀΣDCux, Mᵀλ);
     std::cout << "dynamics constraints: "
-              << guanaqo::float_to_str(compact_blas::xnrminf(simdify(Mxb)))
+              << guanaqo::float_to_str(cyqlone::linalg::norm_inf(simdify(Mxb)))
               << "\nstationarity:         "
-              << guanaqo::float_to_str(compact_blas::xnrminf(simdify(grad))) << "\n";
-    EXPECT_LE(compact_blas::xnrminf(simdify(Mxb)), ε);
-    EXPECT_LE(compact_blas::xnrminf(simdify(grad)), ε);
+              << guanaqo::float_to_str(cyqlone::linalg::norm_inf(simdify(grad))) << "\n";
+    EXPECT_LE(cyqlone::linalg::norm_inf(simdify(Mxb)), ε);
+    EXPECT_LE(cyqlone::linalg::norm_inf(simdify(grad)), ε);
 
 #if GUANAQO_WITH_TRACING
     {
