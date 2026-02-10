@@ -461,12 +461,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                                      Acl, Φλ, Υ_fwd,       //
                                      Tc, /*0*/ Υ_bwd_prev, // note the lack of a minus sign ...
                                      𝑆.top_rows(mj), rot); //
-                compact_blas::xneg(simdify(Υ_bwd_prev));   // which is fixed here (TODO: fuse)
+                negate(Υ_bwd_prev);                        // which is fixed here (TODO: fuse)
                 // 13|  𝒮(c) = 𝑆(j₁)
-                rot ? compact_blas::template xadd_neg_copy<-1>(simdify(𝒮cr),
-                                                               simdify(𝑆.top_rows(mj)))
-                    : compact_blas::template xadd_neg_copy<+0>(simdify(𝒮cr),
-                                                               simdify(𝑆.top_rows(mj)));
+                rot ? negate(𝑆.top_rows(mj), 𝒮cr, with_rotate<1>) //
+                    : negate(𝑆.top_rows(mj), 𝒮cr);
                 // We negate 𝒮(c) because in the CR update, we need blkdiag(-I, 𝒮(c))-orthogonal
                 // or blkdiag(I, -𝒮(c))-orthogonal transformations.
             }
@@ -475,7 +473,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                 if (isolate_u0) {
                     tricyqle.set_update_rank_extra(mu0);
                     copy(Υλ0, tricyqle.work_Ups_extra());
-                    compact_blas::xadd_neg_copy(simdify(tricyqle.work_Σ_extra()), simdify(𝑆u0));
+                    negate(𝑆u0, tricyqle.work_Σ_extra());
                 } else {
                     tricyqle.clear_update_rank_extra();
                 }

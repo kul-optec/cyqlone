@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
+#include <cyqlone/compact.hpp>
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/linalg.hpp>
 #include <cyqlone/random-ocp.hpp>
 #include <cyqlone/tracing.hpp>
 #include <batmat/linalg/simdify.hpp>
@@ -367,7 +369,8 @@ TEST_P(CyqloneFactorTest, factor) {
             solver.general_constr(ctx, ux, DCux);
             ctx.arrive_and_wait();
             if (ctx.is_master()) // TODO
-                Solver::compact_blas::xhadamard(simdify(Σ2), simdify(DCux));
+                for (index_t b = 0; b < DCux.num_batches(); ++b)
+                    cyqlone::linalg::hadamard(DCux.batch(b), Σ2.batch(b));
             ctx.arrive_and_wait();
             solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);
         });
@@ -390,20 +393,25 @@ TEST_P(CyqloneFactorTest, factor) {
         solver.general_constr(ctx, ux, DCux);
         ctx.arrive_and_wait();
         if (ctx.is_master()) // TODO
-            Solver::compact_blas::xhadamard(simdify(Σ2), simdify(DCux));
+            for (index_t b = 0; b < DCux.num_batches(); ++b)
+                cyqlone::linalg::hadamard(DCux.batch(b), Σ2.batch(b));
         ctx.arrive_and_wait();
         solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);
     });
 
+    using compact_blas =
+        cyqlone::compact::CompactBLAS<real_t, batmat::datapar::deduced_abi<real_t, Solver::v>,
+                                      StorageOrder::ColMajor>; // TODO: remove
     using std::pow;
     const auto ε = pow(std::numeric_limits<real_t>::epsilon(), 0.6);
-    Solver::compact_blas::xadd_copy(simdify(grad), simdify(grad), simdify(DCᵀΣDCux), simdify(Mᵀλ));
+    for (index_t b = 0; b < Mxb.num_batches(); ++b)
+        cyqlone::linalg::axpy(grad.batch(b), {1, 1}, DCᵀΣDCux.batch(b), Mᵀλ.batch(b));
     std::cout << "dynamics constraints: "
-              << guanaqo::float_to_str(Solver::compact_blas::xnrminf(simdify(Mxb)))
+              << guanaqo::float_to_str(compact_blas::xnrminf(simdify(Mxb)))
               << "\nstationarity:         "
-              << guanaqo::float_to_str(Solver::compact_blas::xnrminf(simdify(grad))) << "\n";
-    EXPECT_LE(Solver::compact_blas::xnrminf(simdify(Mxb)), ε);
-    EXPECT_LE(Solver::compact_blas::xnrminf(simdify(grad)), ε);
+              << guanaqo::float_to_str(compact_blas::xnrminf(simdify(grad))) << "\n";
+    EXPECT_LE(compact_blas::xnrminf(simdify(Mxb)), ε);
+    EXPECT_LE(compact_blas::xnrminf(simdify(grad)), ε);
 
 #if GUANAQO_WITH_TRACING
     {

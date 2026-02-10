@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/linalg.hpp>
 #include <cyqlone/tracing.hpp>
 
 #include <batmat/assume.hpp>
@@ -14,6 +15,7 @@
 
 namespace CYQLONE_NS(cyqlone) {
 
+using namespace linalg;
 using namespace batmat::linalg;
 
 // Algorithm 2 “Cyqlone factorization”
@@ -217,15 +219,15 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY,
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL, mut_view<> λ,
-                                                           view<> w, index_t stride) const {
+                                                          view<> w, index_t stride) const {
     const index_t diL = iL * stride;
     const index_t iY  = sub_wrap_ceil_p(iL, 1 << l);
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
     if (v > 1 || iY + (1 << l) < p) { // Equilvalent to iL >= (1 << l), but kept for clarity
         // b(diL) -= w(iL)
         GUANAQO_TRACE("Subtract work b", iL);
-        iL == 0 ? compact_blas::template xsub<1>(simdify(λ.batch(diL)), simdify(w.batch(iL)))
-                : compact_blas::template xsub<0>(simdify(λ.batch(diL)), simdify(w.batch(iL)));
+        iL == 0 ? sub(λ.batch(diL), w.batch(iL), with_rotate<-1>) //
+                : sub(λ.batch(diL), w.batch(iL));
     }
     // 14|  b̃(k)⁺ = L(k)⁻¹ b(k)⁺    -- for the next level
     if (ν2p(iL) == l + 1 && iL != 0) { // Don't solve the last level here
@@ -261,18 +263,18 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     GUANAQO_TRACE("Subtract Yᵀb", iL);
     // b[diY] -= Y[iY]ᵀ b[diL]
-    iL == 0 ? gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY), with_shift_B<1>)
+    iL == 0 ? gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY), with_shift_B<1>) //
             : gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY));
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<> λ, view<> w,
-                                                            index_t stride) const {
+                                                           index_t stride) const {
     const index_t diL = iL * stride; // iL = k
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     { // λ[diL] -= w[iL]
         GUANAQO_TRACE("Subtract work b", iL);
-        compact_blas::xsub(simdify(λ.batch(diL)), simdify(w.batch(iL)));
+        sub(λ.batch(diL), w.batch(iL));
     }
     // solve D⁻ᵀ[diL] d[diL]
     GUANAQO_TRACE("Solve b", iL);

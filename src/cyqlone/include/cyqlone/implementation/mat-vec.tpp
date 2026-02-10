@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/linalg.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/linalg/gemv.hpp>
@@ -9,6 +10,7 @@
 
 namespace CYQLONE_NS(cyqlone) {
 
+using namespace linalg;
 using namespace batmat::linalg;
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -33,14 +35,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, 
         if (i > 0) {
             index_t di_next = di - 1; // j + 1
             auto x_next     = x.batch(di_next).bottom_rows(nx);
-            compact_blas::xsub(simdify(Mxbj), simdify(x_next)); // - x(j+1)
+            sub(Mxbj, x_next); // - x(j+1)
         } else {
             ctx.wait(std::move(arrival)); // x_next comes from next thread
             auto x_next = x.batch(d1_next).bottom_rows(nx);
             if (c_next > 0 || v == 1)
-                compact_blas::template xsub<+0>(simdify(Mxbj), simdify(x_next));
+                sub(Mxbj, x_next);
             else
-                compact_blas::template xsub<-1>(simdify(Mxbj), simdify(x_next));
+                sub(Mxbj, x_next, with_rotate<1>);
         }
     }
 }
@@ -76,14 +78,14 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
         if (i + 1 < n) {
             index_t di_prev = di + 1; // j - 1
             auto λ_prev     = λ.batch(di_prev);
-            compact_blas::xsub(simdify(Mᵀλj.bottom_rows(nx)), simdify(λ_prev));
+            sub(Mᵀλj.bottom_rows(nx), λ_prev);
         } else {
             ctx.wait(std::move(arrival)); // λ_prev comes from previous thread
             auto λ_prev = λ.batch(dn_prev);
             if (c > 0 || v == 1)
-                compact_blas::template xsub<0>(simdify(Mᵀλj.bottom_rows(nx)), simdify(λ_prev));
+                sub(Mᵀλj.bottom_rows(nx), λ_prev);
             else
-                compact_blas::template xsub<1>(simdify(Mᵀλj.bottom_rows(nx)), simdify(λ_prev));
+                sub(Mᵀλj.bottom_rows(nx), λ_prev, with_rotate<-1>);
         }
     }
 }
@@ -143,7 +145,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, 
         GUANAQO_TRACE("cost_gradient", j);
         index_t di = dn + i;
         if (α != 0 || β != 1)
-            compact_blas::xaxpby(α, simdify(q.batch(di)), β, simdify(grad_f.batch(di)));
+            axpby(α, q.batch(di), β, grad_f.batch(di));
         symv_add(tril(data_H.batch(di)), ux.batch(di), grad_f.batch(di));
     }
 }

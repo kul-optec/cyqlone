@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/linalg.hpp>
 
 #include <print>
 
@@ -10,6 +11,7 @@
 
 namespace CYQLONE_NS(cyqlone) {
 
+using namespace linalg;
 using namespace batmat::linalg;
 
 // §7.5.2 “Handling of the final scalar levels”
@@ -25,7 +27,7 @@ auto TricyqleSolver<VL, T, DefaultOrder>::mul_Mv(batch_view<> p, mut_batch_view<
     trmm(triu(L.transposed()), p, Mp);
     trmm(tril(L), Mp);
     syomv(tril(K), p, Mp);
-    return compact_blas::xdot(simdify(p), simdify(Mp));
+    return dot(p, Mp);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -44,7 +46,7 @@ auto TricyqleSolver<VL, T, DefaultOrder>::mul_precond(batch_view<> r, mut_batch_
     // Jacobi: z = L⁻ᵀL⁻¹ r
     trsm(tril(L), z);
     trsm(triu(L.transposed()), z);
-    return compact_blas::xdot(simdify(r), simdify(z));
+    return dot(r, z);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -66,16 +68,16 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_pcg(mut_batch_view<> λ,
         GUANAQO_TRACE("PCG", it + 1);
         value_type pᵀMp = mul_Mv(p, Mp, M, K);
         value_type α    = rᵀz / pᵀMp;
-        compact_blas::xaxpy(+α, simdify(p), simdify(λ));
-        compact_blas::xaxpy(-α, simdify(Mp), simdify(r));
-        value_type r2 = compact_blas::xdot(simdify(r), simdify(r));
+        axpy(+α, p, λ);
+        axpy(-α, Mp, r);
+        value_type r2 = dot(r, r);
         if (params.pcg_print_resid)
             std::println("{:>4}) pcg resid = {:15.6e}", it, std::sqrt(r2));
         if (r2 < ε2)
             break;
         value_type rᵀz_new = mul_precond(r, z, Mp, M, K);
         value_type β       = rᵀz_new / rᵀz;
-        compact_blas::xaxpby(1, simdify(z), β, simdify(p));
+        axpby(value_type{1}, z, β, p);
         rᵀz = rᵀz_new;
     }
 }

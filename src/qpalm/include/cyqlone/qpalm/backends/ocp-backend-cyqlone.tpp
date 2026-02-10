@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cyqlone/compact.hpp>
 #include <cyqlone/config.hpp>
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/linalg.hpp>
 #include <cyqlone/neumaier.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/implementation/breakpoint.hpp>
@@ -41,7 +43,7 @@ struct CyqloneBackend {
     using OCP_t                 = cyqlone::CyqloneSolver<VL, real_t, DefaultOrder>;
     using Context               = typename OCP_t::Context;
     using storage_t             = typename OCP_t::template matrix<>;
-    using simd                  = typename OCP_t::compact_blas::simd;
+    using simd                  = batmat::datapar::deduced_simd<real_t, VL>;
     static constexpr auto norms = cyqlone::norms<real_t, simd>{};
     // clang-format off
     struct var_vec_t         : storage_t { friend CyqloneBackend; var_vec_t() = default;         private: var_vec_t(storage_t &&o)         : storage_t{std::move(o)} {} friend auto simdify(var_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const var_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
@@ -49,6 +51,9 @@ struct CyqloneBackend {
     struct ineq_constr_vec_t : storage_t { friend CyqloneBackend; ineq_constr_vec_t() = default; private: ineq_constr_vec_t(storage_t &&o) : storage_t{std::move(o)} {} friend auto simdify(ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
     struct active_set_t      : storage_t { friend CyqloneBackend; active_set_t() = default;      private: active_set_t(storage_t &&o)      : storage_t{std::move(o)} {} friend auto simdify(active_set_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const active_set_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
     // clang-format on
+
+    using compact_blas = compact::CompactBLAS<real_t, typename simd::abi_type,
+                                              StorageOrder::ColMajor>; // TODO: remove
 
     struct Timings {
         using type    = DefaultTimings;
@@ -261,8 +266,8 @@ struct CyqloneBackend {
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            OCP_t::compact_blas::proj_diff(simdify(Ax.batch(di)), simdify(b_min_strided.batch(di)),
-                                           simdify(b_max_strided.batch(di)), simdify(e.batch(di)));
+            linalg::clamp_resid(Ax.batch(di), b_min_strided.batch(di), b_max_strided.batch(di),
+                                e.batch(di));
         }
     }
 
@@ -301,7 +306,7 @@ struct CyqloneBackend {
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            nrm_simd         = OCP_t::compact_blas::xreduce(
+            nrm_simd         = compact_blas::xreduce(
                 nrm_simd,
                 [](auto accum, auto Axi, auto b_min_i, auto b_max_i) {
                     auto zi = clamp(Axi, b_min_i, b_max_i);
@@ -326,7 +331,7 @@ struct CyqloneBackend {
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            nrm_simd         = OCP_t::compact_blas::xreduce_enumerate(
+            nrm_simd         = compact_blas::xreduce_enumerate(
                 nrm_simd,
                 [di, &e](auto coord, auto accum, auto yi, auto ŷi, auto Σi) {
                     auto [i, r, c] = coord;
@@ -589,13 +594,11 @@ struct CyqloneBackend {
 
     template <class T, class U>
     void xaxpy(Context &ctx, real_t a, const T &x, U &y) {
-        const auto x_            = simdify(x);
-        const auto y_            = simdify(y);
         const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            OCP_t::compact_blas::xaxpy(a, x_.batch(di), y_.batch(di));
+            linalg::axpy(a, x.batch(di), y.batch(di));
         }
     }
 
@@ -626,7 +629,7 @@ struct CyqloneBackend {
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            sum += OCP_t::compact_blas::xdot(simdify(a.batch(di)), simdify(b.batch(di)));
+            sum += linalg::dot(a.batch(di), b.batch(di));
         }
         return ctx.reduce(sum);
     }
@@ -634,7 +637,7 @@ struct CyqloneBackend {
     template <class... Args>
     void local_dots(std::span<real_t, 1 + sizeof...(Args) / 2> out, const auto &a, const auto &b,
                     const Args &...others) const {
-        out[0] += OCP_t::compact_blas::xdot(simdify(a), simdify(b));
+        out[0] += linalg::dot(a, b);
         if constexpr (sizeof...(Args) > 0)
             local_dots(out.template subspan<1>(), others...);
     }
@@ -666,8 +669,8 @@ struct CyqloneBackend {
         const index_t ti = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            nrm_simd         = OCP_t::compact_blas::xreduce(nrm_simd, norms, std::identity{},
-                                                            simdify(x.batch(di)));
+            nrm_simd =
+                compact_blas::xreduce(nrm_simd, norms, std::identity{}, simdify(x.batch(di)));
         }
         return ctx.reduce(norms(nrm_simd), norms);
     }
@@ -681,14 +684,14 @@ struct CyqloneBackend {
 
     template <class T>
     [[nodiscard]] real_t norm_squared(Context &ctx, const T &x) const {
-        real_t sum               = 0;
+        real_t sumsq             = 0;
         const index_t num_stages = ocp.n; // number of stages per thread
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            sum += OCP_t::compact_blas::xnrm2sq(simdify(x.batch(di)));
+            sumsq += linalg::norm_2_squared(x.batch(di));
         }
-        return ctx.reduce(sum);
+        return ctx.reduce(sumsq);
     }
 
     template <class T>
@@ -697,7 +700,7 @@ struct CyqloneBackend {
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            OCP_t::compact_blas::xaxpby(real_t{}, simdify(x.batch(di)), s, simdify(x.batch(di)));
+            linalg::axpby(real_t{}, x.batch(di), s, x.batch(di));
         }
     }
 
@@ -764,7 +767,7 @@ struct CyqloneBackend {
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            nrm_simd         = OCP_t::compact_blas::xreduce(
+            nrm_simd         = compact_blas::xreduce(
                 nrm_simd,
                 [](auto accum, auto grad_fi, auto Mᵀλi, auto Aᵀŷi) {
                     auto grad_ali = grad_fi + Mᵀλi + Aᵀŷi;
@@ -847,8 +850,7 @@ struct CyqloneBackend {
 
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            OCP_t::compact_blas::xsub_copy(simdify(ΔΣ.batch(di)), simdify(J.batch(di)),
-                                           simdify(J_old.batch(di)));
+            linalg::sub(J.batch(di), J_old.batch(di), ΔΣ.batch(di));
         }
         auto t = get_timed(&Timings::update_factorization);
         ocp.update(ctx, ΔΣ);
@@ -911,9 +913,9 @@ struct CyqloneBackend {
         const index_t ti         = ocp.riccati_thread_assignment(ctx);
         for (index_t i = 0; i < num_stages; ++i) {
             const index_t di = ti * num_stages + i;
-            OCP_t::compact_blas::xadd_neg_copy(simdify(d.batch(di)), simdify(grad.batch(di)),
-                                               simdify(Mᵀλ.batch(di)), simdify(Aᵀŷ.batch(di)));
-            OCP_t::compact_blas::xadd_copy(simdify(Δλ.batch(di)), simdify(Mxb.batch(di)));
+            linalg::axpy<0>(d.batch(di), {-1, -1, -1}, grad.batch(di), Mᵀλ.batch(di),
+                            Aᵀŷ.batch(di));
+            batmat::linalg::copy(Mxb.batch(di), Δλ.batch(di));
         }
         if (settings.print_residuals) {
             int prec                      = settings.print_precision;
@@ -988,8 +990,7 @@ struct CyqloneBackend {
             using std::sqrt;
             for (index_t i = 0; i < num_stages; ++i) {
                 const index_t di = ti * num_stages + i;
-                OCP_t::compact_blas::xhadamard(simdify(J.batch(di)), simdify(Ad.batch(di)),
-                                               simdify(temp_ineq.batch(di)));
+                linalg::hadamard(J.batch(di), Ad.batch(di), temp_ineq.batch(di));
             }
             auto &res = temp_var;
             mat_vec_AT(ctx, temp_ineq, res);
@@ -1047,113 +1048,6 @@ struct CyqloneBackend {
             if (ctx.is_master())
                 std::cout << "        RESID(eq. feasibility):  abs∞="
                           << guanaqo::float_to_str(inf_res, prec) << "\n";
-        }
-    }
-
-    void solve_saddle(Context &ctx, [[maybe_unused]] const var_vec_t &x, const var_vec_t &grad,
-                      const var_vec_t &Mᵀλ, const var_vec_t &Aᵀŷ, const eq_constr_vec_t &Mxb,
-                      real_t S, [[maybe_unused]] const ineq_constr_vec_t &Σ,
-                      const active_set_t &J, //
-                      var_vec_t &d, var_vec_t &ξ, ineq_constr_vec_t &Ad, eq_constr_vec_t &Δλ,
-                      var_vec_t &MᵀΔλ) {
-        if (reset_factorization) {
-            // std::cout << "                                     -- Fact reset\n";
-            auto t = get_timed(&Timings::factor);
-            ocp.factor(ctx, S, J);
-            ctx.arrive_and_wait(__LINE__);
-            if (ctx.is_master()) {
-                reset_factorization = false;
-                num_updates         = 0;
-                ++stats.num_factor;
-            }
-            ctx.arrive_and_wait(__LINE__);
-        }
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            OCP_t::compact_blas::xadd_neg_copy(simdify(d.batch(di)), simdify(grad.batch(di)),
-                                               simdify(Mᵀλ.batch(di)), simdify(Aᵀŷ.batch(di)));
-            OCP_t::compact_blas::xadd_neg_copy(simdify(Δλ.batch(di)), simdify(Mxb.batch(di)));
-        }
-        {
-            auto t = get_timed(&Timings::solve);
-            ocp.solve(ctx, d, Δλ);
-        }
-
-        int count = 1000000;
-        while (true) {
-            {
-                auto t = get_timed(&Timings::solve_MT);
-                mat_vec_MT(ctx, Δλ, MᵀΔλ);
-            }
-            // Ad ← A d
-            {
-                auto t = get_timed(&Timings::solve_A);
-                mat_vec_A(ctx, d, Ad);
-            }
-            // ξ ← Q d + S⁻¹ d
-            {
-                auto t = get_timed(&Timings::solve_grad);
-                ocp.cost_gradient(ctx, d, 0, d, 0, ξ);
-            }
-
-            if (count-- == 0)
-                break;
-
-            if (ctx.is_master()) {
-                temp_var  = var_vec();
-                temp_eq   = eq_constr_vec();
-                temp_ineq = ineq_constr_vec();
-            }
-            auto &res = temp_var;
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                for (index_t r = 0; r < grad.rows(); ++r) {
-                    auto gradi = datapar::aligned_load<simd>(&grad.batch(di)(0, r, 0)),
-                         ξi    = datapar::aligned_load<simd>(&ξ.batch(di)(0, r, 0)),
-                         Mᵀλi  = datapar::aligned_load<simd>(&Mᵀλ.batch(di)(0, r, 0)),
-                         Aᵀŷi  = datapar::aligned_load<simd>(&Aᵀŷ.batch(di)(0, r, 0)),
-                         MᵀΔλi = datapar::aligned_load<simd>(&MᵀΔλ.batch(di)(0, r, 0));
-                    auto gi    = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
-                    simd ri    = gi + MᵀΔλi + ξi;
-                    datapar::aligned_store(-ri, &res.batch(di)(0, r, 0));
-                }
-            }
-            auto &res_eq = temp_eq;
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                // res_eq = b - Mx
-                OCP_t::compact_blas::xadd_neg_copy(simdify(res_eq.batch(di)),
-                                                   simdify(Mxb.batch(di)));
-            }
-            // res_eq = M d - (b - Mx) = M (x + d) - b
-            ocp.residual_dynamics_constr(ctx, d, res_eq, res_eq);
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                // res_eq = b - M (x + d)
-                OCP_t::compact_blas::xadd_neg_copy(simdify(res_eq.batch(di)),
-                                                   simdify(res_eq.batch(di)));
-            }
-            real_t inf_res = norm_inf(ctx, res_eq), inf_stat = norm_inf(ctx, res);
-            int prec = settings.print_precision;
-            if (ctx.is_master() && count % 1000 == 0)
-                std::cout << "        RESID(stationarity):     abs∞="
-                          << guanaqo::float_to_str(inf_stat, prec) << "\n"
-                          << "        RESID(eq. feasibility):  abs∞="
-                          << guanaqo::float_to_str(inf_res, prec) << "\n";
-
-            {
-                auto t = get_timed(&Timings::solve);
-                ocp.solve(ctx, res, res_eq);
-            }
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                OCP_t::compact_blas::xadd_copy(simdify(d.batch(di)), simdify(d.batch(di)),
-                                               simdify(res.batch(di)));
-                OCP_t::compact_blas::xadd_copy(simdify(Δλ.batch(di)), simdify(Δλ.batch(di)),
-                                               simdify(res_eq.batch(di)));
-            }
         }
     }
 

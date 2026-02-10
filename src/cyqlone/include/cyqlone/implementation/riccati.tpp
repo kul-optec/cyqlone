@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/linalg.hpp>
 
 #include <batmat/linalg/compress.hpp>
 #include <batmat/linalg/gemm-diag.hpp>
@@ -10,6 +11,7 @@
 
 namespace CYQLONE_NS(cyqlone) {
 
+using namespace linalg;
 using namespace batmat::linalg;
 
 // Algorithm 1 “Factorization of a single modified Riccati block column”
@@ -120,10 +122,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
                      λ_next = λ.batch(di_next), λ_last = λ.batch(dn);
                 gemv_add(Acl, λ_next, λ_last); // λ(jn) += Â λ(j-1)
                 auto w = tricyqle.work_cr.batch(c).left_cols(1);
-                trmm(tril(Q).transposed(), λ_next, w); // w = LQᵀ(j) λ(j-1)
-                trmm(tril(Q), w);                      // w = LQ(j) LQᵀ(j) λ(j-1)
-                compact_blas::xsub_copy(simdify(w), simdify(xi),
-                                        simdify(w));       // w = x(j) - LQ(j) LQᵀ(j) λ(j-1)
+                trmm(tril(Q).transposed(), λ_next, w);     // w = LQᵀ(j) λ(j-1)
+                trmm(tril(Q), w);                          // w = LQ(j) LQᵀ(j) λ(j-1)
+                sub(xi, w, w);                             // w = x(j) - LQ(j) LQᵀ(j) λ(j-1)
                 gemv_add(F_next.transposed(), w, ux_next); // u(j-1) += BAᵀ(j-1) w
             }
             // 12|  V(j-1) = [ B(j-1)ᵀ ] LQ(j)
@@ -192,7 +193,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
             trmm(tril(LQ).transposed(), x, λ_prev);
             trmm(tril(LQ), λ_prev);
             gemv_add(Acl.transposed(), λn, λ_prev);
-            compact_blas::xsub(simdify(λ_prev), simdify(w));
+            sub(λ_prev, w);
         } else {
             GUANAQO_TRACE("Riccati solve rev", j);
             const auto u1 = ux.batch(di).top_rows(nu), x1 = ux.batch(di).bottom_rows(nx);
@@ -205,7 +206,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
             // w = LQ(j₁)⁻ᵀ(LQ(j₁)⁻¹ λ(j₀) - LA(j₁)ᵀ λ(jₙ))
             trsm(tril(LQ).transposed(), w);
             // x(j₁) = LQ(j₁)⁻ᵀ(LQ(j₁)⁻¹ λ(j₀) - LA(j₁)ᵀ λ(jₙ)) + q(j₁)
-            compact_blas::xadd(simdify(x1), simdify(w));
+            add(x1, w);
 
             // u(j₁) = LR(j₁)⁻ᵀ(r(j₁) - LB(j₁)ᵀ λ(jₙ) - LS(j₁)ᵀ x(j₁))
             gemv_sub(LB.transposed(), λn, u1);

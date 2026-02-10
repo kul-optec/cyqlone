@@ -16,8 +16,6 @@
 #include <batmat/unroll.h>
 #include <guanaqo/trace.hpp>
 
-#include "compact.hpp" // TODO
-
 #include <algorithm>
 #include <bit>
 #include <cassert>
@@ -147,13 +145,6 @@ struct TricyqleSolver {
     /// Non-owning mutable view type for a single batch of v matrices.
     template <StorageOrder O = column_major>
     using mut_batch_view = batmat::matrix::View<value_type, index_t, vl_t, vl_t, layer_stride, O>;
-
-    // TODO: these are remnant classes that are used for simple elementwise operations only, and
-    //       they should be replaced by free functions similar to the ones in batmat::linalg.
-    using compact_blas =
-        cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>, column_major>;
-    using compact_blas_default =
-        cyqlone::compact::CompactBLAS<T, batmat::datapar::deduced_abi<T, VL>, default_order>;
 
     /// @}
 
@@ -471,9 +462,6 @@ struct CyqloneSolver {
     /// Non-owning mutable view type for a single batch of v matrices.
     template <StorageOrder O = column_major>
     using mut_batch_view = typename tricyqle_t::template mut_batch_view<O>;
-
-    using compact_blas         = typename tricyqle_t::compact_blas;
-    using compact_blas_default = typename tricyqle_t::compact_blas_default;
 
     /// @}
 

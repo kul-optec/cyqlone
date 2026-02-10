@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/linalg.hpp>
 #include <cyqlone/tracing.hpp>
 
 #include <batmat/assume.hpp>
@@ -12,6 +13,7 @@
 
 namespace CYQLONE_NS(cyqlone) {
 
+using namespace linalg;
 using namespace batmat::linalg;
 
 // Algorithm 2 “Cyqlone factorization”
@@ -109,9 +111,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
             GUANAQO_TRACE("Update λ", dn);
             auto x_next = ux.batch(d1_next).bottom_rows(nx);
             if (c_next > 0 || v == 1)
-                compact_blas::template xsub<+0>(simdify(λ.batch(dn)), simdify(x_next));
+                sub(λ.batch(dn), x_next);
             else
-                compact_blas::template xsub<-1>(simdify(λ.batch(dn)), simdify(x_next));
+                sub(λ.batch(dn), x_next, with_rotate<1>);
         }
         {
             GUANAQO_TRACE("Solve λ", dn);
