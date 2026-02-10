@@ -35,19 +35,64 @@ Requirements: CMake, Conan 2.
 ```sh
 # Prepare environment and dependencies
 python3 -m pip install -U conan
-export CONAN_HOME="$PWD/.conan2"
+export CONAN_HOME="$PWD/.conan2"  # Use a local directory for Conan data
 conan profile detect --exist-ok
 conan remote add tttapa-conan-recipes "$PWD/scripts/ci/conan-recipes"
+conan config install scripts/ci/conan-profiles/settings_user.yml
 ```
+
+### C++ project
 
 ```sh
 # Install dependencies (including GCC) and build from source
-conan build . --build=missing -pr scripts/dev/profiles/laptop -o \&:with_benchmarks=True -c tools.build:jobs=4
+conan build . --build=missing -pr:h scripts/dev/profiles/dev -o \&:with_benchmarks=True -c tools.build:jobs=4
 ```
 
-Replace `laptop` by `desktop` if your hardware supports AVX-512. If sufficient RAM is available, the number of parallel build jobs can be increased.
+To build using Clang instead of GCC, add `-pr:h scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile` to the command above (in addition to the `dev` profile). To use the Intel compiler, add `-pr:h scripts/ci/conan-profiles/profiles/toolchain/icx-linux.profile` instead.
+
+If you have sufficient RAM available, the number of parallel build jobs can be increased.
+
+To re-build after code changes, simply run `cmake --build --preset conan-release` (or rebuild the
+`conan-release` preset from your IDE).
 
 Manual installation using CMake (without the Conan package manager) is also supported, provided that the necessary dependencies are installed.
+
+### Python bindings (development)
+
+To install the Python bindings for local development,
+use the `install-linux-dev.sh` script (without arguments).
+
+Requirements: Python 3.8+, uv, Conan 2 (as configured above).
+
+```sh
+./scripts/dev/install-linux-dev.sh
+```
+
+By default, this script builds the package for both AVX2 and AVX-512 targets, which may be wasteful if you only need AVX2. You can remove `avx512` from the `archs` array in the script to only build for AVX2.
+
+To run the tests, use `pytest`.
+
+To re-build the AVX2 version after code changes, run `cmake --build --preset conan-cp312-abi3-linux_x86_64-1-release` (replace `cp312-abi3` with your Python version and ABI, and replace `-1-` with `-2-` to re-build the AVX-512 version). You will need to restart the Python interpreter to load the new version of the package.
+
+### Python bindings (distribution)
+
+To build the Python package for distribution, use the scripts in `scripts/ci`.
+
+```sh
+# Build the wheel for distribution, and generate the stubs
+./scripts/ci/build-linux-cross.sh 3.12 x86_64-bionic-linux-gnu . dist true
+```
+
+If you are cross-compiling, you will need to generate the stubs using a native build first, since this requires running the built extension module.
+
+```sh
+# Native build to generate the stub files
+./scripts/ci/build-linux-native.sh . dist python
+# Build the wheel for distribution
+./scripts/ci/build-linux-cross.sh 3.12 x86_64-bionic-linux-gnu . dist
+```
+
+Either way, generated Wheel files will be placed in the `dist` directory.
 
 ## Related projects
 

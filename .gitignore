@@ -25,6 +25,7 @@ wheelhouse
 /staging
 /package
 /toolchains
+python/cyqlone/_common.pyi
 python/cyqlone/cyqlone/*.pyi
 python/cyqlone/_cyqlone_generic/*.pyi
 *.cross.profile
