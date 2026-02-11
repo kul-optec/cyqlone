@@ -481,85 +481,43 @@ struct CyqloneBackend {
         return backend.compute_partition_breakpoints(ctx, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
     }
 
+    /// @name Linear algebra operations (level 1 BLAS-like)
+    /// @{
+
+    /// Compute y = a x + y.
     template <class T, class U>
-    void xaxpy(Context &ctx, real_t a, const T &x, U &y) {
-        const auto xaxpy = [a](auto, auto, auto xi, auto yi) { linalg::axpy(a, xi, yi); };
-        ocp.foreach_stage(ctx, xaxpy, x, y);
-    }
-
+    void xaxpy(Context &ctx, real_t a, const T &x, U &y);
+    /// Copy x to y.
     template <class T, class U>
-    void xcopy(Context &ctx, const T &x, U &y) const {
-        const auto xcopy = [](auto, auto, auto xi, auto yi) { batmat::linalg::copy(xi, yi); };
-        ocp.foreach_stage(ctx, xcopy, x, y);
-    }
-
+    void xcopy(Context &ctx, const T &x, U &y) const;
+    /// Set each element of x to the constant value y.
     template <class T, class U>
-    void set_constant(Context &ctx, T &x, const U &y) const {
-        const auto set_constant = [y](auto, auto, auto xi) { batmat::linalg::fill(y, xi); };
-        ocp.foreach_stage(ctx, set_constant, x);
-    }
-
-    [[nodiscard]] real_t dot(Context &ctx, const var_vec_t &a, const var_vec_t &b) const {
-        real_t sum     = 0;
-        const auto dot = [&](auto, auto, auto ai, auto bi) { sum += linalg::dot(ai, bi); };
-        ocp.foreach_stage(ctx, dot, a, b);
-        return ctx.reduce(sum);
-    }
-
+    void set_constant(Context &ctx, T &x, const U &y) const;
+    /// Multiply a vector x by a scalar s.
+    template <class T>
+    void scale(Context &ctx, real_t s, T &x) const;
+    /// Dot product of a and b.
+    [[nodiscard]] real_t dot(Context &ctx, const var_vec_t &a, const var_vec_t &b) const;
+    /// Compute multiple partial dot products, without reducing across threads.
     template <class... Args>
     void local_dots(std::span<real_t, 1 + sizeof...(Args) / 2> out, const auto &a, const auto &b,
-                    const Args &...others) const {
-        out[0] += linalg::dot(a, b);
-        if constexpr (sizeof...(Args) > 0)
-            local_dots(out.template subspan<1>(), others...);
-    }
-
+                    const Args &...others) const;
+    /// Compute multiple dot products at once. This is more efficient than computing them separately
+    /// because only a single reduction across threads is needed.
     template <class... Args>
     [[nodiscard]] std::array<real_t, sizeof...(Args) / 2> dots(Context &ctx,
-                                                               const Args &...args) const {
-        using local_sums_t = std::array<real_t, sizeof...(Args) / 2>;
-        local_sums_t local_sums{};
-        const auto dots = [&](auto, auto, auto... batches) { local_dots(local_sums, batches...); };
-        ocp.foreach_stage(ctx, dots, args...);
-        return ctx.reduce(local_sums, [](local_sums_t a, local_sums_t b) {
-            local_sums_t c{};
-            for (size_t i = 0; i < a.size(); ++i)
-                c[i] = a[i] + b[i];
-            return c;
-        });
-    }
-
+                                                               const Args &...args) const;
+    /// Compute the infinity, l1 and l2 norms of x.
     template <class T>
-    [[nodiscard]] auto norm_inf_l1_sq(Context &ctx, const T &x) const {
-        GUANAQO_TRACE("norm_inf_l1_sq", 0, 4 * x.batch_size() * x.rows() * ocp.n);
-        auto nrm_simd             = norms.zero_simd();
-        const auto norm_inf_l1_sq = [&](auto, auto, auto xi) {
-            nrm_simd = compact_blas::xreduce(nrm_simd, norms, std::identity{}, simdify(xi));
-        };
-        ocp.foreach_stage(ctx, norm_inf_l1_sq, x);
-        return ctx.reduce(norms(nrm_simd), norms);
-    }
-
+    [[nodiscard]] auto norm_inf_l1_sq(Context &ctx, const T &x) const;
+    /// Infinity or max norm of x.
     template <class T>
-    [[nodiscard]] real_t norm_inf(Context &ctx, const T &x) const {
-        using std::isfinite;
-        auto nrm = norm_inf_l1_sq(ctx, x);
-        return isfinite(nrm.asum) ? nrm.max : nrm.asum;
-    }
-
+    [[nodiscard]] real_t norm_inf(Context &ctx, const T &x) const;
+    /// Squared l2 norm of x.
     template <class T>
-    [[nodiscard]] real_t norm_squared(Context &ctx, const T &x) const {
-        real_t sumsq            = 0;
-        const auto norm_squared = [&](auto, auto, auto xi) { sumsq += linalg::norm_2_squared(xi); };
-        ocp.foreach_stage(ctx, norm_squared, x);
-        return ctx.reduce(sumsq);
-    }
+    [[nodiscard]] real_t norm_squared(Context &ctx, const T &x) const;
 
-    template <class T>
-    void scale(Context &ctx, real_t s, T &x) const {
-        const auto scale = [&](auto, auto, auto xi) { linalg::axpy<0>(s, xi, xi); };
-        ocp.foreach_stage(ctx, scale, x);
-    }
+    /// @}
 
     const ineq_constr_vec_t &Ax_min() const { return b_min_strided; }
     const ineq_constr_vec_t &Ax_max() const { return b_max_strided; }
@@ -941,4 +899,5 @@ void update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend,
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)
 
+#include <cyqlone/qpalm/backends/backend-cyqlone/linalg.tpp>
 #include <cyqlone/qpalm/backends/backend-cyqlone/linesearch.tpp>
