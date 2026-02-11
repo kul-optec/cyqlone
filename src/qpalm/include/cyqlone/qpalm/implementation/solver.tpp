@@ -185,6 +185,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         real_t eq_resid               = std::numeric_limits<real_t>::infinity();
         bool increase_penalty_y       = true;
         for (unsigned inner = 0; true; ++inner) {
+            const unsigned inner_total = inner_iter + inner;
             // Compute gradient of augmented Lagrangian
             index_t nJ = timed(timings.mat_vec_AT, [&] {
                 return backend.calc_ŷ_Aᵀŷ(ctx, Ax, Σ, y, ŷ, Aᵀŷ, active_set);
@@ -204,7 +205,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             bool first_iter = outer_iter == 0 && inner == 0;
             bool check_eq   = first_iter || settings.recompute_eq_res;
             {
-                GUANAQO_TRACE("compute residuals", inner_iter + inner);
+                GUANAQO_TRACE("compute residuals", inner_total);
                 eq_resid     = check_eq ? backend.unscaled_eq_constr_viol(ctx, Mxb) : 0;
                 stationarity = backend.unscaled_aug_lagr_norm(ctx, grad, Mᵀλ, Aᵀŷ);
             }
@@ -217,14 +218,13 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             bool inner_conv  = stationarity <= inner_tol && eq_resid <= eq_tol;
 
             if (detailed_stats) {
-                const auto nan = std::numeric_limits<real_t>::quiet_NaN();
                 detailed_stats->entries.push_back({
                     .outer_iter                  = outer_iter,
                     .inner_iter                  = inner,
                     .stationarity                = stationarity,
                     .ineq_constr_viol            = ineq_constr_resid,
                     .eq_constr_viol              = eq_resid,
-                    .linesearch_step_size        = nan,
+                    .linesearch_step_size        = std::numeric_limits<real_t>::quiet_NaN(),
                     .linesearch_breakpoint_index = 0,
                     .num_active_constr           = nJ,
                     .num_changing_constr         = 0,
@@ -250,14 +250,18 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                 break;
             }
 
-            // Check if the active set changed
+            // Count the number of constraints that changed activity
             auto active_set_change = timed(timings.active_set_change, [&] {
-                GUANAQO_TRACE("active_set_change", inner_iter + inner);
+                GUANAQO_TRACE("active_set_change", inner_total);
                 return backend.active_set_change(ctx, S, Σ, active_set, active_set_old);
             });
             swap(active_set, active_set_old);
             if (detailed_stats)
                 detailed_stats->entries.back().num_changing_constr = active_set_change;
+            // If the active set didn't change for a while, there are numerical issues. We may
+            // be close to convergence, in which case we may try to accept step size τ=1 and hope
+            // for the best. Alternatively, we leave the inner solver and update the multipliers
+            // without increasing the penalty in the outer solver.
             if (!active_set_change &&
                 ++no_change_active_set >= settings.max_no_changes_active_set) {
                 if (force_τ_1_active_set || !settings.force_linesearch_if_no_set_change) {
@@ -276,7 +280,8 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                 force_τ_1_active_set = false;
             }
 
-            // Update regularization
+            // Update regularization: if the constraints are all satisfied and no longer changing,
+            // we can try to remove the regularization to get faster convergence.
             bool upd_reg_iter = inner == 0 && outer_iter > 0;
             if (upd_reg_iter && ineq_constr_resid <= settings.dual_tolerance)
                 if (!active_set_change)
@@ -286,7 +291,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
 
             // Solve the Newton system
             timed(timings.solve, [&] {
-                GUANAQO_TRACE("solve", inner_iter + inner);
+                GUANAQO_TRACE("solve", inner_total);
                 backend.solve(ctx, x, grad, Mᵀλ, Aᵀŷ, Mxb, S, Σ, active_set_old, //
                               d, ξ, Ad, Δλ, MᵀΔλ);
             });
@@ -299,6 +304,8 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                 backend.scale(ctx, scal_d, Δλ);
                 backend.scale(ctx, scal_d, MᵀΔλ);
             }
+            // Optionally check whether the Newton step is a descent direction. If not, we simply
+            // accept τ=1 and hope for the best.
             bool force_τ_1_dir_deriv = false;
             if (settings.print_directional_deriv || settings.force_linesearch_if_dir_deriv_pos ||
                 settings.detailed_stats) {
@@ -314,18 +321,28 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                     force_τ_1_dir_deriv = true;
             }
 
-            // Perform exact line search
-            bool force_τ_1_first_iter = (inner_iter + inner) == 0;
+            // Line search
+            bool force_τ_1_first_iter = inner_total == 0;
             typename decltype(linesearch)::Result ls{.τ = 1 / scal_d, .index = 999999999};
+            // During the first iteration, the equality constraints may not be satisfied, so we
+            // cannot use a line search on the augmented Lagrangian. We just take a single step
+            // with τ=1, which ensures that the next iteration will be feasible w.r.t. the equality
+            // constraints. If the active set doesn't change for a while, the logic above may decide
+            // to force τ=1.
             if (force_τ_1_active_set || force_τ_1_dir_deriv || force_τ_1_first_iter) {
                 if (settings.verbose && !force_τ_1_first_iter && ctx.is_master())
                     std::cout << "    \x1b[0;33mWarning\x1b[0m: Forcing line "
                                  "search τ=1\n";
             } else {
+                // Perform exact line search
                 ls = timed(timings.line_search, [&] {
-                    GUANAQO_TRACE("line_search", inner_iter + inner);
+                    GUANAQO_TRACE("line_search", inner_total);
                     auto [η, β] = [&] {
                         if (settings.linesearch_include_multipliers) {
+                            // In theory, d lies in the null space of the equality constraints, so
+                            // the multipliers shouldn't have an effect on the line search.
+                            // In practice, they do have a numerical effect, and including them in
+                            // the line search seems to improve convergence in some cases.
                             auto [η, β, dMᵀΔλ, dMᵀλ] =
                                 backend.dots(ctx, d, ξ, d, grad, d, MᵀΔλ, d, Mᵀλ);
                             if (settings.print_linesearch_inputs && ctx.is_master())
@@ -346,12 +363,12 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                                       backend.Ax_max());
                 });
             }
-
             if (detailed_stats) {
                 detailed_stats->entries.back().linesearch_step_size        = ls.τ;
                 detailed_stats->entries.back().linesearch_breakpoint_index = ls.index;
             }
 
+            // Print some information about the Newton step and line search.
             const real_t τ_min = 1e-8 / scal_d, τ_max = 1e2 / scal_d;
             if (settings.verbose && ctx.is_master()) {
                 int prec          = settings.print_precision;
@@ -361,7 +378,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                                     : ls.τ > τ_min      ? "\x1b[0;33m" /* yellow */
                                                         : "\x1b[0;31m" /* red */;
                 std::cout << "    inner " << std::setw(4) << inner << " (" << std::setw(4)
-                          << (inner_iter + inner) << "): #J = " << std::setw(6) << nJ
+                          << inner_total << "): #J = " << std::setw(6) << nJ
                           << ", #ΔJ = " << std::setw(6) << active_set_change
                           << ", stationarity=" << float_to_str(stationarity, prec)
                           << ", eq constr resid=" << float_to_str(eq_resid, prec) << ", τ=" << color
@@ -370,7 +387,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             ls.τ = std::clamp(ls.τ, τ_min, τ_max);
 
             { // Apply step
-                GUANAQO_TRACE("apply step", inner);
+                GUANAQO_TRACE("apply step", inner_total);
                 backend.xaxpy(ctx, ls.τ, d, x);
                 backend.xaxpy(ctx, ls.τ, Δλ, λ);
             }
@@ -378,7 +395,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             // Optionally recompute Ax and ∇f
             if (settings.recompute_inner) {
                 timed(timings.recompute_inner, [&] {
-                    GUANAQO_TRACE("recompute_inner", inner_iter + inner);
+                    GUANAQO_TRACE("recompute_inner", inner_total);
                     backend.recompute_inner(ctx, S, x_outer, x, λ, grad, Ax, Mᵀλ);
                 });
             } else {
@@ -429,7 +446,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                          (!settings.recompute_eq_res || eq_resid <= settings.eq_constr_tolerance);
         bool out_of_iter =
             inner_iter >= settings.max_total_inner_iter || outer_iter >= settings.max_outer_iter;
-        bool out_of_time = clock_t::now() >= start_time + settings.max_time;
+        bool out_of_time = clock_t::now() - start_time >= settings.max_time;
         bool inf_err     = !std::isfinite(stationarity + ineq_constr_resid);
         bool stop        = stop_signal.stop_requested();
         // Return solution
@@ -455,21 +472,22 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
                                  : SolverStatus::Busy;
         }
 
-        // Update penalty factors
+        // Update penalty factors (only if inner solve was successful and if the constraints are not
+        // yet satisfied)
         if (increase_penalty_y && ineq_constr_resid > settings.dual_tolerance) {
             index_t num_Σ_changed = update_penalty_y(ctx, backend, Σ, e, e_old, settings);
             if (num_Σ_changed > 0)
                 timed(stats.timings.update_penalty,
                       [&] { backend.update_penalty_changed(ctx, Σ, num_Σ_changed); });
         }
-        // Update regularization
+        // Update primal regularization
         real_t S_old = std::exchange(S, update_penalty_x(S, settings));
         if (S != S_old) {
             timed(stats.timings.update_regularization, [&] {
                 backend.update_regularization_changed(ctx, S, S_old); //
             });
         }
-        // Update multipliers
+        // Update Lagrange multipliers
         {
             GUANAQO_TRACE("update multipliers", outer_iter);
             swap(y, ŷ);
