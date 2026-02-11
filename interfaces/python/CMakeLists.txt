@@ -1,8 +1,7 @@
 set(CYQLONE_PYTHON_POSTFIX "_generic" CACHE STRING
     "Additional postfix in Python module file name")
 set(PY_FULL_VERSION ${PROJECT_VERSION}${PY_VERSION_SUFFIX})
-set(PY_BUILD_CMAKE_MODULE_NAME "cyqlone" CACHE STRING "Python module name")
-set(PY_BUILD_CMAKE_PACKAGE_NAME "cyqlone" CACHE STRING "Python package name")
+set(PY_BUILD_CMAKE_IMPORT_NAME "cyqlone" CACHE STRING "Python module name")
 
 # Make sure that the Python and CMake versions match
 if (DEFINED PY_BUILD_CMAKE_PACKAGE_VERSION)
