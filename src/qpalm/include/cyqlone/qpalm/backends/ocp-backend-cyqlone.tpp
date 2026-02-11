@@ -43,7 +43,7 @@ struct CyqloneBackend {
     using OCP_t                 = cyqlone::CyqloneSolver<VL, real_t, DefaultOrder>;
     using Context               = typename OCP_t::Context;
     using storage_t             = typename OCP_t::template matrix<>;
-    using simd                  = batmat::datapar::deduced_simd<real_t, VL>;
+    using simd                  = typename OCP_t::simd;
     static constexpr auto norms = cyqlone::norms<real_t, simd>{};
     // clang-format off
     struct var_vec_t         : storage_t { friend CyqloneBackend; var_vec_t() = default;         private: var_vec_t(storage_t &&o)         : storage_t{std::move(o)} {} friend auto simdify(var_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const var_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
@@ -549,10 +549,8 @@ struct CyqloneBackend {
         const auto ŷ_batch = [&ŷ_simd]([[maybe_unused]] auto j, auto, auto ŷi, auto Ji, auto Σi,
                                        auto yi, auto Axi, auto li, auto ui) {
             GUANAQO_TRACE("calc_ŷ_Aᵀŷ", j);
-            linalg::detail::iter_elems_store2<real_t, typename simd::abi_type,
-                                              StorageOrder::ColMajor>(
-                ŷ_simd, simdify(ŷi), simdify(Ji), simdify(Σi), simdify(yi), simdify(Axi),
-                simdify(li), simdify(ui));
+            linalg::transform2_elementwise(ŷ_simd, ŷi, Ji, //
+                                           Σi, yi, Axi, li, ui);
         };
         {
             auto t = get_timed(&Timings::calc_y_hat);
@@ -797,9 +795,8 @@ struct CyqloneBackend {
             };
             const auto resid_batch = [&](auto, auto, auto gradi, auto ξi, auto Mᵀλi, auto Aᵀŷi,
                                          auto MᵀΔλi, auto resi) {
-                linalg::detail::iter_elems_store<real_t, typename simd::abi_type,
-                                                 StorageOrder::ColMajor>(
-                    resid_simd, resi, gradi, ξi, Mᵀλi, Aᵀŷi, MᵀΔλi, resi);
+                linalg::transform_elementwise(resid_simd, resi, //
+                                              gradi, ξi, Mᵀλi, Aᵀŷi, MᵀΔλi, resi);
             };
             ocp.foreach_stage(ctx, resid_batch, grad, ξ, Mᵀλ, Aᵀŷ, MᵀΔλ, res);
             r_norm_sq    = ctx.reduce(r_norm_sq);

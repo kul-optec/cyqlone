@@ -367,6 +367,35 @@ void add(VA &&A, VB &&B, with_rotate_t<Rotate> = {}) {
         simdify(A).as_const(), simdify(B).as_const(), simdify(A));
 }
 
+/// Apply a function to all elements of the given matrices or vectors.
+template <class F, simdifiable VA, simdifiable... VAs>
+    requires simdify_compatible<VA, VAs...>
+void for_each_elementwise(F &&fun, VA &&A, VAs &&...As) {
+    static constexpr auto storage_order = simdified_view_t<VA>::storage_order;
+    detail::iter_elems<simdified_value_t<VA>, simdified_abi_t<VA>, storage_order>(
+        std::forward<F>(fun), simdify(A).as_const(), simdify(As).as_const()...);
+}
+
+/// Apply a function to all elements of the given matrices or vectors, storing the result in the
+/// first argument.
+template <class F, simdifiable VA, simdifiable... VAs>
+    requires simdify_compatible<VA, VAs...>
+void transform_elementwise(F &&fun, VA &&A, VAs &&...As) {
+    static constexpr auto storage_order = simdified_view_t<VA>::storage_order;
+    detail::iter_elems_store<simdified_value_t<VA>, simdified_abi_t<VA>, storage_order>(
+        std::forward<F>(fun), simdify(A), simdify(As).as_const()...);
+}
+
+/// Apply a function to all elements of the given matrices or vectors, storing the results in the
+/// first two arguments.
+template <class F, simdifiable VA, simdifiable VB, simdifiable... VAs>
+    requires simdify_compatible<VA, VB, VAs...>
+void transform2_elementwise(F &&fun, VA &&A, VB &&B, VAs &&...As) {
+    static constexpr auto storage_order = simdified_view_t<VA>::storage_order;
+    detail::iter_elems_store2<simdified_value_t<VA>, simdified_abi_t<VA>, storage_order>(
+        std::forward<F>(fun), simdify(A), simdify(B), simdify(As).as_const()...);
+}
+
 /// @}
 
 /// @name Multi-batch operations
@@ -422,6 +451,7 @@ simdified_value_t<Vx> norm_2(Vx &&x) {
 template <simdifiable_multi Vx, simdifiable_multi Vy>
     requires simdify_compatible<Vx, Vy>
 simdified_value_t<Vx> dot(Vx &&x, Vy &&y) {
+    BATMAT_ASSERT(x.num_batches() == y.num_batches());
     simdified_value_t<Vx> result{};
     for (index_t b = 0; b < x.num_batches(); ++b)
         result += dot(x.batch(b), y.batch(b));
@@ -432,6 +462,8 @@ simdified_value_t<Vx> dot(Vx &&x, Vy &&y) {
 template <simdifiable_multi Vx, simdifiable_multi Vy, simdifiable_multi Vz>
     requires simdify_compatible<Vx, Vy, Vz>
 void hadamard(Vx &&x, Vy &&y, Vz &&z) {
+    BATMAT_ASSERT(x.num_batches() == y.num_batches());
+    BATMAT_ASSERT(x.num_batches() == z.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
         hadamard(x.batch(b), y.batch(b), z.batch(b));
 }
@@ -440,6 +472,7 @@ void hadamard(Vx &&x, Vy &&y, Vz &&z) {
 template <simdifiable_multi Vx, simdifiable_multi Vy>
     requires simdify_compatible<Vx, Vy>
 void hadamard(Vx &&x, Vy &&y) {
+    BATMAT_ASSERT(x.num_batches() == y.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
         hadamard(x.batch(b), y.batch(b));
 }
@@ -448,6 +481,9 @@ void hadamard(Vx &&x, Vy &&y) {
 template <simdifiable_multi Vx, simdifiable_multi Vlo, simdifiable_multi Vhi, simdifiable_multi Vz>
     requires simdify_compatible<Vx, Vlo, Vhi, Vz>
 void clamp(Vx &&x, Vlo &&lo, Vhi &&hi, Vz &&z) {
+    BATMAT_ASSERT(x.num_batches() == lo.num_batches());
+    BATMAT_ASSERT(x.num_batches() == hi.num_batches());
+    BATMAT_ASSERT(x.num_batches() == z.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
         clamp(x.batch(b), lo.batch(b), hi.batch(b), z.batch(b));
 }
@@ -456,6 +492,9 @@ void clamp(Vx &&x, Vlo &&lo, Vhi &&hi, Vz &&z) {
 template <simdifiable_multi Vx, simdifiable_multi Vlo, simdifiable_multi Vhi, simdifiable_multi Vz>
     requires simdify_compatible<Vx, Vlo, Vhi, Vz>
 void clamp_resid(Vx &&x, Vlo &&lo, Vhi &&hi, Vz &&z) {
+    BATMAT_ASSERT(x.num_batches() == lo.num_batches());
+    BATMAT_ASSERT(x.num_batches() == hi.num_batches());
+    BATMAT_ASSERT(x.num_batches() == z.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
         clamp_resid(x.batch(b), lo.batch(b), hi.batch(b), z.batch(b));
 }
@@ -466,6 +505,8 @@ template <simdifiable_multi Vx, simdifiable_multi Vy, simdifiable_multi Vz, //
           std::convertible_to<simdified_value_t<Vx>> Tb>
     requires simdify_compatible<Vx, Vy, Vz>
 void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y, Vz &&z) {
+    BATMAT_ASSERT(x.num_batches() == y.num_batches());
+    BATMAT_ASSERT(x.num_batches() == z.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
         axpby(alpha, x.batch(b), beta, y.batch(b), z.batch(b));
 }
@@ -476,6 +517,7 @@ template <simdifiable_multi Vx, simdifiable_multi Vy, //
           std::convertible_to<simdified_value_t<Vx>> Tb>
     requires simdify_compatible<Vx, Vy>
 void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y) {
+    BATMAT_ASSERT(x.num_batches() == y.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
         axpby(alpha, x.batch(b), beta, y.batch(b));
 }
@@ -484,6 +526,7 @@ void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y) {
 template <auto Beta = 1, simdifiable_multi Vy, simdifiable_multi... Vx>
     requires simdify_compatible<Vy, Vx...>
 void axpy(Vy &&y, const std::array<simdified_value_t<Vy>, sizeof...(Vx)> &alphas, Vx &&...x) {
+    BATMAT_ASSERT(((y.num_batches() == x.num_batches()) && ...));
     for (index_t b = 0; b < y.num_batches(); ++b)
         axpy<Beta>(y.batch(b), alphas, x.batch(b)...);
 }
@@ -501,6 +544,7 @@ template <auto Beta = 1, simdifiable_multi Vx, simdifiable_multi Vy,
           std::convertible_to<simdified_value_t<Vx>> Ta>
     requires simdify_compatible<Vx, Vy>
 void axpy(Ta alpha, Vx &&x, Vy &&y) {
+    BATMAT_ASSERT(x.num_batches() == y.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
         axpy<Beta>(alpha, x.batch(b), y.batch(b));
 }
@@ -509,6 +553,7 @@ void axpy(Ta alpha, Vx &&x, Vy &&y) {
 template <simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0>
     requires simdify_compatible<VA, VB>
 void negate(VA &&A, VB &&B, with_rotate_t<Rotate> rot = {}) {
+    BATMAT_ASSERT(A.num_batches() == B.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
         negate(A.batch(b), B.batch(b), rot);
 }
@@ -524,6 +569,8 @@ void negate(VA &&A, with_rotate_t<Rotate> rot = {}) {
 template <simdifiable_multi VA, simdifiable_multi VB, simdifiable_multi VC, int Rotate = 0>
     requires simdify_compatible<VA, VB, VC>
 void sub(VA &&A, VB &&B, VC &&C, with_rotate_t<Rotate> rot = {}) {
+    BATMAT_ASSERT(A.num_batches() == B.num_batches());
+    BATMAT_ASSERT(A.num_batches() == C.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
         sub(A.batch(b), B.batch(b), C.batch(b), rot);
 }
@@ -532,6 +579,7 @@ void sub(VA &&A, VB &&B, VC &&C, with_rotate_t<Rotate> rot = {}) {
 template <simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0>
     requires simdify_compatible<VA, VB>
 void sub(VA &&A, VB &&B, with_rotate_t<Rotate> rot = {}) {
+    BATMAT_ASSERT(A.num_batches() == B.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
         sub(A.batch(b), B.batch(b), rot);
 }
@@ -540,6 +588,8 @@ void sub(VA &&A, VB &&B, with_rotate_t<Rotate> rot = {}) {
 template <simdifiable_multi VA, simdifiable_multi VB, simdifiable_multi VC, int Rotate = 0>
     requires simdify_compatible<VA, VB, VC>
 void add(VA &&A, VB &&B, VC &&C, with_rotate_t<Rotate> rot = {}) {
+    BATMAT_ASSERT(A.num_batches() == B.num_batches());
+    BATMAT_ASSERT(A.num_batches() == C.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
         add(A.batch(b), B.batch(b), C.batch(b), rot);
 }
@@ -548,8 +598,39 @@ void add(VA &&A, VB &&B, VC &&C, with_rotate_t<Rotate> rot = {}) {
 template <simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0>
     requires simdify_compatible<VA, VB>
 void add(VA &&A, VB &&B, with_rotate_t<Rotate> rot = {}) {
+    BATMAT_ASSERT(A.num_batches() == B.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
         add(A.batch(b), B.batch(b), rot);
+}
+
+/// Apply a function to all elements of the given matrices or vectors.
+template <class F, simdifiable_multi VA, simdifiable_multi... VAs>
+    requires simdify_compatible<VA, VAs...>
+void for_each_elementwise(F &&fun, VA &&A, VAs &&...As) {
+    BATMAT_ASSERT(((A.num_batches() == As.num_batches()) && ...));
+    for (index_t b = 0; b < A.num_batches(); ++b)
+        for_each_elementwise(fun, A.batch(b), As.batch(b)...);
+}
+
+/// Apply a function to all elements of the given matrices or vectors, storing the result in the
+/// first argument.
+template <class F, simdifiable_multi VA, simdifiable_multi... VAs>
+    requires simdify_compatible<VA, VAs...>
+void transform_elementwise(F &&fun, VA &&A, VAs &&...As) {
+    BATMAT_ASSERT(((A.num_batches() == As.num_batches()) && ...));
+    for (index_t b = 0; b < A.num_batches(); ++b)
+        transform_elementwise(fun, A.batch(b), As.batch(b)...);
+}
+
+/// Apply a function to all elements of the given matrices or vectors, storing the results in the
+/// first two arguments.
+template <class F, simdifiable_multi VA, simdifiable_multi VB, simdifiable_multi... VAs>
+    requires simdify_compatible<VA, VB, VAs...>
+void transform2_elementwise(F &&fun, VA &&A, VB &&B, VAs &&...As) {
+    BATMAT_ASSERT(A.num_batches() == B.num_batches());
+    BATMAT_ASSERT(((A.num_batches() == As.num_batches()) && ...));
+    for (index_t b = 0; b < A.num_batches(); ++b)
+        transform2_elementwise(fun, A.batch(b), B.batch(b), As.batch(b)...);
 }
 
 /// @}

@@ -93,115 +93,72 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::general_constr(Context &ctx, view<> ux,
                                                         mut_view<> DCux) const {
-    const index_t c  = riccati_thread_assignment(ctx);
-    const index_t dn = c * n; // data batch index
-    const index_t jn = c * n; // stage index
-    for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+    const auto mul_Gx = []([[maybe_unused]] auto j, auto, auto Gᵀj, auto uxj, auto DCuxj) {
         GUANAQO_TRACE("general_constr", j);
-        index_t di = dn + i;
-        gemv(data_Gᵀ.batch(di).transposed(), ux.batch(di), DCux.batch(di));
-    }
+        gemv(Gᵀj.transposed(), uxj, DCuxj);
+    };
+    foreach_stage(ctx, mul_Gx, data_Gᵀ, ux, DCux);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(Context &ctx, view<> y,
                                                                    mut_view<> DCᵀy) const {
-    const index_t c  = riccati_thread_assignment(ctx);
-    const index_t dn = c * n; // data batch index
-    const index_t jn = c * n; // stage index
-    for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+    const auto mul_Gᵀy = []([[maybe_unused]] auto j, auto, auto Gᵀj, auto yj, auto DCᵀyj) {
         GUANAQO_TRACE("transposed_general_constr", j);
-        index_t di = dn + i;
-        gemv(data_Gᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
-    }
+        gemv(Gᵀj, yj, DCᵀyj);
+    };
+    foreach_stage(ctx, mul_Gᵀy, data_Gᵀ, y, DCᵀy);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(view<> y,
                                                                    mut_view<> DCᵀy) const {
-    for (index_t c = 0; c < p; ++c) {
-        const index_t dn = c * n; // data batch index
-        const index_t jn = c * n; // stage index
-        for (index_t i = 0; i < n; ++i) {
-            [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
-            GUANAQO_TRACE("transposed_general_constr", j);
-            index_t di = dn + i;
-            gemv(data_Gᵀ.batch(di), y.batch(di), DCᵀy.batch(di));
-        }
-    }
+    run([&](Context &ctx) { transposed_general_constr(ctx, y, DCᵀy); });
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, value_type α,
                                                        view<> q, value_type β,
                                                        mut_view<> grad_f) const {
-    const index_t c  = riccati_thread_assignment(ctx);
-    const index_t dn = c * n; // data batch index
-    const index_t jn = c * n; // stage index
-    for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+    const auto mul_Hx = [&]([[maybe_unused]] auto j, auto, auto qj, auto Hj, auto uxj,
+                            auto grad_fj) {
         GUANAQO_TRACE("cost_gradient", j);
-        index_t di = dn + i;
         if (α != 0 || β != 1)
-            axpby(α, q.batch(di), β, grad_f.batch(di));
-        symv_add(tril(data_H.batch(di)), ux.batch(di), grad_f.batch(di));
-    }
+            axpby(α, qj, β, grad_fj);
+        symv_add(tril(Hj), uxj, grad_fj);
+    };
+    foreach_stage(ctx, mul_Hx, q, data_H, ux, grad_f);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx, value_type γ,
                                                                    view<> ux, view<> ux0, view<> q,
                                                                    mut_view<> grad_f) const {
-    const index_t c  = riccati_thread_assignment(ctx);
-    using abi        = batmat::linalg::simdified_abi_t<decltype(ux.batch(0))>;
-    using simd_types = batmat::linalg::simd_view_types<T, abi>;
-    using simd       = simd_types::simd;
     simd inv_γ{1 / γ};
-    const index_t dn = c * n; // data batch index
-    const index_t jn = c * n; // stage index
-    for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+    const auto reg_simd = [inv_γ](auto qji, auto xji, auto x0ji) {
+        return inv_γ * (xji - x0ji) + qji;
+    };
+    const auto mul_Hx = [&]([[maybe_unused]] auto j, auto, auto qj, auto Hj, auto uxj, auto ux0j,
+                            auto grad_fj) {
         GUANAQO_TRACE("cost_gradient_regularized", j);
-        index_t di = dn + i;
-        auto qi = q.batch(di), xi = ux.batch(di), x0i = ux0.batch(di);
-        auto grad_fi = grad_f.batch(di);
-        for (index_t j = 0; j < ux.rows(); ++j) {
-            simd qij      = simd_types::aligned_load(&qi(0, j, 0)),
-                 xij      = simd_types::aligned_load(&xi(0, j, 0)),
-                 x0ij     = simd_types::aligned_load(&x0i(0, j, 0));
-            simd grad_fij = inv_γ * (xij - x0ij) + qij;
-            simd_types::aligned_store(grad_fij, &grad_fi(0, j, 0));
-        }
-        symv_add(tril(data_H.batch(di)), ux.batch(di), grad_f.batch(di));
-    }
+        linalg::transform_elementwise(reg_simd, grad_fj, qj, uxj, ux0j);
+        symv_add(tril(Hj), uxj, grad_fj);
+    };
+    foreach_stage(ctx, mul_Hx, q, data_H, ux, ux0, grad_f);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_remove_regularization(
     Context &ctx, value_type γ, view<> ux, view<> ux0, mut_view<> grad_f) const {
-    const index_t c  = riccati_thread_assignment(ctx);
-    using abi        = batmat::linalg::simdified_abi_t<decltype(ux.batch(0))>;
-    using simd_types = batmat::linalg::simd_view_types<T, abi>;
-    using simd       = simd_types::simd;
     simd inv_γ{1 / γ};
-    const index_t dn = c * n; // data batch index
-    const index_t jn = c * n; // stage index
-    for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+    const auto sub_reg_simd = [inv_γ](auto grad_fji, auto xji, auto x0ji) {
+        return grad_fji + inv_γ * (x0ji - xji);
+    };
+    const auto sub_reg = [&]([[maybe_unused]] auto j, auto, auto uxj, auto ux0j, auto grad_fj) {
         GUANAQO_TRACE("cost_gradient_remove_regularization", j);
-        index_t di = dn + i;
-        auto xi = ux.batch(di), x0i = ux0.batch(di);
-        auto grad_fi = grad_f.batch(di);
-        for (index_t j = 0; j < ux.rows(); ++j) {
-            simd grad_fij = simd_types::aligned_load(&grad_fi(0, j, 0)),
-                 xij      = simd_types::aligned_load(&xi(0, j, 0)),
-                 x0ij     = simd_types::aligned_load(&x0i(0, j, 0));
-            grad_fij += inv_γ * (x0ij - xij);
-            simd_types::aligned_store(grad_fij, &grad_fi(0, j, 0));
-        }
-    }
+        linalg::transform_elementwise(sub_reg_simd, grad_fj, grad_fj, uxj, ux0j);
+    };
+    foreach_stage(ctx, sub_reg, ux, ux0, grad_f);
 }
 
 } // namespace CYQLONE_NS(cyqlone)

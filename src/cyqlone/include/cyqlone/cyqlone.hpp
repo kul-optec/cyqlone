@@ -96,6 +96,7 @@ struct TricyqleSolver {
     /// log₂(v), logarithm of the vector length.
     [[nodiscard]] static constexpr index_t lv() { return ceil_log2(v); }
 
+    using simd          = batmat::datapar::deduced_simd<value_type, v>;
     using vl_t          = std::integral_constant<index_t, v>;
     using align_t       = std::integral_constant<index_t, v * alignof(value_type)>;
     using SharedContext = parallel::SharedContext;
@@ -103,7 +104,7 @@ struct TricyqleSolver {
     std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
 
     /// Run a function in parallel.
-    void run(auto &&func) { return parallel_ctx->run(std::forward<decltype(func)>(func)); }
+    void run(auto &&func) const { return parallel_ctx->run(std::forward<decltype(func)>(func)); }
 
     /// @}
 
@@ -385,6 +386,7 @@ struct CyqloneSolver {
     /// Tricyqle solver type for solving block-tridiagonal systems in parallel.
     using tricyqle_t = TricyqleSolver<VL, T, DefaultOrder>;
     using Context    = tricyqle_t::Context;
+    using simd       = typename tricyqle_t::simd;
 
     /// Number of processors/threads.
     const index_t p;
@@ -403,7 +405,7 @@ struct CyqloneSolver {
     [[nodiscard]] constexpr index_t ceil_P() const { return tricyqle.ceil_P(); }
 
     /// Run a function in parallel.
-    void run(auto &&func) { return tricyqle.run(std::forward<decltype(func)>(func)); }
+    void run(auto &&func) const { return tricyqle.run(std::forward<decltype(func)>(func)); }
 
     /// Call a function for each stage in the horizon, passing the stage index, the data batch
     /// index, and optionally the corresponding batches of the given arrays.
@@ -689,6 +691,7 @@ struct CyqloneSolver {
     /// Compute Gᵀy, where G is the general constraint Jacobian matrix of the OCP.
     void transposed_general_constr(Context &ctx, view<> y, mut_view<> DCᵀy) const;
     /// @copydoc transposed_general_constr
+    /// @todo Remove.
     void transposed_general_constr(view<> y, mut_view<> DCᵀy) const;
     /// Compute the cost gradient, with optional scaling factors.
     /// grad_f ← Q ux + α q + β grad_f
