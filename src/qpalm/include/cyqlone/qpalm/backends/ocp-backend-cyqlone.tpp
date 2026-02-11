@@ -447,12 +447,8 @@ struct CyqloneBackend {
     }
 
     void update_regularization_changed(Context &ctx, real_t S_new, real_t S_old) {
-        if (S_new != S_old) {
-            ctx.arrive_and_wait(__LINE__);
-            if (ctx.is_master())
-                reset_factorization = true;
-            ctx.arrive_and_wait(__LINE__);
-        }
+        if (S_new != S_old)
+            ctx.run_single_sync([&] { reset_factorization = true; });
     }
 
     real_t boost_regularization(Context &ctx, real_t S, real_t S_boost) {
@@ -462,17 +458,13 @@ struct CyqloneBackend {
 
     void update_penalty_changed(Context &ctx, const ineq_constr_vec_t &Σ, index_t num_Σ_changed) {
         std::ignore = Σ;
-        if (num_Σ_changed > 0) {
-            ctx.arrive_and_wait(__LINE__);
-            if (ctx.is_master())
-                reset_factorization = true;
-            ctx.arrive_and_wait(__LINE__);
-        }
+        if (num_Σ_changed > 0)
+            ctx.run_single_sync([&] { reset_factorization = true; });
     }
 
     template <class T, size_t N>
-    void merge_chunk(std::span<const T> chunk, size_t chunk_index,
-                     std::span<const std::array<size_t, N>> separators, std::span<T> out) {
+    static void merge_chunk(std::span<const T> chunk, size_t chunk_index,
+                            std::span<const std::array<size_t, N>> separators, std::span<T> out) {
         GUANAQO_TRACE("merge_chunk", 0, chunk.size());
         size_t num_chunks = separators.size();
         BATMAT_ASSUME(chunk_index < num_chunks);
@@ -499,25 +491,23 @@ struct CyqloneBackend {
         using std::isfinite;
         using std::sqrt;
         // Allocate memory
-        const index_t ny_M       = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
-        const index_t m          = ocp.ceil_N() * ny_M;
-        const index_t p          = 1 << ocp.lp(); // number of threads
-        const index_t num_stages = ocp.n;         // number of stages per thread
-        if (ctx.is_master()) {
+        const index_t ny_M = std::max(ocp.ny, ocp.ny_0 + ocp.ny_N);
+        ctx.run_single_sync([&] {
+            const index_t m = ocp.ceil_N() * ny_M;
             breakpoints.resize(2 * m);
             breakpoints_temp.resize(2 * m);
-            thread_indices.resize(p);
-            thread_sums.resize(2 * p);
-        }
-        ctx.arrive_and_wait(__LINE__); // TODO: allocate ahead of time to avoid barrier
+            thread_indices.resize(ocp.p);
+            thread_sums.resize(2 * ocp.p);
+        });
         // Parallelization and vectorization
-        auto as = std::span{thread_sums}.first(p), bs = std::span{thread_sums}.subspan(p);
-        auto thr_parts = std::span{thread_indices}.subspan(0, p);
+        auto as = std::span{thread_sums}.first(ocp.p), bs = std::span{thread_sums}.subspan(ocp.p);
+        auto thr_parts = std::span{thread_indices}.subspan(0, ocp.p);
         // Compute break points t[i] and intermediate values α[i] and δ[i]
         std::span<Breakpoint> neg_bp, pos_bp;
-        const index_t ti        = ocp.riccati_thread_assignment(ctx);
-        Breakpoint *const fin_0 = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * VL;
-        Breakpoint *const inf_0 = fin_0 + 2 * num_stages * ny_M * VL;
+        const index_t num_stages = ocp.n; // number of stages per thread
+        const index_t ti         = ocp.riccati_thread_assignment(ctx);
+        Breakpoint *const fin_0  = breakpoints_temp.data() + 2 * ti * num_stages * ny_M * ocp.v;
+        Breakpoint *const inf_0  = fin_0 + 2 * num_stages * ny_M * ocp.v;
         Breakpoint *fin = fin_0, *inf = inf_0;
         const index_t di0 = ti * num_stages;
         for (index_t i = 0; i < num_stages; ++i) {
@@ -534,9 +524,9 @@ struct CyqloneBackend {
                 const auto δ2 = s * Adi, δ1 = -δ2;
                 const auto α1 = (yi + Σi * (Axi - li)) / s, α2 = (Σi * (ui - Axi) - yi) / s;
                 const auto t1 = α1 / δ1, t2 = α2 / δ2;
-                BATMAT_FULLY_UNROLLED_FOR (int v = 0; v < VL; ++v) {
-                    *(isfinite(t1[v]) ? fin++ : --inf) = {.t = t1[v], .δ = δ1[v]};
-                    *(isfinite(t2[v]) ? fin++ : --inf) = {.t = t2[v], .δ = δ2[v]};
+                BATMAT_FULLY_UNROLLED_FOR (int l = 0; l < ocp.v; ++l) {
+                    *(isfinite(t1[l]) ? fin++ : --inf) = {.t = t1[l], .δ = δ1[l]};
+                    *(isfinite(t2[l]) ? fin++ : --inf) = {.t = t2[l], .δ = δ2[l]};
                 }
             }
         }
@@ -594,43 +584,26 @@ struct CyqloneBackend {
 
     template <class T, class U>
     void xaxpy(Context &ctx, real_t a, const T &x, U &y) {
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            linalg::axpy(a, x.batch(di), y.batch(di));
-        }
+        const auto xaxpy = [a](auto, auto, auto xi, auto yi) { linalg::axpy(a, xi, yi); };
+        ocp.foreach_stage(ctx, xaxpy, x, y);
     }
 
     template <class T, class U>
     void xcopy(Context &ctx, const T &x, U &y) const {
-        BATMAT_ASSERT(x.depth() == y.depth());
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            batmat::linalg::copy(x.batch(di), y.batch(di));
-        }
+        const auto xcopy = [](auto, auto, auto xi, auto yi) { batmat::linalg::copy(xi, yi); };
+        ocp.foreach_stage(ctx, xcopy, x, y);
     }
 
     template <class T, class U>
     void set_constant(Context &ctx, T &x, const U &y) const {
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            batmat::linalg::fill(y, x.batch(di));
-        }
+        const auto set_constant = [y](auto, auto, auto xi) { batmat::linalg::fill(y, xi); };
+        ocp.foreach_stage(ctx, set_constant, x);
     }
 
     [[nodiscard]] real_t dot(Context &ctx, const var_vec_t &a, const var_vec_t &b) const {
-        real_t sum               = 0;
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            sum += linalg::dot(a.batch(di), b.batch(di));
-        }
+        real_t sum     = 0;
+        const auto dot = [&](auto, auto, auto ai, auto bi) { sum += linalg::dot(ai, bi); };
+        ocp.foreach_stage(ctx, dot, a, b);
         return ctx.reduce(sum);
     }
 
@@ -647,12 +620,8 @@ struct CyqloneBackend {
                                                                const Args &...args) const {
         using local_sums_t = std::array<real_t, sizeof...(Args) / 2>;
         local_sums_t local_sums{};
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            local_dots(local_sums, args.batch(di)...);
-        }
+        const auto dots = [&](auto, auto, auto... batches) { local_dots(local_sums, batches...); };
+        ocp.foreach_stage(ctx, dots, args...);
         return ctx.reduce(local_sums, [](local_sums_t a, local_sums_t b) {
             local_sums_t c{};
             for (size_t i = 0; i < a.size(); ++i)
@@ -663,15 +632,12 @@ struct CyqloneBackend {
 
     template <class T>
     [[nodiscard]] auto norm_inf_l1_sq(Context &ctx, const T &x) const {
-        const index_t num_stages = ocp.n; // number of stages per thread
-        GUANAQO_TRACE("norm_inf_l1_sq", 0, 4 * x.batch_size() * x.rows() * num_stages);
-        auto nrm_simd    = norms.zero_simd();
-        const index_t ti = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            nrm_simd =
-                compact_blas::xreduce(nrm_simd, norms, std::identity{}, simdify(x.batch(di)));
-        }
+        GUANAQO_TRACE("norm_inf_l1_sq", 0, 4 * x.batch_size() * x.rows() * ocp.n);
+        auto nrm_simd             = norms.zero_simd();
+        const auto norm_inf_l1_sq = [&](auto, auto, auto xi) {
+            nrm_simd = compact_blas::xreduce(nrm_simd, norms, std::identity{}, simdify(xi));
+        };
+        ocp.foreach_stage(ctx, norm_inf_l1_sq, x);
         return ctx.reduce(norms(nrm_simd), norms);
     }
 
@@ -684,24 +650,16 @@ struct CyqloneBackend {
 
     template <class T>
     [[nodiscard]] real_t norm_squared(Context &ctx, const T &x) const {
-        real_t sumsq             = 0;
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            sumsq += linalg::norm_2_squared(x.batch(di));
-        }
+        real_t sumsq            = 0;
+        const auto norm_squared = [&](auto, auto, auto xi) { sumsq += linalg::norm_2_squared(xi); };
+        ocp.foreach_stage(ctx, norm_squared, x);
         return ctx.reduce(sumsq);
     }
 
     template <class T>
     void scale(Context &ctx, real_t s, T &x) const {
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            linalg::axpby(real_t{}, x.batch(di), s, x.batch(di));
-        }
+        const auto scale = [&](auto, auto, auto xi) { linalg::axpy<0>(s, xi, xi); };
+        ocp.foreach_stage(ctx, scale, x);
     }
 
     const ineq_constr_vec_t &Ax_min() const { return b_min_strided; }
@@ -710,47 +668,38 @@ struct CyqloneBackend {
     index_t calc_ŷ_Aᵀŷ(Context &ctx, const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &Σ,
                        const ineq_constr_vec_t &y, ineq_constr_vec_t &ŷ, var_vec_t &Aᵀŷ,
                        active_set_t &J) {
-        using std::clamp;
-        index_t count_J_local    = 0;
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
+        index_t count_J_local = 0;
+        const auto ŷ_simd     = [&count_J_local](auto Σi, auto yi, auto Axi, auto li, auto ui) {
+            using std::clamp;
+            auto ζ = Axi + yi / Σi, z = clamp(ζ, li, ui);
+            auto Ji = z != ζ; // TODO: inclusive?
+#if 0
+            simd ŷi{0};
+            where(Ji, ŷi) = yi + Σi * (Axi - z);
+#else
+            auto ŷi = yi + Σi * (Axi - z);
+#endif
+#if BATMAT_WITH_GSI_HPC_SIMD
+            simd ΣJi = select(Ji, Σi, simd{0});
+            count_J_local += static_cast<index_t>(reduce_count(Ji));
+#else
+            simd ΣJi{};
+            where(Ji, ΣJi) = Σi;
+            count_J_local += static_cast<index_t>(popcount(Ji));
+#endif
+            return std::make_pair(ŷi, ΣJi);
+        };
+        const auto ŷ_batch = [&ŷ_simd]([[maybe_unused]] auto j, auto, auto ŷi, auto Ji, auto Σi,
+                                       auto yi, auto Axi, auto li, auto ui) {
+            GUANAQO_TRACE("calc_ŷ_Aᵀŷ", j);
+            linalg::detail::iter_elems_store2<real_t, typename simd::abi_type,
+                                              StorageOrder::ColMajor>(
+                ŷ_simd, simdify(ŷi), simdify(Ji), simdify(Σi), simdify(yi), simdify(Axi),
+                simdify(li), simdify(ui));
+        };
         {
             auto t = get_timed(&Timings::calc_y_hat);
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                GUANAQO_TRACE("calc_ŷ_Aᵀŷ", di);
-                for (index_t r = 0; r < y.rows(); ++r) {
-                    const auto Σi  = batmat::datapar::aligned_load<simd>(&Σ.batch(di)(0, r, 0)),
-                               yi  = batmat::datapar::aligned_load<simd>(&y.batch(di)(0, r, 0)),
-                               Axi = batmat::datapar::aligned_load<simd>(&Ax.batch(di)(0, r, 0)),
-                               li  = batmat::datapar::aligned_load<simd>(
-                                   &b_min_strided.batch(di)(0, r, 0)),
-                               ui = batmat::datapar::aligned_load<simd>(
-                                   &b_max_strided.batch(di)(0, r, 0));
-                    auto ζ  = Axi + yi / Σi;
-                    auto z  = clamp(ζ, li, ui);
-                    auto Ji = z != ζ; // TODO: inclusive?
-#if 0
-                    simd ŷi{0};
-                    where(Ji, ŷi) = yi + Σi * (Axi - z);
-#else
-                    auto ŷi = yi + Σi * (Axi - z);
-#endif
-                    datapar::aligned_store(ŷi, &ŷ.batch(di)(0, r, 0));
-#if BATMAT_WITH_GSI_HPC_SIMD
-                    simd ΣJi = select(Ji, Σi, simd{0});
-#else
-                    simd ΣJi{};
-                    where(Ji, ΣJi) = Σi;
-#endif
-                    datapar::aligned_store(ΣJi, &J.batch(di)(0, r, 0));
-#if BATMAT_WITH_GSI_HPC_SIMD
-                    count_J_local += static_cast<index_t>(reduce_count(Ji));
-#else
-                    count_J_local += static_cast<index_t>(popcount(Ji));
-#endif
-                }
-            }
+            ocp.foreach_stage(ctx, ŷ_batch, ŷ, J, Σ, y, Ax, b_min_strided, b_max_strided);
         }
         auto t = get_timed(&Timings::calc_y_hat_AT);
         mat_vec_AT(ctx, ŷ, Aᵀŷ);
@@ -760,24 +709,17 @@ struct CyqloneBackend {
     real_t unscaled_aug_lagr_norm(Context &ctx, const var_vec_t &grad_f, const var_vec_t &Mᵀλ,
                                   const var_vec_t &Aᵀŷ) const {
         GUANAQO_TRACE("unscaled_aug_lagr_norm", 0);
-        using std::clamp;
-        using std::isfinite;
-        auto nrm_simd            = norms.zero_simd();
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            nrm_simd         = compact_blas::xreduce(
-                nrm_simd,
-                [](auto accum, auto grad_fi, auto Mᵀλi, auto Aᵀŷi) {
-                    auto grad_ali = grad_fi + Mᵀλi + Aᵀŷi;
-                    return norms(accum, grad_ali);
-                },
-                std::identity{}, simdify(grad_f.batch(di)), simdify(Mᵀλ.batch(di)),
-                simdify(Aᵀŷ.batch(di)));
-        }
-        auto nrm = ctx.reduce(norms(nrm_simd), norms);
-        return isfinite(nrm.asum) ? nrm.max : nrm.asum;
+        auto nrm_simd                        = norms.zero_simd();
+        static constexpr auto grad_norm_simd = [](auto accum, auto grad_fi, auto Mᵀλi, auto Aᵀŷi) {
+            return norms(accum, grad_fi + Mᵀλi + Aᵀŷi);
+        };
+        const auto grad_norm_batch = [&nrm_simd](auto, auto, auto grad_fi, auto Mᵀλi, auto Aᵀŷi) {
+            nrm_simd = compact_blas::xreduce(nrm_simd, grad_norm_simd, std::identity{},
+                                             simdify(grad_fi), simdify(Mᵀλi), simdify(Aᵀŷi));
+        };
+        ocp.foreach_stage(ctx, grad_norm_batch, grad_f, Mᵀλ, Aᵀŷ);
+        return ctx.reduce(norms(nrm_simd), norms).norminf();
+        (void)grad_norm_simd; // Silence bogus GCC warning
     }
 
     void scale_variables(std::span<const real_t> in, var_vec_t &out) const {
@@ -808,20 +750,16 @@ struct CyqloneBackend {
         BATMAT_ASSERT(J.rows() == J_old.rows() && J.cols() == J_old.cols());
         BATMAT_ASSERT(J.depth() == J_old.depth());
         BATMAT_ASSERT(J.cols() == 1);
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        index_t num_different    = 0;
+        index_t num_different = 0;
         {
             GUANAQO_TRACE("active_set_change", 0);
-            for (index_t i = 0; i < num_stages; ++i)
-                num_different += [&] {
-                    auto t           = get_timed(&Timings::update_active_set_change);
-                    const index_t di = ti * num_stages + i;
-                    auto Ji          = simdify(J.batch(di));
-                    auto J_oldi      = simdify(J_old.batch(di));
-                    return std::inner_product(Ji.data, Ji.data + Ji.size(), J_oldi.data, index_t{0},
-                                              std::plus<>{}, std::not_equal_to<>{});
-                }();
+            auto t                       = get_timed(&Timings::update_active_set_change);
+            const auto active_set_change = [&](auto, auto, auto Ji, auto J_oldi) {
+                num_different +=
+                    std::inner_product(Ji.data, Ji.data + Ji.size(), J_oldi.data, //
+                                       index_t{0}, std::plus<>{}, std::not_equal_to<>{});
+            };
+            ocp.foreach_stage(ctx, active_set_change, J, J_old);
         }
         num_different = ctx.reduce(num_different);
         // If there are no changing constraints, or if we were going to
@@ -832,26 +770,20 @@ struct CyqloneBackend {
         do_reset_fac |= static_cast<double>(num_different) >=
                         static_cast<double>(num_ineq_constr()) * settings.changing_constr_factor;
         if (do_reset_fac) {
-            ctx.arrive_and_wait(__LINE__);
-            if (ctx.is_master())
-                reset_factorization = true;
-            ctx.arrive_and_wait(__LINE__);
+            ctx.run_single_sync([&] { reset_factorization = true; });
             return num_different;
         } else {
-            ctx.arrive_and_wait(__LINE__);
-            if (ctx.is_master()) {
+            ctx.run_single_sync([&] {
                 ++num_updates;
                 ++stats.num_updates;
                 stats.rank_updates += num_different;
-            }
-            ctx.arrive_and_wait(__LINE__);
+            });
         }
         // std::cout << "                                     -- Fact update\n";
-
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            linalg::sub(J.batch(di), J_old.batch(di), ΔΣ.batch(di));
-        }
+        const auto delta = [&](auto, auto, auto Ji, auto J_oldi, auto ΔΣi) {
+            linalg::sub(Ji, J_oldi, ΔΣi);
+        };
+        ocp.foreach_stage(ctx, delta, J, J_old, ΔΣ);
         auto t = get_timed(&Timings::update_factorization);
         ocp.update(ctx, ΔΣ);
         return num_different;
@@ -909,14 +841,12 @@ struct CyqloneBackend {
                const active_set_t &J, //
                var_vec_t &d, var_vec_t &ξ, ineq_constr_vec_t &Ad, eq_constr_vec_t &Δλ,
                var_vec_t &MᵀΔλ) {
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            linalg::axpy<0>(d.batch(di), {-1, -1, -1}, grad.batch(di), Mᵀλ.batch(di),
-                            Aᵀŷ.batch(di));
-            batmat::linalg::copy(Mxb.batch(di), Δλ.batch(di));
-        }
+        const auto init_rhs = [&](auto, auto, auto di, auto gradi, auto Mᵀλi, auto Aᵀŷi, auto Mxbi,
+                                  auto Δλi) {
+            linalg::axpy<0>(di, {-1, -1, -1}, gradi, Mᵀλi, Aᵀŷi);
+            batmat::linalg::copy(Mxbi, Δλi);
+        };
+        ocp.foreach_stage(ctx, init_rhs, d, grad, Mᵀλ, Aᵀŷ, Mxb, Δλ);
         if (settings.print_residuals) {
             int prec                      = settings.print_precision;
             auto grad_norm_inf            = norm_inf(ctx, d);
@@ -988,34 +918,33 @@ struct CyqloneBackend {
             using std::isfinite;
             using std::max;
             using std::sqrt;
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                linalg::hadamard(J.batch(di), Ad.batch(di), temp_ineq.batch(di));
-            }
+            const auto ΣAd = [&](auto, auto, auto Ji, auto Adi, auto temp_ineqi) {
+                linalg::hadamard(Ji, Adi, temp_ineqi);
+            };
+            ocp.foreach_stage(ctx, ΣAd, J, Ad, temp_ineq);
             auto &res = temp_var;
             mat_vec_AT(ctx, temp_ineq, res);
             real_t r_norm_sq = 0, grad_norm_sq = 0, r_norm_inf = 0;
             real_t r_kkt_norm_sq = 0, r_kkt_norm_inf = 0;
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                for (index_t r = 0; r < grad.rows(); ++r) {
-                    auto gradi   = datapar::aligned_load<simd>(&grad.batch(di)(0, r, 0)),
-                         ξi      = datapar::aligned_load<simd>(&ξ.batch(di)(0, r, 0)),
-                         Mᵀλi    = datapar::aligned_load<simd>(&Mᵀλ.batch(di)(0, r, 0)),
-                         Aᵀŷi    = datapar::aligned_load<simd>(&Aᵀŷ.batch(di)(0, r, 0)),
-                         MᵀΔλi   = datapar::aligned_load<simd>(&MᵀΔλ.batch(di)(0, r, 0)),
-                         ri      = datapar::aligned_load<simd>(&res.batch(di)(0, r, 0));
-                    auto gi      = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
-                    simd r_kkt_i = gi + MᵀΔλi + ξi;
-                    ri += gi + MᵀΔλi + ξi;
-                    datapar::aligned_store(ri, &res.batch(di)(0, r, 0));
-                    r_norm_inf = max(r_norm_inf, hmax(abs(ri)));
-                    r_norm_sq += reduce(ri * ri);
-                    r_kkt_norm_inf = max(r_kkt_norm_inf, hmax(abs(r_kkt_i)));
-                    r_kkt_norm_sq += reduce(r_kkt_i * r_kkt_i);
-                    grad_norm_sq += reduce(simd{gi} * simd{gi});
-                }
-            }
+            const auto resid_simd = [&](auto gradi, auto ξi, auto Mᵀλi, auto Aᵀŷi, auto MᵀΔλi,
+                                        auto ri) {
+                auto gi      = NeumaierSum(gradi) + Mᵀλi + Aᵀŷi;
+                simd r_kkt_i = gi + MᵀΔλi + ξi;
+                ri += gi + MᵀΔλi + ξi;
+                r_norm_inf = max(r_norm_inf, hmax(abs(ri)));
+                r_norm_sq += reduce(ri * ri);
+                r_kkt_norm_inf = max(r_kkt_norm_inf, hmax(abs(r_kkt_i)));
+                r_kkt_norm_sq += reduce(r_kkt_i * r_kkt_i);
+                grad_norm_sq += reduce(simd{gi} * simd{gi});
+                return ri;
+            };
+            const auto resid_batch = [&](auto, auto, auto gradi, auto ξi, auto Mᵀλi, auto Aᵀŷi,
+                                         auto MᵀΔλi, auto resi) {
+                linalg::detail::iter_elems_store<real_t, typename simd::abi_type,
+                                                 StorageOrder::ColMajor>(
+                    resid_simd, resi, gradi, ξi, Mᵀλi, Aᵀŷi, MᵀΔλi, resi);
+            };
+            ocp.foreach_stage(ctx, resid_batch, grad, ξ, Mᵀλ, Aᵀŷ, MᵀΔλ, res);
             r_norm_sq    = ctx.reduce(r_norm_sq);
             grad_norm_sq = ctx.reduce(grad_norm_sq);
             r_norm_inf   = ctx.reduce(r_norm_inf, [](auto a, auto b) { return max(a, b); });
@@ -1033,15 +962,11 @@ struct CyqloneBackend {
                           << ",  rel₂="
                           << guanaqo::float_to_str(sqrt(r_kkt_norm_sq / grad_norm_sq), prec)
                           << "\n";
-            auto &x_next = temp_var;
-            for (index_t i = 0; i < num_stages; ++i) {
-                const index_t di = ti * num_stages + i;
-                for (index_t r = 0; r < grad.rows(); ++r) {
-                    auto xi  = datapar::aligned_load<simd>(&x.batch(di)(0, r, 0)),
-                         dii = datapar::aligned_load<simd>(&d.batch(di)(0, r, 0));
-                    datapar::aligned_store(xi + dii, &x_next.batch(di)(0, r, 0));
-                }
-            }
+            auto &x_next        = temp_var;
+            const auto add_step = [&](auto, auto, auto xi, auto dii, auto x_nexti) {
+                linalg::add(xi, dii, x_nexti);
+            };
+            ocp.foreach_stage(ctx, add_step, x, d, x_next);
             auto &res_x_next = temp_eq;
             eq_constr_resid(ctx, x_next, res_x_next);
             real_t inf_res = norm_inf(ctx, res_x_next);

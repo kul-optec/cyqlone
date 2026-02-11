@@ -45,6 +45,26 @@ template <class T, class Abi, StorageOrder O, class F, class X, class... Xs>
     }
 }
 
+template <class T, class Abi, StorageOrder O, class F, class X0, class X1, class... Xs>
+[[gnu::always_inline]] inline void iter_elems_store2(F &&fun, X0 &&x0, X1 &&x1, Xs &&...xs) {
+    using types = simd_view_types<T, Abi>;
+    if constexpr (O == StorageOrder::ColMajor) {
+        for (index_t c = 0; c < x0.cols(); ++c)
+            for (index_t r = 0; r < x0.rows(); ++r) {
+                auto [r0, r1] = fun(types::aligned_load(&xs(0, r, c))...);
+                types::aligned_store(r0, &x0(0, r, c));
+                types::aligned_store(r1, &x1(0, r, c));
+            }
+    } else {
+        for (index_t r = 0; r < x0.rows(); ++r)
+            for (index_t c = 0; c < x0.cols(); ++c) {
+                auto [r0, r1] = fun(types::aligned_load(&xs(0, r, c))...);
+                types::aligned_store(r0, &x0(0, r, c));
+                types::aligned_store(r1, &x1(0, r, c));
+            }
+    }
+}
+
 template <class T, class Abi, StorageOrder O0, class Tinit, class F, class R, class... Args>
 auto reduce(Tinit init, F fun, R reduce, view<const T, Abi, O0> x0, const Args &...xs) {
     BATMAT_ASSERT(((x0.rows() == xs.rows()) && ...));

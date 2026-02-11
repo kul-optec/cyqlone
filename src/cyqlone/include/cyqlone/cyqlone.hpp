@@ -405,6 +405,19 @@ struct CyqloneSolver {
     /// Run a function in parallel.
     void run(auto &&func) { return tricyqle.run(std::forward<decltype(func)>(func)); }
 
+    /// Call a function for each stage in the horizon, passing the stage index, the data batch
+    /// index, and optionally the corresponding batches of the given arrays.
+    void foreach_stage(Context &ctx, auto &&func, auto &&...xs) const {
+        BATMAT_ASSERT(((xs.batch_size() == v) && ...));
+        BATMAT_ASSERT(((xs.depth() == ceil_N()) && ...));
+        const index_t ti = riccati_thread_assignment(ctx);
+        for (index_t i = 0; i < n; ++i) {
+            const index_t di = ti * n + i;
+            const index_t j  = sub_wrap_N(ti * n, i);
+            func(j, di, xs.batch(di)...);
+        }
+    }
+
     /// @}
 
     /// @name Indexing utilities
