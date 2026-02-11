@@ -548,7 +548,6 @@ void register_settings(nb::module_ &m) {
         .def_rw("recompute_eq_res", &cyqlone::qpalm::Settings::recompute_eq_res)
         .def_rw("recompute_inner", &cyqlone::qpalm::Settings::recompute_inner)
         .def_rw("recompute", &cyqlone::qpalm::Settings::recompute)
-        .def_rw("recompute_penalty_gradient", &cyqlone::qpalm::Settings::recompute_penalty_gradient)
         .def_rw("verbose", &cyqlone::qpalm::Settings::verbose)
         .def_rw("max_no_changes_active_set", &cyqlone::qpalm::Settings::max_no_changes_active_set)
         .def_rw("linesearch_include_multipliers",

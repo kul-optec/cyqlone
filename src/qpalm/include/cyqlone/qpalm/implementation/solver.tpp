@@ -184,14 +184,12 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         real_t stationarity           = std::numeric_limits<real_t>::infinity();
         real_t eq_resid               = std::numeric_limits<real_t>::infinity();
         bool increase_penalty_y       = true;
-
-        // Compute gradient of augmented Lagrangian
-        index_t nJ = timed(timings.mat_vec_AT,
-                           [&] { return backend.calc_ŷ_Aᵀŷ(ctx, Ax, Σ, y, ŷ, Aᵀŷ, active_set); });
-        backend.augmented_lagrangian_gradient(ctx, grad, Mᵀλ, Aᵀŷ, grad_add);
-
         for (unsigned inner = 0; true; ++inner) {
             const unsigned inner_total = inner_iter + inner;
+            // Compute gradient of augmented Lagrangian
+            index_t nJ = timed(timings.mat_vec_AT, [&] {
+                return backend.calc_ŷ_Aᵀŷ(ctx, Ax, Σ, y, ŷ, Aᵀŷ, active_set);
+            });
 
             // What to do upon inner loop termination
             auto leave_inner = [&] {
@@ -294,7 +292,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             // Solve the Newton system
             timed(timings.solve, [&] {
                 GUANAQO_TRACE("solve", inner_total);
-                backend.solve(ctx, x, &grad_add, grad, Mᵀλ, Aᵀŷ, Mxb, S, Σ, active_set_old, //
+                backend.solve(ctx, x, grad, Mᵀλ, Aᵀŷ, Mxb, S, Σ, active_set_old, //
                               d, ξ, Ad, Δλ, MᵀΔλ);
             });
             real_t scal_d = 1;
@@ -388,31 +386,6 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             }
             ls.τ = std::clamp(ls.τ, τ_min, τ_max);
 
-            const bool recompute =
-                settings.recompute_inner != 0 && (inner_total % settings.recompute_inner == 0);
-
-            // Update Ax and ∇f
-            if (!recompute) {
-                GUANAQO_TRACE("apply step derived", inner_total);
-                backend.xaxpy(ctx, ls.τ, Ad, Ax);
-                backend.xaxpy(ctx, ls.τ, MᵀΔλ, Mᵀλ);
-                backend.xaxpy(ctx, ls.τ, ξ, grad);
-                backend.xaxpy(ctx, ls.τ, MᵀΔλ, grad_add);
-                backend.xaxpy(ctx, ls.τ, ξ, grad_add); // TODO: fuse
-                // Update gradient of augmented Lagrangian term Aᵀŷ
-                nJ = timed(timings.mat_vec_AT, [&] {
-                    if (settings.recompute_penalty_gradient) {
-                        BATMAT_ASSERT(false); // TODO: not supported
-                        auto nJ = backend.calc_ŷ_Aᵀŷ(ctx, Ax, Σ, y, ŷ, Aᵀŷ, active_set);
-                        backend.augmented_lagrangian_gradient(ctx, grad, Mᵀλ, Aᵀŷ, grad_add);
-                        return nJ;
-                    } else {
-                        return backend.calc_ŷ_Aᵀŷ_d(ctx, Ax, ls.τ, Ad, Σ, y, ŷ, Aᵀŷ, active_set,
-                                                    grad_add);
-                    }
-                });
-            }
-
             { // Apply step
                 GUANAQO_TRACE("apply step", inner_total);
                 backend.xaxpy(ctx, ls.τ, d, x);
@@ -420,33 +393,25 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
             }
 
             // Optionally recompute Ax and ∇f
-            if (recompute) {
+            if (settings.recompute_inner) {
                 timed(timings.recompute_inner, [&] {
                     GUANAQO_TRACE("recompute_inner", inner_total);
                     backend.recompute_inner(ctx, S, x_outer, x, λ, grad, Ax, Mᵀλ);
                 });
-                // Recompute gradient of augmented Lagrangian term Aᵀŷ
-                nJ = timed(timings.mat_vec_AT,
-                           [&] { return backend.calc_ŷ_Aᵀŷ(ctx, Ax, Σ, y, ŷ, Aᵀŷ, active_set); });
-                // TODO
-                backend.augmented_lagrangian_gradient(ctx, grad, Mᵀλ, Aᵀŷ, grad_add);
+            } else {
+                GUANAQO_TRACE("apply step derived", inner_iter + inner);
+                backend.xaxpy(ctx, ls.τ, Ad, Ax);
+                backend.xaxpy(ctx, ls.τ, MᵀΔλ, Mᵀλ);
+                backend.xaxpy(ctx, ls.τ, ξ, grad);
             }
 
             // Compute new equality constraint residual
-            if (settings.recompute_eq_res && (inner_total % settings.recompute_eq_res == 0)) {
-                if (settings.recompute_inner && (inner_total % settings.recompute_inner == 0)) {
-                    timed(timings.mat_vec_M, [&] {
-                        backend.eq_constr_resid(ctx, x, Mxb); //
-                    });
-                } else {
-                    timed(timings.mat_vec_M, [&] {
-                        backend.scale(ctx, ls.τ, d);
-                        backend.eq_constr_resid(ctx, d, Mxb, Mxb);
-                    });
-                }
-            } else {
+            if (settings.recompute_eq_res)
+                timed(timings.mat_vec_M, [&] {
+                    backend.eq_constr_resid(ctx, x, Mxb); //
+                });
+            else
                 backend.set_constant(ctx, Mxb, real_t{});
-            }
         }
         ++outer_iter;
 
@@ -454,7 +419,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         swap(e, e_old);
         ineq_constr_resid = backend.ineq_constr_resid_al(ctx, y, ŷ, Σ, e);
 
-        if (settings.recompute && (outer_iter % settings.recompute == 0)) {
+        if (settings.recompute) {
             stationarity = timed(timings.recompute_outer, [&] {
                 GUANAQO_TRACE("recompute_outer", outer_iter);
                 return backend.recompute_outer(ctx, x, ŷ, λ, grad, Ax, Aᵀŷ, Mᵀλ);
@@ -464,14 +429,11 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         // Print progress
         if (settings.verbose) {
             auto nrm_Σ = backend.norm_inf(ctx, Σ);
-            backend.eq_constr_resid(ctx, x, Mxb);
-            eq_resid = backend.unscaled_eq_constr_viol(ctx, Mxb);
             if (ctx.is_master()) {
                 int prec = settings.print_precision;
                 std::cout << "outer " << std::setw(4) << outer_iter
                           << ": stationarity=" << float_to_str(stationarity, prec)
-                          << ", ineq constraints=" << float_to_str(ineq_constr_resid, prec)
-                          << ", eq constraints=" << float_to_str(eq_resid, prec)
+                          << ", constraints=" << float_to_str(ineq_constr_resid, prec)
                           << ", penalty=" << float_to_str(nrm_Σ, prec)
                           << ", regularization=" << float_to_str(1 / S, prec) << '\n'
                           << std::endl;
@@ -479,9 +441,9 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         }
 
         // Check stopping criteria
-        bool converged =
-            stationarity <= settings.tolerance && ineq_constr_resid <= settings.dual_tolerance &&
-            (settings.recompute_eq_res == 0 || eq_resid <= settings.eq_constr_tolerance);
+        bool converged = stationarity <= settings.tolerance &&
+                         ineq_constr_resid <= settings.dual_tolerance &&
+                         (!settings.recompute_eq_res || eq_resid <= settings.eq_constr_tolerance);
         bool out_of_iter =
             inner_iter >= settings.max_total_inner_iter || outer_iter >= settings.max_outer_iter;
         bool out_of_time = clock_t::now() - start_time >= settings.max_time;
