@@ -11,6 +11,7 @@
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 #include <batmat/linalg/copy.hpp>
+#include <batmat/linalg/gemv.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <batmat/openmp.h>
 #include <batmat/simd.hpp>
@@ -349,6 +350,11 @@ struct CyqloneBackend {
         ocp.residual_dynamics_constr(ctx, x, b_eq_strided, Mxb);
     }
 
+    void eq_constr_resid(Context &ctx, const var_vec_t &x, const eq_constr_vec_t &b,
+                         eq_constr_vec_t &Mxb) {
+        ocp.residual_dynamics_constr(ctx, x, b, Mxb);
+    }
+
     void mat_vec_MT(Context &ctx, const eq_constr_vec_t &λ, var_vec_t &Mᵀλ) {
         ocp.transposed_dynamics_constr(ctx, λ, Mᵀλ);
     }
@@ -561,6 +567,47 @@ struct CyqloneBackend {
         return ctx.reduce(count_J_local);
     }
 
+    /// Ax should be the new one (with τd already added to it). Destroys Ad.
+    index_t calc_ŷ_Aᵀŷ_d(Context &ctx, ineq_constr_vec_t &Ax, real_t τ, ineq_constr_vec_t &Ad,
+                         const ineq_constr_vec_t &Σ, const ineq_constr_vec_t &y,
+                         ineq_constr_vec_t &ŷ, var_vec_t &Aᵀŷ, active_set_t &J,
+                         var_vec_t &grad_add) {
+        index_t count_J_local = 0;
+        const auto ŷ_simd     = [&count_J_local, τ](auto Σi, auto yi, auto Axi, auto Adi, auto li,
+                                                auto ui) {
+            using std::clamp;
+            auto ζ = Axi + yi / Σi, ζ_old = ζ - τ * Adi;
+            auto z_old = clamp(ζ_old, li, ui), z = clamp(ζ, li, ui), e = ζ - z;
+            auto Ji  = e != simd{0}; // TODO: inclusive?
+            auto dŷi = Σi * (τ * Adi + (z_old - z));
+#if BATMAT_WITH_GSI_HPC_SIMD
+            simd ΣJi = select(Ji, Σi, simd{0});
+            count_J_local += static_cast<index_t>(reduce_count(Ji));
+#else
+            simd ΣJi{};
+            where(Ji, ΣJi) = Σi;
+            count_J_local += static_cast<index_t>(popcount(Ji));
+#endif
+            return std::make_pair(dŷi, ΣJi);
+        };
+        const auto ŷ_batch = [&ŷ_simd]([[maybe_unused]] auto j, auto, auto ŷi, auto Ji, auto Σi,
+                                       auto yi, auto Axi, auto Adi, auto li, auto ui, auto Gᵀi,
+                                       auto Aᵀŷi, auto grad_addi) {
+            GUANAQO_TRACE("calc_ŷ_Aᵀŷ_d", j);
+            linalg::transform2_elementwise(ŷ_simd, Adi, Ji, //
+                                           Σi, yi, Axi, Adi, li, ui);
+            batmat::linalg::gemv_add(Gᵀi, Adi, Aᵀŷi);
+            batmat::linalg::gemv_add(Gᵀi, Adi, grad_addi); // TODO: fuse
+            linalg::add(ŷi, Adi);
+        };
+        {
+            auto t = get_timed(&Timings::calc_y_hat_AT);
+            ocp.foreach_stage(ctx, ŷ_batch, ŷ, J, Σ, y, Ax, Ad, b_min_strided, b_max_strided,
+                              ocp.data_Gᵀ, Aᵀŷ, grad_add);
+        }
+        return ctx.reduce(count_J_local);
+    }
+
     real_t unscaled_aug_lagr_norm(Context &ctx, const var_vec_t &grad_f, const var_vec_t &Mᵀλ,
                                   const var_vec_t &Aᵀŷ) const {
         GUANAQO_TRACE("unscaled_aug_lagr_norm", 0);
@@ -690,18 +737,34 @@ struct CyqloneBackend {
     eq_constr_vec_t temp_eq;
     ineq_constr_vec_t temp_ineq;
 
-    void solve(Context &ctx, [[maybe_unused]] const var_vec_t &x, const var_vec_t &grad,
-               const var_vec_t &Mᵀλ, const var_vec_t &Aᵀŷ, const eq_constr_vec_t &Mxb, real_t S,
-               [[maybe_unused]] const ineq_constr_vec_t &Σ,
+    void augmented_lagrangian_gradient(Context &ctx, const var_vec_t &grad, const var_vec_t &Mᵀλ,
+                                       const var_vec_t &Aᵀŷ, var_vec_t &out) {
+        auto add = [&](auto, auto, auto outi, auto gradi, auto Mᵀλi, auto Aᵀŷi) {
+            linalg::axpy<0>(outi, {1, 1, 1}, gradi, Mᵀλi, Aᵀŷi);
+        };
+        ocp.foreach_stage(ctx, add, out, grad, Mᵀλ, Aᵀŷ);
+    }
+
+    void solve(Context &ctx, [[maybe_unused]] const var_vec_t &x, const var_vec_t *al_grad,
+               const var_vec_t &grad, const var_vec_t &Mᵀλ, const var_vec_t &Aᵀŷ,
+               const eq_constr_vec_t &Mxb, real_t S, [[maybe_unused]] const ineq_constr_vec_t &Σ,
                const active_set_t &J, //
                var_vec_t &d, var_vec_t &ξ, ineq_constr_vec_t &Ad, eq_constr_vec_t &Δλ,
                var_vec_t &MᵀΔλ) {
-        const auto init_rhs = [&](auto, auto, auto di, auto gradi, auto Mᵀλi, auto Aᵀŷi, auto Mxbi,
-                                  auto Δλi) {
-            linalg::axpy<0>(di, {-1, -1, -1}, gradi, Mᵀλi, Aᵀŷi);
-            batmat::linalg::copy(Mxbi, Δλi);
-        };
-        ocp.foreach_stage(ctx, init_rhs, d, grad, Mᵀλ, Aᵀŷ, Mxb, Δλ);
+        if (al_grad) {
+            const auto init_rhs = [&](auto, auto, auto di, auto gradi, auto Mxbi, auto Δλi) {
+                linalg::negate(gradi, di);
+                batmat::linalg::copy(Mxbi, Δλi);
+            };
+            ocp.foreach_stage(ctx, init_rhs, d, *al_grad, Mxb, Δλ);
+        } else {
+            const auto init_rhs = [&](auto, auto, auto di, auto gradi, auto Mᵀλi, auto Aᵀŷi,
+                                      auto Mxbi, auto Δλi) {
+                linalg::axpy<0>(di, {-1, -1, -1}, gradi, Mᵀλi, Aᵀŷi);
+                batmat::linalg::copy(Mxbi, Δλi);
+            };
+            ocp.foreach_stage(ctx, init_rhs, d, grad, Mᵀλ, Aᵀŷ, Mxb, Δλ);
+        }
         if (settings.print_residuals) {
             int prec                      = settings.print_precision;
             auto grad_norm_inf            = norm_inf(ctx, d);

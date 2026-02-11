@@ -31,9 +31,10 @@ struct CYQLONE_QPALM_EXPORT Settings {
     real_t boost_penalty_x                 = 1e12;
     real_t initial_penalty_x               = 1e7;
     bool proximal                          = true;
-    bool recompute_eq_res                  = true; // TODO
-    bool recompute_inner                   = false;
-    bool recompute                         = true;
+    unsigned recompute_eq_res              = 1; // TODO
+    unsigned recompute_inner               = 0;
+    unsigned recompute                     = 1;
+    bool recompute_penalty_gradient        = false;
     bool verbose                           = true;
     int print_precision                    = 3;
     unsigned max_no_changes_active_set     = 5;
