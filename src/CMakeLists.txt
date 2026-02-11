@@ -36,11 +36,13 @@ target_sources(cyqlone PUBLIC FILE_SET HEADERS
           "cyqlone/include/cyqlone/implementation/riccati.tpp"
           "cyqlone/include/cyqlone/implementation/data.tpp"
           "cyqlone/include/cyqlone/implementation/sparse.tpp"
+          "cyqlone/include/cyqlone/linalg.hpp"
           "cyqlone/include/cyqlone/parallel.hpp"
           "cyqlone/include/cyqlone/timing.hpp"
           "cyqlone/include/cyqlone/tracing.hpp"
           "cyqlone/include/cyqlone/barrier.hpp"
           "cyqlone/include/cyqlone/reduce.hpp"
+          "cyqlone/include/cyqlone/sparse.hpp"
 )
 target_link_libraries(cyqlone PUBLIC batmat::batmat guanaqo::guanaqo guanaqo::blas
                               PRIVATE cyqlone::warnings)
