@@ -109,7 +109,9 @@ if (CYQLONE_WITH_COVERAGE)
 endif()
 
 # Documentation
-add_subdirectory(docs)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/docs/CMakeLists.txt")
+    add_subdirectory(docs)
+endif()
 
 # Libraries
 add_subdirectory(src)
