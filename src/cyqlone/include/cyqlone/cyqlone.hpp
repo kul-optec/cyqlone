@@ -528,7 +528,7 @@ struct CyqloneSolver {
     /// @{
 
     /// Block-tridiagonal solver (CR/PCR/PCG).
-    tricyqle_t tricyqle{
+    tricyqle_t tricyqle = {
         .block_size = nx,
         .max_rank   = std::max(ny, ny_0 + ny_N) * N_horiz,
         .p          = p,
@@ -619,10 +619,11 @@ struct CyqloneSolver {
     /// Initialize a Cyqlone solver for the given OCP.
     ///
     /// Note: constraints on u(0) and x(N) should be independent.
-    ///
-    ///                  nx  nu
-    ///    ocp.CD(0) = [ 0 | D ] ny₀
-    ///                [ 0 | 0 ] ny - ny₀
+    /// ~~~
+    ///               nx  nu
+    /// ocp.CD(0) = [ 0 | D ] ny₀
+    ///             [ 0 | 0 ] ny - ny₀
+    /// ~~~
     ///
     /// Since ocp.D(0) and ocp.C(N) will be merged, the top ny₀ rows of ocp.C(N)
     /// should be zero.

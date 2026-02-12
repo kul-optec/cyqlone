@@ -15,6 +15,8 @@ namespace cyqlone::linalg {
 
 using namespace batmat::linalg;
 
+/// @cond DETAIL
+
 namespace detail {
 
 template <class T, class Abi, StorageOrder O, class F, class X, class... Xs>
@@ -201,6 +203,8 @@ template <class T, class Abi, int Rotate, StorageOrder O>
 
 } // namespace detail
 
+/// @endcond
+
 /// @name Single-batch operations
 /// @{
 
@@ -303,7 +307,7 @@ void axpy(Vy &&y, const std::array<simdified_value_t<Vy>, sizeof...(Vx)> &alphas
         simdify(y), alphas, simdify(x).as_const()...);
 }
 
-/// Add scaled vector y = αx + y.
+/// Add scaled vector z = αx + y.
 template <simdifiable Vx, simdifiable Vy, simdifiable Vz,
           std::convertible_to<simdified_value_t<Vx>> Ta>
     requires simdify_compatible<Vx, Vy, Vz>
@@ -531,7 +535,7 @@ void axpy(Vy &&y, const std::array<simdified_value_t<Vy>, sizeof...(Vx)> &alphas
         axpy<Beta>(y.batch(b), alphas, x.batch(b)...);
 }
 
-/// Add scaled vector y = αx + y.
+/// Add scaled vector z = αx + y.
 template <simdifiable_multi Vx, simdifiable_multi Vy, simdifiable_multi Vz,
           std::convertible_to<simdified_value_t<Vx>> Ta>
     requires simdify_compatible<Vx, Vy, Vz>

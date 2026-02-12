@@ -1,8 +1,9 @@
 /**
- * @file    Conversion utilities for optimal control problems.
- *          For example: converting an OCP into a sparse “multiple shooting”
- *          quadratic program, or computing the gradient of the quadratic OCP
- *          cost function.
+ * @file
+ * Conversion utilities for optimal control problems.
+ * For example: converting an OCP into a sparse “multiple shooting”
+ * quadratic program, or computing the gradient of the quadratic OCP
+ * cost function.
  */
 
 #pragma once

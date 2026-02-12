@@ -14,6 +14,8 @@ struct OCPDim {
     friend constexpr bool operator!=(OCPDim, OCPDim) = default;
 };
 
+/// Storage for a linear-quadratic OCP of the form
+/// ~~~
 ///             ₙ₋₁
 ///  minimize    ∑ [½ uᵢᵀ Rᵢ uᵢ + uᵢᵀ S xᵢ + ½ xᵢᵀ Qᵢ xᵢ + rᵢᵀuᵢ + qᵢᵀxᵢ] + ½ xₙᵀ Qₙ xₙ + qₙᵀ xₙ
 ///             ⁱ⁼⁰
@@ -21,8 +23,11 @@ struct OCPDim {
 ///              xᵢ₊₁ = Aᵢ xᵢ + Bᵢ uᵢ + bᵢ₊₁
 ///              lᵢ   ≤ Cᵢ xᵢ + Dᵢ uᵢ ≤ uᵢ
 ///              lₙ   ≤ Cₙ xₙ ≤ uₙ
+/// ~~~
 struct LinearOCPStorage {
     OCPDim dim{};
+    /// Create a single contiguous storage for all problem data.
+    /// ~~~
     /// Storage layout:     size        offset
     /// N × [ Q Sᵀ] = H     (nx+nu)²    0
     ///     [ S R ]
@@ -38,6 +43,7 @@ struct LinearOCPStorage {
     /// N × [ u ]           ny          N (2nx+nu+ny+1)(nx+nu) + (nx+ny_N+2+N)nx + N ny + ny_N
     /// 1 × [ u ]           ny_N        N (2nx+nu+ny+1)(nx+nu) + (nx+ny_N+2+N)nx + N (2ny) + ny_N
     ///                                 N (2nx+nu+ny+1)(nx+nu) + (nx+ny_N+2+N)nx + N (2ny) + 2ny_N
+    /// ~~~
     std::vector<real_t> storage = create_storage(dim);
     static std::vector<real_t> create_storage(OCPDim dim) {
         auto [N, nx, nu, ny, ny_N] = dim;

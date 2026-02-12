@@ -8,25 +8,29 @@
 
 namespace cyqlone {
 
-///                ₙ₋₁
-///     minimize    ∑ [½ uᵢᵀ Rᵢ uᵢ + uᵢᵀ S xᵢ + ½ xᵢᵀ Qᵢ xᵢ + rᵢᵀuᵢ + qᵢᵀxᵢ]
-///                ⁱ⁼⁰
-///                + ½ xₙᵀ Qₙ xₙ + qₙᵀ xₙ
-///     s.t.        x₀   = xᵢₙᵢₜ
-///                 xᵢ₊₁ = Aᵢ xᵢ + Bᵢ uᵢ + cᵢ
-///                 lᵢ   ≤ Cᵢ xᵢ + Dᵢ uᵢ ≤ uᵢ
-///                 lₙ   ≤ Cₙ xₙ ≤ uₙ
-///
+
+/// Storage for a linear-quadratic OCP with the initial states x₀ eliminated.
+/// ~~~
 ///                ₙ₋₁
 ///     minimize    ∑ [½ uᵢᵀ Rᵢ uᵢ + uᵢᵀ Sᵢ xᵢ + ½ xᵢᵀ Qᵢ xᵢ + rᵢᵀuᵢ + qᵢᵀxᵢ]
 ///                ⁱ⁼¹
-///                + ½ u₀ᵀ R₀ u₀ + (r₀ + S₀ x₀)ᵀ u₀
+///                + ½ u₀ᵀ R₀ u₀ + (r₀ + S₀ xᵢₙᵢₜ)ᵀ u₀
 ///                + ½ xₙᵀ Qₙ xₙ + qₙᵀ xₙ
-///     s.t.        x₀   = xᵢₙᵢₜ
-///                 xᵢ₊₁ = Aᵢ xᵢ + Bᵢ uᵢ + cᵢ
+///     s.t.        xᵢ₊₁ = Aᵢ xᵢ + Bᵢ uᵢ + cᵢ
 ///                 lᵢ   ≤ Cᵢ xᵢ + Dᵢ uᵢ ≤ uᵢ
-///                 l₀ - C₀ x₀ ≤ D₀ U₀ ≤ u₀ - C₀ x₀
+///                 l₀ - C₀ xᵢₙᵢₜ ≤ D₀ U₀ ≤ u₀ - C₀ xᵢₙᵢₜ
 ///                 lₙ   ≤ Cₙ xₙ ≤ uₙ
+/// ~~~
+/// The matrices are combined per stage, with inputs ordered first.
+/// The first and last stage are special because of the lack of x₀ and uₙ.
+/// ~~~
+/// Hᵢ = [ Rᵢ  Sᵢ ],    H₀ = [ R₀  0  ],    Fᵢ = [ Bᵢ  Aᵢ ],    Gᵢ = [ Dᵢ  Cᵢ ],    G₀ = [ D₀ Cₙ ]
+///      [ Sᵢᵀ Qᵢ ]          [ 0   Qₙ ]
+/// ~~~
+/// Due to the elimination of x₀, there may be fewer constraints for the first stage, which is
+/// tracked by the Ju0 mask. When reconstructing the solution, the multipliers for eliminated
+/// constraints are set to zero (we assume that the initial state is feasible w.r.t. the state
+/// constraints).
 template <class T = real_t>
 struct CyqloneStorage {
     using value_type = T;
