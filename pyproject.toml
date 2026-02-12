@@ -26,6 +26,12 @@ dynamic = ["version", "description"]
 
 [project.optional-dependencies]
 test = ["pytest>=7.2.0,<9", "qpalm~=1.2.6"]
+docs = [
+    "sphinx==8.2.3",
+    "sphinx-book-theme==1.1.4",
+    "numpydoc==1.9.0",
+    "breathe==4.36.0",
+]
 
 [project.urls]
 "Documentation" = "https://kul-optec.github.io/cyqlone"

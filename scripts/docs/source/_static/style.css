@@ -1,0 +1,125 @@
+html {
+    --pst-font-family-base: Roboto, Helvetica, Arial, sans-serif;
+}
+
+
+html[data-theme=light] {
+    --pst-color-link: #052e38;
+    --pst-color-primary: #ce4914;
+    --pst-color-accent: #aa3e14;
+    --pst-color-accent-highlight: #f69956;
+    --pst-color-inline-code: #1f8298;
+    --cyqlone-color-param: rgb(7, 82, 40);
+    --cyqlone-color-keyword: #295fb8;
+}
+
+html[data-theme=dark] {
+    --pst-color-link: #a5d7ff;
+    --pst-color-primary: #cf603f;
+    --pst-color-accent: #f57921;
+    --pst-color-accent-highlight: #ffcc80;
+    --pst-color-inline-code: #51d6ff;
+    --cyqlone-color-param: #4ec4a1;
+    --pst-color-inline-code: #4cc0ff;
+    --cyqlone-color-param: #bf84ba;
+    --cyqlone-color-keyword: #dcd8ff;
+}
+
+.bd-main .bd-content .bd-article-container {
+    max-width: 80em;
+}
+
+.bd-page-width {
+    max-width: 108rem;
+}
+
+.toctree-wrapper li.toctree-l1 {
+    margin-top: 0.3em;
+    margin-top: 0.6em;
+}
+
+.toctree-wrapper li.toctree-l1>a {
+    text-decoration: none;
+}
+
+ul.navbar-icon-links {
+    justify-content: center;
+}
+
+.bd-sidebar-secondary {
+    flex-basis: content;
+    max-height: 100vh;
+}
+
+footer.bd-footer-content {
+    display: none;
+}
+
+body {
+    line-height: 1.5;
+}
+
+/* https://github.com/executablebooks/sphinx-book-theme/issues/732 */
+#rtd-footer-container {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+/* Font size for the function signatures in the API reference. */
+.sig {
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+dl.cpp.struct>dt.sig-object,
+dl.cpp.class>dt.sig-object {
+  font-size: 1em;
+}
+
+/* Larger subtitles in the API reference. */
+.breathe-sectiondef-title {
+    font-size: 1.1em;
+}
+
+/* Less margin after each member in the API reference. */
+dl[class]:not(.option-list, .field-list, .footnote, .glossary, .simple) {
+    margin-bottom: 0.25rem;
+}
+
+/* Color for C++ function arguments. */
+.sig-param.n {
+    font-style: normal;
+    color: var(--cyqlone-color-param);
+}
+
+/* Use a very light underline for links. */
+a {
+    text-decoration: underline;
+    text-decoration-thickness: 0.5pt;
+    text-decoration-color: #aaa;
+}
+
+/* Larger # links in the API reference. */
+a.headerlink {
+    font-size: 1.2em;
+}
+
+/* Shadow effect when hovering */
+dl.cpp {
+    transition: box-shadow 0.2s ease;
+    border-radius: 8px;
+    padding: 0.5em;
+}
+
+dl.cpp:hover {
+    box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.12);
+}
+
+.k>.pre {
+    color: var(--cyqlone-color-keyword);
+    font-weight: normal;
+}
+
+li.nav-item code {
+    background-color: initial;
+    border: none;
+}

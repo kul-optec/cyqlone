@@ -301,3 +301,51 @@ jobs:
         uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e
         # with:
         #   repository-url: https://test.pypi.org/legacy/
+
+  docs:
+    runs-on: ubuntu-latest
+    needs: [build-sdist]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download wheels
+        uses: actions/download-artifact@v4
+        with:
+          name: native-wheels
+          path: dist
+      - name: Install ${{ env.PACKAGE_NAME }}
+        run: python3 -m pip install --find-links=dist "${PACKAGE_NAME}[docs]==${PACKAGE_VERSION}"
+      - name: Install Doxygen
+        run: >
+          wget -qO- https://github.com/doxygen/doxygen/releases/download/Release_1_16_1/doxygen-1.16.1.linux.bin.tar.gz
+          | tar xz -C /usr/local/bin doxygen-1.16.1/bin/doxygen --strip-components=2
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: Doxygen build
+        run: doxygen scripts/docs/Doxyfile
+      - name: Sphinx build
+        run: make -C scripts/docs html
+      - name: Upload artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./scripts/docs/build/html
+
+  deploy-docs:
+    if: ${{ github.event.action == 'released' || github.event.action == 'prereleased' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: [docs, check-release, test-linux-x]
+    permissions:
+      id-token: write
+      pages: write
+      contents: read
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
