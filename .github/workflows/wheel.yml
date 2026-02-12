@@ -325,14 +325,14 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
       - name: Doxygen build
-        run: doxygen scripts/docs/Doxyfile
+        run: doxygen docs/Doxyfile
       - name: Sphinx build
-        run: make -C scripts/docs html
+        run: make -C docs html
       - name: Upload artifact
         id: deployment
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./scripts/docs/build/html
+          path: ./docs/build/html
 
   deploy-docs:
     if: ${{ github.event.action == 'released' || github.event.action == 'prereleased' }}

@@ -44,7 +44,7 @@ option(CYQLONE_WARNINGS_AS_ERRORS
     "Enable -Werror or /WX" Off)
 option(CYQLONE_WITH_COVERAGE
     "Generate coverage information" Off)
-set(CYQLONE_DOXYFILE "Doxyfile" CACHE FILEPATH
+set(CYQLONE_DOXYFILE "${PROJECT_SOURCE_DIR}/docs/Doxyfile" CACHE FILEPATH
     "The Doxyfile to use for the docs target")
 option(CYQLONE_WITH_ACCURATE_BUILD_TIME
     "Update the build time on every build" On)
@@ -109,11 +109,7 @@ if (CYQLONE_WITH_COVERAGE)
 endif()
 
 # Documentation
-find_package(Doxygen)
-if (DOXYGEN_FOUND)
-    add_custom_target(docs Doxygen::doxygen ${CYQLONE_DOXYFILE}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/doxygen)
-endif()
+add_subdirectory(docs)
 
 # Libraries
 add_subdirectory(src)
