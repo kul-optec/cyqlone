@@ -11,12 +11,9 @@
 #include <guanaqo/trace.hpp>
 #include <cstdint>
 #include <functional>
-#include <memory>
-#include <new>
 #include <optional>
 #include <type_traits>
 #include <utility>
-#include <vector>
 
 namespace cyqlone::parallel {
 
@@ -42,7 +39,9 @@ struct SharedContext {
 #if !BATMAT_WITH_OPENMP
     batmat::thread_pool thread_pool{static_cast<size_t>(num_thr)};
 #endif
-    std::vector<std::byte> workspace = std::vector<std::byte>(static_cast<size_t>(num_thr) * 64);
+    /// Execute the given function in parallel on all threads, blocking until completion.
+    /// The function will be called with a @ref Context that contains the thread index, and that can
+    /// be used to synchronize and communicate between threads.
     template <class F>
     void run(F &&);
 };
@@ -79,6 +78,8 @@ struct SharedContext {
 
 */
 
+/// Thread context for parallel execution. Each thread has a unique thread index, and can
+/// synchronize and communicate with other threads in the same shared context.
 template <class SC>
 struct Context {
     using shared_context_type = SC;
@@ -157,18 +158,6 @@ struct Context {
     }
 
     template <class T>
-    T *get_workspace_ptr(index_t idx) {
-        const size_t slot_size = shared.workspace.size() / num_thr;
-        BATMAT_ASSERT(sizeof(T) <= slot_size);
-        const size_t offset = slot_size * static_cast<size_t>(idx);
-        void *dest          = shared.workspace.data() + offset;
-        size_t space        = slot_size;
-        bool ok             = std::align(alignof(T), sizeof(T), dest, space);
-        BATMAT_ASSERT(ok);
-        return std::launder(reinterpret_cast<T *>(dest));
-    }
-
-    template <class T>
     T broadcast(T x, index_t src = 0) {
         return shared.barrier.broadcast(static_cast<uint32_t>(index), std::move(x),
                                         static_cast<uint32_t>(src));
@@ -177,23 +166,13 @@ struct Context {
     template <class F, class... Args>
     auto call_broadcast(F &&f, Args &&...args) -> std::invoke_result_t<F, Args...> {
         using T = std::invoke_result_t<F, Args...>;
-#if 0 // TODO: compare performance, optimize barrier.broadcast()
-        void *dest   = shared.workspace.data();
-        size_t space = shared.workspace.size();
-        bool ok      = std::align(alignof(T), sizeof(T), dest, space);
-        BATMAT_ASSERT(ok);
-        if (is_master())
-            new (dest) T(std::invoke(std::forward<F>(f), std::forward<Args>(args)...));
-        arrive_and_wait();
-        T r = *std::launder(reinterpret_cast<T *>(dest));
-        arrive_and_wait(); // Ensure that the workspace is not used before everyone is done
-        return r;
-#else
+        // TODO: implement with a relaxed atomic that gets reset during the completion handler,
+        //       so only the first thread that arrives will execute the function, rather than always
+        //       executing on the master thread.
         if (is_master())
             return broadcast(std::invoke(std::forward<F>(f), std::forward<Args>(args)...), 0);
         else
             return broadcast(T{}, 0);
-#endif
     }
 
     template <class T, class F>
@@ -231,40 +210,5 @@ void SharedContext::run(F &&f) {
     }
 #endif
 }
-
-template <class T, class SC>
-struct SharedResult {
-    using shared_context_type = SC;
-    using context_type        = Context<shared_context_type>;
-    using arrival_token       = typename context_type::arrival_token;
-
-    struct alignas(64) Result {
-        T value;
-        std::optional<arrival_token> token;
-    };
-    std::unique_ptr<Result[]> results;
-
-    SharedResult(shared_context_type &shared)
-        : results(std::make_unique_for_overwrite<Result[]>(shared.num_thr)) {}
-
-    void wait(context_type &ctx) { ctx.wait(results[ctx.index].token); }
-};
-
-template <class SC>
-struct SharedResult<void, SC> {
-    using shared_context_type = SC;
-    using context_type        = Context<shared_context_type>;
-    using arrival_token       = typename context_type::arrival_token;
-
-    struct Result {
-        std::optional<arrival_token> token;
-    };
-    std::unique_ptr<Result[]> results;
-
-    SharedResult(shared_context_type &shared)
-        : results(std::make_unique_for_overwrite<Result[]>(shared.num_thr)) {}
-
-    void wait(context_type &ctx) { ctx.wait(results[ctx.index].token); }
-};
 
 } // namespace cyqlone::parallel
