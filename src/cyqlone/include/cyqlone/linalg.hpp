@@ -10,6 +10,8 @@
 #include <batmat/simd.hpp>
 #include <array>
 #include <concepts>
+#include <tuple>
+#include <utility>
 
 namespace cyqlone::linalg {
 
@@ -63,6 +65,32 @@ template <class T, class Abi, StorageOrder O, class F, class X0, class X1, class
                 auto [r0, r1] = fun(types::aligned_load(&xs(0, r, c))...);
                 types::aligned_store(r0, &x0(0, r, c));
                 types::aligned_store(r1, &x1(0, r, c));
+            }
+    }
+}
+
+template <class T, class Abi, StorageOrder O, class F, class... Ys, class... Xs>
+[[gnu::always_inline]] inline void iter_elems_store_n(F &&fun, std::tuple<Ys...> ys, Xs &&...xs) {
+    using std::get;
+    using types        = simd_view_types<T, Abi>;
+    const index_t rows = std::get<0>(ys).rows(), cols = std::get<0>(ys).cols();
+    if constexpr (O == StorageOrder::ColMajor) {
+        for (index_t c = 0; c < cols; ++c)
+            for (index_t r = 0; r < rows; ++r) {
+                auto rs = fun(types::aligned_load(&xs(0, r, c))...);
+                static_assert(std::tuple_size_v<decltype(rs)> == sizeof...(Ys));
+                [&]<size_t... Is>(std::index_sequence<Is...>) {
+                    ((types::aligned_store(get<Is>(rs), &get<Is>(ys)(0, r, c))), ...);
+                }(std::index_sequence_for<Ys...>());
+            }
+    } else {
+        for (index_t r = 0; r < rows; ++r)
+            for (index_t c = 0; c < cols; ++c) {
+                auto rs = fun(types::aligned_load(&xs(0, r, c))...);
+                static_assert(std::tuple_size_v<decltype(rs)> == sizeof...(Ys));
+                [&]<size_t... Is>(std::index_sequence<Is...>) {
+                    ((types::aligned_store(get<Is>(rs), &get<Is>(ys)(0, r, c))), ...);
+                }(std::index_sequence_for<Ys...>());
             }
     }
 }
@@ -400,6 +428,19 @@ void transform2_elementwise(F &&fun, VA &&A, VB &&B, VAs &&...As) {
         std::forward<F>(fun), simdify(A), simdify(B), simdify(As).as_const()...);
 }
 
+/// Apply a function to all elements of the given matrices or vectors, storing the results in the
+/// tuple of matrices given as the first argument.
+template <class F, simdifiable... VAs, simdifiable... VBs>
+    requires simdify_compatible<VAs..., VBs...>
+void transform_n_elementwise(F &&fun, std::tuple<VAs...> As, VBs &&...Bs) {
+    using VA0                           = std::tuple_element_t<0, decltype(As)>;
+    static constexpr auto storage_order = simdified_view_t<VA0>::storage_order;
+    detail::iter_elems_store_n<simdified_value_t<VA0>, simdified_abi_t<VA0>, storage_order>(
+        std::forward<F>(fun),
+        std::apply([](auto &&...a) { return std::make_tuple(simdify(a)...); }, As),
+        simdify(Bs).as_const()...);
+}
+
 /// @}
 
 /// @name Multi-batch operations
@@ -635,6 +676,23 @@ void transform2_elementwise(F &&fun, VA &&A, VB &&B, VAs &&...As) {
     BATMAT_ASSERT(((A.num_batches() == As.num_batches()) && ...));
     for (index_t b = 0; b < A.num_batches(); ++b)
         transform2_elementwise(fun, A.batch(b), B.batch(b), As.batch(b)...);
+}
+
+/// Apply a function to all elements of the given matrices or vectors, storing the results in the
+/// tuple of matrices given as the first argument.
+template <class F, simdifiable_multi... VAs, simdifiable_multi... VBs>
+    requires simdify_compatible<VAs..., VBs...>
+void transform_n_elementwise(F &&fun, std::tuple<VAs...> As, VBs &&...Bs) {
+    using std::get;
+    auto &&a0 = get<0>(As);
+    BATMAT_ASSERT(((a0.num_batches() == Bs.num_batches()) && ...));
+    BATMAT_ASSERT([&]<std::size_t... Is>(std::index_sequence<Is...>) {
+        return ((a0.num_batches() == get<Is>(As).num_batches()) && ...);
+    }(std::make_index_sequence<sizeof...(VAs)>()));
+    for (index_t b = 0; b < a0.num_batches(); ++b)
+        transform_n_elementwise(
+            fun, std::apply([&](auto &&...a) { return std::make_tuple(a.batch(b)...); }, As),
+            Bs.batch(b)...);
 }
 
 /// @}
