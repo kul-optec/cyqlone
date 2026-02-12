@@ -321,9 +321,6 @@ jobs:
         run: >
           wget -qO- https://github.com/doxygen/doxygen/releases/download/Release_1_16_1/doxygen-1.16.1.linux.bin.tar.gz
           | tar xz -C /usr/local/bin doxygen-1.16.1/bin/doxygen --strip-components=2
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
       - name: Doxygen build
         run: doxygen docs/Doxyfile
       - name: Sphinx build
