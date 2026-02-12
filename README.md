@@ -1,7 +1,7 @@
 [![arXiv Preprint](https://img.shields.io/badge/arXiv-Preprint-b31b1b)](https://arxiv.org/abs/2512.09058)
 
 <p align="center">
-<img src="docs/images/logo-text.svg" width=300>
+<img src="docs/source/images/cyqlone-logo-text.svg" width=300>
 </p>
 
 # Cyqlone
