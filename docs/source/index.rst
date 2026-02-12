@@ -46,3 +46,11 @@ Content
 
    python.rst
    cpp.rst
+
+Related projects
+----------------
+
+* `<https://github.com/kul-optec/QPALM>`_: general-purpose quadratic programming solver on which CyQPALM is based
+* `<https://github.com/tttapa/batmat>`_: high-performance batched linear algebra routines (used by cyqlone)
+* `<https://github.com/kul-optec/hyhound>`_: low-rank Cholesky factorization up- and downdate routines based on hyperbolic Householder transformations (with applications to e.g. Riccati recursion)
+* `<https://github.com/kul-optec/alpaqa>`_: matrix-free, nonlinear programming solver
