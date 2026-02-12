@@ -84,6 +84,7 @@ if (CYQLONE_WITH_QPALM)
               "qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp"
               "qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/linalg.tpp"
               "qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/linesearch.tpp"
+              "qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/solve.tpp"
               "qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp"
               "qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp"
               "qpalm/include/cyqlone/qpalm/implementation/breakpoint.tpp"
