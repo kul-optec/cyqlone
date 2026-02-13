@@ -93,7 +93,6 @@ struct CyqloneBackend {
     std::optional<ineq_constr_vec_t> y0;
     std::optional<eq_constr_vec_t> λ0;
     std::vector<std::array<size_t, 4>> thread_indices;
-    std::vector<ABSum_t> thread_sums;
     std::vector<Breakpoint> breakpoints_temp;
 
     bool reset_factorization = true;

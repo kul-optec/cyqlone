@@ -11,6 +11,7 @@
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
+/// @todo   store t and δ|δ| instead of t and δ.
 struct Breakpoint {
     // t = α/δ   <=>   α = t δ
     real_t t, δ;
@@ -27,6 +28,9 @@ using ABSum_t = real_t;
 
 struct ABSums {
     ABSum_t a, b;
+    constexpr friend ABSums operator+(const ABSums &lhs, const ABSums &rhs) {
+        return {.a = lhs.a + rhs.a, .b = lhs.b + rhs.b};
+    }
 };
 
 struct PartitionedBreakpoints {

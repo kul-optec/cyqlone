@@ -1,7 +1,6 @@
 #include <cyqlone/qpalm/implementation/algorithms.hpp>
 #include <cyqlone/qpalm/implementation/breakpoint.hpp>
 #include <guanaqo/trace.hpp>
-#include <numeric>
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
@@ -24,6 +23,7 @@ PartitionedBreakpoints partition_breakpoints_default(std::span<Breakpoint> break
 }
 
 ABSums partial_sum_negative(PartitionedBreakpoints breakpoints, real_t η, real_t β) {
+    // TODO: single pass over each partition.
     GUANAQO_TRACE("partial sum negative", 0);
     auto &neg_bp = breakpoints.neg_bp, &pos_bp = breakpoints.pos_bp;
     // Initialize a_j and b_j, where t_j is the first positive (see notes)
