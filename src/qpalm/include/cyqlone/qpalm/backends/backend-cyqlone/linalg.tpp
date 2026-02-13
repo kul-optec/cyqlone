@@ -1,9 +1,9 @@
 #pragma once
 
+#include <cyqlone/linalg.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp>
 
 #include <array>
-#include <functional>
 #include <span>
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
@@ -75,12 +75,12 @@ template <index_t VL, StorageOrder DefaultOrder>
 template <class T>
 auto CyqloneBackend<VL, DefaultOrder>::norm_inf_l1_sq(Context &ctx, const T &x) const {
     GUANAQO_TRACE("norm_inf_l1_sq", 0, 4 * x.batch_size() * x.rows() * ocp.n);
-    auto nrm_simd             = norms.zero_simd();
+    auto nrm                  = norms.zero();
     const auto norm_inf_l1_sq = [&](auto, auto, auto xi) {
-        nrm_simd = compact_blas::xreduce(nrm_simd, norms, std::identity{}, simdify(xi));
+        nrm = norms(nrm, linalg::norms_all(xi));
     };
     ocp.foreach_stage(ctx, norm_inf_l1_sq, x);
-    return ctx.reduce(norms(nrm_simd), norms);
+    return ctx.reduce(nrm, norms);
 }
 
 template <index_t VL, StorageOrder DefaultOrder>

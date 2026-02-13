@@ -3,6 +3,8 @@
 #include <cyqlone/linalg.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp>
 
+#include <iostream>
+
 /** 
  * @file
  * Functions for the factorization and solution of Newton system in QPALM for the Cyqlone backend.

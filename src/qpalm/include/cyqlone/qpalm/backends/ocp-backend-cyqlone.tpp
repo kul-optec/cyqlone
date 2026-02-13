@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cyqlone/compact.hpp>
 #include <cyqlone/config.hpp>
 #include <cyqlone/cyqlone.hpp>
 #include <cyqlone/linalg.hpp>
@@ -11,7 +10,6 @@
 #include <batmat/assume.hpp>
 #include <batmat/config.hpp>
 #include <batmat/linalg/copy.hpp>
-#include <batmat/linalg/simdify.hpp>
 #include <batmat/openmp.h>
 #include <batmat/simd.hpp>
 #include <guanaqo/print.hpp>
@@ -23,7 +21,6 @@
 #include <cassert>
 #include <cmath>
 #include <functional>
-#include <iostream>
 #include <limits>
 #include <map>
 #include <memory>
@@ -35,7 +32,6 @@
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
-using batmat::linalg::simdify;
 namespace datapar = batmat::datapar;
 
 template <index_t VL, StorageOrder DefaultOrder>
@@ -46,14 +42,11 @@ struct CyqloneBackend {
     using simd                  = typename OCP_t::simd;
     static constexpr auto norms = cyqlone::norms<real_t, simd>{};
     // clang-format off
-    struct var_vec_t         : storage_t { friend CyqloneBackend; var_vec_t() = default;         private: var_vec_t(storage_t &&o)         : storage_t{std::move(o)} {} friend auto simdify(var_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const var_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
-    struct eq_constr_vec_t   : storage_t { friend CyqloneBackend; eq_constr_vec_t() = default;   private: eq_constr_vec_t(storage_t &&o)   : storage_t{std::move(o)} {} friend auto simdify(eq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const eq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
-    struct ineq_constr_vec_t : storage_t { friend CyqloneBackend; ineq_constr_vec_t() = default; private: ineq_constr_vec_t(storage_t &&o) : storage_t{std::move(o)} {} friend auto simdify(ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const ineq_constr_vec_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
-    struct active_set_t      : storage_t { friend CyqloneBackend; active_set_t() = default;      private: active_set_t(storage_t &&o)      : storage_t{std::move(o)} {} friend auto simdify(active_set_t &s) { return batmat::linalg::simdify(static_cast<storage_t &>(s)); } friend auto simdify(const active_set_t &s) { return batmat::linalg::simdify(static_cast<const storage_t &>(s)); }};
+    struct var_vec_t         : storage_t { friend CyqloneBackend; var_vec_t() = default;         private: var_vec_t(storage_t &&o)         : storage_t{std::move(o)} {} };
+    struct eq_constr_vec_t   : storage_t { friend CyqloneBackend; eq_constr_vec_t() = default;   private: eq_constr_vec_t(storage_t &&o)   : storage_t{std::move(o)} {} };
+    struct ineq_constr_vec_t : storage_t { friend CyqloneBackend; ineq_constr_vec_t() = default; private: ineq_constr_vec_t(storage_t &&o) : storage_t{std::move(o)} {} };
+    struct active_set_t      : storage_t { friend CyqloneBackend; active_set_t() = default;      private: active_set_t(storage_t &&o)      : storage_t{std::move(o)} {} };
     // clang-format on
-
-    using compact_blas = compact::CompactBLAS<real_t, typename simd::abi_type,
-                                              StorageOrder::ColMajor>; // TODO: remove
 
     struct Timings {
         using type    = DefaultTimings;
@@ -237,112 +230,25 @@ struct CyqloneBackend {
     }
 
     void initial_variables(Context &ctx, var_vec_t &x) const {
-        if (x0) {
-            xcopy(ctx, *x0, x);
-            return;
-        }
-        set_constant(ctx, x, real_t{});
+        x0 ? xcopy(ctx, *x0, x) : set_constant(ctx, x, real_t{});
     }
     void initial_multipliers_eq(Context &ctx, eq_constr_vec_t &λ) const {
-        if (λ0) {
-            xcopy(ctx, *λ0, λ);
-            return;
-        }
-        set_constant(ctx, λ, real_t{});
+        λ0 ? xcopy(ctx, *λ0, λ) : set_constant(ctx, λ, real_t{});
     }
     void initial_multipliers_ineq(Context &ctx, ineq_constr_vec_t &y) const {
-        if (y0) {
-            xcopy(ctx, *y0, y);
-            return;
-        }
-        set_constant(ctx, y, real_t{});
+        y0 ? xcopy(ctx, *y0, y) : set_constant(ctx, y, real_t{});
     }
 
     // e = Ax - clamp(Ax, b_min, b_max)
-    void ineq_constr_resid(Context &ctx, const ineq_constr_vec_t &Ax, ineq_constr_vec_t &e) const {
-        auto t                   = get_timed(&Timings::ineq_constr_resid);
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            linalg::clamp_resid(Ax.batch(di), b_min_strided.batch(di), b_max_strided.batch(di),
-                                e.batch(di));
-        }
-    }
+    void ineq_constr_resid(Context &ctx, const ineq_constr_vec_t &Ax, ineq_constr_vec_t &e) const;
 
-    void project_multipliers_ineq(Context &ctx, ineq_constr_vec_t &y) const {
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            auto yi          = simdify(y.batch(di));
-            auto b_min_i     = simdify(b_min_strided.batch(di));
-            auto b_max_i     = simdify(b_max_strided.batch(di));
-            for (index_t j = 0; j < yi.rows(); ++j) {
-                auto yij            = batmat::datapar::aligned_load<simd>(&yi(0, j, 0));
-                const auto b_min_ij = batmat::datapar::aligned_load<simd>(&b_min_i(0, j, 0)),
-                           b_max_ij = batmat::datapar::aligned_load<simd>(&b_max_i(0, j, 0));
-                // If upper bound is infinite, multiplier cannot be positive
-#if BATMAT_WITH_GSI_HPC_SIMD
-                yij = select(isfinite(b_min_ij), yij, fmax(yij, simd{0}));
-                yij = select(isfinite(b_max_ij), yij, fmin(yij, simd{0}));
-#else
-                where(!isfinite(b_min_ij), yij) = fmax(yij, simd{0});
-                where(!isfinite(b_max_ij), yij) = fmin(yij, simd{0});
-#endif
-                batmat::datapar::aligned_store(yij, &yi(0, j, 0));
-            }
-        }
-    }
+    void project_multipliers_ineq(Context &ctx, ineq_constr_vec_t &y) const;
 
-    real_t ineq_constr_viol(Context &ctx, const ineq_constr_vec_t &Ax) const {
-        GUANAQO_TRACE("ineq_constr_viol", 0);
-        auto t = get_timed(&Timings::ineq_constr_viol);
-        using std::clamp;
-        using std::isfinite;
-        auto nrm_simd            = norms.zero_simd();
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            nrm_simd         = compact_blas::xreduce(
-                nrm_simd,
-                [](auto accum, auto Axi, auto b_min_i, auto b_max_i) {
-                    auto zi = clamp(Axi, b_min_i, b_max_i);
-                    return norms(accum, Axi - zi);
-                },
-                std::identity{}, simdify(Ax.batch(di))),
-            simdify(b_min_strided.batch(di)), simdify(b_max_strided.batch(di));
-        }
-        auto nrm = ctx.reduce(norms(nrm_simd), norms);
-        return isfinite(nrm.asum) ? nrm.max : nrm.asum;
-    }
+    real_t ineq_constr_viol(Context &ctx, const ineq_constr_vec_t &Ax) const;
 
     real_t ineq_constr_resid_al(Context &ctx, const ineq_constr_vec_t &y,
                                 const ineq_constr_vec_t &ŷ, const ineq_constr_vec_t &Σ,
-                                ineq_constr_vec_t &e) {
-        GUANAQO_TRACE("ineq_constr_resid_al", 0);
-        auto t = get_timed(&Timings::ineq_constr_resid_al);
-        using std::clamp;
-        using std::isfinite;
-        auto nrm_simd            = norms.zero_simd();
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            nrm_simd         = compact_blas::xreduce_enumerate(
-                nrm_simd,
-                [di, &e](auto coord, auto accum, auto yi, auto ŷi, auto Σi) {
-                    auto [i, r, c] = coord;
-                    auto ei        = (ŷi - yi) / Σi;
-                    datapar::aligned_store(ei, &e.batch(di)(i, r, c));
-                    return norms(accum, ei);
-                },
-                std::identity{}, simdify(y.batch(di)), simdify(ŷ.batch(di)), simdify(Σ.batch(di)));
-        }
-        auto nrm = ctx.reduce(norms(nrm_simd), norms);
-        return isfinite(nrm.asum) ? nrm.max : nrm.asum;
-    }
+                                ineq_constr_vec_t &e);
 
     void eq_constr_resid(Context &ctx, const var_vec_t &x, eq_constr_vec_t &Mxb) {
         ocp.residual_dynamics_constr(ctx, x, b_eq_strided, Mxb);
@@ -406,60 +312,34 @@ struct CyqloneBackend {
         real_t max_penalty_y;
     };
 
+    /// Increase the penalty parameters Σ for which the violation e has not decreased sufficiently
+    /// compared to e_old.
     index_t update_penalty_y(Context &ctx, ineq_constr_vec_t &Σ, const ineq_constr_vec_t &e,
-                             const ineq_constr_vec_t &e_old, const PenaltySettings &settings) {
-        GUANAQO_TRACE("update_penalty_y", 0);
-        auto t                   = get_timed(&Timings::update_penalty_y);
-        const index_t num_stages = ocp.n; // number of stages per thread
-        const index_t ti         = ocp.riccati_thread_assignment(ctx);
-        const real_t min_denom   = 1e-6;
-        const real_t norm_inf_e  = fmax(min_denom, norm_inf(ctx, e));
-        index_t num_changed      = 0;
-        for (index_t i = 0; i < num_stages; ++i) {
-            const index_t di = ti * num_stages + i;
-            auto Σi          = Σ.batch(di);
-            auto ei = e.batch(di), ei_old = e_old.batch(di);
-            for (index_t j = 0; j < ei.rows(); ++j) {
-                auto eij                   = batmat::datapar::aligned_load<simd>(&ei(0, j, 0)),
-                     eij_old               = batmat::datapar::aligned_load<simd>(&ei_old(0, j, 0)),
-                     Σij                   = batmat::datapar::aligned_load<simd>(&Σi(0, j, 0));
-                auto insufficient_progress = abs(eij) >= settings.θ * abs(eij_old);
-#if BATMAT_WITH_GSI_HPC_SIMD
-                simd update_factor =
-                    select(insufficient_progress, settings.Δy * abs(eij) / norm_inf_e, simd{1});
-#else
-                simd update_factor{1};
-                where(insufficient_progress, update_factor) = settings.Δy * abs(eij) / norm_inf_e;
-#endif
-                update_factor *= settings.Δy_always;
-                auto Σ_new = Σij * update_factor;
-                Σ_new = fmax(Σij * settings.Δy_always, fmin(Σ_new, simd{settings.max_penalty_y}));
-#if BATMAT_WITH_GSI_HPC_SIMD
-                num_changed += reduce_count(Σ_new != Σij);
-#else
-                num_changed += popcount(Σ_new != Σij);
-#endif
-                batmat::datapar::aligned_store(Σ_new, &Σi(0, j, 0));
-            }
-        }
-        return ctx.reduce(num_changed, std::plus<>{});
-    }
+                             const ineq_constr_vec_t &e_old, const PenaltySettings &settings);
 
+    /// Called when the primal regularization S has changed: causes the factorization to be reset.
     void update_regularization_changed(Context &ctx, real_t S_new, real_t S_old) {
         if (S_new != S_old)
             ctx.run_single_sync([&] { reset_factorization = true; });
     }
 
+    /// Decrease the primal regularization S to S_boost, to boost convergence when close to the
+    /// solution.
     real_t boost_regularization(Context &ctx, real_t S, real_t S_boost) {
         update_regularization_changed(ctx, S_boost, S);
         return S_boost;
     }
 
+    /// Called when the penalty parameters Σ have been updated: causes the factorization to be reset
+    /// if any of the penalty parameters have changed.
     void update_penalty_changed(Context &ctx, const ineq_constr_vec_t &Σ, index_t num_Σ_changed) {
         std::ignore = Σ;
         if (num_Σ_changed > 0)
             ctx.run_single_sync([&] { reset_factorization = true; });
     }
+
+    /// @name Line search
+    /// @{
 
     template <class T, size_t N>
     static void merge_chunk(std::span<const T> chunk, size_t chunk_index,
@@ -479,6 +359,8 @@ struct CyqloneBackend {
                        const ineq_constr_vec_t &b_max) {
         return backend.compute_partition_breakpoints(ctx, breakpoints, Σ, y, Ad, Ax, b_min, b_max);
     }
+
+    /// @}
 
     /// @name Linear algebra operations (level 1 BLAS-like)
     /// @{
@@ -523,57 +405,20 @@ struct CyqloneBackend {
 
     index_t calc_ŷ_Aᵀŷ(Context &ctx, const ineq_constr_vec_t &Ax, const ineq_constr_vec_t &Σ,
                        const ineq_constr_vec_t &y, ineq_constr_vec_t &ŷ, var_vec_t &Aᵀŷ,
-                       active_set_t &J) {
-        index_t count_J_local = 0;
-        const auto ŷ_simd     = [&count_J_local](auto Σi, auto yi, auto Axi, auto li, auto ui) {
-            using std::clamp;
-            auto ζ = Axi + yi / Σi, z = clamp(ζ, li, ui);
-            auto Ji = z != ζ; // TODO: inclusive?
-#if 0
-            simd ŷi{0};
-            where(Ji, ŷi) = yi + Σi * (Axi - z);
-#else
-            auto ŷi = yi + Σi * (Axi - z);
-#endif
-#if BATMAT_WITH_GSI_HPC_SIMD
-            simd ΣJi = select(Ji, Σi, simd{0});
-            count_J_local += static_cast<index_t>(reduce_count(Ji));
-#else
-            simd ΣJi{};
-            where(Ji, ΣJi) = Σi;
-            count_J_local += static_cast<index_t>(popcount(Ji));
-#endif
-            return std::make_pair(ŷi, ΣJi);
-        };
-        const auto ŷ_batch = [&ŷ_simd]([[maybe_unused]] auto j, auto, auto ŷi, auto Ji, auto Σi,
-                                       auto yi, auto Axi, auto li, auto ui) {
-            GUANAQO_TRACE("calc_ŷ_Aᵀŷ", j);
-            linalg::transform2_elementwise(ŷ_simd, ŷi, Ji, //
-                                           Σi, yi, Axi, li, ui);
-        };
-        {
-            auto t = get_timed(&Timings::calc_y_hat);
-            ocp.foreach_stage(ctx, ŷ_batch, ŷ, J, Σ, y, Ax, b_min_strided, b_max_strided);
-        }
-        auto t = get_timed(&Timings::calc_y_hat_AT);
-        mat_vec_AT(ctx, ŷ, Aᵀŷ);
-        return ctx.reduce(count_J_local);
-    }
+                       active_set_t &J);
 
     real_t unscaled_aug_lagr_norm(Context &ctx, const var_vec_t &grad_f, const var_vec_t &Mᵀλ,
                                   const var_vec_t &Aᵀŷ) const {
         GUANAQO_TRACE("unscaled_aug_lagr_norm", 0);
-        auto nrm_simd                        = norms.zero_simd();
-        static constexpr auto grad_norm_simd = [](auto accum, auto grad_fi, auto Mᵀλi, auto Aᵀŷi) {
-            return norms(accum, grad_fi + Mᵀλi + Aᵀŷi);
+        auto nrm_simd             = norms.zero_simd();
+        const auto grad_norm_simd = [&](auto grad_fji, auto Mᵀλji, auto Aᵀŷji) {
+            nrm_simd = norms(nrm_simd, grad_fji + Mᵀλji + Aᵀŷji);
         };
-        const auto grad_norm_batch = [&nrm_simd](auto, auto, auto grad_fi, auto Mᵀλi, auto Aᵀŷi) {
-            nrm_simd = compact_blas::xreduce(nrm_simd, grad_norm_simd, std::identity{},
-                                             simdify(grad_fi), simdify(Mᵀλi), simdify(Aᵀŷi));
+        const auto grad_norm_batch = [&](auto, auto, auto grad_fj, auto Mᵀλj, auto Aᵀŷj) {
+            linalg::for_each_elementwise(grad_norm_simd, grad_fj, Mᵀλj, Aᵀŷj);
         };
         ocp.foreach_stage(ctx, grad_norm_batch, grad_f, Mᵀλ, Aᵀŷ);
         return ctx.reduce(norms(nrm_simd), norms).norminf();
-        (void)grad_norm_simd; // Silence bogus GCC warning
     }
 
     void scale_variables(std::span<const real_t> in, var_vec_t &out) const {
@@ -604,15 +449,14 @@ struct CyqloneBackend {
         BATMAT_ASSERT(J.rows() == J_old.rows() && J.cols() == J_old.cols());
         BATMAT_ASSERT(J.depth() == J_old.depth());
         BATMAT_ASSERT(J.cols() == 1);
-        index_t num_different = 0;
+        index_t num_different        = 0;
+        const auto active_set_change = [&](auto, auto, auto Ji, auto J_oldi) {
+            num_different += std::inner_product(Ji.data, Ji.data + Ji.size(), J_oldi.data, //
+                                                index_t{0}, std::plus<>{}, std::not_equal_to<>{});
+        };
         {
             GUANAQO_TRACE("active_set_change", 0);
-            auto t                       = get_timed(&Timings::update_active_set_change);
-            const auto active_set_change = [&](auto, auto, auto Ji, auto J_oldi) {
-                num_different +=
-                    std::inner_product(Ji.data, Ji.data + Ji.size(), J_oldi.data, //
-                                       index_t{0}, std::plus<>{}, std::not_equal_to<>{});
-            };
+            auto t = get_timed(&Timings::update_active_set_change);
             ocp.foreach_stage(ctx, active_set_change, J, J_old);
         }
         num_different = ctx.reduce(num_different);
@@ -633,12 +477,11 @@ struct CyqloneBackend {
                 stats.rank_updates += num_different;
             });
         }
-        // std::cout << "                                     -- Fact update\n";
+        auto t           = get_timed(&Timings::update_factorization);
         const auto delta = [&](auto, auto, auto Ji, auto J_oldi, auto ΔΣi) {
             linalg::sub(Ji, J_oldi, ΔΣi);
         };
         ocp.foreach_stage(ctx, delta, J, J_old, ΔΣ);
-        auto t = get_timed(&Timings::update_factorization);
         ocp.update(ctx, ΔΣ);
         return num_different;
     }
@@ -770,6 +613,7 @@ void update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend,
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)
 
+#include <cyqlone/qpalm/backends/backend-cyqlone/ineq-constr.tpp>
 #include <cyqlone/qpalm/backends/backend-cyqlone/linalg.tpp>
 #include <cyqlone/qpalm/backends/backend-cyqlone/linesearch.tpp>
 #include <cyqlone/qpalm/backends/backend-cyqlone/solve.tpp>
