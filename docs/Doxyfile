@@ -61,13 +61,13 @@ PROJECT_BRIEF          =
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           =
+PROJECT_LOGO           = docs/source/images/cyqlone-logo-text.svg
 
 # With the PROJECT_ICON tag one can specify an icon that is included in the tabs
 # when the HTML document is shown. Doxygen will copy the logo to the output
 # directory.
 
-PROJECT_ICON           =
+PROJECT_ICON           = docs/source/images/cyqlone-logo.svg
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
@@ -420,7 +420,7 @@ AUTOLINK_IGNORE_WORDS  =
 # collaboration diagrams that involve STL classes more complete and accurate.
 # The default value is: NO.
 
-BUILTIN_STL_SUPPORT    = NO
+BUILTIN_STL_SUPPORT    = YES
 
 # If you use Microsoft's C++/CLI language, you should set this option to YES to
 # enable parsing support.
@@ -719,7 +719,7 @@ INLINE_INFO            = YES
 # name. If set to NO, the members will appear in declaration order.
 # The default value is: YES.
 
-SORT_MEMBER_DOCS       = YES
+SORT_MEMBER_DOCS       = NO
 
 # If the SORT_BRIEF_DOCS tag is set to YES then Doxygen will sort the brief
 # descriptions of file, namespace and class members alphabetically by member
@@ -853,7 +853,7 @@ FILE_VERSION_FILTER    =
 # DoxygenLayout.xml, Doxygen will parse it automatically even if the LAYOUT_FILE
 # tag is left empty.
 
-LAYOUT_FILE            =
+LAYOUT_FILE            = docs/DoxygenLayout.xml
 
 # The CITE_BIB_FILES tag can be used to specify one or more bib files containing
 # the reference definitions. This must be a list of .bib files. The .bib
@@ -1395,7 +1395,7 @@ IGNORE_PREFIX          =
 # If the GENERATE_HTML tag is set to YES, Doxygen will generate HTML output
 # The default value is: YES.
 
-GENERATE_HTML          = NO
+GENERATE_HTML          = YES
 
 # The HTML_OUTPUT tag is used to specify where the HTML docs will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -1403,7 +1403,7 @@ GENERATE_HTML          = NO
 # The default directory is: html.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_OUTPUT            = html
+HTML_OUTPUT            = doxygen
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for each
 # generated HTML page (for example: .htm, .php, .asp).
@@ -1916,7 +1916,7 @@ FORMULA_MACROFILE      =
 # The default value is: NO.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-USE_MATHJAX            = NO
+USE_MATHJAX            = YES
 
 # With MATHJAX_VERSION it is possible to specify the MathJax version to be used.
 # Note that the different versions of MathJax have different requirements with
@@ -1927,7 +1927,7 @@ USE_MATHJAX            = NO
 # The default value is: MathJax_2.
 # This tag requires that the tag USE_MATHJAX is set to YES.
 
-MATHJAX_VERSION        = MathJax_2
+MATHJAX_VERSION        = MathJax_3
 
 # When MathJax is enabled you can set the default output format to be used for
 # the MathJax output. For more details about the output format see MathJax
