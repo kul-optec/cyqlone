@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <cyqlone/linalg.hpp>
+#include <cyqlone/packing.hpp>
 
 #include <tuple>
 #include <type_traits>
@@ -52,4 +53,44 @@ TEST(LinAlg, transformNElementwiseInPlaceOutput) {
 
     for (index_t i = 0; i < A.size(); ++i)
         EXPECT_DOUBLE_EQ(A.data()[i], A_ref.data()[i] + B.data()[i]);
+}
+
+TEST(LinAlg, unpackGeneral) {
+    using cyqlone::index_t;
+    using vl_t  = std::integral_constant<index_t, 4>;
+    using one_t = std::integral_constant<index_t, 1>;
+    batmat::matrix::Matrix<double, index_t, vl_t, vl_t> A{{.rows = 13, .cols = 17}};
+    batmat::matrix::Matrix<double, index_t, one_t, vl_t> B{{.rows = 13, .cols = 17}};
+    fill_linear(A, 0.5, 0.25);
+
+    cyqlone::linalg::unpack(A, B);
+    for (index_t l = 0; l < A.depth(); ++l) {
+        for (index_t r = 0; r < A.rows(); ++r) {
+            for (index_t c = 0; c < A.cols(); ++c) {
+                const double expected = A(l, r, c);
+                const double actual   = B(l, r, c);
+                EXPECT_DOUBLE_EQ(actual, expected) << " at (" << l << ", " << r << ", " << c << ")";
+            }
+        }
+    }
+}
+
+TEST(LinAlg, packGeneral) {
+    using cyqlone::index_t;
+    using vl_t  = std::integral_constant<index_t, 4>;
+    using one_t = std::integral_constant<index_t, 1>;
+    batmat::matrix::Matrix<double, index_t, vl_t, vl_t> A{{.rows = 3, .cols = 5}};
+    batmat::matrix::Matrix<double, index_t, one_t, vl_t> B{{.rows = 3, .cols = 5}};
+    fill_linear(B, 0.5, 0.25);
+
+    cyqlone::linalg::pack(B, A);
+    for (index_t l = 0; l < A.depth(); ++l) {
+        for (index_t r = 0; r < A.rows(); ++r) {
+            for (index_t c = 0; c < A.cols(); ++c) {
+                const double expected = B(l, r, c);
+                const double actual   = A(l, r, c);
+                EXPECT_DOUBLE_EQ(actual, expected) << " at (" << l << ", " << r << ", " << c << ")";
+            }
+        }
+    }
 }
