@@ -50,6 +50,9 @@ class TreeBarrier {
         BarrierPhase get() const noexcept { return phase; }
     };
 
+    template <class T>
+    class arrival_token_typed : public arrival_token {};
+
   private:
     static constexpr size_t cache_line_size = 64; ///< @todo increase to 128 on newer architectures
     /// Storage for small values used in reductions and broadcasts.
@@ -316,12 +319,25 @@ class TreeBarrier {
     /// Combining tree reduction across all threads. Deterministic application order for a given
     /// number of threads.
     template <class T, class F>
-    [[nodiscard]] T reduce(uint32_t thread_id, T x, F reduce) {
+    [[nodiscard]] arrival_token_typed<T> arrive_reduce(uint32_t thread_id, T x, F reduce) {
         auto arrival = [this, &reduce, &x](BarrierPhase cur_phase, uint32_t thread_id) {
             return arrive_impl(cur_phase, thread_id, std::move(x), std::move(reduce));
         };
-        wait(arrive_with_completion(thread_id, arrival, [] {}));
+        return arrival_token_typed<T>{arrive_with_completion(thread_id, arrival, [] {})};
+    }
+
+    /// Wait for the result of an @ref arrive_reduce call and obtain the reduced value.
+    template <class T>
+    [[nodiscard]] T wait_reduce(arrival_token_typed<T> &&token) {
+        wait(std::move(token));
         return broadcast_storage.template load<T>();
+    }
+
+    /// Combining tree reduction across all threads. Deterministic application order for a given
+    /// number of threads.
+    template <class T, class F>
+    [[nodiscard]] T reduce(uint32_t thread_id, T x, F reduce) {
+        return wait_reduce(arrive_reduce(thread_id, std::move(x), std::move(reduce)));
     }
 
     /// Broadcast a value from the source thread to all other threads. All threads must call this

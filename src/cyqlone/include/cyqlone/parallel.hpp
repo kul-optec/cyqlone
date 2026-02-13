@@ -176,6 +176,17 @@ struct Context {
     }
 
     template <class T, class F>
+    auto arrive_reduce(T x, F func) {
+        return shared.barrier.arrive_reduce(static_cast<uint32_t>(index), std::move(x),
+                                            std::move(func));
+    }
+
+    template <class T>
+    T wait_reduce(shared_context_type::barrier_type::template arrival_token_typed<T> &&token) {
+        return shared.barrier.wait_reduce(std::move(token));
+    }
+
+    template <class T, class F>
     T reduce(T x, F func) {
         return shared.barrier.reduce(static_cast<uint32_t>(index), std::move(x), std::move(func));
     }
