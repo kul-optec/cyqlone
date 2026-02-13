@@ -447,39 +447,39 @@ void transform_n_elementwise(F &&fun, std::tuple<VAs...> As, VBs &&...Bs) {
 /// @{
 
 template <simdifiable_multi V> // TODO: move to batmat
-using simdified_value_t = typename simdified_multi_view_type<V>::value_type;
+using simdified_multi_value_t = typename simdified_multi_view_type<V>::value_type;
 template <simdifiable_multi V> // TODO: move to batmat
-using simdified_abi_t = typename simdified_multi_view_type<V>::abi_type;
+using simdified_multi_abi_t = typename simdified_multi_view_type<V>::abi_type;
 template <simdifiable_multi V, simdifiable_multi... Vs> // TODO: move to batmat
 inline constexpr bool simdify_compatible =
-    (std::is_same_v<simdified_value_t<V>, simdified_value_t<Vs>> && ...) &&
-    (std::is_same_v<simdified_abi_t<V>, simdified_abi_t<Vs>> && ...);
+    (std::is_same_v<simdified_multi_value_t<V>, simdified_multi_value_t<Vs>> && ...) &&
+    (std::is_same_v<simdified_multi_abi_t<V>, simdified_multi_abi_t<Vs>> && ...);
 
 /// Compute the norms (max, 1-norm, and 2-norm) of a vector.
 template <simdifiable_multi Vx>
-norms<simdified_value_t<Vx>>::result norms_all(Vx &&x) {
-    typename norms<simdified_value_t<Vx>>::result result{};
+norms<simdified_multi_value_t<Vx>>::result norms_all(Vx &&x) {
+    typename norms<simdified_multi_value_t<Vx>>::result result{};
     for (index_t b = 0; b < x.num_batches(); ++b)
-        result = norms<simdified_value_t<Vx>>{}(result, norms_all(x.batch(b)));
+        result = norms<simdified_multi_value_t<Vx>>{}(result, norms_all(x.batch(b)));
     return result;
 }
 
 /// Compute the infinity norm of a vector.
 template <simdifiable_multi Vx>
-simdified_value_t<Vx> norm_inf(Vx &&x) {
+simdified_multi_value_t<Vx> norm_inf(Vx &&x) {
     return norms_all(std::forward<Vx>(x)).norminf();
 }
 
 /// Compute the 1-norm of a vector.
 template <simdifiable_multi Vx>
-simdified_value_t<Vx> norm_1(Vx &&x) {
+simdified_multi_value_t<Vx> norm_1(Vx &&x) {
     return norms_all(std::forward<Vx>(x)).norm1();
 }
 
 /// Compute the squared 2-norm of a vector.
 template <simdifiable_multi Vx>
-simdified_value_t<Vx> norm_2_squared(Vx &&x) {
-    simdified_value_t<Vx> sumsq{};
+simdified_multi_value_t<Vx> norm_2_squared(Vx &&x) {
+    simdified_multi_value_t<Vx> sumsq{};
     for (index_t b = 0; b < x.num_batches(); ++b)
         sumsq += norm_2_squared(x.batch(b));
     return sumsq;
@@ -487,7 +487,7 @@ simdified_value_t<Vx> norm_2_squared(Vx &&x) {
 
 /// Compute the 2-norm of a vector.
 template <simdifiable_multi Vx>
-simdified_value_t<Vx> norm_2(Vx &&x) {
+simdified_multi_value_t<Vx> norm_2(Vx &&x) {
     using std::sqrt;
     return sqrt(norm_2_squared(std::forward<Vx>(x)));
 }
@@ -495,9 +495,9 @@ simdified_value_t<Vx> norm_2(Vx &&x) {
 /// Compute the dot product of two vectors.
 template <simdifiable_multi Vx, simdifiable_multi Vy>
     requires simdify_compatible<Vx, Vy>
-simdified_value_t<Vx> dot(Vx &&x, Vy &&y) {
+simdified_multi_value_t<Vx> dot(Vx &&x, Vy &&y) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
-    simdified_value_t<Vx> result{};
+    simdified_multi_value_t<Vx> result{};
     for (index_t b = 0; b < x.num_batches(); ++b)
         result += dot(x.batch(b), y.batch(b));
     return result;
@@ -546,8 +546,8 @@ void clamp_resid(Vx &&x, Vlo &&lo, Vhi &&hi, Vz &&z) {
 
 /// Add scaled vector z = αx + βy.
 template <simdifiable_multi Vx, simdifiable_multi Vy, simdifiable_multi Vz, //
-          std::convertible_to<simdified_value_t<Vx>> Ta,
-          std::convertible_to<simdified_value_t<Vx>> Tb>
+          std::convertible_to<simdified_multi_value_t<Vx>> Ta,
+          std::convertible_to<simdified_multi_value_t<Vx>> Tb>
     requires simdify_compatible<Vx, Vy, Vz>
 void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y, Vz &&z) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
@@ -558,8 +558,8 @@ void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y, Vz &&z) {
 
 /// Add scaled vector y = αx + βy.
 template <simdifiable_multi Vx, simdifiable_multi Vy, //
-          std::convertible_to<simdified_value_t<Vx>> Ta,
-          std::convertible_to<simdified_value_t<Vx>> Tb>
+          std::convertible_to<simdified_multi_value_t<Vx>> Ta,
+          std::convertible_to<simdified_multi_value_t<Vx>> Tb>
     requires simdify_compatible<Vx, Vy>
 void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
@@ -570,7 +570,7 @@ void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y) {
 /// Add scaled vector y = ∑ᵢ αᵢxᵢ + βy.
 template <auto Beta = 1, simdifiable_multi Vy, simdifiable_multi... Vx>
     requires simdify_compatible<Vy, Vx...>
-void axpy(Vy &&y, const std::array<simdified_value_t<Vy>, sizeof...(Vx)> &alphas, Vx &&...x) {
+void axpy(Vy &&y, const std::array<simdified_multi_value_t<Vy>, sizeof...(Vx)> &alphas, Vx &&...x) {
     BATMAT_ASSERT(((y.num_batches() == x.num_batches()) && ...));
     for (index_t b = 0; b < y.num_batches(); ++b)
         axpy<Beta>(y.batch(b), alphas, x.batch(b)...);
@@ -578,7 +578,7 @@ void axpy(Vy &&y, const std::array<simdified_value_t<Vy>, sizeof...(Vx)> &alphas
 
 /// Add scaled vector z = αx + y.
 template <simdifiable_multi Vx, simdifiable_multi Vy, simdifiable_multi Vz,
-          std::convertible_to<simdified_value_t<Vx>> Ta>
+          std::convertible_to<simdified_multi_value_t<Vx>> Ta>
     requires simdify_compatible<Vx, Vy, Vz>
 void axpy(Ta alpha, Vx &&x, Vy &&y, Vz &&z) {
     axpby(alpha, x, 1, y, z);
@@ -586,7 +586,7 @@ void axpy(Ta alpha, Vx &&x, Vy &&y, Vz &&z) {
 
 /// Add scaled vector y = αx + βy (where β is a compile-time constant).
 template <auto Beta = 1, simdifiable_multi Vx, simdifiable_multi Vy,
-          std::convertible_to<simdified_value_t<Vx>> Ta>
+          std::convertible_to<simdified_multi_value_t<Vx>> Ta>
     requires simdify_compatible<Vx, Vy>
 void axpy(Ta alpha, Vx &&x, Vy &&y) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
