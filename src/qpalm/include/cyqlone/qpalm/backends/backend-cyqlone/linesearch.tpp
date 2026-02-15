@@ -13,7 +13,7 @@ namespace CYQLONE_NS(cyqlone::qpalm) {
 
 template <index_t VL, StorageOrder DefaultOrder>
 template <class T, size_t N>
-void CyqloneBackend<VL, DefaultOrder>::merge_chunk(
+void CyQPALMBackend<VL, DefaultOrder>::merge_chunk(
     std::span<const T> chunk, size_t chunk_index, std::span<const std::array<size_t, N>> separators,
     std::span<T> out) {
     GUANAQO_TRACE("merge_chunk", 0, chunk.size());
@@ -33,7 +33,7 @@ void CyqloneBackend<VL, DefaultOrder>::merge_chunk(
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
-BreakpointsResult CyqloneBackend<VL, DefaultOrder>::compute_partition_breakpoints(
+BreakpointsResult CyQPALMBackend<VL, DefaultOrder>::compute_partition_breakpoints(
     Context &ctx, std::vector<Breakpoint> &breakpoints, const ineq_constr_vec_t &Σ,
     const ineq_constr_vec_t &y, const ineq_constr_vec_t &Ad, const ineq_constr_vec_t &Ax,
     const ineq_constr_vec_t &b_min, const ineq_constr_vec_t &b_max) {

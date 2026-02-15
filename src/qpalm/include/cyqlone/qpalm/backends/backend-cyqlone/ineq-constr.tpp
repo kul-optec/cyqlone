@@ -6,7 +6,7 @@
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
 template <index_t VL, StorageOrder DefaultOrder>
-index_t CyqloneBackend<VL, DefaultOrder>::update_penalty_y(Context &ctx, ineq_constr_vec_t &Σ,
+index_t CyQPALMBackend<VL, DefaultOrder>::update_penalty_y(Context &ctx, ineq_constr_vec_t &Σ,
                                                            const ineq_constr_vec_t &e,
                                                            const ineq_constr_vec_t &e_old,
                                                            const PenaltySettings &settings) {
@@ -42,7 +42,7 @@ index_t CyqloneBackend<VL, DefaultOrder>::update_penalty_y(Context &ctx, ineq_co
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
-void CyqloneBackend<VL, DefaultOrder>::ineq_constr_resid(Context &ctx, const ineq_constr_vec_t &Ax,
+void CyQPALMBackend<VL, DefaultOrder>::ineq_constr_resid(Context &ctx, const ineq_constr_vec_t &Ax,
                                                          ineq_constr_vec_t &e) const {
     GUANAQO_TRACE("ineq_constr_resid", 0);
     auto t                       = get_timed(&Timings::ineq_constr_resid);
@@ -53,7 +53,7 @@ void CyqloneBackend<VL, DefaultOrder>::ineq_constr_resid(Context &ctx, const ine
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
-void CyqloneBackend<VL, DefaultOrder>::project_multipliers_ineq(Context &ctx,
+void CyQPALMBackend<VL, DefaultOrder>::project_multipliers_ineq(Context &ctx,
                                                                 ineq_constr_vec_t &y) const {
     GUANAQO_TRACE("project_multipliers_ineq", 0);
     const auto proj_simd = [](auto yji, auto b_minji, auto b_maxji) {
@@ -73,7 +73,7 @@ void CyqloneBackend<VL, DefaultOrder>::project_multipliers_ineq(Context &ctx,
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
-real_t CyqloneBackend<VL, DefaultOrder>::ineq_constr_viol(Context &ctx,
+real_t CyQPALMBackend<VL, DefaultOrder>::ineq_constr_viol(Context &ctx,
                                                           const ineq_constr_vec_t &Ax) const {
     GUANAQO_TRACE("ineq_constr_viol", 0);
     auto t               = get_timed(&Timings::ineq_constr_viol);
@@ -90,7 +90,7 @@ real_t CyqloneBackend<VL, DefaultOrder>::ineq_constr_viol(Context &ctx,
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
-real_t CyqloneBackend<VL, DefaultOrder>::ineq_constr_resid_al(Context &ctx,
+real_t CyQPALMBackend<VL, DefaultOrder>::ineq_constr_resid_al(Context &ctx,
                                                               const ineq_constr_vec_t &y,
                                                               const ineq_constr_vec_t &ŷ,
                                                               const ineq_constr_vec_t &Σ,
@@ -111,7 +111,7 @@ real_t CyqloneBackend<VL, DefaultOrder>::ineq_constr_resid_al(Context &ctx,
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
-index_t CyqloneBackend<VL, DefaultOrder>::calc_ŷ_Aᵀŷ(Context &ctx, const ineq_constr_vec_t &Ax,
+index_t CyQPALMBackend<VL, DefaultOrder>::calc_ŷ_Aᵀŷ(Context &ctx, const ineq_constr_vec_t &Ax,
                                                      const ineq_constr_vec_t &Σ,
                                                      const ineq_constr_vec_t &y,
                                                      ineq_constr_vec_t &ŷ, var_vec_t &Aᵀŷ,

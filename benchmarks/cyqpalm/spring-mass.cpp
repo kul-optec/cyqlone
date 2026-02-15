@@ -157,7 +157,7 @@ void print_traces(std::ostream &) {}
 
 template <index_t VL, qp::StorageOrder Order>
 void run_benchmark(benchmark::State &state, [[maybe_unused]] const std::string &param_name,
-                   const SpringMassParams &params, qp::CyqloneBackendSettings backend_settings,
+                   const SpringMassParams &params, qp::CyQPALMBackendSettings backend_settings,
                    qp::Settings settings, bool warm = false, bool trace = false) try {
     disable_tracing(); // No tracing during the actual benchmark
     if (backend_settings.processors < 1)
@@ -165,8 +165,8 @@ void run_benchmark(benchmark::State &state, [[maybe_unused]] const std::string &
     auto problem = create_problem(params);
     // Build a QPALM Cyqlone solver
     auto ocp     = cyqlone::CyqloneStorage<>::build(problem.ocp);
-    auto backend = qp::make_qpalm_cyqlone_backend<VL, Order>(ocp, {}, backend_settings);
-    qp::Solver<qp::CyqloneBackend<VL, Order> *> qpalm{backend.get(), settings};
+    auto backend = qp::make_cyqpalm_backend<VL, Order>(ocp, {}, backend_settings);
+    qp::Solver<qp::CyQPALMBackend<VL, Order> *> qpalm{backend.get(), settings};
     // Main benchmark
     qp::SolverStatus status;
     double time_solve = 0, time_active_set_change = 0, time_line_search = 0,
@@ -178,7 +178,7 @@ void run_benchmark(benchmark::State &state, [[maybe_unused]] const std::string &
         auto x = qpalm.get_solution();
         std::copy_n(x.data() + nu, nx, problem.ocp.b(0).data);
         ocp.update(problem.ocp);
-        update_qpalm_cyqlone_backend(*qpalm.backend, ocp);
+        update_cyqpalm_backend(*qpalm.backend, ocp);
     }
     for (auto _ : state) {
         status = qpalm();
@@ -333,7 +333,7 @@ std::string_view order(qp::StorageOrder o) { return o == qp::StorageOrder::RowMa
 template <index_t VL, qp::StorageOrder O>
 std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
     const auto cyqlone_solver = [trace{opts.trace}](std::string_view name,
-                                                    const qp::CyqloneBackendSettings &backend,
+                                                    const qp::CyQPALMBackendSettings &backend,
                                                     const qp::Settings &settings) {
         const auto param_name =
             std::format("cyqlone(p={},v={},{},{})", backend.processors, VL, order(O), name);
@@ -343,7 +343,7 @@ std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
                       }};
     };
     for (auto p : opts.parallelism) {
-        qp::CyqloneBackendSettings backend{
+        qp::CyQPALMBackendSettings backend{
             .processors             = p,
             .changing_constr_factor = opts.changing_constr_factor,
             .max_update_count       = 20,
@@ -361,7 +361,7 @@ std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
             .initial_penalty_y = 20,
             .verbose           = false,
         };
-        qp::CyqloneBackendSettings backend_no_upd = backend;
+        qp::CyQPALMBackendSettings backend_no_upd = backend;
         backend_no_upd.max_update_count           = 0;
         qp::Settings settings_warm                = settings;
         settings_warm.initial_penalty_y           = 1e4;

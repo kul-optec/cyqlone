@@ -25,7 +25,7 @@ enum class WarmStartingStrategy {
     ShiftNoInequality,
 };
 
-struct CyqloneBackendSettings {
+struct CyQPALMBackendSettings {
     index_t processors   = 8;
     bool print_residuals = false;
     int print_precision  = 3;
@@ -38,7 +38,7 @@ struct CyqloneBackendSettings {
     WarmStartingStrategy strategy = WarmStartingStrategy::Copy;
 };
 
-struct CyqloneBackendStats {
+struct CyQPALMBackendStats {
     index_t num_updates  = 0;
     index_t rank_updates = 0;
     index_t num_factor   = 0;
@@ -51,43 +51,43 @@ namespace CYQLONE_NS(cyqlone::qpalm) {
 using guanaqo::StorageOrder;
 
 template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
-struct CyqloneBackend;
+struct CyQPALMBackend;
 
 namespace detail {
 
 template <index_t VL, StorageOrder DefaultOrder>
-struct backend_stats_type<CyqloneBackend<VL, DefaultOrder>> {
-    using type = CyqloneBackendStats;
+struct backend_stats_type<CyQPALMBackend<VL, DefaultOrder>> {
+    using type = CyQPALMBackendStats;
 };
 
 } // namespace detail
 
 template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
-struct unique_CyqloneBackend : std::unique_ptr<CyqloneBackend<VL, DefaultOrder>> {
-    unique_CyqloneBackend()                                             = default;
-    unique_CyqloneBackend(unique_CyqloneBackend &&) noexcept            = default;
-    unique_CyqloneBackend &operator=(unique_CyqloneBackend &&) noexcept = default;
-    ~unique_CyqloneBackend();
-    unique_CyqloneBackend(std::unique_ptr<CyqloneBackend<VL, DefaultOrder>> &&o) noexcept
-        : std::unique_ptr<CyqloneBackend<VL, DefaultOrder>>{std::move(o)} {}
+struct unique_CyQPALMBackend : std::unique_ptr<CyQPALMBackend<VL, DefaultOrder>> {
+    unique_CyQPALMBackend()                                             = default;
+    unique_CyQPALMBackend(unique_CyQPALMBackend &&) noexcept            = default;
+    unique_CyQPALMBackend &operator=(unique_CyQPALMBackend &&) noexcept = default;
+    ~unique_CyQPALMBackend();
+    unique_CyQPALMBackend(std::unique_ptr<CyQPALMBackend<VL, DefaultOrder>> &&o) noexcept
+        : std::unique_ptr<CyQPALMBackend<VL, DefaultOrder>>{std::move(o)} {}
 };
 
 template <index_t VL, StorageOrder DefaultOrder>
-struct detail::backend_type<unique_CyqloneBackend<VL, DefaultOrder>> {
-    using type = CyqloneBackend<VL, DefaultOrder>;
+struct detail::backend_type<unique_CyQPALMBackend<VL, DefaultOrder>> {
+    using type = CyQPALMBackend<VL, DefaultOrder>;
 };
 
 template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
-unique_CyqloneBackend<VL, DefaultOrder>
-make_qpalm_cyqlone_backend(const CyqloneStorage<real_t> &ocp, CyqloneData data,
-                           const CyqloneBackendSettings &settings);
+unique_CyQPALMBackend<VL, DefaultOrder>
+make_cyqpalm_backend(const CyqloneStorage<real_t> &ocp, CyqloneData data,
+                           const CyQPALMBackendSettings &settings);
 
 template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
-void update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend,
+void update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend,
                                   const CyqloneStorage<real_t> &ocp);
 
 template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
-void update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend,
+void update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend,
                                   const LinearOCPStorage &ocp);
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)

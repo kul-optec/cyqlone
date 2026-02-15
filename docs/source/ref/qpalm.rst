@@ -32,13 +32,13 @@ Statistics
 Backends
 --------
 
-.. doxygenstruct:: cyqlone::qpalm::unique_CyqloneBackend
+.. doxygenstruct:: cyqlone::qpalm::unique_CyQPALMBackend
    :no-link:
    :members:
    :undoc-members:
-.. doxygenfunction:: cyqlone::qpalm::make_qpalm_cyqlone_backend
+.. doxygenfunction:: cyqlone::qpalm::make_cyqpalm_backend
    :no-link:
-.. doxygenfunction:: cyqlone::qpalm::update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend, const CyqloneStorage<real_t> &ocp)
+.. doxygenfunction:: cyqlone::qpalm::update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend, const CyqloneStorage<real_t> &ocp)
    :no-link:
-.. doxygenfunction:: cyqlone::qpalm::update_qpalm_cyqlone_backend(CyqloneBackend<VL, DefaultOrder> &backend, const LinearOCPStorage &ocp)
+.. doxygenfunction:: cyqlone::qpalm::update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend, const LinearOCPStorage &ocp)
    :no-link:

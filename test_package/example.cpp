@@ -18,7 +18,7 @@ int main() {
     auto ocp           = qp::problems::platooning({.N_horiz = 32});
     auto cocp          = cyqlone::CyqloneStorage<>::build(ocp.ocp);
     const bool verbose = true;
-    qp::CyqloneBackendSettings params{.processors      = 4,
+    qp::CyQPALMBackendSettings params{.processors      = 4,
                                       .print_residuals = verbose,
                                       .print_precision = 17,
                                       .tricyqle_params{.solve_method = cyqlone::SolveMethod::PCR}};
@@ -29,8 +29,8 @@ int main() {
                               .max_penalty_y        = 1e7,
                               .initial_penalty_y    = 1e-2,
                               .verbose              = verbose};
-    auto backend = qp::make_qpalm_cyqlone_backend<4>(cocp, {}, params);
-    qp::Solver<qp::CyqloneBackend<4> *> cyqpalm{backend.get(), qpalm_params};
+    auto backend = qp::make_cyqpalm_backend<4>(cocp, {}, params);
+    qp::Solver<qp::CyQPALMBackend<4> *> cyqpalm{backend.get(), qpalm_params};
     auto status = cyqpalm();
     std::cout << "CyQPALM status: " << enum_name(status) << std::endl;
     return status == qp::SolverStatus::Converged ? 0 : 1;

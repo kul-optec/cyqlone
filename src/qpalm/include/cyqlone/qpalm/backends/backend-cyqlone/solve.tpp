@@ -13,7 +13,7 @@
 namespace CYQLONE_NS(cyqlone::qpalm) {
 
 template <index_t VL, StorageOrder DefaultOrder>
-void CyqloneBackend<VL, DefaultOrder>::solve(Context &ctx, [[maybe_unused]] const var_vec_t &x,
+void CyQPALMBackend<VL, DefaultOrder>::solve(Context &ctx, [[maybe_unused]] const var_vec_t &x,
                                              const var_vec_t &grad, const var_vec_t &Mᵀλ,
                                              const var_vec_t &Aᵀŷ, const eq_constr_vec_t &Mxb,
                                              real_t S, [[maybe_unused]] const ineq_constr_vec_t &Σ,
@@ -61,7 +61,7 @@ void CyqloneBackend<VL, DefaultOrder>::solve(Context &ctx, [[maybe_unused]] cons
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
-void CyqloneBackend<VL, DefaultOrder>::print_solve_rhs_norms(Context &ctx, const var_vec_t &d,
+void CyQPALMBackend<VL, DefaultOrder>::print_solve_rhs_norms(Context &ctx, const var_vec_t &d,
                                                              const eq_constr_vec_t &Δλ,
                                                              const var_vec_t &grad,
                                                              const var_vec_t &Mᵀλ,
@@ -88,7 +88,7 @@ void CyqloneBackend<VL, DefaultOrder>::print_solve_rhs_norms(Context &ctx, const
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
-void CyqloneBackend<VL, DefaultOrder>::print_solve_resid_norms(
+void CyQPALMBackend<VL, DefaultOrder>::print_solve_resid_norms(
     Context &ctx, const var_vec_t &x, const var_vec_t &d, const var_vec_t &grad, const var_vec_t &ξ,
     const var_vec_t &Mᵀλ, const var_vec_t &Aᵀŷ, const var_vec_t &MᵀΔλ, const ineq_constr_vec_t &Ad,
     const active_set_t &J) {

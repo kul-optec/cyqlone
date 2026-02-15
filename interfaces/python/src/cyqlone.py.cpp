@@ -19,18 +19,18 @@ namespace CYQLONE_NS(cyqlone) {
 
 template <index_t VL>
 struct PythonCyqloneSolver {
-    using Backend = cyqlone::qpalm::unique_CyqloneBackend<VL>;
+    using Backend = cyqlone::qpalm::unique_CyQPALMBackend<VL>;
     using Solver  = cyqlone::qpalm::Solver<Backend>;
     Solver solver;
     PythonCyqloneSolver(const CyqloneStorage<> &ocp,
-                        cyqlone::qpalm::CyqloneBackendSettings backend_settings,
+                        cyqlone::qpalm::CyQPALMBackendSettings backend_settings,
                         cyqlone::qpalm::Settings qpalm_settings)
-        : solver{cyqlone::qpalm::make_qpalm_cyqlone_backend<VL>(ocp, {}, backend_settings),
+        : solver{cyqlone::qpalm::make_cyqpalm_backend<VL>(ocp, {}, backend_settings),
                  qpalm_settings} {}
     PythonCyqloneSolver(const PythonOCP &ocp,
-                        cyqlone::qpalm::CyqloneBackendSettings backend_settings,
+                        cyqlone::qpalm::CyQPALMBackendSettings backend_settings,
                         cyqlone::qpalm::Settings qpalm_settings)
-        : solver{cyqlone::qpalm::make_qpalm_cyqlone_backend<VL>(
+        : solver{cyqlone::qpalm::make_cyqpalm_backend<VL>(
                      cyqlone::CyqloneStorage<>::build(ocp.ocp), {}, backend_settings),
                  qpalm_settings} {}
 };
@@ -407,7 +407,7 @@ void register_qpalm_solver(nb::module_ &m, const char *name) {
         .def("update_data",
              [](Solver &self, const PythonOCP &ocp) {
                  BATMAT_ASSERT(self.solver.backend);
-                 return update_qpalm_cyqlone_backend(*self.solver.backend, ocp.ocp);
+                 return update_cyqpalm_backend(*self.solver.backend, ocp.ocp);
              })
         .def("set_b_eq",
              [](Solver &self, np_vector<> b_eq) { return self.solver.set_b_eq(as_span(b_eq)); })
@@ -419,7 +419,7 @@ void register_qpalm_solver(nb::module_ &m, const char *name) {
 
 template <index_t VL>
 void register_qpalm_cyqlone(nb::module_ &m) {
-    register_qpalm_solver<PythonCyqloneSolver<VL>, cyqlone::qpalm::CyqloneBackendSettings>(
+    register_qpalm_solver<PythonCyqloneSolver<VL>, cyqlone::qpalm::CyQPALMBackendSettings>(
         m, "QPALM_Cyqlone");
 }
 
