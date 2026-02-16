@@ -134,8 +134,8 @@ class CyqloneRecipe(ConanFile):
         if can_run(self):
             tc.cache_variables["CYQLONE_FORCE_TEST_DISCOVERY"] = True
             tc.cache_variables["CYQLONE_WITH_PY_STUBS"] = True
-        tc.cache_variables["CYQLONE_DOCS_GUANAQO_VERSION"] = guanaqo.ref.version
-        tc.cache_variables["CYQLONE_DOCS_BATMAT_VERSION"] = batmat.ref.version
+        tc.cache_variables["CYQLONE_DOCS_GUANAQO_VERSION"] = str(guanaqo.ref.version)
+        tc.cache_variables["CYQLONE_DOCS_BATMAT_VERSION"] = str(batmat.ref.version)
         tc.generate()
 
     def build(self):

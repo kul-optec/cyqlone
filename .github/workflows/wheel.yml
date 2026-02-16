@@ -307,9 +307,12 @@ jobs:
     needs: [build-sdist]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Setup Conan and sccache
+        uses: ./.github/workflows/setup-conan
         with:
-          python-version: '3.12'
+          cache-key: docs
+
       - name: Download wheels
         uses: actions/download-artifact@v4
         with:
@@ -317,6 +320,7 @@ jobs:
           path: dist
       - name: Install ${{ env.PACKAGE_NAME }}
         run: python3 -m pip install --find-links=dist "${PACKAGE_NAME}[docs]==${PACKAGE_VERSION}"
+
       - name: Install Doxygen
         run: |
           set -euo pipefail
@@ -325,17 +329,19 @@ jobs:
           curl -sL "$DOXY_URL" -o /tmp/doxygen-1.16.1.linux.bin.tar.gz
           echo "$DOXY_SHA  /tmp/doxygen-1.16.1.linux.bin.tar.gz" | sha256sum -c -
           sudo tar xzf /tmp/doxygen-1.16.1.linux.bin.tar.gz -C /usr/local/bin doxygen-1.16.1/bin/doxygen --strip-components=2
-      - name: Install CMake, Ninja
-        run: python3 -m pip install cmake~=4.2.1 ninja~=1.13.0
+          
+      - name: Install dependencies
+        run: >
+          conan install . --build=missing -pr scripts/ci/profiles/ci.profile
+          -s:h build_type=Debug -s:b build_type=Release
+          -s:b compiler.cppstd=20
       - name: Configure
         run: >
-          cmake -S . -B build
-          -G Ninja -D CMAKE_BUILD_TYPE=Debug
-          -D CYQLONE_ONLY_DOCS=On
+          cmake --fresh --preset conan-debug
           -D DOXYGEN_OUTPUT_DIRECTORY="${{ github.workspace }}/staging"
           -D CYQLONE_DOCS_GUANAQO_VERSION="develop" # TODO: change once guanaqo has released docs
       - name: Build documentation
-        run: cmake --build build --target docs
+        run: cmake --build --preset conan-debug --target docs
       - name: Upload artifact
         id: deployment
         uses: actions/upload-pages-artifact@v4
