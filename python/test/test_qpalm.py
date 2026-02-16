@@ -1,4 +1,4 @@
-from cyqlone import OCP, CyqloneBackendSettings, Settings, LinearOCPSparseQP, SolverStatus
+from cyqlone import OCP, CyQPALMBackendSettings, Settings, LinearOCPSparseQP, SolverStatus
 from cyqlone.cyqlone.simd4 import QPALM_Cyqlone
 import numpy as np
 import numpy.linalg as la
@@ -44,7 +44,7 @@ def test_cyqlone_qpalm(seed):
         rhs_lb=rhs_lb,
         rhs_ub=rhs_ub,
     )
-    backend_settings = CyqloneBackendSettings()
+    backend_settings = CyQPALMBackendSettings()
     backend_settings.processors = p
     backend_settings.print_residuals = True
     qpalm_settings = Settings()
