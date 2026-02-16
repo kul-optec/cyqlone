@@ -340,9 +340,7 @@ jobs:
         id: deployment
         uses: actions/upload-pages-artifact@v4
         with:
-          path: |
-            ./staging/Sphinx
-            ./staging/Doxygen
+          path: staging
 
   deploy-docs:
     if: ${{ github.event.action == 'released' || github.event.action == 'prereleased' }}
