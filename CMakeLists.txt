@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24...4.1)
 set(CMAKE_CXX_SCAN_FOR_MODULES Off)
 project(cyqlone
     VERSION 0.0.1
-    DESCRIPTION "Parallel solver for systems with optimal control structure."
+    DESCRIPTION "Fast, parallel and vectorized solver for linear systems with optimal control structure."
     HOMEPAGE_URL "https://github.com/kul-optec/cyqlone"
     LANGUAGES CXX
 )
@@ -40,6 +40,8 @@ option(CYQLONE_WITH_ZLIB
 option(CYQLONE_WITH_SKA_SORT
     "Use the radix sort implementation provided by skarupke/ska_sort" Off)
 # Developer options
+option(CYQLONE_ONLY_DOCS
+    "Only build the documentation" Off)
 option(CYQLONE_WARNINGS_AS_ERRORS
     "Enable -Werror or /WX" Off)
 option(CYQLONE_WITH_COVERAGE
@@ -111,6 +113,9 @@ endif()
 # Documentation
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/docs/CMakeLists.txt")
     add_subdirectory(docs)
+endif()
+if (CYQLONE_ONLY_DOCS)
+    return()
 endif()
 
 # Libraries
