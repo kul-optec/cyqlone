@@ -318,18 +318,31 @@ jobs:
       - name: Install ${{ env.PACKAGE_NAME }}
         run: python3 -m pip install --find-links=dist "${PACKAGE_NAME}[docs]==${PACKAGE_VERSION}"
       - name: Install Doxygen
+        run: |
+          set -euo pipefail
+          DOXY_URL="https://github.com/doxygen/doxygen/releases/download/Release_1_16_1/doxygen-1.16.1.linux.bin.tar.gz"
+          DOXY_SHA="a56f885d37e3aae08a99f638d17bbb381224c03a878d9e2dda4f9fa4baf1d8bd"
+          curl -sL "$DOXY_URL" -o /tmp/doxygen-1.16.1.linux.bin.tar.gz
+          echo "$DOXY_SHA  /tmp/doxygen-1.16.1.linux.bin.tar.gz" | sha256sum -c -
+          sudo tar xzf /tmp/doxygen-1.16.1.linux.bin.tar.gz -C /usr/local/bin doxygen-1.16.1/bin/doxygen --strip-components=2
+      - name: Install CMake, Ninja
+        run: python3 -m pip install cmake~=4.2.1 ninja~=1.13.0
+      - name: Configure
         run: >
-          wget -qO- https://github.com/doxygen/doxygen/releases/download/Release_1_16_1/doxygen-1.16.1.linux.bin.tar.gz
-          | tar xz -C /usr/local/bin doxygen-1.16.1/bin/doxygen --strip-components=2
-      - name: Doxygen build
-        run: doxygen docs/Doxyfile
-      - name: Sphinx build
-        run: make -C docs html
+          cmake -S . -B build
+          -G Ninja -D CMAKE_BUILD_TYPE=Debug
+          -D CYQLONE_ONLY_DOCS=On
+          -D DOXYGEN_OUTPUT_DIRECTORY="${{ github.workspace }}/staging"
+          -D CYQLONE_DOCS_GUANAQO_VERSION="develop" # TODO: change once guanaqo has released docs
+      - name: Build documentation
+        run: cmake --build build --target docs
       - name: Upload artifact
         id: deployment
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./docs/build/html
+          path: |
+            ./staging/Sphinx
+            ./staging/Doxygen
 
   deploy-docs:
     if: ${{ github.event.action == 'released' || github.event.action == 'prereleased' }}
