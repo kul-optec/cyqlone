@@ -6,6 +6,8 @@
 
 namespace cyqlone {
 
+/// Generates a random linear OCP with the given dimensions and random seed.
+/// @ingroup topic-ocp-formulations
 inline LinearOCPStorage generate_random_ocp(OCPDim dim, uint_fast32_t seed = 0) {
     LinearOCPStorage ocp{dim};
     auto [N, nx, nu, ny, ny_N] = ocp.dim;

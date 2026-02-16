@@ -130,6 +130,9 @@ inline void unpack_partial(view<const T, Abi, OA> A, scalar_view<T, DB, LB, OB> 
 
 /// @endcond
 
+/// @addtogroup topic-linalg
+/// @{
+
 /// @name Packing and unpacking
 /// @{
 
@@ -154,6 +157,8 @@ void pack(VA &&A, VB &&B) {
         simdify(B), A.view().first_layers(B.depth()).as_const());
     // TODO: make sure that .view() is supported for all relevant VA.
 }
+
+/// @}
 
 /// @}
 

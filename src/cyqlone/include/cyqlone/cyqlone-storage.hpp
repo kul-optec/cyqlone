@@ -1,5 +1,9 @@
 #pragma once
 
+/// @file
+/// Data structure for optimal control problems where the initial states are eliminated.
+/// @ingroup topic-ocp-formulations
+
 #include <cyqlone/config.hpp>
 #include <cyqlone/ocp.hpp>
 #include <batmat/matrix/matrix.hpp>
@@ -7,7 +11,6 @@
 #include <vector>
 
 namespace cyqlone {
-
 
 /// Storage for a linear-quadratic OCP with the initial states x₀ eliminated.
 /// ~~~
@@ -31,6 +34,7 @@ namespace cyqlone {
 /// tracked by the Ju0 mask. When reconstructing the solution, the multipliers for eliminated
 /// constraints are set to zero (we assume that the initial state is feasible w.r.t. the state
 /// constraints).
+/// @ingroup topic-ocp-formulations
 template <class T = real_t>
 struct CyqloneStorage {
     using value_type = T;

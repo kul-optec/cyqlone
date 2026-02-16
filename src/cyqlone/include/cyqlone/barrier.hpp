@@ -1,5 +1,9 @@
 #pragma once
 
+/// @file
+/// Barrier synchronization primitive.
+/// @ingroup topic-parallelization
+
 #include <cyqlone/config.hpp>
 #include <batmat/assume.hpp>
 #include <array>
@@ -33,6 +37,7 @@ struct EmptyCompletion {
  *  - The barrier phase is exposed to the user.
  *  - Custom completion functions can be provided at arrival time.
  *  - Reductions and broadcasts on small values are supported.
+ * @ingroup topic-parallelization
  */
 template <typename CompletionFn = EmptyCompletion, class PhaseType = uint32_t>
 class TreeBarrier {

@@ -233,6 +233,9 @@ template <class T, class Abi, int Rotate, StorageOrder O>
 
 /// @endcond
 
+/// @addtogroup topic-linalg
+/// @{
+
 /// @name Single-batch operations
 /// @{
 
@@ -443,8 +446,7 @@ void transform_n_elementwise(F &&fun, std::tuple<VAs...> As, VBs &&...Bs) {
 
 /// @}
 
-/// @name Multi-batch operations
-/// @{
+/// @}
 
 template <simdifiable_multi V> // TODO: move to batmat
 using simdified_multi_value_t = typename simdified_multi_view_type<V>::value_type;
@@ -454,6 +456,16 @@ template <simdifiable_multi V, simdifiable_multi... Vs> // TODO: move to batmat
 inline constexpr bool simdify_compatible =
     (std::is_same_v<simdified_multi_value_t<V>, simdified_multi_value_t<Vs>> && ...) &&
     (std::is_same_v<simdified_multi_abi_t<V>, simdified_multi_abi_t<Vs>> && ...);
+
+// TODO: doxygen gets confused because the template parameters are the same as the single-batch
+// versions, so put in a separate namespace
+inline namespace multi {
+
+/// @addtogroup topic-linalg
+/// @{
+
+/// @name Multi-batch operations
+/// @{
 
 /// Compute the norms (max, 1-norm, and 2-norm) of a vector.
 template <simdifiable_multi Vx>
@@ -696,5 +708,9 @@ void transform_n_elementwise(F &&fun, std::tuple<VAs...> As, VBs &&...Bs) {
 }
 
 /// @}
+
+/// @}
+
+} // namespace multi
 
 } // namespace cyqlone::linalg

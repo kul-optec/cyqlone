@@ -1,5 +1,9 @@
 #pragma once
 
+/// @file
+/// The main header for the Cyqlone and Tricyqle linear solvers.
+/// @ingroup topic-lin-solvers
+
 #include <cyqlone/config.hpp>
 #include <cyqlone/cyqlone-params.hpp>
 #include <cyqlone/cyqlone-storage.hpp>
@@ -53,6 +57,10 @@ using batmat::matrix::StorageOrder;
 
 /// Solver for block-tridiagonal systems using cyclic reduction (CR), parallel cyclic reduction
 /// (PCR), and preconditioned conjugate gradient (PCG) methods.
+/// @tparam VL              Vector length.
+/// @tparam T               Scalar type.
+/// @tparam DefaultOrder    Storage order for the matrix workspaces (row/column major).
+/// @ingroup topic-block-tridiag-solvers
 template <index_t VL = 4, class T = real_t, StorageOrder DefaultOrder = StorageOrder::ColMajor>
 struct TricyqleSolver {
     using value_type = T;
@@ -349,6 +357,11 @@ struct TricyqleSolver {
     /// @}
 };
 
+/// Linear solver for systems with optimal control structure.
+/// @tparam VL              Vector length.
+/// @tparam T               Scalar type.
+/// @tparam DefaultOrder    Storage order for the matrix workspaces (row/column major).
+/// @ingroup topic-ocp-solvers
 template <index_t VL = 4, class T = real_t, StorageOrder DefaultOrder = StorageOrder::ColMajor>
 struct CyqloneSolver {
     using value_type = T;

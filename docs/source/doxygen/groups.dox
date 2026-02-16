@@ -1,0 +1,31 @@
+/** @defgroup topic-lin-solvers Linear solvers
+ *  @brief Solvers for structured linear systems (block tridiagonal and optimal control structure).
+ */
+    /** @defgroup topic-block-tridiag-solvers Block tridiagonal solvers
+     *  @brief Solvers for block tridiagonal linear systems.
+     *  @ingroup topic-lin-solvers
+     */
+    /** @defgroup topic-ocp-solvers Optimal control solvers
+     *  @brief Solvers for linear systems with optimal control structure.
+     * @ingroup topic-lin-solvers
+     */
+
+/** @defgroup topic-optimization-solvers Optimization solvers
+ *  @brief Solvers for structured optimization problems (QP and linear-quadratic optimal control).
+ */
+    /** @defgroup topic-ocp-solvers Optimal control solvers
+     *  @brief Solvers for optimal control problems.
+     *  @ingroup topic-optimization-solvers
+     */
+
+/** @defgroup topic-ocp-formulations Optimal control problem formulations
+ *  @brief Data structures for different formulations of optimal control problems.
+ */
+
+/** @defgroup topic-parallelization Parallelization
+ *  @brief Utilities for parallelization and synchronization.
+ */
+
+/** @defgroup topic-linalg Linear algebra
+ *  @brief Linear algebra utilities (mostly vector operations).
+ */

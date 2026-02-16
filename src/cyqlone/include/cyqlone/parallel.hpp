@@ -1,5 +1,9 @@
 #pragma once
 
+/// @file
+/// Parallel execution context and synchronization primitives.
+/// @ingroup topic-parallelization
+
 #include <cyqlone/barrier.hpp>
 #include <cyqlone/config.hpp>
 #include <batmat/config.hpp>
@@ -21,6 +25,10 @@ struct SharedContext;
 template <class SC = SharedContext>
 struct Context;
 
+/// Abstraction for a parallel execution context: a set of threads that can synchronize and
+/// communicate with each other using barriers.
+/// @see Context
+/// @ingroup topic-parallelization
 struct SharedContext {
 #if GUANAQO_WITH_TRACING
     struct completion_type {
@@ -80,6 +88,8 @@ struct SharedContext {
 
 /// Thread context for parallel execution. Each thread has a unique thread index, and can
 /// synchronize and communicate with other threads in the same shared context.
+/// @see SharedContext
+/// @ingroup topic-parallelization
 template <class SC>
 struct Context {
     using shared_context_type = SC;

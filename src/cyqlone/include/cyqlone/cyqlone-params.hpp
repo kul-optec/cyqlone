@@ -7,6 +7,7 @@
 namespace cyqlone {
 
 /// Defines how to solve the small linear system that remains after cyclic reduction.
+/// @ingroup topic-block-tridiag-solvers
 enum class SolveMethod {
     StairPCG,  ///< Preconditioned Conjugate Gradient with staircase preconditioner (iterative)
     JacobiPCG, ///< Preconditioned Conjugate Gradient with Jacobi preconditioner (iterative)
@@ -24,6 +25,7 @@ inline const char *enum_name(SolveMethod s) {
 }
 
 /// Parameters and settings for the Tricyqle block-tridiagonal solver.
+/// @ingroup topic-block-tridiag-solvers
 template <class T = real_t>
 struct TricyqleParams {
     using value_type = T;
@@ -54,6 +56,7 @@ struct TricyqleParams {
 };
 
 /// Parameters and settings for the Cyqlone solver.
+/// @ingroup topic-ocp-solvers
 template <class T = real_t>
 struct CyqloneParams {
     using value_type = T;

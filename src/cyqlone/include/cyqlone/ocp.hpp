@@ -1,5 +1,9 @@
 #pragma once
 
+/// @file
+/// Data structure for optimal control problems.
+/// @ingroup topic-ocp-formulations
+
 #include <cyqlone/config.hpp>
 #include <batmat/config.hpp>
 #include <guanaqo/mat-view.hpp>
@@ -7,9 +11,14 @@
 
 namespace cyqlone {
 
+/// Dimensions of an optimal control problem.
+/// @ingroup topic-ocp-formulations
 struct OCPDim {
-    index_t N_horiz;
-    index_t nx, nu, ny, ny_N = ny;
+    index_t N_horiz;   ///< Horizon length (one less than the number of stages)
+    index_t nx;        ///< Number of state variables.
+    index_t nu;        ///< Number of input variables.
+    index_t ny;        ///< Number of output variables.
+    index_t ny_N = ny; ///< Number of output variables in the last stage.
     friend constexpr bool operator==(OCPDim, OCPDim) = default;
     friend constexpr bool operator!=(OCPDim, OCPDim) = default;
 };
@@ -24,6 +33,7 @@ struct OCPDim {
 ///              lᵢ   ≤ Cᵢ xᵢ + Dᵢ uᵢ ≤ uᵢ
 ///              lₙ   ≤ Cₙ xₙ ≤ uₙ
 /// ~~~
+/// @ingroup topic-ocp-formulations
 struct LinearOCPStorage {
     OCPDim dim{};
     /// Create a single contiguous storage for all problem data.

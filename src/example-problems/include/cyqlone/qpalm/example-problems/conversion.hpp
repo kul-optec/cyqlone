@@ -4,6 +4,7 @@
  * For example: converting an OCP into a sparse “multiple shooting”
  * quadratic program, or computing the gradient of the quadratic OCP
  * cost function.
+ * @ingroup topic-ocp-formulations
  */
 
 #pragma once
@@ -19,6 +20,7 @@ using guanaqo::linalg::sparsity::SparseCSC;
 
 /// Represents a sparse multiple shooting formulation of the standard optimal
 /// control problem.
+/// @ingroup topic-ocp-formulations
 struct LinearOCPSparseQP {
     std::vector<index_t> Q_outer_ptr, Q_inner_idx;
     std::vector<real_t> Q_values;
@@ -51,8 +53,10 @@ namespace CYQLONE_NS(cyqlone::qpalm) {
 /// \\ u - u^j_\text{ref} \end{pmatrix} \right\|_{H_j}^2 @f$, with the Hessian
 /// @f$ H_j = \begin{pmatrix} Q_j & S_j^\top \\ S_j & R_j \end{pmatrix} @f$.
 /// Stores @f$ \nabla J(0, 0) @f$ to @p qr.
+/// @ingroup topic-ocp-formulations
 void reference_to_gradient(const LinearOCPStorage &ocp, std::span<const real_t> ref,
                            std::span<real_t> qr);
+/// @copydoc reference_to_gradient
 void reference_to_gradient(LinearOCPStorage &ocp, std::span<const real_t> ref);
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)
