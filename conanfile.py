@@ -123,15 +123,19 @@ class CyqloneRecipe(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        index_t = self.dependencies["batmat"].options.get_safe("dense_index_type", default="int")
-        tc.variables["CYQLONE_DENSE_INDEX_TYPE"] = index_t
+        batmat = self.dependencies["batmat"]
+        guanaqo = self.dependencies["guanaqo"]
+        index_t = batmat.options.get_safe("dense_index_type", default="int")
+        tc.cache_variables["CYQLONE_DENSE_INDEX_TYPE"] = index_t
         for k in self.bool_cyqlone_options:
             value = self.options.get_safe(k, None)
             if value is not None and value.value is not None:
-                tc.variables["CYQLONE_" + k.upper()] = bool(value)
+                tc.cache_variables["CYQLONE_" + k.upper()] = bool(value)
         if can_run(self):
             tc.cache_variables["CYQLONE_FORCE_TEST_DISCOVERY"] = True
             tc.cache_variables["CYQLONE_WITH_PY_STUBS"] = True
+        tc.cache_variables["CYQLONE_DOCS_GUANAQO_VERSION"] = guanaqo.ref.version
+        tc.cache_variables["CYQLONE_DOCS_BATMAT_VERSION"] = batmat.ref.version
         tc.generate()
 
     def build(self):

@@ -81,6 +81,15 @@ if (Doxygen_FOUND AND Python3_Interpreter_FOUND)
             "${PROJECT_SOURCE_DIR}/README.md"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Generating Doxygen documentation")
+    foreach(target cyqlone qpalm example-problems)
+        if (TARGET ${target})
+            file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.${target}-inc"
+                        CONTENT "INCLUDE_PATH += \\\n\"$<JOIN:$<TARGET_PROPERTY:INTERFACE_INCLUDE_DIRECTORIES>,\" \\\n\">\"\n"
+                        TARGET ${target})
+            file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.docs-doxygen"
+                        "@INCLUDE = ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.${target}-inc\n")
+        endif()
+    endforeach()
     add_dependencies(docs-doxygen docs-output-dir)
     add_custom_target(docs-sphinx
         COMMAND ${Python3_EXECUTABLE} -m sphinx

@@ -110,11 +110,9 @@ if (CYQLONE_WITH_COVERAGE)
     add_dependencies(coverage cyqlone::tests)
 endif()
 
-# Documentation
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/docs/CMakeLists.txt")
-    add_subdirectory(docs)
-endif()
+# Documentation only
 if (CYQLONE_ONLY_DOCS)
+    add_subdirectory(docs)
     return()
 endif()
 
@@ -133,3 +131,8 @@ if (CYQLONE_WITH_BENCHMARKS)
 endif()
 
 add_subdirectory(interfaces)
+
+# Documentation
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/docs/CMakeLists.txt")
+    add_subdirectory(docs)
+endif()
