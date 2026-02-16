@@ -14,7 +14,7 @@ exact line search.
 
 ## Preprint
 
-The paper describing the algorithms in this repository can be found on arXiv: **<https://arxiv.org/abs/2512.09058>**
+The paper describing the algorithms in this repository can be found on arXiv: [**arxiv.org/abs/2512.09058**](https://arxiv.org/abs/2512.09058)
 
 ```bibtex
 @misc{pas_cyqlone_2025,
