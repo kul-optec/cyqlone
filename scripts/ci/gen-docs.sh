@@ -34,9 +34,7 @@ function run_doxygen {
         -DCYQLONE_FORCE_TEST_DISCOVERY=On \
         -DDOXYGEN_HTML_OUTPUT="$htmldir" \
         -DDOXYGEN_OUTPUT_DIRECTORY="$outdir" \
-        -DDOXYGEN_PROJECT_NUMBER="$branch" \
-        -DCYQLONE_DOCS_BATMAT_VERSION="develop"
-        # TODO: change once batmat has released docs
+        -DDOXYGEN_PROJECT_NUMBER="$branch"
 
     # Generate the Doxygen C++ documentation
     cmake --build --preset "$build_preset" -t docs
