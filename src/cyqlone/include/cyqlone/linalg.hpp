@@ -448,6 +448,10 @@ void transform_n_elementwise(F &&fun, std::tuple<VAs...> As, VBs &&...Bs) {
 
 /// @}
 
+// TODO: doxygen gets confused because the template parameters are the same as the single-batch
+// versions, so put in a separate namespace
+inline namespace multi {
+
 template <simdifiable_multi V> // TODO: move to batmat
 using simdified_multi_value_t = typename simdified_multi_view_type<V>::value_type;
 template <simdifiable_multi V> // TODO: move to batmat
@@ -456,10 +460,6 @@ template <simdifiable_multi V, simdifiable_multi... Vs> // TODO: move to batmat
 inline constexpr bool simdify_compatible =
     (std::is_same_v<simdified_multi_value_t<V>, simdified_multi_value_t<Vs>> && ...) &&
     (std::is_same_v<simdified_multi_abi_t<V>, simdified_multi_abi_t<Vs>> && ...);
-
-// TODO: doxygen gets confused because the template parameters are the same as the single-batch
-// versions, so put in a separate namespace
-inline namespace multi {
 
 /// @addtogroup topic-linalg
 /// @{
@@ -472,7 +472,7 @@ template <simdifiable_multi Vx>
 norms<simdified_multi_value_t<Vx>>::result norms_all(Vx &&x) {
     typename norms<simdified_multi_value_t<Vx>>::result result{};
     for (index_t b = 0; b < x.num_batches(); ++b)
-        result = norms<simdified_multi_value_t<Vx>>{}(result, norms_all(x.batch(b)));
+        result = norms<simdified_multi_value_t<Vx>>{}(result, linalg::norms_all(x.batch(b)));
     return result;
 }
 
@@ -493,7 +493,7 @@ template <simdifiable_multi Vx>
 simdified_multi_value_t<Vx> norm_2_squared(Vx &&x) {
     simdified_multi_value_t<Vx> sumsq{};
     for (index_t b = 0; b < x.num_batches(); ++b)
-        sumsq += norm_2_squared(x.batch(b));
+        sumsq += linalg::norm_2_squared(x.batch(b));
     return sumsq;
 }
 
@@ -511,7 +511,7 @@ simdified_multi_value_t<Vx> dot(Vx &&x, Vy &&y) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
     simdified_multi_value_t<Vx> result{};
     for (index_t b = 0; b < x.num_batches(); ++b)
-        result += dot(x.batch(b), y.batch(b));
+        result += linalg::dot(x.batch(b), y.batch(b));
     return result;
 }
 
@@ -522,7 +522,7 @@ void hadamard(Vx &&x, Vy &&y, Vz &&z) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
     BATMAT_ASSERT(x.num_batches() == z.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
-        hadamard(x.batch(b), y.batch(b), z.batch(b));
+        linalg::hadamard(x.batch(b), y.batch(b), z.batch(b));
 }
 
 /// Compute the Hadamard (elementwise) product of two vectors x = x ⊙ y.
@@ -531,7 +531,7 @@ template <simdifiable_multi Vx, simdifiable_multi Vy>
 void hadamard(Vx &&x, Vy &&y) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
-        hadamard(x.batch(b), y.batch(b));
+        linalg::hadamard(x.batch(b), y.batch(b));
 }
 
 /// Elementwise clamping z = max(lo, min(x, hi)).
@@ -542,7 +542,7 @@ void clamp(Vx &&x, Vlo &&lo, Vhi &&hi, Vz &&z) {
     BATMAT_ASSERT(x.num_batches() == hi.num_batches());
     BATMAT_ASSERT(x.num_batches() == z.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
-        clamp(x.batch(b), lo.batch(b), hi.batch(b), z.batch(b));
+        linalg::clamp(x.batch(b), lo.batch(b), hi.batch(b), z.batch(b));
 }
 
 /// Elementwise clamping residual z = x - max(lo, min(x, hi)).
@@ -553,7 +553,7 @@ void clamp_resid(Vx &&x, Vlo &&lo, Vhi &&hi, Vz &&z) {
     BATMAT_ASSERT(x.num_batches() == hi.num_batches());
     BATMAT_ASSERT(x.num_batches() == z.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
-        clamp_resid(x.batch(b), lo.batch(b), hi.batch(b), z.batch(b));
+        linalg::clamp_resid(x.batch(b), lo.batch(b), hi.batch(b), z.batch(b));
 }
 
 /// Add scaled vector z = αx + βy.
@@ -565,7 +565,7 @@ void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y, Vz &&z) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
     BATMAT_ASSERT(x.num_batches() == z.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
-        axpby(alpha, x.batch(b), beta, y.batch(b), z.batch(b));
+        linalg::axpby(alpha, x.batch(b), beta, y.batch(b), z.batch(b));
 }
 
 /// Add scaled vector y = αx + βy.
@@ -576,7 +576,7 @@ template <simdifiable_multi Vx, simdifiable_multi Vy, //
 void axpby(Ta alpha, Vx &&x, Tb beta, Vy &&y) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
-        axpby(alpha, x.batch(b), beta, y.batch(b));
+        linalg::axpby(alpha, x.batch(b), beta, y.batch(b));
 }
 
 /// Add scaled vector y = ∑ᵢ αᵢxᵢ + βy.
@@ -585,7 +585,7 @@ template <auto Beta = 1, simdifiable_multi Vy, simdifiable_multi... Vx>
 void axpy(Vy &&y, const std::array<simdified_multi_value_t<Vy>, sizeof...(Vx)> &alphas, Vx &&...x) {
     BATMAT_ASSERT(((y.num_batches() == x.num_batches()) && ...));
     for (index_t b = 0; b < y.num_batches(); ++b)
-        axpy<Beta>(y.batch(b), alphas, x.batch(b)...);
+        linalg::axpy<Beta>(y.batch(b), alphas, x.batch(b)...);
 }
 
 /// Add scaled vector z = αx + y.
@@ -603,7 +603,7 @@ template <auto Beta = 1, simdifiable_multi Vx, simdifiable_multi Vy,
 void axpy(Ta alpha, Vx &&x, Vy &&y) {
     BATMAT_ASSERT(x.num_batches() == y.num_batches());
     for (index_t b = 0; b < x.num_batches(); ++b)
-        axpy<Beta>(alpha, x.batch(b), y.batch(b));
+        linalg::axpy<Beta>(alpha, x.batch(b), y.batch(b));
 }
 
 /// Negate a matrix or vector B = -A.
@@ -612,14 +612,14 @@ template <simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0>
 void negate(VA &&A, VB &&B, with_rotate_t<Rotate> rot = {}) {
     BATMAT_ASSERT(A.num_batches() == B.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
-        negate(A.batch(b), B.batch(b), rot);
+        linalg::negate(A.batch(b), B.batch(b), rot);
 }
 
 /// Negate a matrix or vector A = -A.
 template <simdifiable_multi VA, int Rotate = 0>
 void negate(VA &&A, with_rotate_t<Rotate> rot = {}) {
     for (index_t b = 0; b < A.num_batches(); ++b)
-        negate(A.batch(b), rot);
+        linalg::negate(A.batch(b), rot);
 }
 
 /// Subtract two matrices or vectors C = A - B. Rotate affects B.
@@ -629,7 +629,7 @@ void sub(VA &&A, VB &&B, VC &&C, with_rotate_t<Rotate> rot = {}) {
     BATMAT_ASSERT(A.num_batches() == B.num_batches());
     BATMAT_ASSERT(A.num_batches() == C.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
-        sub(A.batch(b), B.batch(b), C.batch(b), rot);
+        linalg::sub(A.batch(b), B.batch(b), C.batch(b), rot);
 }
 
 /// Subtract two matrices or vectors A = A - B. Rotate affects B.
@@ -638,7 +638,7 @@ template <simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0>
 void sub(VA &&A, VB &&B, with_rotate_t<Rotate> rot = {}) {
     BATMAT_ASSERT(A.num_batches() == B.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
-        sub(A.batch(b), B.batch(b), rot);
+        linalg::sub(A.batch(b), B.batch(b), rot);
 }
 
 /// Add two matrices or vectors C = A + B. Rotate affects B.
@@ -648,7 +648,7 @@ void add(VA &&A, VB &&B, VC &&C, with_rotate_t<Rotate> rot = {}) {
     BATMAT_ASSERT(A.num_batches() == B.num_batches());
     BATMAT_ASSERT(A.num_batches() == C.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
-        add(A.batch(b), B.batch(b), C.batch(b), rot);
+        linalg::add(A.batch(b), B.batch(b), C.batch(b), rot);
 }
 
 /// Add two matrices or vectors A = A + B. Rotate affects B.
@@ -657,7 +657,7 @@ template <simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0>
 void add(VA &&A, VB &&B, with_rotate_t<Rotate> rot = {}) {
     BATMAT_ASSERT(A.num_batches() == B.num_batches());
     for (index_t b = 0; b < A.num_batches(); ++b)
-        add(A.batch(b), B.batch(b), rot);
+        linalg::add(A.batch(b), B.batch(b), rot);
 }
 
 /// Apply a function to all elements of the given matrices or vectors.
@@ -666,7 +666,7 @@ template <class F, simdifiable_multi VA, simdifiable_multi... VAs>
 void for_each_elementwise(F &&fun, VA &&A, VAs &&...As) {
     BATMAT_ASSERT(((A.num_batches() == As.num_batches()) && ...));
     for (index_t b = 0; b < A.num_batches(); ++b)
-        for_each_elementwise(fun, A.batch(b), As.batch(b)...);
+        linalg::for_each_elementwise(fun, A.batch(b), As.batch(b)...);
 }
 
 /// Apply a function to all elements of the given matrices or vectors, storing the result in the
@@ -676,7 +676,7 @@ template <class F, simdifiable_multi VA, simdifiable_multi... VAs>
 void transform_elementwise(F &&fun, VA &&A, VAs &&...As) {
     BATMAT_ASSERT(((A.num_batches() == As.num_batches()) && ...));
     for (index_t b = 0; b < A.num_batches(); ++b)
-        transform_elementwise(fun, A.batch(b), As.batch(b)...);
+        linalg::transform_elementwise(fun, A.batch(b), As.batch(b)...);
 }
 
 /// Apply a function to all elements of the given matrices or vectors, storing the results in the
@@ -687,7 +687,7 @@ void transform2_elementwise(F &&fun, VA &&A, VB &&B, VAs &&...As) {
     BATMAT_ASSERT(A.num_batches() == B.num_batches());
     BATMAT_ASSERT(((A.num_batches() == As.num_batches()) && ...));
     for (index_t b = 0; b < A.num_batches(); ++b)
-        transform2_elementwise(fun, A.batch(b), B.batch(b), As.batch(b)...);
+        linalg::transform2_elementwise(fun, A.batch(b), B.batch(b), As.batch(b)...);
 }
 
 /// Apply a function to all elements of the given matrices or vectors, storing the results in the
@@ -702,7 +702,7 @@ void transform_n_elementwise(F &&fun, std::tuple<VAs...> As, VBs &&...Bs) {
         return ((a0.num_batches() == get<Is>(As).num_batches()) && ...);
     }(std::make_index_sequence<sizeof...(VAs)>()));
     for (index_t b = 0; b < a0.num_batches(); ++b)
-        transform_n_elementwise(
+        linalg::transform_n_elementwise(
             fun, std::apply([&](auto &&...a) { return std::make_tuple(a.batch(b)...); }, As),
             Bs.batch(b)...);
 }
