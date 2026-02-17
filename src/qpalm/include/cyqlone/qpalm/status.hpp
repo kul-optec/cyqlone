@@ -8,6 +8,7 @@
 namespace cyqlone::qpalm {
 
 /// Exit status of a numerical solver.
+/// @ingroup topic-optimization-solvers
 enum class SolverStatus {
     Busy = 0,    ///< In progress.
     Converged,   ///< Converged and reached given tolerance.

@@ -5,6 +5,7 @@
 
 namespace cyqlone::qpalm {
 
+/// @ingroup topic-optimization-solvers
 struct DetailedStats {
     enum ExitReason {
         Busy,

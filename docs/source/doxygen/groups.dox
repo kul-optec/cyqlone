@@ -13,7 +13,7 @@
 /** @defgroup topic-optimization-solvers Optimization solvers
  *  @brief Solvers for structured optimization problems (QP and linear-quadratic optimal control).
  */
-    /** @defgroup topic-ocp-solvers Optimal control solvers
+    /** @defgroup topic-optimization-solvers-ocp Optimal control solvers
      *  @brief Solvers for optimal control problems.
      *  @ingroup topic-optimization-solvers
      */

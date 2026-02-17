@@ -8,6 +8,7 @@ namespace cyqlone::qpalm {
 
 using namespace std::chrono_literals;
 
+/// @ingroup topic-optimization-solvers
 struct CYQLONE_QPALM_EXPORT Settings {
     /// Maximum number of (total) iterations.
     unsigned max_outer_iter            = 100;

@@ -13,6 +13,9 @@
 
 namespace cyqlone::qpalm {
 
+/// @addtogroup topic-optimization-solvers-ocp
+/// @{
+
 struct CyqloneData {
     std::span<const real_t> initial_variables = {}, initial_inequality_multipliers = {},
                             initial_equality_multipliers = {};
@@ -44,6 +47,8 @@ struct CyQPALMBackendStats {
     index_t num_factor   = 0;
 };
 
+/// @}
+
 } // namespace cyqlone::qpalm
 
 namespace CYQLONE_NS(cyqlone::qpalm) {
@@ -62,6 +67,9 @@ struct backend_stats_type<CyQPALMBackend<VL, DefaultOrder>> {
 
 } // namespace detail
 
+/// @addtogroup topic-optimization-solvers-ocp
+/// @{
+
 template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
 struct unique_CyQPALMBackend : std::unique_ptr<CyQPALMBackend<VL, DefaultOrder>> {
     unique_CyQPALMBackend()                                             = default;
@@ -72,22 +80,23 @@ struct unique_CyQPALMBackend : std::unique_ptr<CyQPALMBackend<VL, DefaultOrder>>
         : std::unique_ptr<CyQPALMBackend<VL, DefaultOrder>>{std::move(o)} {}
 };
 
+template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+unique_CyQPALMBackend<VL, DefaultOrder>
+make_cyqpalm_backend(const CyqloneStorage<real_t> &ocp, CyqloneData data,
+                     const CyQPALMBackendSettings &settings);
+
+template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+void update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend,
+                            const CyqloneStorage<real_t> &ocp);
+
+template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+void update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend, const LinearOCPStorage &ocp);
+
+/// @}
+
 template <index_t VL, StorageOrder DefaultOrder>
 struct detail::backend_type<unique_CyQPALMBackend<VL, DefaultOrder>> {
     using type = CyQPALMBackend<VL, DefaultOrder>;
 };
-
-template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
-unique_CyQPALMBackend<VL, DefaultOrder>
-make_cyqpalm_backend(const CyqloneStorage<real_t> &ocp, CyqloneData data,
-                           const CyQPALMBackendSettings &settings);
-
-template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
-void update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend,
-                                  const CyqloneStorage<real_t> &ocp);
-
-template <index_t VL, StorageOrder DefaultOrder = StorageOrder::ColMajor>
-void update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend,
-                                  const LinearOCPStorage &ocp);
 
 } // namespace CYQLONE_NS(cyqlone::qpalm)

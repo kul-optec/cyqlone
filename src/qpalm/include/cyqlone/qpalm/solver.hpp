@@ -15,6 +15,7 @@
 
 namespace cyqlone::qpalm {
 
+/// @ingroup topic-optimization-solvers
 struct CYQLONE_QPALM_EXPORT SolverTimings {
     DefaultTimings total;
     DefaultTimings scaling;
@@ -34,8 +35,10 @@ struct CYQLONE_QPALM_EXPORT SolverTimings {
     std::map<std::string, DefaultTimings> backend;
 };
 
+/// @relates SolverTimings
 CYQLONE_QPALM_EXPORT std::ostream &operator<<(std::ostream &, const SolverTimings &);
 
+/// @ingroup topic-optimization-solvers
 struct CYQLONE_QPALM_EXPORT SolverStats {
     unsigned inner_iter         = 0;
     unsigned outer_iter         = 0;
@@ -76,6 +79,7 @@ struct backend_stats_type; // deliberately undefined
 template <class Backend>
 struct SolverImplementation;
 
+/// @ingroup topic-optimization-solvers
 template <class Backend>
 class Solver {
   private:
