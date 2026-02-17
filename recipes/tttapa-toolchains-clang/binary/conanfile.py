@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 libstdc++ cross-compilation toolchains with specific versions of glibc for
 maximal compatibility.
