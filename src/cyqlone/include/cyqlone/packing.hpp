@@ -52,9 +52,9 @@ inline void unpack_full(view<TA, Abi, OA> A, scalar_view<TB, DB, LB, OB> B) {
     const auto ldA             = A.outer_stride() * v;
     const auto ldB             = B.outer_stride();
     const auto batch_stride_B  = B.layer_stride();
-    TA *pA                     = A.data;
+    TA *pA                     = A.data();
     const auto pAend           = pA + A.outer_size() * ldA;
-    TB *pB                     = B.data;
+    TB *pB                     = B.data();
     auto inner_count           = Struc == LowerTriangular ? std::max(A.inner_size(), A.outer_size())
                                  : Struc == UpperTriangular ? index_t{1}
                                                             : A.inner_size();

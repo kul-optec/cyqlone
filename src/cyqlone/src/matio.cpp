@@ -81,7 +81,7 @@ void add_to_mat(mat_t *mat, const std::string &varname,
     const auto r = static_cast<size_t>(data.rows()), c = static_cast<size_t>(data.cols()),
                d = static_cast<size_t>(data.depth());
     if (data.rows() == data.outer_stride() && data.layer_stride() == data.rows() * data.cols()) {
-        write_tensor<3>(mat, varname.c_str(), std::span{data.data, r * c * d},
+        write_tensor<3>(mat, varname.c_str(), std::span{data.data(), r * c * d},
                         {data.rows(), data.cols(), data.depth()});
     } else {
         batmat::matrix::Matrix<real_t, index_t> buffer{{

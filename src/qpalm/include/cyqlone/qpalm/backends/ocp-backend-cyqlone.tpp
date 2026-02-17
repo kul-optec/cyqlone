@@ -451,7 +451,7 @@ struct CyQPALMBackend {
         BATMAT_ASSERT(J.cols() == 1);
         index_t num_different        = 0;
         const auto active_set_change = [&](auto, auto, auto Ji, auto J_oldi) {
-            num_different += std::inner_product(Ji.data, Ji.data + Ji.size(), J_oldi.data, //
+            num_different += std::inner_product(Ji.data(), Ji.data() + Ji.size(), J_oldi.data(), //
                                                 index_t{0}, std::plus<>{}, std::not_equal_to<>{});
         };
         {
@@ -594,19 +594,19 @@ unique_CyQPALMBackend<VL, DefaultOrder>::~unique_CyQPALMBackend() = default;
 template <index_t VL, StorageOrder DefaultOrder>
 unique_CyQPALMBackend<VL, DefaultOrder>
 make_cyqpalm_backend(const CyqloneStorage<> &ocp, CyqloneData data,
-                           const CyQPALMBackendSettings &settings) {
+                     const CyQPALMBackendSettings &settings) {
     return {std::make_unique<CyQPALMBackend<VL, DefaultOrder>>(ocp, data, settings)};
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
 void update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend,
-                                  const CyqloneStorage<real_t> &ocp) {
+                            const CyqloneStorage<real_t> &ocp) {
     backend.update_data(ocp);
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
 void update_cyqpalm_backend(CyQPALMBackend<VL, DefaultOrder> &backend,
-                                  const LinearOCPStorage &ocp) {
+                            const LinearOCPStorage &ocp) {
     const auto cocp = cyqlone::CyqloneStorage<>::build(ocp, backend.ocp.ny_0);
     update_cyqpalm_backend(backend, cocp);
 }

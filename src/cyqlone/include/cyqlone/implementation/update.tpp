@@ -136,7 +136,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
     if constexpr (VL == 1)
         if (i >= p) { // happens in cases where p is not a power of two
             // There's no matrix Q̆(i) to apply, just copy the update matrices forward
-            if (Up_bwd.data != Up_bwd_next.data)
+            if (Up_bwd.data() != Up_bwd_next.data())
                 copy(Up_bwd, Up_bwd_next);
             // If the number of threads is odd, then update_Y won't be called for this column i,
             // so we need to copy the forward update matrices here as well.
@@ -146,7 +146,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_U(index_t l, index_t i) {
             if (i_fwd == 0 && m_update_u0 >= 0)
                 return; // Υ˃(0) = 0
             auto Up_fwd = work_Ups_fwd(l, i_fwd), Up_fwd_next = work_Ups_fwd(l + 1, i_fwd);
-            if (Up_fwd.data != Up_fwd_next.data)
+            if (Up_fwd.data() != Up_fwd_next.data())
                 copy(Up_fwd, Up_fwd_next);
             return;
         }
