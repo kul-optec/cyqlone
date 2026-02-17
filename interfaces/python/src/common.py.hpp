@@ -163,7 +163,7 @@ template <class T, class I, class D, class L, guanaqo::StorageOrder O>
 auto np_view(batmat::matrix::View<T, I, std::integral_constant<I, 1>, D, L, O> matrix) {
     using np_array = nb::ndarray<nb::numpy, T, nb::ndim<3>, nb::device::cpu>;
     return np_array{
-        matrix.data,
+        matrix.data(),
         {
             static_cast<size_t>(matrix.depth()),
             static_cast<size_t>(matrix.rows()),
