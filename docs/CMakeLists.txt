@@ -3,10 +3,14 @@ find_package(Python3 COMPONENTS Interpreter)
 
 option(CYQLONE_DOCS_DOWNLOAD_TAGFILES
     "Whether to download tag files for external documentation" On)
-set(CYQLONE_DOCS_GUANAQO_VERSION "1.0.0-alpha.23" CACHE STRING
+set(CYQLONE_DOCS_GUANAQO_VERSION "1.0.0-alpha.24" CACHE STRING
     "Version of guanaqo to use for documentation")
 set(CYQLONE_DOCS_GUANAQO_URL "https://tttapa.github.io/guanaqo" CACHE STRING
     "URL of guanaqo documentation")
+set(CYQLONE_DOCS_BATMAT_VERSION "0.0.13" CACHE STRING
+    "Version of batmat to use for documentation")
+set(CYQLONE_DOCS_BATMAT_URL "https://tttapa.github.io/batmat" CACHE STRING
+    "URL of batmat documentation")
 
 # Get the git tag and branch, if available, to use for the documentation version.
 function(cyqlone_get_git_ref result_tag result_branch)
@@ -45,16 +49,29 @@ function(cyqlone_get_tag_files result)
         return()
     endif()
     set(tag_files "")
+    set(guanaqo_tag "${CMAKE_CURRENT_BINARY_DIR}/guanaqo-${CYQLONE_DOCS_GUANAQO_VERSION}.tag")
     set(guanaqo_url "${CYQLONE_DOCS_GUANAQO_URL}/${CYQLONE_DOCS_GUANAQO_VERSION}/Doxygen")
-    if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/guanaqo.tag")
-        file(DOWNLOAD "${guanaqo_url}/guanaqo.tag" "${CMAKE_CURRENT_BINARY_DIR}/guanaqo.tag"
+    if(NOT EXISTS "${guanaqo_tag}")
+        file(DOWNLOAD "${guanaqo_url}/guanaqo.tag" "${guanaqo_tag}"
             STATUS download_status)
         if (NOT download_status EQUAL 0)
             message(WARNING "Failed to download guanaqo.tag from ${guanaqo_url}")
         endif()
     endif()
-    if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/guanaqo.tag")
-        list(APPEND tag_files "${CMAKE_CURRENT_BINARY_DIR}/guanaqo.tag = ${guanaqo_url}")
+    if (EXISTS "${guanaqo_tag}")
+        list(APPEND tag_files "${guanaqo_tag} = ${guanaqo_url}")
+    endif()
+    set(batmat_tag "${CMAKE_CURRENT_BINARY_DIR}/batmat-${CYQLONE_DOCS_BATMAT_VERSION}.tag")
+    set(batmat_url "${CYQLONE_DOCS_BATMAT_URL}/${CYQLONE_DOCS_BATMAT_VERSION}/Doxygen")
+    if(NOT EXISTS "${batmat_tag}")
+        file(DOWNLOAD "${batmat_url}/batmat.tag" "${batmat_tag}"
+            STATUS download_status)
+        if (NOT download_status EQUAL 0)
+            message(WARNING "Failed to download batmat.tag from ${batmat_url}")
+        endif()
+    endif()
+    if (EXISTS "${batmat_tag}")
+        list(APPEND tag_files "${batmat_tag} = ${batmat_url}")
     endif()
     set(${result} "${tag_files}" PARENT_SCOPE)
 endfunction()
@@ -95,6 +112,7 @@ if (Doxygen_FOUND AND Python3_Interpreter_FOUND)
         COMMAND ${Python3_EXECUTABLE} -m sphinx
             "${CMAKE_CURRENT_SOURCE_DIR}/source"
             "${DOXYGEN_OUTPUT_DIRECTORY}/Sphinx"
+            -D "breathe_projects.cyqlone=${DOXYGEN_OUTPUT_DIRECTORY}/xml"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Generating Sphinx documentation"
         USES_TERMINAL)

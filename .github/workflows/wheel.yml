@@ -303,7 +303,7 @@ jobs:
         #   repository-url: https://test.pypi.org/legacy/
 
   docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [build-sdist]
     steps:
       - uses: actions/checkout@v4
@@ -335,31 +335,64 @@ jobs:
           conan install . --build=missing -pr scripts/ci/profiles/ci.profile
           -s:h build_type=Debug -s:b build_type=Release
           -s:b compiler.cppstd=20
-      - name: Configure
-        run: >
-          cmake --fresh --preset conan-debug
-          -D DOXYGEN_OUTPUT_DIRECTORY="${{ github.workspace }}/staging"
-          -D CYQLONE_DOCS_GUANAQO_VERSION="develop" # TODO: change once guanaqo has released docs
-      - name: Build documentation
-        run: cmake --build --preset conan-debug --target docs
-      - name: Upload artifact
-        id: deployment
-        uses: actions/upload-pages-artifact@v4
+
+      - name: Generate documentation
+        run: ./scripts/ci/gen-docs.sh "${{ github.workspace }}/staging" conan-debug
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v6
         with:
+          name: documentation
           path: staging
 
+      - run: conan cache clean
+
   deploy-docs:
-    if: ${{ github.event.action == 'released' || github.event.action == 'prereleased' }}
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: [docs, check-release, test-linux-x]
+    name: Deploy Documentation
+    runs-on: ubuntu-24.04
+    needs: docs
     permissions:
-      id-token: write
-      pages: write
-      contents: read
+      contents: write
+    concurrency:
+      group: docs-${{ github.repository }}-gh-pages
+      cancel-in-progress: false  # queue, don’t cancel
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Create a copy of the repo in /tmp/staging.
+      # Create the `gh-pages` branch if it doesn't exist already, check it out.
+      - name: Create staging area
+        run: |
+          rm -rf /tmp/staging
+          cp -ar $GITHUB_WORKSPACE/ /tmp/staging
+          git config --global --add safe.directory /tmp/staging
+          cd /tmp/staging
+          git fetch origin gh-pages:gh-pages ||:
+          git checkout gh-pages || \
+          { git checkout --orphan gh-pages && git rm -rf . && git clean -fxd ; }
+          echo -e 'bib*.aux\ncitelist.doc*\n.conan2\nbuild\ntttapa-conan-recipes' > .gitignore
+
+      - name: Clear old documentation
+        run: ./scripts/ci/gen-docs.sh "/tmp/staging" clean
+
+      - name: Download new documentation
+        uses: actions/download-artifact@v7
+        with:
+          name: documentation
+          path: /tmp/staging
+
+      - name: Generate index
+        run: ./scripts/ci/gen-docs-index.sh "/tmp/staging"
+
+      # Commit the new documentation, squash the commits, and push it to GitHub
+      - name: Commit and push documention
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          commithash=$(git rev-parse HEAD)
+          cd /tmp/staging
+          git add .
+          git commit -m "Documentation for ${commithash}" && \
+          git reset $(git commit-tree HEAD^{tree} -m "Documentation for ${commithash}") && \
+          git push -f origin gh-pages ||:
