@@ -1,6 +1,6 @@
 /* Fonts and Colors */
 html {
-    --font-family-monospace: 'JetBrains Mono',Consolas,Monaco,'Ubuntu Mono',monospace,fixed;
+    --font-family-monospace: 'Andale Mono','JetBrains Mono',Consolas,Monaco,'Ubuntu Mono',monospace,fixed;
     --body-background-color: #DDD;
     --title-background-color: #FFF;
     --header-separator-color: #C8D0E2;
@@ -17,7 +17,7 @@ html {
 }
 /* Dark mode */
 html.dark-mode {
-    --font-family-monospace: 'JetBrains Mono',Consolas,Monaco,'Ubuntu Mono',monospace,fixed;
+    --font-family-monospace: 'Andale Mono','JetBrains Mono',Consolas,Monaco,'Ubuntu Mono',monospace,fixed;
     --page-link-color: rgb(92, 136, 218);
     --page-visited-link-color: rgb(167, 190, 255);
     --body-background-color: black;
@@ -198,7 +198,7 @@ body, table, div, p, dl {
     font-weight: 300;
 }
 span.mono {
-    font-family: monospace;
+    font-family: var(--font-family-monospace);
 }
 h1, h2, h3, h4, h5,
 h2.groupheader, .title, #projectname {
@@ -275,7 +275,7 @@ h2.memtitle, .memproto, .fieldtable th, .reflist dt {
     background-image: none;
 }
 h2.memtitle {
-    /* font-family: monospace; */
+    /* font-family: var(--font-family-monospace); */
     border-radius: 0.4em 0.4em 0 0;
 }
 .memproto {
@@ -296,13 +296,15 @@ span.mlabel {
 .reflist dt {
     border-radius: 0.4em 0.4em 0 0;
 }
-.memdoc a.el,
-.memberdecls a.el {
-    font-size: 0.95em;
-    font-family: monospace;
+.fieldtable .fieldtype,
+.fieldtable .fieldname {
+    font-family: var(--font-family-monospace);
+}
+.memdoc a.el {
+    font-family: var(--font-family-monospace);
 }
 .paramtype {
-    font-family: monospace;
+    font-family: var(--font-family-monospace);
 }
 .memberdecls td, .fieldtable tr {
     transition: none;
@@ -318,7 +320,7 @@ div.textblock li {
     color: var(--description-color);
 }
 .compoundTemplParams {
-    font-family: monospace;
+    font-family: var(--font-family-monospace);
     color: var(--template-color);
     font-size: inherit;
 }
