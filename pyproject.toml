@@ -66,6 +66,7 @@ install_components = ["python_modules", "python_nanobind", "python_stubs"]
 [tool.py-build-cmake.conan]
 args = [
     "--build=missing",
+    "-o&:with_examples=False",
     "-o&:with_python=True",
     "-o&:with_matio=True",
     "-c*:tools.build:skip_test=True",

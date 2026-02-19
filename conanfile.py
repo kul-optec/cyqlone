@@ -25,6 +25,7 @@ class CyqloneRecipe(ConanFile):
     package_id_non_embed_mode = "full_mode"
     bool_cyqlone_options = {
         "with_benchmarks": False,
+        "with_examples": True,
         "with_qpalm": True,
         "with_general_qpalm": False,
         "with_example_problems": True,
