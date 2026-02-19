@@ -119,6 +119,20 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_solve_skip_first(Context &ctx, 
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::factor_solve(Context &ctx, mut_view<> λ, index_t stride) {
+    factor_solve_impl<true, true>(ctx, λ, stride);
+}
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::factor(Context &ctx) {
+    factor_solve_impl<true, false>(ctx, {});
+}
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void TricyqleSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> λ,
+                                                        index_t stride) {
+    factor_solve_impl<false, true>(ctx, λ, stride);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::factor_solve(Context &ctx, value_type γ, view<> Σ,
                                                       mut_view<> ux, mut_view<> λ) {
     factor_solve_impl<true, true>(ctx, γ, Σ, ux, λ);

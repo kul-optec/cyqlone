@@ -69,8 +69,8 @@ struct TricyqleSolver {
     /// @name Problem dimensions
     /// @{
 
-    const index_t block_size; ///< Block size of the block-tridiagonal system.
-    const index_t max_rank;   ///< Maximum update rank.
+    const index_t block_size;   ///< Block size of the block-tridiagonal system.
+    const index_t max_rank = 0; ///< Maximum update rank.
 
     /// Whether the block-tridiagonal system is circular (nonzero top-right & bottom-left corners).
     bool circular = false;
@@ -98,13 +98,13 @@ struct TricyqleSolver {
     const index_t p = 8;
     /// Vector length.
     static constexpr index_t v = VL;
-    /// log₂(p), logarithm of the number of processors/threads, rounded up.
+    /// log₂(p), logarithm of the number of processors/threads @ref p, rounded up.
     [[nodiscard]] constexpr index_t lp() const { return ceil_log2(p); }
     /// The number of processors @ref p rounded up to the next power of two.
     [[nodiscard]] constexpr index_t ceil_p() const { return 1 << lp(); }
-    /// The number of parallel execution units P rounded up to the next power of two.
+    /// The number of parallel execution units `P = p * v` rounded up to the next power of two.
     [[nodiscard]] constexpr index_t ceil_P() const { return 1 << (lp() + lv()); }
-    /// log₂(v), logarithm of the vector length.
+    /// log₂(v), logarithm of the vector length @ref v.
     [[nodiscard]] static constexpr index_t lv() { return ceil_log2(v); }
 
     /// Represents a SIMD vector of width @ref v storing values of type @ref value_type.
@@ -215,12 +215,26 @@ struct TricyqleSolver {
         return func(ctx.index, λ.batch(ctx.index));
     }
 
-    /// Fused factorization and forward solve.
-    /// Also factors the final block tridiagonal system of size @ref v so it can be solved using PCR
-    /// or PCG. Specifically, for PCG, the diagonal blocks of this final system are stored in
-    /// `cr_L.batch(0)` and the subdiagonal blocks are stored in `cr_Y.batch(0)`. The same is true
-    /// for PCR, in addition to the full PCR factorization being stored in @ref pcr_L, @ref pcr_U
-    /// and @ref pcr_Y.
+    /// Fused factorization and forward solve. Performs CR to reduce the system down to a single
+    /// block tridiagonal system of size @ref v which is then solved using PCR or PCG.
+    ///
+    /// @pre The workspaces `cr_L.batch(i)` contain the diagonal blocks `M(i:v:p)` of the block
+    ///      tridiagonal system (see @ref init_diag).
+    /// @pre If `p > 1`, the workspaces `cr_Y.batch(i)` with odd i contain the subdiagonal blocks
+    ///      `K(i:v:p)` of the block tridiagonal system (see @ref init_subdiag).
+    /// @pre If `p > 1`, the workspaces `cr_U.batch(i)` with odd i contain the superdiagonal blocks
+    ///      `K(i-1:v:p)ᵀ` of the block tridiagonal system (see @ref init_subdiag).
+    /// @pre If `p = 1`, the workspace `cr_Y.batch(0)` contains the subdiagonal blocks `K(0:v:1)`
+    ///      of the block tridiagonal system, and `cr_U.batch(0)` is not used.
+    /// @post The workspaces `cr_L.batch(i)` with `i > 0` contain the diagonal blocks of the CR
+    ///       Cholesky factor. `cr_Y.batch(i)` and `cr_U.batch(i)` contain the subdiagonal blocks.
+    ///       The final batch `cr_L.batch(0)` contains the diagonal blocks of the Schur complement
+    ///       of all other blocks, which is the input to the PCR or PCG solver. The batch
+    ///       `pcr_L.batch(0)` contains its Cholesky factorizations. The subdiagonal blocks of this
+    ///       Schur complement are stored in `pcr_Y.batch(0)`.
+    /// @post If the PCR solver was selected, the full PCR factorization is stored in @ref pcr_L,
+    ///       @ref pcr_U and @ref pcr_Y.
+    ///
     /// @param ctx  Parallel execution context for communication/synchronization between threads.
     /// @param λ    On entry, the right-hand side of the linear system. On exit, the solution of the
     ///             forward solve phase.
@@ -230,17 +244,13 @@ struct TricyqleSolver {
     /// Note that a backward solve of the final block `λ.batch(0)` is performed during the forward
     /// solve phase, so `λ.batch(0)` contains (part of) the final solution. Performing the forward
     /// and backward solves separately for this block is not possible, because it is solved using
-    /// PCR or PCG which both solve the full block tridiagonal system at once, rather than using an
-    /// explicit CR Cholesky factorization.
-    void factor_solve(Context &ctx, mut_view<> λ, index_t stride = 1) {
-        factor_solve_impl<true, true>(ctx, λ, stride);
-    }
+    /// PCR or PCG. Both methods solve the full block tridiagonal system at once, rather than using
+    /// a single explicit CR Cholesky factorization with distinct forward and backward solves.
+    void factor_solve(Context &ctx, mut_view<> λ, index_t stride = 1);
     /// Perform only the factorization as described by @ref factor_solve.
-    void factor(Context &ctx) { factor_solve_impl<true, false>(ctx, {}); }
+    void factor(Context &ctx);
     /// Perform only the forward solve as described by @ref factor_solve.
-    void solve_forward(Context &ctx, mut_view<> λ, index_t stride = 1) {
-        factor_solve_impl<false, true>(ctx, λ, stride);
-    }
+    void solve_forward(Context &ctx, mut_view<> λ, index_t stride = 1);
 
     /// Perform the backward solve phase, after the forward solve phase has been performed by
     /// @ref factor_solve.
@@ -347,13 +357,26 @@ struct TricyqleSolver {
 
     /// @}
 
-    /// @name Low-level CR factorization and solve routines
+    /// @name Low-level factorization and solve routines
     /// @{
 
     /// Fused factorization and forward solve. Unlike @ref factor_solve, this function assumes that
     /// the odd diagonal blocks in the first level of CR have already been factorized and solved.
     /// This allows the user to fuse the evaluation and factorization of these blocks, possibly
     /// enabling higher performance by avoiding an additional trip to memory.
+    /// @pre If `p > 1`, the workspaces `cr_L.batch(i)` contain the diagonal blocks M(i) for even i,
+    ///      and the Cholesky factors L(i) of M(i) for odd i.
+    /// @pre If `p = 1`, the workspace `cr_L.batch(0)` contains the diagonal block M(0), and the
+    ///      workspace `pcr_L.batch(0)` contains its Cholesky factor L(0).
+    /// @pre If `p > 1`, the workspaces `cr_Y.batch(i)` contain the subdiagonal blocks K(i) for
+    ///      odd i (uninitialized for even i).
+    /// @pre If `p = 1`, the workspace `cr_Y.batch(0)` contains the subdiagonal block K(0).
+    /// @pre If `p > 1`, the workspace `cr_U.batch(i)` contains the superdiagonal blocks
+    ///      K(i-1)ᵀ for odd i (uninitialized for even i).
+    /// @pre If `p = 1`, the workspace `cr_U.batch(0)` is not used.
+    /// @pre If `p > 1`, the right-hand sides `λ.batch(stride * i)` contain the right-hand sides of
+    ///      the system for even i, and the right-hand sides multiplied by L(i)⁻¹ for odd i.
+    /// @pre If `p = 1`, the right-hand side `λ.batch(0)` contains the right-hand side of the system.
     template <bool Factor = true, bool Solve = true>
     void factor_solve_skip_first(Context &ctx, mut_view<> λ, index_t stride = 1);
     /// Factorization-only variant of @ref factor_solve_skip_first.
@@ -365,6 +388,11 @@ struct TricyqleSolver {
     /// Implementation of @ref factor_solve.
     template <bool Factor = true, bool Solve = true>
     void factor_solve_impl(Context &ctx, mut_view<> λ, index_t stride = 1);
+
+    /// @}
+
+    /// @name Low-level CR factorization and solve routines
+    /// @{
 
     [[nodiscard]] index_t cr_thread_assignment(index_t l, index_t c) const;
     /// Compute a block U in the Cholesky factor for the given CR level @p l and column index @p iU.
