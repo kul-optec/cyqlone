@@ -37,7 +37,7 @@ using namespace batmat::linalg;
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, index_t iU) {
     if constexpr (v == 1)
-        if (iU >= p) // happens in cases where p is not a power of two
+        if (iU >= p && !circular) // happens in cases where p is not a power of two
             return;
     CYQ_TRACE_READ(Kb, iU, 0);
     CYQ_TRACE_READ(L, iU, 1);
@@ -51,7 +51,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, i
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, index_t iY) {
     if constexpr (v == 1)
-        if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
+        if (iY + (1 << l) >= p && !circular) // Y(iY)=0 for scalar case
             return;
     CYQ_TRACE_READ(Kf, iY, 0);
     CYQ_TRACE_READ(L, iY, 0);
@@ -65,7 +65,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t i) {
     const index_t i_prev = sub_wrap_ceil_p(i, 1 << l), i_next = add_wrap_ceil_p(i, 1 << l);
     if constexpr (v == 1)
-        if (i + (1 << l) >= p) // Y(i)=0 for scalar case
+        if (i + (1 << l) >= p && !circular) // Y(i)=0 for scalar case
             return;
 #if CYQLONE_FACTOR_DO_PREFETCH
     for (index_t c = 0; c < cr_U.cols(); c += 1)
@@ -97,7 +97,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
     // 28|  if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
     const bool factor_next = ν2p(i) == l + 1;
     if constexpr (v == 1) {
-        if (i == 0) { // Y(iY)=0 for M on the first thread
+        if (i == 0 && !circular) { // Y(iY)=0 for M on the first thread
             CYQ_TRACE_READ(M, i, 0);
             CYQ_TRACE_READ(U, iU, 0);
             GUANAQO_TRACE("Subtract UUᵀ", i);
@@ -113,7 +113,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
             factor_next ? syrk_sub_potrf(U, M, L0) // chol(M - UUᵀ)
                         : syrk_sub(U, M);
             return;
-        } else if (iU >= p) { // happens in cases where p is not a power of two
+        } else if (iU >= p && !circular) { // happens in cases where p is not a power of two
             CYQ_TRACE_READ(M, i, 0);
             CYQ_TRACE_READ(Y, iY, 0);
             GUANAQO_TRACE("Subtract YYᵀ", i);
@@ -163,7 +163,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
         if (i != 0)
             syrk_sub(Y, M);
         else if constexpr (v > 1)
-            syrk_sub(Y, M, with_rotate_C<1>, with_rotate_D<1>, with_mask_D<1>);
+            syrk_sub(Y, M, with_rotate_C<1>, with_rotate_D<1>);
+        else if (circular)
+            syrk_sub(Y, M);
     }
     // 28| if ν₂(i) = l+1:  L(i) = chol(M(i)⁺)
     if (factor_next && i == 0) {
@@ -194,7 +196,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU, mut_view<> λ,
                                                           index_t stride) const {
     if constexpr (v == 1)
-        if (iU >= p) // happens in cases where p is not a power of two
+        if (iU >= p && !circular) // happens in cases where p is not a power of two
             return;
     const index_t iL  = sub_wrap_ceil_p(iU, 1 << l); // = k, iU = k+2^l
     const index_t diU = iU * stride, diL = iL * stride;
@@ -208,7 +210,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY, mut_view<> λ,
                                                           mut_view<> w, index_t stride) const {
     if constexpr (v == 1)
-        if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
+        if (iY + (1 << l) >= p && !circular) // Y(iY)=0 for scalar case
             return;
     const index_t iL  = add_wrap_ceil_p(iY, 1 << l); // = k, iY = k-2^l
     const index_t diY = iY * stride;
@@ -223,7 +225,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL
     const index_t diL = iL * stride;
     const index_t iY  = sub_wrap_ceil_p(iL, 1 << l);
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
-    if (v > 1 || iY + (1 << l) < p) { // Equilvalent to iL >= (1 << l), but kept for clarity
+    if (v > 1 || iY + (1 << l) < p || circular) { // Equilvalent to iL >= (1 << l), kept for clarity
         // b(diL) -= w(iL)
         GUANAQO_TRACE("Subtract work b", iL);
         iL == 0 ? sub(λ.batch(diL), w.batch(iL), with_rotate<-1>) //
@@ -241,7 +243,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU, mut_view<> λ,
                                                            mut_view<> w, index_t stride) const {
     if constexpr (v == 1)
-        if (iU >= p) // happens in cases where p is not a power of two
+        if (iU >= p && !circular) // happens in cases where p is not a power of two
             return;
     const index_t iL  = sub_wrap_ceil_p(iU, 1 << l); // = k, iU = k+2^l
     const index_t diL = iL * stride;
@@ -255,7 +257,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY, mut_view<> λ,
                                                            index_t stride) const {
     if constexpr (v == 1)
-        if (iY + (1 << l) >= p) // Y(iY)=0 for scalar case
+        if (iY + (1 << l) >= p && !circular) // Y(iY)=0 for scalar case
             return;
     const index_t iL  = add_wrap_ceil_p(iY, 1 << l); // = k, iY = k-2^l
     const index_t diL = iL * stride, diY = iY * stride;
@@ -263,7 +265,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     GUANAQO_TRACE("Subtract Yᵀb", iL);
     // b[diY] -= Y[iY]ᵀ b[diL]
-    iL == 0 ? gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY), with_shift_B<1>) //
+    iL == 0 ? gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY), with_rotate_B<1>) //
             : gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY));
 }
 
@@ -332,7 +334,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::prefetch_U([[maybe_unused]] index_t l,
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void TricyqleSolver<VL, T, DefaultOrder>::prefetch_Y(index_t l, index_t iY) const {
-    if (v == 1 && iY + (1 << l) >= p)
+    if (v == 1 && iY + (1 << l) >= p && !circular)
         return;
     GUANAQO_TRACE("prefetch Y", iY);
     prefetch(cr_Y.batch(iY));

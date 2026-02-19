@@ -1,4 +1,5 @@
 #include <cyqlone/cyqlone.hpp>
+#include <cyqlone/linalg.hpp>
 
 #include <batmat/assume.hpp>
 #include <batmat/loop.hpp>
@@ -55,17 +56,27 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     static constexpr auto r = 1 << Level; // 2^l
 
     if constexpr (Level + 1 == lv() && merge_last_level_pcr) {
-        GUANAQO_TRACE("Merge last PCR level", Level, K.depth() / 2 * K.rows() * K.cols());
         // In the last level, we only have a single sub-diagonal block, which is computed as
         // K(k) = -Y(k+2^l) U(k+2^l)ᵀ - U(k-2^l) Y(k-2^l)ᵀ. Since 2^l = -2^l mod v, we only need to
         // compute one term, and then add its transpose, K(k) ← K(k) + K(k+2^l)ᵀ. Because the right
         // half of the batches in K are zero in the absence of coupling between the first and
         // last blocks, we can perform the transposition in-place.
-        using namespace batmat::datapar;
-        using simd_half = deduced_simd<T, v / 2>;
-        for (index_t j = 0; j < K.cols(); ++j)
-            for (index_t i = 0; i < K.rows(); ++i)
-                aligned_store(aligned_load<simd_half>(&K(0, j, i)), &K(v / 2, i, j));
+        if (!circular) {
+            GUANAQO_TRACE("Merge last PCR level", Level, K.depth() / 2 * K.rows() * K.cols());
+            using namespace batmat::datapar;
+            using simd_half = deduced_simd<T, v / 2>;
+            for (index_t j = 0; j < K.cols(); ++j)
+                for (index_t i = 0; i < K.rows(); ++i)
+                    aligned_store(aligned_load<simd_half>(&K(0, j, i)), &K(v / 2, i, j));
+        } else {
+            GUANAQO_TRACE("Merge last PCR level", Level, 2 * K.depth() * K.rows() * K.cols());
+            // In case of circular coupling, we cannot exploit the complementarity of the batches,
+            // so we cannot perform the transposition in-place. Instead, we transpose it into U
+            // first (U is not used here, so we can overwrite it), and then add it to K.
+            // TODO: is there a better way?
+            batmat::linalg::copy(K.transposed(), U, with_rotate<-r>);
+            linalg::add(K, U);
+        }
     }
 
     //  8|  U(k) = K(k-2^l)ᵀ L(k)⁻ᵀ
@@ -89,7 +100,6 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level() {
         //       storage. But this is more complex, as we need to transpose it here, so we can
         //       perform the trsm in the next level in-place (which is not possible if the input
         //       and output are transposed).
-        // TODO: check if we need with_mask_D<-r> here.
     }
 }
 
@@ -114,11 +124,21 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level_parallel(Context &ctx
         // compute one term, and then add its transpose, K(k) ← K(k) + K(k+2^l)ᵀ. Because the right
         // half of the batches in K are zero in the absence of coupling between the first and
         // last blocks, we can perform the transposition in-place.
-        using namespace batmat::datapar;
-        using simd_half = deduced_simd<T, v / 2>;
-        for (index_t j = 0; j < K.cols(); ++j)
-            for (index_t i = 0; i < K.rows(); ++i)
-                aligned_store(aligned_load<simd_half>(&K(0, j, i)), &K(v / 2, i, j));
+        if (!circular) {
+            using namespace batmat::datapar;
+            using simd_half = deduced_simd<T, v / 2>;
+            for (index_t j = 0; j < K.cols(); ++j)
+                for (index_t i = 0; i < K.rows(); ++i)
+                    aligned_store(aligned_load<simd_half>(&K(0, j, i)), &K(v / 2, i, j));
+        } else {
+            GUANAQO_TRACE("Merge last PCR level", Level, 2 * K.depth() * K.rows() * K.cols());
+            // In case of circular coupling, we cannot exploit the complementarity of the batches,
+            // so we cannot perform the transposition in-place. Instead, we transpose it into U
+            // first (U is not used here, so we can overwrite it), and then add it to K.
+            // TODO: is there a better way?
+            batmat::linalg::copy(K.transposed(), U, with_rotate<-r>);
+            linalg::add(K, U);
+        }
     }
 
     ctx.arrive_and_wait(); // wait for L and K

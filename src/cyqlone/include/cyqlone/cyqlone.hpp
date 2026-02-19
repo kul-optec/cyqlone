@@ -72,6 +72,9 @@ struct TricyqleSolver {
     const index_t block_size; ///< Block size of the block-tridiagonal system.
     const index_t max_rank;   ///< Maximum update rank.
 
+    /// Whether the block-tridiagonal system is circular (nonzero top-right & bottom-left corners).
+    bool circular = false;
+
     /// @}
 
     /// @name Solver parameters
@@ -104,14 +107,23 @@ struct TricyqleSolver {
     /// log₂(v), logarithm of the vector length.
     [[nodiscard]] static constexpr index_t lv() { return ceil_log2(v); }
 
-    using simd          = batmat::datapar::deduced_simd<value_type, v>;
-    using vl_t          = std::integral_constant<index_t, v>;
-    using align_t       = std::integral_constant<index_t, v * alignof(value_type)>;
+    /// Represents a SIMD vector of width @ref v storing values of type @ref value_type.
+    using simd = batmat::datapar::deduced_simd<value_type, v>;
+    /// Integral constant type for the vector length.
+    using vl_t = std::integral_constant<index_t, v>;
+    /// Integral constant type for the alignment of the batched matrix data structures.
+    using align_t = std::integral_constant<index_t, v * alignof(value_type)>;
+    /// Parallel execution context, storing synchronization primitives and shared data for the
+    /// parallel algorithms.
     using SharedContext = parallel::SharedContext;
-    using Context       = parallel::Context<SharedContext>;
+    /// Context type passed to each thread during parallel execution, enabling synchronization
+    /// and parallel broadcasts/reductions with the other threads.
+    using Context = parallel::Context<SharedContext>;
+    /// @copydoc SharedContext
     std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
 
-    /// Run a function in parallel.
+    /// Run a function in parallel on all @ref p threads. Each thread will call the function with
+    /// the parallel execution context as an argument (see @ref Context).
     void run(auto &&func) const { return parallel_ctx->run(std::forward<decltype(func)>(func)); }
 
     /// @}
@@ -157,18 +169,109 @@ struct TricyqleSolver {
 
     /// @}
 
+    /// @name Factorization and solve routines
+    /// @{
+
+    /// Initialize the diagonal blocks M of the block tridiagonal system using a user-provided
+    /// function. The function is called with an index `i` in `[0, p)` and a mutable view to the
+    /// compact workspace of depth `v` where the diagonal blocks `M(i+l*p)` for `l` in `[0, v)`
+    /// should be stored. Copying non-compact data to this workspace can be achieved using the
+    /// @ref cyqlone::linalg::pack function.
+    decltype(auto) init_diag(Context &ctx, auto &&func) {
+        return func(ctx.index, cr_L.batch(ctx.index));
+    }
+    /// Initialize the subdiagonal blocks K of the block tridiagonal system using a user-provided
+    /// function. The function is called with an index `i` in `[0, p)` and a mutable view to the
+    /// compact workspace of depth `v` where the subdiagonal blocks `K(i+l*p)` for `l` in `[0, v)`
+    /// should be stored. Copying non-compact data to this workspace can be achieved using the
+    /// @ref cyqlone::linalg::pack function.
+    decltype(auto) init_subdiag(Context &ctx, auto &&func) {
+        return (p == 1 || ctx.index & 1) ? func(ctx.index, cr_Y.batch(ctx.index))
+                                         : func(ctx.index, cr_U.batch(ctx.index + 1).transposed());
+    }
+    /// Initialize the right-hand side of the linear system using a user-provided function. The
+    /// function is called with an index `i` in `[0, p)` and a mutable view of the batch of @p b
+    /// of depth `v` where the right-hand side blocks `b(i+l*p)` for `l` in `[0, v)` should be
+    /// stored. Copying non-compact data to this batch can be achieved using the
+    /// @ref cyqlone::linalg::pack function.
+    decltype(auto) init_rhs(Context &ctx, mut_view<> b, auto &&func) const {
+        return func(ctx.index, b.batch(ctx.index));
+    }
+    /// Get access to the solution computed by this thread using a user-provided function. The
+    /// function is called with an index `i` in `[0, p)` and a view to the compact batch of @p λ
+    /// of depth `v` where the solution blocks `λ(i+l*p)` for `l` in `[0, v)` are stored. Copying
+    /// this batch to a non-compact layout can be achieved using the @ref cyqlone::linalg::unpack
+    /// function.
+    decltype(auto) get_solution(Context &ctx, view<> λ, auto &&func) const {
+        return func(ctx.index, λ.batch(ctx.index));
+    }
+    /// @copydoc get_solution
+    decltype(auto) get_solution(Context &ctx, mut_view<> λ, auto &&func) const {
+        return func(ctx.index, λ.batch(ctx.index));
+    }
+    /// @copydoc get_solution
+    template <class Λ, class F>
+    decltype(auto) get_solution(Context &ctx, Λ &&λ, F &&func) const {
+        return func(ctx.index, λ.batch(ctx.index));
+    }
+
+    /// Fused factorization and forward solve.
+    /// Also factors the final block tridiagonal system of size @ref v so it can be solved using PCR
+    /// or PCG. Specifically, for PCG, the diagonal blocks of this final system are stored in
+    /// `cr_L.batch(0)` and the subdiagonal blocks are stored in `cr_Y.batch(0)`. The same is true
+    /// for PCR, in addition to the full PCR factorization being stored in @ref pcr_L, @ref pcr_U
+    /// and @ref pcr_Y.
+    /// @param ctx  Parallel execution context for communication/synchronization between threads.
+    /// @param λ    On entry, the right-hand side of the linear system. On exit, the solution of the
+    ///             forward solve phase.
+    /// @param stride   Stride (in number of batches) between batches of @p λ. In total, @p λ
+    ///                 contains `stride * p` batches, but only every `stride`-th batch is accessed.
+    ///
+    /// Note that a backward solve of the final block `λ.batch(0)` is performed during the forward
+    /// solve phase, so `λ.batch(0)` contains (part of) the final solution. Performing the forward
+    /// and backward solves separately for this block is not possible, because it is solved using
+    /// PCR or PCG which both solve the full block tridiagonal system at once, rather than using an
+    /// explicit CR Cholesky factorization.
+    void factor_solve(Context &ctx, mut_view<> λ, index_t stride = 1) {
+        factor_solve_impl<true, true>(ctx, λ, stride);
+    }
+    /// Perform only the factorization as described by @ref factor_solve.
+    void factor(Context &ctx) { factor_solve_impl<true, false>(ctx, {}); }
+    /// Perform only the forward solve as described by @ref factor_solve.
+    void solve_forward(Context &ctx, mut_view<> λ, index_t stride = 1) {
+        factor_solve_impl<false, true>(ctx, λ, stride);
+    }
+
+    /// Perform the backward solve phase, after the forward solve phase has been performed by
+    /// @ref factor_solve.
+    /// @param ctx  Parallel execution context for communication/synchronization between threads.
+    /// @param λ    On entry, the solution of the forward solve phase. On exit, the solution of the
+    ///             full linear system.
+    /// @param work  Workspace of `p * v` column vectors of size @ref block_size.
+    /// @param stride   Stride (in number of batches) between batches of @p λ. In total, @p λ
+    ///                 contains `stride * p` batches, but only every `stride`-th batch is accessed.
+    void solve_reverse(Context &ctx, mut_view<> λ, mut_view<> work, index_t stride = 1) const;
+    void solve_reverse(Context &ctx, mut_view<> λ, index_t stride = 1) {
+        solve_reverse(ctx, λ, work_cr, stride);
+    }
+
+    /// @}
+
     /// @name Cyclic reduction data structures
     /// @{
 
     /// Diagonal blocks of the Cholesky factor of the Schur complement (used during CR).
+    /// Batch indices correspond to block column indices of the block tridiagonal system.
     matrix<default_order> cr_L = [this] {
         return matrix<default_order>{{.depth = p * v, .rows = block_size, .cols = block_size}};
     }();
     /// Subdiagonal blocks U of the Cholesky factor of the Schur complement (used during CR).
+    /// Batch indices correspond to block column indices of the block tridiagonal system.
     matrix<default_order> cr_U = [this] {
         return matrix<default_order>{{.depth = p * v, .rows = block_size, .cols = block_size}};
     }();
     /// Subdiagonal blocks Y of the Cholesky factor of the Schur complement (used during CR).
+    /// Batch indices correspond to block column indices of the block tridiagonal system.
     matrix<default_order> cr_Y = [this] {
         return matrix<default_order>{{.depth = p * v, .rows = block_size, .cols = block_size}};
     }();
@@ -247,17 +350,50 @@ struct TricyqleSolver {
     /// @name Low-level CR factorization and solve routines
     /// @{
 
-    template <bool Factor, bool Solve>
-    void factor_solve_cr(Context &ctx, mut_view<> λ, index_t stride);
-    [[nodiscard]] index_t cr_thread_assignment(index_t l, index_t c) const;
-    void factor_U(index_t l, index_t iU);
-    void factor_Y(index_t l, index_t iY);
-    void factor_L(index_t l, index_t bi);
-    void update_K(index_t l, index_t bi);
+    /// Fused factorization and forward solve. Unlike @ref factor_solve, this function assumes that
+    /// the odd diagonal blocks in the first level of CR have already been factorized and solved.
+    /// This allows the user to fuse the evaluation and factorization of these blocks, possibly
+    /// enabling higher performance by avoiding an additional trip to memory.
+    template <bool Factor = true, bool Solve = true>
+    void factor_solve_skip_first(Context &ctx, mut_view<> λ, index_t stride = 1);
+    /// Factorization-only variant of @ref factor_solve_skip_first.
+    void factor_skip_first(Context &ctx) { factor_solve_skip_first<true, false>(ctx, {}); }
+    /// Solution-only variant of @ref factor_solve_skip_first.
+    void solve_forward_skip_first(Context &ctx, mut_view<> λ, index_t stride = 1) {
+        factor_solve_skip_first<false, true>(ctx, λ, stride);
+    }
+    /// Implementation of @ref factor_solve.
+    template <bool Factor = true, bool Solve = true>
+    void factor_solve_impl(Context &ctx, mut_view<> λ, index_t stride = 1);
 
+    [[nodiscard]] index_t cr_thread_assignment(index_t l, index_t c) const;
+    /// Compute a block U in the Cholesky factor for the given CR level @p l and column index @p iU.
+    void factor_U(index_t l, index_t iU);
+    /// Compute a block Y in the Cholesky factor for the given CR level @p l and column index @p iY.
+    void factor_Y(index_t l, index_t iY);
+    /// Update and factorize a block L in the Cholesky factor for CR level @p l+1 and column index
+    /// @p i, using the previously computed blocks U and Y in the same row at level @p l.
+    void factor_L(index_t l, index_t i);
+    /// Compute a subdiagonal block K of the Schur complement for CR level @p l+1 and column index
+    /// @p i, using the previously computed blocks U and Y in the same row at level @p l.
+    void update_K(index_t l, index_t i);
+
+    /// Update the right-hand side @p λ during the forward solve phase of CR after computing
+    /// block @p iU of @p λ at level @p l, subtracting the product `U(iU) λ(iU)` from the block
+    /// of @p λ in the same row as `U(iU)`.
+    /// The @p stride parameter specifies the stride between consecutive blocks of @p λ.
     void solve_u_forward(index_t l, index_t iU, mut_view<> λ, index_t stride) const;
+    /// Update the right-hand side @p λ during the forward solve phase of CR after computing
+    /// block @p iY of @p λ at level @p l, subtracting the product `Y(iY) λ(iY)` from the block
+    /// of @p λ in the same row as `Y(iY)`.
+    /// The product `Y(iY) λ(iY)` is stored in the workspace @p w to allow it to be computed
+    /// concurrently with @ref solve_u_forward, which updates the same block of @p λ.
+    /// The @p stride parameter specifies the stride between consecutive blocks of @p λ.
     void solve_y_forward(index_t l, index_t iY, mut_view<> λ, mut_view<> w, index_t stride) const;
-    void solve_λ_forward(index_t l, index_t biL, mut_view<> λ, view<> w, index_t stride) const;
+    /// Apply the updates to block @p iL of the right-hand side from @ref solve_u_forward and
+    /// @ref solve_y_forward, and then solve with the diagonal block L for the next level @p l+1.
+    /// The @p stride parameter specifies the stride between consecutive blocks of @p λ.
+    void solve_λ_forward(index_t l, index_t iL, mut_view<> λ, view<> w, index_t stride) const;
 
     /// @}
 
@@ -265,28 +401,61 @@ struct TricyqleSolver {
     /// @{
 
     static constexpr bool merge_last_level_pcr = true;
+    /// Compute the parallel cyclic reduction factorization of the final block tridiagonal system
+    /// of size @ref v.
+    /// The function assumes that the Cholesky factors of the diagonal blocks are stored in
+    /// `cr_L.batch(0)`, and the subdiagonal blocks are stored in `cr_Y.batch(0)`.
+    /// This variant computes both subdiagonal blocks on a single thread.
     void factor_pcr();
+    /// Perform a single level of the PCR factorization.
+    /// This variant computes both subdiagonal blocks on a single thread.
     template <index_t Level>
     void factor_pcr_level();
+    /// Compute the parallel cyclic reduction factorization of the final block tridiagonal system
+    /// of size @ref v.
+    /// This variant computes the subdiagonal blocks in parallel on different threads.
     void factor_pcr_parallel(Context &ctx);
+    /// Perform a single level of the PCR factorization.
+    /// This variant computes the subdiagonal blocks in parallel on different threads.
     template <index_t Level>
     void factor_pcr_level_parallel(Context &ctx);
 
+    /// Solve a linear system with the final block tridiagonal system of size @ref v using the PCR
+    /// factorization.
+    void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
+    /// @copydoc solve_pcr
+    void solve_pcr(mut_batch_view<> λ) { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
+    /// Perform a single level of the PCR solve.
     template <index_t Level>
     void solve_pcr_level(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
-    void solve_pcr(mut_batch_view<> λ, mut_batch_view<> work_pcr) const;
-    void solve_pcr(mut_batch_view<> λ) { solve_pcr(λ, work_pcg.batch(0).left_cols(1)); }
 
     /// @}
 
     /// @name Low-level PCG routines
     /// @{
 
+    /// Multiply a vector by the final block tridiagonal matrix of size @ref v.
+    /// The matrix is represented by the Cholesky factors of the diagonal blocks L and the
+    /// subdiagonal blocks K.
+    /// ~~~
+    /// M = [ M(0)  Kᵀ(0)             ]  where M(i) = L(i) L(i)ᵀ
+    ///     [ K(0)  M(1)  Kᵀ(1)       ]
+    ///     [       K(1)  M(2)  Kᵀ(2) ]
+    ///     [             K(2)  M(3)  ]
+    /// ~~~
     value_type mul_Mv(batch_view<> p, mut_batch_view<> Mp, batch_view<default_order> L,
                       batch_view<default_order> K) const;
+    /// Multiply a vector by the preconditioner for the final block tridiagonal system of size
+    /// @ref v.
+    /// @see mul_Mv
     value_type mul_precond(batch_view<> r, mut_batch_view<> z, mut_batch_view<> w,
                            batch_view<default_order> L, batch_view<default_order> K) const;
+    /// Solve a linear system with the final block tridiagonal system of size @ref v using the
+    /// preconditioned conjugate gradient method.
+    /// The function assumes that the Cholesky factors of the diagonal blocks are stored in
+    /// `cr_L.batch(0)`, and the subdiagonal blocks are stored in `cr_Y.batch(0)`.
     void solve_pcg(mut_batch_view<> λ, mut_batch_view<> work_pcg) const;
+    /// @copydoc solve_pcg
     void solve_pcg(mut_batch_view<> λ) { solve_pcg(λ, work_pcg.batch(0)); }
 
     /// @}
@@ -294,10 +463,8 @@ struct TricyqleSolver {
     /// @name Low-level reverse solve routines
     /// @{
 
-    void solve_reverse_cr(Context &ctx, mut_view<> λ, mut_view<> work, index_t stride) const;
-    void solve_reverse_cr_parallel(Context &ctx, mut_view<> λ, mut_view<> work,
-                                   index_t stride) const;
-    void solve_reverse_cr_serial(mut_view<> λ, mut_view<> work, index_t stride) const;
+    void solve_reverse_parallel(Context &ctx, mut_view<> λ, mut_view<> work, index_t stride) const;
+    void solve_reverse_serial(mut_view<> λ, mut_view<> work, index_t stride) const;
     void solve_u_backward(index_t l, index_t iU, mut_view<> λ, mut_view<> w, index_t stride) const;
     void solve_y_backward(index_t l, index_t iY, mut_view<> λ, index_t stride) const;
     void solve_λ_backward(index_t biL, mut_view<> λ, view<> w, index_t stride) const;
@@ -343,7 +510,7 @@ struct TricyqleSolver {
 
     /// @}
 
-    /// @name Prefetching
+    /// @name Low-level prefetching
     /// @{
 
     template <StorageOrder O>
