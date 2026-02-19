@@ -14,11 +14,12 @@
 
 namespace CYQLONE_NS(cyqlone) {
 
-#define CYQLONE_INSTANTIATE_SOLVER(T, VL)                                                          \
-    template class TricyqleSolver<VL, T, StorageOrder::ColMajor>;                                  \
-    template class TricyqleSolver<VL, T, StorageOrder::RowMajor>;                                  \
-    template class CyqloneSolver<VL, T, StorageOrder::ColMajor>;                                   \
-    template class CyqloneSolver<VL, T, StorageOrder::RowMajor>;
-BATMAT_FOREACH_DTYPE_VL(CYQLONE_INSTANTIATE_SOLVER)
+#define CYQLONE_INSTANTIATE_TRICYQLE(T, VL, O) template struct TricyqleSolver<VL, T, O>;
+BATMAT_FOREACH_DTYPE_VL(CYQLONE_INSTANTIATE_TRICYQLE, StorageOrder::ColMajor)
+BATMAT_FOREACH_DTYPE_VL(CYQLONE_INSTANTIATE_TRICYQLE, StorageOrder::RowMajor)
+#define CYQLONE_INSTANTIATE_CYQLONE(VL, O) template struct CyqloneSolver<VL, double, O>;
+BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_CYQLONE, StorageOrder::ColMajor)
+BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_CYQLONE, StorageOrder::RowMajor)
+// TODO: support single-precision gather in batmat
 
 } // namespace CYQLONE_NS(cyqlone)

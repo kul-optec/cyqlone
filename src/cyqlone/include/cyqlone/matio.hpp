@@ -24,9 +24,13 @@ MatFilePtr open_mat(const std::filesystem::path &filename,
                     MatioOpenMode mode = MatioOpenMode::Read);
 MatFilePtr create_mat(const std::filesystem::path &filename);
 void add_to_mat(mat_t *mat, const std::string &varname,
-                guanaqo::MatrixView<const real_t, index_t> data);
+                guanaqo::MatrixView<const double, index_t> data);
 void add_to_mat(mat_t *mat, const std::string &varname,
-                batmat::matrix::View<const real_t, index_t> data);
+                guanaqo::MatrixView<const float, index_t> data);
+void add_to_mat(mat_t *mat, const std::string &varname,
+                batmat::matrix::View<const double, index_t> data);
+void add_to_mat(mat_t *mat, const std::string &varname,
+                batmat::matrix::View<const float, index_t> data);
 void add_to_mat(mat_t *mat, const LinearOCPStorage &ocp);
 void ocp_dump_mat(const std::filesystem::path &filename, const LinearOCPStorage &ocp);
 void read_from_mat(mat_t *mat, LinearOCPStorage &ocp);

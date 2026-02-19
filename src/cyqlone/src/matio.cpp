@@ -31,13 +31,13 @@ struct matio_traits<double> {
 using MatFilePtr = std::unique_ptr<mat_t, decltype(&Mat_Close)>;
 using MatVarPtr  = std::unique_ptr<matvar_t, decltype(&Mat_VarFree)>;
 
-template <size_t N>
-void write_tensor(mat_t *matfp, const char *name, std::span<const real_t> buffer,
+template <class T, size_t N>
+void write_tensor(mat_t *matfp, const char *name, std::span<const T> buffer,
                   std::array<index_t, N> dims) {
     std::array<size_t, N> dimsu;
     std::ranges::copy(dims, dimsu.begin());
-    MatVarPtr var(Mat_VarCreate(name, matio_traits<real_t>::class_, matio_traits<real_t>::type,
-                                dimsu.size(), dimsu.data(), const_cast<real_t *>(buffer.data()), 0),
+    MatVarPtr var(Mat_VarCreate(name, matio_traits<T>::class_, matio_traits<T>::type, dimsu.size(),
+                                dimsu.data(), const_cast<T *>(buffer.data()), 0),
                   Mat_VarFree);
     if (!var)
         throw std::runtime_error(std::format("Failed to create var {}", name));
@@ -61,30 +61,67 @@ MatFilePtr create_mat(const std::filesystem::path &filename) {
 }
 
 void add_to_mat(mat_t *mat, const std::string &varname,
-                guanaqo::MatrixView<const real_t, index_t> data) {
+                guanaqo::MatrixView<const double, index_t> data) {
     const auto r = static_cast<size_t>(data.rows), c = static_cast<size_t>(data.cols);
     if (data.rows == data.outer_stride) {
-        write_tensor<2>(mat, varname.c_str(), std::span{data.data, r * c}, {data.rows, data.cols});
+        write_tensor<double, 2>(mat, varname.c_str(), std::span{data.data, r * c},
+                                {data.rows, data.cols});
     } else {
-        std::vector<real_t> buffer(r * c);
-        guanaqo::MatrixView<real_t, index_t>{{
+        std::vector<double> buffer(r * c);
+        guanaqo::MatrixView<double, index_t>{{
             .data = buffer.data(),
             .rows = data.rows,
             .cols = data.cols,
         }} = data;
-        write_tensor<2>(mat, varname.c_str(), std::span{buffer}, {data.rows, data.cols});
+        write_tensor<double, 2>(mat, varname.c_str(), std::span{buffer}, {data.rows, data.cols});
     }
 }
 
 void add_to_mat(mat_t *mat, const std::string &varname,
-                batmat::matrix::View<const real_t, index_t> data) {
+                guanaqo::MatrixView<const float, index_t> data) {
+    const auto r = static_cast<size_t>(data.rows), c = static_cast<size_t>(data.cols);
+    if (data.rows == data.outer_stride) {
+        write_tensor<float, 2>(mat, varname.c_str(), std::span{data.data, r * c},
+                               {data.rows, data.cols});
+    } else {
+        std::vector<float> buffer(r * c);
+        guanaqo::MatrixView<float, index_t>{{
+            .data = buffer.data(),
+            .rows = data.rows,
+            .cols = data.cols,
+        }} = data;
+        write_tensor<float, 2>(mat, varname.c_str(), std::span{buffer}, {data.rows, data.cols});
+    }
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname,
+                batmat::matrix::View<const double, index_t> data) {
     const auto r = static_cast<size_t>(data.rows()), c = static_cast<size_t>(data.cols()),
                d = static_cast<size_t>(data.depth());
     if (data.rows() == data.outer_stride() && data.layer_stride() == data.rows() * data.cols()) {
-        write_tensor<3>(mat, varname.c_str(), std::span{data.data(), r * c * d},
-                        {data.rows(), data.cols(), data.depth()});
+        write_tensor<double, 3>(mat, varname.c_str(), std::span{data.data(), r * c * d},
+                                {data.rows(), data.cols(), data.depth()});
     } else {
-        batmat::matrix::Matrix<real_t, index_t> buffer{{
+        batmat::matrix::Matrix<double, index_t> buffer{{
+            .depth = data.depth(),
+            .rows  = data.rows(),
+            .cols  = data.cols(),
+        }};
+        for (index_t l = 0; l < data.depth(); ++l)
+            batmat::linalg::copy(data(l), buffer(l));
+        add_to_mat(mat, varname, buffer.view());
+    }
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname,
+                batmat::matrix::View<const float, index_t> data) {
+    const auto r = static_cast<size_t>(data.rows()), c = static_cast<size_t>(data.cols()),
+               d = static_cast<size_t>(data.depth());
+    if (data.rows() == data.outer_stride() && data.layer_stride() == data.rows() * data.cols()) {
+        write_tensor<float, 3>(mat, varname.c_str(), std::span{data.data(), r * c * d},
+                               {data.rows(), data.cols(), data.depth()});
+    } else {
+        batmat::matrix::Matrix<float, index_t> buffer{{
             .depth = data.depth(),
             .rows  = data.rows(),
             .cols  = data.cols(),
@@ -109,7 +146,7 @@ void add_to_mat(mat_t *mat, const LinearOCPStorage &ocp) {
     // Q(N): (nx, nx), padded by zeros
     batmat::linalg::copy(
         ocp.Q(N), Mat{{.data = &buf[N * nxu * nxu], .rows = nx, .cols = nx, .outer_stride = nxu}});
-    write_tensor<3>(mat, "H", buf, {nxu, nxu, N + 1});
+    write_tensor<real_t, 3>(mat, "H", buf, {nxu, nxu, N + 1});
 
     // CD: (ny, nx+nu, N)
     buf.resize(N * ny * nxu);
@@ -117,12 +154,12 @@ void add_to_mat(mat_t *mat, const LinearOCPStorage &ocp) {
         batmat::linalg::copy(
             ocp.CD(i),
             Mat{{.data = &buf[i * ny * nxu], .rows = ny, .cols = nxu, .outer_stride = ny}});
-    write_tensor<3>(mat, "CD", buf, {ny, nxu, N});
+    write_tensor<real_t, 3>(mat, "CD", buf, {ny, nxu, N});
     // C(N): (ny_N, nx+nu)
     buf.resize(ny_N * nx);
     batmat::linalg::copy(ocp.C(N),
                          Mat{{.data = buf.data(), .rows = ny_N, .cols = nx, .outer_stride = ny_N}});
-    write_tensor<2>(mat, "CN", buf, {ny_N, nx});
+    write_tensor<real_t, 2>(mat, "CN", buf, {ny_N, nx});
 
     // AB: (nx, nx+nu, N)
     buf.resize(N * nx * nxu);
@@ -130,14 +167,14 @@ void add_to_mat(mat_t *mat, const LinearOCPStorage &ocp) {
         batmat::linalg::copy(
             ocp.AB(i),
             Mat{{.data = &buf[i * nx * nxu], .rows = nx, .cols = nxu, .outer_stride = nx}});
-    write_tensor<3>(mat, "AB", buf, {nx, nxu, N});
+    write_tensor<real_t, 3>(mat, "AB", buf, {nx, nxu, N});
 
-    write_tensor<2>(mat, "qr", std::span(ocp.qr().data, ocp.qr().rows), {ocp.qr().rows, 1});
-    write_tensor<2>(mat, "b", std::span(ocp.b().data, ocp.b().rows), {ocp.b().rows, 1});
-    write_tensor<2>(mat, "b_min", std::span(ocp.b_min().data, ocp.b_min().rows),
-                    {ocp.b_min().rows, 1});
-    write_tensor<2>(mat, "b_max", std::span(ocp.b_max().data, ocp.b_max().rows),
-                    {ocp.b_max().rows, 1});
+    write_tensor<real_t, 2>(mat, "qr", std::span(ocp.qr().data, ocp.qr().rows), {ocp.qr().rows, 1});
+    write_tensor<real_t, 2>(mat, "b", std::span(ocp.b().data, ocp.b().rows), {ocp.b().rows, 1});
+    write_tensor<real_t, 2>(mat, "b_min", std::span(ocp.b_min().data, ocp.b_min().rows),
+                            {ocp.b_min().rows, 1});
+    write_tensor<real_t, 2>(mat, "b_max", std::span(ocp.b_max().data, ocp.b_max().rows),
+                            {ocp.b_max().rows, 1});
 }
 
 void read_from_mat(mat_t *mat, LinearOCPStorage &ocp) {
