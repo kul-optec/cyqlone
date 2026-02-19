@@ -131,8 +131,8 @@ template <class Solver>
 
     // Check that the residual is small
     using std::pow;
-    const auto tol =
-        num_blocks * block_size * pow(std::numeric_limits<real_t>::epsilon(), real_t(0.6));
+    const auto tol = static_cast<real_t>(num_blocks * block_size) *
+                     pow(std::numeric_limits<real_t>::epsilon(), real_t(0.6));
     real_t residual = compute_residual_norm(sys, x, circular);
     EXPECT_LT(residual, tol) << "Relative residual too large: " << guanaqo::float_to_str(residual);
 }
