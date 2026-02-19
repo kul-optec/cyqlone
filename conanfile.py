@@ -71,7 +71,7 @@ class CyqloneRecipe(ConanFile):
 
     def requirements(self):
         self.requires("guanaqo/1.0.0-alpha.24", transitive_headers=True, transitive_libs=True)
-        self.requires("batmat/0.0.14", transitive_headers=True, transitive_libs=True)
+        self.requires("batmat/0.0.15", transitive_headers=True, transitive_libs=True)
         if self.options.get_safe("with_zlib"):
             self.requires("zlib/[~1]")
         if self.options.get_safe("with_python"):
