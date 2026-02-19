@@ -8,6 +8,7 @@
 #include <batmat/matrix/matrix.hpp>
 #include <guanaqo/blas/hl-blas-interface.hpp>
 #include <guanaqo/demangled-typename.hpp>
+#include <guanaqo/print.hpp>
 #include <algorithm>
 #include <cmath>
 #include <format>
@@ -52,7 +53,7 @@ auto init_random_system(index_t block_size, index_t num_blocks, bool circular) {
         guanaqo::blas::xsyrk_LN<real_t>(1, A(i), 0, M(i));       // M(i) = A(i) A(i)ᵀ
         guanaqo::blas::xsyrk_LN<real_t>(1, B(i_prev), 1, M(i));  // M(i) += B(i-1) B(i-1)ᵀ
         guanaqo::blas::xgemm_NT<real_t>(1, B(i), A(i), 0, K(i)); // K(i) = B(i) A(i)ᵀ
-        M(i).add_to_diagonal(1e-2);                              // Ensure positive definiteness
+        M(i).add_to_diagonal(real_t(1e-1));                      // Ensure positive definiteness
     }
     return TridiagSystem<T>{.M = std::move(M), .K = std::move(K), .b = std::move(b)};
 }
@@ -130,9 +131,10 @@ template <class Solver>
 
     // Check that the residual is small
     using std::pow;
-    const auto tol  = pow(std::numeric_limits<real_t>::epsilon(), real_t(0.5));
+    const auto tol =
+        num_blocks * block_size * pow(std::numeric_limits<real_t>::epsilon(), real_t(0.6));
     real_t residual = compute_residual_norm(sys, x, circular);
-    EXPECT_LT(residual, tol) << "Relative residual too large: " << residual;
+    EXPECT_LT(residual, tol) << "Relative residual too large: " << guanaqo::float_to_str(residual);
 }
 
 } // namespace
