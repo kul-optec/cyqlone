@@ -14,7 +14,7 @@
 
 namespace cyqlone {
 
-template <typename T>
+template <class T>
 struct matio_traits;
 template <>
 struct matio_traits<float> {
@@ -60,76 +60,62 @@ MatFilePtr create_mat(const std::filesystem::path &filename) {
     return matfp;
 }
 
-void add_to_mat(mat_t *mat, const std::string &varname,
-                guanaqo::MatrixView<const double, index_t> data) {
+template <class T>
+void add_to_mat_impl(mat_t *mat, const std::string &varname,
+                     guanaqo::MatrixView<const T, index_t> data) {
     const auto r = static_cast<size_t>(data.rows), c = static_cast<size_t>(data.cols);
     if (data.rows == data.outer_stride) {
-        write_tensor<double, 2>(mat, varname.c_str(), std::span{data.data, r * c},
-                                {data.rows, data.cols});
+        write_tensor<T, 2>(mat, varname.c_str(), std::span{data.data, r * c},
+                           {data.rows, data.cols});
     } else {
-        std::vector<double> buffer(r * c);
-        guanaqo::MatrixView<double, index_t>{{
+        std::vector<T> buffer(r * c);
+        guanaqo::MatrixView<T, index_t>{{
             .data = buffer.data(),
             .rows = data.rows,
             .cols = data.cols,
         }} = data;
-        write_tensor<double, 2>(mat, varname.c_str(), std::span{buffer}, {data.rows, data.cols});
+        write_tensor<T, 2>(mat, varname.c_str(), std::span{buffer}, {data.rows, data.cols});
     }
 }
 
 void add_to_mat(mat_t *mat, const std::string &varname,
+                guanaqo::MatrixView<const double, index_t> data) {
+    add_to_mat_impl(mat, varname, data);
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname,
                 guanaqo::MatrixView<const float, index_t> data) {
-    const auto r = static_cast<size_t>(data.rows), c = static_cast<size_t>(data.cols);
-    if (data.rows == data.outer_stride) {
-        write_tensor<float, 2>(mat, varname.c_str(), std::span{data.data, r * c},
-                               {data.rows, data.cols});
+    add_to_mat_impl(mat, varname, data);
+}
+
+template <class T>
+void add_to_mat_impl(mat_t *mat, const std::string &varname,
+                     batmat::matrix::View<const T, index_t> data) {
+    const auto r = static_cast<size_t>(data.rows()), c = static_cast<size_t>(data.cols()),
+               d = static_cast<size_t>(data.depth());
+    if (data.rows() == data.outer_stride() && data.layer_stride() == data.rows() * data.cols()) {
+        write_tensor<T, 3>(mat, varname.c_str(), std::span{data.data(), r * c * d},
+                           {data.rows(), data.cols(), data.depth()});
     } else {
-        std::vector<float> buffer(r * c);
-        guanaqo::MatrixView<float, index_t>{{
-            .data = buffer.data(),
-            .rows = data.rows,
-            .cols = data.cols,
-        }} = data;
-        write_tensor<float, 2>(mat, varname.c_str(), std::span{buffer}, {data.rows, data.cols});
+        batmat::matrix::Matrix<T, index_t> buffer{{
+            .depth = data.depth(),
+            .rows  = data.rows(),
+            .cols  = data.cols(),
+        }};
+        for (index_t l = 0; l < data.depth(); ++l)
+            batmat::linalg::copy(data(l), buffer(l));
+        add_to_mat(mat, varname, buffer.view());
     }
 }
 
 void add_to_mat(mat_t *mat, const std::string &varname,
                 batmat::matrix::View<const double, index_t> data) {
-    const auto r = static_cast<size_t>(data.rows()), c = static_cast<size_t>(data.cols()),
-               d = static_cast<size_t>(data.depth());
-    if (data.rows() == data.outer_stride() && data.layer_stride() == data.rows() * data.cols()) {
-        write_tensor<double, 3>(mat, varname.c_str(), std::span{data.data(), r * c * d},
-                                {data.rows(), data.cols(), data.depth()});
-    } else {
-        batmat::matrix::Matrix<double, index_t> buffer{{
-            .depth = data.depth(),
-            .rows  = data.rows(),
-            .cols  = data.cols(),
-        }};
-        for (index_t l = 0; l < data.depth(); ++l)
-            batmat::linalg::copy(data(l), buffer(l));
-        add_to_mat(mat, varname, buffer.view());
-    }
+    add_to_mat_impl(mat, varname, data);
 }
 
 void add_to_mat(mat_t *mat, const std::string &varname,
                 batmat::matrix::View<const float, index_t> data) {
-    const auto r = static_cast<size_t>(data.rows()), c = static_cast<size_t>(data.cols()),
-               d = static_cast<size_t>(data.depth());
-    if (data.rows() == data.outer_stride() && data.layer_stride() == data.rows() * data.cols()) {
-        write_tensor<float, 3>(mat, varname.c_str(), std::span{data.data(), r * c * d},
-                               {data.rows(), data.cols(), data.depth()});
-    } else {
-        batmat::matrix::Matrix<float, index_t> buffer{{
-            .depth = data.depth(),
-            .rows  = data.rows(),
-            .cols  = data.cols(),
-        }};
-        for (index_t l = 0; l < data.depth(); ++l)
-            batmat::linalg::copy(data(l), buffer(l));
-        add_to_mat(mat, varname, buffer.view());
-    }
+    add_to_mat_impl(mat, varname, data);
 }
 
 void add_to_mat(mat_t *mat, const LinearOCPStorage &ocp) {
@@ -177,6 +163,18 @@ void add_to_mat(mat_t *mat, const LinearOCPStorage &ocp) {
                             {ocp.b_max().rows, 1});
 }
 
+void validate_mat_var(const MatVarPtr &var, const std::string &name, int expected_rank) {
+    if (var->rank != expected_rank)
+        throw std::runtime_error(std::format("Variable {}: invalid rank {} (expected {})", name,
+                                             var->rank, expected_rank));
+    if (var->isComplex)
+        throw std::runtime_error(std::format("Variable {}: should be real", name));
+    if (var->class_type != matio_traits<real_t>::class_)
+        throw std::runtime_error(std::format("Variable {}: invalid class type", name));
+    if (var->data_type != matio_traits<real_t>::type)
+        throw std::runtime_error(std::format("Variable {}: invalid data type", name));
+}
+
 void read_from_mat(mat_t *mat, LinearOCPStorage &ocp) {
     MatVarPtr ABvar(Mat_VarRead(mat, "AB"), Mat_VarFree);
     MatVarPtr CDvar(Mat_VarRead(mat, "CD"), Mat_VarFree);
@@ -205,30 +203,14 @@ void read_from_mat(mat_t *mat, LinearOCPStorage &ocp) {
         missing.emplace_back("b_max");
     if (!missing.empty())
         throw std::runtime_error("Missing variables: " + guanaqo::join(missing));
-    if (ABvar->rank != 3 || CDvar->rank != 3 || CNvar->rank != 2 || Hvar->rank != 3 ||
-        qrvar->rank != 2 || bvar->rank != 2 || b_minvar->rank != 2 || b_maxvar->rank != 2)
-        throw std::runtime_error("Invalid rank");
-    if (ABvar->isComplex || CDvar->isComplex || CNvar->isComplex || Hvar->isComplex ||
-        qrvar->isComplex || bvar->isComplex || b_minvar->isComplex || b_maxvar->isComplex)
-        throw std::runtime_error("Should be real");
-    if (ABvar->class_type != matio_traits<real_t>::class_ ||
-        CDvar->class_type != matio_traits<real_t>::class_ ||
-        CNvar->class_type != matio_traits<real_t>::class_ ||
-        Hvar->class_type != matio_traits<real_t>::class_ ||
-        qrvar->class_type != matio_traits<real_t>::class_ ||
-        bvar->class_type != matio_traits<real_t>::class_ ||
-        b_minvar->class_type != matio_traits<real_t>::class_ ||
-        b_maxvar->class_type != matio_traits<real_t>::class_)
-        throw std::runtime_error("Invalid class type");
-    if (ABvar->data_type != matio_traits<real_t>::type ||
-        CDvar->data_type != matio_traits<real_t>::type ||
-        CNvar->data_type != matio_traits<real_t>::type ||
-        Hvar->data_type != matio_traits<real_t>::type ||
-        qrvar->data_type != matio_traits<real_t>::type ||
-        bvar->data_type != matio_traits<real_t>::type ||
-        b_minvar->data_type != matio_traits<real_t>::type ||
-        b_maxvar->data_type != matio_traits<real_t>::type)
-        throw std::runtime_error("Invalid data type");
+    validate_mat_var(ABvar, "AB", 3);
+    validate_mat_var(CDvar, "CD", 3);
+    validate_mat_var(CNvar, "CN", 2);
+    validate_mat_var(Hvar, "H", 3);
+    validate_mat_var(qrvar, "qr", 2);
+    validate_mat_var(bvar, "b", 2);
+    validate_mat_var(b_minvar, "b_min", 2);
+    validate_mat_var(b_maxvar, "b_max", 2);
     auto nx = static_cast<index_t>(ABvar->dims[0]), nxu = static_cast<index_t>(ABvar->dims[1]),
          N = static_cast<index_t>(ABvar->dims[2]), nu = nxu - nx;
     auto ny = static_cast<index_t>(CDvar->dims[0]), ny_N = static_cast<index_t>(CNvar->dims[0]);
@@ -305,16 +287,9 @@ auto open_vector_var(mat_t *mat, const std::string &varname) {
     MatVarPtr var(Mat_VarRead(mat, varname.c_str()), Mat_VarFree);
     if (!var)
         throw std::runtime_error("Missing variable: " + varname);
-    if (var->rank != 2)
-        throw std::runtime_error("Invalid rank");
-    if (var->isComplex)
-        throw std::runtime_error("Should be real");
-    if (var->class_type != matio_traits<real_t>::class_)
-        throw std::runtime_error("Invalid class type");
-    if (var->data_type != matio_traits<real_t>::type)
-        throw std::runtime_error("Invalid data type");
+    validate_mat_var(var, varname, 2);
     if (var->dims[1] != 1)
-        throw std::runtime_error("Should have one column");
+        throw std::runtime_error(std::format("Variable {}: should have one column", varname));
     return var;
 }
 
