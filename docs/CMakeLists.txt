@@ -7,7 +7,7 @@ set(CYQLONE_DOCS_GUANAQO_VERSION "1.0.0-alpha.24" CACHE STRING
     "Version of guanaqo to use for documentation")
 set(CYQLONE_DOCS_GUANAQO_URL "https://tttapa.github.io/guanaqo" CACHE STRING
     "URL of guanaqo documentation")
-set(CYQLONE_DOCS_BATMAT_VERSION "0.0.13" CACHE STRING
+set(CYQLONE_DOCS_BATMAT_VERSION "0.0.15" CACHE STRING
     "Version of batmat to use for documentation")
 set(CYQLONE_DOCS_BATMAT_URL "https://tttapa.github.io/batmat" CACHE STRING
     "URL of batmat documentation")

@@ -27,7 +27,6 @@ class CyqloneRecipe(ConanFile):
         "with_benchmarks": False,
         "with_examples": True,
         "with_qpalm": True,
-        "with_general_qpalm": False,
         "with_example_problems": True,
         "with_blasfeo": False,
         "with_python": False,
@@ -88,8 +87,6 @@ class CyqloneRecipe(ConanFile):
             self.test_requires("eigen/[~3.4 || ~5.0]")
         if self.options.get_safe("with_blasfeo"):
             self.requires("blasfeo/tttapa.20260119")
-        if self.options.get_safe("with_general_qpalm"):
-            self.requires("qpalm/1.2.6")
         if self.options.get_safe("with_ska_sort"):
             self.requires("ska-sort/tttapa.20250919")
         if self.options.get_safe("with_matio"):
@@ -127,17 +124,16 @@ class CyqloneRecipe(ConanFile):
         tc = CMakeToolchain(self)
         batmat = self.dependencies["batmat"]
         guanaqo = self.dependencies["guanaqo"]
-        index_t = batmat.options.get_safe("dense_index_type", default="int")
-        tc.cache_variables["CYQLONE_DENSE_INDEX_TYPE"] = index_t
         for k in self.bool_cyqlone_options:
             value = self.options.get_safe(k, None)
             if value is not None and value.value is not None:
                 tc.cache_variables["CYQLONE_" + k.upper()] = bool(value)
         if can_run(self):
             tc.cache_variables["CYQLONE_FORCE_TEST_DISCOVERY"] = True
-            tc.cache_variables["CYQLONE_WITH_PY_STUBS"] = True
-        tc.cache_variables["CYQLONE_DOCS_GUANAQO_VERSION"] = str(guanaqo.ref.version)
-        tc.cache_variables["CYQLONE_DOCS_BATMAT_VERSION"] = str(batmat.ref.version)
+            if self.options.with_python:
+                tc.cache_variables["CYQLONE_WITH_PY_STUBS"] = True
+        tc.variables["CYQLONE_DOCS_GUANAQO_VERSION"] = str(guanaqo.ref.version)
+        tc.variables["CYQLONE_DOCS_BATMAT_VERSION"] = str(batmat.ref.version)
         tc.generate()
 
     def build(self):
