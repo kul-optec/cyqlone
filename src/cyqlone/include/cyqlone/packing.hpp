@@ -34,7 +34,7 @@ using scalar_view = batmat::matrix::View<T, index_t, index_constant<1>, D, L, O>
 
 template <class TA, class Abi, MatrixStructure Struc = MatrixStructure::General, StorageOrder OA,
           class TB, class DB, class LB, StorageOrder OB>
-    requires(OA == StorageOrder::ColMajor && OB == StorageOrder::ColMajor)
+    requires(OB == StorageOrder::ColMajor)
 inline void unpack_full(view<TA, Abi, OA> A, scalar_view<TB, DB, LB, OB> B) {
     static_assert(std::is_const_v<TA> ^ std::is_const_v<TB>);
     static_assert(typename decltype(B)::batch_size_type() == 1);
@@ -49,42 +49,45 @@ inline void unpack_full(view<TA, Abi, OA> A, scalar_view<TB, DB, LB, OB> B) {
     static constexpr auto lut  = batmat::make_1d_lut<v>([]<index_t R>(index_constant<R>) {
         return Pack ? batmat::ops::transpose<R + 1, v, T> : batmat::ops::transpose<v, R + 1, T>;
     });
-    const auto ldA             = A.outer_stride() * v;
-    const auto ldB             = B.outer_stride();
-    const auto batch_stride_B  = B.layer_stride();
-    TA *pA                     = A.data();
-    const auto pAend           = pA + A.outer_size() * ldA;
-    TB *pB                     = B.data();
-    auto inner_count           = Struc == LowerTriangular ? std::max(A.inner_size(), A.outer_size())
-                                 : Struc == UpperTriangular ? index_t{1}
-                                                            : A.inner_size();
+    const auto cstrA           = A.col_stride() * v;
+    const auto rstrA           = A.row_stride() * v;
+    const auto cstrB           = B.col_stride();
+    const auto rstrB           = B.row_stride();
+    const auto bstrB           = B.layer_stride();
+    static_assert(rstrB == 1);
+    TA *pA           = A.data();
+    const auto pAend = pA + A.cols() * cstrA;
+    TB *pB           = B.data();
+    auto inner_count = Struc == LowerTriangular   ? std::max(A.rows(), A.cols())
+                       : Struc == UpperTriangular ? index_t{1}
+                                                  : A.rows();
     using std::clamp;
     while (pA < pAend) {
         TA *pA_ = pA;
         TB *pB_ = pB;
         batmat::foreach_chunked(
-            0, clamp(inner_count, index_t{0}, A.inner_size()), v,
+            0, clamp(inner_count, index_t{0}, A.rows()), v,
             [&](index_t) {
                 if constexpr (Pack)
-                    batmat::ops::transpose<v, v>(pB_, batch_stride_B, pA_, v);
+                    batmat::ops::transpose<v, v>(pB_, bstrB, pA_, rstrA);
                 else
-                    batmat::ops::transpose<v, v>(pA_, v, pB_, batch_stride_B);
-                pA_ += v * v;
-                pB_ += v;
+                    batmat::ops::transpose<v, v>(pA_, rstrA, pB_, bstrB);
+                pA_ += v * rstrA;
+                pB_ += v * rstrB;
             },
             [&](index_t, index_t nr) {
                 if constexpr (Pack)
-                    lut[nr - 1](pB_, batch_stride_B, pA_, v);
+                    lut[nr - 1](pB_, bstrB, pA_, rstrA);
                 else
-                    lut[nr - 1](pA_, v, pB_, batch_stride_B);
+                    lut[nr - 1](pA_, rstrA, pB_, bstrB);
             });
-        pA += ldA;
-        pB += ldB;
+        pA += cstrA;
+        pB += cstrB;
         if constexpr (Struc == LowerTriangular) {
             --inner_count;
-            if (inner_count < A.inner_size()) {
-                pA += v;
-                pB += 1;
+            if (inner_count < A.rows()) {
+                pA += rstrA;
+                pB += rstrB;
             }
         } else if (Struc == UpperTriangular) {
             ++inner_count;
@@ -94,8 +97,8 @@ inline void unpack_full(view<TA, Abi, OA> A, scalar_view<TB, DB, LB, OB> B) {
 
 template <class TA, class Abi, MatrixStructure Struc = MatrixStructure::General, StorageOrder OA,
           class TB, class DB, class LB, StorageOrder OB>
-    requires(OA == StorageOrder::RowMajor && OB == StorageOrder::RowMajor)
-inline void unpack_full(view<const TA, Abi, OA> A, scalar_view<TB, DB, LB, OB> B) {
+    requires(OB == StorageOrder::RowMajor)
+inline void unpack_full(view<TA, Abi, OA> A, scalar_view<TB, DB, LB, OB> B) {
     return unpack_full<TA, Abi, transpose(Struc)>(A.transposed(), B.transposed());
 }
 
@@ -143,8 +146,7 @@ template <simdifiable VA, class VB>
              typename std::remove_cvref_t<VB>::batch_size_type() == 1)
 void unpack(VA &&A, VB &&B) {
     detail::unpack_full<const simdified_value_t<VA>, simdified_abi_t<VA>>(
-        simdify(A).as_const(), B.view().first_layers(A.depth()));
-    // TODO: make sure that .view() is supported for all relevant VB.
+        simdify(A).as_const(), B.first_layers(A.depth()));
 }
 
 /// Copy multiple scalar matrices @p A to a compact batch of matrices @p B.
@@ -154,8 +156,7 @@ template <class VA, simdifiable VB>
              typename std::remove_cvref_t<VA>::batch_size_type() == 1)
 void pack(VA &&A, VB &&B) {
     detail::unpack_full<simdified_value_t<VB>, simdified_abi_t<VB>>(
-        simdify(B), A.view().first_layers(B.depth()).as_const());
-    // TODO: make sure that .view() is supported for all relevant VA.
+        simdify(B), A.first_layers(B.depth()).as_const());
 }
 
 /// @}
