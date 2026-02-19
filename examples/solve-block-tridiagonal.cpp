@@ -16,6 +16,9 @@ using cyqlone::index_t;                                   // Integer type for in
 using cyqlone::real_t;                                    // Floating-point type for scalars
 using matrices = batmat::matrix::Matrix<real_t, index_t>; // Array of matrices
 
+constexpr index_t v = 4;                                  // Vector length to use
+using Solver        = cyqlone::TricyqleSolver<v, real_t>; // Block tridiagonal solver to use
+
 struct TridiagSystem {
     matrices M, K, b; // Diagonal blocks M, subdiagonal blocks K and right-hand side b
 };
@@ -26,10 +29,9 @@ TridiagSystem init_random_system(index_t block_size, index_t num_blocks, bool ci
 // Example of solving a block tridiagonal system using the TricyqleSolver.
 int main(int argc, char *argv[]) try {
     // Problem dimensions and parameters
-    constexpr index_t v = 4;     // Vector length
-    index_t p           = 8;     // Number of processors/threads
-    index_t block_size  = 5;     // Size of each block of the block tridiagonal system
-    bool circular       = false; // Is K(num_blocks-1) nonzero?
+    index_t p          = 8;     // Number of processors/threads
+    index_t block_size = 5;     // Size of each block of the block tridiagonal system
+    bool circular      = false; // Is K(num_blocks-1) nonzero?
     // Parse arguments
     if (argc > 1)
         p = std::stoi(argv[1]);
@@ -47,7 +49,6 @@ int main(int argc, char *argv[]) try {
     auto [M, K, b] = init_random_system(block_size, num_blocks, circular);
 
     // Create a solver for the block tridiagonal system
-    using Solver = cyqlone::TricyqleSolver<v, real_t>;
     Solver solver{.block_size = block_size, .circular = circular, .p = p};
     solver.params.solve_method = cyqlone::SolveMethod::PCR; // Use the PCR solver instead of PCG.
 
