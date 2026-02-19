@@ -54,6 +54,7 @@ class CyqloneRecipe(ConanFile):
         "cmake/*",
         "interfaces/*",
         "test/*",
+        "examples/*",
         "benchmarks/*",
         "LICENSE",
         "README.md",
