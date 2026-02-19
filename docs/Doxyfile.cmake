@@ -4,7 +4,7 @@ set(DOXYGEN_PROJECT_ICON "${PROJECT_SOURCE_DIR}/docs/source/images/cyqlone-logo.
 set(DOXYGEN_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/docs/build" CACHE PATH "")
 set(DOXYGEN_ABBREVIATE_BRIEF "")
 set(DOXYGEN_INLINE_INHERITED_MEMB "YES")
-set(DOXYGEN_STRIP_FROM_PATH "${PROJECT_SOURCE_DIR}/src")
+set(DOXYGEN_STRIP_FROM_PATH "${PROJECT_SOURCE_DIR}")
 set(DOXYGEN_STRIP_FROM_INC_PATH "${PROJECT_SOURCE_DIR}/src/cyqlone/include"
                                 "${PROJECT_SOURCE_DIR}/src/example-problems/include"
                                 "${PROJECT_SOURCE_DIR}/src/qpalm/include")
