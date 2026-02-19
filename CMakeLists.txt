@@ -25,6 +25,8 @@ cmake_dependent_option(CYQLONE_WITH_EXAMPLE_PROBLEMS
 # Enable/disable optional components
 option(CYQLONE_WITH_TESTS
     "Build the tests" ${BUILD_TESTING})
+option(CYQLONE_WITH_EXAMPLES
+    "Build the examples" On)
 option(CYQLONE_WITH_BENCHMARKS
     "Build the benchmarks" Off)
 option(CYQLONE_WITH_PYTHON
@@ -123,6 +125,11 @@ add_subdirectory(src)
 if (CYQLONE_WITH_TESTS)
     enable_testing()
     add_subdirectory(test)
+endif()
+
+# Examples
+if (CYQLONE_WITH_EXAMPLES)
+    add_subdirectory(examples)
 endif()
 
 # Benchmarks
