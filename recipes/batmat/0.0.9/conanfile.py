@@ -122,7 +122,10 @@ class BatmatRecipe(ConanFile):
             tc.variables["BATMAT_VECTOR_LENGTHS_FLOAT"] = vl_float
         guanaqo = self.dependencies["guanaqo"]
         index_type = guanaqo.options.get_safe("blas_index_type", default="int")
-        tc.variables["BATMAT_DENSE_INDEX_TYPE"] = index_type
+        if self.version >= "0.0.16":
+            tc.variables["BATMAT_DEFAULT_INDEX_TYPE"] = index_type
+        else:
+            tc.variables["BATMAT_DENSE_INDEX_TYPE"] = index_type
         if can_run(self):
             tc.variables["BATMAT_FORCE_TEST_DISCOVERY"] = True
         tc.generate()

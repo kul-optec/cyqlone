@@ -27,12 +27,21 @@ double dot(std::span<const double> a, std::span<const double> b) {
     return result;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     std::vector<double> a(131), b(131);
     std::iota(a.begin(), a.end(), long {+42});
     std::iota(b.begin(), b.end(), long {-42});
     auto d1 = dot(a, b);
     auto d2 = std::inner_product(a.begin(), a.end(), b.begin(), double {0});
     std::cout << d1 << "\n" << d2 << "\n";
-    return d1 == d2 ? EXIT_SUCCESS : EXIT_FAILURE;
+    if (d1 != d2) {
+        std::cerr << "Error: dot product mismatch!\n";
+        return EXIT_FAILURE;
+    }
+    double c[16]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (double)argc + 1};
+    auto vc = std::datapar::unchecked_load<std::datapar::simd<double, 16>>(c);
+    if (all_of(vc == std::datapar::simd<double, 16>{})) {
+        std::cerr << "Error: all_of failed!\n";
+        return EXIT_FAILURE;
+    }
 }
