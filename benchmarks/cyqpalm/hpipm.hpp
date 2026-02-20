@@ -10,10 +10,10 @@ struct HPIPMSolverData;
 struct HPIPMStats {
     int status;
     int iter;
-    double max_res_stat;
-    double max_res_eq;
-    double max_res_ineq;
-    double max_res_comp;
+    cyqlone::real_t max_res_stat;
+    cyqlone::real_t max_res_eq;
+    cyqlone::real_t max_res_ineq;
+    cyqlone::real_t max_res_comp;
 };
 
 std::shared_ptr<HPIPMQPData> build_hpipm_qp(const cyqlone::LinearOCPStorage &ocp);

@@ -359,16 +359,18 @@ std::generator<Solver> get_cyqlone_solvers(const Options &opts) {
                 },
         };
         qp::Settings settings{
-            .tolerance         = 1e-8,
-            .dual_tolerance    = 1e-8,
-            .initial_penalty_y = 20,
-            .verbose           = false,
+            .tolerance           = std::is_same_v<real_t, double> ? 1e-8 : 1e-4f,
+            .dual_tolerance      = std::is_same_v<real_t, double> ? 1e-8 : 1e-4f,
+            .eq_constr_tolerance = std::is_same_v<real_t, double> ? 1e-8 : 1e-4f,
+            .max_penalty_y       = std::is_same_v<real_t, double> ? 1e9 : 1e4f,
+            .initial_penalty_y   = std::is_same_v<real_t, double> ? 20 : 2.f,
+            .verbose             = false,
         };
         qp::CyQPALMBackendSettings backend_no_upd = backend;
         backend_no_upd.max_update_count           = 0;
         qp::Settings settings_warm                = settings;
-        settings_warm.initial_penalty_y           = 1e4;
-        settings_warm.initial_inner_tolerance     = 1e-4;
+        settings_warm.initial_penalty_y           = std::is_same_v<real_t, double> ? 1e4 : 1e2f;
+        settings_warm.initial_inner_tolerance     = std::is_same_v<real_t, double> ? 1e-4 : 1e-2f;
         if (opts.pcr)
             backend.tricyqle_params.solve_method = cyqlone::SolveMethod::PCR;
         if (opts.cold) {
