@@ -9,3 +9,5 @@ patches:
       base_path: simd
     - patch_file: patches/0010-isfinite.patch
       base_path: simd
+    - patch_file: patches/0012-all_of-any_of.patch
+      base_path: simd
