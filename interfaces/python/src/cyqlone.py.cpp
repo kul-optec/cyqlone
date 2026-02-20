@@ -435,4 +435,4 @@ struct overloaded : Ts... {
     cyqlone::register_qpalm_cyqlone<VL>(m##VL);                                                    \
     cyqlone::register_cyqlone_solver<cyqlone::CyqloneSolver<VL>>(m##VL);
 
-NB_MODULE(MODULE_NAME, m) { BATMAT_FOREACH_VL_DOUBLE(CYQLONE_INSTANTIATE_MODULE) }
+NB_MODULE(MODULE_NAME, m) { BATMAT_FOREACH_VL_DEFAULT(CYQLONE_INSTANTIATE_MODULE) }

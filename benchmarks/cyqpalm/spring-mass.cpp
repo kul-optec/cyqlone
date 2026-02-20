@@ -8,9 +8,12 @@
 #include <cyqlone/qpalm/status.hpp>
 #include <cyqlone/tracing.hpp>
 #include <CLI/CLI.hpp>
+#include <batmat/dtypes.hpp>
+#include <batmat/lut.hpp>
 #include <batmat/openmp.h>
 #include <guanaqo/pcm/counters.hpp>
 #include <guanaqo/perfetto/trace.hpp>
+#include <guanaqo/string-util.hpp>
 #include <batmat-version.h>
 #include <cyqlone-version.h>
 #include <algorithm>
@@ -414,17 +417,17 @@ using std::ranges::elements_of;
 
 template <qp::StorageOrder Order>
 std::generator<Solver> get_cyqlone_solvers_vl(const Options &opts) {
+    static constexpr auto VLs       = batmat::types::vl_for_real_t;
+    static constexpr auto to_string = [](auto vl) { return std::to_string(vl); };
+    static constexpr auto lut = guanaqo::make_lut<VLs>([]<index_t VL>(batmat::index_constant<VL>) {
+        return std::make_pair(VL, get_cyqlone_solvers<VL, Order>);
+    });
     for (auto v : opts.vector_length) {
-        if (v == 0)
-            co_return;
-#define CYQ_X(VL) else if (v == VL) co_yield elements_of(get_cyqlone_solvers<VL, Order>(opts));
-        BATMAT_FOREACH_VL_DOUBLE(CYQ_X)
-#undef CYQ_X
-        else
-#define CYQ_X(VL) " " #VL
-            throw std::invalid_argument(
-                "Unsupported vector length. Supported lengths:" BATMAT_FOREACH_VL_DOUBLE(CYQ_X));
-#undef CYQ_X
+        auto dispatch = std::ranges::find(lut, v, &decltype(lut)::value_type::first);
+        if (dispatch == lut.end())
+            throw std::invalid_argument("Unsupported vector length. Supported lengths: " +
+                                        guanaqo::join(std::views::transform(VLs, to_string)));
+        co_yield elements_of(dispatch->second(opts));
     }
 }
 

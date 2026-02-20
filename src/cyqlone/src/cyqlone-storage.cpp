@@ -165,9 +165,7 @@ CyqloneStorage<T> CyqloneStorage<T>::build(const LinearOCPStorage &ocp, index_t 
     return res;
 }
 
-template struct CyqloneStorage<double>;
-#if BATMAT_WITH_SINGLE
-template struct CyqloneStorage<float>;
-#endif
+#define CYQLONE_INSTANTIATE_CYQLONE_STORAGE(T) template struct CyqloneStorage<T>;
+BATMAT_FOREACH_DTYPE(CYQLONE_INSTANTIATE_CYQLONE_STORAGE)
 
 } // namespace cyqlone

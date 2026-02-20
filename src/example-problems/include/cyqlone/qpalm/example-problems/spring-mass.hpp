@@ -112,7 +112,7 @@ struct SpringMassParams {
             .p_max_f            = +1e-3,
             .v_max              = 2,
             .v_max_f            = 1e-3,
-            .width              = 0.1 * static_cast<real_t>(n_masses + 1),
+            .width              = real_t(0.1) * static_cast<real_t>(n_masses + 1),
             .N_horiz            = N_horiz,
             .T_horiz            = 15,
             .q_vel              = 1,
