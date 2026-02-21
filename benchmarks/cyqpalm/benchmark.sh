@@ -13,7 +13,7 @@ export CONAN_HOME="${CYQLONE_ROOT}/.conan2"
 
 # Set up Conan and install the dependencies
 deps() {
-    local profiles=("-pr:h" "${CYQLONE_ROOT}/scripts/dev/profiles/dev-no-sccache")
+    local profiles=("-pr:h" "${CYQLONE_ROOT}/scripts/dev/profiles/dev-minimal")
     local profiles_dir="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles"
     local with_mkl=False; local editable=0; local lock=0
     local extra_args=()

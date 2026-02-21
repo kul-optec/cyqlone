@@ -1,3 +1,4 @@
 {% set my_profiles = os.path.join(profile_dir, "..", "..", "ci", "conan-profiles", "profiles") %}
-include({{ os.path.join(profile_dir, "dev-no-sccache") }})
+include({{ os.path.join(profile_dir, "dev-minimal") }})
 include({{ os.path.join(my_profiles, "sccache", "only-self.profile") }})
+include({{ os.path.join(my_profiles, "link", "mold.profile") }})
