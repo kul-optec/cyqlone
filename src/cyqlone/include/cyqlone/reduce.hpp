@@ -45,16 +45,16 @@ struct norms : norms<T> {
 template <class T>
 struct norms<T, void> {
     struct result {
-        real_t max;
-        real_t asum;
-        real_t sumsq;
+        T max;
+        T asum;
+        T sumsq;
 
-        [[nodiscard]] real_t norm1() const { return asum; }
-        [[nodiscard]] real_t norm2() const {
+        [[nodiscard]] T norm1() const { return asum; }
+        [[nodiscard]] T norm2() const {
             using std::sqrt;
             return sqrt(sumsq);
         }
-        [[nodiscard]] real_t norminf() const {
+        [[nodiscard]] T norminf() const {
             using std::isfinite;
             return isfinite(asum) ? max : asum;
         }

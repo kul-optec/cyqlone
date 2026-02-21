@@ -9,6 +9,7 @@
 #include <batmat/ops/rotate.hpp>
 #include <batmat/simd.hpp>
 #include <array>
+#include <cmath>
 #include <concepts>
 #include <tuple>
 #include <utility>
@@ -131,6 +132,14 @@ template <class T, class Abi, StorageOrder OA>
     return reduce<T, Abi>(simd{0}, fma, simd_reduce, a);
 }
 
+/// Scalar product.
+template <class T, class Abi, StorageOrder OB, StorageOrder OC>
+[[gnu::flatten]] void scale(T a, view<const T, Abi, OB> B, view<T, Abi, OC> C) {
+    BATMAT_ASSERT(B.rows() == C.rows());
+    BATMAT_ASSERT(B.cols() == C.cols());
+    iter_elems_store<T, Abi, OC>([&](auto Bi) { return a * Bi; }, C, B);
+}
+
 /// Hadamard (elementwise) product.
 template <class T, class Abi, StorageOrder OA, StorageOrder OB, StorageOrder OC>
 [[gnu::flatten]] void hadamard(view<const T, Abi, OA> A, view<const T, Abi, OB> B,
@@ -200,34 +209,34 @@ template <class T, class Abi, T Beta, StorageOrder O, class... Xs>
 /// Negate a matrix or vector.
 /// @todo: add Negate option to batmat::linalg::copy and remove this function, then this also
 ///        supports transposition.
-template <class T, class Abi, int Rotate, StorageOrder O>
-[[gnu::flatten]] void negate(view<const T, Abi, O> A, view<T, Abi, O> B) {
+template <class T, class Abi, int Rotate, StorageOrder OA, StorageOrder OB>
+[[gnu::flatten]] void negate(view<const T, Abi, OA> A, view<T, Abi, OB> B) {
     BATMAT_ASSERT(A.rows() == B.rows());
     BATMAT_ASSERT(A.cols() == B.cols());
     using batmat::ops::rotl;
-    iter_elems_store<T, Abi, O>([&](auto Ai) { return -rotl<Rotate>(Ai); }, B, A);
+    iter_elems_store<T, Abi, OB>([&](auto Ai) { return -rotl<Rotate>(Ai); }, B, A);
 }
 
 /// Subtract two matrices or vectors C = A - B.
-template <class T, class Abi, int Rotate, StorageOrder O>
-[[gnu::flatten]] void sub(view<const T, Abi, O> A, view<const T, Abi, O> B, view<T, Abi, O> C) {
+template <class T, class Abi, int Rotate, StorageOrder OA, StorageOrder OB, StorageOrder OC>
+[[gnu::flatten]] void sub(view<const T, Abi, OA> A, view<const T, Abi, OB> B, view<T, Abi, OC> C) {
     BATMAT_ASSERT(A.rows() == B.rows());
     BATMAT_ASSERT(A.cols() == B.cols());
     BATMAT_ASSERT(A.rows() == C.rows());
     BATMAT_ASSERT(A.cols() == C.cols());
     using batmat::ops::rotl;
-    iter_elems_store<T, Abi, O>([&](auto Ai, auto Bi) { return Ai - rotl<Rotate>(Bi); }, C, A, B);
+    iter_elems_store<T, Abi, OC>([&](auto Ai, auto Bi) { return Ai - rotl<Rotate>(Bi); }, C, A, B);
 }
 
 /// Add two matrices or vectors C = A + B.
-template <class T, class Abi, int Rotate, StorageOrder O>
-[[gnu::flatten]] void add(view<const T, Abi, O> A, view<const T, Abi, O> B, view<T, Abi, O> C) {
+template <class T, class Abi, int Rotate, StorageOrder OA, StorageOrder OB, StorageOrder OC>
+[[gnu::flatten]] void add(view<const T, Abi, OA> A, view<const T, Abi, OB> B, view<T, Abi, OC> C) {
     BATMAT_ASSERT(A.rows() == B.rows());
     BATMAT_ASSERT(A.cols() == B.cols());
     BATMAT_ASSERT(A.rows() == C.rows());
     BATMAT_ASSERT(A.cols() == C.cols());
     using batmat::ops::rotl;
-    iter_elems_store<T, Abi, O>([&](auto Ai, auto Bi) { return Ai + rotl<Rotate>(Bi); }, C, A, B);
+    iter_elems_store<T, Abi, OC>([&](auto Ai, auto Bi) { return Ai + rotl<Rotate>(Bi); }, C, A, B);
 }
 
 } // namespace detail
@@ -277,6 +286,21 @@ template <simdifiable Vx, simdifiable Vy>
 simdified_value_t<Vx> dot(Vx &&x, Vy &&y) {
     return detail::dot<simdified_value_t<Vx>, simdified_abi_t<Vx>>(simdify(x).as_const(),
                                                                    simdify(y).as_const());
+}
+
+/// Multiply a vector by a scalar z = αx.
+template <simdifiable Vx, simdifiable Vz, std::convertible_to<simdified_value_t<Vx>> T>
+    requires simdify_compatible<Vx, Vz>
+void scale(T alpha, Vx &&x, Vz &&z) {
+    detail::scale<simdified_value_t<Vx>, simdified_abi_t<Vx>>(alpha, simdify(x).as_const(),
+                                                              simdify(z));
+}
+
+/// Multiply a vector by a scalar x = αx.
+template <simdifiable Vx, std::convertible_to<simdified_value_t<Vx>> T>
+void scale(T alpha, Vx &&x) {
+    detail::scale<simdified_value_t<Vx>, simdified_abi_t<Vx>>(alpha, simdify(x).as_const(),
+                                                              simdify(x));
 }
 
 /// Compute the Hadamard (elementwise) product of two vectors z = x ⊙ y.
@@ -505,6 +529,22 @@ simdified_value_t<Vx> dot(Vx &&x, Vy &&y) {
     for (index_t b = 0; b < x.num_batches(); ++b)
         result += linalg::dot(x.batch(b), y.batch(b));
     return result;
+}
+
+/// Multiply a vector by a scalar z = αx.
+template <simdifiable_multi Vx, simdifiable_multi Vz, std::convertible_to<simdified_value_t<Vx>> T>
+    requires simdify_compatible<Vx, Vz>
+void scale(T alpha, Vx &&x, Vz &&z) {
+    BATMAT_ASSERT(x.num_batches() == z.num_batches());
+    for (index_t b = 0; b < x.num_batches(); ++b)
+        linalg::scale(alpha, x.batch(b), z.batch(b));
+}
+
+/// Multiply a vector by a scalar x = αx.
+template <simdifiable_multi Vx, std::convertible_to<simdified_value_t<Vx>> T>
+void scale(T alpha, Vx &&x) {
+    for (index_t b = 0; b < x.num_batches(); ++b)
+        linalg::scale(alpha, x.batch(b));
 }
 
 /// Compute the Hadamard (elementwise) product of two vectors z = x ⊙ y.
