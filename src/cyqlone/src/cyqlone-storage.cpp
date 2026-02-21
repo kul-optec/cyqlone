@@ -165,7 +165,11 @@ CyqloneStorage<T> CyqloneStorage<T>::build(const LinearOCPStorage &ocp, index_t 
     return res;
 }
 
+#if 0 // TODO: make LinearOCPStorage templated
 #define CYQLONE_INSTANTIATE_CYQLONE_STORAGE(T) template struct CyqloneStorage<T>;
 BATMAT_FOREACH_DTYPE(CYQLONE_INSTANTIATE_CYQLONE_STORAGE)
+#else
+template struct CyqloneStorage<real_t>;
+#endif
 
 } // namespace cyqlone
