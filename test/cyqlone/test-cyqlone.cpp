@@ -393,12 +393,11 @@ TEST_P(CyqloneFactorTest, factor) {
     using std::pow;
     const auto ε = pow(std::numeric_limits<real_t>::epsilon(), 0.6);
     cyqlone::linalg::axpy(grad, {1, 1}, DCᵀΣDCux, Mᵀλ);
-    std::cout << "dynamics constraints: "
-              << guanaqo::float_to_str(cyqlone::linalg::norm_inf(simdify(Mxb)))
+    std::cout << "dynamics constraints: " << guanaqo::float_to_str(cyqlone::linalg::norm_inf(Mxb))
               << "\nstationarity:         "
-              << guanaqo::float_to_str(cyqlone::linalg::norm_inf(simdify(grad))) << "\n";
-    EXPECT_LE(cyqlone::linalg::norm_inf(simdify(Mxb)), ε);
-    EXPECT_LE(cyqlone::linalg::norm_inf(simdify(grad)), ε);
+              << guanaqo::float_to_str(cyqlone::linalg::norm_inf(grad)) << "\n";
+    EXPECT_LE(cyqlone::linalg::norm_inf(Mxb), ε);
+    EXPECT_LE(cyqlone::linalg::norm_inf(grad), ε);
 
 #if GUANAQO_WITH_TRACING
     {
