@@ -56,6 +56,7 @@ class CyqloneRecipe(ConanFile):
         "test/*",
         "examples/*",
         "benchmarks/*",
+        "!benchmarks/cyqpalm/*",
         "LICENSE",
         "README.md",
     )
