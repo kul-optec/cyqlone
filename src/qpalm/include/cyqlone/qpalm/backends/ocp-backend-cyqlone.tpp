@@ -418,7 +418,7 @@ struct CyQPALMBackend {
             linalg::for_each_elementwise(grad_norm_simd, grad_fj, Mᵀλj, Aᵀŷj);
         };
         ocp.foreach_stage(ctx, grad_norm_batch, grad_f, Mᵀλ, Aᵀŷ);
-        return ctx.reduce(norms(nrm_simd), norms).norminf();
+        return ctx.reduce(norms(nrm_simd), norms).norm_inf();
     }
 
     void scale_variables(std::span<const real_t> in, var_vec_t &out) const {

@@ -86,7 +86,7 @@ real_t CyQPALMBackend<VL, DefaultOrder>::ineq_constr_viol(Context &ctx,
         linalg::for_each_elementwise(viol_simd, Axj, b_min_j, b_max_j);
     };
     ocp.foreach_stage(ctx, viol_batch, Ax, b_min_strided, b_max_strided);
-    return ctx.reduce(norms(nrm_simd), norms).norminf();
+    return ctx.reduce(norms(nrm_simd), norms).norm_inf();
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
@@ -107,7 +107,7 @@ real_t CyQPALMBackend<VL, DefaultOrder>::ineq_constr_resid_al(Context &ctx,
         linalg::transform_elementwise(resid_simd, ej, yj, ŷj, Σj);
     };
     ocp.foreach_stage(ctx, resid_batch, e, y, ŷ, Σ);
-    return ctx.reduce(norms(nrm_simd), norms).norminf();
+    return ctx.reduce(norms(nrm_simd), norms).norm_inf();
 }
 
 template <index_t VL, StorageOrder DefaultOrder>

@@ -173,15 +173,15 @@ int main() {
     symv_add(tril(M), x, r);
     syomv(tril(K), x, r);
     auto res_norm = cyqlone::linalg::norms_all(r);
-    std::cout << "\nResidual norms: ℓ₂ = " << guanaqo::float_to_str(res_norm.norm2())
-              << ",\tmax = " << guanaqo::float_to_str(res_norm.norminf()) << "\n";
+    std::cout << "\nResidual norms: ℓ₂ = " << guanaqo::float_to_str(res_norm.norm_2())
+              << ",\tmax = " << guanaqo::float_to_str(res_norm.norm_inf()) << "\n";
     constexpr auto ε = std::numeric_limits<T>::epsilon();
     const int max_it = 100 * N * n;
     auto [normM, it] = λ_max_power(M, K, max_it, ε);
     std::cout << "Spectral norm M: " << guanaqo::float_to_str(normM) << " ("
               << (it <= max_it ? "" : "approx., ") << it << " iter.)\n";
     using cyqlone::linalg::norm_2;
-    const auto η = res_norm.norm2() / (normM * norm_2(x) + norm_2(b));
+    const auto η = res_norm.norm_2() / (normM * norm_2(x) + norm_2(b));
     std::cout << "Backward error: " << guanaqo::float_to_str(η) << "\n\n";
 
 #if CYQLONE_WITH_MATIO

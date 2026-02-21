@@ -258,13 +258,13 @@ norms<simdified_value_t<Vx>>::result norms_all(Vx &&x) {
 /// Compute the infinity norm of a vector.
 template <simdifiable Vx>
 simdified_value_t<Vx> norm_inf(Vx &&x) {
-    return norms_all(std::forward<Vx>(x)).norminf();
+    return norms_all(std::forward<Vx>(x)).norm_inf();
 }
 
 /// Compute the 1-norm of a vector.
 template <simdifiable Vx>
 simdified_value_t<Vx> norm_1(Vx &&x) {
-    return norms_all(std::forward<Vx>(x)).norm1();
+    return norms_all(std::forward<Vx>(x)).norm_1();
 }
 
 /// Compute the squared 2-norm of a vector.
@@ -495,13 +495,13 @@ norms<simdified_value_t<Vx>>::result norms_all(Vx &&x) {
 /// Compute the infinity norm of a vector.
 template <simdifiable_multi Vx>
 simdified_value_t<Vx> norm_inf(Vx &&x) {
-    return norms_all(std::forward<Vx>(x)).norminf();
+    return norms_all(std::forward<Vx>(x)).norm_inf();
 }
 
 /// Compute the 1-norm of a vector.
 template <simdifiable_multi Vx>
 simdified_value_t<Vx> norm_1(Vx &&x) {
-    return norms_all(std::forward<Vx>(x)).norm1();
+    return norms_all(std::forward<Vx>(x)).norm_1();
 }
 
 /// Compute the squared 2-norm of a vector.

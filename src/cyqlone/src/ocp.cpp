@@ -87,10 +87,10 @@ auto LinearOCPStorage::compute_kkt_error(const Solution &sol) const -> KKTError 
     auto eq_norm = std::accumulate(eq_res.data, eq_res.data + eq_res.rows, norms.zero(), norms);
 
     return {
-        .stationarity        = stat_norm.norminf(),
-        .inequality_residual = ineq_norm.norminf(),
-        .equality_residual   = eq_norm.norminf(),
-        .complementarity     = compl_norm.norminf(),
+        .stationarity        = stat_norm.norm_inf(),
+        .inequality_residual = ineq_norm.norm_inf(),
+        .equality_residual   = eq_norm.norm_inf(),
+        .complementarity     = compl_norm.norm_inf(),
     };
 }
 

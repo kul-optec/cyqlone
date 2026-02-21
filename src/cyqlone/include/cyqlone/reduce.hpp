@@ -49,12 +49,12 @@ struct norms<T, void> {
         T asum;
         T sumsq;
 
-        [[nodiscard]] T norm1() const { return asum; }
-        [[nodiscard]] T norm2() const {
+        [[nodiscard]] T norm_1() const { return asum; }
+        [[nodiscard]] T norm_2() const {
             using std::sqrt;
             return sqrt(sumsq);
         }
-        [[nodiscard]] T norminf() const {
+        [[nodiscard]] T norm_inf() const {
             using std::isfinite;
             return isfinite(asum) ? max : asum;
         }

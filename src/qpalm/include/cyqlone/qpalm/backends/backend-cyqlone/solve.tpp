@@ -73,17 +73,15 @@ void CyQPALMBackend<VL, DefaultOrder>::print_solve_rhs_norms(Context &ctx, const
     auto eq_constr_grad_norm   = norm_inf_l1_sq(ctx, Mᵀλ);
     auto ineq_constr_grad_norm = norm_inf_l1_sq(ctx, Aᵀŷ);
     if (ctx.is_master()) {
-        using std::sqrt;
         std::cout << "                   gradient:    abs∞="
-                  << guanaqo::float_to_str(grad_norm.norminf(), prec)
-                  << ",  abs₂=" << guanaqo::float_to_str(sqrt(grad_norm.norm2()), prec)
-                  << "      {grad cost=" << guanaqo::float_to_str(sqrt(cost_grad_norm.norm2()))
-                  << ",  Mᵀλ=" << guanaqo::float_to_str(sqrt(eq_constr_grad_norm.norm2()))
-                  << ",  Aᵀŷ=" << guanaqo::float_to_str(sqrt(ineq_constr_grad_norm.norm2()))
-                  << "}\n"
+                  << guanaqo::float_to_str(grad_norm.norm_inf(), prec)
+                  << ",  abs₂=" << guanaqo::float_to_str(grad_norm.norm_2(), prec)
+                  << "      {grad cost=" << guanaqo::float_to_str(cost_grad_norm.norm_2())
+                  << ",  Mᵀλ=" << guanaqo::float_to_str(eq_constr_grad_norm.norm_2())
+                  << ",  Aᵀŷ=" << guanaqo::float_to_str(ineq_constr_grad_norm.norm_2()) << "}\n"
                   << "                constraints:    abs∞="
-                  << guanaqo::float_to_str(constr_norm.norminf(), prec)
-                  << ",  abs₂=" << guanaqo::float_to_str(sqrt(constr_norm.norm2()), prec) << "\n";
+                  << guanaqo::float_to_str(constr_norm.norm_inf(), prec)
+                  << ",  abs₂=" << guanaqo::float_to_str(constr_norm.norm_2(), prec) << "\n";
     }
 }
 
