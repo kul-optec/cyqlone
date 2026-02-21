@@ -33,3 +33,51 @@ jobs:
         -s:b compiler.cppstd=20
 
     - run: conan cache clean
+
+  benchmarks:
+    name: "CyQPALM benchmarks (${{ matrix.compiler }})"
+    strategy:
+      matrix:
+        compiler: ["gcc", "clang-20"]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    container: ubuntu:jammy
+    env:
+      DEV_ARCH: x86-64-v3
+      CTEST_OUTPUT_ON_FAILURE: "1"
+    steps:
+    - name: Install dependencies
+      run: >
+        apt-get update && apt-get install -y --no-install-recommends
+        git wget gcc g++ make libgfortran5 python3-pip
+        ca-certificates lsb-release software-properties-common gnupg
+    
+    - name: Install Clang
+      if: matrix.compiler == 'clang-20'
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        ./llvm.sh 20 all
+
+    - name: Install Python dependencies
+      run: pip install -U pip 'conan<3'
+
+    - uses: actions/checkout@v4
+
+    - name: Git safe directory
+      run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
+    - name: Install dependencies
+      run: ./benchmark.sh deps --${{ matrix.compiler }}
+      working-directory: benchmarks/cyqpalm
+
+    - name: Build benchmarks
+      run: ./benchmark.sh build
+      working-directory: benchmarks/cyqpalm
+
+    - name: Run quick benchmarks
+      run: ./benchmark.sh benchmark-quick
+      working-directory: benchmarks/cyqpalm
+      env:
+        TASKSET_CPU: env
+        NPROC: 4
