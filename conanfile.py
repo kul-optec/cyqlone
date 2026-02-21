@@ -62,12 +62,13 @@ class CyqloneRecipe(ConanFile):
     )
 
     def export_sources(self):
-        git = Git(self)
-        status_cmd = "status . --short --no-branch --untracked-files=no"
-        dirty = bool(git.run(status_cmd).strip())
-        hash = git.get_commit() + ("-dirty" if dirty else "")
-        print("Commit hash:", hash)
-        save(self, os.path.join(self.export_sources_folder, "commit.txt"), hash)
+        if os.path.exists(os.path.join(self.recipe_folder, ".git")):
+            git = Git(self)
+            status_cmd = "status . --short --no-branch --untracked-files=no"
+            dirty = bool(git.run(status_cmd).strip())
+            hash = git.get_commit() + ("-dirty" if dirty else "")
+            print("Commit hash:", hash)
+            save(self, os.path.join(self.export_sources_folder, "commit.txt"), hash)
 
     generators = ("CMakeDeps",)
 

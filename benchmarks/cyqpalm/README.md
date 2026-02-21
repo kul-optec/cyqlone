@@ -1,8 +1,9 @@
 # CyQPALM benchmarks
 
 To reproduce the results from the paper, you will need the [Conan](https://conan.io/) package
-manager. It can be installed via `pip install conan`. Then download, build and install the
-dependencies:
+manager. It can be installed via `python3 -m pip install conan`. You'll also need the following
+standard tools: Git, wget, make, GCC and libgfortran (`apt install git wget gcc g++ make libgfortran5`).
+Then download, build and install the dependencies:
 ```sh
 ./benchmark.sh deps --gcc
 # -- or --

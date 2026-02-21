@@ -13,10 +13,8 @@ export CONAN_HOME="${CYQLONE_ROOT}/.conan2"
 
 # Set up Conan and install the dependencies
 deps() {
-    local dev_profile="${CYQLONE_ROOT}/scripts/dev/profiles/dev"
-    local clang_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile"
-    local icx_profile="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles/toolchain/icx-linux.profile"
-    local profiles=("-pr:h" "${dev_profile}")
+    local profiles=("-pr:h" "${CYQLONE_ROOT}/scripts/dev/profiles/dev-no-sccache")
+    local profiles_dir="${CYQLONE_ROOT}/scripts/ci/conan-profiles/profiles"
     local with_mkl=False; local editable=0; local lock=0
     local extra_args=()
     while [[ $# -gt 0 ]]; do
@@ -26,10 +24,11 @@ deps() {
         fi
         case $1 in
             --gcc) ;;
-            --clang*) export TTTAPA_CONAN_PROFILES_CLANG_SUFFIX="${1#--clang}"
-                      profiles=("-pr:h" "${dev_profile}" "-pr:h" "${clang_profile}") ;;
-            --icx) profiles=("-pr:h" "${dev_profile}" "-pr:h" "${icx_profile}") ;;
+            --clang*) profiles+=("-pr:h" "${profiles_dir}/toolchain/clang-linux.profile")
+                      export TTTAPA_CONAN_PROFILES_CLANG_SUFFIX="${1#--clang}" ;;
+            --icx) profiles+=("-pr:h" "${profiles_dir}/toolchain/icx-linux.profile") ;;
             --with-mkl) with_mkl=True ;;
+            --sccache) profiles+=("-pr:h" "${profiles_dir}/sccache/only-self.profile") ;;
             --editable|-e) editable=1 ;;
             --lock) lock=1 ;;
             --help|-h)
@@ -40,6 +39,7 @@ deps() {
                 echo "  --with-mkl       Build with MKL support (OpenBLAS is used by default)"          >&2;
                 echo "  --editable,-e    Set up Cyqlone as editable Conan package (for development)"    >&2;
                 echo "  --lock           Create or update the Conan lockfile"                           >&2;
+                echo "  --sccache        Use sccache for caching builds (needs to be installed)"        >&2;
                 exit 0 ;;
             *) echo "Unknown option '$1'. Use $0 deps --help for usage information." >&2; exit 1 ;;
         esac
@@ -227,7 +227,7 @@ main() {
         clean)
             clean ;;
         help|*)
-            echo "Usage: $0 {deps|build|benchmark-quick|benchmark-scaling|benchmark-grid|all}"      >&2
+            echo "Usage: $0 {deps|build|benchmark-quick|benchmark-scaling|benchmark-grid|all|...}"  >&2
             echo ""                                                                                 >&2
             echo "Commands:"                                                                        >&2
             echo "  deps [...]                - Install the dependencies (using Conan)"             >&2

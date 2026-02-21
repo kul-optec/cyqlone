@@ -1,0 +1,24 @@
+# Basic Dockerfile for building and running the CyQPALM benchmarks.
+# Its main purpose is to check that the benchmarks can be built and run in a clean environment.
+
+FROM ubuntu:jammy
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    git wget gcc g++ make libgfortran5 ca-certificates python3-pip \
+ && rm -rf /var/lib/apt/lists/*
+RUN pip install 'conan<3'
+
+COPY src /cyqlone/src
+COPY cmake /cyqlone/cmake
+COPY interfaces /cyqlone/interfaces
+COPY test /cyqlone/test
+COPY examples /cyqlone/examples
+COPY scripts /cyqlone/scripts
+COPY benchmarks /cyqlone/benchmarks
+COPY CMakeLists.txt LICENSE README.md conanfile.py /cyqlone/
+
+WORKDIR /cyqlone/benchmarks/cyqpalm
+RUN ./benchmark.sh deps --gcc
+RUN ./benchmark.sh build
+RUN ./benchmark.sh benchmark-quick
