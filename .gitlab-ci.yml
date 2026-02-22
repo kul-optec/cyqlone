@@ -1,0 +1,90 @@
+variables:
+  CTEST_OUTPUT_ON_FAILURE: "1"
+  GIT_SUBMODULE_STRATEGY: recursive
+  CONAN_HOME: $CI_PROJECT_DIR/.conan2
+  SCCACHE_DIR: $CI_PROJECT_DIR/.sccache
+  SCCACHE_CACHE_SIZE: 2G
+.setup-conan:
+  before_script:
+    - >
+      apt-get update && apt-get install -y --no-install-recommends
+      git wget gcc g++ make libgfortran5 python3-pip
+      ca-certificates lsb-release software-properties-common gnupg
+    - >
+      wget -O- https://github.com/mozilla/sccache/releases/download/v0.14.0/sccache-v0.14.0-x86_64-unknown-linux-musl.tar.gz
+      | tar xz --strip-components=1 -C /usr/local/bin sccache-v0.14.0-x86_64-unknown-linux-musl/sccache
+    - pip install -U --break-system-packages conan~=2.25.2
+    - conan profile detect -f
+    - conan remote add tttapa-conan-recipes "${CI_PROJECT_DIR}/scripts/ci/conan-recipes" --force
+    - conan config install scripts/ci/conan-profiles/settings_user.yml
+  cache:
+    key: conan-$CACHE_KEY
+    paths:
+      - .conan2/p
+      - .sccache
+
+build:
+  extends: .setup-conan
+  image: ubuntu:noble
+  parallel:
+    matrix:
+      - GCC: ["15"]
+        BUILD_TYPE: ["Debug", "Release"]
+        PROFILE: ["ci"]
+  variables:
+    CACHE_KEY: $PROFILE-$GCC-$BUILD_TYPE
+  script:
+    # Debug builds require too much memory, so limit the parallelism
+    - touch /tmp/jobs.profile
+    - '[ $BUILD_TYPE = "Release" ] || { echo -e "[conf]\nbatmat/*:tools.build:jobs=2" > /tmp/jobs.profile; }'
+    - >
+      conan create . --build=missing -pr scripts/ci/profiles/${PROFILE}.profile -pr /tmp/jobs.profile
+      -s compiler.version=${GCC} -s build_type=${BUILD_TYPE} -s:b compiler.cppstd=20
+      2>&1 | tee build.log
+    - conan cache clean
+  artifacts:
+    when: always
+    paths:
+      - build.log
+    expire_in: 1 week
+
+.benchmarks-base:
+  image: ubuntu:jammy
+  variables:
+    DEV_ARCH: x86-64-v3
+  before_script:
+    - >
+      apt-get update && apt-get install -y --no-install-recommends
+      git wget gcc g++ make libgfortran5 python3-pip
+      ca-certificates lsb-release software-properties-common gnupg
+  script:
+    - uname -a
+    - lsb_release -a
+    - lscpu
+    - pip install -U 'conan<3'
+    - cd benchmarks/cyqpalm
+    - ./benchmark.sh deps --${COMPILER} 2>&1 > deps.log
+    - ./benchmark.sh build
+    - export OMP_PLACES='cores(4)'
+    - export OMP_NUM_THREADS=4
+    - ./benchmark.sh benchmark-quick
+  artifacts:
+    when: always
+    paths:
+      - benchmarks/cyqpalm/deps.log
+    expire_in: 1 week
+
+benchmarks-gcc:
+  extends: .benchmarks-base
+  variables:
+    COMPILER: gcc
+
+benchmarks-clang:
+  extends: .benchmarks-base
+  variables:
+    COMPILER: clang-20
+  before_script:
+    - !reference [.benchmarks-base, before_script]
+    - wget https://apt.llvm.org/llvm.sh
+    - chmod +x llvm.sh
+    - ./llvm.sh 20 all
