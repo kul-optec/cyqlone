@@ -20,12 +20,13 @@ By default, the benchmarks run on the first eight CPUs available on your system.
 (e.g. if fewer CPUs are available or if the first eight logical CPUs are hyperthreads on four
 physical cores), configure the following environment variables:
 ```sh
-export NPROC=4                      # number of CPUs to use (p parameter in the paper)
-export TASKSET_CPU="taskset -c 0-3" # which CPUs to use (here: first four)
+export OMP_NUM_THREADS=4 # number of CPUs to use (p parameter in the paper)
+export OMP_PLACES="0:4"  # which CPUs to use (here: first four)
 ```
-Using `taskset` to pin the benchmark processes to specific CPUs helps reduce variability in the
+Using `OMP_PLACES` to pin the benchmark processes to specific CPUs helps reduce variability in the
 results, and is crucial when using a system with both performance and efficiency cores (you want
-to select the performance cores).
+to select the performance cores). See https://www.openmp.org/spec-html/5.0/openmpse53.html for more
+details on the `OMP_PLACES` syntax.
 
 You can now run the benchmarks. For a quick sanity check, run:
 ```sh

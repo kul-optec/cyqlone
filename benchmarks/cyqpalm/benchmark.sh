@@ -8,8 +8,8 @@ export CONAN_HOME="${CYQLONE_ROOT}/.conan2"
 # User-configurable variables with defaults
 : "${CONF_PRESET:=conan-release}"
 : "${BUILD_PRESET:=conan-release}"
-: "${TASKSET_CPU:=taskset -c 0-7}"  # Default to binding to CPU cores 0-7
-: "${NPROC:=8}" # Default to using 8 processors (p parameter in the paper)
+: "${OMP_NUM_THREADS:=8}" # Use 8 processors (p parameter in the paper)
+: "${OMP_PLACES:=0:$OMP_NUM_THREADS}" # Bind to the first CPU cores (should be physical P-cores)
 
 # Set up Conan and install the dependencies
 deps() {
@@ -125,13 +125,14 @@ benchmark() {
         echo "Benchmark executable not found, please run the build step first." >&2; exit 1
     fi
     echo $0
-    exec ${TASKSET_CPU} "${build_folder}/spring-mass" "$@"
+    OMP_NUM_THREADS="${OMP_NUM_THREADS}" OMP_PLACES="${OMP_PLACES}" \
+        "${build_folder}/spring-mass" "$@"
 }
 
 # Run the quick benchmark as a sanity check
 benchmark_quick() {
     benchmark \
-        --problem wang-boyd-2008 --cold --warm-shift -I 1 -p "${NPROC}" --cm \
+        --problem wang-boyd-2008 --cold --warm-shift -I 1 -p "${OMP_NUM_THREADS}" --cm \
         -N 256 -M 12 \
         --benchmark_repetitions=11 --benchmark_report_aggregates_only \
         --benchmark_min_time=0.1s "$@"
@@ -140,7 +141,7 @@ benchmark_quick() {
 # Run the horizon scaling benchmark
 benchmark_scaling() {
     benchmark \
-        --problem wang-boyd-2008 --cold --no-warm-shift -I 20 -p "${NPROC}" --cm --no-updates \
+        --problem wang-boyd-2008 --cold --no-warm-shift -I 20 -p "${OMP_NUM_THREADS}" --cm --no-updates \
         -N 32  -N 64  -N 96  -N 128 -N 160 -N 192 -N 224 -N 256 \
         -N 288 -N 320 -N 352 -N 384 -N 416 -N 448 -N 480 -N 512 \
         -M 12 \
@@ -151,7 +152,7 @@ benchmark_scaling() {
 # Run the states scaling benchmark
 benchmark_scaling_states() {
     benchmark \
-        --problem wang-boyd-2008 --cold --no-warm-shift -I 20 -p1 -p4 -p "${NPROC}" -v1 -v4 --cm \
+        --problem wang-boyd-2008 --cold --no-warm-shift -I 20 -p1 -p4 -p "${OMP_NUM_THREADS}" -v1 -v4 --cm \
         -N 128 \
         -M1 -M2 -M3 -M4 -M5 -M6 -M7 -M8 -M9 -M10 \
         -M11 -M12 -M13 -M14 -M15 -M16 -M17 -M18 -M19 -M20 \
@@ -163,7 +164,7 @@ benchmark_scaling_states() {
 # Run the M×N grid benchmark
 benchmark_grid() {
     benchmark \
-        --problem wang-boyd-2008 --cold --warm-shift -I 150 -p "${NPROC}" --cm \
+        --problem wang-boyd-2008 --cold --warm-shift -I 150 -p "${OMP_NUM_THREADS}" --cm \
         -N 32 -N 64 -N 96 -N 128 -N 160 -N 192 -N 224 -N 256 \
         -M 6 -M 12 -M 18 -M 24 -M 30 \
         --benchmark_repetitions=3 --benchmark_report_aggregates_only \
@@ -245,10 +246,10 @@ main() {
             echo "Use $0 benchmark --help for the available benchmark parameters."                  >&2
             echo ""                                                                                 >&2
             echo "Environment variables:"                                                           >&2
-            echo "  CONF_PRESET  - name of the CMake configure preset (default: conan-release)"     >&2
-            echo "  BUILD_PRESET - name of the CMake build preset (default: conan-release)"         >&2
-            echo "  NPROC        - number of processors to use for the benchmark (default: 8)"      >&2
-            echo "  TASKSET_CPU  - taskset command to bind CPU cores (default: taskset -c 0-7)"     >&2
+            echo "  CONF_PRESET     - name of the CMake configure preset (default: conan-release)"  >&2
+            echo "  BUILD_PRESET    - name of the CMake build preset (default: conan-release)"      >&2
+            echo "  OMP_NUM_THREADS - number of processors to use for the benchmark (default: 8)"   >&2
+            echo "  OMP_PLACES      - OpenMP places for binding (default: 0:\$OMP_NUM_THREADS)"     >&2
             exit $exit ;;
     esac
 }

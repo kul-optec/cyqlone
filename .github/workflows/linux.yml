@@ -79,5 +79,5 @@ jobs:
       run: ./benchmark.sh benchmark-quick
       working-directory: benchmarks/cyqpalm
       env:
-        TASKSET_CPU: env
-        NPROC: 4
+        OMP_PLACES: cores(4)
+        OMP_NUM_THREADS: 4
