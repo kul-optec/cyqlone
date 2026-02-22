@@ -293,19 +293,35 @@ auto open_vector_var(mat_t *mat, const std::string &varname) {
     return var;
 }
 
-void read_from_mat(mat_t *mat, const std::string &varname, std::span<real_t> data) {
+void read_from_mat(mat_t *mat, const std::string &varname, std::span<float> data) {
     auto var = open_vector_var(mat, varname);
     auto n   = var->dims[0];
     BATMAT_ASSERT(n == data.size());
-    const auto *var_data = static_cast<const real_t *>(var->data);
+    const auto *var_data = static_cast<const float *>(var->data);
     std::copy_n(var_data, n, data.begin());
 }
 
-void read_from_mat(mat_t *mat, const std::string &varname, std::vector<real_t> &data) {
+void read_from_mat(mat_t *mat, const std::string &varname, std::span<double> data) {
+    auto var = open_vector_var(mat, varname);
+    auto n   = var->dims[0];
+    BATMAT_ASSERT(n == data.size());
+    const auto *var_data = static_cast<const double *>(var->data);
+    std::copy_n(var_data, n, data.begin());
+}
+
+void read_from_mat(mat_t *mat, const std::string &varname, std::vector<float> &data) {
     auto var = open_vector_var(mat, varname);
     auto n   = var->dims[0];
     data.resize(n);
-    const auto *var_data = static_cast<const real_t *>(var->data);
+    const auto *var_data = static_cast<const float *>(var->data);
+    std::copy_n(var_data, n, data.begin());
+}
+
+void read_from_mat(mat_t *mat, const std::string &varname, std::vector<double> &data) {
+    auto var = open_vector_var(mat, varname);
+    auto n   = var->dims[0];
+    data.resize(n);
+    const auto *var_data = static_cast<const double *>(var->data);
     std::copy_n(var_data, n, data.begin());
 }
 
