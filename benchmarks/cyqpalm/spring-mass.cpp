@@ -29,15 +29,12 @@ namespace fs = std::filesystem;
 
 #include "hpipm.hpp"
 
-#if BATMAT_HAS_DOUBLE_VL_2 && defined(__ARM_NEON)
-constexpr cyqlone::index_t v = 2;
-#elif BATMAT_HAS_DOUBLE_VL_4
-constexpr cyqlone::index_t v = 4;
-#elif BATMAT_HAS_DOUBLE_VL_2
-constexpr cyqlone::index_t v = 2;
+#if defined(__ARM_NEON)
+constexpr auto v_native = std::is_same_v<batmat::real_t, double> ? 2 : 4;
 #else
-constexpr cyqlone::index_t v = 1;
+constexpr auto v_native = std::is_same_v<batmat::real_t, double> ? 4 : 8; // assuming AVX2
 #endif
+constexpr auto v = batmat::types::vl_at_most<batmat::real_t, v_native>;
 
 auto counter(auto x) {
     return benchmark::Counter{static_cast<double>(x), benchmark::Counter::kDefaults};
