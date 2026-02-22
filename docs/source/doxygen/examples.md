@@ -1,6 +1,7 @@
 # Examples {#examples}
 
 - [Solving a block tridiagonal system](@ref solve-block-tridiagonal.cpp)
+- [Spring-mass OCP benchmark](@ref benchmarks/cyqpalm/spring-mass.cpp)
 
 ## 🚧 Work in progress 🚧
 
@@ -37,3 +38,7 @@ The solution produced by this example is stored in a `.mat` file, which can be l
 using the Python script @ref solve-block-tridiagonal.py.
 
 @example solve-block-tridiagonal.py
+
+@example benchmarks/cyqpalm/spring-mass.cpp
+@par Benchmarks from the paper
+@see @ref benchmarks/cyqpalm/README.md for instructions to reproduce the results from the paper.

@@ -28,6 +28,11 @@ The paper describing the algorithms in this repository can be found on arXiv: [*
 }
 ```
 
+## Reproduction of benchmark results from the paper
+
+A script to reproduce the benchmark results from the paper can be found in `benchmarks/cyqpalm`.
+See [`benchmarks/cyqpalm/README.md`](benchmarks/cyqpalm/README.md) for instructions.
+
 ## Installation
 
 Requirements: CMake, Conan 2.

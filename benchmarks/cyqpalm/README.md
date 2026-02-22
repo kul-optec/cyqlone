@@ -40,3 +40,11 @@ To run the full grid benchmark (takes a couple of hours), run:
 ```sh
 ./benchmark.sh benchmark-grid
 ```
+For a full list of the available commands, run:
+```sh
+./benchmark.sh --help
+```
+For more details on the available benchmark parameters, run:
+```sh
+./benchmark.sh benchmark --help
+```

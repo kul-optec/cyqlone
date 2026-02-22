@@ -94,6 +94,8 @@ if (Doxygen_FOUND AND Python3_Interpreter_FOUND)
         docs-doxygen
             "${PROJECT_SOURCE_DIR}/src"
             "${PROJECT_SOURCE_DIR}/examples/solve-block-tridiagonal.cpp"
+            "${PROJECT_SOURCE_DIR}/benchmarks/cyqpalm/README.md"
+            "${PROJECT_SOURCE_DIR}/benchmarks/cyqpalm/spring-mass.cpp"
             "${PROJECT_SOURCE_DIR}/docs/source/doxygen/groups.dox"
             "${PROJECT_SOURCE_DIR}/docs/source/doxygen/examples.md"
             "${PROJECT_SOURCE_DIR}/README.md"
