@@ -133,6 +133,8 @@ def create_scaling_plot(
     if not solvers:
         solvers = list(all_results.keys())
     for solver in solvers:
+        if solver.startswith("cyqlone(p=1,v=1"):
+            continue  # Cyqlone without parallelization or vectorization is not very relevant
         df = get_solver_data(all_results, solver)
         df = df.filter(pl.col("aggregate_name") == aggregate)
         df = df.with_columns(
@@ -154,15 +156,22 @@ def create_scaling_plot(
         scale = 1e3
 
     fig, ax = plt.subplots(figsize=figsize)
+    legend_data = []
     for solver, df_result in plot_data:
-        ax.plot(
+        single_threaded = re.search(r"p=1\b", solver) is not None or "hpipm" in solver
+        four_threaded = re.search(r"p=4\b", solver) is not None
+        no_vectorization = re.search(r"v=1\b", solver) is not None
+        line = ax.plot(
             df_result[xvar].to_numpy(),
             df_result[metric].to_numpy() * scale,
-            marker="o",
+            marker="|" if four_threaded else "o",
             linewidth=1.25,
-            markersize=3,
-            label=format_solver_name(solver),
+            linestyle=":" if no_vectorization else "-",
+            markersize=5 if four_threaded else 3 if single_threaded else 2.5,
+            mfc="white" if single_threaded else None,
         )
+        legend_data.append((line[0], format_solver_name(solver)))
+
 
     if log:
         ax.set_yscale("log")
@@ -173,7 +182,8 @@ def create_scaling_plot(
     label = {"N": "horizon lengths $N$", "M": "numbers of masses $M$"}.get(xvar, xvar)
     ax.set_title(f"{title.capitalize()}\nfor increasing {label}")
     ax.grid(True, alpha=0.3)
-    ax.legend(loc="best", fontsize=9, framealpha=0.7)
+    legend_data.sort(key=lambda x: x[0].get_ydata()[-1], reverse=True)
+    ax.legend(*zip(*legend_data), loc="best", fontsize=9, framealpha=0.7)
     if ylim:
         ax.set_ylim(ylim[0] * scale, ylim[1] * scale)
     elif not log:
