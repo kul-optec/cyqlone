@@ -87,8 +87,7 @@ template <index_t VL, StorageOrder DefaultOrder>
 template <class T>
 real_t CyQPALMBackend<VL, DefaultOrder>::norm_inf(Context &ctx, const T &x) const {
     using std::isfinite;
-    auto nrm = norm_inf_l1_sq(ctx, x);
-    return isfinite(nrm.asum) ? nrm.max : nrm.asum;
+    return norm_inf_l1_sq(ctx, x).norm_inf();
 }
 
 template <index_t VL, StorageOrder DefaultOrder>
