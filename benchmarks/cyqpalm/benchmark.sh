@@ -140,7 +140,7 @@ benchmark_quick() {
 # Run the horizon scaling benchmark
 benchmark_scaling() {
     benchmark \
-        --problem wang-boyd-2008 --cold --warm-shift -I 20 -p "${NPROC}" --cm --no-updates \
+        --problem wang-boyd-2008 --cold --no-warm-shift -I 20 -p "${NPROC}" --cm --no-updates \
         -N 32  -N 64  -N 96  -N 128 -N 160 -N 192 -N 224 -N 256 \
         -N 288 -N 320 -N 352 -N 384 -N 416 -N 448 -N 480 -N 512 \
         -M 12 \
@@ -151,9 +151,8 @@ benchmark_scaling() {
 # Run the states scaling benchmark
 benchmark_scaling_states() {
     benchmark \
-        --problem wang-boyd-2008 --cold --warm-shift -I 5 -p 1 -p "${NPROC}" -v 4 -v 8 \
-        --cm --no-warm-shift \
-        -N 48 \
+        --problem wang-boyd-2008 --cold --no-warm-shift -I 20 -p1 -p4 -p "${NPROC}" -v1 -v4 --cm \
+        -N 128 \
         -M1 -M2 -M3 -M4 -M5 -M6 -M7 -M8 -M9 -M10 \
         -M11 -M12 -M13 -M14 -M15 -M16 -M17 -M18 -M19 -M20 \
         -M21 -M22 -M23 -M24 -M25 -M26 -M27 -M28 -M29 -M30 \
