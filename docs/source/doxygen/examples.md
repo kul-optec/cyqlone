@@ -2,6 +2,7 @@
 
 - [Solving a block tridiagonal system](@ref solve-block-tridiagonal.cpp)
 - [Spring-mass OCP benchmark](@ref benchmarks/cyqpalm/spring-mass.cpp)
+- [Standalone PCR solver](@ref test/test-pcr.cpp)
 
 ## 🚧 Work in progress 🚧
 
@@ -42,3 +43,6 @@ using the Python script @ref solve-block-tridiagonal.py.
 @example benchmarks/cyqpalm/spring-mass.cpp
 @par Benchmarks from the paper
 @see @ref benchmarks/cyqpalm/README.md for instructions to reproduce the results from the paper.
+
+@example test/test-pcr.cpp
+@par Standalone vectorized PCR solver (independent of the main CyqloneSolver).

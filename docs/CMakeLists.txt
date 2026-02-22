@@ -98,6 +98,7 @@ if (Doxygen_FOUND AND Python3_Interpreter_FOUND)
             "${PROJECT_SOURCE_DIR}/benchmarks/cyqpalm/spring-mass.cpp"
             "${PROJECT_SOURCE_DIR}/docs/source/doxygen/groups.dox"
             "${PROJECT_SOURCE_DIR}/docs/source/doxygen/examples.md"
+            "${PROJECT_SOURCE_DIR}/test/test-pcr.cpp"
             "${PROJECT_SOURCE_DIR}/README.md"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Generating Doxygen documentation")

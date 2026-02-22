@@ -1,5 +1,9 @@
 #pragma once
 
+/// @file
+/// Sparse matrix utilities.
+/// @ingroup topic-utilities
+
 #include <cyqlone/config.hpp>
 #include <batmat/assume.hpp>
 #include <guanaqo/linalg/sparsity.hpp>
@@ -9,9 +13,13 @@
 
 namespace cyqlone {
 
+/// @addtogroup topic-utilities
+/// @{
+
 using guanaqo::linalg::sparsity::SparseCOO;
 using guanaqo::linalg::sparsity::Symmetry;
 
+/// A sparse matrix in COO format.
 struct SparseMatrix {
     const std::vector<index_t> row_indices, col_indices;
     const std::vector<real_t> values;
@@ -22,6 +30,7 @@ struct SparseMatrix {
     }
 };
 
+/// A builder for constructing a SparseMatrix incrementally.
 struct SparseMatrixBuilder {
     index_t rows = -1, cols = -1;
     Symmetry symmetry = Symmetry::Unsymmetric;
@@ -62,5 +71,7 @@ struct SparseMatrixBuilder {
                                                   .col_indices = std::span{col_indices}}};
     }
 };
+
+/// @}
 
 } // namespace cyqlone

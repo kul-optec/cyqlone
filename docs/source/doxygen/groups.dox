@@ -29,3 +29,11 @@
 /** @defgroup topic-linalg Linear algebra
  *  @brief Linear algebra utilities (mostly vector operations).
  */
+
+/** @defgroup topic-utilities Utilities
+ *  @brief Various utility functions and classes.
+ */
+    /** @defgroup topic-util-matio Exporting and loading .mat files
+      *  @brief Functions for exporting and loading matrices and OCP data to and from .mat files.
+      *  @ingroup topic-utilities
+      */

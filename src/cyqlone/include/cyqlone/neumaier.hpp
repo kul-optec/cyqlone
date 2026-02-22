@@ -1,11 +1,17 @@
 #pragma once
 
+/// @file
+/// Kahan-Babuška-Neumaier compensated summation.
+/// @ingroup topic-utilities
+
 #include <cyqlone/config.hpp>
 #include <cmath>
 #include <type_traits>
 
 namespace cyqlone {
 
+/// Kahan-Babuška-Neumaier compensated summation.
+/// @ingroup topic-utilities
 template <class T>
 class NeumaierSum {
   public:

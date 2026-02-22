@@ -23,8 +23,10 @@
 
 namespace cyqlone {
 
+/// No-op completion function for the @ref TreeBarrier.
+/// @ingroup topic-parallelization
 struct EmptyCompletion {
-    void operator()() const noexcept {}
+    void operator()() const noexcept {} ///< Does nothing.
 };
 
 /**
