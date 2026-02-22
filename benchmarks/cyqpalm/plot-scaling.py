@@ -105,7 +105,7 @@ def format_arg(arg: str) -> str | None:
     arg = arg.strip()
     if m := re.match(r"([pv])=(\d+)", arg):
         return f"${m.group(1)}$={m.group(2)}"
-    return {"cm": None, "rm": None, "zero": "cold", "shift": "warm", "upd=0": "no updates"}.get(arg)
+    return {"cm": None, "rm": None, "zero": None, "shift": "warm", "upd=0": "no updates"}.get(arg)
 
 
 def format_solver_name(solver: str) -> str:
@@ -157,6 +157,7 @@ def create_scaling_plot(
 
     fig, ax = plt.subplots(figsize=figsize)
     legend_data = []
+    min_x, max_x = 999999, 0
     for solver, df_result in plot_data:
         single_threaded = re.search(r"p=1\b", solver) is not None or "hpipm" in solver
         four_threaded = re.search(r"p=4\b", solver) is not None
@@ -171,7 +172,7 @@ def create_scaling_plot(
             mfc="white" if single_threaded else None,
         )
         legend_data.append((line[0], format_solver_name(solver)))
-
+        min_x, max_x = min(min_x, df_result[xvar].min()), max(max_x, df_result[xvar].max())
 
     if log:
         ax.set_yscale("log")
@@ -188,6 +189,7 @@ def create_scaling_plot(
         ax.set_ylim(ylim[0] * scale, ylim[1] * scale)
     elif not log:
         ax.set_ylim(bottom=0)
+    ax.set_xlim(left=0, right=max_x + min_x)
 
     plt.tight_layout()
     return fig

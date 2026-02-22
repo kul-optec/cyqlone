@@ -232,9 +232,9 @@ main() {
             echo "  deps [...]                - Install the dependencies (using Conan)"             >&2
             echo "  build                     - Build the benchmark project"                        >&2
             echo "  benchmark-quick           - Run quick benchmark (sanity check)"                 >&2
-            echo "  benchmark-scaling         - Run horizon scaling benchmark (couple of minutes)"  >&2
-            echo "  benchmark-scaling-states  - Run states scaling benchmark (couple of minutes)"   >&2
-            echo "  benchmark-grid            - Run grid benchmark (couple of hours)"               >&2
+            echo "  benchmark-scaling         - Run horizon scaling benchmark (~6 minutes)"         >&2
+            echo "  benchmark-scaling-states  - Run states scaling benchmark (~15 minutes)"         >&2
+            echo "  benchmark-grid            - Run grid benchmark (a couple of hours)"             >&2
             echo "  plot-scaling              - Plot the results of the horizon scaling benchmark"  >&2
             echo "  plot-scaling-states       - Plot the results of the states scaling benchmark"   >&2
             echo "  all                       - Run all commands above in sequence"                 >&2
