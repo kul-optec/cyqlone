@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from pathlib import Path
+import re
 import matplotlib
 
 matplotlib.use("Agg")  # Use non-interactive backend before importing pyplot
@@ -61,17 +63,14 @@ def load_data(file: str) -> dict[str, pl.DataFrame]:
     df = pl.DataFrame(records)
 
     columns_to_add = []
-    if "real_time" in df.columns:
-        columns_to_add.append(pl.col("real_time").alias("time"))
+    columns_to_add.append(pl.col("real_time").alias("time"))
     # Handle num_iter column mapping
     iter_cols = [c for c in ["inner_iter", "iter", "num_iter"] if c in df.columns]
-    if iter_cols:
-        columns_to_add.append(pl.coalesce(iter_cols).alias("num_iter"))
+    columns_to_add.append(pl.coalesce(iter_cols).alias("num_iter"))
     # Handle num_outer_iter column mapping
     if "outer_iter" in df.columns:
         columns_to_add.append(pl.col("outer_iter").alias("num_outer_iter"))
-    if columns_to_add:
-        df = df.with_columns(columns_to_add)
+    df = df.with_columns(columns_to_add)
     # Apply time unit conversions
     df = df.with_columns(
         [
@@ -91,7 +90,7 @@ def load_data(file: str) -> dict[str, pl.DataFrame]:
 
     # Group by solver_id and return dictionary
     return {
-        solver[0] if isinstance(solver, tuple) else solver: group.sort("problem_id")
+        solver[0]: group.sort("problem_id")
         for solver, group in df.group_by("solver_id", maintain_order=True)
     }
 
@@ -100,6 +99,24 @@ def get_solver_data(all_results: dict[str, pl.DataFrame], solver: str) -> pl.Dat
     if solver not in all_results:
         raise ValueError(f"Solver '{solver}' not found. Available: {list(all_results.keys())}")
     return all_results[solver]
+
+
+def format_arg(arg: str) -> str | None:
+    arg = arg.strip()
+    if m := re.match(r"([pv])=(\d+)", arg):
+        return f"${m.group(1)}$={m.group(2)}"
+    return {"cm": None, "rm": None, "zero": "cold", "shift": "warm", "upd=0": "no updates"}.get(arg)
+
+
+def format_solver_name(solver: str) -> str:
+    if not (m := re.match(r"(?P<name>\w+)\((?P<args>.*)\)", solver)):
+        return solver
+    name, args = m.group("name"), m.group("args")
+    name = {"cyqlone": "CyQPALM", "hpipm": "HPIPM"}.get(name, name)
+    fmt_args = list(filter(None, (format_arg(arg) for arg in args.split(","))))
+    if not fmt_args:
+        return name
+    return name + " (" + ", ".join(fmt_args) + ")"
 
 
 def create_scaling_plot(
@@ -131,9 +148,10 @@ def create_scaling_plot(
     max_y = ylim[1] if ylim else max(all_values, default=0)
 
     ylabel = METRIC_LABELS.get(metric, metric.replace("_", " ").capitalize())
-    scale = 1e3 if max_y <= 1.0 and "[ms]" in ylabel else 1.0
-    if scale > 1.0:
+    scale = 1.0
+    if "[ms]" in ylabel and max_y <= 1.0:
         ylabel = ylabel.replace("[ms]", r"[$\mu$s]")
+        scale = 1e3
 
     fig, ax = plt.subplots(figsize=figsize)
     for solver, df_result in plot_data:
@@ -143,7 +161,7 @@ def create_scaling_plot(
             marker="o",
             linewidth=1.25,
             markersize=3,
-            label=solver,
+            label=format_solver_name(solver),
         )
 
     if log:
@@ -204,9 +222,10 @@ def main(
     fig = create_scaling_plot(
         all_results, metric, list(solvers), fig_size, aggregate, ylim_tuple, xvar, log
     )
-    fig.savefig(output, dpi=300)
+    fig_path = Path(output).absolute()
+    fig.savefig(fig_path, dpi=300)
     plt.close(fig)
-    print(output)
+    print(fig_path)
 
 
 if __name__ == "__main__":
