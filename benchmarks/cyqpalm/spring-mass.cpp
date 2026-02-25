@@ -79,7 +79,7 @@ struct Options {
     double pcr_max_update_fraction    = 0.25;
     double cr_max_update_fraction     = 0.9;
     int parallel_solve_cr_threshold   = 10;
-    int parallel_factor_pcr_threshold = 10;
+    int parallel_factor_pcr_threshold = 20;
     double changing_constr_factor     = 0.01;
     bool custom_reporter              = true;
     bool print_extra                  = false;

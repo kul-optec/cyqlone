@@ -52,7 +52,7 @@ struct TricyqleParams {
     /// Threshold on nx for switching to a serial implementation of the reverse CR solve.
     index_t parallel_solve_cr_threshold = 10;
     /// Threshold on nx for switching to a serial implementation of the PCR factorization.
-    index_t parallel_factor_pcr_threshold = 10;
+    index_t parallel_factor_pcr_threshold = 20;
 };
 
 /// Parameters and settings for the Cyqlone solver.
