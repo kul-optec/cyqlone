@@ -317,7 +317,7 @@ void export_problem(const Options &opts) {
         if (fs::is_directory(filename))
             filename /= params.name + ".mat";
         auto mat = cyqlone::create_mat(filename);
-        cyqlone::add_to_mat(mat.get(), problem.ocp);
+        cyqlone::add_to_mat(mat.get(), "ocp", problem.ocp);
         std::cout << "Exported problem " << params.name << " to " << filename << std::endl;
         break;
     }

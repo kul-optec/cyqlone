@@ -36,12 +36,12 @@ TEST(Matio, ocp) {
         for (index_t c = 0; c < ocp.dim.nx; ++c)
             ocp.Q(N)(r, c) = static_cast<real_t>(95000 + N * 100 + r + 10 * c);
 
-    cyqlone::add_to_mat(mat.get(), ocp);
+    cyqlone::add_to_mat(mat.get(), "ocp", ocp);
     mat.reset();
 
     auto mat_loaded = cyqlone::open_mat(pth / "ocp.mat");
     cyqlone::LinearOCPStorage ocp_loaded;
-    cyqlone::read_from_mat(mat_loaded.get(), ocp_loaded);
+    cyqlone::read_from_mat(mat_loaded.get(), "ocp", ocp_loaded);
 
     ASSERT_EQ(ocp.dim.N_horiz, ocp_loaded.dim.N_horiz);
     ASSERT_EQ(ocp.dim.nx, ocp_loaded.dim.nx);

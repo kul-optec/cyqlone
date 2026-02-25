@@ -69,6 +69,10 @@ void add_to_mat(mat_t *mat, const std::string &varname,
 /// Add a batch of matrices to an open .mat file.
 void add_to_mat(mat_t *mat, const std::string &varname,
                 batmat::matrix::View<const float, index_t> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const float> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const double> data);
 /// Add a sparse matrix to an open .mat file.
 /// On the Python side, you can use the following code to load the sparse matrix:
 /// ```python
@@ -84,9 +88,9 @@ void add_to_mat(mat_t *mat, const std::string &varname,
 /// ```
 void add_to_mat(mat_t *mat, const std::string &varname, const SparseMatrix &matrix);
 /// Add the data from a LinearOCPStorage to an open .mat file.
-void add_to_mat(mat_t *mat, const LinearOCPStorage &ocp);
+void add_to_mat(mat_t *mat, const std::string &varname, const LinearOCPStorage &ocp);
 /// Load a LinearOCPStorage from a .mat file.
-void read_from_mat(mat_t *mat, LinearOCPStorage &ocp);
+void read_from_mat(mat_t *mat, const std::string &varname, LinearOCPStorage &ocp);
 /// Load a vector from an open .mat file.
 void read_from_mat(mat_t *mat, const std::string &varname, std::vector<float> &data);
 /// Load a vector from an open .mat file.

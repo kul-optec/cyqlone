@@ -103,12 +103,12 @@ struct PythonOCP {
 
     void dump_mat(const std::filesystem::path &filename) const {
         auto matfp = cyqlone::create_mat(filename);
-        add_to_mat(matfp.get(), ocp);
+        add_to_mat(matfp.get(), "ocp", ocp);
     }
 
     void load_mat(const std::filesystem::path &filename) {
         auto matfp = cyqlone::open_mat(filename);
-        read_from_mat(matfp.get(), ocp);
+        read_from_mat(matfp.get(), "ocp", ocp);
     }
 };
 
