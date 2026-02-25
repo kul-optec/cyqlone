@@ -9,8 +9,6 @@ import polars as pl
 import json
 import click
 
-plt.rcParams.update({"text.usetex": False, "font.size": 11, "font.family": "serif"})
-
 METRIC_PRETTY = {
     "time": "total solver run time",
     "time_per_iter": "time per iteration",
@@ -93,6 +91,13 @@ def load_data(file: str) -> dict[str, pl.DataFrame]:
         solver[0]: group.sort("problem_id")
         for solver, group in df.group_by("solver_id", maintain_order=True)
     }
+
+
+def print_stats(all_results: dict[str, pl.DataFrame], aggregate: str):
+    for solver, df in all_results.items():
+        res = df.filter(pl.col("aggregate_name") == aggregate)
+        tot, failed = len(res), res.filter(pl.col("success") != 1).height
+        print(f"{solver}: {tot - failed}/{tot} successful runs")
 
 
 def get_solver_data(all_results: dict[str, pl.DataFrame], solver: str) -> pl.DataFrame:
@@ -205,6 +210,7 @@ def create_scaling_plot(
 @click.option("--ylim", help="Y-axis limits as 'min,max'")
 @click.option("--xvar", default="N", help="X-axis variable (N or M)")
 @click.option("--log", is_flag=True, help="Use logarithmic scale for Y-axis")
+@click.option("--tex", is_flag=True, help="Render text using LaTeX")
 def main(
     file: str,
     output: str,
@@ -215,7 +221,9 @@ def main(
     ylim: str | None,
     xvar: str,
     log: bool,
+    tex: bool,
 ):
+    plt.rcParams.update({"text.usetex": tex, "font.size": 11, "font.family": "serif"})
     ylim_tuple = None
     if ylim:
         try:
@@ -231,6 +239,7 @@ def main(
         raise click.BadParameter(f"Invalid figsize: {figsize}")
 
     all_results = load_data(file)
+    print_stats(all_results, aggregate)
     fig = create_scaling_plot(
         all_results, metric, list(solvers), fig_size, aggregate, ylim_tuple, xvar, log
     )

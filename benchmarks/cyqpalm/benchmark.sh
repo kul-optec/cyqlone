@@ -141,7 +141,7 @@ benchmark_quick() {
 # Run the horizon scaling benchmark
 benchmark_scaling() {
     benchmark \
-        --problem wang-boyd-2008 --cold --no-warm-shift -I 20 -p "${OMP_NUM_THREADS}" --cm --no-updates \
+        --problem wang-boyd-2008 --no-cold --warm-shift -I 20 -p "${OMP_NUM_THREADS}" --cm --no-updates \
         -N 32  -N 64  -N 96  -N 128 -N 160 -N 192 -N 224 -N 256 \
         -N 288 -N 320 -N 352 -N 384 -N 416 -N 448 -N 480 -N 512 \
         -M 12 \
@@ -152,8 +152,8 @@ benchmark_scaling() {
 # Run the states scaling benchmark
 benchmark_scaling_states() {
     benchmark \
-        --problem wang-boyd-2008 --cold --no-warm-shift -I 20 -p1 -p4 -p "${OMP_NUM_THREADS}" -v1 -v4 --cm \
-        -N 128 \
+        --problem wang-boyd-2008 --no-cold --warm-shift -I 20 -p1 -p4 -p "${OMP_NUM_THREADS}" -v1 -v4 --cm \
+        -N 256 \
         -M1 -M2 -M3 -M4 -M5 -M6 -M7 -M8 -M9 -M10 \
         -M11 -M12 -M13 -M14 -M15 -M16 -M17 -M18 -M19 -M20 \
         -M21 -M22 -M23 -M24 -M25 -M26 -M27 -M28 -M29 -M30 \
@@ -161,7 +161,9 @@ benchmark_scaling_states() {
         --benchmark_min_time=0.01s --benchmark_out=benchmark-scaling-states.json "$@"
 }
 
-# Run the M×N grid benchmark
+# Run the M×N grid benchmark. These are the green tables in the paper.
+# 8 values of N × 5 values of M × 150 instances each × 2 solvers × 2 initializations × 3 repetitions
+# × >0.05 seconds, so this takes a couple of hours to run.
 benchmark_grid() {
     benchmark \
         --problem wang-boyd-2008 --cold --warm-shift -I 150 -p "${OMP_NUM_THREADS}" --cm \
@@ -234,7 +236,7 @@ main() {
             echo "  build                     - Build the benchmark project"                        >&2
             echo "  benchmark-quick           - Run quick benchmark (sanity check)"                 >&2
             echo "  benchmark-scaling         - Run horizon scaling benchmark (~6 minutes)"         >&2
-            echo "  benchmark-scaling-states  - Run states scaling benchmark (~15 minutes)"         >&2
+            echo "  benchmark-scaling-states  - Run states scaling benchmark (~25 minutes)"         >&2
             echo "  benchmark-grid            - Run grid benchmark (a couple of hours)"             >&2
             echo "  plot-scaling              - Plot the results of the horizon scaling benchmark"  >&2
             echo "  plot-scaling-states       - Plot the results of the states scaling benchmark"   >&2
