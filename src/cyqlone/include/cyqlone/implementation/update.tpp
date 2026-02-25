@@ -378,7 +378,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
     // Iterate over all stages in the interval (in reverse order)
     for (index_t i = 0; i < n; ++i) {
         //  5|  for j = jₙ downto j₁
-        index_t j = sub_wrap_N(jn, i);
+        index_t j = sub_wrap_ceil_N(jn, i);
         auto LH = LHs.middle_cols(i * nux, nux), LRS = LH.left_cols(nu);
         auto LR = tril(LRS.top_rows(nu)), LQ = tril(LH.bottom_right(nx, nx));
         auto LB = B̂s.middle_cols(i * nu, nu), Acl = Âs.middle_cols(i * nx, nx);
@@ -404,7 +404,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
         auto Φx = Υ.middle_rows(nu, nx), Φλ = Υ.bottom_rows(nx);
         //  8|  if j > j₁
         if (i + 1 < n) {
-            [[maybe_unused]] const auto j_next = sub_wrap_N(j, 1);
+            [[maybe_unused]] const auto j_next = sub_wrap_ceil_N(j, 1);
             const auto di_next                 = dn + i + 1;
             auto Υ_next                        = (i & 1 ? Υ2 : Υ1).left_cols(mj + nyM);
             auto Υux_next = Υ_next.top_rows(nu + nx), Υλ_next = Υ_next.bottom_rows(nx);

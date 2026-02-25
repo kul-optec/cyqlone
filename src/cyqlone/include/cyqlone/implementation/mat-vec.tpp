@@ -24,7 +24,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, 
     const index_t c_next  = add_wrap_p(c, 1);
     const index_t dn_next = c_next * n, d1_next = dn_next + n - 1;
     for (index_t i = n; i-- > 0;) {
-        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        [[maybe_unused]] index_t j = sub_wrap_ceil_N(jn, i);
         GUANAQO_TRACE("resid_dyn_constr", j);
         index_t di = dn + i;
         auto BAj   = data_F.batch(di);
@@ -60,7 +60,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
     const index_t c_prev  = sub_wrap_p(c, 1);
     const index_t dn_prev = c_prev * n;
     for (index_t i = 0; i < n; ++i) {
-        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        [[maybe_unused]] index_t j = sub_wrap_ceil_N(jn, i);
         GUANAQO_TRACE("trans_dyn_constr", j);
         index_t di = dn + i;
         auto BAj = data_F.batch(di), Bj = BAj.left_cols(nu);

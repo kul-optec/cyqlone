@@ -37,7 +37,7 @@ template <index_t VL, class T, StorageOrder DefaultOrder>
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_N(index_t a, index_t b) const -> index_t {
+auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_ceil_N(index_t a, index_t b) const -> index_t {
     const index_t N = ceil_N();
     BATMAT_ASSUME(N >= 0);
     BATMAT_ASSUME(a >= 0);
@@ -47,7 +47,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::add_wrap_N(index_t a, index_t b) const 
     return a >= N ? a - N : a;
 }
 template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_N(index_t a, index_t b) const -> index_t {
+auto CyqloneSolver<VL, T, DefaultOrder>::sub_wrap_ceil_N(index_t a, index_t b) const -> index_t {
     const index_t N = ceil_N();
     BATMAT_ASSUME(N >= 0);
     BATMAT_ASSUME(a >= 0);

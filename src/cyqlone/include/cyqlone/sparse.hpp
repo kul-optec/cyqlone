@@ -10,6 +10,7 @@
 #include <guanaqo/linalg/sparsity.hpp>
 #include <guanaqo/mat-view.hpp>
 
+#include <concepts>
 #include <ranges>
 #include <vector>
 
@@ -51,7 +52,9 @@ struct SparseMatrixBuilder {
         values.push_back(value);
     }
 
-    void add(index_t row, index_t col, guanaqo::MatrixView<const real_t, index_t> dense,
+    template <std::convertible_to<real_t> T, class I, class S, guanaqo::StorageOrder O>
+    void add(index_t row, index_t col, guanaqo::MatrixView<T, I, S, O> dense,
+             std::remove_cvref_t<T> scale              = 1,
              batmat::linalg::MatrixStructure structure = batmat::linalg::MatrixStructure::General) {
         if (rows >= 0)
             BATMAT_ASSUME(row + dense.rows <= rows);
@@ -61,18 +64,18 @@ struct SparseMatrixBuilder {
             case batmat::linalg::MatrixStructure::General:
                 for (index_t j = 0; j < dense.cols; ++j)
                     for (index_t i = 0; i < dense.rows; ++i)
-                        add(row + i, col + j, dense(i, j));
+                        add(row + i, col + j, scale * dense(i, j));
                 break;
             case batmat::linalg::MatrixStructure::LowerTriangular:
                 for (index_t j = 0; j < dense.cols; ++j)
                     for (index_t i = j; i < dense.rows; ++i)
-                        add(row + i, col + j, dense(i, j));
+                        add(row + i, col + j, scale * dense(i, j));
                 break;
             case batmat::linalg::MatrixStructure::UpperTriangular:
                 BATMAT_ASSERT(dense.rows == dense.cols);
                 for (index_t j = 0; j < dense.cols; ++j)
                     for (index_t i = 0; i <= j; ++i)
-                        add(row + i, col + j, dense(i, j));
+                        add(row + i, col + j, scale * dense(i, j));
                 break;
             default: BATMAT_ASSERT(false);
         }

@@ -623,7 +623,7 @@ struct CyqloneSolver {
         const index_t ti = riccati_thread_assignment(ctx);
         for (index_t i = 0; i < n; ++i) {
             const index_t di = ti * n + i;
-            const index_t j  = sub_wrap_N(ti * n, i);
+            const index_t j  = sub_wrap_ceil_N(ti * n, i);
             func(j, di, xs.batch(di)...);
         }
     }
@@ -640,9 +640,9 @@ struct CyqloneSolver {
     /// 2-adic valuation modulo p, i.e. `ν2p(0) = ν2p(p) = lp()`.
     [[nodiscard]] index_t ν2p(index_t i) const;
     /// Add @p b to @p a modulo @ref N_horiz.
-    [[nodiscard]] index_t add_wrap_N(index_t a, index_t b) const;
+    [[nodiscard]] index_t add_wrap_ceil_N(index_t a, index_t b) const;
     /// Subtract @p b from @p a modulo @ref N_horiz.
-    [[nodiscard]] index_t sub_wrap_N(index_t a, index_t b) const;
+    [[nodiscard]] index_t sub_wrap_ceil_N(index_t a, index_t b) const;
     /// Add @p b to @p a modulo @ref p.
     [[nodiscard]] index_t add_wrap_p(index_t a, index_t b) const;
     /// Subtract @p b from @p a modulo @ref p.

@@ -58,7 +58,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
     // Iterate over all stages in the interval (in reverse order)
     for (index_t i = 0; i < n; ++i) {
         //  6|  for j = jₙ downto j₁
-        const index_t j  = sub_wrap_N(jn, i); // stage index j ≡ jₙ - i mod N
+        const index_t j  = sub_wrap_ceil_N(jn, i); // stage index j ≡ jₙ - i mod N
         const index_t di = dn + i;            // data batch index
         auto LH          = LHs.middle_cols(i * nux, nux);
         auto RS          = LH.left_cols(nu);
@@ -103,7 +103,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
         }
         // 10|  if j > j₁
         if (i + 1 < n) {
-            [[maybe_unused]] const auto j_next = sub_wrap_N(j, 1);
+            [[maybe_unused]] const auto j_next = sub_wrap_ceil_N(j, 1);
             GUANAQO_TRACE("Riccati update AB", j_next);
             const auto di_next = dn + i + 1;
             auto VGᵀ_next      = VGᵀ.middle_cols(no_keep_V ? 0 : i * nx, nx + nyM),
@@ -168,7 +168,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
     const auto w          = work.batch(c);
 
     for (index_t i = n; i-- > 0;) {
-        [[maybe_unused]] index_t j = sub_wrap_N(jn, i);
+        [[maybe_unused]] index_t j = sub_wrap_ceil_N(jn, i);
         index_t di                 = dn + i;
         const auto LH = LHs.middle_cols(i * nux, nux), LQ = LH.bottom_right(nx, nx),
                    LR = LH.top_left(nu, nu), LS = LH.bottom_left(nx, nu);
