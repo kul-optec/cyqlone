@@ -1,10 +1,13 @@
 #include <cyqlone/matio.hpp>
 #include <cyqlone/ocp.hpp>
 #include <batmat/linalg/copy.hpp>
+#include <guanaqo/string-util.hpp>
 #include <matio.h>
 
-#include <guanaqo/string-util.hpp>
 #include <algorithm>
+#include <climits>
+#include <concepts>
+#include <cstdint>
 #include <filesystem>
 #include <format>
 #include <memory>
@@ -25,6 +28,38 @@ template <>
 struct matio_traits<double> {
     static constexpr auto type   = MAT_T_DOUBLE;
     static constexpr auto class_ = MAT_C_DOUBLE;
+};
+template <std::unsigned_integral I>
+struct matio_traits<I> {
+    static constexpr auto type   = sizeof(I) == 1   ? MAT_T_UINT8
+                                   : sizeof(I) == 2 ? MAT_T_UINT16
+                                   : sizeof(I) == 4 ? MAT_T_UINT32
+                                   : sizeof(I) == 8 ? MAT_T_UINT64
+                                                    : MAT_T_UNKNOWN;
+    static constexpr auto class_ = sizeof(I) == 1   ? MAT_C_UINT8
+                                   : sizeof(I) == 2 ? MAT_C_UINT16
+                                   : sizeof(I) == 4 ? MAT_C_UINT32
+                                   : sizeof(I) == 8 ? MAT_C_UINT64
+                                                    : MAT_C_EMPTY;
+    static_assert(CHAR_BIT == 8, "Unsupported char size");
+    static_assert(type != MAT_T_UNKNOWN, "Unsupported unsigned integer type");
+    static_assert(class_ != MAT_C_EMPTY, "Unsupported unsigned integer type");
+};
+template <std::signed_integral I>
+struct matio_traits<I> {
+    static constexpr auto type   = sizeof(I) == 1   ? MAT_T_INT8
+                                   : sizeof(I) == 2 ? MAT_T_INT16
+                                   : sizeof(I) == 4 ? MAT_T_INT32
+                                   : sizeof(I) == 8 ? MAT_T_INT64
+                                                    : MAT_T_UNKNOWN;
+    static constexpr auto class_ = sizeof(I) == 1   ? MAT_C_INT8
+                                   : sizeof(I) == 2 ? MAT_C_INT16
+                                   : sizeof(I) == 4 ? MAT_C_INT32
+                                   : sizeof(I) == 8 ? MAT_C_INT64
+                                                    : MAT_C_EMPTY;
+    static_assert(CHAR_BIT == 8, "Unsupported char size");
+    static_assert(type != MAT_T_UNKNOWN, "Unsupported signed integer type");
+    static_assert(class_ != MAT_C_EMPTY, "Unsupported signed integer type");
 };
 
 // RAII wrappers
@@ -78,6 +113,46 @@ void add_to_mat_impl(mat_t *mat, const std::string &varname,
     }
 }
 
+void add_to_mat(mat_t *mat, const std::string &varname, float value) {
+    write_tensor<float, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, double value) {
+    write_tensor<double, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, unsigned short value) {
+    write_tensor<unsigned short, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, unsigned int value) {
+    write_tensor<unsigned int, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, unsigned long value) {
+    write_tensor<unsigned long, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, unsigned long long value) {
+    write_tensor<unsigned long long, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, short value) {
+    write_tensor<short, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, int value) {
+    write_tensor<int, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, long value) {
+    write_tensor<long, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, long long value) {
+    write_tensor<long long, 1>(mat, varname.c_str(), std::span{&value, 1}, {1});
+}
+
 void add_to_mat(mat_t *mat, const std::string &varname,
                 guanaqo::MatrixView<const double, index_t> data) {
     add_to_mat_impl(mat, varname, data);
@@ -116,6 +191,44 @@ void add_to_mat(mat_t *mat, const std::string &varname,
 void add_to_mat(mat_t *mat, const std::string &varname,
                 batmat::matrix::View<const float, index_t> data) {
     add_to_mat_impl(mat, varname, data);
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, const SparseMatrix &matrix) {
+    std::array<const char *, 5> fieldnames{"num_rows", "num_cols", "row_indices", "col_indices",
+                                           "values"};
+    std::array<size_t, 2> struct_dims{1, 1};
+    MatVarPtr struct_{Mat_VarCreateStruct(varname.c_str(), struct_dims.size(), struct_dims.data(),
+                                          fieldnames.data(), fieldnames.size()),
+                      Mat_VarFree};
+    if (!struct_)
+        throw std::runtime_error(std::format("Failed to create struct {}", varname));
+    using index_traits = matio_traits<decltype(SparseMatrix::row_indices)::value_type>;
+    std::array<size_t, 2> scalar_dims{1, 1}; // MATLAB scalars are 1x1 matrices
+    Mat_VarSetStructFieldByIndex(struct_.get(), 0, 0,
+                                 Mat_VarCreate("num_rows", index_traits::class_, index_traits::type,
+                                               scalar_dims.size(), scalar_dims.data(),
+                                               &matrix.sparsity.rows, 0));
+    Mat_VarSetStructFieldByIndex(struct_.get(), 1, 0,
+                                 Mat_VarCreate("num_cols", index_traits::class_, index_traits::type,
+                                               scalar_dims.size(), scalar_dims.data(),
+                                               &matrix.sparsity.cols, 0));
+    const size_t n_row_indices = matrix.sparsity.row_indices.size();
+    Mat_VarSetStructFieldByIndex(struct_.get(), 2, 0,
+                                 Mat_VarCreate("row_indices", index_traits::class_,
+                                               index_traits::type, 1, &n_row_indices,
+                                               matrix.sparsity.row_indices.data(), 0));
+    const size_t n_col_indices = matrix.sparsity.col_indices.size();
+    Mat_VarSetStructFieldByIndex(struct_.get(), 3, 0,
+                                 Mat_VarCreate("col_indices", index_traits::class_,
+                                               index_traits::type, 1, &n_col_indices,
+                                               matrix.sparsity.col_indices.data(), 0));
+    using value_traits    = matio_traits<decltype(SparseMatrix::values)::value_type>;
+    const size_t n_values = matrix.values.size();
+    Mat_VarSetStructFieldByIndex(struct_.get(), 4, 0,
+                                 Mat_VarCreate("values", value_traits::class_, value_traits::type,
+                                               1, &n_values, matrix.values.data(), 0));
+    if (auto e = Mat_VarWrite(mat, struct_.get(), MAT_COMPRESSION_ZLIB); e)
+        throw std::runtime_error(std::format("Failed to write struct {} ({})", varname, e));
 }
 
 void add_to_mat(mat_t *mat, const LinearOCPStorage &ocp) {
