@@ -102,7 +102,8 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -> std::vector<T> {
+auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> rq, view<> b, value_type scale_rq,
+                                                   value_type scale_b) const -> std::vector<T> {
     BATMAT_ASSERT(is_pow_2(p));
     const index_t nux = nu + nx, nuxx = nux + nx;
     // stride between stages in the same interval
@@ -127,9 +128,9 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -
                 index_t s        = l * vector_stride + t * interval_stride + stage_stride * i;
                 if (i > 0)
                     for (index_t c = 0; c < nx; ++c)
-                        rhs[s - nx + c] = λ.batch(di)(l)(c, 0);
+                        rhs[s - nx + c] = scale_b * b.batch(di)(l)(c, 0);
                 for (index_t c = 0; c < nux; ++c)
-                    rhs[s + c] = -ux.batch(di)(l)(c, 0);
+                    rhs[s + c] = scale_rq * rq.batch(di)(l)(c, 0);
             }
         }
     }
@@ -138,7 +139,7 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> ux, view<> λ) const -
         const index_t t = i % p, l = i / p;
         const index_t di = t * n;
         for (index_t c = 0; c < nx; ++c)
-            rhs[s + c] = λ.batch(di)(l)(c, 0);
+            rhs[s + c] = scale_b * b.batch(di)(l)(c, 0);
         s += nx;
     };
     for (index_t l = 0; l < lp(); ++l) {

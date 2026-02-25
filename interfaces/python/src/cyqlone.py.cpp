@@ -30,8 +30,8 @@ struct PythonCyqloneSolver {
     PythonCyqloneSolver(const PythonOCP &ocp,
                         cyqlone::qpalm::CyQPALMBackendSettings backend_settings,
                         cyqlone::qpalm::Settings qpalm_settings)
-        : solver{cyqlone::qpalm::make_cyqpalm_backend<VL>(
-                     cyqlone::CyqloneStorage<>::build(ocp.ocp), {}, backend_settings),
+        : solver{cyqlone::qpalm::make_cyqpalm_backend<VL>(cyqlone::CyqloneStorage<>::build(ocp.ocp),
+                                                          {}, backend_settings),
                  qpalm_settings} {}
 };
 
@@ -237,7 +237,7 @@ void register_cyqlone_solver(nb::module_ &m) {
                const CyqloneStorage<> &ocp) {
                 auto Σ_vw = view_as_batched(Σ);
                 auto ux   = self.initialize_gradient(ocp);
-                cyqlone::linalg::negate(ux); // TODO: remove
+                cyqlone::linalg::negate(ux); // right-hand side is the negative gradient
                 auto λ = self.initialize_rhs(ocp);
                 self.run([&](auto &ctx) { self.factor_solve(ctx, S, Σ_vw, ux, λ); });
                 return std::make_tuple(np_copy(std::move(ux)), np_copy(std::move(λ)));
@@ -292,7 +292,7 @@ void register_cyqlone_solver(nb::module_ &m) {
             "solve_forward",
             [](Solver &self, const CyqloneStorage<> &ocp) {
                 auto ux = self.initialize_gradient(ocp);
-                cyqlone::linalg::negate(ux); // TODO: remove
+                cyqlone::linalg::negate(ux); // right-hand side is the negative gradient
                 auto λ = self.initialize_rhs(ocp);
                 self.run([&](auto &ctx) { self.solve_forward(ctx, ux, λ); });
                 return std::make_tuple(np_copy(std::move(ux)), np_copy(std::move(λ)));

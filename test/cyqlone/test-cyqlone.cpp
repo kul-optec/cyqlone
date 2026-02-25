@@ -2,26 +2,39 @@
 
 #include <cyqlone/cyqlone.hpp>
 #include <cyqlone/linalg.hpp>
+#include <cyqlone/packing.hpp>
 #include <cyqlone/random-ocp.hpp>
 #include <cyqlone/tracing.hpp>
 #include <batmat/linalg/simdify.hpp>
 #include <guanaqo/print.hpp>
 #include <guanaqo/trace.hpp>
 #include <cyqlone-version.h>
+#if CYQLONE_WITH_MATIO
+#include <cyqlone/matio.hpp>
+#endif
 
 #if GUANAQO_WITH_TRACING
 #include <filesystem>
 #endif
-#include <fstream>
 #include <iostream>
 #include <limits>
 
 using cyqlone::index_t;
 using cyqlone::real_t;
 
+#define NO_PENALTY 0
 #define WITH_UPDATES 1
 
 class CyqloneFactorTest : public testing::TestWithParam<cyqlone::SolveMethod> {};
+
+template <class M>
+auto unpacked(const M &m) {
+    using Mat = batmat::matrix::Matrix<typename M::value_type, typename M::index_type>;
+    Mat res{{.depth = m.depth(), .rows = m.rows(), .cols = m.cols()}};
+    for (index_t b = 0; b < m.num_batches(); ++b)
+        cyqlone::linalg::unpack(m.batch(b), res.middle_batches(b * m.batch_size(), m.batch_size()));
+    return res;
+}
 
 // Tests the factorization, factorization updates, and solution of the Cyqlone linear solver.
 TEST_P(CyqloneFactorTest, factor) {
@@ -31,7 +44,7 @@ TEST_P(CyqloneFactorTest, factor) {
     const index_t p  = 8;
     using Solver     = CyqloneSolver<4, real_t, StorageOrder::RowMajor>;
     const index_t ny = 50, ny_0 = 25, ny_N = 25, nyM = std::max(ny, ny_0 + ny_N);
-    OCPDim dim{.N_horiz = 97, .nx = 40, .nu = 30, .ny = ny, .ny_N = ny_N};
+    OCPDim dim{.N_horiz = 96, .nx = 7, .nu = 5, .ny = ny, .ny_N = ny_N};
     const index_t nux = dim.nu + dim.nx, N = dim.N_horiz;
     auto ocp = generate_random_ocp(dim);
     ocp.D(0).bottom_rows(ny - ny_0).set_constant(0);
@@ -57,7 +70,9 @@ TEST_P(CyqloneFactorTest, factor) {
         [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
 
     std::vector<real_t> Σ_lin((N - 1) * ny + ny_0 + ny_N);
-    Solver::matrix λ{{.depth = solver.ceil_N(), .rows = dim.nx, .cols = 1}},
+    Solver::matrix b{{.depth = solver.ceil_N(), .rows = dim.nx, .cols = 1}},
+        λ{{.depth = solver.ceil_N(), .rows = dim.nx, .cols = 1}},
+        rq{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
         ux{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
         Mᵀλ{{.depth = solver.ceil_N(), .rows = nux, .cols = 1}},
         DCux{{.depth = solver.ceil_N(), .rows = nyM, .cols = 1}},
@@ -67,11 +82,13 @@ TEST_P(CyqloneFactorTest, factor) {
         Σ{{.depth = solver.ceil_N(), .rows = nyM, .cols = 1}},
         Σ2{{.depth = solver.ceil_N(), .rows = nyM, .cols = 1}},
         ΔΣ{{.depth = solver.ceil_N(), .rows = nyM, .cols = 1}};
-    std::ranges::generate(λ, [&] { return uni(rng); });
-    std::ranges::generate(ux, [&] { return uni(rng); });
+
+    // Initialize penalties (two different ones, to test the updates)
     std::ranges::generate(Σ_lin, [&] { return std::exp2(uni(rng)); });
     std::vector<real_t> Σ_lin2 = Σ_lin;
-#if WITH_UPDATES
+#if NO_PENALTY
+    std::ranges::fill(Σ_lin2, 0);
+#elif WITH_UPDATES
     for (auto &Σ2i : Σ_lin2)
         if (bern(rng))
             Σ2i = std::exp2(uni(rng));
@@ -80,14 +97,15 @@ TEST_P(CyqloneFactorTest, factor) {
     solver.pack_constraints(Σ_lin2, Σ2);
     std::ranges::transform(Σ2, Σ, std::ranges::begin(ΔΣ), std::minus<>{});
 
-    if (std::ofstream f("rhs.csv"); f) {
-        auto b = solver.build_rhs(ux, λ);
-        for (auto x : b)
-            f << guanaqo::float_to_str(x) << '\n';
-    }
+    // Initialize the right-hand side of the KKT system
+    solver.initialize_gradient(cocp, rq);
+    solver.initialize_rhs(cocp, b);
 
-    const auto ux_initial = ux, λ_initial = λ;
+    // Repeatedly factor and solve the KKT system (as a warm-up run for the timing and to make sure
+    // the workspaces are still okay after a couple of iterations)
     for (int i = 0; i < 50; ++i) {
+        cyqlone::linalg::negate(rq, ux);
+        λ = b;
         solver.run([&](auto &ctx) {
             solver.factor(ctx, 1e100, Σ);
 #if WITH_UPDATES
@@ -95,16 +113,18 @@ TEST_P(CyqloneFactorTest, factor) {
 #endif
             solver.solve_forward(ctx, ux, λ);
             solver.solve_reverse(ctx, ux, λ);
-            solver.residual_dynamics_constr(ctx, ux, λ_initial, Mxb);
+            solver.residual_dynamics_constr(ctx, ux, b, Mxb);
             solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
-            solver.cost_gradient(ctx, ux, -1, ux_initial, 0, grad);
+            solver.cost_gradient(ctx, ux, 1, rq, 0, grad);
             solver.general_constr(ctx, ux, DCux);
             ctx.run_single_sync([&] { cyqlone::linalg::hadamard(DCux, Σ2); });
             solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);
         });
-        ux.view() = ux_initial.view();
-        λ.view()  = λ_initial.view();
     }
+
+    // Now factor and solve the KKT system for real
+    cyqlone::linalg::negate(rq, ux);
+    λ = b;
 #if GUANAQO_WITH_TRACING
     guanaqo::get_trace_logger().reset();
 #endif
@@ -115,22 +135,48 @@ TEST_P(CyqloneFactorTest, factor) {
 #endif
         solver.solve_forward(ctx, ux, λ);
         solver.solve_reverse(ctx, ux, λ);
-        solver.residual_dynamics_constr(ctx, ux, λ_initial, Mxb);
-        solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);
-        solver.cost_gradient(ctx, ux, -1, ux_initial, 0, grad);
-        solver.general_constr(ctx, ux, DCux);
-        ctx.run_single_sync([&] { cyqlone::linalg::hadamard(DCux, Σ2); });
-        solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);
+        solver.residual_dynamics_constr(ctx, ux, b, Mxb);                  // Mz + b  (= 0)
+        solver.transposed_dynamics_constr(ctx, λ, Mᵀλ);                    // Mᵀλ
+        solver.cost_gradient(ctx, ux, 1, rq, 0, grad);                     // Qz + q
+        solver.general_constr(ctx, ux, DCux);                              // Gz
+        ctx.run_single_sync([&] { cyqlone::linalg::hadamard(DCux, Σ2); }); // ΣGz
+        solver.transposed_general_constr(ctx, DCux, DCᵀΣDCux);             // GᵀΣGz
     });
 
+    // Check the residuals
     using std::pow;
     const auto ε = pow(std::numeric_limits<real_t>::epsilon(), 0.6);
-    cyqlone::linalg::axpy(grad, {1, 1}, DCᵀΣDCux, Mᵀλ);
+    cyqlone::linalg::axpy(grad, {1, 1}, DCᵀΣDCux, Mᵀλ); // gradient of the Lagrangian
     std::cout << "dynamics constraints: " << guanaqo::float_to_str(cyqlone::linalg::norm_inf(Mxb))
               << "\nstationarity:         "
               << guanaqo::float_to_str(cyqlone::linalg::norm_inf(grad)) << "\n";
     EXPECT_LE(cyqlone::linalg::norm_inf(Mxb), ε);
     EXPECT_LE(cyqlone::linalg::norm_inf(grad), ε);
+
+#if CYQLONE_WITH_MATIO
+    auto K   = solver.build_sparse(cocp, Σ_lin2);
+    auto L   = solver.build_sparse_factor();
+    auto D   = solver.build_sparse_diag();
+    auto rhs = solver.build_rhs(rq, b);
+    auto sol = solver.build_sol(ux, λ);
+
+    // Export the problem, the Cholesky factor, and the solution as a .mat file
+    std::filesystem::path filename = "test-cyqlone.mat";
+    auto matfile                   = cyqlone::create_mat(filename);
+    cyqlone::add_to_mat(matfile.get(), "ocp", ocp);
+    cyqlone::add_to_mat(matfile.get(), "K", K);
+    cyqlone::add_to_mat(matfile.get(), "L", L);
+    cyqlone::add_to_mat(matfile.get(), "D", D);
+    cyqlone::add_to_mat(matfile.get(), "rhs", std::span{rhs});
+    cyqlone::add_to_mat(matfile.get(), "sol", std::span{sol});
+    cyqlone::add_to_mat(matfile.get(), "sigma", unpacked(Σ2));
+    cyqlone::add_to_mat(matfile.get(), "LH", unpacked(solver.riccati_LH));
+    cyqlone::add_to_mat(matfile.get(), "LAB", unpacked(solver.riccati_LAB));
+    // Execute the factorization with Σ2 directly (instead of factorizing with Σ and updating)
+    solver.run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2); });
+    cyqlone::add_to_mat(matfile.get(), "L_refactor", solver.build_sparse_factor());
+    std::cout << filename << "\n";
+#endif
 
 #if GUANAQO_WITH_TRACING
     {
@@ -150,39 +196,6 @@ TEST_P(CyqloneFactorTest, factor) {
         std::cout << (out_dir / name).replace_extension("json.gz") << std::endl;
     }
 #endif
-
-    if (std::ofstream f("sparse.csv"); f) {
-        auto sp = solver.build_sparse(cocp, Σ_lin2);
-        for (auto [r, c, x] : sp.iter_coo())
-            f << r << ',' << c << ',' << guanaqo::float_to_str(x) << '\n';
-    }
-    if (std::ofstream f("sparse_factor.csv"); f) {
-        auto sp = solver.build_sparse_factor();
-        for (auto [r, c, x] : sp.iter_coo())
-            f << r << ',' << c << ',' << guanaqo::float_to_str(x) << '\n';
-    }
-    if (std::ofstream f("sparse_diag.csv"); f) {
-        auto sp = solver.build_sparse_diag();
-        for (auto [r, c, x] : sp.iter_coo())
-            f << r << ',' << c << ',' << guanaqo::float_to_str(x) << '\n';
-    }
-    if (std::ofstream f("sol.csv"); f) {
-        auto b = solver.build_rhs(ux, λ);
-        for (auto x : b)
-            f << guanaqo::float_to_str(x) << '\n';
-    }
-    if (std::ofstream f("res.csv"); f) {
-        auto b = solver.build_rhs(Mᵀλ, Mxb);
-        for (auto x : b)
-            f << guanaqo::float_to_str(x) << '\n';
-    }
-
-    solver.run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2); });
-    if (std::ofstream f("sparse_refactor.csv"); f) {
-        auto sp = solver.build_sparse_factor();
-        for (auto [r, c, x] : sp.iter_coo())
-            f << r << ',' << c << ',' << guanaqo::float_to_str(x) << '\n';
-    }
 }
 
 // The tests below check that the workspaces for the CR factorization updates don't overlap.

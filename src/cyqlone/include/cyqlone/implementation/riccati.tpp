@@ -59,7 +59,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
     for (index_t i = 0; i < n; ++i) {
         //  6|  for j = jₙ downto j₁
         const index_t j  = sub_wrap_ceil_N(jn, i); // stage index j ≡ jₙ - i mod N
-        const index_t di = dn + i;            // data batch index
+        const index_t di = dn + i;                 // data batch index
         auto LH          = LHs.middle_cols(i * nux, nux);
         auto RS          = LH.left_cols(nu);
         auto R = RS.top_rows(nu), S = RS.bottom_rows(nx), Q = LH.bottom_right(nx, nx);
