@@ -199,8 +199,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(Context &ctx, mut
             const auto u1 = ux.batch(di).top_rows(nu), x1 = ux.batch(di).bottom_rows(nx);
             const auto LA1 = AclLAs.middle_cols(i * nx, nx);
             // w = LQ(j₁)⁻¹ λ(j₀)
-            c == 0 ? trsm(tril(LQ), λ.batch(dn_prev), w, with_rotate_B<-1>)
-                   : trsm(tril(LQ), λ.batch(dn_prev), w);
+            c == 0 && v > 1 ? trsm(tril(LQ), λ.batch(dn_prev), w, with_rotate_B<-1>)
+                            : trsm(tril(LQ), λ.batch(dn_prev), w);
             // w = LQ(j₁)⁻¹ λ(j₀) - LA(j₁)ᵀ λ(jₙ)
             gemv_sub(LA1.transposed(), λn, w);
             // w = LQ(j₁)⁻ᵀ(LQ(j₁)⁻¹ λ(j₀) - LA(j₁)ᵀ λ(jₙ))
