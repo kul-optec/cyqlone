@@ -25,6 +25,9 @@ class guanaqoRecipe(ConanFile):
         "with_quad_precision": False,  # affects ABI
         "with_itt": False,  # affects ABI
         "with_tracing": False,  # affects ABI
+        "with_perfetto": False,  # affects ABI
+        "with_pcm": False,  # affects ABI
+        "with_pcm_tracing": False,  # affects ABI
         "with_hl_blas_tracing": True,  # affects ABI
         "with_openmp": False,  # affects ABI
         "with_blas": False,  # affects ABI
@@ -55,6 +58,10 @@ class guanaqoRecipe(ConanFile):
             self.options.rm_safe("with_openmp")
         if Version(self.version) < "1.0.0-alpha.13":
             self.options.rm_safe("with_hl_blas_tracing")
+        if Version(self.version) < "1.0.0-alpha.24":
+            self.options.rm_safe("with_perfetto")
+            self.options.rm_safe("with_pcm")
+            self.options.rm_safe("with_pcm_tracing")
 
     def configure(self):
         if self.options.shared:
@@ -69,6 +76,8 @@ class guanaqoRecipe(ConanFile):
             self.options.rm_safe("blas_index_type")
         if not self.options.get_safe("with_tracing") or not with_blas:
             self.options.rm_safe("with_hl_blas_tracing")
+        if not self.options.get_safe("with_perfetto") or not self.options.get_safe("with_pcm"):
+            self.options.rm_safe("with_pcm_tracing")
 
     def export_sources(self):
         export_conandata_patches(self)
@@ -78,7 +87,7 @@ class guanaqoRecipe(ConanFile):
             self,
             **self.conan_data["sources"][self.version],
             destination=self.source_folder,
-            strip_root=True
+            strip_root=True,
         )
         apply_conandata_patches(self)
 
@@ -87,18 +96,27 @@ class guanaqoRecipe(ConanFile):
 
     def requirements(self):
         if self.options.get_safe("with_itt"):
-            self.requires("ittapi/3.24.4", transitive_headers=True)
+            self.requires("ittapi/3.25.5", transitive_headers=True)
+        if self.options.get_safe("with_perfetto"):
+            self.requires("perfetto/52.0", transitive_headers=True)
+        if self.options.get_safe("with_pcm"):
+            self.requires("intel-pcm/tttapa.20260207")
         if self.options.get_safe("with_blas") and not self.options.get_safe("with_mkl"):
             self.requires("openblas/0.3.30", transitive_headers=True)
         if self.options.get_safe("with_openmp") and self.settings.compiler == "clang":
-            self.requires(f"llvm-openmp/[~{self.settings.compiler.version}]")
-        self.test_requires("gtest/1.17.0")
-        self.test_requires("eigen/[~3.4 || ~5.0]")
-        if self.conf.get("user.guanaqo:with_python_tests", default=False, check_type=bool):
-            self.test_requires("nanobind/2.10.2")
+            self.requires(
+                f"llvm-openmp/[~{self.settings.compiler.version}]",
+                transitive_headers=True,
+            )
 
     def build_requirements(self):
         self.tool_requires("cmake/[>=3.24 <5]")
+        self.test_requires("gtest/1.17.0")
+        self.test_requires("eigen/[~3.4 || ~5.0]")
+        if self.conf.get(
+            "user.guanaqo:with_python_tests", default=False, check_type=bool
+        ):
+            self.test_requires("nanobind/2.10.2")
 
     def generate(self):
         deps = CMakeDeps(self)
