@@ -512,9 +512,9 @@ struct CyQPALMBackend {
         }
     }
 
-    real_t recompute_outer(Context &ctx, const var_vec_t &x, const ineq_constr_vec_t &ŷ,
+    real_t recompute_outer(Context &ctx, const var_vec_t &x, const var_vec_t &Aᵀŷ,
                            const eq_constr_vec_t &λ, var_vec_t &grad, ineq_constr_vec_t &Ax,
-                           var_vec_t &Aᵀŷ, var_vec_t &Mᵀλ) {
+                           var_vec_t &Mᵀλ) {
         {
             auto t = get_timed(&Timings::recompute_outer_grad);
             grad_f(ctx, x, grad); // ∇f = Q * x + q
@@ -522,10 +522,6 @@ struct CyQPALMBackend {
         {
             auto t = get_timed(&Timings::recompute_outer_A);
             mat_vec_A(ctx, x, Ax); // Ax = A * x
-        }
-        {
-            auto t = get_timed(&Timings::recompute_outer_AT);
-            mat_vec_AT(ctx, ŷ, Aᵀŷ); // Aᵀŷ = Aᵀ * ŷ
         }
         {
             auto t = get_timed(&Timings::recompute_outer_MT);

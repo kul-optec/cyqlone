@@ -422,7 +422,7 @@ SolverStatus SolverImplementation<Backend>::do_main_loop(Backend::Context &ctx,
         if (settings.recompute) {
             stationarity = timed(timings.recompute_outer, [&] {
                 GUANAQO_TRACE("recompute_outer", outer_iter);
-                return backend.recompute_outer(ctx, x, ŷ, λ, grad, Ax, Aᵀŷ, Mᵀλ);
+                return backend.recompute_outer(ctx, x, Aᵀŷ, λ, grad, Ax, Mᵀλ);
             });
         }
 
