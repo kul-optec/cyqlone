@@ -33,8 +33,16 @@ void CyQPALMBackend<VL, DefaultOrder>::solve(Context &ctx, [[maybe_unused]] cons
         if (ctx.is_master()) {
             // No synchronization needed here, barriers in factor_solve and solve_reverse
             reset_factorization = false;
+            update_pending      = false;
             num_updates         = 0;
             ++stats.num_factor;
+        }
+    } else if (update_pending) {
+        auto t = get_timed(&Timings::update_factorization);
+        ocp.update_solve(ctx, ΔΣ, d, Δλ); // (d, Δλ) ← L⁻¹ (d, Δλ)
+        if (ctx.is_master()) {
+            // No synchronization needed here, barriers in update_solve and solve_reverse
+            update_pending = false;
         }
     } else { // (d, Δλ) ← L⁻¹ (d, Δλ)
         auto t = get_timed(&Timings::solve);

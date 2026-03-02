@@ -122,7 +122,7 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_L(index_t l, index_t i) {
 
     // Finally, recompute the PCR factorization if we did not do an update.
     if (do_refactor_pcr)
-        factor_pcr(); // TODO: use parallel variant
+        factor_pcr(); // TODO: use parallel variant (when doing so, synchronize in update_solve_cr)
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -267,21 +267,48 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_pcr(batch_view<> fwd, batch_vie
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
+template <bool Solve>
+void CyqloneSolver<VL, T, DefaultOrder>::update_solve_impl(Context &ctx, view<> ΔΣ, mut_view<> ux,
+                                                           mut_view<> λ) {
     //  2|  Υ˃(c;0), Υ˂(c-1;0), 𝒮(c;0) = update-block-column-riccati(c)
     //  3|  update-schur(c)
-    update_riccati(ctx, ΔΣ);
+    update_riccati_solve<Solve>(ctx, ΔΣ, ux, λ);
     //  5|  -- sync --
-    ctx.arrive_and_wait();   // wait for Υ˃, Υ˂
-    tricyqle.update_cr(ctx); // Update the block-tridiagonal Schur complement using CR
+    ctx.arrive_and_wait(); // wait for Υ˃, Υ˂, x_next
+    if constexpr (Solve) {
+        const index_t c   = ctx.index; // different assignment than compute_schur
+        const auto c_next = add_wrap_p(c, 1);
+        const auto dn = c * n, dn_next = c_next * n, d1_next = dn_next + n - 1; // see compute_schur
+        auto x_next = ux.batch(d1_next).bottom_rows(nx);
+        c_next > 0 || v == 1 ? sub(λ.batch(dn), x_next) //
+                             : sub(λ.batch(dn), x_next, with_rotate<1>);
+    }
+    // Update the block-tridiagonal Schur complement using CR
+    tricyqle.template update_solve_cr<Solve>(ctx, λ, n);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::update_cr(Context &ctx) {
+void CyqloneSolver<VL, T, DefaultOrder>::update(Context &ctx, view<> ΔΣ) {
+    update_solve_impl<false>(ctx, ΔΣ, {}, {});
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::update_solve(Context &ctx, view<> ΔΣ, mut_view<> ux,
+                                                      mut_view<> λ) {
+    update_solve_impl<true>(ctx, ΔΣ, ux, λ);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+template <bool Solve>
+void TricyqleSolver<VL, T, DefaultOrder>::update_solve_cr(Context &ctx, mut_view<> λ,
+                                                          index_t stride) {
     const index_t c = ctx.index;
     //  6|  if ν₂(c) = 0:  update-L(0, c)
-    if (ν2p(c) == 0)
+    if (ν2p(c) == 0) {
         update_L(0, c);
+        if constexpr (Solve)
+            trsm(tril(cr_L.batch(c)), λ.batch(c * stride));
+    }
     //  7|  for l = 0 ... log₂(P)-1
     for (index_t l = 0; l < lp(); ++l) {
         const auto c_ = cr_thread_assignment(l, c);
@@ -290,16 +317,33 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_cr(Context &ctx) {
         //  9|  -- sync --
         ctx.arrive_and_wait(); // wait for Q̆
         // 10|  if ν₂(iU) = l:  update-U(l, iU)
-        if (ν2p(iU) == l)
+        if (ν2p(iU) == l) {
             update_U(l, iU);
+            if constexpr (Solve)
+                solve_u_forward(l, iU, λ, stride);
+        }
         // 11|  elif ν₂(iY) = l:  update-Y(l, iY)
-        else if (ν2p(iY) == l)
+        else if (ν2p(iY) == l) {
             update_Y(l, iY);
+            if constexpr (Solve)
+                solve_y_forward(l, iY, λ, work_cr, stride);
+        }
         // 12|  -- sync --
         ctx.arrive_and_wait(); // wait for Υ˃, Υ˂
         // 13|  if ν₂(iY) = l+1:  update-L(l+1, iY)
         if (ν2p(iY) == l + 1)
             update_L(l + 1, iY);
+        if (ν2p(iU) == l)
+            if constexpr (Solve)
+                solve_λ_forward(l, iY, λ, work_cr, stride);
+    }
+    if constexpr (Solve) {
+        ctx.arrive_and_wait();
+        // TODO: synchronize here if switching to parallel PCR factor in update_L
+        if (ν2p(c + 1) + 1 == lp() || p == 1)
+            params.solve_method == SolveMethod::PCR
+                ? solve_pcr(λ.batch(0), work_pcg.batch(0).left_cols(1))
+                : solve_pcg(λ.batch(0), work_pcg.batch(0));
     }
 }
 
@@ -323,8 +367,10 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_cr(Context &ctx) {
 //    See work_Ups_bwd_w.
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
+template <bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
-void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> ΔΣ) {
+void CyqloneSolver<VL, T, DefaultOrder>::update_riccati_solve(Context &ctx, view<> ΔΣ,
+                                                              mut_view<> ux, mut_view<> λ) {
     const index_t c = riccati_thread_assignment(ctx);
     //  3|  j₁ = n(c-1)+1, jₙ = nc
     const index_t dn  = c * n; // data batch index
@@ -378,7 +424,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
     // Iterate over all stages in the interval (in reverse order)
     for (index_t i = 0; i < n; ++i) {
         //  5|  for j = jₙ downto j₁
-        index_t j = sub_wrap_ceil_N(jn, i);
+        const index_t j  = sub_wrap_ceil_N(jn, i); // stage index j ≡ jₙ - i mod N
+        const index_t di = dn + i;                 // data batch index
         auto LH = LHs.middle_cols(i * nux, nux), LRS = LH.left_cols(nu);
         auto LR = tril(LRS.top_rows(nu)), LQ = tril(LH.bottom_right(nx, nx));
         auto LB = B̂s.middle_cols(i * nu, nu), Acl = Âs.middle_cols(i * nx, nx);
@@ -402,6 +449,15 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                                LB, Υλ0, 𝑆u0);
         }
         auto Φx = Υ.middle_rows(nu, nx), Φλ = Υ.bottom_rows(nx);
+        if constexpr (Solve) {
+            // Solve u ← LR̂⁻¹ u, x ← x - Ŝ u
+            auto ui = ux.batch(di).top_rows(nu), xi = ux.batch(di).bottom_rows(nx);
+            trsm(LR, ui);
+            auto S = LRS.bottom_rows(nx);
+            gemv_sub(S, ui, xi);
+            auto λ_last = λ.batch(dn);
+            gemv_add(LB, ui, λ_last);
+        }
         //  8|  if j > j₁
         if (i + 1 < n) {
             [[maybe_unused]] const auto j_next = sub_wrap_ceil_N(j, 1);
@@ -433,6 +489,16 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                 gemm_diag_add(Φλ, Φx.transposed(), Acl, 𝑆.top_rows(mj));
                 // 12|  [ L̃Q(j)  0 ] = [ LQ(j)  Φx(j) ] Q̆x(j),  blkdiag(I, 𝑆(j))-orthogonal
                 hyhound_diag(LQ, Φx, 𝑆.top_rows(mj));
+            }
+            if constexpr (Solve) {
+                auto xi = ux.batch(di).bottom_rows(nx), ux_next = ux.batch(di_next),
+                     λ_next = λ.batch(di_next), λ_last = λ.batch(dn);
+                gemv_add(Acl, λ_next, λ_last); // λ(jn) += Â λ(j-1)
+                auto w = tricyqle.work_cr.batch(c).left_cols(1);
+                trmm(LQ.transposed(), λ_next, w);          // w = LQᵀ(j) λ(j-1)
+                trmm(LQ, w);                               // w = LQ(j) LQᵀ(j) λ(j-1)
+                sub(xi, w, w);                             // w = x(j) - LQ(j) LQᵀ(j) λ(j-1)
+                gemv_add(F_next.transposed(), w, ux_next); // u(j-1) += BAᵀ(j-1) w
             }
         } else {
 #ifndef NDEBUG
@@ -467,6 +533,12 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_riccati(Context &ctx, view<> Δ�
                     : negate(𝑆.top_rows(mj), 𝒮cr);
                 // We negate 𝒮(c) because in the CR update, we need blkdiag(-I, 𝒮(c))-orthogonal
                 // or blkdiag(I, -𝒮(c))-orthogonal transformations.
+            }
+            if constexpr (Solve) {
+                auto xi = ux.batch(di).bottom_rows(nx), λ_last = λ.batch(dn);
+                trsm(LQ, xi);
+                gemv_add(Acl, xi, λ_last);
+                trsm(LQ.transposed(), xi);
             }
             if (dn == 0) {
                 // Add the contribution from the isolated update for u(0) as well

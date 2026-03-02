@@ -527,7 +527,8 @@ struct TricyqleSolver {
     [[nodiscard]] mut_batch_view<column_major> work_Ups_extra();
     [[nodiscard]] mut_batch_view<column_major> work_Σ_extra();
 
-    void update_cr(Context &ctx);
+    template <bool Solve = true>
+    void update_solve_cr(Context &ctx, mut_view<> λ, index_t stride);
     void update_L(index_t l, index_t i);
     void update_U(index_t l, index_t i);
     void update_Y(index_t l, index_t i);
@@ -926,6 +927,7 @@ struct CyqloneSolver {
     /// Perform factorization updates of the Cyqlone factorization as described by
     /// Algorithm 4 in the paper.
     void update(Context &ctx, view<> ΔΣ);
+    void update_solve(Context &ctx, view<> ΔΣ, mut_view<> ux, mut_view<> λ);
 
     /// @}
 
@@ -961,7 +963,11 @@ struct CyqloneSolver {
 
     /// Update the modified Riccati factorization of a single block column as described by
     /// Algorithm 3 in the paper.
-    void update_riccati(Context &ctx, view<> Σ);
+    template <bool Solve = true>
+    void update_riccati_solve(Context &ctx, view<> ΔΣ, mut_view<> ux, mut_view<> λ);
+    void update_riccati(Context &ctx, view<> ΔΣ) { update_riccati_solve<false>(ctx, ΔΣ, {}, {}); }
+    template <bool Solve = true>
+    void update_solve_impl(Context &ctx, view<> ΔΣ, mut_view<> ux, mut_view<> λ);
 
     /// @}
 

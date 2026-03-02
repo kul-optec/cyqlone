@@ -116,6 +116,7 @@ void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> 
                 sub(λ.batch(dn), x_next, with_rotate<1>);
         }
         {
+            // TODO: λ(dn) here has a different thread assignment than in TricyqleSolver
             GUANAQO_TRACE("Solve λ", dn);
             if (ν2p(i_fwd) == 0 && p != 1)
                 trsm(M, λ.batch(dn));

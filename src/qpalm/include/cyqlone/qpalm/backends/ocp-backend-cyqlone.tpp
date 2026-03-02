@@ -89,6 +89,7 @@ struct CyQPALMBackend {
     std::vector<Breakpoint> breakpoints_temp;
 
     bool reset_factorization = true;
+    bool update_pending      = false;
     index_t num_updates      = 0;
     std::unique_ptr<Timings> ocp_timings;
 
@@ -193,6 +194,7 @@ struct CyQPALMBackend {
     void reset() {
         num_updates         = 0;
         reset_factorization = true;
+        update_pending      = false;
         if (ocp_timings)
             std::exchange(*ocp_timings, {});
     }
@@ -467,22 +469,29 @@ struct CyQPALMBackend {
         bool do_reset_fac = num_updates >= settings.max_update_count;
         do_reset_fac |= static_cast<double>(num_different) >=
                         static_cast<double>(num_ineq_constr()) * settings.changing_constr_factor;
+        bool prev_update_pending = update_pending;
         if (do_reset_fac) {
             ctx.run_single_sync([&] { reset_factorization = true; });
             return num_different;
-        } else {
-            ctx.run_single_sync([&] {
-                ++num_updates;
-                ++stats.num_updates;
-                stats.rank_updates += num_different;
-            });
         }
-        auto t           = get_timed(&Timings::update_factorization);
-        const auto delta = [&](auto, auto, auto Ji, auto J_oldi, auto ΔΣi) {
-            linalg::sub(Ji, J_oldi, ΔΣi);
-        };
-        ocp.foreach_stage(ctx, delta, J, J_old, ΔΣ);
-        ocp.update(ctx, ΔΣ);
+        ctx.run_single_sync([&] {
+            update_pending = true;
+            ++num_updates;
+            ++stats.num_updates;
+            stats.rank_updates += num_different;
+        });
+        auto t = get_timed(&Timings::update_factorization);
+        if (prev_update_pending) {
+            const auto delta = [&](auto, auto, auto Ji, auto J_oldi, auto ΔΣi) {
+                linalg::axpy(ΔΣi, {1, -1}, Ji, J_oldi);
+            };
+            ocp.foreach_stage(ctx, delta, J, J_old, ΔΣ);
+        } else {
+            const auto delta = [&](auto, auto, auto Ji, auto J_oldi, auto ΔΣi) {
+                linalg::sub(Ji, J_oldi, ΔΣi);
+            };
+            ocp.foreach_stage(ctx, delta, J, J_old, ΔΣ);
+        }
         return num_different;
     }
 
