@@ -1,4 +1,7 @@
 sources:
+  "1.0.0-alpha.25":
+    url: "https://github.com/tttapa/guanaqo/archive/refs/tags/1.0.0-alpha.25.zip"
+    sha256: "b8afc7eb7f9cd9584e568d8321499043c1f2b1d45753d4a49de184261f82d468"
   "1.0.0-alpha.24":
     url: "https://github.com/tttapa/guanaqo/archive/refs/tags/1.0.0-alpha.24.zip"
     sha256: "c3b5fc8118e9e34d11c196d96a53dfe974ddf1c8bfdb17ca2b04f971d70fab61"

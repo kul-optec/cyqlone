@@ -61,7 +61,10 @@ class LLVMOpenMpConan(ConanFile):
             self.requires(f"llvm-core/{self.version}")
 
     def layout(self):
-        cmake_layout(self, src_folder="src")
+        if self.version < "22.0.0":
+            cmake_layout(self, src_folder="src")
+        else:
+            cmake_layout(self, src_folder="src/openmp")
 
     def validate(self):
         if self.settings.compiler not in ["apple-clang", "clang", "gcc", "intel-cc"]:
@@ -75,19 +78,28 @@ class LLVMOpenMpConan(ConanFile):
             self.tool_requires("cmake/[>=3.20 <4]")
 
     def source(self):
-        get(self, **self.conan_data["sources"][self.version]["openmp"], strip_root=True)
-        get(
-            self,
-            **self.conan_data["sources"][self.version]["cmake"],
-            strip_root=True,
-            destination=self.export_sources_folder,
-        )
-        copy(
-            self,
-            "*.cmake",
-            src=os.path.join(self.export_sources_folder, "Modules"),
-            dst=os.path.join(self.source_folder, "cmake"),
-        )
+        data = self.conan_data["sources"][self.version]
+        if self.version < "22.0.0":
+            get(self, **data["openmp"], strip_root=True)
+            get(
+                self,
+                **data["cmake"],
+                strip_root=True,
+                destination=self.export_sources_folder,
+            )
+            copy(
+                self,
+                "*.cmake",
+                src=os.path.join(self.export_sources_folder, "Modules"),
+                dst=os.path.join(self.source_folder, "cmake"),
+            )
+        else:
+            get(
+                self,
+                **data["llvm"],
+                strip_root=True,
+                destination=os.path.dirname(self.source_folder),
+            )
         apply_conandata_patches(self)
         replace_in_file(
             self,
@@ -130,9 +142,12 @@ class LLVMOpenMpConan(ConanFile):
         aliases = ["OpenMP::OpenMP_C", "OpenMP::OpenMP_CXX"]
         self.cpp_info.set_property("cmake_target_aliases", aliases)
         self.cpp_info.libs = ["omp"]
+        self.cpp_info.includedirs.append("include")
         if self.settings.os in ["Linux", "FreeBSD"]:
             self.cpp_info.system_libs = ["dl", "m", "pthread", "rt"]
-        if self.settings.compiler in ("clang", "apple-clang"):
+        if self.settings.compiler == "clang":
+            self.cpp_info.cxxflags = ["-fopenmp"]
+        elif self.settings.compiler == "apple-clang":
             self.cpp_info.cxxflags = ["-Xpreprocessor", "-fopenmp"]
         elif self.settings.compiler == "gcc":
             self.cpp_info.cxxflags = ["-fopenmp"]
