@@ -15,7 +15,6 @@
 #include <guanaqo/trace.hpp>
 #include <cstdint>
 #include <functional>
-#include <optional>
 #include <type_traits>
 #include <utility>
 
@@ -32,11 +31,7 @@ struct Context;
 struct SharedContext {
 #if GUANAQO_WITH_TRACING
     struct completion_type {
-        void operator()() const noexcept {
-            auto trace = guanaqo::get_trace_logger().trace("barrier-complete", 0);
-            if (auto l = std::exchange(trace.log, nullptr)) // no duration logging in destructor
-                l->duration = std::chrono::nanoseconds(0);
-        }
+        void operator()() const noexcept { GUANAQO_TRACE_INSTANT("barrier-complete", 0); }
     };
 #else
     using completion_type = EmptyCompletion;
@@ -93,7 +88,7 @@ struct SharedContext {
 template <class SC>
 struct Context {
     using shared_context_type = SC;
-#if GUANAQO_WITH_TRACING
+#if GUANAQO_WITH_TRACING && !GUANAQO_WITH_PERFETTO
     struct arrival_token {
         using token_t = typename shared_context_type::barrier_type::arrival_token;
         token_t token;
@@ -105,14 +100,12 @@ struct Context {
 
     shared_context_type &shared;
     const index_t index, num_thr = shared.num_thr;
-    std::optional<arrival_token> *token = nullptr;
 
     [[nodiscard]] bool is_master() const { return index == 0; }
 
     /// Low-level: token must be awaited before any other call to arrive.
     arrival_token arrive() {
-        wait();
-#if GUANAQO_WITH_TRACING
+#if GUANAQO_WITH_TRACING && !GUANAQO_WITH_PERFETTO
         auto trace = guanaqo::get_trace_logger().trace("barrier-arrive", index);
         return {shared.barrier.arrive(static_cast<uint32_t>(index)), std::move(trace)};
 #else
@@ -121,7 +114,7 @@ struct Context {
     }
     /// Low-level: await a token returned by arrive().
     void wait(arrival_token &&token) {
-#if GUANAQO_WITH_TRACING
+#if GUANAQO_WITH_TRACING && !GUANAQO_WITH_PERFETTO
         auto trace = std::move(token.trace);
         shared.barrier.wait(std::move(token.token));
 #else
@@ -129,42 +122,17 @@ struct Context {
 #endif
     }
 
-    // Waits for the previous phase to succeed if we already arrived
-    // without waiting, and then arrives at the barrier again, saving
-    // the arrival token to the given optional.
-    // Later calls to arrive() will first await this optional if it
-    // contains a token. This means that the optional should remain
-    // alive.
-    void arrive(std::optional<arrival_token> &token) {
-        wait();
-        this->token = &token;
-#if GUANAQO_WITH_TRACING
-        auto trace = guanaqo::get_trace_logger().trace("barrier-arrive", index);
-        token.emplace(shared.barrier.arrive(static_cast<uint32_t>(index)), std::move(trace));
-#else
-        token = shared.barrier.arrive(static_cast<uint32_t>(index));
-#endif
-    }
     void arrive_and_wait() {
-        wait();
+#if !GUANAQO_WITH_PERFETTO
         GUANAQO_TRACE("barrier-arrive-and-wait", index);
+#endif
         shared.barrier.arrive_and_wait(static_cast<uint32_t>(index));
     }
     void arrive_and_wait(int line) {
-        wait();
+#if !GUANAQO_WITH_PERFETTO
         GUANAQO_TRACE("barrier-arrive-and-wait", index);
+#endif
         shared.barrier.arrive_and_wait(static_cast<uint32_t>(index), line);
-    }
-    bool wait(std::optional<arrival_token> &token) {
-        if (!token)
-            return false;
-        wait(*std::exchange(token, std::nullopt));
-        return true;
-    }
-    bool wait() {
-        if (!token)
-            return false;
-        return wait(*std::exchange(token, nullptr));
     }
 
     template <class T>

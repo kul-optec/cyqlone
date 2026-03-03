@@ -78,7 +78,7 @@ BreakpointsResult CyQPALMBackend<VL, DefaultOrder>::compute_partition_breakpoint
     // Partitioning the chunk of each thread separately improves partitioning performance
     // later on in the line search because of branch prediction.
     auto [pos, large] = [&] {
-        GUANAQO_TRACE("linesearch breakpoints cyqlone partition", di0);
+        GUANAQO_TRACE("linesearch breakpoints cyqlone partition", ti);
         auto pos   = partition(fin_0, fin, [](Breakpoint p) { return p.t <= 0; }).begin();
         auto large = partition(pos, fin, [](Breakpoint p) { return p.t <= 1; }).begin();
         return std::pair{pos, large};
@@ -96,7 +96,7 @@ BreakpointsResult CyQPALMBackend<VL, DefaultOrder>::compute_partition_breakpoint
     // Synchronize the separator indices for all threads.
     ctx.wait(std::move(thr_parts_done));
     // Merge all local partitions of all threads into a single partitioned array.
-    GUANAQO_TRACE("linesearch breakpoints cyqlone merge", di0);
+    GUANAQO_TRACE("linesearch breakpoints cyqlone merge", ti);
     merge_chunk<Breakpoint, 4>(std::span{fin_0, inf_0}, ti, thr_parts, std::span{breakpoints});
     // Compute the total sums across all threads.
     auto ab_neg_and_merge_done = ctx.arrive_reduce(ab_neg, std::plus<>{});
