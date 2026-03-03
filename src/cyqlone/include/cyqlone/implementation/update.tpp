@@ -307,7 +307,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_solve_cr(Context &ctx, mut_view
     if (ν2p(c) == 0) {
         update_L(0, c);
         if constexpr (Solve)
-            trsm(tril(cr_L.batch(c)), λ.batch(c * stride));
+            if (p != 1)
+                trsm(tril(cr_L.batch(c)), λ.batch(c * stride));
     }
     //  7|  for l = 0 ... log₂(P)-1
     for (index_t l = 0; l < lp(); ++l) {
