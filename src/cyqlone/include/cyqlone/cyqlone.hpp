@@ -920,16 +920,41 @@ struct CyqloneSolver {
     /// @name Factorization and solve routines
     /// @{
 
+    /// Compute the Cyqlone factorization of the KKT matrix of the OCP and perform a forward solve
+    /// (fused for improved locality).
+    /// @param ctx Parallel context.
+    /// @param γ Reciprocal primal regularization.
+    /// @param Σ ALM penalty factors.
+    /// @param[in,out] ux Negative augmented Lagrangian gradient on entry; solution of forward solve
+    ///                   on exit.
+    /// @param[in,out] λ Constant term of the dynamics constraints on entry; solution of forward
+    ///                  solve on exit.
+    /// To obtain the solution of the KKT system, a reverse solve with the same factorization must
+    /// be performed afterwards.
+    /// @see @ref solve_reverse
     void factor_solve(Context &ctx, value_type γ, view<> Σ, mut_view<> ux, mut_view<> λ);
+    /// Compute the Cyqlone factorization of the KKT matrix of the OCP.
+    /// @see @ref factor_solve
     void factor(Context &ctx, value_type γ, view<> Σ);
+    /// Perform a forward solve with the Cyqlone factorization.
+    /// @see @ref factor_solve
     void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ);
+    /// Perform a reverse solve with the Cyqlone factorization.
+    /// @param ctx Parallel context.
+    /// @param ux On entry, the result of the forward solve; on exit the solution of the primal
+    ///           variables of the KKT system.
+    /// @param λ On entry, the result of the forward solve; on exit the solution of the dual
+    ///          variables corresponding to the dynamics constraints of the KKT system.
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ);
     /// Fused variant of @ref solve_reverse and @ref transposed_dynamics_constr (for improved
     /// locality of the dynamics Jacobians).
     void solve_reverse_mul(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> Mᵀλ);
     /// Perform factorization updates of the Cyqlone factorization as described by
     /// Algorithm 4 in the paper.
+    /// @param ctx Parallel context.
+    /// @param ΔΣ Changes to the ALM penalty factors Σ.
     void update(Context &ctx, view<> ΔΣ);
+    /// Fused variant of @ref update and @ref solve_forward.
     void update_solve(Context &ctx, view<> ΔΣ, mut_view<> ux, mut_view<> λ);
 
     /// @}
