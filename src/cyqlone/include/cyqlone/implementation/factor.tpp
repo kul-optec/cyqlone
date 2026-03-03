@@ -156,10 +156,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::solve_forward(Context &ctx, mut_view<> 
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ,
-                                                       mut_view<> work) const {
+                                                       mut_view<> work,
+                                                       std::optional<mut_view<>> Mᵀλ) const {
     tricyqle.solve_reverse(ctx, λ, work, n);
     ctx.arrive_and_wait(); // wait for λ(c-1)
-    solve_riccati_reverse(ctx, ux, λ, work);
+    solve_riccati_reverse(ctx, ux, λ, work, Mᵀλ);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
@@ -251,6 +252,12 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_reverse_serial(mut_view<> λ, mu
 template <index_t VL, class T, StorageOrder DefaultOrder>
 void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ) {
     solve_reverse(ctx, ux, λ, riccati_work);
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder>
+void CyqloneSolver<VL, T, DefaultOrder>::solve_reverse_mul(Context &ctx, mut_view<> ux,
+                                                           mut_view<> λ, mut_view<> Mᵀλ) {
+    solve_reverse(ctx, ux, λ, riccati_work, Mᵀλ);
 }
 
 /// Adjust thread assignment for non-power-of-two p:

@@ -48,13 +48,9 @@ void CyQPALMBackend<VL, DefaultOrder>::solve(Context &ctx, [[maybe_unused]] cons
         auto t = get_timed(&Timings::solve);
         ocp.solve_forward(ctx, d, Δλ);
     }
-    { // (d, Δλ) ← L⁻ᵀ (d, Δλ)
+    { // (d, Δλ) ← L⁻ᵀ (d, Δλ) and MᵀΔλ ← Mᵀ Δλ
         auto t = get_timed(&Timings::solve);
-        ocp.solve_reverse(ctx, d, Δλ);
-    }
-    { // MᵀΔλ ← Mᵀ Δλ
-        auto t = get_timed(&Timings::solve_MT);
-        mat_vec_MT(ctx, Δλ, MᵀΔλ);
+        ocp.solve_reverse_mul(ctx, d, Δλ, MᵀΔλ);
     }
     { // Ad ← A d
         auto t = get_timed(&Timings::solve_A);

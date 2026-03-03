@@ -924,6 +924,9 @@ struct CyqloneSolver {
     void factor(Context &ctx, value_type γ, view<> Σ);
     void solve_forward(Context &ctx, mut_view<> ux, mut_view<> λ);
     void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ);
+    /// Fused variant of @ref solve_reverse and @ref transposed_dynamics_constr (for improved
+    /// locality of the dynamics Jacobians).
+    void solve_reverse_mul(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> Mᵀλ);
     /// Perform factorization updates of the Cyqlone factorization as described by
     /// Algorithm 4 in the paper.
     void update(Context &ctx, view<> ΔΣ);
@@ -953,8 +956,10 @@ struct CyqloneSolver {
     /// @name Low-level reverse solve routines
     /// @{
 
-    void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
-    void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work) const;
+    void solve_riccati_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work,
+                               std::optional<mut_view<>> Mᵀλ) const;
+    void solve_reverse(Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work,
+                       std::optional<mut_view<>> Mᵀλ = std::nullopt) const;
 
     /// @}
 
