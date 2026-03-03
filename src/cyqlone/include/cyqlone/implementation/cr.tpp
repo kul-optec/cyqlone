@@ -265,8 +265,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     GUANAQO_TRACE("Subtract Yᵀb", iL);
     // b[diY] -= Y[iY]ᵀ b[diL]
-    iL == 0 ? gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY), with_rotate_B<1>) //
-            : gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY));
+    v == 1 || iL > 0 ? gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY)) //
+                     : gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY), with_rotate_B<1>);
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder>
