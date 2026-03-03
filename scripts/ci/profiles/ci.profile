@@ -34,9 +34,9 @@ tools.build.cross_building:can_run=True
 # Work around bug in OpenBLAS recipe
 tools.build:sharedlinkflags+=["-lgfortran"]
 tools.build:exelinkflags+=["-lgfortran"]
-&:tools.cmake.cmaketoolchain:extra_variables*={"BATMAT_WITH_ACCURATE_BUILD_TIME": "Off"}
-&:tools.cmake.cmaketoolchain:extra_variables*={"CYQLONE_WITH_ACCURATE_BUILD_TIME": "Off"}
 hyhound/*:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_UNITY_BUILD": "On"}
+batmat/*:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_UNITY_BUILD": "On"}
+batmat/*:tools.cmake.cmaketoolchain:extra_variables*={"CMAKE_UNITY_BUILD_BATCH_SIZE": "4"}
 hpipm/*:tools.build:cflags+=["-fvisibility=default"]
 
 [options]

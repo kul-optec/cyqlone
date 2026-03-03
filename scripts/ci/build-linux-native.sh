@@ -12,6 +12,7 @@ pbc_config="$PWD/native-py-build-cmake.local.pbc"
 profiles="$PWD/scripts/ci/conan-profiles/profiles"
 cat << EOF > "$pbc_config"
 conan.profile_host=["default"]
+conan.profile_host+=["$PWD/scripts/ci/profiles/unity.profile"]
 conan.profile_host+=["$profiles/color/gcc.profile"]
 conan.profile_host+=["$profiles/link/lto-auto.profile"]
 conan.profile_host+=["$profiles/visibility/hidden.profile"]
