@@ -335,6 +335,8 @@ jobs:
           conan install . --build=missing -pr scripts/ci/profiles/ci.profile
           -s:h build_type=Debug -s:b build_type=Release
           -s:b compiler.cppstd=20
+          -s batmat/\*:build_type=Release
+        # Building batmat in debug mode is slow and memory hungry
 
       - name: Generate documentation
         run: ./scripts/ci/gen-docs.sh "${{ github.workspace }}/staging" conan-debug
