@@ -11,6 +11,7 @@
 #include <guanaqo/eigen/view.hpp>
 
 #include <format>
+#include <memory>
 #include <stdexcept>
 
 #include "common.py.hpp"
@@ -35,9 +36,27 @@ struct PythonCyqloneSolver {
                  qpalm_settings} {}
 };
 
-template <class Solver>
+/// Adds a reusable parallel context to the solver.
+template <class BaseSolver>
+struct SolverWrapper : BaseSolver {
+    SolverWrapper(BaseSolver &&o) noexcept : BaseSolver{std::move(o)} {}
+    std::unique_ptr<typename BaseSolver::SharedContext> parallel_context;
+
+    typename BaseSolver::SharedContext &get_parallel_context() {
+        if (!parallel_context)
+            parallel_context = this->create_parallel_context();
+        return *parallel_context;
+    }
+
+    template <class F>
+    decltype(auto) run(F &&func) {
+        return get_parallel_context().run(std::forward<F>(func));
+    }
+};
+
+template <class BaseSolver>
 void register_cyqlone_solver(nb::module_ &m) {
-    static constexpr index_t v            = Solver::v;
+    static constexpr index_t v            = BaseSolver::v;
     static constexpr auto view_as_batched = []<class T>(const np_batched_view<v, T> &t) {
         using View = batmat::matrix::View<T, index_t, std::integral_constant<index_t, v>, index_t,
                                           index_t, StorageOrder::ColMajor>;
@@ -81,6 +100,7 @@ void register_cyqlone_solver(nb::module_ &m) {
         }};
     };
 
+    using Solver = SolverWrapper<BaseSolver>;
     nb::class_<Solver> solver(m, "CyqloneSolver");
     solver //
         .def(
@@ -108,7 +128,7 @@ void register_cyqlone_solver(nb::module_ &m) {
         .def(
             "set_barrier_spin_count",
             [](Solver &self, uint32_t spin_count) {
-                return self.set_barrier_spin_count(spin_count);
+                return self.get_parallel_context().set_barrier_spin_count(spin_count);
             },
             "spin_count"_a)
         .def(

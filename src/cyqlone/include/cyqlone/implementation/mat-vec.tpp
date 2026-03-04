@@ -13,9 +13,10 @@ namespace CYQLONE_NS(cyqlone) {
 using namespace linalg;
 using namespace batmat::linalg;
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, view<> x, view<> b,
-                                                                  mut_view<> Mxb) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::residual_dynamics_constr(Context &ctx, view<> x,
+                                                                       view<> b,
+                                                                       mut_view<> Mxb) const {
     // (Mx + b)(j) = A(j) x(j) + B(j) u(j) - x(j+1) + b(j)
     auto arrival          = ctx.arrive();
     const index_t c       = riccati_thread_assignment(ctx);
@@ -47,10 +48,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::residual_dynamics_constr(Context &ctx, 
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx, view<> λ,
-                                                                    mut_view<> Mᵀλ,
-                                                                    bool accum) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::transposed_dynamics_constr(Context &ctx, view<> λ,
+                                                                         mut_view<> Mᵀλ,
+                                                                         bool accum) const {
     // (Mᵀλ)(j) = [ B(j)ᵀ ] λ(j) - [ 0 ] λ(j-1)
     //            [ A(j)ᵀ ]        [ I ]
     auto arrival          = ctx.arrive();
@@ -90,9 +91,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_dynamics_constr(Context &ctx
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::general_constr(Context &ctx, view<> ux,
-                                                        mut_view<> DCux) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::general_constr(Context &ctx, view<> ux,
+                                                             mut_view<> DCux) const {
     const auto mul_Gx = []([[maybe_unused]] auto j, auto, auto Gᵀj, auto uxj, auto DCuxj) {
         GUANAQO_TRACE("general_constr", j);
         gemv(Gᵀj.transposed(), uxj, DCuxj);
@@ -100,9 +101,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::general_constr(Context &ctx, view<> ux,
     foreach_stage(ctx, mul_Gx, data_Gᵀ, ux, DCux);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(Context &ctx, view<> y,
-                                                                   mut_view<> DCᵀy) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::transposed_general_constr(Context &ctx, view<> y,
+                                                                        mut_view<> DCᵀy) const {
     const auto mul_Gᵀy = []([[maybe_unused]] auto j, auto, auto Gᵀj, auto yj, auto DCᵀyj) {
         GUANAQO_TRACE("transposed_general_constr", j);
         gemv(Gᵀj, yj, DCᵀyj);
@@ -110,16 +111,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(Context &ctx,
     foreach_stage(ctx, mul_Gᵀy, data_Gᵀ, y, DCᵀy);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::transposed_general_constr(view<> y,
-                                                                   mut_view<> DCᵀy) const {
-    run([&](Context &ctx) { transposed_general_constr(ctx, y, DCᵀy); });
-}
-
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, value_type α,
-                                                       view<> q, value_type β,
-                                                       mut_view<> grad_f) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::cost_gradient(Context &ctx, view<> ux, value_type α,
+                                                            view<> q, value_type β,
+                                                            mut_view<> grad_f) const {
     const auto mul_Hx = [&]([[maybe_unused]] auto j, auto, auto qj, auto Hj, auto uxj,
                             auto grad_fj) {
         GUANAQO_TRACE("cost_gradient", j);
@@ -130,10 +125,11 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient(Context &ctx, view<> ux, 
     foreach_stage(ctx, mul_Hx, q, data_H, ux, grad_f);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx, value_type γ,
-                                                                   view<> ux, view<> ux0, view<> q,
-                                                                   mut_view<> grad_f) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::cost_gradient_regularized(Context &ctx, value_type γ,
+                                                                        view<> ux, view<> ux0,
+                                                                        view<> q,
+                                                                        mut_view<> grad_f) const {
     simd inv_γ{1 / γ};
     const auto reg_simd = [inv_γ](auto qji, auto xji, auto x0ji) {
         return inv_γ * (xji - x0ji) + qji;
@@ -147,8 +143,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_regularized(Context &ctx,
     foreach_stage(ctx, mul_Hx, q, data_H, ux, ux0, grad_f);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::cost_gradient_remove_regularization(
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::cost_gradient_remove_regularization(
     Context &ctx, value_type γ, view<> ux, view<> ux0, mut_view<> grad_f) const {
     simd inv_γ{1 / γ};
     const auto sub_reg_simd = [inv_γ](auto grad_fji, auto xji, auto x0ji) {

@@ -29,15 +29,15 @@ using namespace batmat::linalg;
 //  - We use an iterative approach to factor all levels, instead of recursion.
 //  - The solution step is separated from the factorization step.
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr() {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr() {
     [this]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template factor_pcr_level<Levels>(), ...);
     }(std::make_integer_sequence<index_t, lv()>{});
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_parallel(Context &ctx) {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr_parallel(Context &ctx) {
     [this, &ctx]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template factor_pcr_level_parallel<Levels>(ctx), ...);
     }(std::make_integer_sequence<index_t, lv()>{});
@@ -45,9 +45,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_parallel(Context &ctx) {
 
 // The level is a template parameter to allow for compile-time vector rotations.
 // The number of levels is small, so this should not bloat the code too much.
-template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <index_t Level>
-void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level() {
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr_level() {
     GUANAQO_TRACE("Factor PCR", Level);
     auto M      = Level == 0 ? cr_L.batch(0) : pcr_M.batch(0);
     auto K      = Level == 0 ? cr_Y.batch(0) : pcr_Y.batch(Level);
@@ -103,9 +103,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level() {
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <index_t Level>
-void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level_parallel(Context &ctx) {
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr_level_parallel(Context &ctx) {
     auto M      = Level == 0 ? cr_L.batch(0) : pcr_M.batch(0);
     auto K      = Level == 0 ? cr_Y.batch(0) : pcr_L.batch(Level + 1);
     auto M_next = pcr_M.batch(0);
@@ -174,9 +174,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_pcr_level_parallel(Context &ctx
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
-                                                    mut_batch_view<> work_pcr) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_pcr(mut_batch_view<> λ,
+                                                         mut_batch_view<> work_pcr) const {
     [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template solve_pcr_level<Levels>(λ, work_pcr), ...);
     }(std::make_integer_sequence<index_t, lv()>{});
@@ -186,10 +186,10 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_pcr(mut_batch_view<> λ,
     trsm(triu(pcr_L.batch(lv()).transposed()), λ);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <index_t Level>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_pcr_level(mut_batch_view<> λ,
-                                                          mut_batch_view<> work_pcr) const {
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_pcr_level(mut_batch_view<> λ,
+                                                               mut_batch_view<> work_pcr) const {
     GUANAQO_TRACE("Solve PCR", Level);
     auto L = pcr_L.batch(Level), Y = pcr_Y.batch(Level), U = pcr_U.batch(Level);
     static constexpr auto r = 1 << Level;

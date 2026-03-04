@@ -61,10 +61,13 @@ using batmat::matrix::StorageOrder;
 /// @tparam T               Scalar type.
 /// @tparam DefaultOrder    Storage order for the matrix workspaces (row/column major).
 /// @ingroup topic-block-tridiag-solvers
-template <index_t VL = 4, class T = real_t, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+template <index_t VL = 4, class T = real_t, StorageOrder DefaultOrder = StorageOrder::ColMajor,
+          class Ctx = parallel::Context<>>
 struct TricyqleSolver {
-    using value_type = T;
-    using Params     = TricyqleParams<value_type>;
+    using value_type    = T;
+    using Params        = TricyqleParams<value_type>;
+    using Context       = Ctx;
+    using SharedContext = typename Context::shared_context_type;
 
     /// @name Problem dimensions
     /// @{
@@ -113,18 +116,12 @@ struct TricyqleSolver {
     using vl_t = std::integral_constant<index_t, v>;
     /// Integral constant type for the alignment of the batched matrix data structures.
     using align_t = std::integral_constant<index_t, v * alignof(value_type)>;
-    /// Parallel execution context, storing synchronization primitives and shared data for the
-    /// parallel algorithms.
-    using SharedContext = parallel::SharedContext;
-    /// Context type passed to each thread during parallel execution, enabling synchronization
-    /// and parallel broadcasts/reductions with the other threads.
-    using Context = parallel::Context<SharedContext>;
-    /// @copydoc SharedContext
-    std::unique_ptr<SharedContext> parallel_ctx = std::make_unique<SharedContext>(p);
 
-    /// Run a function in parallel on all @ref p threads. Each thread will call the function with
-    /// the parallel execution context as an argument (see @ref Context).
-    void run(auto &&func) const { return parallel_ctx->run(std::forward<decltype(func)>(func)); }
+    /// Create a new parallel execution context, storing synchronization primitives and shared data
+    /// for the parallel algorithms.
+    std::unique_ptr<SharedContext> create_parallel_context() const {
+        return std::make_unique<SharedContext>(p);
+    }
 
     /// @}
 
@@ -557,8 +554,10 @@ struct TricyqleSolver {
 /// @tparam VL              Vector length.
 /// @tparam T               Scalar type.
 /// @tparam DefaultOrder    Storage order for the matrix workspaces (row/column major).
+/// @tparam Ctx             Parallel execution context type, see @ref parallel::Context.
 /// @ingroup topic-ocp-solvers
-template <index_t VL = 4, class T = real_t, StorageOrder DefaultOrder = StorageOrder::ColMajor>
+template <index_t VL = 4, class T = real_t, StorageOrder DefaultOrder = StorageOrder::ColMajor,
+          class Ctx = parallel::Context<>>
 struct CyqloneSolver {
     using value_type = T;
 
@@ -593,9 +592,10 @@ struct CyqloneSolver {
     /// @{
 
     /// Tricyqle solver type for solving block-tridiagonal systems in parallel.
-    using tricyqle_t = TricyqleSolver<VL, T, DefaultOrder>;
-    using Context    = tricyqle_t::Context;
-    using simd       = typename tricyqle_t::simd;
+    using tricyqle_t    = TricyqleSolver<VL, T, DefaultOrder, Ctx>;
+    using Context       = tricyqle_t::Context;
+    using SharedContext = tricyqle_t::SharedContext;
+    using simd          = tricyqle_t::simd;
 
     /// Number of processors/threads.
     const index_t p;
@@ -613,8 +613,9 @@ struct CyqloneSolver {
     /// The number of parallel execution units P rounded up to the next power of two.
     [[nodiscard]] constexpr index_t ceil_P() const { return tricyqle.ceil_P(); }
 
-    /// Run a function in parallel.
-    void run(auto &&func) const { return tricyqle.run(std::forward<decltype(func)>(func)); }
+    std::unique_ptr<SharedContext> create_parallel_context() const {
+        return tricyqle.create_parallel_context();
+    }
 
     /// Call a function for each stage in the horizon, passing the stage index, the data batch
     /// index, and optionally the corresponding batches of the given arrays.
@@ -709,14 +710,6 @@ struct CyqloneSolver {
     /// Update the Tricyqle solver parameters.
     void update_tricyqle_params(const TricyqleParams<value_type> &new_params) {
         tricyqle.update_params(new_params);
-    }
-
-    /// Configure the barrier spin count used in parallel synchronization before falling back to a
-    /// futex wait.
-    uint32_t set_barrier_spin_count(uint32_t spin_count) {
-        auto &barrier = tricyqle.parallel_ctx->barrier;
-        static_assert(std::is_same_v<decltype(barrier.spin_count), decltype(spin_count)>);
-        return std::exchange(barrier.spin_count, spin_count);
     }
 
     /// Get a string representation of the main solver parameters. Used mainly for file names.

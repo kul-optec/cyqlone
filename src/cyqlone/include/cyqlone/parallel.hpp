@@ -47,6 +47,13 @@ struct SharedContext {
     /// be used to synchronize and communicate between threads.
     template <class F>
     void run(F &&);
+
+    /// Configure the barrier spin count used in parallel synchronization before falling back to a
+    /// futex wait.
+    uint32_t set_barrier_spin_count(uint32_t spin_count) {
+        static_assert(std::is_same_v<decltype(barrier.spin_count), decltype(spin_count)>);
+        return std::exchange(barrier.spin_count, spin_count);
+    }
 };
 
 /*

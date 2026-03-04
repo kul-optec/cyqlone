@@ -200,13 +200,14 @@ void bm_factor_cyqlone(benchmark::State &state) {
     auto [ocp, Σ] = generate_ocp(state);
     const auto p  = static_cast<index_t>(state.range(4));
     auto solver   = build_cyqlone_solver<VL>(ocp, p);
-    solver.set_barrier_spin_count(std::numeric_limits<uint32_t>::max());
-    GUANAQO_IF_ITT(solver.run(
+    auto pctx     = solver.create_parallel_context();
+    pctx->set_barrier_spin_count(std::numeric_limits<uint32_t>::max());
+    GUANAQO_IF_ITT(pctx->run(
         [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
     auto Σ_packed = solver.initialize_general_constraints();
     solver.pack_constraints(as_span(Σ.reshaped()), Σ_packed);
     const auto do_factor = [&] {
-        solver.run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ_packed); });
+        pctx->run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ_packed); });
     };
     for (auto _ : state)
         do_factor();

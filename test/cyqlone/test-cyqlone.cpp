@@ -62,11 +62,12 @@ TEST_P(CyqloneFactorTest, factor) {
     tricyqle_params.cr_max_update_fraction_Y0 = 9999;
     tricyqle_params.pcr_max_update_fraction   = 9999;
     solver.update_tricyqle_params(tricyqle_params);
+    auto pctx = solver.create_parallel_context();
 
     // Spin a bit longer to get more deterministic timings
-    solver.set_barrier_spin_count(std::numeric_limits<uint32_t>::max());
+    pctx->set_barrier_spin_count(std::numeric_limits<uint32_t>::max());
 
-    GUANAQO_IF_ITT(solver.run(
+    GUANAQO_IF_ITT(pctx->run(
         [](auto &ctx) { __itt_thread_set_name(std::format("OMP({})", ctx.index).c_str()); }));
 
     std::vector<real_t> Σ_lin((N - 1) * ny + ny_0 + ny_N);
@@ -106,7 +107,7 @@ TEST_P(CyqloneFactorTest, factor) {
     for (int i = 0; i < 50; ++i) {
         cyqlone::linalg::negate(rq, ux);
         λ = b;
-        solver.run([&](auto &ctx) {
+        pctx->run([&](auto &ctx) {
             solver.factor(ctx, 1e100, Σ);
 #if WITH_UPDATES
             solver.update(ctx, ΔΣ);
@@ -128,7 +129,7 @@ TEST_P(CyqloneFactorTest, factor) {
 #if GUANAQO_WITH_TRACING
     guanaqo::get_trace_logger().reset();
 #endif
-    solver.run([&](auto &ctx) {
+    pctx->run([&](auto &ctx) {
         solver.factor(ctx, 1e100, Σ);
 #if WITH_UPDATES
         solver.update(ctx, ΔΣ);
@@ -173,14 +174,14 @@ TEST_P(CyqloneFactorTest, factor) {
     cyqlone::add_to_mat(matfile.get(), "LH", unpacked(solver.riccati_LH));
     cyqlone::add_to_mat(matfile.get(), "LAB", unpacked(solver.riccati_LAB));
     // Execute the factorization with Σ2 directly (instead of factorizing with Σ and updating)
-    solver.run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2); });
+    pctx->run([&](auto &ctx) { solver.factor(ctx, 1e100, Σ2); });
     cyqlone::add_to_mat(matfile.get(), "L_refactor", solver.build_sparse_factor());
     std::cout << filename << "\n";
 #endif
 
 #if GUANAQO_WITH_TRACING
     {
-        solver.run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
+        pctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
         std::string name = std::format("factor_cyclic_new.csv");
         std::filesystem::path out_dir{"traces"};
         out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";

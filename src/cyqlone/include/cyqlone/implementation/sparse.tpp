@@ -11,9 +11,9 @@
 namespace CYQLONE_NS(cyqlone) {
 using namespace batmat::linalg;
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value_type> &ocp,
-                                                      std::span<const value_type> Σ) const
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::build_sparse(const CyqloneStorage<value_type> &ocp,
+                                                           std::span<const value_type> Σ) const
     -> SparseMatrix {
     BATMAT_ASSERT(is_pow_2(p));
     using enum batmat::linalg::MatrixStructure;
@@ -101,9 +101,10 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse(const CyqloneStorage<value
     return std::move(mat).build();
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> rq, view<> b, value_type scale_rq,
-                                                   value_type scale_b) const -> std::vector<T> {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::build_rhs(view<> rq, view<> b, value_type scale_rq,
+                                                        value_type scale_b) const
+    -> std::vector<T> {
     BATMAT_ASSERT(is_pow_2(p));
     const index_t nux = nu + nx, nuxx = nux + nx;
     // stride between stages in the same interval
@@ -154,8 +155,8 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_rhs(view<> rq, view<> b, value_ty
     return rhs;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMatrix {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::build_sparse_factor() const -> SparseMatrix {
     BATMAT_ASSERT(is_pow_2(p));
     using enum batmat::linalg::MatrixStructure;
     const index_t nux = nu + nx, nuxx = nux + nx;
@@ -278,8 +279,8 @@ auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_factor() const -> SparseMa
     return std::move(mat).build();
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::build_sparse_diag() const -> SparseMatrix {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::build_sparse_diag() const -> SparseMatrix {
     BATMAT_ASSERT(is_pow_2(p));
     const index_t nux = nu + nx, nuxx = nux + nx;
     // stride between stages in the same interval

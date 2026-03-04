@@ -36,9 +36,9 @@ void scale(T0 scalar, guanaqo::MatrixView<T1, I1, S1, O1> src,
 }
 } // namespace detail
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-CyqloneSolver<VL, T, DefaultOrder>
-CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp, index_t p) {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+CyqloneSolver<VL, T, DefaultOrder, Ctx>
+CyqloneSolver<VL, T, DefaultOrder, Ctx>::build(const CyqloneStorage<value_type> &ocp, index_t p) {
     BATMAT_ASSERT(p > 0);
     BATMAT_ASSERT(v == 1 || is_pow_2(p));
     CyqloneSolver<VL, T, DefaultOrder> res{
@@ -90,8 +90,8 @@ CyqloneSolver<VL, T, DefaultOrder>::build(const CyqloneStorage<value_type> &ocp,
 // | 20      | 7        | 1       | 22      |      |      |       |       |
 // | 19      | 7        | 2       | 23      |      |      |       |       |
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::update_data(const CyqloneStorage<value_type> &ocp) {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_data(const CyqloneStorage<value_type> &ocp) {
     using cyqlone::detail::copy;
     using cyqlone::detail::scale;
     BATMAT_ASSERT(ocp.N_horiz == N_horiz);
@@ -143,9 +143,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::update_data(const CyqloneStorage<value_
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<value_type> &ocp,
-                                                        mut_view<> rhs) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_rhs(const CyqloneStorage<value_type> &ocp,
+                                                             mut_view<> rhs) const {
     BATMAT_ASSERT(rhs.depth() == ceil_N());
     BATMAT_ASSERT(rhs.rows() == nx);
     BATMAT_ASSERT(rhs.cols() == 1);
@@ -166,9 +166,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<val
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(const CyqloneStorage<value_type> &ocp,
-                                                             mut_view<> grad) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_gradient(
+    const CyqloneStorage<value_type> &ocp, mut_view<> grad) const {
     BATMAT_ASSERT(grad.depth() == ceil_N());
     BATMAT_ASSERT(grad.rows() == nu + nx);
     BATMAT_ASSERT(grad.cols() == 1);
@@ -200,10 +200,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(const CyqloneStorag
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(const CyqloneStorage<value_type> &ocp,
-                                                           mut_view<> b_min,
-                                                           mut_view<> b_max) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_bounds(
+    const CyqloneStorage<value_type> &ocp, mut_view<> b_min, mut_view<> b_max) const {
     const index_t nyM = std::max(ny, ny_0 + ny_N);
     BATMAT_ASSERT(b_min.depth() == ceil_N());
     BATMAT_ASSERT(b_min.rows() == nyM);
@@ -239,9 +238,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(const CyqloneStorage<
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::pack_variables(std::span<const value_type> ux_lin,
-                                                        mut_view<> ux) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::pack_variables(std::span<const value_type> ux_lin,
+                                                             mut_view<> ux) const {
     const index_t nux = nu + nx;
     BATMAT_ASSERT(static_cast<index_t>(ux_lin.size()) == nux * N_horiz);
     BATMAT_ASSERT(ux.depth() == ceil_N());
@@ -278,9 +277,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_variables(std::span<const value_ty
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::unpack_variables(view<> ux,
-                                                          std::span<value_type> ux_lin) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::unpack_variables(view<> ux,
+                                                               std::span<value_type> ux_lin) const {
     const index_t nux = nu + nx;
     BATMAT_ASSERT(static_cast<index_t>(ux_lin.size()) == nux * N_horiz);
     BATMAT_ASSERT(ux.depth() == ceil_N());
@@ -313,9 +312,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_variables(view<> ux,
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::pack_dynamics(std::span<const value_type> λ_lin,
-                                                       mut_view<> λ) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::pack_dynamics(std::span<const value_type> λ_lin,
+                                                            mut_view<> λ) const {
     const index_t nλ = nx;
     BATMAT_ASSERT(static_cast<index_t>(λ_lin.size()) == nλ * N_horiz);
     BATMAT_ASSERT(λ.depth() == ceil_N());
@@ -339,9 +338,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_dynamics(std::span<const value_typ
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::unpack_dynamics(view<> λ,
-                                                         std::span<value_type> λ_lin) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::unpack_dynamics(view<> λ,
+                                                              std::span<value_type> λ_lin) const {
     const index_t nλ = nx;
     BATMAT_ASSERT(static_cast<index_t>(λ_lin.size()) == nλ * N_horiz);
     BATMAT_ASSERT(λ.depth() == ceil_N());
@@ -363,9 +362,10 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_dynamics(view<> λ,
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::pack_constraints(std::span<const value_type> y_lin,
-                                                          mut_view<> y, value_type fill) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::pack_constraints(std::span<const value_type> y_lin,
+                                                               mut_view<> y,
+                                                               value_type fill) const {
     BATMAT_ASSERT(static_cast<index_t>(y_lin.size()) == ny * (N_horiz - 1) + ny_0 + ny_N);
     BATMAT_ASSERT(y.depth() == ceil_N());
     BATMAT_ASSERT(y.rows() == std::max(ny, ny_0 + ny_N));
@@ -397,9 +397,9 @@ void CyqloneSolver<VL, T, DefaultOrder>::pack_constraints(std::span<const value_
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y,
-                                                            std::span<value_type> y_lin) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::unpack_constraints(
+    view<> y, std::span<value_type> y_lin) const {
     BATMAT_ASSERT(static_cast<index_t>(y_lin.size()) == ny * (N_horiz - 1) + ny_0 + ny_N);
     BATMAT_ASSERT(y.depth() == ceil_N());
     BATMAT_ASSERT(y.rows() == std::max(ny, ny_0 + ny_N));
@@ -425,90 +425,90 @@ void CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y,
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::initialize_rhs(const CyqloneStorage<value_type> &ocp) const
-    -> matrix<> {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_rhs(
+    const CyqloneStorage<value_type> &ocp) const -> matrix<> {
     matrix<> rhs = initialize_dynamics_constraints();
     initialize_rhs(ocp, rhs);
     return rhs;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::initialize_gradient(
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_gradient(
     const CyqloneStorage<value_type> &ocp) const -> matrix<> {
     matrix<> grad = initialize_variables();
     initialize_gradient(ocp, grad);
     return grad;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::initialize_bounds(
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_bounds(
     const CyqloneStorage<value_type> &ocp) const -> std::pair<matrix<>, matrix<>> {
     std::pair b{initialize_general_constraints(), initialize_general_constraints()};
     initialize_bounds(ocp, b.first, b.second);
     return b;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::pack_variables(std::span<const value_type> ux_lin) const
-    -> matrix<> {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::pack_variables(
+    std::span<const value_type> ux_lin) const -> matrix<> {
     matrix<> ux = initialize_variables();
     pack_variables(ux_lin, ux);
     return ux;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::unpack_variables(view<> ux) const
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::unpack_variables(view<> ux) const
     -> std::vector<value_type> {
     std::vector<value_type> ux_lin(num_variables());
     unpack_variables(ux, ux_lin);
     return ux_lin;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::pack_dynamics(std::span<const value_type> λ_lin) const
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::pack_dynamics(std::span<const value_type> λ_lin) const
     -> matrix<> {
     matrix<> λ = initialize_dynamics_constraints();
     pack_dynamics(λ_lin, λ);
     return λ;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::unpack_dynamics(view<> λ) const
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::unpack_dynamics(view<> λ) const
     -> std::vector<value_type> {
     std::vector<value_type> λ_lin(num_dynamics_constraints());
     unpack_dynamics(λ, λ_lin);
     return λ_lin;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::pack_constraints(std::span<const value_type> y_lin,
-                                                          value_type fill) const -> matrix<> {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::pack_constraints(std::span<const value_type> y_lin,
+                                                               value_type fill) const -> matrix<> {
     matrix<> y = initialize_general_constraints();
     pack_constraints(y_lin, y, fill);
     return y;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::unpack_constraints(view<> y) const
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::unpack_constraints(view<> y) const
     -> std::vector<value_type> {
     std::vector<value_type> y_lin(num_general_constraints());
     unpack_constraints(y, y_lin);
     return y_lin;
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::initialize_variables() const -> matrix<> {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_variables() const -> matrix<> {
     return matrix<>{{.depth = ceil_N(), .rows = nu + nx, .cols = 1}};
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::initialize_dynamics_constraints() const -> matrix<> {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_dynamics_constraints() const -> matrix<> {
     return matrix<>{{.depth = ceil_N(), .rows = nx, .cols = 1}};
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto CyqloneSolver<VL, T, DefaultOrder>::initialize_general_constraints() const -> matrix<> {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto CyqloneSolver<VL, T, DefaultOrder, Ctx>::initialize_general_constraints() const -> matrix<> {
     return matrix<>{{.depth = ceil_N(), .rows = std::max(ny, ny_0 + ny_N), .cols = 1}};
 }
 

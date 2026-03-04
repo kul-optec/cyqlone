@@ -34,8 +34,8 @@ using namespace batmat::linalg;
 //    circular boundary conditions, so this masking is not applied for v > 1.
 
 // 20|  U(iU) = K˂(iU) L(iU)⁻ᵀ
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, index_t iU) {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_U([[maybe_unused]] index_t l, index_t iU) {
     if constexpr (v == 1)
         if (iU >= p && !circular) // happens in cases where p is not a power of two
             return;
@@ -48,8 +48,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_U([[maybe_unused]] index_t l, i
 }
 
 // 21|  Y(iY) = K˃(iY) L(iY)⁻ᵀ
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, index_t iY) {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_Y([[maybe_unused]] index_t l, index_t iY) {
     if constexpr (v == 1)
         if (iY + (1 << l) >= p && !circular) // Y(iY)=0 for scalar case
             return;
@@ -61,8 +61,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_Y([[maybe_unused]] index_t l, i
     trsm(cr_Y.batch(iY), tril(cr_L.batch(iY)).transposed());
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t i) {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_K(index_t l, index_t i) {
     const index_t i_prev = sub_wrap_ceil_p(i, 1 << l), i_next = add_wrap_ceil_p(i, 1 << l);
     if constexpr (v == 1)
         if (i + (1 << l) >= p && !circular) // Y(i)=0 for scalar case
@@ -87,8 +87,8 @@ void TricyqleSolver<VL, T, DefaultOrder>::update_K(index_t l, index_t i) {
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_L(index_t l, index_t i) {
     const index_t offset = 1 << l;
     const index_t iU     = add_wrap_ceil_p(i, offset);
     const index_t iY     = sub_wrap_ceil_p(i, offset);
@@ -192,9 +192,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::factor_L(index_t l, index_t i) {
 //    U(k)ᵀ x(k-2^l) is stored in a temporary workspace to avoid races on x(k).
 //  - The last level is not handled here, because it is solved using PCG or PCR.
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU, mut_view<> λ,
-                                                          index_t stride) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_u_forward(index_t l, index_t iU, mut_view<> λ,
+                                                               index_t stride) const {
     if constexpr (v == 1)
         if (iU >= p && !circular) // happens in cases where p is not a power of two
             return;
@@ -206,9 +206,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_u_forward(index_t l, index_t iU,
     gemv_sub(cr_U.batch(iU), λ.batch(diU), λ.batch(diL));
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY, mut_view<> λ,
-                                                          mut_view<> w, index_t stride) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_y_forward(index_t l, index_t iY, mut_view<> λ,
+                                                               mut_view<> w, index_t stride) const {
     if constexpr (v == 1)
         if (iY + (1 << l) >= p && !circular) // Y(iY)=0 for scalar case
             return;
@@ -219,9 +219,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_y_forward(index_t l, index_t iY,
     gemv(cr_Y.batch(iY), λ.batch(diY), w.batch(iL));
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL, mut_view<> λ,
-                                                          view<> w, index_t stride) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_λ_forward(index_t l, index_t iL, mut_view<> λ,
+                                                               view<> w, index_t stride) const {
     const index_t diL = iL * stride;
     const index_t iY  = sub_wrap_ceil_p(iL, 1 << l);
     // 21|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
@@ -239,9 +239,10 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_forward(index_t l, index_t iL
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU, mut_view<> λ,
-                                                           mut_view<> w, index_t stride) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_u_backward(index_t l, index_t iU, mut_view<> λ,
+                                                                mut_view<> w,
+                                                                index_t stride) const {
     if constexpr (v == 1)
         if (iU >= p && !circular) // happens in cases where p is not a power of two
             return;
@@ -253,9 +254,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_u_backward(index_t l, index_t iU
     gemv(cr_U.batch(iU).transposed(), λ.batch(diL), w.batch(iU));
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY, mut_view<> λ,
-                                                           index_t stride) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_y_backward(index_t l, index_t iY, mut_view<> λ,
+                                                                index_t stride) const {
     if constexpr (v == 1)
         if (iY + (1 << l) >= p && !circular) // Y(iY)=0 for scalar case
             return;
@@ -269,9 +270,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_y_backward(index_t l, index_t iY
                      : gemv_sub(Y.transposed(), λ.batch(diL), λ.batch(diY), with_rotate_B<1>);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view<> λ, view<> w,
-                                                           index_t stride) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_λ_backward(index_t iL, mut_view<> λ, view<> w,
+                                                                index_t stride) const {
     const index_t diL = iL * stride; // iL = k
     // 25|  x(k) = L(k)⁻ᵀ (b̃(k) - Y(k)ᵀ x(k+2^l) - U(k)ᵀ x(k-2^l))
     { // λ[diL] -= w[iL]
@@ -286,9 +287,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::solve_λ_backward(index_t iL, mut_view
 
 // Prefetching
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <StorageOrder O>
-void TricyqleSolver<VL, T, DefaultOrder>::prefetch(batch_view<O> X) const {
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::prefetch(batch_view<O> X) const {
     if (!params.enable_prefetching)
         return;
     const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / v, 1);
@@ -302,9 +303,9 @@ void TricyqleSolver<VL, T, DefaultOrder>::prefetch(batch_view<O> X) const {
                 __builtin_prefetch(&X(0, r, c), 0, 2);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <StorageOrder O>
-void TricyqleSolver<VL, T, DefaultOrder>::prefetch_L(batch_view<O> X) const {
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::prefetch_L(batch_view<O> X) const {
     if (!params.enable_prefetching)
         return;
     const auto inner_stride = std::max<index_t>(64 / sizeof(value_type) / v, 1);
@@ -318,22 +319,23 @@ void TricyqleSolver<VL, T, DefaultOrder>::prefetch_L(batch_view<O> X) const {
                 __builtin_prefetch(&X(0, r, c), 0, 2);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::prefetch_L(index_t bi) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::prefetch_L(index_t bi) const {
     GUANAQO_TRACE("prefetch L", bi);
     prefetch_L(cr_L.batch(bi));
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::prefetch_U([[maybe_unused]] index_t l, index_t iU) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::prefetch_U([[maybe_unused]] index_t l,
+                                                          index_t iU) const {
     if (v == 1 && iU >= p)
         return;
     GUANAQO_TRACE("prefetch U", iU);
     prefetch(cr_U.batch(iU));
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::prefetch_Y(index_t l, index_t iY) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::prefetch_Y(index_t l, index_t iY) const {
     if (v == 1 && iY + (1 << l) >= p && !circular)
         return;
     GUANAQO_TRACE("prefetch Y", iY);

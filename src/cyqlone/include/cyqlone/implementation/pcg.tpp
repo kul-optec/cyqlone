@@ -19,10 +19,11 @@ using namespace batmat::linalg;
 // Straightforward preconditioned conjugate gradient method to solve M(v) λ = b, with optimized
 // vectorized matrix-vector products for M(v) and its preconditioner.
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto TricyqleSolver<VL, T, DefaultOrder>::mul_Mv(batch_view<> p, mut_batch_view<> Mp,
-                                                batch_view<default_order> L,
-                                                batch_view<default_order> K) const -> value_type {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto TricyqleSolver<VL, T, DefaultOrder, Ctx>::mul_Mv(batch_view<> p, mut_batch_view<> Mp,
+                                                      batch_view<default_order> L,
+                                                      batch_view<default_order> K) const
+    -> value_type {
     // Mp = M p = LLᵀ p + K p
     trmm(triu(L.transposed()), p, Mp);
     trmm(tril(L), Mp);
@@ -30,11 +31,11 @@ auto TricyqleSolver<VL, T, DefaultOrder>::mul_Mv(batch_view<> p, mut_batch_view<
     return dot(p, Mp);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-auto TricyqleSolver<VL, T, DefaultOrder>::mul_precond(batch_view<> r, mut_batch_view<> z,
-                                                     mut_batch_view<> w,
-                                                     batch_view<default_order> L,
-                                                     batch_view<default_order> K) const
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+auto TricyqleSolver<VL, T, DefaultOrder, Ctx>::mul_precond(batch_view<> r, mut_batch_view<> z,
+                                                           mut_batch_view<> w,
+                                                           batch_view<default_order> L,
+                                                           batch_view<default_order> K) const
     -> value_type {
     // Stair: z = Φ⁻¹ r = L⁻ᵀL⁻¹ r - L⁻ᵀL⁻¹ K L⁻ᵀL⁻¹ r = L⁻ᵀL⁻¹(r - K L⁻ᵀL⁻¹ r)
     copy(r, z);
@@ -49,9 +50,9 @@ auto TricyqleSolver<VL, T, DefaultOrder>::mul_precond(batch_view<> r, mut_batch_
     return dot(r, z);
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void TricyqleSolver<VL, T, DefaultOrder>::solve_pcg(mut_batch_view<> λ,
-                                                   mut_batch_view<> work_pcg) const {
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_pcg(mut_batch_view<> λ,
+                                                         mut_batch_view<> work_pcg) const {
     auto r = work_pcg.middle_cols(0, 1), z = work_pcg.middle_cols(1, 1),
          p = work_pcg.middle_cols(2, 1), Mp = work_pcg.middle_cols(3, 1);
     auto M = pcr_L.batch(0), K = cr_Y.batch(0);

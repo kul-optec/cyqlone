@@ -56,8 +56,9 @@ int main(int argc, char *argv[]) try {
     Solver::matrix b_solve{{.depth = num_blocks, .rows = block_size, .cols = 1}};
     matrices x{{.depth = num_blocks, .rows = block_size, .cols = 1}};
 
-    // Call the solver's parallel run method, passing a lambda that is executed by each thread.
-    solver.run([&](Solver::Context &ctx) {
+    // Call the solver in parallel, passing a lambda that is executed by each thread.
+    auto pctx = solver.create_parallel_context();
+    pctx->run([&](Solver::Context &ctx) {
         // Copy the data to the solver's internal data structures
         using cyqlone::linalg::pack;
         auto pack_M = [&](index_t i, auto Ms) { return pack(M.middle_batches(i, v, p), Ms); };

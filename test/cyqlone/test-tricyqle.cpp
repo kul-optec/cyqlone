@@ -111,7 +111,8 @@ template <class Solver>
     matrices x{{.depth = num_blocks, .rows = block_size, .cols = 1}};
 
     // Solve the system
-    solver.run([&](typename Solver::Context &ctx) {
+    auto pctx = solver.create_parallel_context();
+    pctx->run([&](typename Solver::Context &ctx) {
         using cyqlone::linalg::pack;
         using cyqlone::linalg::unpack;
 

@@ -24,10 +24,11 @@ using namespace batmat::linalg;
 //
 // See also: factor.tpp
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Factor, bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
-void CyqloneSolver<VL, T, DefaultOrder>::compute_schur(Context &ctx, mut_view<> ux, mut_view<> λ) {
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::compute_schur(Context &ctx, mut_view<> ux,
+                                                            mut_view<> λ) {
     const index_t c   = riccati_thread_assignment(ctx);
     const auto c_next = add_wrap_p(c, 1);
     //  7|  j₁ = n(c-1)+1,  jₙ = nc

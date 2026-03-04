@@ -77,6 +77,7 @@ struct CyQPALMBackend {
     };
 
     OCP_t ocp;
+    std::unique_ptr<typename OCP_t::SharedContext> parallel_ctx = ocp.create_parallel_context();
     CyQPALMBackendSettings settings;
     ineq_constr_vec_t b_min_strided, b_max_strided;
     eq_constr_vec_t b_eq_strided;
@@ -96,8 +97,8 @@ struct CyQPALMBackend {
     CyQPALMBackend(const CyqloneStorage<> &ocp, CyqloneData data,
                    const CyQPALMBackendSettings &settings)
         : ocp{OCP_t::build(ocp, settings.processors)}, settings{settings} {
+        this->parallel_ctx->barrier.spin_count = settings.spin_count;
         this->ocp.update_tricyqle_params(settings.tricyqle_params);
-        this->ocp.set_barrier_spin_count(settings.spin_count);
         b_min_strided = ineq_constr_vec();
         b_max_strided = ineq_constr_vec();
         ΔΣ            = ineq_constr_vec();

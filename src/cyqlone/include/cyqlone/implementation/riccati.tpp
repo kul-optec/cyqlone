@@ -28,11 +28,12 @@ using namespace batmat::linalg;
 //  - Data batch indices where the problem data and the factorization are stored are reversed
 //    compared to the stage indices, simplifying the per-thread contiguous storage.
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Factor, bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
-void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, value_type γ, view<> Σ,
-                                                              mut_view<> ux, mut_view<> λ) {
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_riccati_solve(Context &ctx, value_type γ,
+                                                                   view<> Σ, mut_view<> ux,
+                                                                   mut_view<> λ) {
     // Don't store intermediate V = BAᵀ LQ products
     // (if this ever changes, increase the size of riccati_V).
     constexpr bool no_keep_V = true;
@@ -151,8 +152,8 @@ void CyqloneSolver<VL, T, DefaultOrder>::factor_riccati_solve(Context &ctx, valu
     }
 }
 
-template <index_t VL, class T, StorageOrder DefaultOrder>
-void CyqloneSolver<VL, T, DefaultOrder>::solve_riccati_reverse(
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void CyqloneSolver<VL, T, DefaultOrder, Ctx>::solve_riccati_reverse(
     Context &ctx, mut_view<> ux, mut_view<> λ, mut_view<> work,
     std::optional<mut_view<>> Mᵀλ) const {
     const index_t c       = riccati_thread_assignment(ctx);
