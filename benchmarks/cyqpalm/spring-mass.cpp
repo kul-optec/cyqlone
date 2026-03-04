@@ -11,6 +11,7 @@
 #include <batmat/dtypes.hpp>
 #include <batmat/lut.hpp>
 #include <batmat/openmp.h>
+#include <guanaqo/demangled-typename.hpp>
 #include <guanaqo/pcm/counters.hpp>
 #include <guanaqo/perfetto/trace.hpp>
 #include <guanaqo/string-util.hpp>
@@ -28,6 +29,12 @@
 #include <stdexcept>
 #include <utility>
 namespace fs = std::filesystem;
+
+#if GUANAQO_WITH_MKL
+#include <mkl.h>
+#elif GUANAQO_WITH_OPENBLAS
+#include <openblas_config.h>
+#endif
 
 #include "hpipm.hpp"
 
@@ -544,6 +551,20 @@ void register_context() {
     benchmark::AddCustomContext("batmat_commit_hash", batmat_commit_hash);
     benchmark::AddCustomContext("cyqlone_build_time", cyqlone_build_time);
     benchmark::AddCustomContext("cyqlone_commit_hash", cyqlone_commit_hash);
+    benchmark::AddCustomContext("real_t", guanaqo::demangled_typename(typeid(real_t)));
+    benchmark::AddCustomContext("index_t", guanaqo::demangled_typename(typeid(index_t)));
+#if GUANAQO_WITH_MKL
+    MKLVersion Version;
+    mkl_get_version(&Version);
+    benchmark::AddCustomContext("blas_library", "MKL");
+    benchmark::AddCustomContext("blas_version",
+                                std::format("{}.{}.{} ({}) for {}: {}", Version.MajorVersion,
+                                            Version.MinorVersion, Version.UpdateVersion,
+                                            Version.Build, Version.Platform, Version.Processor));
+#elif GUANAQO_WITH_OPENBLAS
+    benchmark::AddCustomContext("blas_library", "OpenBLAS");
+    benchmark::AddCustomContext("blas_version", OPENBLAS_VERSION);
+#endif
 #if defined(__INTEL_LLVM_COMPILER)
     benchmark::AddCustomContext("compiler", "intel-llvm");
     benchmark::AddCustomContext("compiler_version", __VERSION__);
