@@ -1,6 +1,7 @@
 {% set home = os.getenv("HOME") %}
 {% set oneapi_candidates = [
     os.getenv("ONEAPI_ROOT"),
+    os.getenv("EBROOTINTELMINCOMPILERS"),
     os.path.join(home, "intel/oneapi") if home else None,
     "/opt/intel/oneapi",
 ] %}
@@ -15,7 +16,10 @@
 
 [settings]
 compiler=intel-cc
-compiler.version=2025.3
+{% if paths.oneapi_root %}
+{% set icx_bin = os.path.join(paths.oneapi_root, "compiler/latest/bin/icx") %}
+compiler.version={{ detect_api.detect_intel_compiler(icx_bin)[1] }}
+{% endif %}
 compiler.mode=icx
 compiler.cppstd=23
 compiler.libcxx=libstdc++11
