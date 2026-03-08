@@ -1,6 +1,7 @@
 # Examples {#examples}
 
 - [Solving a block tridiagonal system](@ref solve-block-tridiagonal.cpp)
+- [Solving an optimal control problem using Cyqlone](@ref solve-ocp.cpp)
 - [Spring-mass OCP benchmark](@ref benchmarks/cyqpalm/spring-mass.cpp)
 - [Standalone PCR solver](@ref test/test-pcr.cpp)
 
@@ -39,6 +40,12 @@ The solution produced by this example is stored in a `.mat` file, which can be l
 using the Python script @ref solve-block-tridiagonal.py.
 
 @example solve-block-tridiagonal.py
+
+@example solve-ocp.cpp
+@par Example demonstrating how to solve an optimal control problem using Cyqlone.
+
+This example generates a random optimal control problem (without inequality constraints),
+and solves the resulting KKT system using Cyqlone.
 
 @example benchmarks/cyqpalm/spring-mass.cpp
 @par Benchmarks from the paper
