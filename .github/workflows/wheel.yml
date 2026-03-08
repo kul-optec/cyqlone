@@ -135,7 +135,7 @@ jobs:
       - run: conan cache clean
 
   test-linux-x:
-    name: Import ${{ matrix.python-version }} ${{ matrix.host }}
+    name: Test ${{ matrix.python-version }} ${{ matrix.host }}
     needs: [build-linux]
     runs-on: ${{ matrix.os }}
     container: '${{ matrix.python }}:${{ matrix.python-version }}${{ matrix.image-suffix }}-bookworm'
@@ -175,10 +175,13 @@ jobs:
         run: apt-get update && apt-get install -y --no-install-recommends libgfortran5
 
       - name: Install
-        run: python3 -m pip install --find-links=dist "${PACKAGE_NAME}==${PACKAGE_VERSION}"
+        run: python3 -m pip install --find-links=dist "${PACKAGE_NAME}[test]==${PACKAGE_VERSION}"
 
       - name: Import
         run: objdump -p "$(python3 -c 'import cyqlone; print(cyqlone.cyqlone.__file__)')"
+
+      - name: Test
+        run: pytest -ra
 
   # Build for Windows and macOS using cibuildwheel.
   # Since we're not specifying any cross-compilation settings, py-build-cmake
