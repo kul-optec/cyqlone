@@ -177,6 +177,23 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_Y(index_t l, index_t i) {
 
 //! [PCR update]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_pcr(batch_view<> fwd, batch_view<> bwd,
+                                                          batch_view<> Σbwd) {
+    index_t m = fwd.cols();
+    BATMAT_ASSUME(m == bwd.cols());
+    auto WYU = work_update_pcr_UY.left_cols(VL * m).batch(0);
+    auto WY  = WYU.left_cols(VL * m / 2); // WY and WU start in the middle of WYU and grow outwards
+    auto WU  = WYU.right_cols(VL * m / 2);
+    auto Σ   = work_update_pcr_Σ.top_rows(VL * m).batch(0);
+    batmat::linalg::copy(bwd, WU.left_cols(m));
+    batmat::linalg::copy(fwd, WY.right_cols(m), with_rotate<-1>);
+    batmat::linalg::copy(Σbwd, Σ.bottom_rows(m));
+    [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
+        (this->template update_pcr_level<Levels>(m, WYU, Σ), ...);
+    }(std::make_integer_sequence<index_t, TricyqleSolver::lv()>{});
+}
+
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <index_t Level>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_pcr_level(index_t m, mut_batch_view<> WYU,
                                                                 mut_batch_view<> WΣ) {
@@ -237,23 +254,6 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_pcr_level(index_t m, mut_b
         // [ L̃(k;l+1) |   0   ] = [ L(k;l+1) | Υ˃(k;l+1)  Υ˂(k;l+1) ] Q̆(k;l+1)
         hyhound_diag(tril(pcr_L.batch(l + 1)), WU, Σ);
     }
-}
-
-template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
-void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_pcr(batch_view<> fwd, batch_view<> bwd,
-                                                          batch_view<> Σbwd) {
-    index_t m = fwd.cols();
-    BATMAT_ASSUME(m == bwd.cols());
-    auto WYU = work_update_pcr_UY.left_cols(VL * m).batch(0);
-    auto WY  = WYU.left_cols(VL * m / 2); // WY and WU start in the middle of WYU and grow outwards
-    auto WU  = WYU.right_cols(VL * m / 2);
-    auto Σ   = work_update_pcr_Σ.top_rows(VL * m).batch(0);
-    batmat::linalg::copy(bwd, WU.left_cols(m));
-    batmat::linalg::copy(fwd, WY.right_cols(m), with_rotate<-1>);
-    batmat::linalg::copy(Σbwd, Σ.bottom_rows(m));
-    [&]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
-        (this->template update_pcr_level<Levels>(m, WYU, Σ), ...);
-    }(std::make_integer_sequence<index_t, TricyqleSolver::lv()>{});
 }
 //! [PCR update]
 

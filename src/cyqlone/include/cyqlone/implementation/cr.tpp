@@ -9,10 +9,6 @@
 #include <batmat/linalg/shift.hpp>
 #include <batmat/linalg/trsm.hpp>
 
-#ifndef CYQLONE_FACTOR_DO_PREFETCH
-#define CYQLONE_FACTOR_DO_PREFETCH 0
-#endif
-
 namespace CYQLONE_NS(cyqlone) {
 
 using namespace linalg;
@@ -56,11 +52,6 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_K(index_t l, index_t i) {
     if constexpr (v == 1)
         if (i + (1 << l) >= p && !circular) // Y(i)=0 for scalar case
             return;
-#if CYQLONE_FACTOR_DO_PREFETCH
-    for (index_t c = 0; c < cr_U.cols(); c += 1)
-        for (index_t r = 0; r < cr_U.rows(); r += 16)
-            __builtin_prefetch(&cr_U.batch(i)(0, r, c), 0, 3);
-#endif
     CYQ_TRACE_READ(U, i, 1);
     CYQ_TRACE_READ(Y, i, 1);
     if (ν2p(i_prev) > ν2p(i_next)) {
@@ -121,11 +112,6 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_L(index_t l, index_t i) {
         }
     }
     auto U = cr_U.batch(iU), Y = cr_Y.batch(iY);
-#if CYQLONE_FACTOR_DO_PREFETCH
-    for (index_t c = 0; c < cr_Y.cols(); c += 1)
-        for (index_t r = 0; r < cr_Y.rows(); r += 16)
-            __builtin_prefetch(&cr_Y.batch(iY)(0, r, c), 0, 3);
-#endif
     {
         CYQ_TRACE_READ(M, i, 0);
         CYQ_TRACE_READ(U, iU, 0);
