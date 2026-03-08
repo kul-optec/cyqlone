@@ -739,6 +739,30 @@ void transform_n_elementwise(F &&fun, std::tuple<VAs...> As, VBs &&...Bs) {
             Bs.batch(b)...);
 }
 
+// More multi-batch versions of batmat::linalg functions (should be upstreamed at some point)
+
+using batmat::linalg::copy;
+
+/// Copy a matrix or vector B = A.
+template <simdifiable_multi VA, simdifiable_multi VB, batmat::linalg::rotate_opt... Opts>
+    requires simdify_compatible<VA, VB>
+void copy(VA &&A, VB &&B, Opts... opts) {
+    BATMAT_ASSERT(A.num_batches() == B.num_batches());
+    for (index_t b = 0; b < A.num_batches(); ++b)
+        batmat::linalg::copy(A.batch(b), B.batch(b), opts...);
+}
+
+/// Copy a matrix or vector B = A.
+template <MatrixStructure S, simdifiable_multi VA, simdifiable_multi VB,
+          batmat::linalg::rotate_opt... Opts>
+    requires simdify_compatible<VA, VB>
+void copy(Structured<VA, S> A, Structured<VB, S> B, Opts... opts) {
+    BATMAT_ASSERT(A.value.num_batches() == B.value.num_batches());
+    for (index_t b = 0; b < A.value.num_batches(); ++b)
+        batmat::linalg::copy(make_structured<S>(A.value.batch(b)),
+                             make_structured<S>(B.value.batch(b)), opts...);
+}
+
 /// @}
 
 /// @}
