@@ -13,6 +13,7 @@ _target = importlib.import_module(_target_name, package=__package__)
 setattr(_target, "variant", _variant)
 sys.modules[__name__] = _target
 
-for _submod in ("simd8", "simd4", "scalar"):
-    _target = importlib.import_module(_target_name + "." + _submod, package=__package__)
-    sys.modules[__name__ + "." + _submod] = _target
+for _submod in ("simd8", "simd4", "simd2", "scalar"):
+    with contextlib.suppress(ModuleNotFoundError):
+        _target = importlib.import_module(_target_name + "." + _submod, package=__package__)
+        sys.modules[__name__ + "." + _submod] = _target
