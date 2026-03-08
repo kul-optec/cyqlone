@@ -1,12 +1,17 @@
 # Basic Dockerfile for building and running the CyQPALM benchmarks.
 # Its main purpose is to check that the benchmarks can be built and run in a clean environment.
+# This one uses Clang 20, see Dockerfile.gcc for a version using GCC.
 
 FROM ubuntu:jammy
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-    git wget gcc g++ make libgfortran5 ca-certificates python3-pip \
+    git wget gcc g++ make libgfortran5 python3-pip \
+    ca-certificates lsb-release software-properties-common gnupg \
  && rm -rf /var/lib/apt/lists/*
+RUN wget https://apt.llvm.org/llvm.sh \
+ && chmod +x llvm.sh \
+ && ./llvm.sh 20 all
 RUN pip install 'conan<3'
 
 COPY src /cyqlone/src
@@ -19,6 +24,6 @@ COPY benchmarks /cyqlone/benchmarks
 COPY CMakeLists.txt LICENSE README.md conanfile.py /cyqlone/
 
 WORKDIR /cyqlone/benchmarks/cyqpalm
-RUN ./benchmark.sh deps --gcc
+RUN ./benchmark.sh deps --clang-20
 RUN ./benchmark.sh build
 RUN ./benchmark.sh benchmark-quick
