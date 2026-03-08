@@ -23,9 +23,6 @@ template <bool Factor, bool Solve>
 void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_riccati_solve(Context &ctx, value_type γ,
                                                                    view<> Σ, mut_view<> ux,
                                                                    mut_view<> λ) {
-    // Don't store intermediate V = BAᵀ LQ products
-    // (if this ever changes, increase the size of riccati_V).
-    constexpr bool no_keep_V = true;
     using batmat::linalg::compress_masks_sqrt;
     const index_t c = riccati_thread_assignment(ctx);
     //  3|  j₁ = n(c-1)+1, jₙ = nc
@@ -65,10 +62,10 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_riccati_solve(Context &ctx,
             //  7|  [ LR(j)       ] = chol [ R̂(j)  Ŝ(j) ]
             //   |  [ LS(j) LQ(j) ]        [ Ŝ(j)ᵀ Q̂(j) ]
             if constexpr (Factor) {
-                // VGᵀ_prev = [ B(j+1)ᵀ LQ(j+1)   D(j)ᵀ √Σ(j) ]
-                //            [ A(j+1)ᵀ LQ(j+1)   C(j)ᵀ √Σ(j) ]
-                auto VGᵀ_prev = VGᵀ.middle_cols(no_keep_V || i == 0 ? 0 : (i - 1) * nx, m_syrk);
-                syrk_add_potrf(VGᵀ_prev, tril(data_H.batch(di)), tril(LH), 1 / γ);
+                // VGᵀprev = [ B(j+1)ᵀ LQ(j+1)   D(j)ᵀ √Σ(j) ]
+                //           [ A(j+1)ᵀ LQ(j+1)   C(j)ᵀ √Σ(j) ]
+                auto VGᵀprev = VGᵀ.left_cols(m_syrk);
+                syrk_add_potrf(VGᵀprev, tril(data_H.batch(di)), tril(LH), 1 / γ);
             }
             if constexpr (Solve) {
                 // Solve u ← LR̂⁻¹ u, x ← x - Ŝ u
@@ -97,8 +94,8 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_riccati_solve(Context &ctx,
             [[maybe_unused]] const auto j_next = sub_wrap_ceil_N(j, 1);
             GUANAQO_TRACE("Riccati update AB", j_next);
             const auto di_next = dn + i + 1;
-            auto VGᵀnext       = VGᵀ.middle_cols(no_keep_V ? 0 : i * nx, nx + nyM),
-                 V_next = VGᵀnext.left_cols(nx), Gᵀnext = VGᵀnext.right_cols(nyM);
+            auto VGᵀnext = VGᵀ.left_cols(nx + nyM), V_next = VGᵀnext.left_cols(nx),
+                 Gᵀnext = VGᵀnext.right_cols(nyM);
             auto F_next = data_F.batch(di_next), B_next = F_next.left_cols(nu),
                  A_next = F_next.right_cols(nx);
             // 11|  [ B̂(j-1)  Â(j-1) ] = Acl(j) [ B(j-1)  A(j-1) ]
