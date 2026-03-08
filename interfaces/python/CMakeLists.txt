@@ -129,7 +129,7 @@ if (CYQLONE_WITH_PY_STUBS)
         RECURSIVE
         EXCLUDE_FROM_ALL
         VERBOSE)
-    foreach(mod "__init__" "scalar" "simd4" "simd8")
+    foreach(mod "__init__" "scalar" "simd2" "simd4" "simd8")
         file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/stubs/${mod}.pyi"
              INPUT "${CMAKE_CURRENT_SOURCE_DIR}/stubs/${mod}.pyi")
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/stubs/${mod}.pyi"

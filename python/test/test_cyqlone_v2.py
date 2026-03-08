@@ -56,7 +56,12 @@ MΔz        = -(b + Mz)
 """
 
 Solver = Union[
-    cyqlone.scalar.CyqloneSolver, cyqlone.simd4.CyqloneSolver, cyqlone.simd8.CyqloneSolver
+    cyqlone.scalar.CyqloneSolver,
+    *(
+        getattr(cyqlone, f"simd{v}").CyqloneSolver
+        for v in (2, 4, 8)
+        if hasattr(cyqlone, f"simd{v}")
+    ),
 ]
 
 
@@ -298,17 +303,16 @@ def run_with_shorter_N(test_func, p, base_N, seed, solver, **kwargs):
 
 SEEDS = [12345, 54321, 10101]
 SEEDS = [12345]
-SIMD_SOLVERS = {
-    1: cyqlone.scalar.CyqloneSolver,
-    4: cyqlone.simd4.CyqloneSolver,
-    8: cyqlone.simd8.CyqloneSolver,
+SIMD_SOLVERS: dict[int, Solver] = {1: cyqlone.scalar.CyqloneSolver} | {
+    v: getattr(cyqlone, f"simd{v}").CyqloneSolver for v in [2, 4, 8] if hasattr(cyqlone, f"simd{v}")
 }
 SIMD_P_COMBOS = {
     1: list(range(1, 67)),
+    2: [1, 2, 4, 8, 16, 64],
     4: [1, 2, 4, 8, 16, 64],
     8: [1, 2, 4, 8, 16, 64],
 }
-SOLVER_P_COMBOS = [(SIMD_SOLVERS[v], v, p) for v in [1, 4, 8] for p in SIMD_P_COMBOS[v]]
+SOLVER_P_COMBOS = [(s, v, p) for v, s in SIMD_SOLVERS.items() for p in SIMD_P_COMBOS[v]]
 SOLVER_P_ID = [f"{solver.__qualname__}-v{v}-p{p}" for solver, v, p in SOLVER_P_COMBOS]
 
 
