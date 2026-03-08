@@ -337,8 +337,11 @@ jobs:
           sudo tar xzf /tmp/doxygen-1.16.1.linux.bin.tar.gz -C /usr/local/bin doxygen-1.16.1/bin/doxygen --strip-components=2
 
       - name: Install bibtex
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends texlive-binaries
-          
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+          texlive-latex-base texlive-bibtex-extra texlive-binaries
+
       - name: Install dependencies
         run: >
           conan install . --build=missing -pr scripts/ci/profiles/ci.profile
