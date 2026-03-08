@@ -207,6 +207,40 @@ void add_to_mat(mat_t *mat, const std::string &varname, std::span<const double> 
     write_tensor<double, 1>(mat, varname.c_str(), data, {static_cast<index_t>(data.size())});
 }
 
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const unsigned short> data) {
+    write_tensor<unsigned short, 1>(mat, varname.c_str(), data,
+                                    {static_cast<index_t>(data.size())});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const unsigned int> data) {
+    write_tensor<unsigned int, 1>(mat, varname.c_str(), data, {static_cast<index_t>(data.size())});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const unsigned long> data) {
+    write_tensor<unsigned long, 1>(mat, varname.c_str(), data, {static_cast<index_t>(data.size())});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const unsigned long long> data) {
+    write_tensor<unsigned long long, 1>(mat, varname.c_str(), data,
+                                        {static_cast<index_t>(data.size())});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const short> data) {
+    write_tensor<short, 1>(mat, varname.c_str(), data, {static_cast<index_t>(data.size())});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const int> data) {
+    write_tensor<int, 1>(mat, varname.c_str(), data, {static_cast<index_t>(data.size())});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const long> data) {
+    write_tensor<long, 1>(mat, varname.c_str(), data, {static_cast<index_t>(data.size())});
+}
+
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const long long> data) {
+    write_tensor<long long, 1>(mat, varname.c_str(), data, {static_cast<index_t>(data.size())});
+}
+
 void add_to_mat(mat_t *mat, const std::string &varname, const SparseMatrix &matrix) {
     std::array<const char *, 5> fieldnames{"num_rows", "num_cols", "row_indices", "col_indices",
                                            "values"};

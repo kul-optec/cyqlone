@@ -73,6 +73,23 @@ void add_to_mat(mat_t *mat, const std::string &varname,
 void add_to_mat(mat_t *mat, const std::string &varname, std::span<const float> data);
 /// Add a vector to an open .mat file.
 void add_to_mat(mat_t *mat, const std::string &varname, std::span<const double> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const unsigned short> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const unsigned int> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const unsigned long> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const unsigned long long> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const short> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const int> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const long> data);
+/// Add a vector to an open .mat file.
+void add_to_mat(mat_t *mat, const std::string &varname, std::span<const long long> data);
+
 /// Add a sparse matrix to an open .mat file.
 /// On the Python side, you can use the following code to load the sparse matrix:
 /// ```python
