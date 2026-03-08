@@ -335,6 +335,9 @@ jobs:
           curl -sL "$DOXY_URL" -o /tmp/doxygen-1.16.1.linux.bin.tar.gz
           echo "$DOXY_SHA  /tmp/doxygen-1.16.1.linux.bin.tar.gz" | sha256sum -c -
           sudo tar xzf /tmp/doxygen-1.16.1.linux.bin.tar.gz -C /usr/local/bin doxygen-1.16.1/bin/doxygen --strip-components=2
+
+      - name: Install bibtex
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends texlive-binaries
           
       - name: Install dependencies
         run: >
