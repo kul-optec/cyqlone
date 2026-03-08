@@ -54,7 +54,8 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_riccati_solve(Context &ctx,
         // Note that Â(jₙ) is not copied explicitly, as it is not modified in-place
         copy(data_F.batch(dn).left_cols(nu), B̂s.left_cols(nu));
         // Compress the active constraint Jacobians to add them to the Hessian later
-        m_syrk = compress_masks_sqrt(data_Gᵀ.batch(dn), Σ.batch(dn), VGᵀ.left_cols(nyM));
+        if (nyM > 0)
+            m_syrk = compress_masks_sqrt(data_Gᵀ.batch(dn), Σ.batch(dn), VGᵀ.left_cols(nyM));
     }
     // Iterate over all stages in the interval (in reverse order)
     for (index_t i = 0; i < n; ++i) {
@@ -107,8 +108,8 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_riccati_solve(Context &ctx,
             [[maybe_unused]] const auto j_next = sub_wrap_ceil_N(j, 1);
             GUANAQO_TRACE("Riccati update AB", j_next);
             const auto di_next = dn + i + 1;
-            auto VGᵀ_next      = VGᵀ.middle_cols(no_keep_V ? 0 : i * nx, nx + nyM),
-                 V_next = VGᵀ_next.left_cols(nx), Gᵀ_next = VGᵀ_next.right_cols(nyM);
+            auto VGᵀnext       = VGᵀ.middle_cols(no_keep_V ? 0 : i * nx, nx + nyM),
+                 V_next = VGᵀnext.left_cols(nx), Gᵀnext = VGᵀnext.right_cols(nyM);
             auto F_next = data_F.batch(di_next), B_next = F_next.left_cols(nu),
                  A_next = F_next.right_cols(nx);
             // 11|  [ B̂(j-1)  Â(j-1) ] = Acl(j) [ B(j-1)  A(j-1) ]
@@ -134,7 +135,8 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_riccati_solve(Context &ctx,
                 trmm(F_next.transposed(), tril(Q), V_next);
                 m_syrk = nx; // columns of V(j-1)
                 // Compress the active constraint Jacobians to add them to the Hessian later
-                m_syrk += compress_masks_sqrt(data_Gᵀ.batch(di_next), Σ.batch(di_next), Gᵀ_next);
+                if (nyM > 0)
+                    m_syrk += compress_masks_sqrt(data_Gᵀ.batch(di_next), Σ.batch(di_next), Gᵀnext);
             }
         } else {
             GUANAQO_TRACE("Riccati last", j);

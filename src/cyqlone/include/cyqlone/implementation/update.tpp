@@ -401,9 +401,10 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_riccati_solve(Context &ctx,
         // Note that we only need to consider the columns corresponding to changing constraints,
         // i.e. where ΔΣ is nonzero, which is why we compress them.
         auto Υux = Υ_first.top_rows(nu + nx); // we don't know the number of columns yet
-        m        = compress_masks(data_Gᵀ.batch(dn), ΔΣ.batch(dn), //
-                                  Υux, 𝑆.top_rows(nyM));
-        auto Υλ  = Υ_first.bottom_left(nx, m);
+        if (nyM > 0)
+            m = compress_masks(data_Gᵀ.batch(dn), ΔΣ.batch(dn), //
+                               Υux, 𝑆.top_rows(nyM));
+        auto Υλ = Υ_first.bottom_left(nx, m);
         Υλ.set_constant(0);
     } else {
         // Exploit the block-diagonal structure of G₀ = [ D₀ 0 ]  ny_0
@@ -411,10 +412,12 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_riccati_solve(Context &ctx,
         auto D0ᵀ = data_Gᵀ.batch(dn).top_left(nu, ny_0),
              C0ᵀ = data_Gᵀ.batch(dn).bottom_rows(nx).middle_cols(ny_0, ny_N);
         auto Υu0 = Υu0_first.top_rows(nu), Υx = Υ_first.middle_rows(nu, nx).left_cols(ny_N);
-        mu0     = compress_masks(D0ᵀ, ΔΣ.batch(dn).top_rows(ny_0), //
+        if (ny_0 > 0)
+            mu0 = compress_masks(D0ᵀ, ΔΣ.batch(dn).top_rows(ny_0), //
                                  Υu0, 𝑆.bottom_rows(ny_0));
-        m       = compress_masks(C0ᵀ, ΔΣ.batch(dn).middle_rows(ny_0, ny_N), //
-                                 Υx, 𝑆.top_rows(ny_N));
+        if (ny_N > 0)
+            m = compress_masks(C0ᵀ, ΔΣ.batch(dn).middle_rows(ny_0, ny_N), //
+                               Υx, 𝑆.top_rows(ny_N));
         auto Υλ = Υ_first.bottom_left(nx, m), Υλ0 = Υu0_first.bottom_left(nx, mu0);
         Υλ.set_constant(0);
         Υλ0.set_constant(0);
@@ -480,8 +483,9 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_riccati_solve(Context &ctx,
             {
                 GUANAQO_TRACE("Riccati update compress", j_next);
                 // Now the right block column, again compressing to only the changing constraints
-                m += compress_masks(data_Gᵀ.batch(di_next), ΔΣ.batch(di_next),
-                                    Υux_next.right_cols(nyM), 𝑆.middle_rows(mj, nyM));
+                if (nyM > 0)
+                    m += compress_masks(data_Gᵀ.batch(di_next), ΔΣ.batch(di_next),
+                                        Υux_next.right_cols(nyM), 𝑆.middle_rows(mj, nyM));
                 Υλ_next.middle_cols(mj, m - mj).set_constant(0);
             }
             if (mj > 0) {
