@@ -1,10 +1,10 @@
-#include <cyqlone/qpalm/example-problems/conversion.hpp>
+#include <cyqlone/conversion.hpp>
 #include <batmat/assume.hpp>
 #include <guanaqo/blas/hl-blas-interface.hpp>
 #include <algorithm>
 #include <numeric>
 
-namespace CYQLONE_NS(cyqlone::qpalm) {
+namespace cyqlone {
 
 void reference_to_gradient(const LinearOCPStorage &ocp, std::span<const real_t> ref,
                            std::span<real_t> qr) {
@@ -40,10 +40,6 @@ void reference_to_gradient(LinearOCPStorage &ocp, std::span<const real_t> ref) {
     static_assert(qr.storage_order == guanaqo::StorageOrder::ColMajor);
     reference_to_gradient(ocp, ref, std::span{qr.data, static_cast<size_t>(qr.rows)});
 }
-
-} // namespace CYQLONE_NS(cyqlone::qpalm)
-
-namespace cyqlone::qpalm {
 
 LinearOCPSparseQP LinearOCPSparseQP::build(const LinearOCPStorage &ocp) {
     using guanaqo::linalg::sparsity::Symmetry;
@@ -111,11 +107,11 @@ LinearOCPSparseQP LinearOCPSparseQP::build(const LinearOCPStorage &ocp) {
                 qp.A_outer_ptr.push_back(nnz);
                 if (c < nx) {
                     qp.A_inner_idx.push_back(r_off_eq + c);
-                    qp.A_values.push_back(1);
+                    qp.A_values.push_back(-1);
                 }
                 for (index_t r = 0; r < nx; ++r) {
                     qp.A_inner_idx.push_back(r_off_eq + nx + r);
-                    qp.A_values.push_back(-ABi(r, c));
+                    qp.A_values.push_back(ABi(r, c));
                 }
                 for (index_t r = 0; r < ny; ++r) {
                     qp.A_inner_idx.push_back(r_off_ineq + r);
@@ -130,7 +126,7 @@ LinearOCPSparseQP LinearOCPSparseQP::build(const LinearOCPStorage &ocp) {
             auto nnz = static_cast<index_t>(qp.A_inner_idx.size());
             qp.A_outer_ptr.push_back(nnz);
             qp.A_inner_idx.push_back(r_off_eq + c);
-            qp.A_values.push_back(1);
+            qp.A_values.push_back(-1);
             for (index_t r = 0; r < ny_N; ++r) {
                 qp.A_inner_idx.push_back(r_off_ineq + r);
                 qp.A_values.push_back(CDi(r, c));
@@ -217,4 +213,4 @@ auto LinearOCPSparseQP::build_kkt(real_t S, std::span<const real_t> Σ,
     return K;
 }
 
-} // namespace cyqlone::qpalm
+} // namespace cyqlone

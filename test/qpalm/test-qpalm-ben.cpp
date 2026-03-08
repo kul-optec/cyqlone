@@ -6,7 +6,7 @@
 #include <vector>
 using guanaqo::as_span;
 
-#include <cyqlone/qpalm/example-problems/conversion.hpp>
+#include <cyqlone/conversion.hpp>
 #include <cyqlone/qpalm/example-problems/csv.hpp>
 #include <cyqlone/qpalm/example-problems/platooning.hpp>
 using cyqlone::index_t;
@@ -23,7 +23,7 @@ TEST(QPALMBen, ocp) {
     auto grad = qp::reference_to_gradient(ocp.ocp, ocp.ref);
 
     // Quadratic program
-    auto oqp          = qp::LinearOCPSparseQP::build(ocp.ocp);
+    auto oqp          = cyqlone::LinearOCPSparseQP::build(ocp.ocp);
     qpalm::Data data  = {oqp.n, oqp.m_eq + oqp.m_ineq};
     auto to_eigen_idx = [](const auto v) {
         using std::begin;

@@ -1,4 +1,4 @@
-#include <cyqlone/qpalm/example-problems/conversion.hpp>
+#include <cyqlone/conversion.hpp>
 #include <cyqlone/qpalm/example-problems/spring-mass.hpp>
 #include <cyqlone/qpalm/example-problems/zoh.hpp>
 #include <batmat/config.hpp>

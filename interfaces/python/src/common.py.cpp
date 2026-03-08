@@ -1,7 +1,7 @@
+#include <cyqlone/conversion.hpp>
 #include <cyqlone/cyqlone-params.hpp>
 #include <cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp>
 #include <cyqlone/qpalm/detailed-stats.hpp>
-#include <cyqlone/qpalm/example-problems/conversion.hpp>
 #include <cyqlone/qpalm/example-problems/platooning.hpp>
 #include <cyqlone/qpalm/example-problems/spring-mass.hpp>
 #include <cyqlone/qpalm/solver.hpp>
@@ -118,7 +118,7 @@ void register_ocp(nb::module_ &m) {
         .def_ro("equality_residual", &KKTError::equality_residual)
         .def_ro("complementarity", &KKTError::complementarity);
 
-    using cyqlone::qpalm::LinearOCPSparseQP;
+    using cyqlone::LinearOCPSparseQP;
     nb::class_<LinearOCPSparseQP>(m, "LinearOCPSparseQP")
         .def("__init__",
              [](LinearOCPSparseQP *sto, const PythonOCP &ocp) {

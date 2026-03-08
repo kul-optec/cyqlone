@@ -62,8 +62,8 @@ def test_cyqlone_qpalm(seed):
 
     qp = LinearOCPSparseQP(ocp)
     x = np.concatenate((ocp.x0, solver.solution))
-    b_l = np.concatenate((ocp.rhs_eq, ocp.rhs_lb))
-    b_u = np.concatenate((ocp.rhs_eq, ocp.rhs_ub))
+    b_l = np.concatenate((-ocp.rhs_eq, ocp.rhs_lb))
+    b_u = np.concatenate((-ocp.rhs_eq, ocp.rhs_ub))
     Ax = qp.A @ x
     if ny >= 5:
         ny0 = ny - 2  # TODO: automate
@@ -81,7 +81,7 @@ def test_cyqlone_qpalm(seed):
         + ocp.C(0).T @ y0
     )
     y = np.concatenate(
-        (-λ0, -np.asarray(solver.equality_multipliers), y0, solver.inequality_multipliers[ny0:])
+        (λ0, np.asarray(solver.equality_multipliers), y0, solver.inequality_multipliers[ny0:])
     )
 
     import qpalm

@@ -12,8 +12,8 @@
 #include <cyqlone/qpalm/solver.hpp>
 #include <cyqlone-version.h>
 
+#include <cyqlone/conversion.hpp>
 #include <cyqlone/cyqlone-storage.hpp>
-#include <cyqlone/qpalm/example-problems/conversion.hpp>
 #if CYQLONE_WITH_MATIO
 #include <cyqlone/matio.hpp>
 #endif
@@ -179,7 +179,7 @@ TEST(QPALM, ocpBackend) {
         cocp, {}, {.processors = 4, .print_residuals = true, .pcg_print_resid = true});
 
     // Build quadratic program
-    auto qp = qp::LinearOCPSparseQP::build(ocp.ocp);
+    auto qp = cyqlone::LinearOCPSparseQP::build(ocp.ocp);
     // Convert to dense matrices to compare with Eigen
     sp::SparsityConverter<sp::Sparsity, sp::Dense> conv_Q{qp.Q_sparsity};
     auto qp_Q_values = conv_Q.convert_values_copy(std::span{qp.Q_values});
