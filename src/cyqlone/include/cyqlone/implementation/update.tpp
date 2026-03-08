@@ -17,14 +17,8 @@ namespace CYQLONE_NS(cyqlone) {
 using namespace batmat::linalg;
 
 // Algorithm 4 “Cyqlone factorization updates”
-//
-// Differences compared to the pseudo-code in the paper:
-//   - The update of the last has been modified to allow for vectorization (v>1), updating the
-//     PCR factorization if necessary.
-//   - A heuristic rank check is used to decide whether to update or re-factorize the last level.
-//   - The update matrices Y˃(0) are skipped when they are zero (i.e. when the updates to u(0) are
-//     handled separately). This saves some unnecessary computation in the scalar case.
 
+//! [Cyqlone update CR helper]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_L(index_t l, index_t i) {
     if (l < lp()) {
@@ -179,7 +173,9 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_Y(index_t l, index_t i) {
     hyhound_diag_apply(Y, Up_fwd, Up_fwd_next, //
                        UpQ, Σ, WQ, Up_fwd_next.cols() - Up_fwd.cols());
 }
+//! [Cyqlone update CR helper]
 
+//! [PCR update]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <index_t Level>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_pcr_level(index_t m, mut_batch_view<> WYU,
@@ -243,15 +239,9 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_pcr_level(index_t m, mut_b
     }
 }
 
-// TODO: write down the pseudocode for this algorithm in the appendix of the paper?
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_pcr(batch_view<> fwd, batch_view<> bwd,
                                                           batch_view<> Σbwd) {
-#ifndef NDEBUG
-    work_update_pcr_L.set_constant(std::numeric_limits<T>::quiet_NaN());
-    work_update_pcr_Σ.set_constant(std::numeric_limits<T>::quiet_NaN());
-    work_update_pcr_UY.set_constant(std::numeric_limits<T>::quiet_NaN());
-#endif
     index_t m = fwd.cols();
     BATMAT_ASSUME(m == bwd.cols());
     auto WYU = work_update_pcr_UY.left_cols(VL * m).batch(0);
@@ -265,7 +255,9 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_pcr(batch_view<> fwd, batc
         (this->template update_pcr_level<Levels>(m, WYU, Σ), ...);
     }(std::make_integer_sequence<index_t, TricyqleSolver::lv()>{});
 }
+//! [PCR update]
 
+//! [Cyqlone update]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Solve>
 void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_solve_impl(Context &ctx, view<> ΔΣ,
@@ -286,6 +278,7 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_solve_impl(Context &ctx, vi
     // Update the block-tridiagonal Schur complement using CR
     tricyqle.template update_solve_cr<Solve>(ctx, λ, n);
 }
+//! [Cyqlone update]
 
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update(Context &ctx, view<> ΔΣ) {
@@ -298,6 +291,7 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_solve(Context &ctx, view<> 
     update_solve_impl<true>(ctx, ΔΣ, ux, λ);
 }
 
+//! [Cyqlone update CR]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Solve>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_solve_cr(Context &ctx, mut_view<> λ,
@@ -347,26 +341,11 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_solve_cr(Context &ctx, mut
                 : solve_pcg(λ.batch(0), work_pcg.batch(0));
     }
 }
+//! [Cyqlone update CR]
 
 // Algorithm 3 “Factorization update of a single modified Riccati block column”
-//
-// Differences compared to the pseudo-code in the paper:
-//  - Many operations are performed in-place to reduce memory usage.
-//    For example, all original Cholesky factors are replaced by the updated ones.
-//  - The workspaces Υ1 and Υ2 are reused for the variables Υ and Φ in the paper. Two workspaces
-//    are required because the matrix multiplication by Φx(j) cannot be done in-place.
-//  - Only the constraints for which ΔΣ is nonzero are used during the update. This is done by
-//    compressing the relevant columns of Dᵀ and Cᵀ into Υu and Υx respectively.
-//  - A global communication step is used at the end to compute the total update rank for the entire
-//    problem, and to partition the workspace for Υ˃ and Υ˂ to prepare for the CR phase.
-//  - The update for u(0) is handled as a special case to exploit its mostly independent structure.
-//  - If the number of processors p is not a power of two, the workspace allocation of Υ˃(0) needs
-//    to be adjusted to ensure that it does not overlap with Υ˂(p-2^l). Note that this is only
-//    necessary when u(0) is not isolated. See work_Ups_fwd_w.
-//  - In the vectorized case, Υ˃(0) and Υ˂(0) are stored in different workspaces in the last level
-//    of CR, since this is not actually the last level of the full reduction (PCR handles the rest).
-//    See work_Ups_bwd_w.
 
+//! [Cyqlone update Riccati]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
@@ -558,6 +537,7 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_riccati_solve(Context &ctx,
         }
     }
 }
+//! [Cyqlone update Riccati]
 
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::set_thread_update_rank(Context &ctx, index_t c,

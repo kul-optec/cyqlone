@@ -20,19 +20,8 @@ using namespace batmat::linalg;
 
 // Algorithm 2 “Cyqlone factorization”
 // §4.4 Factorization of the Schur complement (step 4)
-//
-// Cyclic reduction helper functions.
-//
-// Differences compared to the pseudo-code in the paper:
-//  - The factorization is done in-place on cr_L, cr_U, and cr_Y. Subdiagonal blocks K˂ and K˃ are
-//    temporarily stored in cr_U and cr_Y respectively.
-//  - Syrk and potrf operations are fused where possible to improve performance.
-//  - Additional masking is performed for the scalar case (v == 1), corresponding to the boundary
-//    conditions K˃(p-2^l)=0 (i.e. no circular coupling between the last and first stages). This
-//    serves two main purposes: it avoids unnecessary computations on zero blocks, and it allows
-//    for processor counts p that are not powers of two. In contrast, the vectorized case requires
-//    circular boundary conditions, so this masking is not applied for v > 1.
 
+//![Cyqlone factor CR helper]
 // 20|  U(iU) = K˂(iU) L(iU)⁻ᵀ
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_U([[maybe_unused]] index_t l, index_t iU) {
@@ -176,22 +165,14 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_L(index_t l, index_t i) {
         potrf(M, L0);
     }
 }
+//![Cyqlone factor CR helper]
 
-// Algorithm 5 “Solution of a symmetric block-tridiagonal system using cyclic reduction (CR)”
+// Algorithm 5 “CR: Solution of a symmetric block-tridiagonal system using cyclic reduction”
 // §3.2 Cyclic reduction of block-tridiagonal linear systems
 //
 // The solve routines below closely follow the structure of the corresponding factorization routines.
-//
-// Differences compared to the pseudo-code in the paper:
-//  - We use an iterative approach to factor all levels, instead of recursion.
-//  - The right-hand side vector λ is updated in-place.
-//  - It contains all stages of the original problem, not just the stages that are handled by CR.
-//    Therefore, we use the data batch index di = n bi, not the cyclic reduction batch index bi.
-//  - Y(k-2^l) b̃(k-2^l) is stored in a temporary workspace to allow it to be evaluated concurrently
-//    with U(k+2^l) b̃(k+2^l), as they both update b(k)⁺. Similarly for the backward solve, where
-//    U(k)ᵀ x(k-2^l) is stored in a temporary workspace to avoid races on x(k).
-//  - The last level is not handled here, because it is solved using PCG or PCR.
 
+//![Cyqlone solve CR helper]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_u_forward(index_t l, index_t iU, mut_view<> λ,
                                                                index_t stride) const {
@@ -284,6 +265,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_λ_backward(index_t iL, mut
     BATMAT_ASSUME(iL != 0);
     trsm(tril(cr_L.batch(iL)).transposed(), λ.batch(diL));
 }
+//![Cyqlone solve CR helper]
 
 // Prefetching
 

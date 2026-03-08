@@ -20,26 +20,14 @@ namespace CYQLONE_NS(cyqlone) {
 
 using namespace batmat::linalg;
 
-// Algorithm 6 “Solution of a symmetric block-tridiagonal system using parallel cyclic
-//              reduction (PCR)”
-//
-// Differences compared to the pseudo-code in the paper:
-//  - The factorization is done in-place on pcr_L.
-//  - The solution is done in-place on the input λ.
-//  - We use an iterative approach to factor all levels, instead of recursion.
-//  - The solution step is separated from the factorization step.
+// Algorithm 6 “PCR: Solution of a symmetric block-tridiagonal system using parallel cyclic reduction”
+// Algorithm 7 “Periodic PCR factorization of a block-tridiagonal matrix”
 
+//! [PCR factor serial]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr() {
     [this]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
         (this->template factor_pcr_level<Levels>(), ...);
-    }(std::make_integer_sequence<index_t, lv()>{});
-}
-
-template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
-void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr_parallel(Context &ctx) {
-    [this, &ctx]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
-        (this->template factor_pcr_level_parallel<Levels>(ctx), ...);
     }(std::make_integer_sequence<index_t, lv()>{});
 }
 
@@ -55,6 +43,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr_level() {
     auto L = pcr_L.batch(Level), Y = pcr_Y.batch(Level), U = pcr_U.batch(Level);
     static constexpr auto r = 1 << Level; // 2^l
 
+    //  9|  K̊(k) = K(k) + K(k+2^l)ᵀ
     if constexpr (Level + 1 == lv() && merge_last_level_pcr) {
         // In the last level, we only have a single sub-diagonal block, which is computed as
         // K(k) = -Y(k+2^l) U(k+2^l)ᵀ - U(k-2^l) Y(k-2^l)ᵀ. Since 2^l = -2^l mod v, we only need to
@@ -79,28 +68,40 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr_level() {
         }
     }
 
-    //  8|  U(k) = K(k-2^l)ᵀ L(k)⁻ᵀ
+    //  4|  U(k) = K(k-2^l)ᵀ L(k)⁻ᵀ
+    // 10|  U(k) = K̊(k-2^l)ᵀ L(k)⁻ᵀ
     trsm(K.transposed(), triu(L.transposed()), U, with_rotate_A<-r>);
-    //  7|  Y(k) = K(k) L(k)⁻ᵀ
+    //  5|  Y(k) = K(k) L(k)⁻ᵀ
     if constexpr (Level + 1 < lv() || !merge_last_level_pcr)
         trsm(K, triu(L.transposed()), Y);
-    // 10|  M(k)⁺ = M(k) - Y(k-2^l) Y(k-2^l)ᵀ - U(k+2^l) U(k+2^l)ᵀ
-    //      -- implemented as M(k-2^l)⁺ = M(k-2^l) - Y(k) Y(k)ᵀ
+    //  8|  M(k)⁺ = M(k) - Y(k-2^l) Y(k-2^l)ᵀ - U(k+2^l) U(k+2^l)ᵀ
+    // 11|  M(k)⁺ = M(k) - U(k+2^l) U(k+2^l)ᵀ
+    //      -- implemented as M(k+2^l)⁺ = U(k) U(k)ᵀ
     syrk_sub(U, tril(M), tril(M_next), with_rotate_C<-r>, with_rotate_D<-r>);
-    //      -- followed by    M(k+2^l)⁺ -= U(k) U(k)ᵀ
+    //      -- followed by    M(k-2^l)⁺ -= M(k-2^l) - Y(k) Y(k)ᵀ    (except in the last level)
     if constexpr (Level + 1 < lv() || !merge_last_level_pcr)
         syrk_sub(Y, tril(M_next), with_rotate_C<+r>, with_rotate_D<+r>);
-    //  3|  L(k)⁺ = chol(M(k)⁺)    -- for the next level
+    //  2|  L(k)⁺ = chol(M(k)⁺)    -- for the next level
+    // 12|  L(k)⁺ = chol(M(k)⁺)    -- for the last level
     potrf(tril(M_next), tril(pcr_L.batch(Level + 1)));
     if constexpr (Level + 1 < lv()) {
         auto K_next = pcr_Y.batch(Level + 1);
-        // 11|  K(k)⁺ = -Y(k+2^l) U(k+2^l)ᵀ    -- implemented as K(k-2^l)⁺ = -Y(k) U(k)ᵀ
+        //  7|  K(k)⁺ = -Y(k+2^l) U(k+2^l)ᵀ    -- implemented as K(k-2^l)⁺ = -Y(k) U(k)ᵀ
         gemm_neg(Y, U.transposed(), K_next, {}, with_rotate_C<-r>, with_rotate_D<-r>);
         // TODO: we could store K_next in U instead of Y, so the last level would not need extra
         //       storage. But this is more complex, as we need to transpose it here, so we can
         //       perform the trsm in the next level in-place (which is not possible if the input
         //       and output are transposed).
     }
+}
+//! [PCR factor serial]
+
+//! [PCR factor]
+template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
+void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr_parallel(Context &ctx) {
+    [this, &ctx]<index_t... Levels>(std::integer_sequence<index_t, Levels...>) {
+        (this->template factor_pcr_level_parallel<Levels>(ctx), ...);
+    }(std::make_integer_sequence<index_t, lv()>{});
 }
 
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
@@ -173,7 +174,9 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_pcr_level_parallel(Context
         gemm_neg(Y, U.transposed(), K_next, {}, with_rotate_C<-r>, with_rotate_D<-r>);
     }
 }
+//! [PCR factor]
 
+//! [Cyqlone solve PCR]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_pcr(mut_batch_view<> λ,
                                                          mut_batch_view<> work_pcr) const {
@@ -193,12 +196,13 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_pcr_level(mut_batch_view<> 
     GUANAQO_TRACE("Solve PCR", Level);
     auto L = pcr_L.batch(Level), Y = pcr_Y.batch(Level), U = pcr_U.batch(Level);
     static constexpr auto r = 1 << Level;
-    //  9|  b̃(k) = L(k)⁻¹ b(k)
+    //  8|  b̃(k) = L(k)⁻¹ b(k)
     trsm(tril(L), λ, work_pcr); // w = L⁻¹ λ
-    // 12|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
+    // 11|  b(k)⁺ = b(k) - Y(k-2^l) b̃(k-2^l) - U(k+2^l) b̃(k+2^l)
     if constexpr (Level + 1 < lv() || !merge_last_level_pcr)
         gemv_sub(Y, work_pcr, λ, with_rotate_C<+r>, with_rotate_D<+r>);
     gemv_sub(U, work_pcr, λ, with_rotate_C<-r>, with_rotate_D<-r>);
 }
+//! [Cyqlone solve PCR]
 
 } // namespace CYQLONE_NS(cyqlone)

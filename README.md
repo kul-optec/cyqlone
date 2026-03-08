@@ -38,8 +38,9 @@ See [`benchmarks/cyqpalm/README.md`](benchmarks/cyqpalm/README.md) for instructi
 
 ## Documentation
 
-- [API documentation](https://kul-optec.github.io/cyqlone/develop/Doxygen/topics.html)
+- [Detailed algorithm descriptions](https://kul-optec.github.io/cyqlone/develop/Doxygen/algorithms.html) (matching the pseudocode in the paper)
 - [Examples](https://kul-optec.github.io/cyqlone/develop/Doxygen/examples.html)
+- [API documentation](https://kul-optec.github.io/cyqlone/develop/Doxygen/topics.html)
 
 ## Installation
 

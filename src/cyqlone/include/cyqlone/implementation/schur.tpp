@@ -24,6 +24,7 @@ using namespace batmat::linalg;
 //
 // See also: factor.tpp
 
+//! [Cyqlone compute Schur]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Factor, bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
@@ -87,7 +88,8 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::compute_schur(Context &ctx, mut_vi
             GUANAQO_TRACE("Factor M last", c);
             CYQ_TRACE_WRITE(L, c, 0);
             auto L0 = tril(tricyqle.pcr_L.batch(0));
-            // 14|  M(c) = M(c)˂ + M(c)˃ = M(c)˂ + WWᵀ
+            // 13|  M(c)˃ = WWᵀ
+            // 14|  M(c) = M(c)˂ + M(c)˃
             syrk_add(W, M);
             // 16|  L(c) = chol(M(c))
             potrf(M, L0); // Final block is stored separately (for PCR/PCG later)
@@ -95,13 +97,15 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::compute_schur(Context &ctx, mut_vi
             GUANAQO_TRACE("Factor M", c);
             CYQ_TRACE_WRITE(L, c, 0);
             CYQ_TRACE_WRITE(L, c, 1);
-            // 14|  M(c) = M(c)˂ + M(c)˃ = M(c)˂ + WWᵀ
+            // 13|  M(c)˃ = WWᵀ
+            // 14|  M(c) = M(c)˂ + M(c)˃
             // 16|  L(c) = chol(M(c))
             syrk_add_potrf(W, M);
         } else {
             GUANAQO_TRACE("Compute WWᵀ", c);
             CYQ_TRACE_WRITE(M, c, 0);
-            // 14|  M(c) = M(c)˂ + M(c)˃ = M(c)˂ + WWᵀ
+            // 13|  M(c)˃ = WWᵀ
+            // 14|  M(c) = M(c)˂ + M(c)˃
             syrk_add(W, M);
         }
     }
@@ -124,5 +128,6 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::compute_schur(Context &ctx, mut_vi
         }
     }
 }
+//! [Cyqlone compute Schur]
 
 } // namespace CYQLONE_NS(cyqlone)

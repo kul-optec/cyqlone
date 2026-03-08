@@ -6,21 +6,10 @@ namespace CYQLONE_NS(cyqlone) {
 // §4 “Cyqlone: Parallel factorization and solution of KKT systems with optimal control structure”
 //
 // Optionally fused factorization and forward solve of the KKT system.
-//
-// Differences compared to the pseudo-code in the paper:
-//  - The penalty terms DCᵀ Σ DC and the regularizers Γₓ = γI are added to the cost Hessians during
-//    the Riccati factorization step, as described in §5.1 “The augmented Lagrangian inner problem”.
-//  - Solution is fused/interleaved with the factorization steps to improve temporal locality and
-//    reduce memory bandwidth.
-//  - The factorization and solution are done mostly in-place (without overwriting the OCP data).
-//  - Factorization of the odd diagonal blocks M(i) is performed in the compute_schur function
-//    instead of at the first level of the CR code.
-//  - The last level is factored and solved using PCR or PCG, as described in §7.5.2 “Handling of
-//    the final scalar levels”.
 
+//! [Cyqlone factorization and fused forward solve]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Factor, bool Solve>
-// NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
 void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_solve_impl(Context &ctx, value_type γ,
                                                                 view<> Σ, mut_view<> ux,
                                                                 mut_view<> λ) {
@@ -31,7 +20,10 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_solve_impl(Context &ctx, va
     //  4|  factor-schur(c)                   -- step 4
     tricyqle.template factor_solve_skip_first<Factor, Solve>(ctx, λ, n);
 }
+//! [Cyqlone factorization and fused forward solve]
 
+// First level of CR is only needed when solving a standalone block tridiagonal matrix. In Cyqlone,
+// this is fused with the Schur complement computation.
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Factor, bool Solve>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_solve_impl(Context &ctx, mut_view<> λ,
@@ -50,6 +42,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_solve_impl(Context &ctx, m
     factor_solve_skip_first<Factor, Solve>(ctx, λ, stride);
 }
 
+//! [Cyqlone factor Schur]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Factor, bool Solve>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_solve_skip_first(Context &ctx, mut_view<> λ,
@@ -118,6 +111,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_solve_skip_first(Context &
         }
     }
 }
+//! [Cyqlone factor Schur]
 
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::factor_solve(Context &ctx, mut_view<> λ,
@@ -180,6 +174,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_reverse(Context &ctx, mut_v
     }
 }
 
+//![Cyqlone solve CR]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_reverse_parallel(Context &ctx, mut_view<> λ,
                                                                       mut_view<> work,
@@ -226,7 +221,9 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_reverse_parallel(Context &c
     if (ν2p(c) == 0 && p != 1)
         solve_λ_backward(c, λ, work, stride);
 }
+//![Cyqlone solve CR]
 
+//![Cyqlone solve CR serial]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_reverse_serial(mut_view<> λ, mut_view<> work,
                                                                     index_t stride) const {
@@ -252,6 +249,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::solve_reverse_serial(mut_view<> �
         if (ν2p(c) == 0 && p != 1)
             solve_λ_backward(c, λ, work, stride);
 }
+//![Cyqlone solve CR serial]
 
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void CyqloneSolver<VL, T, DefaultOrder, Ctx>::solve_reverse(Context &ctx, mut_view<> ux,

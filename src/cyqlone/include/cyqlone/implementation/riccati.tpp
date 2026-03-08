@@ -15,19 +15,8 @@ using namespace linalg;
 using namespace batmat::linalg;
 
 // Algorithm 1 “Factorization of a single modified Riccati block column”
-//
-// Differences compared to the pseudo-code in the paper:
-//  - Many operations are performed in-place to reduce memory usage.
-//    For example, the matrices R̂, Ŝ and Q̂ are replaced by the Cholesky factors LR, LS and LQ.
-//  - The addition of the penalty term DCᵀ Σ DC is fused with the rest of the operations,
-//    avoiding an explicit formation of the intermediate matrix and improving cache locality.
-//    See §5.1 “The augmented Lagrangian inner problem” for details about the penalty term.
-//  - The product V(j-1) V(j-1)ᵀ is not added to the Hessian at the end of an iteration, but rather
-//    at the beginning of the next iteration, so it can be fused with the addition of DCᵀ Σ DC
-//    and the Cholesky factorization of the sum.
-//  - Data batch indices where the problem data and the factorization are stored are reversed
-//    compared to the stage indices, simplifying the per-thread contiguous storage.
 
+//! [Modified Riccati factorization and fused forward solve]
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 template <bool Factor, bool Solve>
 // NOLINTNEXTLINE(*-cognitive-complexity) // Needs to match pseudocode structure
@@ -153,6 +142,7 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::factor_riccati_solve(Context &ctx,
         }
     }
 }
+//! [Modified Riccati factorization and fused forward solve]
 
 template <index_t VL, class T, StorageOrder DefaultOrder, class Ctx>
 void CyqloneSolver<VL, T, DefaultOrder, Ctx>::solve_riccati_reverse(
