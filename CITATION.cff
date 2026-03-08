@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+title: cyqlone
+message: >-
+  If Cyqlone or CyQPALM proves useful in your research, please cite the following paper.
+type: software
+authors:
+  - given-names: Pieter
+    family-names: Pas
+    orcid: 'https://orcid.org/0000-0002-7004-2447'
+    affiliation: KU Leuven
+  - given-names: Panagiotis
+    family-names: Patrinos
+    orcid: 'https://orcid.org/0000-0003-4824-7697'
+    affiliation: KU Leuven
+repository-code: 'https://github.com/kul-optec/cyqlone'
+url: 'https://kul-optec.github.io/cyqlone'
+keywords:
+  - optimization
+  - linear algebra
+  - model predictive control
+  - augmented lagrangian method
+  - qpalm
+license: LGPL-3.0
+date-released: '2025-07-20'
+preferred-citation:
+  type: article
+  authors:
+    - given-names: Pieter
+      family-names: Pas
+      orcid: 'https://orcid.org/0000-0002-7004-2447'
+      affiliation: KU Leuven
+    - given-names: Panagiotis
+      family-names: Patrinos
+      orcid: 'https://orcid.org/0000-0003-4824-7697'
+      affiliation: KU Leuven
+  title: >-
+    Cyqlone: A Parallel, High-Performance Linear Solver for Optimal Control
+  year: 2025
+  month: 12
+  date: '2025-12-09'
+  status: preprint
+  url: 'https://arxiv.org/abs/2512.09058'
+  doi: '10.48550/arXiv.2512.09058'
