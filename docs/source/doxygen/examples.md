@@ -5,8 +5,6 @@
 - [Spring-mass OCP benchmark](@ref benchmarks/cyqpalm/spring-mass.cpp)
 - [Standalone PCR solver](@ref test/test-pcr.cpp)
 
-## 🚧 Work in progress 🚧
-
 @example solve-block-tridiagonal.cpp
 @par Example demonstrating how to solve a block tridiagonal system in parallel
 

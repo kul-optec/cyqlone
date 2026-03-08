@@ -1,4 +1,7 @@
 [![arXiv Preprint](https://img.shields.io/badge/arXiv-Preprint-b31b1b)](https://arxiv.org/abs/2512.09058)
+[![Documentation](https://img.shields.io/badge/Documentation-develop-blue)](https://kul-optec.github.io/cyqlone/develop/Doxygen)
+[![CI: Linux](https://github.com/kul-optec/cyqlone/actions/workflows/linux.yml/badge.svg)](https://github.com/kul-optec/cyqlone/actions/workflows/linux.yml)
+[![GitHub License](https://img.shields.io/github/license/kul-optec/alpaqa?label=License&logo=gnu)](https://github.com/kul-optec/alpaqa/blob/develop/LICENSE)
 
 <p align="center">
 <img src="docs/source/images/cyqlone-logo-text.svg" width=300>
@@ -33,9 +36,14 @@ The paper describing the algorithms in this repository can be found on arXiv: [*
 A script to reproduce the benchmark results from the paper can be found in `benchmarks/cyqpalm`.
 See [`benchmarks/cyqpalm/README.md`](benchmarks/cyqpalm/README.md) for instructions.
 
+## Documentation
+
+- [API documentation](https://kul-optec.github.io/cyqlone/develop/Doxygen/topics.html)
+- [Examples](https://kul-optec.github.io/cyqlone/develop/Doxygen/examples.html)
+
 ## Installation
 
-Requirements: CMake, Conan 2.
+Requirements: Linux, CMake, Conan 2.
 
 ```sh
 # Prepare environment and dependencies
