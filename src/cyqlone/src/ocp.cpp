@@ -24,14 +24,16 @@ auto LinearOCPStorage::compute_kkt_error(const Solution &sol) const -> KKTError 
         auto rj = dual_residual.middle_rows(j * (nx + nu), nx + nu);
         guanaqo::blas::xsymv_L(real_t{1}, H(j), xuj, real_t{1}, rj);
         guanaqo::blas::xgemv_T(real_t{1}, AB(j), λj_next, real_t{1}, rj);
-        guanaqo::blas::xgemv_T(real_t{1}, CD(j), yj, real_t{1}, rj);
+        if (ny > 0)
+            guanaqo::blas::xgemv_T(real_t{1}, CD(j), yj, real_t{1}, rj);
         for (index_t i = 0; i < nx; ++i)
             rj(i, 0) -= λj(i, 0);
     }
     auto xN = x.bottom_rows(nx), λN = λ.bottom_rows(nx), yN = y.bottom_rows(ny_N);
     auto rN = dual_residual.bottom_rows(nx);
     guanaqo::blas::xsymv_L(real_t{1}, Q(N), xN, real_t{1}, rN);
-    guanaqo::blas::xgemv_T(real_t{1}, C(N), yN, real_t{1}, rN);
+    if (ny_N > 0)
+        guanaqo::blas::xgemv_T(real_t{1}, C(N), yN, real_t{1}, rN);
     for (index_t i = 0; i < nx; ++i)
         rN(i, 0) -= λN(i, 0);
     const auto norms = cyqlone::norms<real_t>{};
@@ -49,7 +51,8 @@ auto LinearOCPStorage::compute_kkt_error(const Solution &sol) const -> KKTError 
         auto xuj = x.middle_rows(j * (nx + nu), nx + nu), yj = y.middle_rows(j * ny, ny);
         auto lbj = b_min(j), ubj = b_max(j);
         auto cj = ineq_res.middle_rows(j * ny, ny);
-        guanaqo::blas::xgemv_N(real_t{1}, CD(j), xuj, real_t{-1}, cj);
+        if (ny > 0)
+            guanaqo::blas::xgemv_N(real_t{1}, CD(j), xuj, real_t{-1}, cj);
         for (index_t i = 0; i < ny; ++i) {
             compl_norm =
                 norms(compl_norm, yj(i, 0) > 0 ? yj(i, 0) * (cj(i, 0) - fmin(ubj(i, 0), +big))
@@ -58,7 +61,8 @@ auto LinearOCPStorage::compute_kkt_error(const Solution &sol) const -> KKTError 
         }
     }
     auto cN = ineq_res.bottom_rows(ny_N);
-    guanaqo::blas::xgemv_N(real_t{1}, C(N), xN, real_t{-1}, cN);
+    if (ny_N > 0)
+        guanaqo::blas::xgemv_N(real_t{1}, C(N), xN, real_t{-1}, cN);
     auto lbN = b_min().bottom_rows(ny_N), ubN = b_max().bottom_rows(ny_N);
     for (index_t i = 0; i < ny_N; ++i) {
         compl_norm =
