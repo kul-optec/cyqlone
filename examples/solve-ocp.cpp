@@ -3,8 +3,8 @@
 #include <cyqlone/linalg.hpp>
 #include <cyqlone/ocp.hpp>
 #include <batmat/dtypes.hpp>
-#include <guanaqo/print.hpp>
 #include <iostream>
+#include <print>
 #include <random>
 #include <string>
 
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) try {
     auto params         = solver.get_tricyqle_params();
     params.solve_method = cyqlone::SolveMethod::PCR; // Use the PCR solver instead of PCG
     solver.update_tricyqle_params(params);
-    std::cout << solver.get_params_string() << "\n";
+    std::println("{}", solver.get_params_string());
 
     // Initialize copies of the OCP data vectors in compact storage format
     const auto rq = solver.initialize_gradient(cocp); // gradient vectors r and q
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) try {
         solver.solve_reverse(ctx, ux, λ);       // Backward substitution
     });                                         // blocks until all threads have joined
     auto t1 = std::chrono::high_resolution_clock::now();
-    std::cout << std::chrono::duration<double, std::milli>(t1 - t0).count() << " ms\n";
+    std::println("Time: {:.3f} ms", std::chrono::duration<double, std::milli>(t1 - t0).count());
 
     // Compute the residuals (in compact storage and without x0, also in parallel)
     auto Mxb  = solver.initialize_dynamics_constraints(); // primal equality constraint residual
@@ -101,8 +101,8 @@ int main(int argc, char *argv[]) try {
 
     // Print the residuals
     using cyqlone::linalg::norm_inf;
-    std::cout << "Eq. residual (compact): " << guanaqo::float_to_str(norm_inf(Mxb)) << "\n"
-              << "Lagr. stationarity (compact): " << guanaqo::float_to_str(norm_inf(grad)) << "\n";
+    std::println("Eq. residual (compact):       {:.17e}", norm_inf(Mxb));
+    std::println("Lagr. stationarity (compact): {:.17e}", norm_inf(grad));
 
     // Reconstruct the full solution (as a flat vector, including x0)
     std::vector ux_unpacked = solver.unpack_variables(ux); // convert compact to linear storage
@@ -111,8 +111,8 @@ int main(int argc, char *argv[]) try {
 
     // Check the residuals of the original OCP
     auto resid = ocp.compute_kkt_error(sol);
-    std::cout << "Eq. residual (full): " << guanaqo::float_to_str(resid.equality_residual) << "\n"
-              << "Lagr. stationarity (full): " << guanaqo::float_to_str(resid.stationarity) << "\n";
+    std::println("Eq. residual (full):       {:.17e}", resid.equality_residual);
+    std::println("Lagr. stationarity (full): {:.17e}", resid.stationarity);
 
 #if CYQLONE_WITH_MATIO
     // Export the original OCP and the solution as a .mat file
