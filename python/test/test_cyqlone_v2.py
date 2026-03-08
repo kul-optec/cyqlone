@@ -56,14 +56,13 @@ MΔz        = -(b + Mz)
 """
 
 Solver = Union[
-    cyqlone.scalar.CyqloneSolver,
-    *(
-        getattr(cyqlone, f"simd{v}").CyqloneSolver
-        for v in (2, 4, 8)
-        if hasattr(cyqlone, f"simd{v}")
-    ),
+    (
+        cyqlone.scalar.CyqloneSolver,
+        "cyqlone.simd2.CyqloneSolver",
+        "cyqlone.simd4.CyqloneSolver",
+        "cyqlone.simd8.CyqloneSolver",
+    )
 ]
-
 
 np.set_printoptions(
     precision=17, suppress=False, linewidth=800, formatter={"float_kind": "{:+.17e}".format}
