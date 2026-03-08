@@ -33,7 +33,7 @@ using guanaqo::as_span;
 #if GUANAQO_WITH_TRACING
 std::map<std::tuple<std::string, std::string>, std::filesystem::path> traces;
 template <class T = void>
-void trace(auto &&fun, const auto &name, const auto &params, T *solver = nullptr) {
+void trace(auto &&fun, const auto &name, const auto &params, T *pctx = nullptr) {
     std::string filename = std::format("{}.csv", name);
     std::filesystem::path out_dir{"traces"};
     out_dir /= *cyqlone_commit_hash ? cyqlone_commit_hash : "unknown";
@@ -47,8 +47,8 @@ void trace(auto &&fun, const auto &name, const auto &params, T *solver = nullptr
     guanaqo::get_trace_logger().reset();
     fun();
     if constexpr (!std::is_void_v<T>)
-        if (solver)
-            solver->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
+        if (pctx)
+            pctx->run([](auto &ctx) { GUANAQO_TRACE("thread_id", ctx.index); });
     std::filesystem::create_directories(out_dir);
     std::ofstream csv{out_file};
     guanaqo::TraceLogger::write_column_headings(csv) << '\n';
@@ -211,7 +211,7 @@ void bm_factor_cyqlone(benchmark::State &state) {
     };
     for (auto _ : state)
         do_factor();
-    trace([&] { do_factor(); }, "factor_cyqlone", solver.get_params_string(), &solver);
+    trace([&] { do_factor(); }, "factor_cyqlone", solver.get_params_string(), pctx.get());
 }
 
 #if WITH_BLASFEO
