@@ -122,7 +122,7 @@ Most of the space here is taken up by the updates of the last level, which needs
 special cases depending on the final PCR or PCG solver, and depending on whether we perform
 updates or re-factorization.
 
-The special cases `if constexpr (VL == 1)` add some visual overhead, and can safely be ignored.
+The special cases `if constexpr (v == 1)` add some visual overhead, and can safely be ignored.
 
 @snippet cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update CR helper
 

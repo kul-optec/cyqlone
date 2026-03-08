@@ -67,7 +67,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_L(index_t l, index_t i) {
     auto y0_update_thres  = params.cr_max_update_fraction_Y0 * static_cast<double>(block_size);
     bool update           = static_cast<double>(nj) < pcr_update_thres;
     bool update_y         = static_cast<double>(nj) < y0_update_thres;
-    bool do_update_pcr    = params.solve_method == SolveMethod::PCR && update && VL > 1;
+    bool do_update_pcr    = params.solve_method == SolveMethod::PCR && update && v > 1;
     bool do_refactor_pcr  = params.solve_method == SolveMethod::PCR && !update;
 
     CYQ_TRACE_READ(Upf, 0, 0);
@@ -82,7 +82,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_L(index_t l, index_t i) {
         // If there's only a single thread, we always update because there is no previous CR level
         // to recompute from (we would need to recompute the Riccati products, which is slow).
         // Otherwise, we only update if the rank is sufficiently low.
-        if constexpr (VL > 1) {
+        if constexpr (v > 1) {
             if (update_y || p == 1)
                 gemm_diag_add(Υ0_fwd, Υ0_bwd.transposed(), Y0, Σ_fwd);
             else
@@ -127,7 +127,7 @@ void TricyqleSolver<VL, T, DefaultOrder, Ctx>::update_U(index_t l, index_t i) {
     GUANAQO_TRACE("Update U", i);
     CYQ_TRACE_WRITE(Upb, i_bwd, 0);
     auto Up_bwd = work_Ups_bwd(l, i_bwd), Up_bwd_next = work_Ups_bwd(l + 1, i_bwd);
-    if constexpr (VL == 1)
+    if constexpr (v == 1)
         if (i >= p) { // happens in cases where p is not a power of two
             // There's no matrix Q̆(i) to apply, just copy the update matrices forward
             if (Up_bwd.data() != Up_bwd_next.data())
@@ -366,7 +366,7 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_riccati_solve(Context &ctx,
     // update, but also introduces structural zeros that can be exploited during the CR updates.
     // Its contribution just has to be applied to LB(0) (which is done in this function), and to
     // M(0)/L(0) (which is done in update_L).
-    const bool isolate_u0 = VL == 1 && dn == 0;
+    const bool isolate_u0 = v == 1 && dn == 0;
 
     index_t m    = 0; // Total update rank so far
     index_t mu0  = 0; // Update rank for u(0)
