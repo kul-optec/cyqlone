@@ -485,16 +485,12 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_riccati_solve(Context &ctx,
                 gemv_add(F_next.transposed(), w, ux_next); // u(j-1) += BAᵀ(j-1) w
             }
         } else {
-#ifndef NDEBUG
-            if (ctx.is_master())
-                tricyqle.work_update.set_constant(std::numeric_limits<T>::quiet_NaN());
-#endif
             const auto c_prev = sub_wrap_p(c, 1); // c-1
             // Communicate the update ranks mj to all threads and compute the column offsets in the
             // global update workspace we'll write Υ(c) and Υ(c-1) to.
             tricyqle.set_thread_update_rank(ctx, c_prev, mj);
             const index_t i_fwd = c, i_bwd = c_prev;
-            const bool rot = c == 0;
+            const bool rotate = c == 0;
             GUANAQO_TRACE("Riccati update Q", j);
             CYQ_TRACE_WRITE(Upf, i_fwd, 0);
             CYQ_TRACE_WRITE(Upb, i_bwd, 0);
@@ -507,14 +503,14 @@ void CyqloneSolver<VL, T, DefaultOrder, Ctx>::update_riccati_solve(Context &ctx,
                 // Fused with:
                 // 14|  [ L̃A(j₁)  Υ˃(c)   ] = [ LA(j₁)  Φλ(j₁) ] Q̆x(j₁),
                 //   |  [ -T̃(c)   Υ˂(c-1) ]   [ -T(c)     0    ]
-                hyhound_diag_riccati(LQ, Φx,               //
-                                     Acl, Φλ, Υ_fwd,       //
-                                     Tc, /*0*/ Υ_bwd_prev, // note the lack of a minus sign ...
-                                     𝑆.top_rows(mj), rot); //
-                negate(Υ_bwd_prev);                        // which is fixed here (TODO: fuse)
+                hyhound_diag_riccati(LQ, Φx,                  //
+                                     Acl, Φλ, Υ_fwd,          //
+                                     Tc, /*0*/ Υ_bwd_prev,    // note the lack of a minus sign ...
+                                     𝑆.top_rows(mj), rotate); //
+                negate(Υ_bwd_prev);                           // which is fixed here (TODO: fuse)
                 // 13|  𝒮(c) = 𝑆(j₁)
-                rot ? negate(𝑆.top_rows(mj), 𝒮cr, with_rotate<1>) //
-                    : negate(𝑆.top_rows(mj), 𝒮cr);
+                rotate ? negate(𝑆.top_rows(mj), 𝒮cr, with_rotate<1>) //
+                       : negate(𝑆.top_rows(mj), 𝒮cr);
                 // We negate 𝒮(c) because in the CR update, we need blkdiag(-I, 𝒮(c))-orthogonal
                 // or blkdiag(I, -𝒮(c))-orthogonal transformations.
             }

@@ -5,7 +5,7 @@
 - [Spring-mass OCP benchmark](@ref benchmarks/cyqpalm/spring-mass.cpp)
 - [Standalone PCR solver](@ref test/test-pcr.cpp)
 
-@example solve-block-tridiagonal.cpp
+@example{lineno} solve-block-tridiagonal.cpp
 @par Example demonstrating how to solve a block tridiagonal system in parallel
 
 The system has the form
@@ -37,17 +37,17 @@ the local blocks into the solver's workspace directly.
 The solution produced by this example is stored in a `.mat` file, which can be loaded and verified
 using the Python script @ref solve-block-tridiagonal.py.
 
-@example solve-block-tridiagonal.py
+@example{lineno} solve-block-tridiagonal.py
 
-@example solve-ocp.cpp
+@example{lineno} solve-ocp.cpp
 @par Example demonstrating how to solve an optimal control problem using Cyqlone.
 
 This example generates a random optimal control problem (without inequality constraints),
 and solves the resulting KKT system using Cyqlone.
 
-@example benchmarks/cyqpalm/spring-mass.cpp
+@example{lineno} benchmarks/cyqpalm/spring-mass.cpp
 @par Benchmarks from the paper
 @see @ref benchmarks/cyqpalm/README.md for instructions to reproduce the results from the paper.
 
-@example test/test-pcr.cpp
+@example{lineno} test/test-pcr.cpp
 @par Standalone vectorized PCR solver (independent of the main CyqloneSolver).

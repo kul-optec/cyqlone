@@ -25,7 +25,7 @@ Differences compared to the pseudo-code in the paper:
    compared to the stage indices, matching the iteration order and simplifying the per-thread
    contiguous storage.
 
-@snippet cyqlone/include/cyqlone/implementation/riccati.tpp Modified Riccati factorization and fused forward solve
+@snippet{lineno} cyqlone/include/cyqlone/implementation/riccati.tpp Modified Riccati factorization and fused forward solve
 
 ## Algorithm 2: Cyqlone factorization {#algorithm-2}
 
@@ -47,14 +47,14 @@ Differences compared to the pseudo-code in the paper:
 
 ### High-level factorization procedure
 
-@snippet cyqlone/include/cyqlone/implementation/factor.tpp Cyqlone factorization and fused forward solve
+@snippet{lineno} cyqlone/include/cyqlone/implementation/factor.tpp Cyqlone factorization and fused forward solve
 
 ### Schur complement computation
 
 This is the <span style="font-variant:small-caps">compute-schur</span> function in the paper,
 including the factorization of the first level of CR.
 
-@snippet cyqlone/include/cyqlone/implementation/schur.tpp Cyqlone compute Schur
+@snippet{lineno} cyqlone/include/cyqlone/implementation/schur.tpp Cyqlone compute Schur
 
 ### Schur complement factorization
 
@@ -62,7 +62,7 @@ This is the <span style="font-variant:small-caps">factor-schur</span> function i
 without the first level of CR, which is fused with the
 <span style="font-variant:small-caps">compute-schur</span> function above.
 
-@snippet cyqlone/include/cyqlone/implementation/factor.tpp Cyqlone factor Schur
+@snippet{lineno} cyqlone/include/cyqlone/implementation/factor.tpp Cyqlone factor Schur
 
 ### CR helper functions
 
@@ -76,13 +76,15 @@ Differences compared to the pseudo-code in the paper:
    for processor counts p that are not powers of two. In contrast, the vectorized case requires
    periodic boundary conditions, so this masking is not applied for v > 1.
 
-@snippet cyqlone/include/cyqlone/implementation/cr.tpp Cyqlone factor CR helper
+@snippet{lineno} cyqlone/include/cyqlone/implementation/cr.tpp Cyqlone factor CR helper
 
 ## Algorithm 3: Factorization update of a single modified Riccati block column {#algorithm-3}
 
 Differences compared to the pseudo-code in the paper:
  - Many operations are performed in-place to reduce memory usage.
    For example, all original Cholesky factors are replaced by the updated ones.
+ - Solution is fused/interleaved with the factorization steps to improve temporal locality and
+   reduce memory bandwidth.
  - The workspaces Υ1 and Υ2 are reused for the variables Υ and Φ in the paper. Two workspaces
    are required because the matrix multiplication by Φx(j) cannot be done in-place.
  - Only the constraints for which ΔΣ is nonzero are used during the update. This is done by
@@ -97,24 +99,26 @@ Differences compared to the pseudo-code in the paper:
    of CR, since this is not actually the last level of the full reduction (PCR handles the rest).
    See @ref cyqlone::TricyqleSolver::work_Ups_bwd_w "work_Ups_bwd_w".
 
-@snippet cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update Riccati
+@snippet{lineno} cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update Riccati
 
 ## Algorithm 4: Cyqlone factorization updates {#algorithm-4}
 
 Differences compared to the pseudo-code in the paper:
  - The update of the last has been modified to allow for vectorization (v>1), updating the
    PCR factorization if necessary.
+ - Solution is fused/interleaved with the factorization steps to improve temporal locality and
+   reduce memory bandwidth.
  - A heuristic rank check is used to decide whether to update or re-factorize the last level.
  - The update matrices Y˃(0) are skipped when they are zero (i.e. when the updates to u(0) are
    handled separately). This saves some unnecessary computation in the scalar case.
 
 ### High-level update procedure
 
-@snippet cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update
+@snippet{lineno} cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update
 
 ### Update of the CR factorization
 
-@snippet cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update CR
+@snippet{lineno} cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update CR
 
 ### CR factorization update helper functions
 
@@ -124,7 +128,7 @@ updates or re-factorization.
 
 The special cases `if constexpr (v == 1)` add some visual overhead, and can safely be ignored.
 
-@snippet cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update CR helper
+@snippet{lineno} cyqlone/include/cyqlone/implementation/update.tpp Cyqlone update CR helper
 
 ## Algorithm 5: CR: Solution of a symmetric block-tridiagonal system using cyclic reduction {#algorithm-5}
 
@@ -141,15 +145,15 @@ Differences compared to the pseudo-code in the paper:
 
 ### Serial reverse solve
 
-@snippet cyqlone/include/cyqlone/implementation/factor.tpp Cyqlone solve CR serial
+@snippet{lineno} cyqlone/include/cyqlone/implementation/factor.tpp Cyqlone solve CR serial
 
 ### Parallel reverse solve
 
-@snippet cyqlone/include/cyqlone/implementation/factor.tpp Cyqlone solve CR
+@snippet{lineno} cyqlone/include/cyqlone/implementation/factor.tpp Cyqlone solve CR
 
 ### CR solve helper functions
 
-@snippet cyqlone/include/cyqlone/implementation/cr.tpp Cyqlone solve CR helper
+@snippet{lineno} cyqlone/include/cyqlone/implementation/cr.tpp Cyqlone solve CR helper
 
 ## Algorithm 6: PCR: Solution of a symmetric block-tridiagonal system using parallel cyclic reduction {#algorithm-6}
 
@@ -159,7 +163,7 @@ Differences compared to the pseudo-code in the paper:
  - The solution is done in-place on the input λ.
  - We use an iterative approach to factor all levels, instead of recursion.
 
-@snippet cyqlone/include/cyqlone/implementation/pcr.tpp Cyqlone solve PCR
+@snippet{lineno} cyqlone/include/cyqlone/implementation/pcr.tpp Cyqlone solve PCR
 
 ## Algorithm 7: Periodic PCR factorization of a block-tridiagonal matrix {#algorithm-7}
 
@@ -170,11 +174,11 @@ Differences compared to the pseudo-code in the paper:
 
 ### Serial PCR factorization
 
-@snippet cyqlone/include/cyqlone/implementation/pcr.tpp PCR factor serial
+@snippet{lineno} cyqlone/include/cyqlone/implementation/pcr.tpp PCR factor serial
 
 ### Parallel PCR factorization
 
-@snippet cyqlone/include/cyqlone/implementation/pcr.tpp PCR factor
+@snippet{lineno} cyqlone/include/cyqlone/implementation/pcr.tpp PCR factor
 
 ## Algorithm 8: Periodic PCR factorization updates by a block-bidiagonal matrix {#algorithm-8}
 
@@ -183,4 +187,4 @@ Differences compared to the pseudo-code in the paper:
  - Intermediate update matrices are left rotated in memory to minimize the number of rotations
    required.
 
-@snippet cyqlone/include/cyqlone/implementation/update.tpp PCR update
+@snippet{lineno} cyqlone/include/cyqlone/implementation/update.tpp PCR update
