@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::CyQPALMBackend::PenaltySettings</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings_1ab415575db2fb46bdc65c98bef9cd7a7b" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::PenaltySettings::θ</definition>
+        <argsstring></argsstring>
+        <name>θ</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackend::PenaltySettings::θ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="313" column="16" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="313" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings_1a46e4b816757eb36919adcd8a8d3c299c" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::PenaltySettings::Δy</definition>
+        <argsstring></argsstring>
+        <name>Δy</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackend::PenaltySettings::Δy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="314" column="16" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="314" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings_1a560cef30409d81f0c2c2c0954f409ba6" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::PenaltySettings::Δy_always</definition>
+        <argsstring></argsstring>
+        <name>Δy_always</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackend::PenaltySettings::Δy_always</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="314" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="314" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings_1aff96dc973f14bd43277c46b5d39d3e18" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::PenaltySettings::max_penalty_y</definition>
+        <argsstring></argsstring>
+        <name>max_penalty_y</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackend::PenaltySettings::max_penalty_y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="315" column="16" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="315" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::PenaltySettings</label>
+        <link refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="312" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="312" bodyend="316"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings_1a46e4b816757eb36919adcd8a8d3c299c" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackend::PenaltySettings</scope><name>Δy</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings_1a560cef30409d81f0c2c2c0954f409ba6" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackend::PenaltySettings</scope><name>Δy_always</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings_1ab415575db2fb46bdc65c98bef9cd7a7b" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackend::PenaltySettings</scope><name>θ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings_1aff96dc973f14bd43277c46b5d39d3e18" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackend::PenaltySettings</scope><name>max_penalty_y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

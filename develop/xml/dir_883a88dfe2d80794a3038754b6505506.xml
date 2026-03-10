@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_883a88dfe2d80794a3038754b6505506" kind="dir">
+    <compoundname>src/cyqlone/include/cyqlone</compoundname>
+    <innerdir refid="dir_52b2d70e12b6b2dd0d9cd3d7cdbaa926">src/cyqlone/include/cyqlone/implementation</innerdir>
+    <innerfile refid="barrier_8hpp">barrier.hpp</innerfile>
+    <innerfile refid="config_8hpp">config.hpp</innerfile>
+    <innerfile refid="conversion_8hpp">conversion.hpp</innerfile>
+    <innerfile refid="cyqlone-params_8hpp">cyqlone-params.hpp</innerfile>
+    <innerfile refid="cyqlone-storage_8hpp">cyqlone-storage.hpp</innerfile>
+    <innerfile refid="cyqlone_8hpp">cyqlone.hpp</innerfile>
+    <innerfile refid="linalg_8hpp">linalg.hpp</innerfile>
+    <innerfile refid="matio_8hpp">matio.hpp</innerfile>
+    <innerfile refid="neumaier_8hpp">neumaier.hpp</innerfile>
+    <innerfile refid="ocp_8hpp">ocp.hpp</innerfile>
+    <innerfile refid="packing_8hpp">packing.hpp</innerfile>
+    <innerfile refid="parallel_8hpp">parallel.hpp</innerfile>
+    <innerfile refid="random-ocp_8hpp">random-ocp.hpp</innerfile>
+    <innerfile refid="reduce_8hpp">reduce.hpp</innerfile>
+    <innerfile refid="sparse_8hpp">sparse.hpp</innerfile>
+    <innerfile refid="timing_8hpp">timing.hpp</innerfile>
+    <innerfile refid="tracing_8hpp">tracing.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/cyqlone/include/cyqlone/"/>
+  </compounddef>
+</doxygen>

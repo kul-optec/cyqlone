@@ -1,0 +1,759 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1CyqloneStorage" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::CyqloneStorage</compoundname>
+    <includes refid="cyqlone-storage_8hpp" local="no">cyqlone/cyqlone-storage.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+        <defval>real_t</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" prot="public" static="no">
+        <type>T</type>
+        <definition>using cyqlone::CyqloneStorage&lt; T &gt;::value_type = T</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>cyqlone::CyqloneStorage::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="40" column="5" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" prot="public" static="no">
+        <type><ref refid="structbatmat_1_1matrix_1_1Matrix" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::Matrix</ref>&lt; <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref>, index_t &gt;</type>
+        <definition>using cyqlone::CyqloneStorage&lt; T &gt;::matrix = batmat::matrix::Matrix&lt;value_type, index_t&gt;</definition>
+        <argsstring></argsstring>
+        <name>matrix</name>
+        <qualifiedname>cyqlone::CyqloneStorage::matrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="44" column="5" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1CyqloneStorage_1a5077445bf9f6dd8b1d187db5eb8ecc20" prot="public" static="no">
+        <type><ref refid="structcyqlone_1_1LinearOCPStorage_1_1Solution" kindref="compound">LinearOCPStorage::Solution</ref></type>
+        <definition>using cyqlone::CyqloneStorage&lt; T &gt;::Solution = LinearOCPStorage::Solution</definition>
+        <argsstring></argsstring>
+        <name>Solution</name>
+        <qualifiedname>cyqlone::CyqloneStorage::Solution</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="72" column="5" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1CyqloneStorage_1a8800a636bfb956a3750797b6849c82fb" prot="public" static="no">
+        <type><ref refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError" kindref="compound">LinearOCPStorage::KKTError</ref></type>
+        <definition>using cyqlone::CyqloneStorage&lt; T &gt;::KKTError = LinearOCPStorage::KKTError</definition>
+        <argsstring></argsstring>
+        <name>KKTError</name>
+        <qualifiedname>cyqlone::CyqloneStorage::KKTError</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="73" column="5" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::CyqloneStorage&lt; T &gt;::N_horiz</definition>
+        <argsstring></argsstring>
+        <name>N_horiz</name>
+        <qualifiedname>cyqlone::CyqloneStorage::N_horiz</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="41" column="13" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="41" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a7f65a7abbe21c43f87ebd73e50724202" compoundref="data_8tpp" startline="41" endline="55">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a43c82f3ed7f435db9b028baba5419b91" compoundref="cyqlone-storage_8cpp" startline="10" endline="15">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" compoundref="cyqlone-storage_8cpp" startline="18" endline="29">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" compoundref="cyqlone-storage_8cpp" startline="32" endline="55">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_solution</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::CyqloneStorage&lt; T &gt;::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>cyqlone::CyqloneStorage::nx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="42" column="13" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a7f65a7abbe21c43f87ebd73e50724202" compoundref="data_8tpp" startline="41" endline="55">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" compoundref="cyqlone-storage_8cpp" startline="32" endline="55">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_solution</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::CyqloneStorage&lt; T &gt;::nu</definition>
+        <argsstring></argsstring>
+        <name>nu</name>
+        <qualifiedname>cyqlone::CyqloneStorage::nu</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="42" column="16" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a7f65a7abbe21c43f87ebd73e50724202" compoundref="data_8tpp" startline="41" endline="55">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" compoundref="cyqlone-storage_8cpp" startline="32" endline="55">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_solution</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::CyqloneStorage&lt; T &gt;::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>cyqlone::CyqloneStorage::ny</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="42" column="19" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a7f65a7abbe21c43f87ebd73e50724202" compoundref="data_8tpp" startline="41" endline="55">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a43c82f3ed7f435db9b028baba5419b91" compoundref="cyqlone-storage_8cpp" startline="10" endline="15">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" compoundref="cyqlone-storage_8cpp" startline="18" endline="29">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" compoundref="cyqlone-storage_8cpp" startline="32" endline="55">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_solution</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::CyqloneStorage&lt; T &gt;::ny_0</definition>
+        <argsstring></argsstring>
+        <name>ny_0</name>
+        <qualifiedname>cyqlone::CyqloneStorage::ny_0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="42" column="22" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a7f65a7abbe21c43f87ebd73e50724202" compoundref="data_8tpp" startline="41" endline="55">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" compoundref="cyqlone-storage_8cpp" startline="18" endline="29">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1aa2b03be361da3dc445fbe12a7f5b14e4" compoundref="cyqlone-storage_8cpp" startline="79" endline="83">cyqlone::CyqloneStorage&lt; T &gt;::update</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::CyqloneStorage&lt; T &gt;::ny_N</definition>
+        <argsstring></argsstring>
+        <name>ny_N</name>
+        <qualifiedname>cyqlone::CyqloneStorage::ny_N</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="42" column="27" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a7f65a7abbe21c43f87ebd73e50724202" compoundref="data_8tpp" startline="41" endline="55">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a43c82f3ed7f435db9b028baba5419b91" compoundref="cyqlone-storage_8cpp" startline="10" endline="15">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" compoundref="cyqlone-storage_8cpp" startline="18" endline="29">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" compoundref="cyqlone-storage_8cpp" startline="32" endline="55">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_solution</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; bool &gt;</type>
+        <definition>std::vector&lt;bool&gt; cyqlone::CyqloneStorage&lt; T &gt;::Ju0</definition>
+        <argsstring></argsstring>
+        <name>Ju0</name>
+        <qualifiedname>cyqlone::CyqloneStorage::Ju0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="43" column="17" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="43" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" compoundref="cyqlone-storage_8cpp" startline="18" endline="29">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1aa2b03be361da3dc445fbe12a7f5b14e4" compoundref="cyqlone-storage_8cpp" startline="79" endline="83">cyqlone::CyqloneStorage&lt; T &gt;::update</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1ae59a1ad04812a951b67cffb555e2c46e" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_H</definition>
+        <argsstring></argsstring>
+        <name>data_H</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_H</qualifiedname>
+        <initializer>              = [this] {
+    return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = <ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>, .cols = <ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>}};
+}()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="45" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="45" bodyend="47"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a9858e75b9e77fa90942ae9e93bee6cd0" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_F</definition>
+        <argsstring></argsstring>
+        <name>data_F</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_F</qualifiedname>
+        <initializer>= [this] { return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = <ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>, .cols = <ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>}}; }()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="48" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="48" bodyend="48"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1ac42f16fa5afd1539c75464abf5224c2e" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_G</definition>
+        <argsstring></argsstring>
+        <name>data_G</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_G</qualifiedname>
+        <initializer>              = [this] {
+    return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = <ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref> - 1, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" kindref="member">ny</ref>, .cols = <ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>}};
+}()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="49" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="49" bodyend="51"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a9d576ab731437a666d1779180ab0da93" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_G0N</definition>
+        <argsstring></argsstring>
+        <name>data_G0N</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_G0N</qualifiedname>
+        <initializer>                = [this] {
+    return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = 1, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" kindref="member">ny_N</ref>, .cols = <ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>}};
+}()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="52" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="52" bodyend="54"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a210cf14825f736136173613ccba6e5a0" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_rq</definition>
+        <argsstring></argsstring>
+        <name>data_rq</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_rq</qualifiedname>
+        <initializer>= [this] { return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = <ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>, .cols = 1}}; }()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="55" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="55" bodyend="55"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a39590c5614a24539b5fc72b3a580f5dd" compoundref="data_8tpp" startline="170" endline="201">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::initialize_gradient</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a0f2e51a560de04b725a2835530c9d6c1" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_c</definition>
+        <argsstring></argsstring>
+        <name>data_c</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_c</qualifiedname>
+        <initializer>= [this] { return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = <ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>, .cols = 1}}; }()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="56" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="56" bodyend="56"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a8ca046a1255bcfbf774bcb3b81184537" compoundref="data_8tpp" startline="147" endline="167">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::initialize_rhs</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a39945295b599e4e6eb8603d4545fbb01" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_lb</definition>
+        <argsstring></argsstring>
+        <name>data_lb</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_lb</qualifiedname>
+        <initializer>= [this] { return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = <ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref> - 1, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" kindref="member">ny</ref>, .cols = 1}}; }()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="57" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="57" bodyend="57"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1aa6f5141dde78366e2baab1c2af0181b8" compoundref="data_8tpp" startline="204" endline="239">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::initialize_bounds</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1af7d6268a019a69170affc90f45f6fcbb" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_lb0N</definition>
+        <argsstring></argsstring>
+        <name>data_lb0N</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_lb0N</qualifiedname>
+        <initializer>= [this] { return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = 1, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" kindref="member">ny_N</ref>, .cols = 1}}; }()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="58" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="58" bodyend="58"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1aa6f5141dde78366e2baab1c2af0181b8" compoundref="data_8tpp" startline="204" endline="239">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::initialize_bounds</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a02ff2708ce8de1cd931128a1f22c4de6" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_ub</definition>
+        <argsstring></argsstring>
+        <name>data_ub</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_ub</qualifiedname>
+        <initializer>= [this] { return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = <ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref> - 1, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" kindref="member">ny</ref>, .cols = 1}}; }()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="59" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="59" bodyend="59"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1aa6f5141dde78366e2baab1c2af0181b8" compoundref="data_8tpp" startline="204" endline="239">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::initialize_bounds</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a9a940b82db836d321c2b85af56718c26" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref></type>
+        <definition>matrix cyqlone::CyqloneStorage&lt; T &gt;::data_ub0N</definition>
+        <argsstring></argsstring>
+        <name>data_ub0N</name>
+        <qualifiedname>cyqlone::CyqloneStorage::data_ub0N</qualifiedname>
+        <initializer>= [this] { return <ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth = 1, .rows = <ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref> + <ref refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" kindref="member">ny_N</ref>, .cols = 1}}; }()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="60" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="60" bodyend="60"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1aa6f5141dde78366e2baab1c2af0181b8" compoundref="data_8tpp" startline="204" endline="239">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::initialize_bounds</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1CyqloneStorage_1a3a48efdcefe05de53bbf06d911ac2411" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::CyqloneStorage&lt; T &gt;::indices_G0</definition>
+        <argsstring></argsstring>
+        <name>indices_G0</name>
+        <qualifiedname>cyqlone::CyqloneStorage::indices_G0</qualifiedname>
+        <initializer>= std::vector&lt;index_t&gt;(<ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref>)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="61" column="17" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="61" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::CyqloneStorage&lt; T &gt;::update_impl</definition>
+        <argsstring>(const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update_impl</name>
+        <qualifiedname>cyqlone::CyqloneStorage::update_impl</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="63" column="10" bodyfile="src/cyqlone/src/cyqlone-storage.cpp" bodystart="86" bodyend="145"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" compoundref="ocp_8hpp" startline="127" endline="131">cyqlone::LinearOCPStorage::A</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" compoundref="ocp_8hpp" startline="132" endline="136">cyqlone::LinearOCPStorage::B</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">cyqlone::LinearOCPStorage::b</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">cyqlone::LinearOCPStorage::b_max</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">cyqlone::LinearOCPStorage::b_min</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">cyqlone::LinearOCPStorage::C</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" compoundref="ocp_8hpp" startline="111" endline="115">cyqlone::LinearOCPStorage::D</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a0f2e51a560de04b725a2835530c9d6c1" compoundref="cyqlone-storage_8hpp" startline="56" endline="56">cyqlone::CyqloneStorage&lt; T &gt;::data_c</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a9858e75b9e77fa90942ae9e93bee6cd0" compoundref="cyqlone-storage_8hpp" startline="48" endline="48">cyqlone::CyqloneStorage&lt; T &gt;::data_F</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ac42f16fa5afd1539c75464abf5224c2e" compoundref="cyqlone-storage_8hpp" startline="49" endline="51">cyqlone::CyqloneStorage&lt; T &gt;::data_G</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a9d576ab731437a666d1779180ab0da93" compoundref="cyqlone-storage_8hpp" startline="52" endline="54">cyqlone::CyqloneStorage&lt; T &gt;::data_G0N</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ae59a1ad04812a951b67cffb555e2c46e" compoundref="cyqlone-storage_8hpp" startline="45" endline="47">cyqlone::CyqloneStorage&lt; T &gt;::data_H</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a39945295b599e4e6eb8603d4545fbb01" compoundref="cyqlone-storage_8hpp" startline="57" endline="57">cyqlone::CyqloneStorage&lt; T &gt;::data_lb</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1af7d6268a019a69170affc90f45f6fcbb" compoundref="cyqlone-storage_8hpp" startline="58" endline="58">cyqlone::CyqloneStorage&lt; T &gt;::data_lb0N</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a210cf14825f736136173613ccba6e5a0" compoundref="cyqlone-storage_8hpp" startline="55" endline="55">cyqlone::CyqloneStorage&lt; T &gt;::data_rq</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a02ff2708ce8de1cd931128a1f22c4de6" compoundref="cyqlone-storage_8hpp" startline="59" endline="59">cyqlone::CyqloneStorage&lt; T &gt;::data_ub</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a9a940b82db836d321c2b85af56718c26" compoundref="cyqlone-storage_8hpp" startline="60" endline="60">cyqlone::CyqloneStorage&lt; T &gt;::data_ub0N</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a3a48efdcefe05de53bbf06d911ac2411" compoundref="cyqlone-storage_8hpp" startline="61">cyqlone::CyqloneStorage&lt; T &gt;::indices_G0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" compoundref="cyqlone-storage_8hpp" startline="43">cyqlone::CyqloneStorage&lt; T &gt;::Ju0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" compoundref="cyqlone-storage_8hpp" startline="41">cyqlone::CyqloneStorage&lt; T &gt;::N_horiz</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::nu</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::nx</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_N</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">cyqlone::LinearOCPStorage::Q</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a18987fd40bfbf98512ea0a831184fceb" compoundref="ocp_8hpp" startline="240" endline="244">cyqlone::LinearOCPStorage::q</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" compoundref="ocp_8hpp" startline="80" endline="84">cyqlone::LinearOCPStorage::R</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a00cf31fb617a4375e87e3bc94b2c023e" compoundref="ocp_8hpp" startline="245" endline="249">cyqlone::LinearOCPStorage::r</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" compoundref="ocp_8hpp" startline="85" endline="89">cyqlone::LinearOCPStorage::S</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a84859ccb81131e7a5bc78e2bada07cf4" compoundref="ocp_8hpp" startline="90" endline="94">cyqlone::LinearOCPStorage::S_trans</references>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1aa2b03be361da3dc445fbe12a7f5b14e4" compoundref="cyqlone-storage_8cpp" startline="79" endline="83">cyqlone::CyqloneStorage&lt; T &gt;::update</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1CyqloneStorage_1aa2b03be361da3dc445fbe12a7f5b14e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::CyqloneStorage&lt; T &gt;::update</definition>
+        <argsstring>(const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update</name>
+        <qualifiedname>cyqlone::CyqloneStorage::update</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="64" column="10" bodyfile="src/cyqlone/src/cyqlone-storage.cpp" bodystart="79" bodyend="83"/>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" compoundref="cyqlone-storage_8hpp" startline="43">cyqlone::CyqloneStorage&lt; T &gt;::Ju0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</definition>
+        <argsstring>(std::span&lt; const value_type &gt; y_compressed, std::span&lt; value_type &gt; y) const</argsstring>
+        <name>reconstruct_ineq_multipliers</name>
+        <qualifiedname>cyqlone::CyqloneStorage::reconstruct_ineq_multipliers</qualifiedname>
+        <param>
+          <type>std::span&lt; const <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>y_compressed</declname>
+        </param>
+        <param>
+          <type>std::span&lt; <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="66" column="10" bodyfile="src/cyqlone/src/cyqlone-storage.cpp" bodystart="18" bodyend="29"/>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" compoundref="cyqlone-storage_8hpp" startline="43">cyqlone::CyqloneStorage&lt; T &gt;::Ju0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" compoundref="cyqlone-storage_8hpp" startline="41">cyqlone::CyqloneStorage&lt; T &gt;::N_horiz</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_N</references>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a43c82f3ed7f435db9b028baba5419b91" compoundref="cyqlone-storage_8cpp" startline="10" endline="15">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" compoundref="cyqlone-storage_8cpp" startline="32" endline="55">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_solution</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1CyqloneStorage_1a43c82f3ed7f435db9b028baba5419b91" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+        <definition>auto cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</definition>
+        <argsstring>(std::span&lt; const value_type &gt; y_compressed) const</argsstring>
+        <name>reconstruct_ineq_multipliers</name>
+        <qualifiedname>cyqlone::CyqloneStorage::reconstruct_ineq_multipliers</qualifiedname>
+        <param>
+          <type>std::span&lt; const <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>y_compressed</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="69" column="5" bodyfile="src/cyqlone/src/cyqlone-storage.cpp" bodystart="10" bodyend="15"/>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" compoundref="cyqlone-storage_8hpp" startline="41">cyqlone::CyqloneStorage&lt; T &gt;::N_horiz</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_N</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" compoundref="cyqlone-storage_8cpp" startline="18" endline="29">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a5077445bf9f6dd8b1d187db5eb8ecc20" kindref="member">Solution</ref></type>
+        <definition>auto cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_solution</definition>
+        <argsstring>(const LinearOCPStorage &amp;ocp, std::span&lt; const value_type &gt; ux_compressed, std::span&lt; const value_type &gt; y_compressed, std::span&lt; const value_type &gt; λ_compressed) const</argsstring>
+        <name>reconstruct_solution</name>
+        <qualifiedname>cyqlone::CyqloneStorage::reconstruct_solution</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>ux_compressed</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>y_compressed</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>λ_compressed</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="75" column="14" bodyfile="src/cyqlone/src/cyqlone-storage.cpp" bodystart="32" bodyend="55"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1aa187d42123b8a9ea7d9d6d9044db4844" compoundref="ocp_8hpp" startline="376">cyqlone::LinearOCPStorage::Solution::equality_multipliers</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a27048ba2583ea8247b4d5dc35d5f7038" compoundref="ocp_8hpp" startline="376">cyqlone::LinearOCPStorage::Solution::inequality_multipliers</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" compoundref="cyqlone-storage_8hpp" startline="41">cyqlone::CyqloneStorage&lt; T &gt;::N_horiz</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::nu</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::nx</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_N</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" compoundref="cyqlone-storage_8cpp" startline="18" endline="29">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_ineq_multipliers</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a3ea90dd6d6b601c9c919ab2edb251b7d" compoundref="ocp_8hpp" startline="376">cyqlone::LinearOCPStorage::Solution::solution</references>
+        <references refid="group__linalg__blas__hl_1gaed74d5df153a525f319dd183aee84622">guanaqo::blas::xgemv_T</references>
+        <references refid="group__linalg__blas__hl_1gac9091441d928e985a0bdcd8170bf3d86">guanaqo::blas::xsymv_L</references>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1ad01b4d57231a32421e798a03be313310" compoundref="cyqlone-storage_8cpp" startline="58" endline="65">cyqlone::CyqloneStorage&lt; T &gt;::compute_kkt_error</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1CyqloneStorage_1ad01b4d57231a32421e798a03be313310" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage_1a8800a636bfb956a3750797b6849c82fb" kindref="member">KKTError</ref></type>
+        <definition>auto cyqlone::CyqloneStorage&lt; T &gt;::compute_kkt_error</definition>
+        <argsstring>(const LinearOCPStorage &amp;ocp, std::span&lt; const value_type &gt; ux_compressed, std::span&lt; const value_type &gt; y_compressed, std::span&lt; const value_type &gt; λ_compressed) const</argsstring>
+        <name>compute_kkt_error</name>
+        <qualifiedname>cyqlone::CyqloneStorage::compute_kkt_error</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>ux_compressed</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>y_compressed</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const <ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref> &gt;</type>
+          <declname>λ_compressed</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="80" column="14" bodyfile="src/cyqlone/src/cyqlone-storage.cpp" bodystart="58" bodyend="65"/>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" compoundref="cyqlone-storage_8cpp" startline="32" endline="55">cyqlone::CyqloneStorage&lt; T &gt;::reconstruct_solution</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref></type>
+        <definition>CyqloneStorage&lt; T &gt; cyqlone::CyqloneStorage&lt; T &gt;::build</definition>
+        <argsstring>(const LinearOCPStorage &amp;ocp, index_t ny_0=-1)</argsstring>
+        <name>build</name>
+        <qualifiedname>cyqlone::CyqloneStorage::build</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>ny_0</declname>
+          <defval>-1</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="65" column="27" bodyfile="src/cyqlone/src/cyqlone-storage.cpp" bodystart="148" bodyend="166"/>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">cyqlone::LinearOCPStorage::dim</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" compoundref="cyqlone-storage_8hpp" startline="43">cyqlone::CyqloneStorage&lt; T &gt;::Ju0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::nu</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::nx</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_N</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</references>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a9a50c58845ad3929bc28241ad1ef0991" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="168" endline="232">run_benchmark</referencedby>
+        <referencedby refid="group__topic-optimization-solvers-ocp_1ga8aac8ebf6f85aba82b32a927bc9bea00" compoundref="ocp-backend-cyqlone_8tpp" startline="614" endline="618">cyqlone::qpalm::update_cyqpalm_backend</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>index_t</type>
+        <definition>index_t cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</definition>
+        <argsstring>(const LinearOCPStorage &amp;ocp, std::vector&lt; bool &gt; &amp;Ju0)</argsstring>
+        <name>count_constr_0</name>
+        <qualifiedname>cyqlone::CyqloneStorage::count_constr_0</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; bool &gt; &amp;</type>
+          <declname>Ju0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="70" column="20" bodyfile="src/cyqlone/src/cyqlone-storage.cpp" bodystart="68" bodyend="76"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" compoundref="ocp_8hpp" startline="111" endline="115">cyqlone::LinearOCPStorage::D</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">cyqlone::LinearOCPStorage::dim</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" compoundref="cyqlone-storage_8hpp" startline="43">cyqlone::CyqloneStorage&lt; T &gt;::Ju0</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::nu</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::nx</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny</references>
+        <references refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" compoundref="cyqlone-storage_8hpp" startline="42">cyqlone::CyqloneStorage&lt; T &gt;::ny_N</references>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1aa2b03be361da3dc445fbe12a7f5b14e4" compoundref="cyqlone-storage_8cpp" startline="79" endline="83">cyqlone::CyqloneStorage&lt; T &gt;::update</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Storage for a linear-quadratic OCP with the initial states x₀ eliminated. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><programlisting><codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ₙ₋₁</highlight></codeline>
+<codeline><highlight class="normal">minimize<sp/><sp/><sp/><sp/>∑<sp/>[½<sp/>uᵢᵀ<sp/>Rᵢ<sp/>uᵢ<sp/>+<sp/>uᵢᵀ<sp/>Sᵢ<sp/>xᵢ<sp/>+<sp/>½<sp/>xᵢᵀ<sp/>Qᵢ<sp/>xᵢ<sp/>+<sp/>rᵢᵀuᵢ<sp/>+<sp/>qᵢᵀxᵢ]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ⁱ⁼¹</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>½<sp/>u₀ᵀ<sp/>R₀<sp/>u₀<sp/>+<sp/>(r₀<sp/>+<sp/>S₀<sp/>xᵢₙᵢₜ)ᵀ<sp/>u₀</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>½<sp/>xₙᵀ<sp/>Qₙ<sp/>xₙ<sp/>+<sp/>qₙᵀ<sp/>xₙ</highlight></codeline>
+<codeline><highlight class="normal">s.t.<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>xᵢ₊₁<sp/>=<sp/>Aᵢ<sp/>xᵢ<sp/>+<sp/>Bᵢ<sp/>uᵢ<sp/>+<sp/>cᵢ</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lᵢ<sp/><sp/><sp/>≤<sp/>Cᵢ<sp/>xᵢ<sp/>+<sp/>Dᵢ<sp/>uᵢ<sp/>≤<sp/>uᵢ</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>l₀<sp/>-<sp/>C₀<sp/>xᵢₙᵢₜ<sp/>≤<sp/>D₀<sp/>U₀<sp/>≤<sp/>u₀<sp/>-<sp/>C₀<sp/>xᵢₙᵢₜ</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lₙ<sp/><sp/><sp/>≤<sp/>Cₙ<sp/>xₙ<sp/>≤<sp/>uₙ</highlight></codeline>
+</programlisting> The matrices are combined per stage, with inputs ordered first. The first and last stage are special because of the lack of x₀ and uₙ. <programlisting><codeline><highlight class="normal">Hᵢ<sp/>=<sp/>[<sp/>Rᵢ<sp/><sp/>Sᵢ<sp/>],<sp/><sp/><sp/><sp/>H₀<sp/>=<sp/>[<sp/>R₀<sp/><sp/>0<sp/><sp/>],<sp/><sp/><sp/><sp/>Fᵢ<sp/>=<sp/>[<sp/>Bᵢ<sp/><sp/>Aᵢ<sp/>],<sp/><sp/><sp/><sp/>Gᵢ<sp/>=<sp/>[<sp/>Dᵢ<sp/><sp/>Cᵢ<sp/>],<sp/><sp/><sp/><sp/>G₀<sp/>=<sp/>[<sp/>D₀<sp/>Cₙ<sp/>]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>[<sp/>Sᵢᵀ<sp/>Qᵢ<sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/>0<sp/><sp/><sp/>Qₙ<sp/>]</highlight></codeline>
+</programlisting> Due to the elimination of x₀, there may be fewer constraints for the first stage, which is tracked by the Ju0 mask. When reconstructing the solution, the multipliers for eliminated constraints are set to zero (we assume that the initial state is feasible w.r.t. the state constraints). </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>batmat::matrix::Matrix&lt; value_type, index_t &gt;</label>
+        <link refid="structbatmat_1_1matrix_1_1Matrix" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::CyqloneStorage&lt; T &gt;</label>
+        <link refid="structcyqlone_1_1CyqloneStorage"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+Ju0</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+data_F</edgelabel>
+          <edgelabel>+data_G</edgelabel>
+          <edgelabel>+data_G0N</edgelabel>
+          <edgelabel>+data_H</edgelabel>
+          <edgelabel>+data_c</edgelabel>
+          <edgelabel>+data_lb</edgelabel>
+          <edgelabel>+data_lb0N</edgelabel>
+          <edgelabel>+data_rq</edgelabel>
+          <edgelabel>+data_ub</edgelabel>
+          <edgelabel>+data_ub0N</edgelabel>
+          <edgelabel>  ...</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+indices_G0</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; bool &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; index_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" line="39" column="1" bodyfile="src/cyqlone/include/cyqlone/cyqlone-storage.hpp" bodystart="39" bodyend="84"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>build</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1ad01b4d57231a32421e798a03be313310" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>compute_kkt_error</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>count_constr_0</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a0f2e51a560de04b725a2835530c9d6c1" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_c</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a9858e75b9e77fa90942ae9e93bee6cd0" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_F</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1ac42f16fa5afd1539c75464abf5224c2e" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_G</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a9d576ab731437a666d1779180ab0da93" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_G0N</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1ae59a1ad04812a951b67cffb555e2c46e" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_H</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a39945295b599e4e6eb8603d4545fbb01" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_lb</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1af7d6268a019a69170affc90f45f6fcbb" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_lb0N</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a210cf14825f736136173613ccba6e5a0" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_rq</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a02ff2708ce8de1cd931128a1f22c4de6" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_ub</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a9a940b82db836d321c2b85af56718c26" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>data_ub0N</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a3a48efdcefe05de53bbf06d911ac2411" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>indices_G0</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>Ju0</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a8800a636bfb956a3750797b6849c82fb" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>KKTError</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>matrix</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>N_horiz</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>nu</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>nx</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>ny</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>ny_0</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>ny_N</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>reconstruct_ineq_multipliers</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a43c82f3ed7f435db9b028baba5419b91" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>reconstruct_ineq_multipliers</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>reconstruct_solution</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a5077445bf9f6dd8b1d187db5eb8ecc20" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>Solution</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1aa2b03be361da3dc445fbe12a7f5b14e4" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>update</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>update_impl</name></member>
+      <member refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneStorage</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

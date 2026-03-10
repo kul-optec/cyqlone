@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1SparseMatrixBuilder" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::SparseMatrixBuilder</compoundname>
+    <includes refid="sparse_8hpp" local="no">cyqlone/sparse.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::SparseMatrixBuilder::rows</definition>
+        <argsstring></argsstring>
+        <name>rows</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::rows</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="38" column="13" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="38" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1ad993733a1dec0503e7673f660a4bad9d" compoundref="sparse_8hpp" startline="56" endline="82">add</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" compoundref="sparse_8hpp" startline="43" endline="53">add</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a41d1b610717191be7fc1e42be93a0b39" compoundref="sparse_8hpp" startline="84" endline="91">add_diag</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" compoundref="sparse_8hpp" startline="104" endline="114">build</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" compoundref="sparse_8hpp" startline="93" endline="102">build</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::SparseMatrixBuilder::cols</definition>
+        <argsstring></argsstring>
+        <name>cols</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::cols</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="38" column="19" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="38" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1ad993733a1dec0503e7673f660a4bad9d" compoundref="sparse_8hpp" startline="56" endline="82">add</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" compoundref="sparse_8hpp" startline="43" endline="53">add</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a41d1b610717191be7fc1e42be93a0b39" compoundref="sparse_8hpp" startline="84" endline="91">add_diag</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" compoundref="sparse_8hpp" startline="104" endline="114">build</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" compoundref="sparse_8hpp" startline="93" endline="102">build</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrixBuilder_1a19ecbe0cd231677dec36961eb9f6c2f5" prot="public" static="no" mutable="no">
+        <type><ref refid="group__linalg__sparsity_1gae1bb6ee70c1d06fc6940a7a867b5754a" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">Symmetry</ref></type>
+        <definition>Symmetry cyqlone::SparseMatrixBuilder::symmetry</definition>
+        <argsstring></argsstring>
+        <name>symmetry</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::symmetry</qualifiedname>
+        <initializer>= Symmetry::Unsymmetric</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="39" column="14" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="39" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" compoundref="sparse_8hpp" startline="104" endline="114">build</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" compoundref="sparse_8hpp" startline="93" endline="102">build</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::SparseMatrixBuilder::row_indices</definition>
+        <argsstring></argsstring>
+        <name>row_indices</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::row_indices</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="40" column="17" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="40" bodyend="40"/>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" compoundref="sparse_8hpp" startline="43" endline="53">add</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" compoundref="sparse_8hpp" startline="104" endline="114">build</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" compoundref="sparse_8hpp" startline="93" endline="102">build</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::SparseMatrixBuilder::col_indices</definition>
+        <argsstring></argsstring>
+        <name>col_indices</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::col_indices</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="40" column="29" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="40" bodyend="40"/>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" compoundref="sparse_8hpp" startline="43" endline="53">add</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" compoundref="sparse_8hpp" startline="104" endline="114">build</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" compoundref="sparse_8hpp" startline="93" endline="102">build</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::SparseMatrixBuilder::values</definition>
+        <argsstring></argsstring>
+        <name>values</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::values</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="41" column="17" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="41" bodyend="41"/>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" compoundref="sparse_8hpp" startline="43" endline="53">add</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" compoundref="sparse_8hpp" startline="104" endline="114">build</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" compoundref="sparse_8hpp" startline="93" endline="102">build</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::SparseMatrixBuilder::add</definition>
+        <argsstring>(index_t row, index_t col, real_t value)</argsstring>
+        <name>add</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::add</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="43" column="10" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="43" bodyend="53"/>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" compoundref="sparse_8hpp" startline="40" endline="40">col_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" compoundref="sparse_8hpp" startline="38">cols</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" compoundref="sparse_8hpp" startline="40" endline="40">row_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" compoundref="sparse_8hpp" startline="38">rows</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" compoundref="sparse_8hpp" startline="41" endline="41">values</references>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1ad993733a1dec0503e7673f660a4bad9d" compoundref="sparse_8hpp" startline="56" endline="82">add</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrixBuilder_1a41d1b610717191be7fc1e42be93a0b39" compoundref="sparse_8hpp" startline="84" endline="91">add_diag</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1ad5b252edc37cdcf3d6b026287a60bb68" compoundref="sparse_8tpp" startline="283" endline="317">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build_sparse_diag</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1SparseMatrixBuilder_1ad993733a1dec0503e7673f660a4bad9d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::convertible_to&lt; real_t &gt;</type>
+            <declname>T</declname>
+            <defname>T</defname>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class S</type>
+          </param>
+          <param>
+            <type><ref refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95bae" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::StorageOrder</ref></type>
+            <declname>O</declname>
+            <defname>O</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::SparseMatrixBuilder::add</definition>
+        <argsstring>(index_t row, index_t col, guanaqo::MatrixView&lt; T, I, S, O &gt; dense, std::remove_cvref_t&lt; T &gt; scale=1, batmat::linalg::MatrixStructure structure=batmat::linalg::MatrixStructure::General)</argsstring>
+        <name>add</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::add</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; T, I, S, O &gt;</type>
+          <declname>dense</declname>
+        </param>
+        <param>
+          <type>std::remove_cvref_t&lt; T &gt;</type>
+          <declname>scale</declname>
+          <defval>1</defval>
+        </param>
+        <param>
+          <type><ref refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::MatrixStructure</ref></type>
+          <declname>structure</declname>
+          <defval><ref refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629ca0db377921f4ce762c62526131097968f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::MatrixStructure::General</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="56" column="10" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="56" bodyend="82"/>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" compoundref="sparse_8hpp" startline="43" endline="53">add</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" compoundref="sparse_8hpp" startline="38">cols</references>
+        <references refid="structguanaqo_1_1MatrixView_1aa097c43922d29e04d9d8d649eabdf589">guanaqo::MatrixView&lt; class T, class I, class S, StorageOrder O &gt;::cols</references>
+        <references refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629ca0db377921f4ce762c62526131097968f">batmat::linalg::General</references>
+        <references refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629ca8b6fd06efea0c23bd14af4292b609553">batmat::linalg::LowerTriangular</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" compoundref="sparse_8hpp" startline="38">rows</references>
+        <references refid="structguanaqo_1_1MatrixView_1a45ea549d32e825c0f0d384c90f056a83">guanaqo::MatrixView&lt; class T, class I, class S, StorageOrder O &gt;::rows</references>
+        <references refid="group__topic-linalg_1gaeee444a2231976efc5f93a58cada45c5" compoundref="linalg_8hpp" startline="294" endline="297">cyqlone::linalg::scale</references>
+        <references refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629cace546798a67931b38dee5a153f9cf688">batmat::linalg::UpperTriangular</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1SparseMatrixBuilder_1a41d1b610717191be7fc1e42be93a0b39" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::SparseMatrixBuilder::add_diag</definition>
+        <argsstring>(index_t row, index_t col, real_t value, index_t n)</argsstring>
+        <name>add_diag</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::add_diag</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>row</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="84" column="10" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="84" bodyend="91"/>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" compoundref="sparse_8hpp" startline="43" endline="53">add</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" compoundref="sparse_8hpp" startline="38">cols</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" compoundref="sparse_8hpp" startline="38">rows</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" refqual="lvalue" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1SparseMatrix" kindref="compound">SparseMatrix</ref></type>
+        <definition>SparseMatrix cyqlone::SparseMatrixBuilder::build</definition>
+        <argsstring>() const &amp;</argsstring>
+        <name>build</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::build</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="93" column="19" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="93" bodyend="102"/>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" compoundref="sparse_8hpp" startline="40" endline="40">col_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" compoundref="sparse_8hpp" startline="38">cols</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" compoundref="sparse_8hpp" startline="40" endline="40">row_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" compoundref="sparse_8hpp" startline="38">rows</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a19ecbe0cd231677dec36961eb9f6c2f5" compoundref="sparse_8hpp" startline="39">symmetry</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" compoundref="sparse_8hpp" startline="41" endline="41">values</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" refqual="rvalue" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1SparseMatrix" kindref="compound">SparseMatrix</ref></type>
+        <definition>SparseMatrix cyqlone::SparseMatrixBuilder::build</definition>
+        <argsstring>() &amp;&amp;</argsstring>
+        <name>build</name>
+        <qualifiedname>cyqlone::SparseMatrixBuilder::build</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="104" column="19" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="104" bodyend="114"/>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" compoundref="sparse_8hpp" startline="40" endline="40">col_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" compoundref="sparse_8hpp" startline="38">cols</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" compoundref="sparse_8hpp" startline="40" endline="40">row_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" compoundref="sparse_8hpp" startline="38">rows</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1a19ecbe0cd231677dec36961eb9f6c2f5" compoundref="sparse_8hpp" startline="39">symmetry</references>
+        <references refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" compoundref="sparse_8hpp" startline="41" endline="41">values</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>A builder for constructing a <ref refid="structcyqlone_1_1SparseMatrix" kindref="compound">SparseMatrix</ref> incrementally. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::SparseMatrixBuilder</label>
+        <link refid="structcyqlone_1_1SparseMatrixBuilder"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+col_indices</edgelabel>
+          <edgelabel>+row_indices</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+values</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; index_t &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="37" column="1" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="37" bodyend="115"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>add</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1ad993733a1dec0503e7673f660a4bad9d" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>add</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1a41d1b610717191be7fc1e42be93a0b39" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>add_diag</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>build</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>build</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>col_indices</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>cols</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>row_indices</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>rows</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1a19ecbe0cd231677dec36961eb9f6c2f5" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>symmetry</name></member>
+      <member refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrixBuilder</scope><name>values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,614 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="pcr_8tpp" kind="file" language="C++">
+    <compoundname>pcr.tpp</compoundname>
+    <includes refid="cyqlone_8hpp" local="no">cyqlone/cyqlone.hpp</includes>
+    <includes refid="linalg_8hpp" local="no">cyqlone/linalg.hpp</includes>
+    <includes local="no">batmat/assume.hpp</includes>
+    <includes local="no">batmat/loop.hpp</includes>
+    <includes local="no">batmat/linalg/compress.hpp</includes>
+    <includes local="no">batmat/linalg/gemm-diag.hpp</includes>
+    <includes local="no">batmat/linalg/gemm.hpp</includes>
+    <includes local="no">batmat/linalg/gemv.hpp</includes>
+    <includes local="no">batmat/linalg/potrf.hpp</includes>
+    <includes local="no">batmat/linalg/shift.hpp</includes>
+    <includes local="no">batmat/linalg/trsm.hpp</includes>
+    <includes local="no">batmat/linalg/trtri.hpp</includes>
+    <includes local="no">batmat/ops/rotate.hpp</includes>
+    <includes local="no">batmat/simd.hpp</includes>
+    <includes local="no">utility</includes>
+    <includedby refid="cyqlone_8cpp" local="no">src/cyqlone/src/cyqlone.cpp</includedby>
+    <incdepgraph>
+      <node id="15">
+        <label>cyqlone/barrier.hpp</label>
+        <link refid="barrier_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/cyqlone-params.hpp</label>
+        <link refid="cyqlone-params_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>cyqlone/cyqlone-storage.hpp</label>
+        <link refid="cyqlone-storage_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone/cyqlone.hpp</label>
+        <link refid="cyqlone_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/implementation/pcr.tpp</label>
+        <link refid="pcr_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>cyqlone/linalg.hpp</label>
+        <link refid="linalg_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>cyqlone/parallel.hpp</label>
+        <link refid="parallel_8hpp"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>cyqlone/reduce.hpp</label>
+        <link refid="reduce_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>cyqlone/sparse.hpp</label>
+        <link refid="sparse_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>cyqlone/timing.hpp</label>
+        <link refid="timing_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="18">
+        <label>atomic</label>
+      </node>
+      <node id="16">
+        <label>batmat/assume.hpp</label>
+      </node>
+      <node id="4">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="50">
+        <label>batmat/linalg/compress.hpp</label>
+      </node>
+      <node id="44">
+        <label>batmat/linalg/copy.hpp</label>
+      </node>
+      <node id="51">
+        <label>batmat/linalg/gemm-diag.hpp</label>
+      </node>
+      <node id="52">
+        <label>batmat/linalg/gemm.hpp</label>
+      </node>
+      <node id="53">
+        <label>batmat/linalg/gemv.hpp</label>
+      </node>
+      <node id="34">
+        <label>batmat/linalg/hyhound.hpp</label>
+      </node>
+      <node id="54">
+        <label>batmat/linalg/potrf.hpp</label>
+      </node>
+      <node id="45">
+        <label>batmat/linalg/shift.hpp</label>
+      </node>
+      <node id="46">
+        <label>batmat/linalg/simdify.hpp</label>
+      </node>
+      <node id="28">
+        <label>batmat/linalg/structure.hpp</label>
+      </node>
+      <node id="55">
+        <label>batmat/linalg/trsm.hpp</label>
+      </node>
+      <node id="56">
+        <label>batmat/linalg/trtri.hpp</label>
+      </node>
+      <node id="49">
+        <label>batmat/loop.hpp</label>
+      </node>
+      <node id="35">
+        <label>batmat/matrix/layout.hpp</label>
+      </node>
+      <node id="12">
+        <label>batmat/matrix/matrix.hpp</label>
+      </node>
+      <node id="24">
+        <label>batmat/openmp.h</label>
+      </node>
+      <node id="47">
+        <label>batmat/ops/rotate.hpp</label>
+      </node>
+      <node id="36">
+        <label>batmat/simd.hpp</label>
+      </node>
+      <node id="33">
+        <label>batmat/timing.hpp</label>
+      </node>
+      <node id="37">
+        <label>batmat/unroll.h</label>
+      </node>
+      <node id="39">
+        <label>bit</label>
+      </node>
+      <node id="40">
+        <label>cassert</label>
+      </node>
+      <node id="43">
+        <label>cmath</label>
+      </node>
+      <node id="30">
+        <label>concepts</label>
+      </node>
+      <node id="19">
+        <label>cstdint</label>
+      </node>
+      <node id="20">
+        <label>cstring</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="29">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="10">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="25">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+      <node id="6">
+        <label>limits</label>
+      </node>
+      <node id="22">
+        <label>memory</label>
+      </node>
+      <node id="31">
+        <label>ranges</label>
+      </node>
+      <node id="13">
+        <label>span</label>
+      </node>
+      <node id="7">
+        <label>stdexcept</label>
+      </node>
+      <node id="48">
+        <label>tuple</label>
+      </node>
+      <node id="23">
+        <label>type_traits</label>
+      </node>
+      <node id="26">
+        <label>utility</label>
+      </node>
+      <node id="11">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/implementation/pcr.tpp</label>
+        <link refid="pcr_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/cyqlone/src/cyqlone.cpp</label>
+        <link refid="cyqlone_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="cyqlone_8hpp" kindref="compound">cyqlone/cyqlone.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="linalg_8hpp" kindref="compound">cyqlone/linalg.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/assume.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/loop.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/compress.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/gemm-diag.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/gemm.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/gemv.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/potrf.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/shift.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/trsm.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/trtri.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/ops/rotate.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/simd.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;utility&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">CYQLONE_NS(cyqlone)<sp/>{</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">batmat::linalg;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Algorithm<sp/>6<sp/>“PCR:<sp/>Solution<sp/>of<sp/>a<sp/>symmetric<sp/>block-tridiagonal<sp/>system<sp/>using<sp/>parallel<sp/>cyclic<sp/>reduction”</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Algorithm<sp/>7<sp/>“Periodic<sp/>PCR<sp/>factorization<sp/>of<sp/>a<sp/>block-tridiagonal<sp/>matrix”</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="26"><highlight class="comment">//!<sp/>[PCR<sp/>factor<sp/>serial]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>VL,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/>StorageOrder<sp/>DefaultOrder,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Ctx&gt;</highlight></codeline>
+<codeline lineno="28" refid="structcyqlone_1_1TricyqleSolver_1ab77d3511e2d8d513f8c6bf225bbd1148" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ab77d3511e2d8d513f8c6bf225bbd1148" kindref="member">TricyqleSolver&lt;VL, T, DefaultOrder, Ctx&gt;::factor_pcr</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]&lt;index_t...<sp/>Levels&gt;(std::integer_sequence&lt;index_t,<sp/>Levels...&gt;)<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(this-&gt;</highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1afc99f3e0c97a8abd568553ca869b81d1" kindref="member">factor_pcr_level&lt;Levels&gt;</ref>(),<sp/>...);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>}(std::make_integer_sequence&lt;index_t,<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()&gt;{});</highlight></codeline>
+<codeline lineno="32"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>level<sp/>is<sp/>a<sp/>template<sp/>parameter<sp/>to<sp/>allow<sp/>for<sp/>compile-time<sp/>vector<sp/>rotations.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="comment">//<sp/>The<sp/>number<sp/>of<sp/>levels<sp/>is<sp/>small,<sp/>so<sp/>this<sp/>should<sp/>not<sp/>bloat<sp/>the<sp/>code<sp/>too<sp/>much.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>VL,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/>StorageOrder<sp/>DefaultOrder,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Ctx&gt;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>Level&gt;</highlight></codeline>
+<codeline lineno="38" refid="structcyqlone_1_1TricyqleSolver_1afc99f3e0c97a8abd568553ca869b81d1" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1afc99f3e0c97a8abd568553ca869b81d1" kindref="member">TricyqleSolver&lt;VL, T, DefaultOrder, Ctx&gt;::factor_pcr_level</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Factor<sp/>PCR&quot;</highlight><highlight class="normal">,<sp/>Level);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>M<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>Level<sp/>==<sp/>0<sp/>?<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aef557f2fcdecb0dcff9d05ca4f41a70d" kindref="member">cr_L</ref>.batch(0)<sp/>:<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ac11c0ec3fd165450dd92fb58cdda74bc" kindref="member">pcr_M</ref>.batch(0);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>K<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>Level<sp/>==<sp/>0<sp/>?<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aa1507aaa86895db2fd1e012a7fd45493" kindref="member">cr_Y</ref>.batch(0)<sp/>:<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aee76308f1db45678cb49400f5fbe20d4" kindref="member">pcr_Y</ref>.batch(Level);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>M_next<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ac11c0ec3fd165450dd92fb58cdda74bc" kindref="member">pcr_M</ref>.batch(0);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>L<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(Level),<sp/>Y<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aee76308f1db45678cb49400f5fbe20d4" kindref="member">pcr_Y</ref>.batch(Level),<sp/>U<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a8d54a1b6808c4c6b02100237d4e15326" kindref="member">pcr_U</ref>.batch(Level);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>r<sp/>=<sp/>1<sp/>&lt;&lt;<sp/>Level;<sp/></highlight><highlight class="comment">//<sp/>2^l</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>9|<sp/><sp/>K̊(k)<sp/>=<sp/>K(k)<sp/>+<sp/>K(k+2^l)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(Level<sp/>+<sp/>1<sp/>==<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()<sp/>&amp;&amp;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a8731c7fb3868ef8a43a28dde8d7c20c0" kindref="member">merge_last_level_pcr</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>In<sp/>the<sp/>last<sp/>level,<sp/>we<sp/>only<sp/>have<sp/>a<sp/>single<sp/>sub-diagonal<sp/>block,<sp/>which<sp/>is<sp/>computed<sp/>as</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>K(k)<sp/>=<sp/>-Y(k+2^l)<sp/>U(k+2^l)ᵀ<sp/>-<sp/>U(k-2^l)<sp/>Y(k-2^l)ᵀ.<sp/>Since<sp/>2^l<sp/>=<sp/>-2^l<sp/>mod<sp/>v,<sp/>we<sp/>only<sp/>need<sp/>to</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>compute<sp/>one<sp/>term,<sp/>and<sp/>then<sp/>add<sp/>its<sp/>transpose,<sp/>K(k)<sp/>←<sp/>K(k)<sp/>+<sp/>K(k+2^l)ᵀ.<sp/>Because<sp/>the<sp/>right</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>half<sp/>of<sp/>the<sp/>batches<sp/>in<sp/>K<sp/>are<sp/>zero<sp/>in<sp/>the<sp/>absence<sp/>of<sp/>coupling<sp/>between<sp/>the<sp/>first<sp/>and</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>last<sp/>blocks,<sp/>we<sp/>can<sp/>perform<sp/>the<sp/>transposition<sp/>in-place.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="structcyqlone_1_1TricyqleSolver_1a8acb277cac93b1388932b018ac8a8759" kindref="member">circular</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Merge<sp/>last<sp/>PCR<sp/>level&quot;</highlight><highlight class="normal">,<sp/>Level,<sp/>K.depth()<sp/>/<sp/>2<sp/>*<sp/>K.rows()<sp/>*<sp/>K.cols());</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacebatmat_1_1datapar" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::datapar</ref>;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">simd_half<sp/>=<sp/><ref refid="namespacebatmat_1_1datapar_1ac2f2c9f35f77cfd396640965c5ff04d4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">deduced_simd</ref>&lt;T,<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ac6ba1b63d73d96fdb1d2c451f169198a" kindref="member">v</ref><sp/>/<sp/>2&gt;;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>K.cols();<sp/>++j)</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>K.rows();<sp/>++i)</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacebatmat_1_1datapar_1a37a115c835b05841a7f348320e1e43b6" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">aligned_store</ref>(<ref refid="namespacebatmat_1_1datapar_1a9e5512aee8f62a9475578de6da9dd666" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">aligned_load&lt;simd_half&gt;</ref>(&amp;K(0,<sp/>j,<sp/>i)),<sp/>&amp;K(<ref refid="structcyqlone_1_1TricyqleSolver_1ac6ba1b63d73d96fdb1d2c451f169198a" kindref="member">v</ref><sp/>/<sp/>2,<sp/>i,<sp/>j));</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Merge<sp/>last<sp/>PCR<sp/>level&quot;</highlight><highlight class="normal">,<sp/>Level,<sp/>2<sp/>*<sp/>K.depth()<sp/>*<sp/>K.rows()<sp/>*<sp/>K.cols());</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>In<sp/>case<sp/>of<sp/>circular<sp/>coupling,<sp/>we<sp/>cannot<sp/>exploit<sp/>the<sp/>complementarity<sp/>of<sp/>the<sp/>batches,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>so<sp/>we<sp/>cannot<sp/>perform<sp/>the<sp/>transposition<sp/>in-place.<sp/>Instead,<sp/>we<sp/>transpose<sp/>it<sp/>into<sp/>U</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>first<sp/>(U<sp/>is<sp/>not<sp/>used<sp/>here,<sp/>so<sp/>we<sp/>can<sp/>overwrite<sp/>it),<sp/>and<sp/>then<sp/>add<sp/>it<sp/>to<sp/>K.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>is<sp/>there<sp/>a<sp/>better<sp/>way?</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga9df61b993f7e79ad21eddb76b4c2089e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::copy</ref>(K.transposed(),<sp/>U,<sp/><ref refid="namespacebatmat_1_1linalg_1a18f5c2df0c1ec2ea5038ad05d81946d1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga63e5d7edfbf2831545aea00d9a75966b" kindref="member">linalg::add</ref>(K,<sp/>U);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>4|<sp/><sp/>U(k)<sp/>=<sp/>K(k-2^l)ᵀ<sp/>L(k)⁻ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>10|<sp/><sp/>U(k)<sp/>=<sp/>K̊(k-2^l)ᵀ<sp/>L(k)⁻ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(K.transposed(),<sp/><ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(L.transposed()),<sp/>U,<sp/><ref refid="namespacebatmat_1_1linalg_1ad955091c80d01d8d4201c828ec0c4c2c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_A&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>5|<sp/><sp/>Y(k)<sp/>=<sp/>K(k)<sp/>L(k)⁻ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(Level<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()<sp/>||<sp/>!<ref refid="structcyqlone_1_1TricyqleSolver_1a8731c7fb3868ef8a43a28dde8d7c20c0" kindref="member">merge_last_level_pcr</ref>)</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(K,<sp/><ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(L.transposed()),<sp/>Y);</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>8|<sp/><sp/>M(k)⁺<sp/>=<sp/>M(k)<sp/>-<sp/>Y(k-2^l)<sp/>Y(k-2^l)ᵀ<sp/>-<sp/>U(k+2^l)<sp/>U(k+2^l)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>11|<sp/><sp/>M(k)⁺<sp/>=<sp/>M(k)<sp/>-<sp/>U(k+2^l)<sp/>U(k+2^l)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/>--<sp/>implemented<sp/>as<sp/>M(k+2^l)⁺<sp/>=<sp/>U(k)<sp/>U(k)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga19841b227bc4cf6d0949b85b6e201033" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk_sub</ref>(U,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/>--<sp/>followed<sp/>by<sp/><sp/><sp/><sp/>M(k-2^l)⁺<sp/>-=<sp/>M(k-2^l)<sp/>-<sp/>Y(k)<sp/>Y(k)ᵀ<sp/><sp/><sp/><sp/>(except<sp/>in<sp/>the<sp/>last<sp/>level)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(Level<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()<sp/>||<sp/>!<ref refid="structcyqlone_1_1TricyqleSolver_1a8731c7fb3868ef8a43a28dde8d7c20c0" kindref="member">merge_last_level_pcr</ref>)</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga19841b227bc4cf6d0949b85b6e201033" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk_sub</ref>(Y,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;+r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;+r&gt;</ref>);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>2|<sp/><sp/>L(k)⁺<sp/>=<sp/>chol(M(k)⁺)<sp/><sp/><sp/><sp/>--<sp/>for<sp/>the<sp/>next<sp/>level</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>12|<sp/><sp/>L(k)⁺<sp/>=<sp/>chol(M(k)⁺)<sp/><sp/><sp/><sp/>--<sp/>for<sp/>the<sp/>last<sp/>level</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gaa5a48352d831fa72f651dfb4a53bba9e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">potrf</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(<ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(Level<sp/>+<sp/>1)));</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(Level<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>())<sp/>{</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>K_next<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aee76308f1db45678cb49400f5fbe20d4" kindref="member">pcr_Y</ref>.batch(Level<sp/>+<sp/>1);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>7|<sp/><sp/>K(k)⁺<sp/>=<sp/>-Y(k+2^l)<sp/>U(k+2^l)ᵀ<sp/><sp/><sp/><sp/>--<sp/>implemented<sp/>as<sp/>K(k-2^l)⁺<sp/>=<sp/>-Y(k)<sp/>U(k)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga2ecaacbba5614bcbbf95c79023424e64" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">gemm_neg</ref>(Y,<sp/>U.transposed(),<sp/>K_next,<sp/>{},<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>we<sp/>could<sp/>store<sp/>K_next<sp/>in<sp/>U<sp/>instead<sp/>of<sp/>Y,<sp/>so<sp/>the<sp/>last<sp/>level<sp/>would<sp/>not<sp/>need<sp/>extra</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/>storage.<sp/>But<sp/>this<sp/>is<sp/>more<sp/>complex,<sp/>as<sp/>we<sp/>need<sp/>to<sp/>transpose<sp/>it<sp/>here,<sp/>so<sp/>we<sp/>can</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/>perform<sp/>the<sp/>trsm<sp/>in<sp/>the<sp/>next<sp/>level<sp/>in-place<sp/>(which<sp/>is<sp/>not<sp/>possible<sp/>if<sp/>the<sp/>input</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/>and<sp/>output<sp/>are<sp/>transposed).</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="96"><highlight class="normal">}</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="97"><highlight class="comment">//!<sp/>[PCR<sp/>factor<sp/>serial]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="99"><highlight class="comment">//!<sp/>[PCR<sp/>factor]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>VL,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/>StorageOrder<sp/>DefaultOrder,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Ctx&gt;</highlight></codeline>
+<codeline lineno="101" refid="structcyqlone_1_1TricyqleSolver_1af4e4da068b7b88c23bec221ca7cb19e4" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1af4e4da068b7b88c23bec221ca7cb19e4" kindref="member">TricyqleSolver&lt;VL, T, DefaultOrder, Ctx&gt;::factor_pcr_parallel</ref>(<ref refid="structcyqlone_1_1TricyqleSolver_1affb1753c99cde7e3136139a84f8fbb54" kindref="member">Context</ref><sp/>&amp;ctx)<sp/>{</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">,<sp/>&amp;ctx]&lt;index_t...<sp/>Levels&gt;(std::integer_sequence&lt;index_t,<sp/>Levels...&gt;)<sp/>{</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(this-&gt;</highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ad7503136804e8ef1863af78ca16256cf" kindref="member">factor_pcr_level_parallel&lt;Levels&gt;</ref>(ctx),<sp/>...);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>}(std::make_integer_sequence&lt;index_t,<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()&gt;{});</highlight></codeline>
+<codeline lineno="105"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>VL,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/>StorageOrder<sp/>DefaultOrder,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Ctx&gt;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>Level&gt;</highlight></codeline>
+<codeline lineno="109" refid="structcyqlone_1_1TricyqleSolver_1ad7503136804e8ef1863af78ca16256cf" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ad7503136804e8ef1863af78ca16256cf" kindref="member">TricyqleSolver&lt;VL, T, DefaultOrder, Ctx&gt;::factor_pcr_level_parallel</ref>(<ref refid="structcyqlone_1_1TricyqleSolver_1affb1753c99cde7e3136139a84f8fbb54" kindref="member">Context</ref><sp/>&amp;ctx)<sp/>{</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>M<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>Level<sp/>==<sp/>0<sp/>?<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aef557f2fcdecb0dcff9d05ca4f41a70d" kindref="member">cr_L</ref>.batch(0)<sp/>:<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ac11c0ec3fd165450dd92fb58cdda74bc" kindref="member">pcr_M</ref>.batch(0);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>K<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>Level<sp/>==<sp/>0<sp/>?<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aa1507aaa86895db2fd1e012a7fd45493" kindref="member">cr_Y</ref>.batch(0)<sp/>:<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(Level<sp/>+<sp/>1);</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>M_next<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ac11c0ec3fd165450dd92fb58cdda74bc" kindref="member">pcr_M</ref>.batch(0);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>L<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(Level),<sp/>Y<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aee76308f1db45678cb49400f5fbe20d4" kindref="member">pcr_Y</ref>.batch(Level),<sp/>U<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a8d54a1b6808c4c6b02100237d4e15326" kindref="member">pcr_U</ref>.batch(Level);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>r<sp/>=<sp/>1<sp/>&lt;&lt;<sp/>Level;<sp/></highlight><highlight class="comment">//<sp/>2^l</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Use<sp/>the<sp/>same<sp/>thread<sp/>assignment<sp/>as<sp/>CR</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(ctx.num_thr<sp/>&gt;=<sp/>2);</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>primary<sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a782a7ace2e04f33aaf3a8f13a4232ba2" kindref="member">ν2p</ref>(ctx.index<sp/>+<sp/>1)<sp/>+<sp/>1<sp/>==<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a012802e173a8dc5b1a52ab48d6fbdbc6" kindref="member">lp</ref>(),</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>secondary<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a782a7ace2e04f33aaf3a8f13a4232ba2" kindref="member">ν2p</ref>(ctx.index<sp/>+<sp/>1<sp/>+<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ae7132e8f61a245a3d01fc383af0eb89b" kindref="member">p</ref><sp/>/<sp/>2)<sp/>+<sp/>1<sp/>==<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a012802e173a8dc5b1a52ab48d6fbdbc6" kindref="member">lp</ref>();</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(secondary<sp/>&amp;&amp;<sp/>Level<sp/>+<sp/>1<sp/>==<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>())<sp/>{</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Merge<sp/>last<sp/>PCR<sp/>level&quot;</highlight><highlight class="normal">,<sp/>Level,<sp/>K.depth()<sp/>/<sp/>2<sp/>*<sp/>K.rows()<sp/>*<sp/>K.cols());</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>In<sp/>the<sp/>last<sp/>level,<sp/>we<sp/>only<sp/>have<sp/>a<sp/>single<sp/>sub-diagonal<sp/>block,<sp/>which<sp/>is<sp/>computed<sp/>as</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>K(k)<sp/>=<sp/>-Y(k+2^l)<sp/>U(k+2^l)ᵀ<sp/>-<sp/>U(k-2^l)<sp/>Y(k-2^l)ᵀ.<sp/>Since<sp/>2^l<sp/>=<sp/>-2^l<sp/>mod<sp/>v,<sp/>we<sp/>only<sp/>need<sp/>to</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>compute<sp/>one<sp/>term,<sp/>and<sp/>then<sp/>add<sp/>its<sp/>transpose,<sp/>K(k)<sp/>←<sp/>K(k)<sp/>+<sp/>K(k+2^l)ᵀ.<sp/>Because<sp/>the<sp/>right</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>half<sp/>of<sp/>the<sp/>batches<sp/>in<sp/>K<sp/>are<sp/>zero<sp/>in<sp/>the<sp/>absence<sp/>of<sp/>coupling<sp/>between<sp/>the<sp/>first<sp/>and</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>last<sp/>blocks,<sp/>we<sp/>can<sp/>perform<sp/>the<sp/>transposition<sp/>in-place.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="structcyqlone_1_1TricyqleSolver_1a8acb277cac93b1388932b018ac8a8759" kindref="member">circular</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacebatmat_1_1datapar" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::datapar</ref>;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">simd_half<sp/>=<sp/><ref refid="namespacebatmat_1_1datapar_1ac2f2c9f35f77cfd396640965c5ff04d4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">deduced_simd</ref>&lt;T,<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ac6ba1b63d73d96fdb1d2c451f169198a" kindref="member">v</ref><sp/>/<sp/>2&gt;;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>K.cols();<sp/>++j)</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>K.rows();<sp/>++i)</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacebatmat_1_1datapar_1a37a115c835b05841a7f348320e1e43b6" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">aligned_store</ref>(<ref refid="namespacebatmat_1_1datapar_1a9e5512aee8f62a9475578de6da9dd666" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">aligned_load&lt;simd_half&gt;</ref>(&amp;K(0,<sp/>j,<sp/>i)),<sp/>&amp;K(<ref refid="structcyqlone_1_1TricyqleSolver_1ac6ba1b63d73d96fdb1d2c451f169198a" kindref="member">v</ref><sp/>/<sp/>2,<sp/>i,<sp/>j));</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Merge<sp/>last<sp/>PCR<sp/>level&quot;</highlight><highlight class="normal">,<sp/>Level,<sp/>2<sp/>*<sp/>K.depth()<sp/>*<sp/>K.rows()<sp/>*<sp/>K.cols());</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>In<sp/>case<sp/>of<sp/>circular<sp/>coupling,<sp/>we<sp/>cannot<sp/>exploit<sp/>the<sp/>complementarity<sp/>of<sp/>the<sp/>batches,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>so<sp/>we<sp/>cannot<sp/>perform<sp/>the<sp/>transposition<sp/>in-place.<sp/>Instead,<sp/>we<sp/>transpose<sp/>it<sp/>into<sp/>U</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>first<sp/>(U<sp/>is<sp/>not<sp/>used<sp/>here,<sp/>so<sp/>we<sp/>can<sp/>overwrite<sp/>it),<sp/>and<sp/>then<sp/>add<sp/>it<sp/>to<sp/>K.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>is<sp/>there<sp/>a<sp/>better<sp/>way?</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga9df61b993f7e79ad21eddb76b4c2089e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::copy</ref>(K.transposed(),<sp/>U,<sp/><ref refid="namespacebatmat_1_1linalg_1a18f5c2df0c1ec2ea5038ad05d81946d1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga63e5d7edfbf2831545aea00d9a75966b" kindref="member">linalg::add</ref>(K,<sp/>U);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/>ctx.arrive_and_wait();<sp/></highlight><highlight class="comment">//<sp/>wait<sp/>for<sp/>L<sp/>and<sp/>K</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(primary)<sp/>{</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Factor<sp/>PCR<sp/>U&quot;</highlight><highlight class="normal">,<sp/>Level);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>8|<sp/><sp/>U(k)<sp/>=<sp/>K(k-2^l)ᵀ<sp/>L(k)⁻ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(K.transposed(),<sp/><ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(L.transposed()),<sp/>U,<sp/><ref refid="namespacebatmat_1_1linalg_1ad955091c80d01d8d4201c828ec0c4c2c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_A&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(secondary<sp/>&amp;&amp;<sp/>Level<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>())<sp/>{</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Factor<sp/>PCR<sp/>Y&quot;</highlight><highlight class="normal">,<sp/>Level);</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>7|<sp/><sp/>Y(k)<sp/>=<sp/>K(k)<sp/>L(k)⁻ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(K,<sp/><ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(L.transposed()),<sp/>Y);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Level<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>())</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ctx.arrive_and_wait();<sp/></highlight><highlight class="comment">//<sp/>wait<sp/>for<sp/>U<sp/>and<sp/>Y</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(primary)<sp/>{</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Factor<sp/>PCR<sp/>L&quot;</highlight><highlight class="normal">,<sp/>Level);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>10|<sp/><sp/>M(k)⁺<sp/>=<sp/>M(k)<sp/>-<sp/>Y(k-2^l)<sp/>Y(k-2^l)ᵀ<sp/>-<sp/>U(k+2^l)<sp/>U(k+2^l)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/>--<sp/>implemented<sp/>as<sp/>M(k-2^l)⁺<sp/>=<sp/>M(k-2^l)<sp/>-<sp/>Y(k)<sp/>Y(k)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga19841b227bc4cf6d0949b85b6e201033" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk_sub</ref>(U,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/>--<sp/>followed<sp/>by<sp/><sp/><sp/><sp/>M(k+2^l)⁺<sp/>-=<sp/>U(k)<sp/>U(k)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(Level<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()<sp/>||<sp/>!<ref refid="structcyqlone_1_1TricyqleSolver_1a8731c7fb3868ef8a43a28dde8d7c20c0" kindref="member">merge_last_level_pcr</ref>)</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga19841b227bc4cf6d0949b85b6e201033" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk_sub</ref>(Y,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;+r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;+r&gt;</ref>);</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>3|<sp/><sp/>L(k)⁺<sp/>=<sp/>chol(M(k)⁺)<sp/><sp/><sp/><sp/>--<sp/>for<sp/>the<sp/>next<sp/>level</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gaa5a48352d831fa72f651dfb4a53bba9e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">potrf</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(<ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(Level<sp/>+<sp/>1)));</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(secondary<sp/>&amp;&amp;<sp/>Level<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>())<sp/>{</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Factor<sp/>PCR<sp/>K&quot;</highlight><highlight class="normal">,<sp/>Level);</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>K_next<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(Level<sp/>+<sp/>2);</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>11|<sp/><sp/>K(k)⁺<sp/>=<sp/>-Y(k+2^l)<sp/>U(k+2^l)ᵀ<sp/><sp/><sp/><sp/>--<sp/>implemented<sp/>as<sp/>K(k-2^l)⁺<sp/>=<sp/>-Y(k)<sp/>U(k)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga2ecaacbba5614bcbbf95c79023424e64" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">gemm_neg</ref>(Y,<sp/>U.transposed(),<sp/>K_next,<sp/>{},<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="176"><highlight class="normal">}</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="177"><highlight class="comment">//!<sp/>[PCR<sp/>factor]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="179"><highlight class="comment">//!<sp/>[Cyqlone<sp/>solve<sp/>PCR]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>VL,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/>StorageOrder<sp/>DefaultOrder,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Ctx&gt;</highlight></codeline>
+<codeline lineno="181" refid="structcyqlone_1_1TricyqleSolver_1ae788d7e0258330b80bc6f145bd2e782f" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1ae788d7e0258330b80bc6f145bd2e782f" kindref="member">TricyqleSolver&lt;VL, T, DefaultOrder, Ctx&gt;::solve_pcr</ref>(<ref refid="structcyqlone_1_1TricyqleSolver_1a213872b5c37a2175d0525b84d7746c2a" kindref="member">mut_batch_view&lt;&gt;</ref><sp/>λ,</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a213872b5c37a2175d0525b84d7746c2a" kindref="member">mut_batch_view&lt;&gt;</ref><sp/>work_pcr)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/>[&amp;]&lt;index_t...<sp/>Levels&gt;(std::integer_sequence&lt;index_t,<sp/>Levels...&gt;)<sp/>{</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(this-&gt;</highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aeb42515d69d37fefba719d63bce4fcc6" kindref="member">solve_pcr_level&lt;Levels&gt;</ref>(λ,<sp/>work_pcr),<sp/>...);</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/>}(std::make_integer_sequence&lt;index_t,<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()&gt;{});</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Solve<sp/>PCR&quot;</highlight><highlight class="normal">,<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>());</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>5|<sp/><sp/>x(k)<sp/>=<sp/>L(k)⁻ᵀ<sp/>L(k)⁻¹<sp/>b(k)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(<ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(<ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>())),<sp/>λ);</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(<ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(<ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(<ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()).transposed()),<sp/>λ);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"></highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>VL,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/>StorageOrder<sp/>DefaultOrder,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Ctx&gt;</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>Level&gt;</highlight></codeline>
+<codeline lineno="194" refid="structcyqlone_1_1TricyqleSolver_1aeb42515d69d37fefba719d63bce4fcc6" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aeb42515d69d37fefba719d63bce4fcc6" kindref="member">TricyqleSolver&lt;VL, T, DefaultOrder, Ctx&gt;::solve_pcr_level</ref>(<ref refid="structcyqlone_1_1TricyqleSolver_1a213872b5c37a2175d0525b84d7746c2a" kindref="member">mut_batch_view&lt;&gt;</ref><sp/>λ,</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a213872b5c37a2175d0525b84d7746c2a" kindref="member">mut_batch_view&lt;&gt;</ref><sp/>work_pcr)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;Solve<sp/>PCR&quot;</highlight><highlight class="normal">,<sp/>Level);</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>L<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a997da195519a15cf284223f486421cff" kindref="member">pcr_L</ref>.batch(Level),<sp/>Y<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1aee76308f1db45678cb49400f5fbe20d4" kindref="member">pcr_Y</ref>.batch(Level),<sp/>U<sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a8d54a1b6808c4c6b02100237d4e15326" kindref="member">pcr_U</ref>.batch(Level);</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>r<sp/>=<sp/>1<sp/>&lt;&lt;<sp/>Level;</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>8|<sp/><sp/>b̃(k)<sp/>=<sp/>L(k)⁻¹<sp/>b(k)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(L),<sp/>λ,<sp/>work_pcr);<sp/></highlight><highlight class="comment">//<sp/>w<sp/>=<sp/>L⁻¹<sp/>λ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>11|<sp/><sp/>b(k)⁺<sp/>=<sp/>b(k)<sp/>-<sp/>Y(k-2^l)<sp/>b̃(k-2^l)<sp/>-<sp/>U(k+2^l)<sp/>b̃(k+2^l)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(Level<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" kindref="member">lv</ref>()<sp/>||<sp/>!<ref refid="structcyqlone_1_1TricyqleSolver_1a8731c7fb3868ef8a43a28dde8d7c20c0" kindref="member">merge_last_level_pcr</ref>)</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gac4246c2e6b61282811138d8232f9d737" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">gemv_sub</ref>(Y,<sp/>work_pcr,<sp/>λ,<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;+r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;+r&gt;</ref>);</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gac4246c2e6b61282811138d8232f9d737" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">gemv_sub</ref>(U,<sp/>work_pcr,<sp/>λ,<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="205"><highlight class="normal">}</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="206"><highlight class="comment">//!<sp/>[Cyqlone<sp/>solve<sp/>PCR]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"></highlight></codeline>
+<codeline lineno="208"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/include/cyqlone/implementation/pcr.tpp"/>
+  </compounddef>
+</doxygen>

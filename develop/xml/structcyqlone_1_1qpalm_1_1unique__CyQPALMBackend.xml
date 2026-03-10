@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::unique_CyQPALMBackend</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::unique_ptr&lt; CyQPALMBackend&lt; VL, StorageOrder::ColMajor &gt; &gt;</basecompoundref>
+    <includes refid="ocp-backend-cyqlone_8hpp" local="no">cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>index_t</type>
+        <declname>VL</declname>
+        <defname>VL</defname>
+      </param>
+      <param>
+        <type><ref refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95bae" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">StorageOrder</ref></type>
+        <declname>DefaultOrder</declname>
+        <defname>DefaultOrder</defname>
+        <defval>StorageOrder::ColMajor</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1ae48c54f7523a4d8151b13be51204696c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</definition>
+        <argsstring>()=default</argsstring>
+        <name>unique_CyQPALMBackend</name>
+        <qualifiedname>cyqlone::qpalm::unique_CyQPALMBackend::unique_CyQPALMBackend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="75" column="5"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1aac81ea68f1f225346bf8001358fb6fd4" compoundref="ocp-backend-cyqlone_8hpp" startline="79" endline="80">cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1a2705bfe5f1f82c6ab1f4202c3f27acc7">cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1af371fc8c95ce721f843746a819929a2e">cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::~unique_CyQPALMBackend</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1a53de35e407e92d4b9a931ba698524ee2">cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::operator=</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1a2705bfe5f1f82c6ab1f4202c3f27acc7" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</definition>
+        <argsstring>(unique_CyQPALMBackend &amp;&amp;) noexcept=default</argsstring>
+        <name>unique_CyQPALMBackend</name>
+        <qualifiedname>cyqlone::qpalm::unique_CyQPALMBackend::unique_CyQPALMBackend</qualifiedname>
+        <param>
+          <type>unique_CyQPALMBackend &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="76" column="5"/>
+        <references refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1ae48c54f7523a4d8151b13be51204696c">cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1a53de35e407e92d4b9a931ba698524ee2" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1ae48c54f7523a4d8151b13be51204696c" kindref="member">unique_CyQPALMBackend</ref> &amp;</type>
+        <definition>unique_CyQPALMBackend &amp; cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::operator=</definition>
+        <argsstring>(unique_CyQPALMBackend &amp;&amp;) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>cyqlone::qpalm::unique_CyQPALMBackend::operator=</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1ae48c54f7523a4d8151b13be51204696c" kindref="member">unique_CyQPALMBackend</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="77" column="27"/>
+        <references refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1ae48c54f7523a4d8151b13be51204696c">cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1af371fc8c95ce721f843746a819929a2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::~unique_CyQPALMBackend</definition>
+        <argsstring>()</argsstring>
+        <name>~unique_CyQPALMBackend</name>
+        <qualifiedname>cyqlone::qpalm::unique_CyQPALMBackend::~unique_CyQPALMBackend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="78" column="5"/>
+        <references refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1ae48c54f7523a4d8151b13be51204696c">cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1aac81ea68f1f225346bf8001358fb6fd4" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</definition>
+        <argsstring>(std::unique_ptr&lt; CyQPALMBackend&lt; VL, DefaultOrder &gt; &gt; &amp;&amp;o) noexcept</argsstring>
+        <name>unique_CyQPALMBackend</name>
+        <qualifiedname>cyqlone::qpalm::unique_CyQPALMBackend::unique_CyQPALMBackend</qualifiedname>
+        <param>
+          <type>std::unique_ptr&lt; <ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; VL, DefaultOrder &gt; &gt; &amp;&amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="79" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="79" bodyend="80"/>
+        <references refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1ae48c54f7523a4d8151b13be51204696c">cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;::unique_CyQPALMBackend</references>
+      </memberdef>
+      <memberdef kind="function" id="classstd_1_1unique__ptr_1a94e5fed358ff2ef440499ac836dd68f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>T *</type>
+        <definition>T* std::unique_ptr&lt; T &gt;::operator-&gt;</definition>
+        <argsstring>()</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>std::unique_ptr::operator-&gt;</qualifiedname>
+        <briefdescription>
+<para>STL member. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="" line="1" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classstd_1_1unique__ptr_1adae741234450c126c1260d389e1720b9" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T std::unique_ptr&lt; T &gt;::ptr</definition>
+        <argsstring></argsstring>
+        <name>ptr</name>
+        <qualifiedname>std::unique_ptr::ptr</qualifiedname>
+        <briefdescription>
+<para>STL member. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="" line="1" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; T &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+ptr</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="74" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="74" bodyend="81"/>
+    <listofallmembers>
+      <member refid="classstd_1_1unique__ptr_1a94e5fed358ff2ef440499ac836dd68f2" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::unique_CyQPALMBackend</scope><name>operator-&gt;</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1a53de35e407e92d4b9a931ba698524ee2" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::unique_CyQPALMBackend</scope><name>operator=</name></member>
+      <member refid="classstd_1_1unique__ptr_1adae741234450c126c1260d389e1720b9" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::unique_CyQPALMBackend</scope><name>ptr</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1ae48c54f7523a4d8151b13be51204696c" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::unique_CyQPALMBackend</scope><name>unique_CyQPALMBackend</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1a2705bfe5f1f82c6ab1f4202c3f27acc7" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::unique_CyQPALMBackend</scope><name>unique_CyQPALMBackend</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1aac81ea68f1f225346bf8001358fb6fd4" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::unique_CyQPALMBackend</scope><name>unique_CyQPALMBackend</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend_1af371fc8c95ce721f843746a819929a2e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::unique_CyQPALMBackend</scope><name>~unique_CyQPALMBackend</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

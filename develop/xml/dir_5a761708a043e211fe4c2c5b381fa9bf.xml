@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_5a761708a043e211fe4c2c5b381fa9bf" kind="dir">
+    <compoundname>src/qpalm/include/cyqlone/qpalm/backends</compoundname>
+    <innerdir refid="dir_35c28c2d068fa72095cfe229e39093c5">src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone</innerdir>
+    <innerfile refid="ocp-backend-cyqlone_8hpp">ocp-backend-cyqlone.hpp</innerfile>
+    <innerfile refid="ocp-backend-cyqlone_8tpp">ocp-backend-cyqlone.tpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/"/>
+  </compounddef>
+</doxygen>

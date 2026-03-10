@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="group__topic-block-tridiag-solvers" kind="group">
+    <compoundname>topic-block-tridiag-solvers</compoundname>
+    <title>Block tridiagonal solvers</title>
+    <innerclass refid="structcyqlone_1_1TricyqleParams" prot="public">cyqlone::TricyqleParams</innerclass>
+    <innerclass refid="structcyqlone_1_1TricyqleSolver" prot="public">cyqlone::TricyqleSolver</innerclass>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="group__topic-block-tridiag-solvers_1ga922388e973fa665d5f5eb0c7d988c81f" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>SolveMethod</name>
+        <qualifiedname>cyqlone::SolveMethod</qualifiedname>
+        <enumvalue id="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fa91fa024e7c3efdd56efd4588853cf488" prot="public">
+          <name>StairPCG</name>
+          <briefdescription>
+<para>Preconditioned Conjugate Gradient with staircase preconditioner (iterative). </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fa811f52a4a3648918ef143a0cb6a6e334" prot="public">
+          <name>JacobiPCG</name>
+          <briefdescription>
+<para>Preconditioned Conjugate Gradient with Jacobi preconditioner (iterative). </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fac0ff1599838f84547b6668a463198617" prot="public">
+          <name>PCR</name>
+          <briefdescription>
+<para>Parallel Cyclic Reduction (direct). </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Defines how to solve the small linear system that remains after cyclic reduction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="11" column="1" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="11" bodyend="15"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Solvers for block tridiagonal linear systems. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

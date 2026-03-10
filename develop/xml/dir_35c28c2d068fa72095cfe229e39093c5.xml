@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_35c28c2d068fa72095cfe229e39093c5" kind="dir">
+    <compoundname>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone</compoundname>
+    <innerfile refid="ineq-constr_8tpp">ineq-constr.tpp</innerfile>
+    <innerfile refid="linalg_8tpp">linalg.tpp</innerfile>
+    <innerfile refid="backends_2backend-cyqlone_2linesearch_8tpp">linesearch.tpp</innerfile>
+    <innerfile refid="solve_8tpp">solve.tpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/"/>
+  </compounddef>
+</doxygen>

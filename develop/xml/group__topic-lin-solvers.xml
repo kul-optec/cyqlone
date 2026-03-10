@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="group__topic-lin-solvers" kind="group">
+    <compoundname>topic-lin-solvers</compoundname>
+    <title>Linear solvers</title>
+    <innerfile refid="cyqlone_8hpp">cyqlone.hpp</innerfile>
+    <innergroup refid="group__topic-block-tridiag-solvers">Block tridiagonal solvers</innergroup>
+    <innergroup refid="group__topic-ocp-solvers">Optimal control solvers</innergroup>
+    <briefdescription>
+<para>Solvers for structured linear systems (block tridiagonal and optimal control structure). </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

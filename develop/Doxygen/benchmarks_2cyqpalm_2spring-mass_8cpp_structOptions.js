@@ -1,0 +1,28 @@
+var benchmarks_2cyqpalm_2spring_mass_8cpp_structOptions =
+[
+    [ "cold", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a3de04e8f7bbb951b210863e1714ed62a", null ],
+    [ "warm_shift", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#af35db881cccf91a2eded77afa50b70fb", null ],
+    [ "warm_copy", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a33a25a66e106fd98e8eb8e22a2ad6952", null ],
+    [ "no_updates", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a15b9dc7e39dbeb050697735dbe1929e6", null ],
+    [ "parallelism", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a84366d66b118e7062a152985348239cd", null ],
+    [ "vector_length", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a7c864f62e787e28ea788125a0b5b59c1", null ],
+    [ "rm", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a028a843a11fc7b7ed2654be9b8c82a42", null ],
+    [ "cm", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#aa87c76cef3252d6411bce3893b442e5c", null ],
+    [ "pcr", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#ae4d3df5515efa3730d7789445f52fd97", null ],
+    [ "hpipm", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a5fb516d0404207b4a43f572c2df77f10", null ],
+    [ "horizon", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#add5121947cc0caf0f36002d9139b42d7", null ],
+    [ "masses", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a6e54944195345a63ad09c39e0bf0e073", null ],
+    [ "num_instances", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a28f0b7978ade7a3be01900e7ce473280", null ],
+    [ "seed", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#ad0cd58ab8b36006862e57094b9be42b5", null ],
+    [ "problem_type", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a30184c9dceaa1948064492129b48dea0", null ],
+    [ "pcr_max_update_fraction", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a8090adb2740c14588adaf6a54259fcc2", null ],
+    [ "cr_max_update_fraction", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a6dcb695bee4b0a8bd43c71a59af746f0", null ],
+    [ "parallel_solve_cr_threshold", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a9ed388d2e25d400369ad3c4dbee92ed0", null ],
+    [ "parallel_factor_pcr_threshold", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#aae3b8bfee6ceac8cd95a967c33cad452", null ],
+    [ "changing_constr_factor", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a6016e9e0cd591f88d4b471f602a1bab7", null ],
+    [ "custom_reporter", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a7127e3b6cdb1170a62208979c97c32aa", null ],
+    [ "print_extra", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#ae279fc65b1d933a072077a630cbc9e3a", null ],
+    [ "use_color", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a0c157ff2f12fcd0535ad0d57680dc155", null ],
+    [ "trace", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#a2078f04e236cb4491abc5d00d863ed81", null ],
+    [ "export_problem", "benchmarks_2cyqpalm_2spring-mass_8cpp.html#af57c4c88687fda5d62a62e8b0dc4008d", null ]
+];

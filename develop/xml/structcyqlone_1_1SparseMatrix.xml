@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1SparseMatrix" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::SparseMatrix</compoundname>
+    <includes refid="sparse_8hpp" local="no">cyqlone/sparse.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrix_1a4d79e8a7c7688a17c4989b2a8f44a075" prot="public" static="no" mutable="no">
+        <type>const std::vector&lt; index_t &gt;</type>
+        <definition>const std::vector&lt;index_t&gt; cyqlone::SparseMatrix::row_indices</definition>
+        <argsstring></argsstring>
+        <name>row_indices</name>
+        <qualifiedname>cyqlone::SparseMatrix::row_indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="27" column="23" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="27" bodyend="-1"/>
+        <referencedby refid="group__topic-util-matio_1gae79d8af02b2c40cfa0b8edd01ff7fa94" compoundref="matio_8cpp" startline="244" endline="280">cyqlone::add_to_mat</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrix_1af045ed16c8458b849c5d5efd78dcc614" compoundref="sparse_8hpp" startline="31" endline="33">iter_coo</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrix_1aff52eb48294d9712d48d795ea08cd413" prot="public" static="no" mutable="no">
+        <type>const std::vector&lt; index_t &gt;</type>
+        <definition>const std::vector&lt;index_t&gt; cyqlone::SparseMatrix::col_indices</definition>
+        <argsstring></argsstring>
+        <name>col_indices</name>
+        <qualifiedname>cyqlone::SparseMatrix::col_indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="27" column="35" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="27" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1SparseMatrix_1af045ed16c8458b849c5d5efd78dcc614" compoundref="sparse_8hpp" startline="31" endline="33">iter_coo</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrix_1affcc16b1597ec5f4726e480f16afecc0" prot="public" static="no" mutable="no">
+        <type>const std::vector&lt; real_t &gt;</type>
+        <definition>const std::vector&lt;real_t&gt; cyqlone::SparseMatrix::values</definition>
+        <argsstring></argsstring>
+        <name>values</name>
+        <qualifiedname>cyqlone::SparseMatrix::values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="28" column="23" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="group__topic-util-matio_1gae79d8af02b2c40cfa0b8edd01ff7fa94" compoundref="matio_8cpp" startline="244" endline="280">cyqlone::add_to_mat</referencedby>
+        <referencedby refid="structcyqlone_1_1SparseMatrix_1af045ed16c8458b849c5d5efd78dcc614" compoundref="sparse_8hpp" startline="31" endline="33">iter_coo</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1SparseMatrix_1a15da14f54f507c2f4f3d99cc835dea77" prot="public" static="no" mutable="no">
+        <type>const <ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCOO" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCOO</ref>&lt; index_t &gt;</type>
+        <definition>const SparseCOO&lt;index_t&gt; cyqlone::SparseMatrix::sparsity</definition>
+        <argsstring></argsstring>
+        <name>sparsity</name>
+        <qualifiedname>cyqlone::SparseMatrix::sparsity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="29" column="21" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1SparseMatrix_1af045ed16c8458b849c5d5efd78dcc614" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto cyqlone::SparseMatrix::iter_coo</definition>
+        <argsstring>() const</argsstring>
+        <name>iter_coo</name>
+        <qualifiedname>cyqlone::SparseMatrix::iter_coo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="31" column="11" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="31" bodyend="33"/>
+        <references refid="structcyqlone_1_1SparseMatrix_1aff52eb48294d9712d48d795ea08cd413" compoundref="sparse_8hpp" startline="27">col_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrix_1a4d79e8a7c7688a17c4989b2a8f44a075" compoundref="sparse_8hpp" startline="27">row_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrix_1affcc16b1597ec5f4726e480f16afecc0" compoundref="sparse_8hpp" startline="28">values</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>A sparse matrix in COO format. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::SparseMatrix</label>
+        <link refid="structcyqlone_1_1SparseMatrix"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+col_indices</edgelabel>
+          <edgelabel>+row_indices</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+values</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+sparsity</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>guanaqo::linalg::sparsity::SparseCOO&lt; index_t &gt;</label>
+        <link refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCOO" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+col_indices</edgelabel>
+          <edgelabel>+row_indices</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::span&lt; const index_t &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; index_t &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="26" column="1" bodyfile="src/cyqlone/include/cyqlone/sparse.hpp" bodystart="26" bodyend="34"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1SparseMatrix_1aff52eb48294d9712d48d795ea08cd413" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrix</scope><name>col_indices</name></member>
+      <member refid="structcyqlone_1_1SparseMatrix_1af045ed16c8458b849c5d5efd78dcc614" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrix</scope><name>iter_coo</name></member>
+      <member refid="structcyqlone_1_1SparseMatrix_1a4d79e8a7c7688a17c4989b2a8f44a075" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrix</scope><name>row_indices</name></member>
+      <member refid="structcyqlone_1_1SparseMatrix_1a15da14f54f507c2f4f3d99cc835dea77" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrix</scope><name>sparsity</name></member>
+      <member refid="structcyqlone_1_1SparseMatrix_1affcc16b1597ec5f4726e480f16afecc0" prot="public" virt="non-virtual"><scope>cyqlone::SparseMatrix</scope><name>values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

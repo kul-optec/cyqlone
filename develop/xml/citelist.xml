@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="citelist" kind="page">
+    <compoundname>citelist</compoundname>
+    <title>Bibliography</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><variablelist>
+<varlistentry><term><anchor id="citelist_1CITEREF_pas_cyqlone_2025"/>[1]</term></varlistentry>
+<listitem><para>Pieter Pas and Panagiotis Patrinos. <ulink url="http://arxiv.org/abs/2512.09058">Cyqlone: A Parallel, High-Performance Linear Solver for Optimal Control</ulink>, December 2025. </para>
+<para></para>
+</listitem>
+</variablelist>
+</para>
+    </detaileddescription>
+    <location file="citelist"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,685 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone::LinearOCPStorage::Solution Struct Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('structcyqlone_1_1LinearOCPStorage_1_1Solution.html','','structcyqlone_1_1LinearOCPStorage_1_1Solution-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">cyqlone::LinearOCPStorage::Solution Struct Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="ocp_8hpp_source.html">cyqlone/ocp.hpp</a>&gt;</code></p>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock">
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00375">375</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a425c2d4bb9e7dcd53037df08727d5136" id="r_a425c2d4bb9e7dcd53037df08727d5136"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a425c2d4bb9e7dcd53037df08727d5136">x</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>)</td></tr>
+<tr class="memitem:a52a40c70f02131892376d28fbe697918" id="r_a52a40c70f02131892376d28fbe697918"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a52a40c70f02131892376d28fbe697918">x</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>) const</td></tr>
+<tr class="memitem:a503548b931fe97fd871677e77c713644" id="r_a503548b931fe97fd871677e77c713644"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a503548b931fe97fd871677e77c713644">x</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>, index_t i)</td></tr>
+<tr class="memitem:ac85fac03cc34432f60c0c515d41c04b0" id="r_ac85fac03cc34432f60c0c515d41c04b0"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ac85fac03cc34432f60c0c515d41c04b0">x</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>, index_t i) const</td></tr>
+<tr class="memitem:a044e078de78960184f902efdfd6ce595" id="r_a044e078de78960184f902efdfd6ce595"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a044e078de78960184f902efdfd6ce595">u</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>)</td></tr>
+<tr class="memitem:a909337e8f2f7ef1bb34ad6ff0f495cf1" id="r_a909337e8f2f7ef1bb34ad6ff0f495cf1"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a909337e8f2f7ef1bb34ad6ff0f495cf1">u</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>) const</td></tr>
+<tr class="memitem:a2ba673966e3f39ae3c0855ce704fccda" id="r_a2ba673966e3f39ae3c0855ce704fccda"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a2ba673966e3f39ae3c0855ce704fccda">u</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>, index_t i)</td></tr>
+<tr class="memitem:aed0aed3c97c95b98d46e70c3a0ec8def" id="r_aed0aed3c97c95b98d46e70c3a0ec8def"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aed0aed3c97c95b98d46e70c3a0ec8def">u</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>, index_t i) const</td></tr>
+<tr class="memitem:ac83413181846e0d2f8b916fb8b40a463" id="r_ac83413181846e0d2f8b916fb8b40a463"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ac83413181846e0d2f8b916fb8b40a463">λ</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>)</td></tr>
+<tr class="memitem:aed5345c2f09e35727671a4dcc156fec0" id="r_aed5345c2f09e35727671a4dcc156fec0"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aed5345c2f09e35727671a4dcc156fec0">λ</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>) const</td></tr>
+<tr class="memitem:a993e894897541ab5b71b0cd60ce9b502" id="r_a993e894897541ab5b71b0cd60ce9b502"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a993e894897541ab5b71b0cd60ce9b502">λ</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>, index_t i)</td></tr>
+<tr class="memitem:af926d24915f29acde923176de7e598f9" id="r_af926d24915f29acde923176de7e598f9"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#af926d24915f29acde923176de7e598f9">λ</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>, index_t i) const</td></tr>
+<tr class="memitem:a464d8ebc2fe1a51b00ba3fefc538494b" id="r_a464d8ebc2fe1a51b00ba3fefc538494b"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a464d8ebc2fe1a51b00ba3fefc538494b">y</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>, index_t i)</td></tr>
+<tr class="memitem:a30a55a890a025eaa4ca6d45dc60266d1" id="r_a30a55a890a025eaa4ca6d45dc60266d1"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a30a55a890a025eaa4ca6d45dc60266d1">y</a> (<a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a> <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#af6e9e4a08238975565a9f2769e5fc121">dim</a>, index_t i) const</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a3ea90dd6d6b601c9c919ab2edb251b7d" id="r_a3ea90dd6d6b601c9c919ab2edb251b7d"><td class="memItemLeft">std::vector&lt; real_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a3ea90dd6d6b601c9c919ab2edb251b7d">solution</a></td></tr>
+<tr class="memitem:a27048ba2583ea8247b4d5dc35d5f7038" id="r_a27048ba2583ea8247b4d5dc35d5f7038"><td class="memItemLeft">std::vector&lt; real_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a27048ba2583ea8247b4d5dc35d5f7038">inequality_multipliers</a></td></tr>
+<tr class="memitem:aa187d42123b8a9ea7d9d6d9044db4844" id="r_aa187d42123b8a9ea7d9d6d9044db4844"><td class="memItemLeft">std::vector&lt; real_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa187d42123b8a9ea7d9d6d9044db4844">equality_multipliers</a></td></tr>
+</table>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a425c2d4bb9e7dcd53037df08727d5136" name="a425c2d4bb9e7dcd53037df08727d5136"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a425c2d4bb9e7dcd53037df08727d5136">&#9670;&#160;</a></span>x() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::x </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00378">378</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a52a40c70f02131892376d28fbe697918" name="a52a40c70f02131892376d28fbe697918"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52a40c70f02131892376d28fbe697918">&#9670;&#160;</a></span>x() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::x </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00382">382</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a503548b931fe97fd871677e77c713644" name="a503548b931fe97fd871677e77c713644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a503548b931fe97fd871677e77c713644">&#9670;&#160;</a></span>x() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::x </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00386">386</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac85fac03cc34432f60c0c515d41c04b0" name="ac85fac03cc34432f60c0c515d41c04b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac85fac03cc34432f60c0c515d41c04b0">&#9670;&#160;</a></span>x() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::x </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00389">389</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a044e078de78960184f902efdfd6ce595" name="a044e078de78960184f902efdfd6ce595"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a044e078de78960184f902efdfd6ce595">&#9670;&#160;</a></span>u() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::u </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00393">393</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a909337e8f2f7ef1bb34ad6ff0f495cf1" name="a909337e8f2f7ef1bb34ad6ff0f495cf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a909337e8f2f7ef1bb34ad6ff0f495cf1">&#9670;&#160;</a></span>u() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::u </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00397">397</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2ba673966e3f39ae3c0855ce704fccda" name="a2ba673966e3f39ae3c0855ce704fccda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ba673966e3f39ae3c0855ce704fccda">&#9670;&#160;</a></span>u() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::u </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00401">401</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aed0aed3c97c95b98d46e70c3a0ec8def" name="aed0aed3c97c95b98d46e70c3a0ec8def"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed0aed3c97c95b98d46e70c3a0ec8def">&#9670;&#160;</a></span>u() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::u </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00404">404</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac83413181846e0d2f8b916fb8b40a463" name="ac83413181846e0d2f8b916fb8b40a463"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac83413181846e0d2f8b916fb8b40a463">&#9670;&#160;</a></span>λ() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::λ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00408">408</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aed5345c2f09e35727671a4dcc156fec0" name="aed5345c2f09e35727671a4dcc156fec0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed5345c2f09e35727671a4dcc156fec0">&#9670;&#160;</a></span>λ() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::λ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00415">415</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a993e894897541ab5b71b0cd60ce9b502" name="a993e894897541ab5b71b0cd60ce9b502"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a993e894897541ab5b71b0cd60ce9b502">&#9670;&#160;</a></span>λ() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::λ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00422">422</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af926d24915f29acde923176de7e598f9" name="af926d24915f29acde923176de7e598f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af926d24915f29acde923176de7e598f9">&#9670;&#160;</a></span>λ() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::λ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00425">425</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a464d8ebc2fe1a51b00ba3fefc538494b" name="a464d8ebc2fe1a51b00ba3fefc538494b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a464d8ebc2fe1a51b00ba3fefc538494b">&#9670;&#160;</a></span>y() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::y </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00429">429</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a30a55a890a025eaa4ca6d45dc60266d1" name="a30a55a890a025eaa4ca6d45dc60266d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30a55a890a025eaa4ca6d45dc60266d1">&#9670;&#160;</a></span>y() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::Solution::y </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1OCPDim.html">OCPDim</a></td>          <td class="paramname"><span class="paramname"><em>dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00435">435</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a3ea90dd6d6b601c9c919ab2edb251b7d" name="a3ea90dd6d6b601c9c919ab2edb251b7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ea90dd6d6b601c9c919ab2edb251b7d">&#9670;&#160;</a></span>solution</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;real_t&gt; cyqlone::LinearOCPStorage::Solution::solution</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00376">376</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a27048ba2583ea8247b4d5dc35d5f7038" name="a27048ba2583ea8247b4d5dc35d5f7038"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27048ba2583ea8247b4d5dc35d5f7038">&#9670;&#160;</a></span>inequality_multipliers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;real_t&gt; cyqlone::LinearOCPStorage::Solution::inequality_multipliers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00376">376</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa187d42123b8a9ea7d9d6d9044db4844" name="aa187d42123b8a9ea7d9d6d9044db4844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa187d42123b8a9ea7d9d6d9044db4844">&#9670;&#160;</a></span>equality_multipliers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;real_t&gt; cyqlone::LinearOCPStorage::Solution::equality_multipliers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp_8hpp_source.html#l00376">376</a> of file <a class="el" href="ocp_8hpp_source.html">ocp.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>src/cyqlone/include/cyqlone/<a class="el" href="ocp_8hpp_source.html">ocp.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacecyqlone.html">cyqlone</a></li><li class="navelem"><a href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a></li><li class="navelem"><a href="structcyqlone_1_1LinearOCPStorage_1_1Solution.html">Solution</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

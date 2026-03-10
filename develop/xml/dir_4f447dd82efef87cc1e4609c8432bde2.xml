@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_4f447dd82efef87cc1e4609c8432bde2" kind="dir">
+    <compoundname>src/qpalm</compoundname>
+    <innerdir refid="dir_3f2f9b6a483e8fb1fb5becef34cc0a81">src/qpalm/include</innerdir>
+    <innerdir refid="dir_25fe273618eceb7408f086225a281458">src/qpalm/src</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/qpalm/"/>
+  </compounddef>
+</doxygen>

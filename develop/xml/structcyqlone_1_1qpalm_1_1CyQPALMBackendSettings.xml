@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::CyQPALMBackendSettings</compoundname>
+    <includes refid="ocp-backend-cyqlone_8hpp" local="no">cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1af00e70c02cd13e5ebf43d6638eb9df7c" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::CyQPALMBackendSettings::processors</definition>
+        <argsstring></argsstring>
+        <name>processors</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::processors</qualifiedname>
+        <initializer>= 8</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="32" column="13" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="32" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a9a50c58845ad3929bc28241ad1ef0991" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="168" endline="232">run_benchmark</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1a1ca10438c0578c7a0acec2f8e78d50b1" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cyqlone::qpalm::CyQPALMBackendSettings::print_residuals</definition>
+        <argsstring></argsstring>
+        <name>print_residuals</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::print_residuals</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="33" column="10" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1add64f743497f10b2503b77de45c77c5d" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int cyqlone::qpalm::CyQPALMBackendSettings::print_precision</definition>
+        <argsstring></argsstring>
+        <name>print_precision</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::print_precision</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="34" column="9" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1abd09901dbadec2708293d74a8ed78814" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double cyqlone::qpalm::CyQPALMBackendSettings::changing_constr_factor</definition>
+        <argsstring></argsstring>
+        <name>changing_constr_factor</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::changing_constr_factor</qualifiedname>
+        <initializer>= 0.05</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="36" column="12" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1acff95d8fedf3933328e02b7cc9023df8" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::CyQPALMBackendSettings::max_update_count</definition>
+        <argsstring></argsstring>
+        <name>max_update_count</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::max_update_count</qualifiedname>
+        <initializer>= 5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="37" column="13" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1ac58824cc204ea83f5521f3f214d0f33a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cyqlone::qpalm::CyQPALMBackendSettings::detailed_timings</definition>
+        <argsstring></argsstring>
+        <name>detailed_timings</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::detailed_timings</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="38" column="10" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1ac8be3f5b5799e223800c1ca14cb28318" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1TricyqleParams" kindref="compound">cyqlone::TricyqleParams</ref>&lt; real_t &gt;</type>
+        <definition>cyqlone::TricyqleParams&lt;real_t&gt; cyqlone::qpalm::CyQPALMBackendSettings::tricyqle_params</definition>
+        <argsstring></argsstring>
+        <name>tricyqle_params</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::tricyqle_params</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="39" column="29" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="39" bodyend="39"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1a7eae519b11db2e650190fd9a73476714" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t cyqlone::qpalm::CyQPALMBackendSettings::spin_count</definition>
+        <argsstring></argsstring>
+        <name>spin_count</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::spin_count</qualifiedname>
+        <initializer>= std::numeric_limits&lt;uint32_t&gt;::max()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="40" column="14" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1ac58edb0fc69ddab30f2ffb3f6b903832" prot="public" static="no" mutable="no">
+        <type><ref refid="group__topic-optimization-solvers-ocp_1gaeb4dd1f31c1ec8d3d9e0f9023da5cec3" kindref="member">WarmStartingStrategy</ref></type>
+        <definition>WarmStartingStrategy cyqlone::qpalm::CyQPALMBackendSettings::strategy</definition>
+        <argsstring></argsstring>
+        <name>strategy</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendSettings::strategy</qualifiedname>
+        <initializer>= <ref refid="group__topic-optimization-solvers-ocp_1ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3a5fb63579fc981698f97d55bfecb213ea" kindref="member">WarmStartingStrategy::Copy</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="41" column="26" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="41" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>cyqlone::TricyqleParams&lt; real_t &gt;</label>
+        <link refid="structcyqlone_1_1TricyqleParams"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::CyQPALMBackendSettings</label>
+        <link refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+tricyqle_params</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="31" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="31" bodyend="42"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1abd09901dbadec2708293d74a8ed78814" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>changing_constr_factor</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1ac58824cc204ea83f5521f3f214d0f33a" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>detailed_timings</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1acff95d8fedf3933328e02b7cc9023df8" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>max_update_count</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1add64f743497f10b2503b77de45c77c5d" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>print_precision</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1a1ca10438c0578c7a0acec2f8e78d50b1" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>print_residuals</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1af00e70c02cd13e5ebf43d6638eb9df7c" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>processors</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1a7eae519b11db2e650190fd9a73476714" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>spin_count</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1ac58edb0fc69ddab30f2ffb3f6b903832" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>strategy</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings_1ac8be3f5b5799e223800c1ca14cb28318" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendSettings</scope><name>tricyqle_params</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

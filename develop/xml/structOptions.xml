@@ -1,0 +1,494 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structOptions" kind="struct" language="C++" prot="public">
+    <compoundname>Options</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structOptions_1a3de04e8f7bbb951b210863e1714ed62a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::cold</definition>
+        <argsstring></argsstring>
+        <name>cold</name>
+        <qualifiedname>Options::cold</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="69" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="69" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a114b0239a8ec074b2ceec7996775c9a0" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="401" endline="420">get_hpipm_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1af35db881cccf91a2eded77afa50b70fb" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::warm_shift</definition>
+        <argsstring></argsstring>
+        <name>warm_shift</name>
+        <qualifiedname>Options::warm_shift</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="70" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="70" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a114b0239a8ec074b2ceec7996775c9a0" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="401" endline="420">get_hpipm_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a33a25a66e106fd98e8eb8e22a2ad6952" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::warm_copy</definition>
+        <argsstring></argsstring>
+        <name>warm_copy</name>
+        <qualifiedname>Options::warm_copy</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="71" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="71" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a114b0239a8ec074b2ceec7996775c9a0" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="401" endline="420">get_hpipm_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a15b9dc7e39dbeb050697735dbe1929e6" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::no_updates</definition>
+        <argsstring></argsstring>
+        <name>no_updates</name>
+        <qualifiedname>Options::no_updates</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="72" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="72" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a84366d66b118e7062a152985348239cd" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; int &gt;</type>
+        <definition>std::vector&lt;int&gt; Options::parallelism</definition>
+        <argsstring></argsstring>
+        <name>parallelism</name>
+        <qualifiedname>Options::parallelism</qualifiedname>
+        <initializer>= {8}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="73" column="17" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="73" bodyend="73"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a7c864f62e787e28ea788125a0b5b59c1" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; int &gt;</type>
+        <definition>std::vector&lt;int&gt; Options::vector_length</definition>
+        <argsstring></argsstring>
+        <name>vector_length</name>
+        <qualifiedname>Options::vector_length</qualifiedname>
+        <initializer>= {<ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1abd7c170326903ac2f678a7b7f48a1dca" kindref="member">v</ref>}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="74" column="17" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="74" bodyend="74"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a151b1c60490223468d41623ebfdde774" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="425" endline="438">get_cyqlone_solvers_vl</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a028a843a11fc7b7ed2654be9b8c82a42" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::rm</definition>
+        <argsstring></argsstring>
+        <name>rm</name>
+        <qualifiedname>Options::rm</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="75" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="75" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a24b505c3306cc2abef80b9bf1bab9339" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="440" endline="446">get_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1aa87c76cef3252d6411bce3893b442e5c" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::cm</definition>
+        <argsstring></argsstring>
+        <name>cm</name>
+        <qualifiedname>Options::cm</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="76" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="76" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a24b505c3306cc2abef80b9bf1bab9339" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="440" endline="446">get_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1ae4d3df5515efa3730d7789445f52fd97" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::pcr</definition>
+        <argsstring></argsstring>
+        <name>pcr</name>
+        <qualifiedname>Options::pcr</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="77" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="77" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a5fb516d0404207b4a43f572c2df77f10" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::hpipm</definition>
+        <argsstring></argsstring>
+        <name>hpipm</name>
+        <qualifiedname>Options::hpipm</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="81" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="81" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a114b0239a8ec074b2ceec7996775c9a0" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="401" endline="420">get_hpipm_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1add5121947cc0caf0f36002d9139b42d7" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; int &gt;</type>
+        <definition>std::vector&lt;int&gt; Options::horizon</definition>
+        <argsstring></argsstring>
+        <name>horizon</name>
+        <qualifiedname>Options::horizon</qualifiedname>
+        <initializer>{32, 64, 96, 128, 192, 256}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="83" column="17" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="83" bodyend="83"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ab1a4727f1d17d76d3fb9c497efb1650b" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="286" endline="318">get_spring_mass_params</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a6e54944195345a63ad09c39e0bf0e073" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; int &gt;</type>
+        <definition>std::vector&lt;int&gt; Options::masses</definition>
+        <argsstring></argsstring>
+        <name>masses</name>
+        <qualifiedname>Options::masses</qualifiedname>
+        <initializer>{6, 12, 30}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="84" column="17" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="84" bodyend="84"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ab1a4727f1d17d76d3fb9c497efb1650b" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="286" endline="318">get_spring_mass_params</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a28f0b7978ade7a3be01900e7ce473280" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Options::num_instances</definition>
+        <argsstring></argsstring>
+        <name>num_instances</name>
+        <qualifiedname>Options::num_instances</qualifiedname>
+        <initializer>= 50</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="85" column="14" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="85" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ab1a4727f1d17d76d3fb9c497efb1650b" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="286" endline="318">get_spring_mass_params</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1ad0cd58ab8b36006862e57094b9be42b5" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Options::seed</definition>
+        <argsstring></argsstring>
+        <name>seed</name>
+        <qualifiedname>Options::seed</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="86" column="14" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="86" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ab1a4727f1d17d76d3fb9c497efb1650b" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="286" endline="318">get_spring_mass_params</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a30184c9dceaa1948064492129b48dea0" prot="public" static="no" mutable="no">
+        <type><ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a4c669cb1cb4d98dfea944e9ceec7d33e" kindref="member">ProblemType</ref></type>
+        <definition>ProblemType Options::problem_type</definition>
+        <argsstring></argsstring>
+        <name>problem_type</name>
+        <qualifiedname>Options::problem_type</qualifiedname>
+        <initializer>= <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a4c669cb1cb4d98dfea944e9ceec7d33eafc57686bf20fc8e206157d78a9fb758b" kindref="member">ProblemType::WangBoyd2008</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="87" column="17" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="87" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ab1a4727f1d17d76d3fb9c497efb1650b" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="286" endline="318">get_spring_mass_params</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a8090adb2740c14588adaf6a54259fcc2" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Options::pcr_max_update_fraction</definition>
+        <argsstring></argsstring>
+        <name>pcr_max_update_fraction</name>
+        <qualifiedname>Options::pcr_max_update_fraction</qualifiedname>
+        <initializer>= 0.25</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="88" column="12" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="88" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a6dcb695bee4b0a8bd43c71a59af746f0" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Options::cr_max_update_fraction</definition>
+        <argsstring></argsstring>
+        <name>cr_max_update_fraction</name>
+        <qualifiedname>Options::cr_max_update_fraction</qualifiedname>
+        <initializer>= 0.9</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="89" column="12" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="89" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a9ed388d2e25d400369ad3c4dbee92ed0" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Options::parallel_solve_cr_threshold</definition>
+        <argsstring></argsstring>
+        <name>parallel_solve_cr_threshold</name>
+        <qualifiedname>Options::parallel_solve_cr_threshold</qualifiedname>
+        <initializer>= 10</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="90" column="9" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="90" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1aae3b8bfee6ceac8cd95a967c33cad452" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Options::parallel_factor_pcr_threshold</definition>
+        <argsstring></argsstring>
+        <name>parallel_factor_pcr_threshold</name>
+        <qualifiedname>Options::parallel_factor_pcr_threshold</qualifiedname>
+        <initializer>= 20</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="91" column="9" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="91" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a6016e9e0cd591f88d4b471f602a1bab7" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Options::changing_constr_factor</definition>
+        <argsstring></argsstring>
+        <name>changing_constr_factor</name>
+        <qualifiedname>Options::changing_constr_factor</qualifiedname>
+        <initializer>= 0.01</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="92" column="12" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="92" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a7127e3b6cdb1170a62208979c97c32aa" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::custom_reporter</definition>
+        <argsstring></argsstring>
+        <name>custom_reporter</name>
+        <qualifiedname>Options::custom_reporter</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="93" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="93" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a3c04138a5bfe5d72780bb7e82a18e627" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="599" endline="627">main</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1ae279fc65b1d933a072077a630cbc9e3a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::print_extra</definition>
+        <argsstring></argsstring>
+        <name>print_extra</name>
+        <qualifiedname>Options::print_extra</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="94" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="94" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a3c04138a5bfe5d72780bb7e82a18e627" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="599" endline="627">main</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a0c157ff2f12fcd0535ad0d57680dc155" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::use_color</definition>
+        <argsstring></argsstring>
+        <name>use_color</name>
+        <qualifiedname>Options::use_color</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="95" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="95" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a3c04138a5bfe5d72780bb7e82a18e627" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="599" endline="627">main</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1a2078f04e236cb4491abc5d00d863ed81" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Options::trace</definition>
+        <argsstring></argsstring>
+        <name>trace</name>
+        <qualifiedname>Options::trace</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="96" column="10" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structOptions_1af57c4c88687fda5d62a62e8b0dc4008d" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string Options::export_problem</definition>
+        <argsstring></argsstring>
+        <name>export_problem</name>
+        <qualifiedname>Options::export_problem</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="97" column="17" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="97" bodyend="97"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a14f468c71f063f09688477ea3fd75bb8" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="320" endline="333">export_problem</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a6301de13c9af8b12550574d0b6336157" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="474" endline="529">register_options</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Options</label>
+        <link refid="structOptions"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+horizon</edgelabel>
+          <edgelabel>+masses</edgelabel>
+          <edgelabel>+parallelism</edgelabel>
+          <edgelabel>+vector_length</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+export_problem</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; int &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="benchmarks/cyqpalm/spring-mass.cpp" line="68" column="1" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="68" bodyend="98"/>
+    <listofallmembers>
+      <member refid="structOptions_1a6016e9e0cd591f88d4b471f602a1bab7" prot="public" virt="non-virtual"><scope>Options</scope><name>changing_constr_factor</name></member>
+      <member refid="structOptions_1aa87c76cef3252d6411bce3893b442e5c" prot="public" virt="non-virtual"><scope>Options</scope><name>cm</name></member>
+      <member refid="structOptions_1a3de04e8f7bbb951b210863e1714ed62a" prot="public" virt="non-virtual"><scope>Options</scope><name>cold</name></member>
+      <member refid="structOptions_1a6dcb695bee4b0a8bd43c71a59af746f0" prot="public" virt="non-virtual"><scope>Options</scope><name>cr_max_update_fraction</name></member>
+      <member refid="structOptions_1a7127e3b6cdb1170a62208979c97c32aa" prot="public" virt="non-virtual"><scope>Options</scope><name>custom_reporter</name></member>
+      <member refid="structOptions_1af57c4c88687fda5d62a62e8b0dc4008d" prot="public" virt="non-virtual"><scope>Options</scope><name>export_problem</name></member>
+      <member refid="structOptions_1add5121947cc0caf0f36002d9139b42d7" prot="public" virt="non-virtual"><scope>Options</scope><name>horizon</name></member>
+      <member refid="structOptions_1a5fb516d0404207b4a43f572c2df77f10" prot="public" virt="non-virtual"><scope>Options</scope><name>hpipm</name></member>
+      <member refid="structOptions_1a6e54944195345a63ad09c39e0bf0e073" prot="public" virt="non-virtual"><scope>Options</scope><name>masses</name></member>
+      <member refid="structOptions_1a15b9dc7e39dbeb050697735dbe1929e6" prot="public" virt="non-virtual"><scope>Options</scope><name>no_updates</name></member>
+      <member refid="structOptions_1a28f0b7978ade7a3be01900e7ce473280" prot="public" virt="non-virtual"><scope>Options</scope><name>num_instances</name></member>
+      <member refid="structOptions_1aae3b8bfee6ceac8cd95a967c33cad452" prot="public" virt="non-virtual"><scope>Options</scope><name>parallel_factor_pcr_threshold</name></member>
+      <member refid="structOptions_1a9ed388d2e25d400369ad3c4dbee92ed0" prot="public" virt="non-virtual"><scope>Options</scope><name>parallel_solve_cr_threshold</name></member>
+      <member refid="structOptions_1a84366d66b118e7062a152985348239cd" prot="public" virt="non-virtual"><scope>Options</scope><name>parallelism</name></member>
+      <member refid="structOptions_1ae4d3df5515efa3730d7789445f52fd97" prot="public" virt="non-virtual"><scope>Options</scope><name>pcr</name></member>
+      <member refid="structOptions_1a8090adb2740c14588adaf6a54259fcc2" prot="public" virt="non-virtual"><scope>Options</scope><name>pcr_max_update_fraction</name></member>
+      <member refid="structOptions_1ae279fc65b1d933a072077a630cbc9e3a" prot="public" virt="non-virtual"><scope>Options</scope><name>print_extra</name></member>
+      <member refid="structOptions_1a30184c9dceaa1948064492129b48dea0" prot="public" virt="non-virtual"><scope>Options</scope><name>problem_type</name></member>
+      <member refid="structOptions_1a028a843a11fc7b7ed2654be9b8c82a42" prot="public" virt="non-virtual"><scope>Options</scope><name>rm</name></member>
+      <member refid="structOptions_1ad0cd58ab8b36006862e57094b9be42b5" prot="public" virt="non-virtual"><scope>Options</scope><name>seed</name></member>
+      <member refid="structOptions_1a2078f04e236cb4491abc5d00d863ed81" prot="public" virt="non-virtual"><scope>Options</scope><name>trace</name></member>
+      <member refid="structOptions_1a0c157ff2f12fcd0535ad0d57680dc155" prot="public" virt="non-virtual"><scope>Options</scope><name>use_color</name></member>
+      <member refid="structOptions_1a7c864f62e787e28ea788125a0b5b59c1" prot="public" virt="non-virtual"><scope>Options</scope><name>vector_length</name></member>
+      <member refid="structOptions_1a33a25a66e106fd98e8eb8e22a2ad6952" prot="public" virt="non-virtual"><scope>Options</scope><name>warm_copy</name></member>
+      <member refid="structOptions_1af35db881cccf91a2eded77afa50b70fb" prot="public" virt="non-virtual"><scope>Options</scope><name>warm_shift</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structSolver" kind="struct" language="C++" prot="public">
+    <compoundname>Solver</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structSolver_1aa3cc0c1424c904084583322bc3a14f5f" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string Solver::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>Solver::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="336" column="17" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="336" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structSolver_1aae9371b91862765a1a99f1287ed4cdf7" prot="public" static="no" mutable="no">
+        <type>std::function&lt; void(benchmark::State &amp;, <ref refid="structSpringMassParams" kindref="compound">SpringMassParams</ref>)&gt;</type>
+        <definition>std::function&lt;void(benchmark::State &amp;, SpringMassParams)&gt; Solver::run</definition>
+        <argsstring></argsstring>
+        <name>run</name>
+        <qualifiedname>Solver::run</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="benchmarks/cyqpalm/spring-mass.cpp" line="337" column="19" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="337" bodyend="-1"/>
+        <referencedby refid="solve-block-tridiagonal_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="solve-block-tridiagonal_8cpp" startline="30" endline="111">main</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Solver</label>
+        <link refid="structSolver"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="benchmarks/cyqpalm/spring-mass.cpp" line="335" column="1" bodyfile="benchmarks/cyqpalm/spring-mass.cpp" bodystart="335" bodyend="338"/>
+    <listofallmembers>
+      <member refid="structSolver_1aa3cc0c1424c904084583322bc3a14f5f" prot="public" virt="non-virtual"><scope>Solver</scope><name>name</name></member>
+      <member refid="structSolver_1aae9371b91862765a1a99f1287ed4cdf7" prot="public" virt="non-virtual"><scope>Solver</scope><name>run</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

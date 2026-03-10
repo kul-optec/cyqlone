@@ -1,0 +1,1131 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: benchmarks/cyqpalm/spring-mass.cpp File Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('benchmarks_2cyqpalm_2spring-mass_8cpp.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">spring-mass.cpp File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;benchmark/benchmark.h&gt;</code><br />
+<code>#include &lt;<a class="el" href="matio_8hpp_source.html">cyqlone/matio.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="ocp-backend-cyqlone_8hpp_source.html">cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="spring-mass_8hpp_source.html">cyqlone/qpalm/example-problems/spring-mass.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="settings_8hpp_source.html">cyqlone/qpalm/settings.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="solver_8hpp_source.html">cyqlone/qpalm/solver.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="status_8hpp_source.html">cyqlone/qpalm/status.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="tracing_8hpp_source.html">cyqlone/tracing.hpp</a>&gt;</code><br />
+<code>#include &lt;CLI/CLI.hpp&gt;</code><br />
+<code>#include &lt;batmat/dtypes.hpp&gt;</code><br />
+<code>#include &lt;batmat/lut.hpp&gt;</code><br />
+<code>#include &lt;batmat/openmp.h&gt;</code><br />
+<code>#include &lt;guanaqo/demangled-typename.hpp&gt;</code><br />
+<code>#include &lt;guanaqo/pcm/counters.hpp&gt;</code><br />
+<code>#include &lt;guanaqo/perfetto/trace.hpp&gt;</code><br />
+<code>#include &lt;guanaqo/string-util.hpp&gt;</code><br />
+<code>#include &lt;guanaqo/stringify.h&gt;</code><br />
+<code>#include &lt;batmat-version.h&gt;</code><br />
+<code>#include &lt;cyqlone-version.h&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;cstdlib&gt;</code><br />
+<code>#include &lt;filesystem&gt;</code><br />
+<code>#include &lt;format&gt;</code><br />
+<code>#include &lt;generator&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
+<code>#include &lt;optional&gt;</code><br />
+<code>#include &lt;random&gt;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &quot;hpipm.hpp&quot;</code><br />
+</div>
+<p><a href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:Options_5FstructOptions" id="r_Options_5FstructOptions"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="#structOptions">Options</a></td></tr>
+<tr class="memitem:Problem_5FstructProblem" id="r_Problem_5FstructProblem"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="#structProblem">Problem</a></td></tr>
+<tr class="memitem:Solver" id="r_Solver"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structSolver.html">Solver</a></td></tr>
+<tr class="memitem:SpringMassParams" id="r_SpringMassParams"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structSpringMassParams.html">SpringMassParams</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:aedfb63997e73d0dc8964ae5c1f36cd41" id="r_aedfb63997e73d0dc8964ae5c1f36cd41"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#aedfb63997e73d0dc8964ae5c1f36cd41">seconds</a> = std::chrono::duration&lt;double&gt;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a4c669cb1cb4d98dfea944e9ceec7d33e" id="r_a4c669cb1cb4d98dfea944e9ceec7d33e"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33e">ProblemType</a> { <a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33eafc57686bf20fc8e206157d78a9fb758b">WangBoyd2008</a>
+, <a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33ea25d408c56cbbbab45f40c893418fb894">WangBoyd2008Width</a>
+, <a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33eae7ce5734fbb933180d31b231c2eb7be1">Domahidi2012</a>
+, <a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33eae327976f658280963c254af6d143c777">ActiveStateConstr</a>
+ }</td></tr>
+<tr class="memitem:a1e5ece077879bedb19586a2c036f2c23" id="r_a1e5ece077879bedb19586a2c036f2c23"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a1e5ece077879bedb19586a2c036f2c23">WarmStartHPIPM</a> { <a class="el" href="#a1e5ece077879bedb19586a2c036f2c23a5b85379fb6d4ff2312ca180d829fdf01">NoWarmStart</a>
+, <a class="el" href="#a1e5ece077879bedb19586a2c036f2c23a54db44089bbacc4895e3414518231c77">WarmZero</a>
+, <a class="el" href="#a1e5ece077879bedb19586a2c036f2c23abe144a42394a837bd7f50a6b10cf78be">WarmCopy</a>
+, <a class="el" href="#a1e5ece077879bedb19586a2c036f2c23a971d78d68790b314dad6cbe5b5431d8f">WarmShift</a>
+ }</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:aed9742e190fcdab12ce85ae28d0c0a66" id="r_aed9742e190fcdab12ce85ae28d0c0a66"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#aed9742e190fcdab12ce85ae28d0c0a66">counter</a> (auto x)</td></tr>
+<tr class="memitem:a0c126e7f6f691e9434fc9c999ed9b106" id="r_a0c126e7f6f691e9434fc9c999ed9b106"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a0c126e7f6f691e9434fc9c999ed9b106">counter_avg</a> (auto x)</td></tr>
+<tr class="memitem:a87c3add091c930e9266aaf6c71d5b499" id="r_a87c3add091c930e9266aaf6c71d5b499"><td class="memItemLeft"><a class="el" href="namespacecyqlone_1_1qpalm_1_1problems.html#structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem">qp::problems::SpringMassProblem</a>&#160;</td><td class="memItemRight"><a class="el" href="#a87c3add091c930e9266aaf6c71d5b499">create_problem</a> (const <a class="el" href="structSpringMassParams.html">SpringMassParams</a> &amp;params)</td></tr>
+<tr class="memitem:a796f7650fc942bd964d67e29a30785c4" id="r_a796f7650fc942bd964d67e29a30785c4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a796f7650fc942bd964d67e29a30785c4">disable_tracing</a> ()</td></tr>
+<tr class="memitem:ad3b3d4b3fd7cf72bcb309c69323c1c1d" id="r_ad3b3d4b3fd7cf72bcb309c69323c1c1d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad3b3d4b3fd7cf72bcb309c69323c1c1d">trace_run</a> (auto &amp;&amp;, const auto &amp;)</td></tr>
+<tr class="memitem:a99ac5e937e8cd6649369830168443ed2" id="r_a99ac5e937e8cd6649369830168443ed2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a99ac5e937e8cd6649369830168443ed2">print_traces</a> (std::ostream &amp;)</td></tr>
+<tr class="memitem:a9a50c58845ad3929bc28241ad1ef0991" id="r_a9a50c58845ad3929bc28241ad1ef0991"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">qp::StorageOrder</a> Order&gt; </td></tr>
+<tr class="memitem:a9a50c58845ad3929bc28241ad1ef0991 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9a50c58845ad3929bc28241ad1ef0991">run_benchmark</a> (benchmark::State &amp;state, const std::string &amp;param_name, const <a class="el" href="structSpringMassParams.html">SpringMassParams</a> &amp;params, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">qp::CyQPALMBackendSettings</a> backend_settings, <a class="el" href="structcyqlone_1_1qpalm_1_1Settings.html">qp::Settings</a> settings, bool warm=false, bool trace=false)</td></tr>
+<tr class="memitem:ab1a4727f1d17d76d3fb9c497efb1650b" id="r_ab1a4727f1d17d76d3fb9c497efb1650b"><td class="memItemLeft">std::generator&lt; <a class="el" href="#structProblem">Problem</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ab1a4727f1d17d76d3fb9c497efb1650b">get_spring_mass_params</a> (const <a class="el" href="#structOptions">Options</a> &amp;opts)</td></tr>
+<tr class="memitem:a14f468c71f063f09688477ea3fd75bb8" id="r_a14f468c71f063f09688477ea3fd75bb8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a14f468c71f063f09688477ea3fd75bb8">export_problem</a> (const <a class="el" href="#structOptions">Options</a> &amp;opts)</td></tr>
+<tr class="memitem:af61fff0ad381f171d5c3d5fdbb5835d5" id="r_af61fff0ad381f171d5c3d5fdbb5835d5"><td class="memItemLeft">std::string_view&#160;</td><td class="memItemRight"><a class="el" href="#af61fff0ad381f171d5c3d5fdbb5835d5">order</a> (<a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">qp::StorageOrder</a> o)</td></tr>
+<tr class="memitem:ac3104388361a980a90810067441fdad2" id="r_ac3104388361a980a90810067441fdad2"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">qp::StorageOrder</a> O&gt; </td></tr>
+<tr class="memitem:ac3104388361a980a90810067441fdad2 template"><td class="memItemLeft">std::generator&lt; <a class="el" href="structSolver.html">Solver</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ac3104388361a980a90810067441fdad2">get_cyqlone_solvers</a> (const <a class="el" href="#structOptions">Options</a> &amp;opts)</td></tr>
+<tr class="memitem:a114b0239a8ec074b2ceec7996775c9a0" id="r_a114b0239a8ec074b2ceec7996775c9a0"><td class="memItemLeft">std::generator&lt; <a class="el" href="structSolver.html">Solver</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a114b0239a8ec074b2ceec7996775c9a0">get_hpipm_solvers</a> (const <a class="el" href="#structOptions">Options</a> &amp;opts)</td></tr>
+<tr class="memitem:a151b1c60490223468d41623ebfdde774" id="r_a151b1c60490223468d41623ebfdde774"><td class="memTemplParams" colspan="2">template&lt;<a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">qp::StorageOrder</a> Order&gt; </td></tr>
+<tr class="memitem:a151b1c60490223468d41623ebfdde774 template"><td class="memItemLeft">std::generator&lt; <a class="el" href="structSolver.html">Solver</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a151b1c60490223468d41623ebfdde774">get_cyqlone_solvers_vl</a> (const <a class="el" href="#structOptions">Options</a> &amp;opts)</td></tr>
+<tr class="memitem:a24b505c3306cc2abef80b9bf1bab9339" id="r_a24b505c3306cc2abef80b9bf1bab9339"><td class="memItemLeft">std::generator&lt; <a class="el" href="structSolver.html">Solver</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a24b505c3306cc2abef80b9bf1bab9339">get_solvers</a> (const <a class="el" href="#structOptions">Options</a> &amp;opts)</td></tr>
+<tr class="memitem:a5e87583157c03d1f72c32e615762ca84" id="r_a5e87583157c03d1f72c32e615762ca84"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a5e87583157c03d1f72c32e615762ca84">register_benchmarks</a> (const <a class="el" href="#structOptions">Options</a> &amp;opts)</td></tr>
+<tr class="memitem:a4670f9f2112847d3390329c356aaabfe" id="r_a4670f9f2112847d3390329c356aaabfe"><td class="memItemLeft">std::unique_ptr&lt; benchmark::BenchmarkReporter &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4670f9f2112847d3390329c356aaabfe">make_custom_reporter</a> (size_t problem_name_width, size_t solver_name_width, bool print_extra, bool with_color)</td></tr>
+<tr class="memitem:a6301de13c9af8b12550574d0b6336157" id="r_a6301de13c9af8b12550574d0b6336157"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6301de13c9af8b12550574d0b6336157">register_options</a> (const char *program, CLI::App &amp;app, <a class="el" href="#structOptions">Options</a> &amp;opts)</td></tr>
+<tr class="memitem:a2fab40ef532103fd442a6d633bde2edc" id="r_a2fab40ef532103fd442a6d633bde2edc"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a2fab40ef532103fd442a6d633bde2edc">initialize_google_benchmark</a> (char *program, auto bm_args)</td></tr>
+<tr class="memitem:a2eb0bd8e125a8ca4d991c8146f1d9f53" id="r_a2eb0bd8e125a8ca4d991c8146f1d9f53"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a2eb0bd8e125a8ca4d991c8146f1d9f53">register_context</a> ()</td></tr>
+<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627" id="r_a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a7a4d39b575e51782c5391448b0a1f931" id="r_a7a4d39b575e51782c5391448b0a1f931"><td class="memItemLeft">constexpr auto&#160;</td><td class="memItemRight"><a class="el" href="#a7a4d39b575e51782c5391448b0a1f931">v_native</a> = std::is_same_v&lt;batmat::real_t, double&gt; ? 4 : 8</td></tr>
+<tr class="memitem:abd7c170326903ac2f678a7b7f48a1dca" id="r_abd7c170326903ac2f678a7b7f48a1dca"><td class="memItemLeft">constexpr auto&#160;</td><td class="memItemRight"><a class="el" href="#abd7c170326903ac2f678a7b7f48a1dca">v</a> = <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1types.html#aae92c3201f735f2fefabf1173b89d79b">batmat::types::vl_at_most</a>&lt;batmat::real_t, <a class="el" href="#a7a4d39b575e51782c5391448b0a1f931">v_native</a>&gt;</td></tr>
+<tr class="memitem:af601e9d42ebf311a42fa20225d866186" id="r_af601e9d42ebf311a42fa20225d866186"><td class="memItemLeft">const std::map&lt; std::string, <a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33e">ProblemType</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#af601e9d42ebf311a42fa20225d866186">problem_type_map</a></td></tr>
+</table>
+<hr/><h2 id="header-inline_5Fclasses" class="groupheader">Class Documentation</h2>
+<a name="structOptions" id="structOptions"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structOptions">&#9670;&#160;</a></span>Options</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct Options</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="a3de04e8f7bbb951b210863e1714ed62a" name="a3de04e8f7bbb951b210863e1714ed62a"></a>bool</td>
+<td class="fieldname">
+cold = true</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="af35db881cccf91a2eded77afa50b70fb" name="af35db881cccf91a2eded77afa50b70fb"></a>bool</td>
+<td class="fieldname">
+warm_shift = true</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a33a25a66e106fd98e8eb8e22a2ad6952" name="a33a25a66e106fd98e8eb8e22a2ad6952"></a>bool</td>
+<td class="fieldname">
+warm_copy = false</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a15b9dc7e39dbeb050697735dbe1929e6" name="a15b9dc7e39dbeb050697735dbe1929e6"></a>bool</td>
+<td class="fieldname">
+no_updates = false</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a84366d66b118e7062a152985348239cd" name="a84366d66b118e7062a152985348239cd"></a>vector&lt; int &gt;</td>
+<td class="fieldname">
+parallelism = {8}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a7c864f62e787e28ea788125a0b5b59c1" name="a7c864f62e787e28ea788125a0b5b59c1"></a>vector&lt; int &gt;</td>
+<td class="fieldname">
+vector_length = {<a class="el" href="#abd7c170326903ac2f678a7b7f48a1dca">v</a>}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a028a843a11fc7b7ed2654be9b8c82a42" name="a028a843a11fc7b7ed2654be9b8c82a42"></a>bool</td>
+<td class="fieldname">
+rm = false</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="aa87c76cef3252d6411bce3893b442e5c" name="aa87c76cef3252d6411bce3893b442e5c"></a>bool</td>
+<td class="fieldname">
+cm = true</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ae4d3df5515efa3730d7789445f52fd97" name="ae4d3df5515efa3730d7789445f52fd97"></a>bool</td>
+<td class="fieldname">
+pcr = true</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a5fb516d0404207b4a43f572c2df77f10" name="a5fb516d0404207b4a43f572c2df77f10"></a>bool</td>
+<td class="fieldname">
+hpipm = false</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="add5121947cc0caf0f36002d9139b42d7" name="add5121947cc0caf0f36002d9139b42d7"></a>vector&lt; int &gt;</td>
+<td class="fieldname">
+horizon {32, 64, 96, 128, 192, 256}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a6e54944195345a63ad09c39e0bf0e073" name="a6e54944195345a63ad09c39e0bf0e073"></a>vector&lt; int &gt;</td>
+<td class="fieldname">
+masses {6, 12, 30}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a28f0b7978ade7a3be01900e7ce473280" name="a28f0b7978ade7a3be01900e7ce473280"></a>uint64_t</td>
+<td class="fieldname">
+num_instances = 50</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ad0cd58ab8b36006862e57094b9be42b5" name="ad0cd58ab8b36006862e57094b9be42b5"></a>uint64_t</td>
+<td class="fieldname">
+seed = 0</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a30184c9dceaa1948064492129b48dea0" name="a30184c9dceaa1948064492129b48dea0"></a><a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33e">ProblemType</a></td>
+<td class="fieldname">
+problem_type = <a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33eafc57686bf20fc8e206157d78a9fb758b">ProblemType::WangBoyd2008</a></td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a8090adb2740c14588adaf6a54259fcc2" name="a8090adb2740c14588adaf6a54259fcc2"></a>double</td>
+<td class="fieldname">
+pcr_max_update_fraction = 0.25</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a6dcb695bee4b0a8bd43c71a59af746f0" name="a6dcb695bee4b0a8bd43c71a59af746f0"></a>double</td>
+<td class="fieldname">
+cr_max_update_fraction = 0.9</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a9ed388d2e25d400369ad3c4dbee92ed0" name="a9ed388d2e25d400369ad3c4dbee92ed0"></a>int</td>
+<td class="fieldname">
+parallel_solve_cr_threshold = 10</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="aae3b8bfee6ceac8cd95a967c33cad452" name="aae3b8bfee6ceac8cd95a967c33cad452"></a>int</td>
+<td class="fieldname">
+parallel_factor_pcr_threshold = 20</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a6016e9e0cd591f88d4b471f602a1bab7" name="a6016e9e0cd591f88d4b471f602a1bab7"></a>double</td>
+<td class="fieldname">
+changing_constr_factor = 0.01</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a7127e3b6cdb1170a62208979c97c32aa" name="a7127e3b6cdb1170a62208979c97c32aa"></a>bool</td>
+<td class="fieldname">
+custom_reporter = true</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ae279fc65b1d933a072077a630cbc9e3a" name="ae279fc65b1d933a072077a630cbc9e3a"></a>bool</td>
+<td class="fieldname">
+print_extra = false</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a0c157ff2f12fcd0535ad0d57680dc155" name="a0c157ff2f12fcd0535ad0d57680dc155"></a>bool</td>
+<td class="fieldname">
+use_color = false</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a2078f04e236cb4491abc5d00d863ed81" name="a2078f04e236cb4491abc5d00d863ed81"></a>bool</td>
+<td class="fieldname">
+trace = false</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="af57c4c88687fda5d62a62e8b0dc4008d" name="af57c4c88687fda5d62a62e8b0dc4008d"></a>string</td>
+<td class="fieldname">
+export_problem {}</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a name="structProblem" id="structProblem"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structProblem">&#9670;&#160;</a></span>Problem</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct Problem</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="a2086d27dcbd2dc82aa31c44869aada91" name="a2086d27dcbd2dc82aa31c44869aada91"></a>string</td>
+<td class="fieldname">
+name</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a56720c210bc176b2068647ae4795b4f9" name="a56720c210bc176b2068647ae4795b4f9"></a><a class="el" href="structSpringMassParams.html">SpringMassParams</a></td>
+<td class="fieldname">
+params</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="aedfb63997e73d0dc8964ae5c1f36cd41" name="aedfb63997e73d0dc8964ae5c1f36cd41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedfb63997e73d0dc8964ae5c1f36cd41">&#9670;&#160;</a></span>seconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#aedfb63997e73d0dc8964ae5c1f36cd41">seconds</a> = std::chrono::duration&lt;double&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#_a39">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00104">104</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<a id="a4c669cb1cb4d98dfea944e9ceec7d33e" name="a4c669cb1cb4d98dfea944e9ceec7d33e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c669cb1cb4d98dfea944e9ceec7d33e">&#9670;&#160;</a></span>ProblemType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33e">ProblemType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4c669cb1cb4d98dfea944e9ceec7d33eafc57686bf20fc8e206157d78a9fb758b" name="a4c669cb1cb4d98dfea944e9ceec7d33eafc57686bf20fc8e206157d78a9fb758b"></a>WangBoyd2008&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4c669cb1cb4d98dfea944e9ceec7d33ea25d408c56cbbbab45f40c893418fb894" name="a4c669cb1cb4d98dfea944e9ceec7d33ea25d408c56cbbbab45f40c893418fb894"></a>WangBoyd2008Width&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4c669cb1cb4d98dfea944e9ceec7d33eae7ce5734fbb933180d31b231c2eb7be1" name="a4c669cb1cb4d98dfea944e9ceec7d33eae7ce5734fbb933180d31b231c2eb7be1"></a>Domahidi2012&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4c669cb1cb4d98dfea944e9ceec7d33eae327976f658280963c254af6d143c777" name="a4c669cb1cb4d98dfea944e9ceec7d33eae327976f658280963c254af6d143c777"></a>ActiveStateConstr&#160;</td><td class="fielddoc"></td></tr>
+</table>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#_a5">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00055">55</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a1e5ece077879bedb19586a2c036f2c23" name="a1e5ece077879bedb19586a2c036f2c23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e5ece077879bedb19586a2c036f2c23">&#9670;&#160;</a></span>WarmStartHPIPM</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a1e5ece077879bedb19586a2c036f2c23">WarmStartHPIPM</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1e5ece077879bedb19586a2c036f2c23a5b85379fb6d4ff2312ca180d829fdf01" name="a1e5ece077879bedb19586a2c036f2c23a5b85379fb6d4ff2312ca180d829fdf01"></a>NoWarmStart&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1e5ece077879bedb19586a2c036f2c23a54db44089bbacc4895e3414518231c77" name="a1e5ece077879bedb19586a2c036f2c23a54db44089bbacc4895e3414518231c77"></a>WarmZero&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1e5ece077879bedb19586a2c036f2c23abe144a42394a837bd7f50a6b10cf78be" name="a1e5ece077879bedb19586a2c036f2c23abe144a42394a837bd7f50a6b10cf78be"></a>WarmCopy&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1e5ece077879bedb19586a2c036f2c23a971d78d68790b314dad6cbe5b5431d8f" name="a1e5ece077879bedb19586a2c036f2c23a971d78d68790b314dad6cbe5b5431d8f"></a>WarmShift&#160;</td><td class="fielddoc"></td></tr>
+</table>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#_a68">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00234">234</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="aed9742e190fcdab12ce85ae28d0c0a66" name="aed9742e190fcdab12ce85ae28d0c0a66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed9742e190fcdab12ce85ae28d0c0a66">&#9670;&#160;</a></span>counter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto counter </td>
+          <td>(</td>
+          <td class="paramtype">auto</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a3">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00048">48</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a0c126e7f6f691e9434fc9c999ed9b106" name="a0c126e7f6f691e9434fc9c999ed9b106"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c126e7f6f691e9434fc9c999ed9b106">&#9670;&#160;</a></span>counter_avg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto counter_avg </td>
+          <td>(</td>
+          <td class="paramtype">auto</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a4">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00051">51</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a87c3add091c930e9266aaf6c71d5b499" name="a87c3add091c930e9266aaf6c71d5b499"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87c3add091c930e9266aaf6c71d5b499">&#9670;&#160;</a></span>create_problem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacecyqlone_1_1qpalm_1_1problems.html#structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem">qp::problems::SpringMassProblem</a> create_problem </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structSpringMassParams.html">SpringMassParams</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>params</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a41">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00106">106</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a796f7650fc942bd964d67e29a30785c4" name="a796f7650fc942bd964d67e29a30785c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a796f7650fc942bd964d67e29a30785c4">&#9670;&#160;</a></span>disable_tracing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void disable_tracing </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a47">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00162">162</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad3b3d4b3fd7cf72bcb309c69323c1c1d" name="ad3b3d4b3fd7cf72bcb309c69323c1c1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3b3d4b3fd7cf72bcb309c69323c1c1d">&#9670;&#160;</a></span>trace_run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void trace_run </td>
+          <td>(</td>
+          <td class="paramtype">auto &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const auto &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a50">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00163">163</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a99ac5e937e8cd6649369830168443ed2" name="a99ac5e937e8cd6649369830168443ed2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ac5e937e8cd6649369830168443ed2">&#9670;&#160;</a></span>print_traces()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void print_traces </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a58">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00164">164</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9a50c58845ad3929bc28241ad1ef0991" name="a9a50c58845ad3929bc28241ad1ef0991"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a50c58845ad3929bc28241ad1ef0991">&#9670;&#160;</a></span>run_benchmark()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">qp::StorageOrder</a> Order&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void run_benchmark </td>
+          <td>(</td>
+          <td class="paramtype">benchmark::State &amp;</td>          <td class="paramname"><span class="paramname"><em>state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>param_name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structSpringMassParams.html">SpringMassParams</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>params</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">qp::CyQPALMBackendSettings</a></td>          <td class="paramname"><span class="paramname"><em>backend_settings</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1Settings.html">qp::Settings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>warm</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>trace</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a59">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00168">168</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab1a4727f1d17d76d3fb9c497efb1650b" name="ab1a4727f1d17d76d3fb9c497efb1650b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1a4727f1d17d76d3fb9c497efb1650b">&#9670;&#160;</a></span>get_spring_mass_params()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::generator&lt; <a class="el" href="#structProblem">Problem</a> &gt; get_spring_mass_params </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#structOptions">Options</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>opts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a76">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00286">286</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a14f468c71f063f09688477ea3fd75bb8" name="a14f468c71f063f09688477ea3fd75bb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14f468c71f063f09688477ea3fd75bb8">&#9670;&#160;</a></span>export_problem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void export_problem </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#structOptions">Options</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>opts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a81">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00320">320</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af61fff0ad381f171d5c3d5fdbb5835d5" name="af61fff0ad381f171d5c3d5fdbb5835d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af61fff0ad381f171d5c3d5fdbb5835d5">&#9670;&#160;</a></span>order()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string_view order </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">qp::StorageOrder</a></td>          <td class="paramname"><span class="paramname"><em>o</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a87">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00340">340</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac3104388361a980a90810067441fdad2" name="ac3104388361a980a90810067441fdad2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3104388361a980a90810067441fdad2">&#9670;&#160;</a></span>get_cyqlone_solvers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">qp::StorageOrder</a> O&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::generator&lt; <a class="el" href="structSolver.html">Solver</a> &gt; get_cyqlone_solvers </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#structOptions">Options</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>opts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a89">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00343">343</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a114b0239a8ec074b2ceec7996775c9a0" name="a114b0239a8ec074b2ceec7996775c9a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a114b0239a8ec074b2ceec7996775c9a0">&#9670;&#160;</a></span>get_hpipm_solvers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::generator&lt; <a class="el" href="structSolver.html">Solver</a> &gt; get_hpipm_solvers </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#structOptions">Options</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>opts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a100">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00401">401</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a151b1c60490223468d41623ebfdde774" name="a151b1c60490223468d41623ebfdde774"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a151b1c60490223468d41623ebfdde774">&#9670;&#160;</a></span>get_cyqlone_solvers_vl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">qp::StorageOrder</a> Order&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::generator&lt; <a class="el" href="structSolver.html">Solver</a> &gt; get_cyqlone_solvers_vl </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#structOptions">Options</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>opts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a101">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00425">425</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a24b505c3306cc2abef80b9bf1bab9339" name="a24b505c3306cc2abef80b9bf1bab9339"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24b505c3306cc2abef80b9bf1bab9339">&#9670;&#160;</a></span>get_solvers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::generator&lt; <a class="el" href="structSolver.html">Solver</a> &gt; get_solvers </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#structOptions">Options</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>opts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a106">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00440">440</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a5e87583157c03d1f72c32e615762ca84" name="a5e87583157c03d1f72c32e615762ca84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e87583157c03d1f72c32e615762ca84">&#9670;&#160;</a></span>register_benchmarks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto register_benchmarks </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#structOptions">Options</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>opts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a107">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00448">448</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4670f9f2112847d3390329c356aaabfe" name="a4670f9f2112847d3390329c356aaabfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4670f9f2112847d3390329c356aaabfe">&#9670;&#160;</a></span>make_custom_reporter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; benchmark::BenchmarkReporter &gt; make_custom_reporter </td>
+          <td>(</td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>problem_name_width</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>solver_name_width</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>print_extra</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>with_color</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a108">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="a6301de13c9af8b12550574d0b6336157" name="a6301de13c9af8b12550574d0b6336157"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6301de13c9af8b12550574d0b6336157">&#9670;&#160;</a></span>register_options()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void register_options </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>program</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CLI::App &amp;</td>          <td class="paramname"><span class="paramname"><em>app</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#structOptions">Options</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>opts</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a109">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00474">474</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2fab40ef532103fd442a6d633bde2edc" name="a2fab40ef532103fd442a6d633bde2edc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fab40ef532103fd442a6d633bde2edc">&#9670;&#160;</a></span>initialize_google_benchmark()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int initialize_google_benchmark </td>
+          <td>(</td>
+          <td class="paramtype">char *</td>          <td class="paramname"><span class="paramname"><em>program</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">auto</td>          <td class="paramname"><span class="paramname"><em>bm_args</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a110">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00531">531</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2eb0bd8e125a8ca4d991c8146f1d9f53" name="a2eb0bd8e125a8ca4d991c8146f1d9f53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eb0bd8e125a8ca4d991c8146f1d9f53">&#9670;&#160;</a></span>register_context()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void register_context </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a111">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00544">544</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c04138a5bfe5d72780bb7e82a18e627">&#9670;&#160;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>argc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>argv</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00599">599</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="a7a4d39b575e51782c5391448b0a1f931" name="a7a4d39b575e51782c5391448b0a1f931"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a4d39b575e51782c5391448b0a1f931">&#9670;&#160;</a></span>v_native</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto v_native = std::is_same_v&lt;batmat::real_t, double&gt; ? 4 : 8</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#_a0">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00044">44</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="abd7c170326903ac2f678a7b7f48a1dca" name="abd7c170326903ac2f678a7b7f48a1dca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd7c170326903ac2f678a7b7f48a1dca">&#9670;&#160;</a></span>v</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto v = <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1types.html#aae92c3201f735f2fefabf1173b89d79b">batmat::types::vl_at_most</a>&lt;batmat::real_t, <a class="el" href="#a7a4d39b575e51782c5391448b0a1f931">v_native</a>&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a18">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00046">46</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af601e9d42ebf311a42fa20225d866186" name="af601e9d42ebf311a42fa20225d866186"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af601e9d42ebf311a42fa20225d866186">&#9670;&#160;</a></span>problem_type_map</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::map&lt;std::string, <a class="el" href="#a4c669cb1cb4d98dfea944e9ceec7d33e">ProblemType</a>&gt; problem_type_map</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{</div>
+<div class="line">    {<span class="stringliteral">&quot;wang-boyd-2008&quot;</span>, <a class="code hl_enumvalue" href="#a4c669cb1cb4d98dfea944e9ceec7d33eafc57686bf20fc8e206157d78a9fb758b">ProblemType::WangBoyd2008</a>},</div>
+<div class="line">    {<span class="stringliteral">&quot;wang-boyd-2008-width&quot;</span>, <a class="code hl_enumvalue" href="#a4c669cb1cb4d98dfea944e9ceec7d33ea25d408c56cbbbab45f40c893418fb894">ProblemType::WangBoyd2008Width</a>},</div>
+<div class="line">    {<span class="stringliteral">&quot;domahidi-2012&quot;</span>, <a class="code hl_enumvalue" href="#a4c669cb1cb4d98dfea944e9ceec7d33eae7ce5734fbb933180d31b231c2eb7be1">ProblemType::Domahidi2012</a>},</div>
+<div class="line">    {<span class="stringliteral">&quot;active-state-constr&quot;</span>, <a class="code hl_enumvalue" href="#a4c669cb1cb4d98dfea944e9ceec7d33eae327976f658280963c254af6d143c777">ProblemType::ActiveStateConstr</a>},</div>
+<div class="line">}</div>
+<div class="ttc" id="abenchmarks_2cyqpalm_2spring-mass_8cpp_html_a4c669cb1cb4d98dfea944e9ceec7d33ea25d408c56cbbbab45f40c893418fb894"><div class="ttname"><a href="#a4c669cb1cb4d98dfea944e9ceec7d33ea25d408c56cbbbab45f40c893418fb894">ProblemType::WangBoyd2008Width</a></div><div class="ttdeci">@ WangBoyd2008Width</div><div class="ttdef"><b>Definition</b> <a href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00057">spring-mass.cpp:57</a></div></div>
+<div class="ttc" id="abenchmarks_2cyqpalm_2spring-mass_8cpp_html_a4c669cb1cb4d98dfea944e9ceec7d33eae327976f658280963c254af6d143c777"><div class="ttname"><a href="#a4c669cb1cb4d98dfea944e9ceec7d33eae327976f658280963c254af6d143c777">ProblemType::ActiveStateConstr</a></div><div class="ttdeci">@ ActiveStateConstr</div><div class="ttdef"><b>Definition</b> <a href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00059">spring-mass.cpp:59</a></div></div>
+<div class="ttc" id="abenchmarks_2cyqpalm_2spring-mass_8cpp_html_a4c669cb1cb4d98dfea944e9ceec7d33eae7ce5734fbb933180d31b231c2eb7be1"><div class="ttname"><a href="#a4c669cb1cb4d98dfea944e9ceec7d33eae7ce5734fbb933180d31b231c2eb7be1">ProblemType::Domahidi2012</a></div><div class="ttdeci">@ Domahidi2012</div><div class="ttdef"><b>Definition</b> <a href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00058">spring-mass.cpp:58</a></div></div>
+<div class="ttc" id="abenchmarks_2cyqpalm_2spring-mass_8cpp_html_a4c669cb1cb4d98dfea944e9ceec7d33eafc57686bf20fc8e206157d78a9fb758b"><div class="ttname"><a href="#a4c669cb1cb4d98dfea944e9ceec7d33eafc57686bf20fc8e206157d78a9fb758b">ProblemType::WangBoyd2008</a></div><div class="ttdeci">@ WangBoyd2008</div><div class="ttdef"><b>Definition</b> <a href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00056">spring-mass.cpp:56</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#_a10">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html#l00061">61</a> of file <a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp_source.html">spring-mass.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_13a41d9ad64fb9ae396cb953294783cf.html">benchmarks</a></li><li class="navelem"><a href="dir_a176c167fe9328c1c90f722060dd8e38.html">cyqpalm</a></li><li class="navelem"><a href="benchmarks_2cyqpalm_2spring-mass_8cpp.html">spring-mass.cpp</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="neumaier_8hpp" kind="file" language="C++">
+    <compoundname>neumaier.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes local="no">cmath</includes>
+    <includes local="no">type_traits</includes>
+    <includedby refid="ocp-backend-cyqlone_8tpp" local="no">src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp</includedby>
+    <includedby refid="breakpoint_8hpp" local="no">src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp</includedby>
+    <includedby refid="implementation_2linesearch_8tpp" local="no">src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/neumaier.hpp</label>
+        <link refid="neumaier_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="4">
+        <label>cmath</label>
+      </node>
+      <node id="5">
+        <label>type_traits</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/neumaier.hpp</label>
+        <link refid="neumaier_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/ineq-constr.tpp</label>
+        <link refid="ineq-constr_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/linalg.tpp</label>
+        <link refid="linalg_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/linesearch.tpp</label>
+        <link refid="backends_2backend-cyqlone_2linesearch_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/solve.tpp</label>
+        <link refid="solve_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp</label>
+        <link refid="ocp-backend-cyqlone_8tpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp</label>
+        <link refid="breakpoint_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.tpp</label>
+        <link refid="breakpoint_8tpp"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp</label>
+        <link refid="implementation_2linesearch_8tpp"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp</label>
+        <link refid="solver_8tpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>src/qpalm/src/breakpoint.cpp</label>
+        <link refid="breakpoint_8cpp"/>
+      </node>
+      <node id="7">
+        <label>src/qpalm/src/ocp-backend-cyqlone.cpp</label>
+        <link refid="ocp-backend-cyqlone_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classcyqlone_1_1NeumaierSum" prot="public">cyqlone::NeumaierSum</innerclass>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <briefdescription>
+<para>Kahan-Babuška-Neumaier compensated summation. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="3"><highlight class="comment">///<sp/>@file</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">///<sp/>Kahan-Babuška-Neumaier<sp/>compensated<sp/>summation.</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">///<sp/>@ingroup<sp/>topic-utilities</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cmath&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref><sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="13"><highlight class="comment">///<sp/>Kahan-Babuška-Neumaier<sp/>compensated<sp/>summation.</highlight></codeline>
+<codeline lineno="14"><highlight class="comment">///<sp/>@ingroup<sp/>topic-utilities</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;</highlight></codeline>
+<codeline lineno="16" refid="classcyqlone_1_1NeumaierSum" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>{</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="18" refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>T<sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>{};</highlight></codeline>
+<codeline lineno="19" refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref>(T<sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>,<sp/>T<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>)<sp/>:<sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>{<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>},<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>{<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>}<sp/>{}</highlight></codeline>
+<codeline lineno="20" refid="classcyqlone_1_1NeumaierSum_1a7eae35f0eb6ff40578eb75bd3d0b97d8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7eae35f0eb6ff40578eb75bd3d0b97d8" kindref="member">NeumaierSum</ref>(T<sp/>value<sp/>=<sp/>{})<sp/>:<sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>(value)<sp/>{}</highlight></codeline>
+<codeline lineno="21" refid="classcyqlone_1_1NeumaierSum_1a1e9d8e69fbe7fb21a7d22222ec32fa4c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">operator</highlight><highlight class="normal"><sp/>T()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>+<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>;<sp/>}</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23" refid="classcyqlone_1_1NeumaierSum_1af4a486126bb2f5861efc3c36596de62f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1af4a486126bb2f5861efc3c36596de62f" kindref="member">operator-</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{-<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>,<sp/>-<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>};<sp/>}</highlight></codeline>
+<codeline lineno="24" refid="classcyqlone_1_1NeumaierSum_1a7c9a9a7e0d20f1a26be61b3c1ac62913" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>&amp;<ref refid="classcyqlone_1_1NeumaierSum_1a7c9a9a7e0d20f1a26be61b3c1ac62913" kindref="member">operator+=</ref>(T<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::abs;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T<sp/>t<sp/>=<sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(std::is_floating_point_v&lt;T&gt;)<sp/>{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(abs(<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>)<sp/>&gt;=<sp/>abs(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>))</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>+=<sp/>(<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>-<sp/>t)<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>+=<sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>t)<sp/>+<sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>m<sp/>=<sp/>abs(<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>)<sp/>&gt;=<sp/>abs(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>BATMAT_WITH_GSI_HPC_SIMD</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>=</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>select(m,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>+<sp/>((<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>-<sp/>t)<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>),<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>+<sp/>((<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>t)<sp/>+<sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>));</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>where(m,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>)<sp/>+=<sp/>(<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>-<sp/>t)<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>where(!m,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>)<sp/>+=<sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>t)<sp/>+<sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>=<sp/>t;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="45" refid="classcyqlone_1_1NeumaierSum_1adfdfea95f2a07dcc5b5172bd86fb178e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>&amp;<ref refid="classcyqlone_1_1NeumaierSum_1adfdfea95f2a07dcc5b5172bd86fb178e" kindref="member">operator+=</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>&amp;other)<sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>+=<sp/>other.<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>+=<sp/>other.<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="50" refid="classcyqlone_1_1NeumaierSum_1ae0827ceb18a50a2352479817e15ea71c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>&amp;<ref refid="classcyqlone_1_1NeumaierSum_1ae0827ceb18a50a2352479817e15ea71c" kindref="member">operator-=</ref>(T<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>+=<sp/>-<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>;<sp/>}</highlight></codeline>
+<codeline lineno="51" refid="classcyqlone_1_1NeumaierSum_1ae2e1be6f876d0e24d67353b9d1205136" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>&amp;<ref refid="classcyqlone_1_1NeumaierSum_1ae2e1be6f876d0e24d67353b9d1205136" kindref="member">operator-=</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>&amp;other)<sp/>{</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>-=<sp/>other.<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal"><sp/>-=<sp/>other.<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>*</highlight><highlight class="keyword">this</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57" refid="classcyqlone_1_1NeumaierSum_1aa1a0ff64fbd206621f3932fd3d889cbd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1aa1a0ff64fbd206621f3932fd3d889cbd" kindref="member">operator+</ref>(<ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>lhs,<sp/>T<sp/>rhs)<sp/>{</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lhs<sp/>+=<sp/>rhs;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lhs;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="61" refid="classcyqlone_1_1NeumaierSum_1a79b2b0a27d953a81fd12901e4aa92482" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a79b2b0a27d953a81fd12901e4aa92482" kindref="member">operator+</ref>(T<sp/>lhs,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>rhs)<sp/>{</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rhs<sp/>+=<sp/>lhs;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>rhs;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="65" refid="classcyqlone_1_1NeumaierSum_1a81cc781ba392c62870490923aec1b788" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a81cc781ba392c62870490923aec1b788" kindref="member">operator+</ref>(<ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>lhs,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>rhs)<sp/>{</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lhs<sp/>+=<sp/>rhs;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lhs;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70" refid="classcyqlone_1_1NeumaierSum_1a7489c5f2d5249961c8edca3e95be9b30" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7489c5f2d5249961c8edca3e95be9b30" kindref="member">operator-</ref>(<ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>lhs,<sp/>T<sp/>rhs)<sp/>{</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lhs<sp/>-=<sp/>rhs;</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lhs;</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="74" refid="classcyqlone_1_1NeumaierSum_1a561f4df562069d61ae54b6fc1e5e5ede" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a561f4df562069d61ae54b6fc1e5e5ede" kindref="member">operator-</ref>(T<sp/>lhs,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>rhs)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lhs<sp/>+<sp/>(-rhs);<sp/>}</highlight></codeline>
+<codeline lineno="75" refid="classcyqlone_1_1NeumaierSum_1a7f28fe9f7125430a30e6a086a5812bd7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a7f28fe9f7125430a30e6a086a5812bd7" kindref="member">operator-</ref>(<ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>lhs,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>&amp;rhs)<sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lhs<sp/>-=<sp/>rhs;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lhs;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="79" refid="classcyqlone_1_1NeumaierSum_1a27ec7543c36110a2281af26a9bedd8e5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a27ec7543c36110a2281af26a9bedd8e5" kindref="member">operator*</ref>(<ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>lhs,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>rhs)<sp/>{</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>res<sp/>=<sp/>lhs.<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>*<sp/>rhs.<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>res<sp/>+=<sp/>lhs.<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>*<sp/>rhs.<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>res<sp/>+=<sp/>lhs.<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>*<sp/>rhs.<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref>;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>res<sp/>+=<sp/>lhs.<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>*<sp/>rhs.<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref>;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>res;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="86" refid="classcyqlone_1_1NeumaierSum_1a39555a9263f53e921f6606941f7325fe" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a39555a9263f53e921f6606941f7325fe" kindref="member">operator*</ref>(<ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>lhs,<sp/>T<sp/>rhs)<sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{lhs.<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>*<sp/>rhs,<sp/>lhs.<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>*<sp/>rhs};</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="89" refid="classcyqlone_1_1NeumaierSum_1a78ba89c6c79ffd4b81408693c4b47171" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/><ref refid="classcyqlone_1_1NeumaierSum_1a78ba89c6c79ffd4b81408693c4b47171" kindref="member">operator*</ref>(T<sp/>lhs,<sp/><ref refid="classcyqlone_1_1NeumaierSum_1a023246a8890b36f4196b2dfe7a6d40d6" kindref="member">NeumaierSum</ref><sp/>rhs)<sp/>{</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{rhs.<ref refid="classcyqlone_1_1NeumaierSum_1aadc3d20324c0a51493451fdeb3e1f411" kindref="member">sum</ref><sp/>*<sp/>lhs,<sp/>rhs.<ref refid="classcyqlone_1_1NeumaierSum_1a7ca4d34bf91570c1a170e9b12ae099d3" kindref="member">compensation</ref><sp/>*<sp/>lhs};</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/include/cyqlone/neumaier.hpp"/>
+  </compounddef>
+</doxygen>

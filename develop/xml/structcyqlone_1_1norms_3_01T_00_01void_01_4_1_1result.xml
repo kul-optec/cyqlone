@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::norms&lt; T, void &gt;::result</compoundname>
+    <includes refid="reduce_8hpp" local="no">cyqlone/reduce.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a5dc0f728ca5a884e644e44bebd624670" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T cyqlone::norms&lt; T, void &gt;::result::amax</definition>
+        <argsstring></argsstring>
+        <name>amax</name>
+        <qualifiedname>cyqlone::norms&lt; T, void &gt;::result::amax</qualifiedname>
+        <briefdescription>
+<para>Maximum absolute value (ignoring NaNs). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="62" column="11" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="62" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1af6d8423fe66d5da13575c8c19715b831" compoundref="reduce_8hpp" startline="73" endline="76">norm_inf</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1a08cc788d323708afc55d14ca1cc7957e" compoundref="reduce_8hpp" startline="88" endline="91">cyqlone::norms&lt; T, void &gt;::operator()</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1a53d8853b933dc9a4ae19c612cb6d8ce1" compoundref="reduce_8hpp" startline="80" endline="85">cyqlone::norms&lt; T, void &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a8c35129719e7462be73debf4f7cac49e" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T cyqlone::norms&lt; T, void &gt;::result::asum</definition>
+        <argsstring></argsstring>
+        <name>asum</name>
+        <qualifiedname>cyqlone::norms&lt; T, void &gt;::result::asum</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="63" column="11" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="63" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a9e4b2f0ccab08aaca1d0b64830530699" compoundref="reduce_8hpp" startline="67" endline="67">norm_1</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1af6d8423fe66d5da13575c8c19715b831" compoundref="reduce_8hpp" startline="73" endline="76">norm_inf</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1a08cc788d323708afc55d14ca1cc7957e" compoundref="reduce_8hpp" startline="88" endline="91">cyqlone::norms&lt; T, void &gt;::operator()</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1a53d8853b933dc9a4ae19c612cb6d8ce1" compoundref="reduce_8hpp" startline="80" endline="85">cyqlone::norms&lt; T, void &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a97310921bb4629f482b78eaef9f16aa2" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T cyqlone::norms&lt; T, void &gt;::result::sumsq</definition>
+        <argsstring></argsstring>
+        <name>sumsq</name>
+        <qualifiedname>cyqlone::norms&lt; T, void &gt;::result::sumsq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="64" column="11" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="64" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a6607d6e3206400cd69de845523e9b859" compoundref="reduce_8hpp" startline="69" endline="72">norm_2</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1a08cc788d323708afc55d14ca1cc7957e" compoundref="reduce_8hpp" startline="88" endline="91">cyqlone::norms&lt; T, void &gt;::operator()</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1a53d8853b933dc9a4ae19c612cb6d8ce1" compoundref="reduce_8hpp" startline="80" endline="85">cyqlone::norms&lt; T, void &gt;::operator()</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a9e4b2f0ccab08aaca1d0b64830530699" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T cyqlone::norms&lt; T, void &gt;::result::norm_1</definition>
+        <argsstring>() const</argsstring>
+        <name>norm_1</name>
+        <qualifiedname>cyqlone::norms&lt; T, void &gt;::result::norm_1</qualifiedname>
+        <briefdescription>
+<para>ℓ₁ norm. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="67" column="12" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="67" bodyend="67"/>
+        <references refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a8c35129719e7462be73debf4f7cac49e" compoundref="reduce_8hpp" startline="63">asum</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a6607d6e3206400cd69de845523e9b859" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T cyqlone::norms&lt; T, void &gt;::result::norm_2</definition>
+        <argsstring>() const</argsstring>
+        <name>norm_2</name>
+        <qualifiedname>cyqlone::norms&lt; T, void &gt;::result::norm_2</qualifiedname>
+        <briefdescription>
+<para>ℓ₂ norm. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="69" column="12" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="69" bodyend="72"/>
+        <references refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a97310921bb4629f482b78eaef9f16aa2" compoundref="reduce_8hpp" startline="64">sumsq</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1af6d8423fe66d5da13575c8c19715b831" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T cyqlone::norms&lt; T, void &gt;::result::norm_inf</definition>
+        <argsstring>() const</argsstring>
+        <name>norm_inf</name>
+        <qualifiedname>cyqlone::norms&lt; T, void &gt;::result::norm_inf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="73" column="12" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="73" bodyend="76"/>
+        <references refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a5dc0f728ca5a884e644e44bebd624670" compoundref="reduce_8hpp" startline="62">amax</references>
+        <references refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a8c35129719e7462be73debf4f7cac49e" compoundref="reduce_8hpp" startline="63">asum</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Accumulator. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::norms&lt; T, void &gt;::result</label>
+        <link refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="61" column="5" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="61" bodyend="77"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a5dc0f728ca5a884e644e44bebd624670" prot="public" virt="non-virtual"><scope>cyqlone::norms&lt; T, void &gt;::result</scope><name>amax</name></member>
+      <member refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a8c35129719e7462be73debf4f7cac49e" prot="public" virt="non-virtual"><scope>cyqlone::norms&lt; T, void &gt;::result</scope><name>asum</name></member>
+      <member refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a9e4b2f0ccab08aaca1d0b64830530699" prot="public" virt="non-virtual"><scope>cyqlone::norms&lt; T, void &gt;::result</scope><name>norm_1</name></member>
+      <member refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a6607d6e3206400cd69de845523e9b859" prot="public" virt="non-virtual"><scope>cyqlone::norms&lt; T, void &gt;::result</scope><name>norm_2</name></member>
+      <member refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1af6d8423fe66d5da13575c8c19715b831" prot="public" virt="non-virtual"><scope>cyqlone::norms&lt; T, void &gt;::result</scope><name>norm_inf</name></member>
+      <member refid="structcyqlone_1_1norms_3_01T_00_01void_01_4_1_1result_1a97310921bb4629f482b78eaef9f16aa2" prot="public" virt="non-virtual"><scope>cyqlone::norms&lt; T, void &gt;::result</scope><name>sumsq</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

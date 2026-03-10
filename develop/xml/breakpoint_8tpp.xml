@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="breakpoint_8tpp" kind="file" language="C++">
+    <compoundname>breakpoint.tpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes refid="breakpoint_8hpp" local="no">cyqlone/qpalm/implementation/breakpoint.hpp</includes>
+    <includes local="no">guanaqo/trace.hpp</includes>
+    <includes local="no">cmath</includes>
+    <includes local="no">ranges</includes>
+    <includedby refid="implementation_2linesearch_8tpp" local="no">src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/neumaier.hpp</label>
+        <link refid="neumaier_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>cyqlone/qpalm/implementation/breakpoint.hpp</label>
+        <link refid="breakpoint_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.tpp</label>
+        <link refid="breakpoint_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="6">
+        <label>cmath</label>
+      </node>
+      <node id="8">
+        <label>guanaqo/tag-invoke.hpp</label>
+      </node>
+      <node id="11">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+      <node id="12">
+        <label>ranges</label>
+      </node>
+      <node id="9">
+        <label>span</label>
+      </node>
+      <node id="7">
+        <label>type_traits</label>
+      </node>
+      <node id="10">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.tpp</label>
+        <link refid="breakpoint_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp</label>
+        <link refid="implementation_2linesearch_8tpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp</label>
+        <link refid="solver_8tpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>src/qpalm/src/ocp-backend-cyqlone.cpp</label>
+        <link refid="ocp-backend-cyqlone_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="breakpoint_8hpp" kindref="compound">cyqlone/qpalm/implementation/breakpoint.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/trace.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cmath&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;ranges&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="config_8hpp_1a1f4757b3a02c15cce8aeaa6906e55c17" kindref="member">CYQLONE_NS</ref>(<ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>::qpalm)<sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Vec&gt;</highlight></codeline>
+<codeline lineno="10"><highlight class="normal">std::span&lt;Breakpoint&gt;</highlight></codeline>
+<codeline lineno="11" refid="namespacecyqlone_1_1qpalm_1ac2625e16a723c214f3e23b72f59ad817" refkind="member"><highlight class="normal"><ref refid="namespacecyqlone_1_1qpalm_1ac2625e16a723c214f3e23b72f59ad817" kindref="member">compute_breakpoints_default</ref>(std::vector&lt;Breakpoint&gt;<sp/>&amp;breakpoints,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vec<sp/>&amp;Σ,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vec<sp/>&amp;y,</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vec<sp/>&amp;Ad,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vec<sp/>&amp;Ax,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vec<sp/>&amp;b_min,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vec<sp/>&amp;b_max)<sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;linesearch<sp/>breakpoints&quot;</highlight><highlight class="normal">,<sp/>0);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::sqrt;</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Allocate<sp/>memory</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>m<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="keywordtype">size_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(y.size());</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>breakpoints.resize(2<sp/>*<sp/>m);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compute<sp/>break<sp/>points<sp/>t[i]<sp/>and<sp/>intermediate<sp/>values<sp/>α[i]<sp/>and<sp/>δ[i]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>indices<sp/>=<sp/>std::views::iota(index_t{});</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[Σi,<sp/>yi,<sp/>Adi,<sp/>Axi,<sp/>li,<sp/>ui,<sp/>i]<sp/>:</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::views::zip(Σ,<sp/>y,<sp/>Ad,<sp/>Ax,<sp/>b_min,<sp/>b_max,<sp/>indices))<sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>s<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>sqrt(Σi);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>breakpoints[m<sp/>+<sp/>i].δ<sp/>=<sp/>s<sp/>*<sp/>Adi;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>breakpoints[i].δ<sp/><sp/><sp/><sp/><sp/>=<sp/>-breakpoints[m<sp/>+<sp/>i].δ;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>breakpoints[i].t<sp/><sp/><sp/><sp/><sp/>=<sp/>(yi<sp/>+<sp/>Σi<sp/>*<sp/>(Axi<sp/>-<sp/>li))<sp/>/<sp/>(s<sp/>*<sp/>breakpoints[i].δ);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>breakpoints[m<sp/>+<sp/>i].t<sp/>=<sp/>(Σi<sp/>*<sp/>(ui<sp/>-<sp/>Axi)<sp/>-<sp/>yi)<sp/>/<sp/>(s<sp/>*<sp/>breakpoints[m<sp/>+<sp/>i].δ);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::span{breakpoints};</highlight></codeline>
+<codeline lineno="29"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone::qpalm)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.tpp"/>
+  </compounddef>
+</doxygen>

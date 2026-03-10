@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1detail_1_1backend__stats__type" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::detail::backend_stats_type</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::detail::backend_stats_type&lt; T &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1detail_1_1backend__stats__type"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="75" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="75" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

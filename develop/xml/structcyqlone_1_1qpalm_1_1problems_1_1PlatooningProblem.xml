@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::problems::PlatooningProblem</compoundname>
+    <includes refid="platooning_8hpp" local="no">cyqlone/qpalm/example-problems/platooning.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem_1afaad2533c84ecf56d28b0848410ca29f" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref></type>
+        <definition>LinearOCPStorage cyqlone::qpalm::problems::PlatooningProblem::ocp</definition>
+        <argsstring></argsstring>
+        <name>ocp</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningProblem::ocp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="25" column="22" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem_1a919449a70bfca330f0c99653129867e1" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::qpalm::problems::PlatooningProblem::ref</definition>
+        <argsstring></argsstring>
+        <name>ref</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningProblem::ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="26" column="17" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>cyqlone::LinearOCPStorage</label>
+        <link refid="structcyqlone_1_1LinearOCPStorage"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+dim</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+storage</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cyqlone::OCPDim</label>
+        <link refid="structcyqlone_1_1OCPDim"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::problems::PlatooningProblem</label>
+        <link refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+ocp</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+ref</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="24" column="1" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="24" bodyend="27"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem_1afaad2533c84ecf56d28b0848410ca29f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningProblem</scope><name>ocp</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem_1a919449a70bfca330f0c99653129867e1" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningProblem</scope><name>ref</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

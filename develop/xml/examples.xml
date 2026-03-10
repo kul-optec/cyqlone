@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="examples" kind="page">
+    <compoundname>examples</compoundname>
+    <title>Examples</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="examples_1md_docs_2source_2doxygen_2examples"/></para>
+<para><itemizedlist>
+<listitem><para><ref refid="solve-block-tridiagonal_8cpp-example" kindref="compound">Solving a block tridiagonal system</ref></para>
+</listitem><listitem><para><ref refid="solve-ocp_8cpp-example" kindref="compound">Solving an optimal control problem using Cyqlone</ref></para>
+</listitem><listitem><para><ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp-example" kindref="compound">Spring-mass OCP benchmark</ref></para>
+</listitem><listitem><para><ref refid="test_2test-pcr_8cpp-example" kindref="compound">Standalone PCR solver</ref> </para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <location file=""/>
+  </compounddef>
+</doxygen>

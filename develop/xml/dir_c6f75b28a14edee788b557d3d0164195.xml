@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_c6f75b28a14edee788b557d3d0164195" kind="dir">
+    <compoundname>src/qpalm/include/cyqlone</compoundname>
+    <innerdir refid="dir_2d5279b0a350446182c761e0ab245364">src/qpalm/include/cyqlone/qpalm</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/qpalm/include/cyqlone/"/>
+  </compounddef>
+</doxygen>

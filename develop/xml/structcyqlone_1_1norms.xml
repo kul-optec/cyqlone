@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1norms" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::norms</compoundname>
+    <includes refid="reduce_8hpp" local="no">cyqlone/reduce.hpp</includes>
+    <innerclass refid="structcyqlone_1_1norms_1_1result__simd" prot="public">cyqlone::norms::result_simd</innerclass>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+      <param>
+        <type>class simd</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1norms_1acd004182a7328d96fffa3c56a019c3a5" prot="public" static="no">
+        <type>typename <ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>&lt; T &gt;::result</type>
+        <definition>using cyqlone::norms&lt; T, simd &gt;::result = typename norms&lt;T&gt;::result</definition>
+        <argsstring></argsstring>
+        <name>result</name>
+        <qualifiedname>cyqlone::norms::result</qualifiedname>
+        <briefdescription>
+<para>Accumulator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="28" column="5" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1norms_1a5cddc1c0b1676fd0b22f60a3638a0caf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1norms_1_1result__simd" kindref="compound">result_simd</ref></type>
+        <definition>result_simd cyqlone::norms&lt; T, simd &gt;::operator()</definition>
+        <argsstring>(result_simd accum, simd t) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>cyqlone::norms::operator()</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1norms_1_1result__simd" kindref="compound">result_simd</ref></type>
+          <declname>accum</declname>
+        </param>
+        <param>
+          <type>simd</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+<para>Update the accumulator with a new value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="39" column="17" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="39" bodyend="44"/>
+        <references refid="structcyqlone_1_1norms_1_1result__simd_1a4df711757b01f11eedfa2cee42e241b8" compoundref="reduce_8hpp" startline="31">cyqlone::norms&lt; T, simd &gt;::result_simd::amax</references>
+        <references refid="structcyqlone_1_1norms_1_1result__simd_1a1f39de7cc82aa5ce08d13fb0b0c4a162" compoundref="reduce_8hpp" startline="32">cyqlone::norms&lt; T, simd &gt;::result_simd::asum</references>
+        <references refid="structcyqlone_1_1norms_1_1result__simd_1a9e93f56b0ed66e8942e571b1769b6ebb" compoundref="reduce_8hpp" startline="33">cyqlone::norms&lt; T, simd &gt;::result_simd::sumsq</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1norms_1a312d14b1e7e5274be8e6320d76ed33f4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1norms_1acd004182a7328d96fffa3c56a019c3a5" kindref="member">result</ref></type>
+        <definition>result cyqlone::norms&lt; T, simd &gt;::operator()</definition>
+        <argsstring>(result_simd accum) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>cyqlone::norms::operator()</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1norms_1_1result__simd" kindref="compound">result_simd</ref></type>
+          <declname>accum</declname>
+        </param>
+        <briefdescription>
+<para>Reduce the SIMD accumulator to a scalar result. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="47" column="12" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="47" bodyend="52"/>
+        <references refid="structcyqlone_1_1norms_1_1result__simd_1a4df711757b01f11eedfa2cee42e241b8" compoundref="reduce_8hpp" startline="31">cyqlone::norms&lt; T, simd &gt;::result_simd::amax</references>
+        <references refid="structcyqlone_1_1norms_1_1result__simd_1a1f39de7cc82aa5ce08d13fb0b0c4a162" compoundref="reduce_8hpp" startline="32">cyqlone::norms&lt; T, simd &gt;::result_simd::asum</references>
+        <references refid="structcyqlone_1_1norms_1_1result__simd_1a9e93f56b0ed66e8942e571b1769b6ebb" compoundref="reduce_8hpp" startline="33">cyqlone::norms&lt; T, simd &gt;::result_simd::sumsq</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structcyqlone_1_1norms_1a1fa0c63b386ad6fa5766870f1fb34eae" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1norms_1_1result__simd" kindref="compound">result_simd</ref></type>
+        <definition>static result_simd cyqlone::norms&lt; T, simd &gt;::zero_simd</definition>
+        <argsstring>()</argsstring>
+        <name>zero_simd</name>
+        <qualifiedname>cyqlone::norms::zero_simd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="55" column="24" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="55" bodyend="55"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Utilities for computing vector norms. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scalar type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>simd</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>SIMD type. Void for scalar-only. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::norms&lt; T, simd &gt;</label>
+        <link refid="structcyqlone_1_1norms"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="26" column="1" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="26" bodyend="56"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1norms_1a5cddc1c0b1676fd0b22f60a3638a0caf" prot="public" virt="non-virtual"><scope>cyqlone::norms</scope><name>operator()</name></member>
+      <member refid="structcyqlone_1_1norms_1a312d14b1e7e5274be8e6320d76ed33f4" prot="public" virt="non-virtual"><scope>cyqlone::norms</scope><name>operator()</name></member>
+      <member refid="structcyqlone_1_1norms_1acd004182a7328d96fffa3c56a019c3a5" prot="public" virt="non-virtual"><scope>cyqlone::norms</scope><name>result</name></member>
+      <member refid="structcyqlone_1_1norms_1a1fa0c63b386ad6fa5766870f1fb34eae" prot="public" virt="non-virtual"><scope>cyqlone::norms</scope><name>zero_simd</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

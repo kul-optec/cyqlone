@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1LinearOCPStorage_1_1KKTError" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::LinearOCPStorage::KKTError</compoundname>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPStorage_1_1KKTError_1a24dd4b50f7770134875f10d21fb5a736" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::LinearOCPStorage::KKTError::stationarity</definition>
+        <argsstring></argsstring>
+        <name>stationarity</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::KKTError::stationarity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="444" column="16" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="444" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPStorage_1_1KKTError_1afd463cff91741360c951fa34dbd2dc01" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::LinearOCPStorage::KKTError::inequality_residual</definition>
+        <argsstring></argsstring>
+        <name>inequality_residual</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::KKTError::inequality_residual</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="444" column="29" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="444" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPStorage_1_1KKTError_1a2e0836a2b4627eafeee13186ad0d504a" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::LinearOCPStorage::KKTError::equality_residual</definition>
+        <argsstring></argsstring>
+        <name>equality_residual</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::KKTError::equality_residual</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="444" column="49" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="444" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPStorage_1_1KKTError_1aec340cd6313ecc032c6cd1b88b41d89b" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::LinearOCPStorage::KKTError::complementarity</definition>
+        <argsstring></argsstring>
+        <name>complementarity</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::KKTError::complementarity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="444" column="67" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="444" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::LinearOCPStorage::KKTError</label>
+        <link refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="443" column="5" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="443" bodyend="445"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError_1aec340cd6313ecc032c6cd1b88b41d89b" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage::KKTError</scope><name>complementarity</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError_1a2e0836a2b4627eafeee13186ad0d504a" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage::KKTError</scope><name>equality_residual</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError_1afd463cff91741360c951fa34dbd2dc01" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage::KKTError</scope><name>inequality_residual</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError_1a24dd4b50f7770134875f10d21fb5a736" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage::KKTError</scope><name>stationarity</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

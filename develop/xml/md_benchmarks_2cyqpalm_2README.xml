@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="md_benchmarks_2cyqpalm_2README" kind="page">
+    <compoundname>md_benchmarks_2cyqpalm_2README</compoundname>
+    <title>CyQPALM benchmarks</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="md_benchmarks_2cyqpalm_2README_1cyqpalm-benchmarks"/></para>
+<para>To reproduce the results from the paper, you will need the <ulink url="https://conan.io/">Conan</ulink> package manager. It can be installed via <computeroutput>python3 -m pip install conan</computeroutput>. You&apos;ll also need the following standard tools: Git, wget, make, GCC and libgfortran (<computeroutput>apt install git wget gcc g++ make libgfortran5</computeroutput>). Currently, only Linux is supported (tested on Ubuntu 22.04 and 24.04, and Rocky Linux 9.7). Then download, build and install the dependencies: <programlisting filename=".sh"><codeline><highlight class="normal">./benchmark.sh<sp/>deps<sp/>--gcc</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>--<sp/>or<sp/>--</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>deps<sp/>--clang<sp/><sp/><sp/>#<sp/>or<sp/>use<sp/>e.g.<sp/>--clang-21<sp/>for<sp/>a<sp/>specific<sp/>version</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>--<sp/>or<sp/>--</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>deps<sp/>--icx</highlight></codeline>
+</programlisting> By default, compiler flags are selected automatically depending on the build machine, but this can be overridden by setting the <computeroutput>DEV_ARCH</computeroutput> variable. For example, to enable AVX2 but not AVX-512, set <computeroutput>DEV_ARCH=x86-64-v3</computeroutput>; to enable both AVX2 and AVX-512, set <computeroutput>DEV_ARCH=x86-64-v4</computeroutput>.</para>
+<para>Next, build the benchmark project: <programlisting filename=".sh"><codeline><highlight class="normal">./benchmark.sh<sp/>build</highlight></codeline>
+</programlisting></para>
+<para>By default, the benchmarks run on the first eight CPUs available on your system. To change this (e.g. if fewer CPUs are available or if the first eight logical CPUs are hyperthreads on four physical cores), configure the following environment variables: <programlisting filename=".sh"><codeline><highlight class="normal">export<sp/>OMP_NUM_THREADS=4<sp/>#<sp/>number<sp/>of<sp/>CPUs<sp/>to<sp/>use<sp/>(p<sp/>parameter<sp/>in<sp/>the<sp/>paper)</highlight></codeline>
+<codeline><highlight class="normal">export<sp/>OMP_PLACES=&quot;0:4&quot;<sp/><sp/>#<sp/>which<sp/>CPUs<sp/>to<sp/>use<sp/>(here:<sp/>first<sp/>four)</highlight></codeline>
+</programlisting> Using <computeroutput>OMP_PLACES</computeroutput> to pin the benchmark processes to specific CPUs helps reduce variability in the results, and is crucial when using a system with both performance and efficiency cores (you want to select the performance cores). See <ulink url="https://www.openmp.org/spec-html/5.0/openmpse53.html">https://www.openmp.org/spec-html/5.0/openmpse53.html</ulink> for more details on the <computeroutput>OMP_PLACES</computeroutput> syntax.</para>
+<para>You can now run the benchmarks. For a quick sanity check, run: <programlisting filename=".sh"><codeline><highlight class="normal">./benchmark.sh<sp/>benchmark-quick</highlight></codeline>
+</programlisting> To run the full scaling benchmark (Figure 15 in the paper), run: <programlisting filename=".sh"><codeline><highlight class="normal">./benchmark.sh<sp/>benchmark-scaling<sp/>#<sp/>takes<sp/>a<sp/>couple<sp/>of<sp/>minutes</highlight></codeline>
+</programlisting> To run the full grid benchmark (Tables 1-3, Figures 13-14, Tables 5-7 in the paper), run: <programlisting filename=".sh"><codeline><highlight class="normal">./benchmark.sh<sp/>benchmark-grid<sp/>#<sp/>takes<sp/>a<sp/>couple<sp/>of<sp/>hours</highlight></codeline>
+</programlisting> To visualize the results of the scaling benchmark, run: <programlisting filename=".sh"><codeline><highlight class="normal">./benchmark.sh<sp/>plot-scaling</highlight></codeline>
+</programlisting> For a full list of the available commands, run: <programlisting filename=".sh"><codeline><highlight class="normal">./benchmark.sh<sp/>--help</highlight></codeline>
+</programlisting> For more details on the available benchmark parameters, run: <programlisting filename=".sh"><codeline><highlight class="normal">./benchmark.sh<sp/>benchmark<sp/>--help</highlight></codeline>
+</programlisting></para>
+<sect1 id="md_benchmarks_2cyqpalm_2README_1docker">
+<title>Docker</title><para>If building locally is not an option, Docker files are provided for both GCC and Clang. To build the Docker image, run: <programlisting filename=".sh"><codeline><highlight class="normal">rm<sp/>-rf<sp/>benchmarks/cyqpalm/build<sp/>#<sp/>Clean<sp/>up<sp/>any<sp/>previous<sp/>builds<sp/>just<sp/>in<sp/>case</highlight></codeline>
+<codeline><highlight class="normal">docker<sp/>build<sp/>-f<sp/>Dockerfile.gcc<sp/>-t<sp/>cyqlone-benchmarks:latest<sp/>.</highlight></codeline>
+<codeline><highlight class="normal">docker<sp/>run<sp/>-it<sp/>cyqlone-benchmarks:latest</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>benchmark-quick</highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <location file="benchmarks/cyqpalm/README.md"/>
+  </compounddef>
+</doxygen>

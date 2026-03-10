@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="solve-block-tridiagonal_8py-example" kind="example">
+    <compoundname>solve-block-tridiagonal.py</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><programlisting filename="solve-block-tridiagonal.py"><codeline><highlight class="keyword">import</highlight><highlight class="normal"><sp/>sys</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>numpy<sp/></highlight><highlight class="keyword">as</highlight><highlight class="normal"><sp/>np</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>numpy.linalg<sp/></highlight><highlight class="keyword">as</highlight><highlight class="normal"><sp/>la</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">from</highlight><highlight class="normal"><sp/>scipy.io<sp/></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>loadmat</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">#<sp/>Load<sp/>the<sp/>data<sp/>generated<sp/>by<sp/>solve-block-tridiagonal.cpp</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">data<sp/>=<sp/>loadmat(</highlight><highlight class="stringliteral">&quot;block_tridiagonal_system.mat&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">#<sp/>Data<sp/>is<sp/>stored<sp/>in<sp/>Fortran<sp/>order,<sp/>so<sp/>transpose</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">M<sp/>=<sp/>np.moveaxis(data[</highlight><highlight class="stringliteral">&quot;M&quot;</highlight><highlight class="normal">],<sp/>-1,<sp/>0)<sp/><sp/></highlight><highlight class="comment">#<sp/>(n,<sp/>n,<sp/>N)<sp/>-&gt;<sp/>(N,<sp/>n,<sp/>n)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">K<sp/>=<sp/>np.moveaxis(data[</highlight><highlight class="stringliteral">&quot;K&quot;</highlight><highlight class="normal">],<sp/>-1,<sp/>0)<sp/><sp/></highlight><highlight class="comment">#<sp/>(n,<sp/>n,<sp/>N)<sp/>-&gt;<sp/>(N,<sp/>n,<sp/>n)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">b<sp/>=<sp/>np.moveaxis(data[</highlight><highlight class="stringliteral">&quot;b&quot;</highlight><highlight class="normal">],<sp/>-1,<sp/>0)<sp/><sp/></highlight><highlight class="comment">#<sp/>(n,<sp/>1,<sp/>N)<sp/>-&gt;<sp/>(N,<sp/>n,<sp/>1)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">x<sp/>=<sp/>np.moveaxis(data[</highlight><highlight class="stringliteral">&quot;x&quot;</highlight><highlight class="normal">],<sp/>-1,<sp/>0)<sp/><sp/></highlight><highlight class="comment">#<sp/>(n,<sp/>1,<sp/>N)<sp/>-&gt;<sp/>(N,<sp/>n,<sp/>1)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">N,<sp/>n,<sp/>_<sp/>=<sp/>M.shape</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">#<sp/>Construct<sp/>the<sp/>full<sp/>block<sp/>tridiagonal<sp/>system<sp/>as<sp/>a<sp/>dense<sp/>matrix<sp/>for<sp/>verification</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">A<sp/>=<sp/>np.zeros((N<sp/>*<sp/>n,<sp/>N<sp/>*<sp/>n))</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>i<sp/></highlight><highlight class="keywordflow">in</highlight><highlight class="normal"><sp/>range(N):</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>A[i<sp/>*<sp/>n<sp/>:<sp/>(i<sp/>+<sp/>1)<sp/>*<sp/>n,<sp/>i<sp/>*<sp/>n<sp/>:<sp/>(i<sp/>+<sp/>1)<sp/>*<sp/>n]<sp/>=<sp/>np.tril(M[i])<sp/>+<sp/>np.tril(M[i],<sp/>-1).T</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>A[((i<sp/>+<sp/>1)<sp/>%<sp/>N)<sp/>*<sp/>n<sp/>:<sp/>((i<sp/>+<sp/>1)<sp/>%<sp/>N<sp/>+<sp/>1)<sp/>*<sp/>n,<sp/>i<sp/>*<sp/>n<sp/>:<sp/>(i<sp/>+<sp/>1)<sp/>*<sp/>n]<sp/>=<sp/>K[i]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>A[i<sp/>*<sp/>n<sp/>:<sp/>(i<sp/>+<sp/>1)<sp/>*<sp/>n,<sp/>((i<sp/>+<sp/>1)<sp/>%<sp/>N)<sp/>*<sp/>n<sp/>:<sp/>((i<sp/>+<sp/>1)<sp/>%<sp/>N<sp/>+<sp/>1)<sp/>*<sp/>n]<sp/>=<sp/>K[i].T</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">#<sp/>Report<sp/>the<sp/>condition<sp/>number<sp/>and<sp/>the<sp/>residual<sp/>of<sp/>the<sp/>solution</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;Number<sp/>of<sp/>blocks:<sp/><sp/><sp/><sp/>{N}&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;Block<sp/>size:<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{n}&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;Number<sp/>of<sp/>variables:<sp/>{N<sp/>*<sp/>n}&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;Number<sp/>of<sp/>nonzeros:<sp/><sp/>{N<sp/>*<sp/>n<sp/>*<sp/>(n<sp/>+<sp/>1)<sp/>//<sp/>2<sp/>+<sp/>N<sp/>*<sp/>n<sp/>*<sp/>n}&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">σA<sp/>=<sp/>la.eigvalsh(A)</highlight></codeline>
+<codeline><highlight class="normal">nrmA<sp/>=<sp/>max(σA)</highlight></codeline>
+<codeline><highlight class="normal">condA<sp/>=<sp/>nrmA<sp/>/<sp/>min(σA)</highlight></codeline>
+<codeline><highlight class="normal">res<sp/>=<sp/>la.norm(A<sp/>@<sp/>x.ravel()<sp/>-<sp/>b.ravel())</highlight></codeline>
+<codeline><highlight class="normal">nrmx,<sp/>nrmb<sp/>=<sp/>la.norm(x.ravel()),<sp/>la.norm(b.ravel())</highlight></codeline>
+<codeline><highlight class="normal">err<sp/>=<sp/>res<sp/>/<sp/>(nrmA<sp/>*<sp/>nrmx<sp/>+<sp/>nrmb)</highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;Condition<sp/>number<sp/>κ(A)<sp/>=<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{condA:.17e}&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;Relative<sp/>residual<sp/>‖Ax-b‖/‖b‖<sp/>=<sp/><sp/>{res<sp/>/<sp/>nrmb:.17e}&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>‖Ax-b‖&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;Backward<sp/>error<sp/>η<sp/>=<sp/>──────────<sp/>=<sp/>{err:.17e}&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">print(f</highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>‖A‖‖x‖+‖b‖&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">sys.exit(0<sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>err<sp/>&lt;<sp/>10<sp/>*<sp/>np.finfo(M.dtype).eps<sp/>*<sp/>N<sp/>*<sp/>n<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>1)</highlight></codeline>
+</programlisting> </para>
+    </detaileddescription>
+    <location file="docs/source/doxygen/examples.md"/>
+  </compounddef>
+</doxygen>

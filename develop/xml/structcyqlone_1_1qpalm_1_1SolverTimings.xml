@@ -1,0 +1,336 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1SolverTimings" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::SolverTimings</compoundname>
+    <includes refid="solver_8hpp" local="no">cyqlone/qpalm/solver.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1af05f866344d2c8d0b431bf82e6bcb528" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::total</definition>
+        <argsstring></argsstring>
+        <name>total</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::total</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="20" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a6817bb47e1b906671e2ff3fc539df997" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::scaling</definition>
+        <argsstring></argsstring>
+        <name>scaling</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::scaling</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="21" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a5e598eb1eb75831ade2d39c6ef763962" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::line_search</definition>
+        <argsstring></argsstring>
+        <name>line_search</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::line_search</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="22" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a204e1c7d89db46c34718a46fbcab5c31" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::recompute_inner</definition>
+        <argsstring></argsstring>
+        <name>recompute_inner</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::recompute_inner</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="23" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1ac362d870927e569e86a85b5afc233a71" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::recompute_outer</definition>
+        <argsstring></argsstring>
+        <name>recompute_outer</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::recompute_outer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="24" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a5e3650cb9a7f98e5d8bc82b52d9d2c6b" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::mat_vec_M</definition>
+        <argsstring></argsstring>
+        <name>mat_vec_M</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::mat_vec_M</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="25" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1aa2d2311d3ddcf436aa8e801ed960e814" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::mat_vec_MT</definition>
+        <argsstring></argsstring>
+        <name>mat_vec_MT</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::mat_vec_MT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="26" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="26" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a1155e1ba338cbaf461369dae46d03068" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::mat_vec_A</definition>
+        <argsstring></argsstring>
+        <name>mat_vec_A</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::mat_vec_A</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="27" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="27" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a5f414bd26fea73b4cb14516d253cd216" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::mat_vec_AT</definition>
+        <argsstring></argsstring>
+        <name>mat_vec_AT</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::mat_vec_AT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="28" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a48f490b0bfaef5afa76af09bc2a81984" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::mat_vec_Q</definition>
+        <argsstring></argsstring>
+        <name>mat_vec_Q</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::mat_vec_Q</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="29" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="29" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a7b8a81360c87e947b2e7b6d7caf96e43" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::active_set_change</definition>
+        <argsstring></argsstring>
+        <name>active_set_change</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::active_set_change</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="30" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="30" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a2e5f2c5a7c88fd2d3c52662e0357ba12" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::update_penalty</definition>
+        <argsstring></argsstring>
+        <name>update_penalty</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::update_penalty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="31" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a64b885dd8e1d0d6806ca3067038154f0" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::update_regularization</definition>
+        <argsstring></argsstring>
+        <name>update_regularization</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::update_regularization</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="32" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="32" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a3525a9be60e61aaa7249a8aa45b10d6f" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::boost_regularization</definition>
+        <argsstring></argsstring>
+        <name>boost_regularization</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::boost_regularization</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="33" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="33" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a60979bac16c487ca041325a8aebe0f08" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref></type>
+        <definition>DefaultTimings cyqlone::qpalm::SolverTimings::solve</definition>
+        <argsstring></argsstring>
+        <name>solve</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::solve</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="34" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="34" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a1f2d0413d9e3d80270f2674513876e51" prot="public" static="no" mutable="no">
+        <type>std::map&lt; std::string, <ref refid="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" kindref="member">DefaultTimings</ref> &gt;</type>
+        <definition>std::map&lt;std::string, DefaultTimings&gt; cyqlone::qpalm::SolverTimings::backend</definition>
+        <argsstring></argsstring>
+        <name>backend</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::backend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="35" column="14" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="35" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="related">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a3177822c4e8bd78867cb8736f643e562" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream &amp; operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;, const SolverTimings &amp;)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1SolverTimings" kindref="compound">SolverTimings</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="39" column="2" declfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" declline="39" declcolumn="2"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>batmat::DefaultTimings</label>
+        <link refid="namespacebatmat" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::SolverTimings</label>
+        <link refid="structcyqlone_1_1qpalm_1_1SolverTimings"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+active_set_change</edgelabel>
+          <edgelabel>+boost_regularization</edgelabel>
+          <edgelabel>+line_search</edgelabel>
+          <edgelabel>+mat_vec_A</edgelabel>
+          <edgelabel>+mat_vec_AT</edgelabel>
+          <edgelabel>+mat_vec_M</edgelabel>
+          <edgelabel>+mat_vec_MT</edgelabel>
+          <edgelabel>+mat_vec_Q</edgelabel>
+          <edgelabel>+recompute_inner</edgelabel>
+          <edgelabel>+recompute_outer</edgelabel>
+          <edgelabel>  ...</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+backend</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::map&lt; std::string, batmat::DefaultTimings &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+keys</edgelabel>
+        </childnode>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::string</label>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="19" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="19" bodyend="36"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a7b8a81360c87e947b2e7b6d7caf96e43" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>active_set_change</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a1f2d0413d9e3d80270f2674513876e51" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>backend</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a3525a9be60e61aaa7249a8aa45b10d6f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>boost_regularization</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a5e598eb1eb75831ade2d39c6ef763962" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>line_search</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a1155e1ba338cbaf461369dae46d03068" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>mat_vec_A</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a5f414bd26fea73b4cb14516d253cd216" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>mat_vec_AT</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a5e3650cb9a7f98e5d8bc82b52d9d2c6b" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>mat_vec_M</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1aa2d2311d3ddcf436aa8e801ed960e814" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>mat_vec_MT</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a48f490b0bfaef5afa76af09bc2a81984" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>mat_vec_Q</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a3177822c4e8bd78867cb8736f643e562" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>operator&lt;&lt;</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a204e1c7d89db46c34718a46fbcab5c31" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>recompute_inner</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1ac362d870927e569e86a85b5afc233a71" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>recompute_outer</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a6817bb47e1b906671e2ff3fc539df997" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>scaling</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a60979bac16c487ca041325a8aebe0f08" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>solve</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1af05f866344d2c8d0b431bf82e6bcb528" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>total</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a2e5f2c5a7c88fd2d3c52662e0357ba12" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>update_penalty</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a64b885dd8e1d0d6806ca3067038154f0" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverTimings</scope><name>update_regularization</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

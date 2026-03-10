@@ -1,0 +1,1319 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone::qpalm Namespace Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('namespacecyqlone_1_1qpalm.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">cyqlone::qpalm Namespace Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:problems" id="r_problems"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacecyqlone_1_1qpalm_1_1problems.html">problems</a></td></tr>
+<tr class="memitem:detail" id="r_detail"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacecyqlone_1_1qpalm_1_1detail.html">detail</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:CyqloneData_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyqloneData" id="r_CyqloneData_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyqloneData"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a></td></tr>
+<tr class="memitem:CyQPALMBackendSettings_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyQPALMBackendSettings" id="r_CyQPALMBackendSettings_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyQPALMBackendSettings"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a></td></tr>
+<tr class="memitem:CyQPALMBackendStats_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyQPALMBackendStats" id="r_CyQPALMBackendStats_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyQPALMBackendStats"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendStats">CyQPALMBackendStats</a></td></tr>
+<tr class="memitem:CyQPALMBackend" id="r_CyQPALMBackend"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a></td></tr>
+<tr class="memitem:unique_5FCyQPALMBackend" id="r_unique_5FCyQPALMBackend"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a></td></tr>
+<tr class="memitem:DetailedStats" id="r_DetailedStats"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1DetailedStats.html">DetailedStats</a></td></tr>
+<tr class="memitem:Breakpoint" id="r_Breakpoint"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a></td></tr>
+<tr class="memitem:ABSums" id="r_ABSums"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1ABSums.html">ABSums</a></td></tr>
+<tr class="memitem:PartitionedBreakpoints_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1PartitionedBreakpoints" id="r_PartitionedBreakpoints_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1PartitionedBreakpoints"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="#structcyqlone_1_1qpalm_1_1PartitionedBreakpoints">PartitionedBreakpoints</a></td></tr>
+<tr class="memitem:BreakpointsResult_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1BreakpointsResult" id="r_BreakpointsResult_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1BreakpointsResult"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="#structcyqlone_1_1qpalm_1_1BreakpointsResult">BreakpointsResult</a></td></tr>
+<tr class="memitem:compute_5Fbreakpoints_5Ffn" id="r_compute_5Fbreakpoints_5Ffn"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn.html">compute_breakpoints_fn</a></td></tr>
+<tr class="memitem:get_5Fpartitioned_5Fbreakpoints_5Ffn" id="r_get_5Fpartitioned_5Fbreakpoints_5Ffn"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1get__partitioned__breakpoints__fn.html">get_partitioned_breakpoints_fn</a></td></tr>
+<tr class="memitem:get_5Fbreakpoints_5Ffn" id="r_get_5Fbreakpoints_5Ffn"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1get__breakpoints__fn.html">get_breakpoints_fn</a></td></tr>
+<tr class="memitem:LineSearchSettings_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1LineSearchSettings" id="r_LineSearchSettings_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1LineSearchSettings"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="#structcyqlone_1_1qpalm_1_1LineSearchSettings">LineSearchSettings</a></td></tr>
+<tr class="memitem:LineSearch" id="r_LineSearch"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1LineSearch.html">LineSearch</a></td></tr>
+<tr class="memitem:SolverImplementation" id="r_SolverImplementation"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1SolverImplementation.html">SolverImplementation</a></td></tr>
+<tr class="memitem:Settings" id="r_Settings"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1Settings.html">Settings</a></td></tr>
+<tr class="memitem:SolverTimings" id="r_SolverTimings"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1SolverTimings.html">SolverTimings</a></td></tr>
+<tr class="memitem:SolverStats_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1SolverStats" id="r_SolverStats_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1SolverStats"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers.html#structcyqlone_1_1qpalm_1_1SolverStats">SolverStats</a></td></tr>
+<tr class="memitem:Solver" id="r_Solver"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classcyqlone_1_1qpalm_1_1Solver.html">Solver</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a584914f2e3545fba9420d6b1c5c09059" id="r_a584914f2e3545fba9420d6b1c5c09059"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a584914f2e3545fba9420d6b1c5c09059">ABSum_t</a> = real_t</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:gaeb4dd1f31c1ec8d3d9e0f9023da5cec3" id="r_gaeb4dd1f31c1ec8d3d9e0f9023da5cec3"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#gaeb4dd1f31c1ec8d3d9e0f9023da5cec3">WarmStartingStrategy</a> { <a class="el" href="group__topic-optimization-solvers-ocp.html#ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3a8b7a61a6e9bd5b8977b7b3f02a425adc">WarmStartingStrategy::Zeros</a>
+, <a class="el" href="group__topic-optimization-solvers-ocp.html#ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3a5fb63579fc981698f97d55bfecb213ea">WarmStartingStrategy::Copy</a>
+, <a class="el" href="group__topic-optimization-solvers-ocp.html#ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3a825a3d98017bab11815ad2817201324c">WarmStartingStrategy::Shift</a>
+, <a class="el" href="group__topic-optimization-solvers-ocp.html#ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3ab882fa82c60e5b9a229e5ed6e52ad31a">WarmStartingStrategy::ShiftNoInequality</a>
+ }</td></tr>
+<tr class="memitem:gade0917661457f4dc0d6396ded24277a4" id="r_gade0917661457f4dc0d6396ded24277a4"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers.html#gade0917661457f4dc0d6396ded24277a4">SolverStatus</a> { <br />
+&#160;&#160;<a class="el" href="group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4ad8a942ef2b04672adfafef0ad817a407">SolverStatus::Busy</a> = 0
+, <a class="el" href="group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4ada5418b1eb4e80d05f2c1c7c4fa1b6ec">SolverStatus::Converged</a>
+, <a class="el" href="group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4a9e8b9350c8f1716701ec1f9bbe76432e">SolverStatus::MaxTime</a>
+, <a class="el" href="group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4abbf52264f7a6e91c48a242f95aeed3db">SolverStatus::MaxIter</a>
+, <br />
+&#160;&#160;<a class="el" href="group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4aff6e97b110349dae9c6e8be0ff7a85c3">SolverStatus::NotFinite</a>
+, <a class="el" href="group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4ab644b4f0de4cf0c46acb4583602e168c">SolverStatus::NoProgress</a>
+, <a class="el" href="group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4a12c37c4278b8c0db6c2f65052569cd80">SolverStatus::Interrupted</a>
+, <a class="el" href="group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4ab0d4998a26f5b5742ad38c4af8817e32">SolverStatus::Exception</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:gade0917661457f4dc0d6396ded24277a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exit status of a numerical solver.  <a href="group__topic-optimization-solvers.html#gade0917661457f4dc0d6396ded24277a4">More...</a><br /></td></tr>
+<tr class="memitem:a12561d95ffd5ca9cc074d7b3edceb429" id="r_a12561d95ffd5ca9cc074d7b3edceb429"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a12561d95ffd5ca9cc074d7b3edceb429">StorageOrder</a> </td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gae148b32eb392bb39d685929069cfabdb" id="r_gae148b32eb392bb39d685929069cfabdb"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">StorageOrder</a> DefaultOrder = StorageOrder::ColMajor&gt; </td></tr>
+<tr class="memitem:gae148b32eb392bb39d685929069cfabdb template"><td class="memItemLeft"><a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; VL, DefaultOrder &gt;&#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#gae148b32eb392bb39d685929069cfabdb">make_cyqpalm_backend</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt; real_t &gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:gaf5dbe2437a5f7176b58b7743cba83d1c" id="r_gaf5dbe2437a5f7176b58b7743cba83d1c"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">StorageOrder</a> DefaultOrder = StorageOrder::ColMajor&gt; </td></tr>
+<tr class="memitem:gaf5dbe2437a5f7176b58b7743cba83d1c template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">update_cyqpalm_backend</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; VL, DefaultOrder &gt; &amp;backend, const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt; real_t &gt; &amp;ocp)</td></tr>
+<tr class="memitem:ga8aac8ebf6f85aba82b32a927bc9bea00" id="r_ga8aac8ebf6f85aba82b32a927bc9bea00"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">StorageOrder</a> DefaultOrder = StorageOrder::ColMajor&gt; </td></tr>
+<tr class="memitem:ga8aac8ebf6f85aba82b32a927bc9bea00 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#ga8aac8ebf6f85aba82b32a927bc9bea00">update_cyqpalm_backend</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; VL, DefaultOrder &gt; &amp;backend, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:a0d06e7a2fb9288cf51ce720d27a14baf" id="r_a0d06e7a2fb9288cf51ce720d27a14baf"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">StorageOrder</a> DefaultOrder&gt; </td></tr>
+<tr class="memitem:a0d06e7a2fb9288cf51ce720d27a14baf template"><td class="memItemLeft"><a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; VL, DefaultOrder &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a0d06e7a2fb9288cf51ce720d27a14baf">make_cyqpalm_backend</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:aaa9bd6f0faae51b2d93379a451da5206" id="r_aaa9bd6f0faae51b2d93379a451da5206"><td class="memTemplParams" colspan="2">template&lt;class R, class F&gt; </td></tr>
+<tr class="memitem:aaa9bd6f0faae51b2d93379a451da5206 template"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#aaa9bd6f0faae51b2d93379a451da5206">sort</a> (R &amp;&amp;range, F key)</td></tr>
+<tr class="memitem:af0491991e6f9a32072489c45d934541b" id="r_af0491991e6f9a32072489c45d934541b"><td class="memTemplParams" colspan="2">template&lt;class R, class I, class F&gt; </td></tr>
+<tr class="memitem:af0491991e6f9a32072489c45d934541b template"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#af0491991e6f9a32072489c45d934541b">nth_element</a> (R &amp;&amp;range, I mid, F key)</td></tr>
+<tr class="memitem:a907fb321c6e4e7fa1375233be5c9f815" id="r_a907fb321c6e4e7fa1375233be5c9f815"><td class="memTemplParams" colspan="2">template&lt;std::ranges::bidirectional_range R, class F, class C&gt; </td></tr>
+<tr class="memitem:a907fb321c6e4e7fa1375233be5c9f815 template"><td class="memItemLeft">static std::ranges::subrange&lt; std::ranges::iterator_t&lt; R &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a907fb321c6e4e7fa1375233be5c9f815">partition_min</a> (R &amp;&amp;range, F pred, C cmp)</td></tr>
+<tr class="memdesc:a907fb321c6e4e7fa1375233be5c9f815"><td class="mdescLeft">&#160;</td><td class="mdescRight">A variant of std::ranges::partition where the first element of the return value is the smallest element of the "false" partition.  <br /></td></tr>
+<tr class="memitem:a1f120beae4aaa6b4c80f83809088d0e3" id="r_a1f120beae4aaa6b4c80f83809088d0e3"><td class="memTemplParams" colspan="2">template&lt;std::ranges::forward_range R, class F&gt; </td></tr>
+<tr class="memitem:a1f120beae4aaa6b4c80f83809088d0e3 template"><td class="memItemLeft">static decltype(auto)&#160;</td><td class="memItemRight"><a class="el" href="#a1f120beae4aaa6b4c80f83809088d0e3">partition</a> (R &amp;&amp;range, F key)</td></tr>
+<tr class="memitem:a6446ea453ccfe8d17c950f1a9a348e12" id="r_a6446ea453ccfe8d17c950f1a9a348e12"><td class="memTemplParams" colspan="2">template&lt;std::permutable I, std::sentinel_for&lt; I &gt; S, class F&gt; </td></tr>
+<tr class="memitem:a6446ea453ccfe8d17c950f1a9a348e12 template"><td class="memItemLeft">static decltype(auto)&#160;</td><td class="memItemRight"><a class="el" href="#a6446ea453ccfe8d17c950f1a9a348e12">partition</a> (I first, S last, F key)</td></tr>
+<tr class="memitem:acc34e5d9c2599830eb0f4f519dc2c791" id="r_acc34e5d9c2599830eb0f4f519dc2c791"><td class="memTemplParams" colspan="2">template&lt;class R, class F&gt; </td></tr>
+<tr class="memitem:acc34e5d9c2599830eb0f4f519dc2c791 template"><td class="memItemLeft">static decltype(auto)&#160;</td><td class="memItemRight"><a class="el" href="#acc34e5d9c2599830eb0f4f519dc2c791">min_element</a> (R &amp;&amp;range, F key)</td></tr>
+<tr class="memitem:a278e2594d3f1fc905558b7b5c8c1378e" id="r_a278e2594d3f1fc905558b7b5c8c1378e"><td class="memTemplParams" colspan="2">template&lt;class I, class T, class BinOp, class UnOp&gt; </td></tr>
+<tr class="memitem:a278e2594d3f1fc905558b7b5c8c1378e template"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#a278e2594d3f1fc905558b7b5c8c1378e">transform_reduce</a> (I first, I last, T init, BinOp binary_op, UnOp unary_op)</td></tr>
+<tr class="memitem:a3e3de90bb2d8bb912950e1aa6141b065" id="r_a3e3de90bb2d8bb912950e1aa6141b065"><td class="memItemLeft"><a class="el" href="structcyqlone_1_1qpalm_1_1ABSums.html">ABSums</a>&#160;</td><td class="memItemRight"><a class="el" href="#a3e3de90bb2d8bb912950e1aa6141b065">partial_sum_negative</a> (<a class="el" href="#structcyqlone_1_1qpalm_1_1PartitionedBreakpoints">PartitionedBreakpoints</a> breakpoints, real_t η=0, real_t β=0)</td></tr>
+<tr class="memitem:ac2625e16a723c214f3e23b72f59ad817" id="r_ac2625e16a723c214f3e23b72f59ad817"><td class="memTemplParams" colspan="2">template&lt;class Vec&gt; </td></tr>
+<tr class="memitem:ac2625e16a723c214f3e23b72f59ad817 template"><td class="memItemLeft">std::span&lt; <a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ac2625e16a723c214f3e23b72f59ad817">compute_breakpoints_default</a> (std::vector&lt; <a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a> &gt; &amp;breakpoints, const Vec &amp;Σ, const Vec &amp;y, const Vec &amp;Ad, const Vec &amp;Ax, const Vec &amp;b_min, const Vec &amp;b_max)</td></tr>
+<tr class="memdesc:ac2625e16a723c214f3e23b72f59ad817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the break points t[i] using formula (3.6) in the QPALM paper.  <br /></td></tr>
+<tr class="memitem:a57b32dc88357c5b2b160d9c09b949c93" id="r_a57b32dc88357c5b2b160d9c09b949c93"><td class="memItemLeft"><a class="el" href="#structcyqlone_1_1qpalm_1_1PartitionedBreakpoints">PartitionedBreakpoints</a>&#160;</td><td class="memItemRight"><a class="el" href="#a57b32dc88357c5b2b160d9c09b949c93">partition_breakpoints_default</a> (std::span&lt; <a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a> &gt; breakpoints)</td></tr>
+<tr class="memdesc:a57b32dc88357c5b2b160d9c09b949c93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves any non-finite elements in t to the end of the range, and all negative elements to the front.  <br /></td></tr>
+<tr class="memitem:a58838550654934492da37499013b24d8" id="r_a58838550654934492da37499013b24d8"><td class="memItemLeft">const char *&#160;</td><td class="memItemRight"><a class="el" href="#a58838550654934492da37499013b24d8">enum_name</a> (<a class="el" href="group__topic-optimization-solvers.html#gade0917661457f4dc0d6396ded24277a4">SolverStatus</a> s)</td></tr>
+<tr class="memitem:a8c85a6a89dd8e96977a86abad68b5d5c" id="r_a8c85a6a89dd8e96977a86abad68b5d5c"><td class="memItemLeft">std::ostream &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a8c85a6a89dd8e96977a86abad68b5d5c">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="group__topic-optimization-solvers.html#gade0917661457f4dc0d6396ded24277a4">SolverStatus</a> s)</td></tr>
+<tr class="memitem:a2f204cd23b6824fa6bc96a5509d41edb" id="r_a2f204cd23b6824fa6bc96a5509d41edb"><td class="memItemLeft">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 1, StorageOrder::ColMajor &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a2f204cd23b6824fa6bc96a5509d41edb">make_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:ab585f169928943f6459d5842bf956468" id="r_ab585f169928943f6459d5842bf956468"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#ab585f169928943f6459d5842bf956468">update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 1, StorageOrder::ColMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp)</td></tr>
+<tr class="memitem:a1b42a175a558c7d15014e8d1e5f35e17" id="r_a1b42a175a558c7d15014e8d1e5f35e17"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#a1b42a175a558c7d15014e8d1e5f35e17">update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 1, StorageOrder::ColMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:a79f0ae995ed7eb26c1190599436819e1" id="r_a79f0ae995ed7eb26c1190599436819e1"><td class="memItemLeft">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 4, StorageOrder::ColMajor &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a79f0ae995ed7eb26c1190599436819e1">make_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:a97f95a80f835db53479b55aede5c5727" id="r_a97f95a80f835db53479b55aede5c5727"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#a97f95a80f835db53479b55aede5c5727">update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 4, StorageOrder::ColMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp)</td></tr>
+<tr class="memitem:aac8173f4f423dec08f6d05883a487f2c" id="r_aac8173f4f423dec08f6d05883a487f2c"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#aac8173f4f423dec08f6d05883a487f2c">update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 4, StorageOrder::ColMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:a934baf37e367a903f0011b30b8a4aed7" id="r_a934baf37e367a903f0011b30b8a4aed7"><td class="memItemLeft">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 8, StorageOrder::ColMajor &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a934baf37e367a903f0011b30b8a4aed7">make_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:a6c72550fee87ca239bd8cf6ebf328294" id="r_a6c72550fee87ca239bd8cf6ebf328294"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#a6c72550fee87ca239bd8cf6ebf328294">update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 8, StorageOrder::ColMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp)</td></tr>
+<tr class="memitem:af1728fda54e6061da9342445412b957d" id="r_af1728fda54e6061da9342445412b957d"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#af1728fda54e6061da9342445412b957d">update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 8, StorageOrder::ColMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:ac583ca9eff1c425f194434aec7b48b63" id="r_ac583ca9eff1c425f194434aec7b48b63"><td class="memItemLeft">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 1, StorageOrder::RowMajor &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ac583ca9eff1c425f194434aec7b48b63">make_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:a3c2d9d42bb1ddc3f169cec3a93c28646" id="r_a3c2d9d42bb1ddc3f169cec3a93c28646"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#a3c2d9d42bb1ddc3f169cec3a93c28646">update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 1, StorageOrder::RowMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp)</td></tr>
+<tr class="memitem:a01b08da46621a7c625ba8b4f3ee3021a" id="r_a01b08da46621a7c625ba8b4f3ee3021a"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#a01b08da46621a7c625ba8b4f3ee3021a">update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 1, StorageOrder::RowMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:aa59386df69f60ced9a2dd111d5ebd6db" id="r_aa59386df69f60ced9a2dd111d5ebd6db"><td class="memItemLeft">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 4, StorageOrder::RowMajor &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa59386df69f60ced9a2dd111d5ebd6db">make_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:a4fe47de5c740f85dfd2fe730ed892539" id="r_a4fe47de5c740f85dfd2fe730ed892539"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#a4fe47de5c740f85dfd2fe730ed892539">update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 4, StorageOrder::RowMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp)</td></tr>
+<tr class="memitem:abec2428948043461b0a8ad92e3bb3d44" id="r_abec2428948043461b0a8ad92e3bb3d44"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#abec2428948043461b0a8ad92e3bb3d44">update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 4, StorageOrder::RowMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:a1ca8f68ee1e0bc4e089eb3db751a2f6d" id="r_a1ca8f68ee1e0bc4e089eb3db751a2f6d"><td class="memItemLeft">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 8, StorageOrder::RowMajor &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a1ca8f68ee1e0bc4e089eb3db751a2f6d">make_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:a52066fb50c5a90391061dcc71365fafb" id="r_a52066fb50c5a90391061dcc71365fafb"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#a52066fb50c5a90391061dcc71365fafb">update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 8, StorageOrder::RowMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp)</td></tr>
+<tr class="memitem:a37219f7b9f34c0ff4e574e598d2d308b" id="r_a37219f7b9f34c0ff4e574e598d2d308b"><td class="memItemLeft">template void&#160;</td><td class="memItemRight"><a class="el" href="#a37219f7b9f34c0ff4e574e598d2d308b">update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 8, StorageOrder::RowMajor &gt; &amp;, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:a3177822c4e8bd78867cb8736f643e562" id="r_a3177822c4e8bd78867cb8736f643e562"><td class="memItemLeft">std::ostream &amp;&#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1SolverTimings.html#a3177822c4e8bd78867cb8736f643e562">operator&lt;&lt;</a> (std::ostream &amp;, const <a class="el" href="structcyqlone_1_1qpalm_1_1SolverTimings.html">SolverTimings</a> &amp;)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a7e1db9ae6e521ae2f4ce103e38f3f934" id="r_a7e1db9ae6e521ae2f4ce103e38f3f934"><td class="memItemLeft">struct <a class="el" href="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn.html">cyqlone::qpalm::compute_breakpoints_fn</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7e1db9ae6e521ae2f4ce103e38f3f934">compute_breakpoints</a></td></tr>
+<tr class="memitem:a3908dbec9d527354fdfc9eebec4d8d30" id="r_a3908dbec9d527354fdfc9eebec4d8d30"><td class="memItemLeft">struct <a class="el" href="structcyqlone_1_1qpalm_1_1get__partitioned__breakpoints__fn.html">cyqlone::qpalm::get_partitioned_breakpoints_fn</a>&#160;</td><td class="memItemRight"><a class="el" href="#a3908dbec9d527354fdfc9eebec4d8d30">get_partitioned_breakpoints</a></td></tr>
+<tr class="memitem:acefd63912f9919fa5ab62ac0a305c3f2" id="r_acefd63912f9919fa5ab62ac0a305c3f2"><td class="memItemLeft">struct <a class="el" href="structcyqlone_1_1qpalm_1_1get__breakpoints__fn.html">cyqlone::qpalm::get_breakpoints_fn</a>&#160;</td><td class="memItemRight"><a class="el" href="#acefd63912f9919fa5ab62ac0a305c3f2">get_breakpoints</a></td></tr>
+</table>
+<hr/><h2 id="header-inline_5Fclasses" class="groupheader">Class Documentation</h2>
+<a name="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints" id="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structcyqlone_1_1qpalm_1_1PartitionedBreakpoints">&#9670;&#160;</a></span>cyqlone::qpalm::PartitionedBreakpoints</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct cyqlone::qpalm::PartitionedBreakpoints</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="a39e61a555be8f3e459906d7b57408662" name="a39e61a555be8f3e459906d7b57408662"></a>span&lt; <a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a> &gt;</td>
+<td class="fieldname">
+neg_bp</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a7ad314946fc51eb1d2a40f650b75ffbe" name="a7ad314946fc51eb1d2a40f650b75ffbe"></a>span&lt; <a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a> &gt;</td>
+<td class="fieldname">
+pos_bp</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a name="structcyqlone_1_1qpalm_1_1BreakpointsResult" id="structcyqlone_1_1qpalm_1_1BreakpointsResult"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structcyqlone_1_1qpalm_1_1BreakpointsResult">&#9670;&#160;</a></span>cyqlone::qpalm::BreakpointsResult</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct cyqlone::qpalm::BreakpointsResult</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="abe3f31fef0fe9ec9df164a59a621c1ce" name="abe3f31fef0fe9ec9df164a59a621c1ce"></a><a class="el" href="#structcyqlone_1_1qpalm_1_1PartitionedBreakpoints">PartitionedBreakpoints</a></td>
+<td class="fieldname">
+bp</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ac56a2f8be122302fb793476a68f1e0f0" name="ac56a2f8be122302fb793476a68f1e0f0"></a><a class="el" href="structcyqlone_1_1qpalm_1_1ABSums.html">ABSums</a></td>
+<td class="fieldname">
+ab_neg</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a name="structcyqlone_1_1qpalm_1_1LineSearchSettings" id="structcyqlone_1_1qpalm_1_1LineSearchSettings"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structcyqlone_1_1qpalm_1_1LineSearchSettings">&#9670;&#160;</a></span>cyqlone::qpalm::LineSearchSettings</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct cyqlone::qpalm::LineSearchSettings</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="ac2fff19946adc7531bc0afc11226ad8f" name="ac2fff19946adc7531bc0afc11226ad8f"></a>bool</td>
+<td class="fieldname">
+find_smallest_breakpoint_first = false</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="a584914f2e3545fba9420d6b1c5c09059" name="a584914f2e3545fba9420d6b1c5c09059"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a584914f2e3545fba9420d6b1c5c09059">&#9670;&#160;</a></span>ABSum_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a584914f2e3545fba9420d6b1c5c09059">cyqlone::qpalm::ABSum_t</a> = real_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="breakpoint_8hpp_source.html#l00026">26</a> of file <a class="el" href="breakpoint_8hpp_source.html">breakpoint.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<a id="a12561d95ffd5ca9cc074d7b3edceb429" name="a12561d95ffd5ca9cc074d7b3edceb429"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12561d95ffd5ca9cc074d7b3edceb429">&#9670;&#160;</a></span>StorageOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">guanaqo::StorageOrder</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a0d06e7a2fb9288cf51ce720d27a14baf" name="a0d06e7a2fb9288cf51ce720d27a14baf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d06e7a2fb9288cf51ce720d27a14baf">&#9670;&#160;</a></span>make_cyqpalm_backend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">StorageOrder</a> DefaultOrder&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; VL, DefaultOrder &gt; cyqlone::qpalm::make_cyqpalm_backend </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a></td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ocp-backend-cyqlone_8tpp_source.html#l00602">602</a> of file <a class="el" href="ocp-backend-cyqlone_8tpp_source.html">ocp-backend-cyqlone.tpp</a>.</p>
+
+</div>
+</div>
+<a id="aaa9bd6f0faae51b2d93379a451da5206" name="aaa9bd6f0faae51b2d93379a451da5206"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa9bd6f0faae51b2d93379a451da5206">&#9670;&#160;</a></span>sort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R, class F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::qpalm::sort </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>range</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F</td>          <td class="paramname"><span class="paramname"><em>key</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="algorithms_8hpp_source.html#l00017">17</a> of file <a class="el" href="algorithms_8hpp_source.html">algorithms.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af0491991e6f9a32072489c45d934541b" name="af0491991e6f9a32072489c45d934541b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0491991e6f9a32072489c45d934541b">&#9670;&#160;</a></span>nth_element()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R, class I, class F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::qpalm::nth_element </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>range</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">I</td>          <td class="paramname"><span class="paramname"><em>mid</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F</td>          <td class="paramname"><span class="paramname"><em>key</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="algorithms_8hpp_source.html#l00028">28</a> of file <a class="el" href="algorithms_8hpp_source.html">algorithms.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a907fb321c6e4e7fa1375233be5c9f815" name="a907fb321c6e4e7fa1375233be5c9f815"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a907fb321c6e4e7fa1375233be5c9f815">&#9670;&#160;</a></span>partition_min()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::ranges::bidirectional_range R, class F, class C&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ranges::subrange&lt; std::ranges::iterator_t&lt; R &gt; &gt; cyqlone::qpalm::partition_min </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>range</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F</td>          <td class="paramname"><span class="paramname"><em>pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">C</td>          <td class="paramname"><span class="paramname"><em>cmp</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A variant of std::ranges::partition where the first element of the return value is the smallest element of the "false" partition. </p>
+
+<p class="definition">Definition at line <a class="el" href="algorithms_8hpp_source.html#l00037">37</a> of file <a class="el" href="algorithms_8hpp_source.html">algorithms.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1f120beae4aaa6b4c80f83809088d0e3" name="a1f120beae4aaa6b4c80f83809088d0e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f120beae4aaa6b4c80f83809088d0e3">&#9670;&#160;</a></span>partition() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::ranges::forward_range R, class F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">decltype(auto) cyqlone::qpalm::partition </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>range</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F</td>          <td class="paramname"><span class="paramname"><em>key</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="algorithms_8hpp_source.html#l00093">93</a> of file <a class="el" href="algorithms_8hpp_source.html">algorithms.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6446ea453ccfe8d17c950f1a9a348e12" name="a6446ea453ccfe8d17c950f1a9a348e12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6446ea453ccfe8d17c950f1a9a348e12">&#9670;&#160;</a></span>partition() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::permutable I, std::sentinel_for&lt; I &gt; S, class F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">decltype(auto) cyqlone::qpalm::partition </td>
+          <td>(</td>
+          <td class="paramtype">I</td>          <td class="paramname"><span class="paramname"><em>first</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">S</td>          <td class="paramname"><span class="paramname"><em>last</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F</td>          <td class="paramname"><span class="paramname"><em>key</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="algorithms_8hpp_source.html#l00098">98</a> of file <a class="el" href="algorithms_8hpp_source.html">algorithms.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acc34e5d9c2599830eb0f4f519dc2c791" name="acc34e5d9c2599830eb0f4f519dc2c791"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc34e5d9c2599830eb0f4f519dc2c791">&#9670;&#160;</a></span>min_element()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class R, class F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">decltype(auto) cyqlone::qpalm::min_element </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>range</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F</td>          <td class="paramname"><span class="paramname"><em>key</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="algorithms_8hpp_source.html#l00104">104</a> of file <a class="el" href="algorithms_8hpp_source.html">algorithms.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a278e2594d3f1fc905558b7b5c8c1378e" name="a278e2594d3f1fc905558b7b5c8c1378e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a278e2594d3f1fc905558b7b5c8c1378e">&#9670;&#160;</a></span>transform_reduce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class I, class T, class BinOp, class UnOp&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T cyqlone::qpalm::transform_reduce </td>
+          <td>(</td>
+          <td class="paramtype">I</td>          <td class="paramname"><span class="paramname"><em>first</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">I</td>          <td class="paramname"><span class="paramname"><em>last</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>init</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BinOp</td>          <td class="paramname"><span class="paramname"><em>binary_op</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">UnOp</td>          <td class="paramname"><span class="paramname"><em>unary_op</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="algorithms_8hpp_source.html#l00110">110</a> of file <a class="el" href="algorithms_8hpp_source.html">algorithms.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3e3de90bb2d8bb912950e1aa6141b065" name="a3e3de90bb2d8bb912950e1aa6141b065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e3de90bb2d8bb912950e1aa6141b065">&#9670;&#160;</a></span>partial_sum_negative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structcyqlone_1_1qpalm_1_1ABSums.html">ABSums</a> cyqlone::qpalm::partial_sum_negative </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#structcyqlone_1_1qpalm_1_1PartitionedBreakpoints">PartitionedBreakpoints</a></td>          <td class="paramname"><span class="paramname"><em>breakpoints</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real_t</td>          <td class="paramname"><span class="paramname"><em>η</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real_t</td>          <td class="paramname"><span class="paramname"><em>β</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="breakpoint_8cpp_source.html#l00025">25</a> of file <a class="el" href="breakpoint_8cpp_source.html">breakpoint.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac2625e16a723c214f3e23b72f59ad817" name="ac2625e16a723c214f3e23b72f59ad817"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2625e16a723c214f3e23b72f59ad817">&#9670;&#160;</a></span>compute_breakpoints_default()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Vec&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::span&lt; <a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a> &gt; cyqlone::qpalm::compute_breakpoints_default </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>breakpoints</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vec &amp;</td>          <td class="paramname"><span class="paramname"><em>Σ</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vec &amp;</td>          <td class="paramname"><span class="paramname"><em>y</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vec &amp;</td>          <td class="paramname"><span class="paramname"><em>Ad</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vec &amp;</td>          <td class="paramname"><span class="paramname"><em>Ax</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vec &amp;</td>          <td class="paramname"><span class="paramname"><em>b_min</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vec &amp;</td>          <td class="paramname"><span class="paramname"><em>b_max</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute the break points t[i] using formula (3.6) in the QPALM paper. </p>
+<dl class="section return"><dt>Returns</dt><dd>t, α, δ </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="breakpoint_8tpp_source.html#l00011">11</a> of file <a class="el" href="breakpoint_8tpp_source.html">breakpoint.tpp</a>.</p>
+
+</div>
+</div>
+<a id="a57b32dc88357c5b2b160d9c09b949c93" name="a57b32dc88357c5b2b160d9c09b949c93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57b32dc88357c5b2b160d9c09b949c93">&#9670;&#160;</a></span>partition_breakpoints_default()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#structcyqlone_1_1qpalm_1_1PartitionedBreakpoints">PartitionedBreakpoints</a> cyqlone::qpalm::partition_breakpoints_default </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; <a class="el" href="structcyqlone_1_1qpalm_1_1Breakpoint.html">Breakpoint</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>breakpoints</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Moves any non-finite elements in t to the end of the range, and all negative elements to the front. </p>
+<p>Returns the negative and positive partitions. </p>
+
+<p class="definition">Definition at line <a class="el" href="breakpoint_8cpp_source.html#l00007">7</a> of file <a class="el" href="breakpoint_8cpp_source.html">breakpoint.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a58838550654934492da37499013b24d8" name="a58838550654934492da37499013b24d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58838550654934492da37499013b24d8">&#9670;&#160;</a></span>enum_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * cyqlone::qpalm::enum_name </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers.html#gade0917661457f4dc0d6396ded24277a4">SolverStatus</a></td>          <td class="paramname"><span class="paramname"><em>s</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="status_8hpp_source.html#l00023">23</a> of file <a class="el" href="status_8hpp_source.html">status.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8c85a6a89dd8e96977a86abad68b5d5c" name="a8c85a6a89dd8e96977a86abad68b5d5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c85a6a89dd8e96977a86abad68b5d5c">&#9670;&#160;</a></span>operator&lt;&lt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; cyqlone::qpalm::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;</td>          <td class="paramname"><span class="paramname"><em>os</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers.html#gade0917661457f4dc0d6396ded24277a4">SolverStatus</a></td>          <td class="paramname"><span class="paramname"><em>s</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="status_8cpp_source.html#l00006">6</a> of file <a class="el" href="status_8cpp_source.html">status.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2f204cd23b6824fa6bc96a5509d41edb" name="a2f204cd23b6824fa6bc96a5509d41edb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f204cd23b6824fa6bc96a5509d41edb">&#9670;&#160;</a></span>make_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 1, StorageOrder::ColMajor &gt; <a class="el" href="group__topic-optimization-solvers-ocp.html#gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</a>&lt; 1, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a></td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab585f169928943f6459d5842bf956468" name="ab585f169928943f6459d5842bf956468"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab585f169928943f6459d5842bf956468">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 1, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 1, StorageOrder::ColMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1b42a175a558c7d15014e8d1e5f35e17" name="a1b42a175a558c7d15014e8d1e5f35e17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b42a175a558c7d15014e8d1e5f35e17">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 1, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 1, StorageOrder::ColMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a79f0ae995ed7eb26c1190599436819e1" name="a79f0ae995ed7eb26c1190599436819e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79f0ae995ed7eb26c1190599436819e1">&#9670;&#160;</a></span>make_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 4, StorageOrder::ColMajor &gt; <a class="el" href="group__topic-optimization-solvers-ocp.html#gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</a>&lt; 4, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a></td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a97f95a80f835db53479b55aede5c5727" name="a97f95a80f835db53479b55aede5c5727"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97f95a80f835db53479b55aede5c5727">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 4, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 4, StorageOrder::ColMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aac8173f4f423dec08f6d05883a487f2c" name="aac8173f4f423dec08f6d05883a487f2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac8173f4f423dec08f6d05883a487f2c">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 4, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 4, StorageOrder::ColMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a934baf37e367a903f0011b30b8a4aed7" name="a934baf37e367a903f0011b30b8a4aed7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a934baf37e367a903f0011b30b8a4aed7">&#9670;&#160;</a></span>make_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 8, StorageOrder::ColMajor &gt; <a class="el" href="group__topic-optimization-solvers-ocp.html#gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</a>&lt; 8, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a></td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6c72550fee87ca239bd8cf6ebf328294" name="a6c72550fee87ca239bd8cf6ebf328294"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c72550fee87ca239bd8cf6ebf328294">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 8, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 8, StorageOrder::ColMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af1728fda54e6061da9342445412b957d" name="af1728fda54e6061da9342445412b957d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1728fda54e6061da9342445412b957d">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 8, StorageOrder::ColMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 8, StorageOrder::ColMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac583ca9eff1c425f194434aec7b48b63" name="ac583ca9eff1c425f194434aec7b48b63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac583ca9eff1c425f194434aec7b48b63">&#9670;&#160;</a></span>make_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 1, StorageOrder::RowMajor &gt; <a class="el" href="group__topic-optimization-solvers-ocp.html#gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</a>&lt; 1, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a></td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c2d9d42bb1ddc3f169cec3a93c28646" name="a3c2d9d42bb1ddc3f169cec3a93c28646"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c2d9d42bb1ddc3f169cec3a93c28646">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 1, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 1, StorageOrder::RowMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a01b08da46621a7c625ba8b4f3ee3021a" name="a01b08da46621a7c625ba8b4f3ee3021a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01b08da46621a7c625ba8b4f3ee3021a">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 1, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 1, StorageOrder::RowMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa59386df69f60ced9a2dd111d5ebd6db" name="aa59386df69f60ced9a2dd111d5ebd6db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa59386df69f60ced9a2dd111d5ebd6db">&#9670;&#160;</a></span>make_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 4, StorageOrder::RowMajor &gt; <a class="el" href="group__topic-optimization-solvers-ocp.html#gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</a>&lt; 4, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a></td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4fe47de5c740f85dfd2fe730ed892539" name="a4fe47de5c740f85dfd2fe730ed892539"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fe47de5c740f85dfd2fe730ed892539">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 4, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 4, StorageOrder::RowMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abec2428948043461b0a8ad92e3bb3d44" name="abec2428948043461b0a8ad92e3bb3d44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abec2428948043461b0a8ad92e3bb3d44">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 4, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 4, StorageOrder::RowMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1ca8f68ee1e0bc4e089eb3db751a2f6d" name="a1ca8f68ee1e0bc4e089eb3db751a2f6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ca8f68ee1e0bc4e089eb3db751a2f6d">&#9670;&#160;</a></span>make_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template <a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; 8, StorageOrder::RowMajor &gt; <a class="el" href="group__topic-optimization-solvers-ocp.html#gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</a>&lt; 8, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a></td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a52066fb50c5a90391061dcc71365fafb" name="a52066fb50c5a90391061dcc71365fafb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52066fb50c5a90391061dcc71365fafb">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 8, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 8, StorageOrder::RowMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a37219f7b9f34c0ff4e574e598d2d308b" name="a37219f7b9f34c0ff4e574e598d2d308b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37219f7b9f34c0ff4e574e598d2d308b">&#9670;&#160;</a></span>update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">template void <a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a>&lt; 8, StorageOrder::RowMajor &gt; </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; 8, StorageOrder::RowMajor &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="a7e1db9ae6e521ae2f4ce103e38f3f934" name="a7e1db9ae6e521ae2f4ce103e38f3f934"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e1db9ae6e521ae2f4ce103e38f3f934">&#9670;&#160;</a></span>compute_breakpoints</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn.html">cyqlone::qpalm::compute_breakpoints_fn</a> cyqlone::qpalm::compute_breakpoints</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3908dbec9d527354fdfc9eebec4d8d30" name="a3908dbec9d527354fdfc9eebec4d8d30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3908dbec9d527354fdfc9eebec4d8d30">&#9670;&#160;</a></span>get_partitioned_breakpoints</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structcyqlone_1_1qpalm_1_1get__partitioned__breakpoints__fn.html">cyqlone::qpalm::get_partitioned_breakpoints_fn</a> cyqlone::qpalm::get_partitioned_breakpoints</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acefd63912f9919fa5ab62ac0a305c3f2" name="acefd63912f9919fa5ab62ac0a305c3f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acefd63912f9919fa5ab62ac0a305c3f2">&#9670;&#160;</a></span>get_breakpoints</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structcyqlone_1_1qpalm_1_1get__breakpoints__fn.html">cyqlone::qpalm::get_breakpoints_fn</a> cyqlone::qpalm::get_breakpoints</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacecyqlone.html">cyqlone</a></li><li class="navelem"><a href="namespacecyqlone_1_1qpalm.html">qpalm</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

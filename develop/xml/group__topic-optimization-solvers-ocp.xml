@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="group__topic-optimization-solvers-ocp" kind="group">
+    <compoundname>topic-optimization-solvers-ocp</compoundname>
+    <title>Optimal control solvers</title>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1CyqloneData" prot="public">cyqlone::qpalm::CyqloneData</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" prot="public">cyqlone::qpalm::CyQPALMBackendSettings</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats" prot="public">cyqlone::qpalm::CyQPALMBackendStats</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" prot="public">cyqlone::qpalm::unique_CyQPALMBackend</innerclass>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="group__topic-optimization-solvers-ocp_1gaeb4dd1f31c1ec8d3d9e0f9023da5cec3" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>WarmStartingStrategy</name>
+        <qualifiedname>cyqlone::qpalm::WarmStartingStrategy</qualifiedname>
+        <enumvalue id="group__topic-optimization-solvers-ocp_1ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3a8b7a61a6e9bd5b8977b7b3f02a425adc" prot="public">
+          <name>Zeros</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__topic-optimization-solvers-ocp_1ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3a5fb63579fc981698f97d55bfecb213ea" prot="public">
+          <name>Copy</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__topic-optimization-solvers-ocp_1ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3a825a3d98017bab11815ad2817201324c" prot="public">
+          <name>Shift</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__topic-optimization-solvers-ocp_1ggaeb4dd1f31c1ec8d3d9e0f9023da5cec3ab882fa82c60e5b9a229e5ed6e52ad31a" prot="public">
+          <name>ShiftNoInequality</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="24" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="24" bodyend="29"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="group__topic-optimization-solvers-ocp_1gae148b32eb392bb39d685929069cfabdb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>index_t</type>
+            <declname>VL</declname>
+            <defname>VL</defname>
+          </param>
+          <param>
+            <type>StorageOrder</type>
+            <declname>DefaultOrder</declname>
+            <defname>DefaultOrder</defname>
+            <defval>StorageOrder::ColMajor</defval>
+          </param>
+        </templateparamlist>
+        <type>unique_CyQPALMBackend&lt; VL, DefaultOrder &gt;</type>
+        <definition>unique_CyQPALMBackend&lt; VL, DefaultOrder &gt; cyqlone::qpalm::make_cyqpalm_backend</definition>
+        <argsstring>(const CyqloneStorage&lt; real_t &gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings)</argsstring>
+        <name>make_cyqpalm_backend</name>
+        <qualifiedname>cyqlone::qpalm::make_cyqpalm_backend</qualifiedname>
+        <param>
+          <type>const CyqloneStorage&lt; real_t &gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type>CyqloneData</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>const CyQPALMBackendSettings &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="85" column="1" declfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" declline="85" declcolumn="1"/>
+        <references refid="group__topic-optimization-solvers-ocp_1gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</references>
+        <references refid="group__topic-optimization-solvers-ocp_1gaf5dbe2437a5f7176b58b7743cba83d1c" compoundref="ocp-backend-cyqlone_8tpp" startline="608" endline="611">cyqlone::qpalm::update_cyqpalm_backend</references>
+        <referencedby refid="group__topic-optimization-solvers-ocp_1gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a0d06e7a2fb9288cf51ce720d27a14baf" compoundref="ocp-backend-cyqlone_8tpp" startline="602" endline="605">cyqlone::qpalm::make_cyqpalm_backend</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a9a50c58845ad3929bc28241ad1ef0991" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="168" endline="232">run_benchmark</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-optimization-solvers-ocp_1gaf5dbe2437a5f7176b58b7743cba83d1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>index_t</type>
+            <declname>VL</declname>
+            <defname>VL</defname>
+          </param>
+          <param>
+            <type>StorageOrder</type>
+            <declname>DefaultOrder</declname>
+            <defname>DefaultOrder</defname>
+            <defval>StorageOrder::ColMajor</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::qpalm::update_cyqpalm_backend</definition>
+        <argsstring>(CyQPALMBackend&lt; VL, DefaultOrder &gt; &amp;backend, const CyqloneStorage&lt; real_t &gt; &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend</qualifiedname>
+        <param>
+          <type>CyQPALMBackend&lt; VL, DefaultOrder &gt; &amp;</type>
+          <declname>backend</declname>
+        </param>
+        <param>
+          <type>const CyqloneStorage&lt; real_t &gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="608" column="6" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="608" bodyend="611" declfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" declline="89" declcolumn="6"/>
+        <references refid="group__topic-optimization-solvers-ocp_1gaf5dbe2437a5f7176b58b7743cba83d1c" compoundref="ocp-backend-cyqlone_8tpp" startline="608" endline="611">cyqlone::qpalm::update_cyqpalm_backend</references>
+        <references refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1a422f861e115493145d188b75c69b9fc5" compoundref="ocp-backend-cyqlone_8tpp" startline="126" endline="131">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::update_data</references>
+        <referencedby refid="group__topic-optimization-solvers-ocp_1gae148b32eb392bb39d685929069cfabdb">cyqlone::qpalm::make_cyqpalm_backend</referencedby>
+        <referencedby refid="group__topic-optimization-solvers-ocp_1gaf5dbe2437a5f7176b58b7743cba83d1c" compoundref="ocp-backend-cyqlone_8tpp" startline="608" endline="611">cyqlone::qpalm::update_cyqpalm_backend</referencedby>
+        <referencedby refid="group__topic-optimization-solvers-ocp_1ga8aac8ebf6f85aba82b32a927bc9bea00" compoundref="ocp-backend-cyqlone_8tpp" startline="614" endline="618">cyqlone::qpalm::update_cyqpalm_backend</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-optimization-solvers-ocp_1ga8aac8ebf6f85aba82b32a927bc9bea00" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>index_t</type>
+            <declname>VL</declname>
+            <defname>VL</defname>
+          </param>
+          <param>
+            <type>StorageOrder</type>
+            <declname>DefaultOrder</declname>
+            <defname>DefaultOrder</defname>
+            <defval>StorageOrder::ColMajor</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::qpalm::update_cyqpalm_backend</definition>
+        <argsstring>(CyQPALMBackend&lt; VL, DefaultOrder &gt; &amp;backend, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend</qualifiedname>
+        <param>
+          <type>CyQPALMBackend&lt; VL, DefaultOrder &gt; &amp;</type>
+          <declname>backend</declname>
+        </param>
+        <param>
+          <type>const LinearOCPStorage &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="614" column="6" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="614" bodyend="618" declfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" declline="93" declcolumn="6"/>
+        <references refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</references>
+        <references refid="structcyqlone_1_1CyqloneSolver_1abd0522443208690a953a9941e94a50c7" compoundref="cyqlone_8hpp" startline="571">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::ny_0</references>
+        <references refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1a9136b75d6dc0873e9b596a1a6e3a2f6e" compoundref="ocp-backend-cyqlone_8tpp" startline="79">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::ocp</references>
+        <references refid="group__topic-optimization-solvers-ocp_1gaf5dbe2437a5f7176b58b7743cba83d1c" compoundref="ocp-backend-cyqlone_8tpp" startline="608" endline="611">cyqlone::qpalm::update_cyqpalm_backend</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Solvers for optimal control problems. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

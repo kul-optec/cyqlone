@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1LineSearchSettings" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::LineSearchSettings</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LineSearchSettings_1ac2fff19946adc7531bc0afc11226ad8f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cyqlone::qpalm::LineSearchSettings::find_smallest_breakpoint_first</definition>
+        <argsstring></argsstring>
+        <name>find_smallest_breakpoint_first</name>
+        <qualifiedname>cyqlone::qpalm::LineSearchSettings::find_smallest_breakpoint_first</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="31" column="10" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::LineSearchSettings</label>
+        <link refid="structcyqlone_1_1qpalm_1_1LineSearchSettings"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="30" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="30" bodyend="32"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearchSettings_1ac2fff19946adc7531bc0afc11226ad8f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearchSettings</scope><name>find_smallest_breakpoint_first</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,785 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1SolverImplementation" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::SolverImplementation</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class Backend</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad3d5e547fe54253a35c503000ae9957f" prot="public" static="no">
+        <type>Backend</type>
+        <definition>using cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::backend_type = Backend</definition>
+        <argsstring></argsstring>
+        <name>backend_type</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::backend_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="21" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a67c434f22cfab91fc164db8d9c116780" prot="public" static="no">
+        <type>typename backend_type::active_set_t</type>
+        <definition>using cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::active_set_t = typename backend_type::active_set_t</definition>
+        <argsstring></argsstring>
+        <name>active_set_t</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::active_set_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="24" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" prot="public" static="no">
+        <type>typename backend_type::ineq_constr_vec_t</type>
+        <definition>using cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ineq_vec_t = typename backend_type::ineq_constr_vec_t</definition>
+        <argsstring></argsstring>
+        <name>ineq_vec_t</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::ineq_vec_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="25" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a258af9d0152cbaa9462f000a7fea9485" prot="public" static="no">
+        <type>typename backend_type::eq_constr_vec_t</type>
+        <definition>using cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::eq_vec_t = typename backend_type::eq_constr_vec_t</definition>
+        <argsstring></argsstring>
+        <name>eq_vec_t</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::eq_vec_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="26" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" prot="public" static="no">
+        <type>typename backend_type::var_vec_t</type>
+        <definition>using cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::var_vec_t = typename backend_type::var_vec_t</definition>
+        <argsstring></argsstring>
+        <name>var_vec_t</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::var_vec_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="27" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1acd99d245f212c2a5153d3e21a53a5cac" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1LineSearch" kindref="compound">LineSearch</ref>&lt; <ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref> &gt;</type>
+        <definition>LineSearch&lt;ineq_vec_t&gt; cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::linesearch</definition>
+        <argsstring></argsstring>
+        <name>linesearch</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::linesearch</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="28" column="16" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a133ce19074efa6bb16cea9a55366cf6a" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a67c434f22cfab91fc164db8d9c116780" kindref="member">active_set_t</ref></type>
+        <definition>active_set_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::active_set</definition>
+        <argsstring></argsstring>
+        <name>active_set</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::active_set</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="93" column="18" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="93" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a4bb430d59135bbd9ab8fd69872708e" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a67c434f22cfab91fc164db8d9c116780" kindref="member">active_set_t</ref></type>
+        <definition>active_set_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::active_set_old</definition>
+        <argsstring></argsstring>
+        <name>active_set_old</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::active_set_old</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="93" column="29" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="93" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a1b6ed7b638b9abbb88cc0a92d9dc6c92" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref></type>
+        <definition>ineq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Σ</definition>
+        <argsstring></argsstring>
+        <name>Σ</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::Σ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="94" column="16" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="94" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a30930ad39860699cc18f15336f6c93ce" compoundref="solver_8tpp" startline="30" endline="42">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::initialize_penalty_y</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aeca28f0766eff6405b150db702661a84" compoundref="solver_8tpp" startline="44" endline="74">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::update_penalty_y</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae82f3298e1e256446ccc50b11626dbfd" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref></type>
+        <definition>ineq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="94" column="19" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="94" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a625329a85eff1a9c81ecb06e4827b30e" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref></type>
+        <definition>ineq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ŷ</definition>
+        <argsstring></argsstring>
+        <name>ŷ</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::ŷ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="94" column="21" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="94" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a889230a838400fdd08d3e7d9e4572ee6" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref></type>
+        <definition>ineq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e</definition>
+        <argsstring></argsstring>
+        <name>e</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::e</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="94" column="24" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="94" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a30930ad39860699cc18f15336f6c93ce" compoundref="solver_8tpp" startline="30" endline="42">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::initialize_penalty_y</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aeca28f0766eff6405b150db702661a84" compoundref="solver_8tpp" startline="44" endline="74">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::update_penalty_y</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a044ad1db552d3890866688c9e5e18990" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref></type>
+        <definition>ineq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e_old</definition>
+        <argsstring></argsstring>
+        <name>e_old</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::e_old</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="94" column="26" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="94" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aeca28f0766eff6405b150db702661a84" compoundref="solver_8tpp" startline="44" endline="74">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::update_penalty_y</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae9d970a82cac621bcba89780d7ff44c6" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref></type>
+        <definition>ineq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Ax</definition>
+        <argsstring></argsstring>
+        <name>Ax</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::Ax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="94" column="32" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="94" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a3c34534a1bfce2131c879e01557863e1" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref></type>
+        <definition>ineq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Ad</definition>
+        <argsstring></argsstring>
+        <name>Ad</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::Ad</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="94" column="35" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="94" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1aafaac7519adab2070c51345ef6e486c5" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a258af9d0152cbaa9462f000a7fea9485" kindref="member">eq_vec_t</ref></type>
+        <definition>eq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Mxb</definition>
+        <argsstring></argsstring>
+        <name>Mxb</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::Mxb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="95" column="14" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="95" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1aab33b05f7516d390babbeb04156254f0" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a258af9d0152cbaa9462f000a7fea9485" kindref="member">eq_vec_t</ref></type>
+        <definition>eq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Δλ</definition>
+        <argsstring></argsstring>
+        <name>Δλ</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::Δλ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="95" column="18" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="95" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a6437ff2c50e1b6596ae3fb583bb4ec98" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a258af9d0152cbaa9462f000a7fea9485" kindref="member">eq_vec_t</ref></type>
+        <definition>eq_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::λ</definition>
+        <argsstring></argsstring>
+        <name>λ</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::λ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="95" column="23" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="95" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1aa5b94cb580a4522b76f5c2357f87b605" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="15" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1ac2356290b62119851ff68de07515456f" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::grad</definition>
+        <argsstring></argsstring>
+        <name>grad</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::grad</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="17" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a502d8ea367f2203afbf19d085b7f7f54" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Mᵀλ</definition>
+        <argsstring></argsstring>
+        <name>Mᵀλ</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::Mᵀλ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="22" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1ac406e699106ea94ba60acbf5b7e603ce" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Aᵀŷ</definition>
+        <argsstring></argsstring>
+        <name>Aᵀŷ</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::Aᵀŷ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="29" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a6d6cc97ac2911bbe32c1d2b64f21785c" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::x_outer</definition>
+        <argsstring></argsstring>
+        <name>x_outer</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::x_outer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="36" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a11cd80b2b9eb33af400c739418adc387" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::MᵀΔλ</definition>
+        <argsstring></argsstring>
+        <name>MᵀΔλ</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::MᵀΔλ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="44" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad343e19fdb19ad8e3a5cc83c80b48885" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::d</definition>
+        <argsstring></argsstring>
+        <name>d</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="53" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a0698b9f0bb505542ff75fd3e8a25e46b" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ξ</definition>
+        <argsstring></argsstring>
+        <name>ξ</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::ξ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="55" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a2222f8611460ceb4869e61869c82c486" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" kindref="member">var_vec_t</ref></type>
+        <definition>var_vec_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::grad_add</definition>
+        <argsstring></argsstring>
+        <name>grad_add</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::grad_add</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="96" column="58" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="96" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" compoundref="solver_8tpp" startline="81" endline="87">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a30930ad39860699cc18f15336f6c93ce" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::initialize_penalty_y</definition>
+        <argsstring>(Backend::Context &amp;ctx, backend_type &amp;backend, real_t f0, const ineq_vec_t &amp;e0, ineq_vec_t &amp;Σ, const Settings &amp;settings)</argsstring>
+        <name>initialize_penalty_y</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::initialize_penalty_y</qualifiedname>
+        <param>
+          <type>Backend::Context &amp;</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad3d5e547fe54253a35c503000ae9957f" kindref="member">backend_type</ref> &amp;</type>
+          <declname>backend</declname>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>f0</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref> &amp;</type>
+          <declname>e0</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref> &amp;</type>
+          <declname>Σ</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1Settings" kindref="compound">Settings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="30" column="17" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="30" bodyend="42"/>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a1b6ed7b638b9abbb88cc0a92d9dc6c92" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Σ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a889230a838400fdd08d3e7d9e4572ee6" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a0dd70fdbec05ca3053d9ea475a227d68" compoundref="settings_8hpp" startline="28">cyqlone::qpalm::Settings::initial_penalty_y</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a89ccde4b8379e5f343154eba11ef695f" compoundref="settings_8hpp" startline="29">cyqlone::qpalm::Settings::scale_initial_penalty_y</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1aeca28f0766eff6405b150db702661a84" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>index_t</type>
+        <definition>static index_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::update_penalty_y</definition>
+        <argsstring>(Backend::Context &amp;ctx, backend_type &amp;backend, ineq_vec_t &amp;Σ, const ineq_vec_t &amp;e, const ineq_vec_t &amp;e_old, const Settings &amp;settings)</argsstring>
+        <name>update_penalty_y</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::update_penalty_y</qualifiedname>
+        <param>
+          <type>Backend::Context &amp;</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad3d5e547fe54253a35c503000ae9957f" kindref="member">backend_type</ref> &amp;</type>
+          <declname>backend</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref> &amp;</type>
+          <declname>Σ</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref> &amp;</type>
+          <declname>e</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" kindref="member">ineq_vec_t</ref> &amp;</type>
+          <declname>e_old</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1Settings" kindref="compound">Settings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="44" column="20" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="44" bodyend="74"/>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a78e7361dbb3e5379436bd46f43414d2f" compoundref="settings_8hpp" startline="25">cyqlone::qpalm::Settings::Δy</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a36fef6363ab0f0de8e9bf7cdd8380265" compoundref="settings_8hpp" startline="26">cyqlone::qpalm::Settings::Δy_always</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a1b6ed7b638b9abbb88cc0a92d9dc6c92" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Σ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1ab5d863568d7480e236b7afc32ce7521e" compoundref="settings_8hpp" startline="24">cyqlone::qpalm::Settings::θ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a889230a838400fdd08d3e7d9e4572ee6" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a044ad1db552d3890866688c9e5e18990" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e_old</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a972306dc31bec781d356b2d746c8fc3f" compoundref="settings_8hpp" startline="27">cyqlone::qpalm::Settings::max_penalty_y</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae03cb5a76ddf3129488cf00fedaeef86" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>real_t</type>
+        <definition>static real_t cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::update_penalty_x</definition>
+        <argsstring>(real_t S, const Settings &amp;settings)</argsstring>
+        <name>update_penalty_x</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::update_penalty_x</qualifiedname>
+        <param>
+          <type>real_t</type>
+          <declname>S</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1Settings" kindref="compound">Settings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="76" column="19" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="76" bodyend="79"/>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1aa15b0558ea04a215d1758fedf5d6cd41" compoundref="settings_8hpp" startline="30">cyqlone::qpalm::Settings::Δx</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a4e42bf80414aec6ce52346ebe541254f" compoundref="settings_8hpp" startline="31">cyqlone::qpalm::Settings::max_penalty_x</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ensure_storage</definition>
+        <argsstring>(backend_type &amp;backend)</argsstring>
+        <name>ensure_storage</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::ensure_storage</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad3d5e547fe54253a35c503000ae9957f" kindref="member">backend_type</ref> &amp;</type>
+          <declname>backend</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="81" column="10" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="81" bodyend="87"/>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a625329a85eff1a9c81ecb06e4827b30e" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ŷ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aab33b05f7516d390babbeb04156254f0" compoundref="solver_8tpp" startline="95">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Δλ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a1b6ed7b638b9abbb88cc0a92d9dc6c92" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Σ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a6437ff2c50e1b6596ae3fb583bb4ec98" compoundref="solver_8tpp" startline="95">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::λ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a0698b9f0bb505542ff75fd3e8a25e46b" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ξ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ac406e699106ea94ba60acbf5b7e603ce" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Aᵀŷ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a133ce19074efa6bb16cea9a55366cf6a" compoundref="solver_8tpp" startline="93">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::active_set</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a4bb430d59135bbd9ab8fd69872708e" compoundref="solver_8tpp" startline="93">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::active_set_old</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a3c34534a1bfce2131c879e01557863e1" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Ad</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae9d970a82cac621bcba89780d7ff44c6" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Ax</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad343e19fdb19ad8e3a5cc83c80b48885" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::d</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a889230a838400fdd08d3e7d9e4572ee6" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a044ad1db552d3890866688c9e5e18990" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e_old</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ac2356290b62119851ff68de07515456f" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::grad</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a2222f8611460ceb4869e61869c82c486" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::grad_add</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a11cd80b2b9eb33af400c739418adc387" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::MᵀΔλ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a502d8ea367f2203afbf19d085b7f7f54" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Mᵀλ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aafaac7519adab2070c51345ef6e486c5" compoundref="solver_8tpp" startline="95">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Mxb</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aa5b94cb580a4522b76f5c2357f87b605" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::x</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a6d6cc97ac2911bbe32c1d2b64f21785c" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::x_outer</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae82f3298e1e256446ccc50b11626dbfd" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::y</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group__topic-optimization-solvers_1gade0917661457f4dc0d6396ded24277a4" kindref="member">SolverStatus</ref></type>
+        <definition>SolverStatus cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</definition>
+        <argsstring>(Backend::Context &amp;ctx, backend_type &amp;backend, const Settings &amp;settings, guanaqo::AtomicStopSignal &amp;stop_signal, SolverStats &amp;stats)</argsstring>
+        <name>do_main_loop</name>
+        <qualifiedname>cyqlone::qpalm::SolverImplementation::do_main_loop</qualifiedname>
+        <param>
+          <type>Backend::Context &amp;</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad3d5e547fe54253a35c503000ae9957f" kindref="member">backend_type</ref> &amp;</type>
+          <declname>backend</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1Settings" kindref="compound">Settings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <param>
+          <type><ref refid="classguanaqo_1_1AtomicStopSignal" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::AtomicStopSignal</ref> &amp;</type>
+          <declname>stop_signal</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1SolverStats" kindref="compound">SolverStats</ref> &amp;</type>
+          <declname>stats</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="89" column="18" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="124" bodyend="499"/>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a625329a85eff1a9c81ecb06e4827b30e" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ŷ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aab33b05f7516d390babbeb04156254f0" compoundref="solver_8tpp" startline="95">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Δλ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a1b6ed7b638b9abbb88cc0a92d9dc6c92" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Σ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a6437ff2c50e1b6596ae3fb583bb4ec98" compoundref="solver_8tpp" startline="95">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::λ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a0698b9f0bb505542ff75fd3e8a25e46b" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::ξ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a8db61e7713f34a508a71e97b67217c20" compoundref="settings_8hpp" startline="23">cyqlone::qpalm::Settings::ρ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ac406e699106ea94ba60acbf5b7e603ce" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Aᵀŷ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a133ce19074efa6bb16cea9a55366cf6a" compoundref="solver_8tpp" startline="93">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::active_set</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a7b8a81360c87e947b2e7b6d7caf96e43" compoundref="solver_8hpp" startline="30">cyqlone::qpalm::SolverTimings::active_set_change</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a4bb430d59135bbd9ab8fd69872708e" compoundref="solver_8tpp" startline="93">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::active_set_old</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a3c34534a1bfce2131c879e01557863e1" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Ad</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae9d970a82cac621bcba89780d7ff44c6" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Ax</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a1f2d0413d9e3d80270f2674513876e51" compoundref="solver_8hpp" startline="35">cyqlone::qpalm::SolverTimings::backend</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a3525a9be60e61aaa7249a8aa45b10d6f" compoundref="solver_8hpp" startline="33">cyqlone::qpalm::SolverTimings::boost_regularization</references>
+        <references refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca31ddc63b44ee2a594e7254f88cb46a85" compoundref="detailed-stats_8hpp" startline="11">cyqlone::qpalm::DetailedStats::Busy</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4ad8a942ef2b04672adfafef0ad817a407" compoundref="status_8hpp" startline="13">cyqlone::qpalm::Busy</references>
+        <references refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca4d1f8c96fbbe0840d849f750db3bbde8" compoundref="detailed-stats_8hpp" startline="12">cyqlone::qpalm::DetailedStats::Converged</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4ada5418b1eb4e80d05f2c1c7c4fa1b6ec" compoundref="status_8hpp" startline="14">cyqlone::qpalm::Converged</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad343e19fdb19ad8e3a5cc83c80b48885" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::d</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverStats_1a5d12e93e75443d9cee74c8f774bb0dd6" compoundref="solver_8hpp" startline="49">cyqlone::qpalm::SolverStats::detail</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a59257ea29ecdfc3d349696d4d75ed2f7" compoundref="settings_8hpp" startline="44">cyqlone::qpalm::Settings::detailed_stats</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a91a765126c9120f79f40d4a597640c8c" compoundref="settings_8hpp" startline="20">cyqlone::qpalm::Settings::dual_tolerance</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a889230a838400fdd08d3e7d9e4572ee6" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a044ad1db552d3890866688c9e5e18990" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::e_old</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1ad66071896a3caab2e37080c77cc4a343" compoundref="settings_8hpp" startline="21">cyqlone::qpalm::Settings::eq_constr_tolerance</references>
+        <references refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca9e193bc9332f68e38de95c9f6d7dd471" compoundref="detailed-stats_8hpp" startline="14">cyqlone::qpalm::DetailedStats::Fail</references>
+        <references refid="group__io_1gaad039ddbace5b0948cececedd1a7973c">guanaqo::float_to_str</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a51cfcc03495f12d5a186c763a356b772" compoundref="settings_8hpp" startline="43">cyqlone::qpalm::Settings::force_linesearch_if_dir_deriv_pos</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a7063860509c616716b1e4cb0b9218d95" compoundref="settings_8hpp" startline="42">cyqlone::qpalm::Settings::force_linesearch_if_no_set_change</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ac2356290b62119851ff68de07515456f" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::grad</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a2222f8611460ceb4869e61869c82c486" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::grad_add</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a42592dae1b8a1ac2ed162bc429b1d811" compoundref="settings_8hpp" startline="22">cyqlone::qpalm::Settings::initial_inner_tolerance</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a010943e66e81c08f22df67ac7d61d4e6" compoundref="settings_8hpp" startline="33">cyqlone::qpalm::Settings::initial_penalty_x</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a30930ad39860699cc18f15336f6c93ce" compoundref="solver_8tpp" startline="30" endline="42">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::initialize_penalty_y</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverStats_1adc75854df050f2e03ab9e518d99baade" compoundref="solver_8hpp" startline="43">cyqlone::qpalm::SolverStats::inner_iter</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4a12c37c4278b8c0db6c2f65052569cd80" compoundref="status_8hpp" startline="19">cyqlone::qpalm::Interrupted</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a5e598eb1eb75831ade2d39c6ef763962" compoundref="solver_8hpp" startline="22">cyqlone::qpalm::SolverTimings::line_search</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acd99d245f212c2a5153d3e21a53a5cac" compoundref="solver_8tpp" startline="28">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::linesearch</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a11cd80b2b9eb33af400c739418adc387" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::MᵀΔλ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a502d8ea367f2203afbf19d085b7f7f54" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Mᵀλ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a1155e1ba338cbaf461369dae46d03068" compoundref="solver_8hpp" startline="27">cyqlone::qpalm::SolverTimings::mat_vec_A</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a5f414bd26fea73b4cb14516d253cd216" compoundref="solver_8hpp" startline="28">cyqlone::qpalm::SolverTimings::mat_vec_AT</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a5e3650cb9a7f98e5d8bc82b52d9d2c6b" compoundref="solver_8hpp" startline="25">cyqlone::qpalm::SolverTimings::mat_vec_M</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1aa2d2311d3ddcf436aa8e801ed960e814" compoundref="solver_8hpp" startline="26">cyqlone::qpalm::SolverTimings::mat_vec_MT</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a48f490b0bfaef5afa76af09bc2a81984" compoundref="solver_8hpp" startline="29">cyqlone::qpalm::SolverTimings::mat_vec_Q</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1adbca66e89cf0e36d35759f4f7242f084" compoundref="settings_8hpp" startline="15">cyqlone::qpalm::Settings::max_inner_iter</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a0e6123400ca8df7f5b663973ae64c00a" compoundref="settings_8hpp" startline="40">cyqlone::qpalm::Settings::max_no_changes_active_set</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1ac9090bf9b9298054631ea7d6c3a693e0" compoundref="settings_8hpp" startline="14">cyqlone::qpalm::Settings::max_outer_iter</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverStats_1ab6b5e84cd3ad52c8e1c1cad930e896ed" compoundref="solver_8hpp" startline="47">cyqlone::qpalm::SolverStats::max_penalty</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1af78fad11450c21eeb0dc2a4e27882a1e" compoundref="settings_8hpp" startline="17">cyqlone::qpalm::Settings::max_time</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a515ecca5d8342d9ad0c09581358efa8c" compoundref="settings_8hpp" startline="16">cyqlone::qpalm::Settings::max_total_inner_iter</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4abbf52264f7a6e91c48a242f95aeed3db" compoundref="status_8hpp" startline="16">cyqlone::qpalm::MaxIter</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4a9e8b9350c8f1716701ec1f9bbe76432e" compoundref="status_8hpp" startline="15">cyqlone::qpalm::MaxTime</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aafaac7519adab2070c51345ef6e486c5" compoundref="solver_8tpp" startline="95">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::Mxb</references>
+        <references refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca6f8138db1d6c4dcc155498c9f0f65bed" compoundref="detailed-stats_8hpp" startline="13">cyqlone::qpalm::DetailedStats::NoActiveSetChange</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4aff6e97b110349dae9c6e8be0ff7a85c3" compoundref="status_8hpp" startline="17">cyqlone::qpalm::NotFinite</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverStats_1ad44c570bc854d2d3e6dd8fc5f81e4791" compoundref="solver_8hpp" startline="44">cyqlone::qpalm::SolverStats::outer_iter</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverStats_1a7e0f4e611db03ea5ef10ec00c14bc118" compoundref="solver_8hpp" startline="46">cyqlone::qpalm::SolverStats::primal_residual_norm</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a2af53ebb7f2b0201286ed7533457793c" compoundref="settings_8hpp" startline="46">cyqlone::qpalm::Settings::print_directional_deriv</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a056c1f3656deb4bb4a251b863c52a055" compoundref="settings_8hpp" startline="39">cyqlone::qpalm::Settings::print_precision</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1adeeed2f5ebe50223962d3d0f45fa8677" compoundref="settings_8hpp" startline="37">cyqlone::qpalm::Settings::recompute</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1aaf2ccd8782df804b34d5c54836de5fd6" compoundref="settings_8hpp" startline="35">cyqlone::qpalm::Settings::recompute_eq_res</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a4ac0f331a56105f5eaf8e5c0d7dbd592" compoundref="settings_8hpp" startline="36">cyqlone::qpalm::Settings::recompute_inner</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a204e1c7d89db46c34718a46fbcab5c31" compoundref="solver_8hpp" startline="23">cyqlone::qpalm::SolverTimings::recompute_inner</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1ac362d870927e569e86a85b5afc233a71" compoundref="solver_8hpp" startline="24">cyqlone::qpalm::SolverTimings::recompute_outer</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1af6ed344a2af61f08695210cea0cf120f" compoundref="settings_8hpp" startline="45">cyqlone::qpalm::Settings::scale_newton_step</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a60979bac16c487ca041325a8aebe0f08" compoundref="solver_8hpp" startline="34">cyqlone::qpalm::SolverTimings::solve</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverStats_1a211599a03a96d0763a347a5a2369f735" compoundref="solver_8hpp" startline="45">cyqlone::qpalm::SolverStats::stationarity</references>
+        <references refid="classguanaqo_1_1AtomicStopSignal_1a6303d5d72c5f7b9a6bf9c26fafdcfb6b">guanaqo::AtomicStopSignal::stop_requested</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverStats_1a583afdaf6f7dea1a0bdb16f7827918dc" compoundref="solver_8hpp" startline="48" endline="48">cyqlone::qpalm::SolverStats::timings</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a604567d806df4d6ec9ab2522f3ca803d" compoundref="settings_8hpp" startline="19">cyqlone::qpalm::Settings::tolerance</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a2e5f2c5a7c88fd2d3c52662e0357ba12" compoundref="solver_8hpp" startline="31">cyqlone::qpalm::SolverTimings::update_penalty</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae03cb5a76ddf3129488cf00fedaeef86" compoundref="solver_8tpp" startline="76" endline="79">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::update_penalty_x</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aeca28f0766eff6405b150db702661a84" compoundref="solver_8tpp" startline="44" endline="74">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::update_penalty_y</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverTimings_1a64b885dd8e1d0d6806ca3067038154f0" compoundref="solver_8hpp" startline="32">cyqlone::qpalm::SolverTimings::update_regularization</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Settings_1a25954ef9b610d1d58103257ae20032b1" compoundref="settings_8hpp" startline="38">cyqlone::qpalm::Settings::verbose</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aa5b94cb580a4522b76f5c2357f87b605" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::x</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a6d6cc97ac2911bbe32c1d2b64f21785c" compoundref="solver_8tpp" startline="96">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::x_outer</references>
+        <references refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae82f3298e1e256446ccc50b11626dbfd" compoundref="solver_8tpp" startline="94">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::y</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>cyqlone::qpalm::Breakpoint</label>
+        <link refid="structcyqlone_1_1qpalm_1_1Breakpoint"/>
+      </node>
+      <node id="2">
+        <label>cyqlone::qpalm::LineSearch&lt; ineq_vec_t &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1LineSearch"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+settings</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+breakpoints</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cyqlone::qpalm::LineSearchSettings</label>
+        <link refid="structcyqlone_1_1qpalm_1_1LineSearchSettings"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::SolverImplementation&lt; Backend &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1SolverImplementation"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+linesearch</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; cyqlone::qpalm::Breakpoint &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" line="20" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp" bodystart="20" bodyend="98"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a625329a85eff1a9c81ecb06e4827b30e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>ŷ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aab33b05f7516d390babbeb04156254f0" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>Δλ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a1b6ed7b638b9abbb88cc0a92d9dc6c92" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>Σ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a6437ff2c50e1b6596ae3fb583bb4ec98" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>λ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a0698b9f0bb505542ff75fd3e8a25e46b" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>ξ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ac406e699106ea94ba60acbf5b7e603ce" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>Aᵀŷ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a133ce19074efa6bb16cea9a55366cf6a" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>active_set</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a4bb430d59135bbd9ab8fd69872708e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>active_set_old</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a67c434f22cfab91fc164db8d9c116780" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>active_set_t</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a3c34534a1bfce2131c879e01557863e1" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>Ad</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae9d970a82cac621bcba89780d7ff44c6" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>Ax</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad3d5e547fe54253a35c503000ae9957f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>backend_type</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ad343e19fdb19ad8e3a5cc83c80b48885" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>d</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>do_main_loop</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a889230a838400fdd08d3e7d9e4572ee6" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>e</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a044ad1db552d3890866688c9e5e18990" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>e_old</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5f7017998c8b3dce13690968fd2d6299" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>ensure_storage</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a258af9d0152cbaa9462f000a7fea9485" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>eq_vec_t</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ac2356290b62119851ff68de07515456f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>grad</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a2222f8611460ceb4869e61869c82c486" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>grad_add</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae3ba776437c40d7b7b449ff25736ad69" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>ineq_vec_t</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a30930ad39860699cc18f15336f6c93ce" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>initialize_penalty_y</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acd99d245f212c2a5153d3e21a53a5cac" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>linesearch</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a11cd80b2b9eb33af400c739418adc387" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>MᵀΔλ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a502d8ea367f2203afbf19d085b7f7f54" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>Mᵀλ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aafaac7519adab2070c51345ef6e486c5" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>Mxb</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae03cb5a76ddf3129488cf00fedaeef86" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>update_penalty_x</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aeca28f0766eff6405b150db702661a84" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>update_penalty_y</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a5a323dfa6e6ff3b8585c4b498c6b8344" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>var_vec_t</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1aa5b94cb580a4522b76f5c2357f87b605" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>x</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1a6d6cc97ac2911bbe32c1d2b64f21785c" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>x_outer</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1ae82f3298e1e256446ccc50b11626dbfd" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverImplementation</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

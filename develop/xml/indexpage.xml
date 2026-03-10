@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="indexpage" kind="page">
+    <compoundname>index</compoundname>
+    <title>cyqlone</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="index_1md_README"/> <ulink url="https://arxiv.org/abs/2512.09058"><image type="html" name="https://img.shields.io/badge/arXiv-Preprint-b31b1b" alt="arXiv Preprint" inline="yes"></image>
+</ulink> <ulink url="https://kul-optec.github.io/cyqlone/develop/Doxygen"><image type="html" name="https://img.shields.io/badge/Documentation-develop-blue" alt="Documentation" inline="yes"></image>
+</ulink> <ulink url="https://github.com/kul-optec/cyqlone/actions/workflows/linux.yml"><image type="html" name="https://github.com/kul-optec/cyqlone/actions/workflows/linux.yml/badge.svg" alt="CI: Linux" inline="yes"></image>
+</ulink> <ulink url="https://github.com/kul-optec/alpaqa/blob/develop/LICENSE"><image type="html" name="https://img.shields.io/github/license/kul-optec/alpaqa?label=License&amp;logo=gnu" alt="GitHub License" inline="yes"></image>
+</ulink></para>
+<para></para>
+<para><image type="html" name="docs/source/images/cyqlone-logo-text.svg" inline="yes"></image>
+ </para>
+<sect1 id="index_1cyqlone">
+<title>Cyqlone</title><para>Fast, <bold>parallel and vectorized solver</bold> for linear systems with <bold>optimal control structure</bold>.</para>
+<para>Also includes an implementation of the <bold>CyQPALM</bold> solver that uses the Cyqlone linear solver as a backend, with parallel factorization update routines to handle active set changes and a parallel exact line search.</para>
+<sect2 id="index_1preprint">
+<title>Preprint</title><para>The paper describing the algorithms in this repository can be found on arXiv: <ulink url="https://arxiv.org/abs/2512.09058"><bold>arxiv.org/abs/2512.09058</bold></ulink></para>
+<para><programlisting filename=".bibtex"><codeline><highlight class="normal">@misc{pas_cyqlone_2025,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>title<sp/>=<sp/>{Cyqlone:<sp/>{A}<sp/>{Parallel},<sp/>{High}-{Performance}<sp/>{Linear}<sp/>{Solver}<sp/>for<sp/>{Optimal}<sp/>{Control}},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>url<sp/>=<sp/>{http://arxiv.org/abs/2512.09058},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>doi<sp/>=<sp/>{10.48550/arXiv.2512.09058},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>publisher<sp/>=<sp/>{arXiv},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>author<sp/>=<sp/>{Pas,<sp/>Pieter<sp/>and<sp/>Patrinos,<sp/>Panagiotis},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>month<sp/>=<sp/>dec,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>year<sp/>=<sp/>{2025},</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="index_1reproduction-of-benchmark-results-from-the-paper">
+<title>Reproduction of benchmark results from the paper</title><para>A script to reproduce the benchmark results from the paper can be found in <computeroutput>benchmarks/cyqpalm</computeroutput>. See <ref refid="md_benchmarks_2cyqpalm_2README" kindref="compound"><computeroutput>benchmarks/cyqpalm/README.md</computeroutput></ref> for instructions.</para>
+</sect2>
+<sect2 id="index_1documentation">
+<title>Documentation</title><para><itemizedlist>
+<listitem><para><ulink url="https://kul-optec.github.io/cyqlone/develop/Doxygen/algorithms.html">Detailed algorithm descriptions</ulink> (matching the pseudocode in the paper)</para>
+</listitem><listitem><para><ulink url="https://kul-optec.github.io/cyqlone/develop/Doxygen/examples.html">Examples</ulink></para>
+</listitem><listitem><para><ulink url="https://kul-optec.github.io/cyqlone/develop/Doxygen/topics.html">API documentation</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="index_1installation">
+<title>Installation</title><para>Requirements: Linux, CMake, Conan 2.</para>
+<para><programlisting filename=".sh"><codeline><highlight class="normal">#<sp/>Prepare<sp/>environment<sp/>and<sp/>dependencies</highlight></codeline>
+<codeline><highlight class="normal">python3<sp/>-m<sp/>pip<sp/>install<sp/>-U<sp/>conan</highlight></codeline>
+<codeline><highlight class="normal">export<sp/>CONAN_HOME=&quot;$PWD/.conan2&quot;<sp/><sp/>#<sp/>Use<sp/>a<sp/>local<sp/>directory<sp/>for<sp/>Conan<sp/>data</highlight></codeline>
+<codeline><highlight class="normal">conan<sp/>profile<sp/>detect<sp/>--exist-ok</highlight></codeline>
+<codeline><highlight class="normal">conan<sp/>remote<sp/>add<sp/>tttapa-conan-recipes<sp/>&quot;$PWD/scripts/ci/conan-recipes&quot;</highlight></codeline>
+<codeline><highlight class="normal">conan<sp/>config<sp/>install<sp/>scripts/ci/conan-profiles/settings_user.yml</highlight></codeline>
+</programlisting></para>
+<sect3 id="index_1c-project">
+<title>C++ project</title><para><programlisting filename=".sh"><codeline><highlight class="normal">#<sp/>Install<sp/>dependencies<sp/>(including<sp/>GCC)<sp/>and<sp/>build<sp/>from<sp/>source</highlight></codeline>
+<codeline><highlight class="normal">conan<sp/>build<sp/>.<sp/>--build=missing<sp/>-pr:h<sp/>scripts/dev/profiles/dev<sp/>-o<sp/>\&amp;:with_benchmarks=True<sp/>-c<sp/>tools.build:jobs=4</highlight></codeline>
+</programlisting></para>
+<para>To build using Clang instead of GCC, add <computeroutput>-pr:h scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile</computeroutput> to the command above (in addition to the <computeroutput>dev</computeroutput> profile). To use the Intel compiler, add <computeroutput>-pr:h scripts/ci/conan-profiles/profiles/toolchain/icx-linux.profile</computeroutput> instead.</para>
+<para>If you have sufficient RAM available, the number of parallel build jobs can be increased.</para>
+<para>To re-build after code changes, simply run <computeroutput>cmake --build --preset conan-release</computeroutput> (or rebuild the <computeroutput>conan-release</computeroutput> preset from your IDE).</para>
+<para>Manual installation using CMake (without the Conan package manager) is also supported, provided that the necessary dependencies are installed.</para>
+</sect3>
+<sect3 id="index_1python-bindings-development">
+<title>Python bindings (development)</title><para>To install the Python bindings for local development, use the <computeroutput>install-linux-dev.sh</computeroutput> script (without arguments).</para>
+<para>Requirements: Python 3.8+, uv, Conan 2 (as configured above).</para>
+<para><programlisting filename=".sh"><codeline><highlight class="normal">./scripts/dev/install-linux-dev.sh</highlight></codeline>
+</programlisting></para>
+<para>By default, this script builds the package for both AVX2 and AVX-512 targets, which may be wasteful if you only need AVX2. You can remove <computeroutput>avx512</computeroutput> from the <computeroutput>archs</computeroutput> array in the script to only build for AVX2.</para>
+<para>To run the tests, use <computeroutput>pytest</computeroutput>.</para>
+<para>To re-build the AVX2 version after code changes, run <computeroutput>cmake --build --preset conan-cp312-abi3-linux_x86_64-1-release</computeroutput> (replace <computeroutput>cp312-abi3</computeroutput> with your Python version and ABI, and replace <computeroutput>-1-</computeroutput> with <computeroutput>-2-</computeroutput> to re-build the AVX-512 version). You will need to restart the Python interpreter to load the new version of the package.</para>
+</sect3>
+<sect3 id="index_1python-bindings-distribution">
+<title>Python bindings (distribution)</title><para>To build the Python package for distribution, use the scripts in <computeroutput>scripts/ci</computeroutput>.</para>
+<para><programlisting filename=".sh"><codeline><highlight class="normal">#<sp/>Build<sp/>the<sp/>wheel<sp/>for<sp/>distribution,<sp/>and<sp/>generate<sp/>the<sp/>stubs</highlight></codeline>
+<codeline><highlight class="normal">./scripts/ci/build-linux-cross.sh<sp/>3.12<sp/>x86_64-bionic-linux-gnu<sp/>.<sp/>dist<sp/>true</highlight></codeline>
+</programlisting></para>
+<para>If you are cross-compiling, you will need to generate the stubs using a native build first, since this requires running the built extension module.</para>
+<para><programlisting filename=".sh"><codeline><highlight class="normal">#<sp/>Native<sp/>build<sp/>to<sp/>generate<sp/>the<sp/>stub<sp/>files</highlight></codeline>
+<codeline><highlight class="normal">./scripts/ci/build-linux-native.sh<sp/>.<sp/>dist<sp/>python</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Build<sp/>the<sp/>wheel<sp/>for<sp/>distribution</highlight></codeline>
+<codeline><highlight class="normal">./scripts/ci/build-linux-cross.sh<sp/>3.12<sp/>x86_64-bionic-linux-gnu<sp/>.<sp/>dist</highlight></codeline>
+</programlisting></para>
+<para>Either way, generated Wheel files will be placed in the <computeroutput>dist</computeroutput> directory.</para>
+</sect3>
+</sect2>
+<sect2 id="index_1related-projects">
+<title>Related projects</title><para><itemizedlist>
+<listitem><para><ulink url="https://github.com/kul-optec/QPALM">QPALM</ulink>: general-purpose quadratic programming solver on which CyQPALM is based</para>
+</listitem><listitem><para><ulink url="https://github.com/tttapa/batmat">batmat</ulink>: high-performance batched linear algebra routines (used by cyqlone)</para>
+</listitem><listitem><para><ulink url="https://github.com/kul-optec/hyhound">hyhound</ulink>: low-rank Cholesky factorization up- and downdate routines based on hyperbolic Householder transformations (with applications to e.g. Riccati recursion)</para>
+</listitem><listitem><para><ulink url="https://github.com/kul-optec/alpaqa">alpaqa</ulink>: matrix-free, nonlinear programming solver </para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="README.md"/>
+  </compounddef>
+</doxygen>

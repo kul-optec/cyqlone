@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::PartitionedBreakpoints</compoundname>
+    <includes refid="breakpoint_8hpp" local="no">cyqlone/qpalm/implementation/breakpoint.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a39e61a555be8f3e459906d7b57408662" prot="public" static="no" mutable="no">
+        <type>std::span&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt;</type>
+        <definition>std::span&lt;Breakpoint&gt; cyqlone::qpalm::PartitionedBreakpoints::neg_bp</definition>
+        <argsstring></argsstring>
+        <name>neg_bp</name>
+        <qualifiedname>cyqlone::qpalm::PartitionedBreakpoints::neg_bp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="37" column="15" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a3e3de90bb2d8bb912950e1aa6141b065" compoundref="breakpoint_8cpp" startline="25" endline="41">cyqlone::qpalm::partial_sum_negative</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a7ad314946fc51eb1d2a40f650b75ffbe" prot="public" static="no" mutable="no">
+        <type>std::span&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt;</type>
+        <definition>std::span&lt;Breakpoint&gt; cyqlone::qpalm::PartitionedBreakpoints::pos_bp</definition>
+        <argsstring></argsstring>
+        <name>pos_bp</name>
+        <qualifiedname>cyqlone::qpalm::PartitionedBreakpoints::pos_bp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="37" column="22" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a3e3de90bb2d8bb912950e1aa6141b065" compoundref="breakpoint_8cpp" startline="25" endline="41">cyqlone::qpalm::partial_sum_negative</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>cyqlone::qpalm::Breakpoint</label>
+        <link refid="structcyqlone_1_1qpalm_1_1Breakpoint"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::PartitionedBreakpoints</label>
+        <link refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+neg_bp</edgelabel>
+          <edgelabel>+pos_bp</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::span&lt; cyqlone::qpalm::Breakpoint &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="36" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="36" bodyend="38"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a39e61a555be8f3e459906d7b57408662" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::PartitionedBreakpoints</scope><name>neg_bp</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a7ad314946fc51eb1d2a40f650b75ffbe" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::PartitionedBreakpoints</scope><name>pos_bp</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

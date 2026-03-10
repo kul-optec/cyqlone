@@ -1,0 +1,335 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="cyqlone-storage_8hpp" kind="file" language="C++">
+    <compoundname>cyqlone-storage.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <includes local="no">batmat/matrix/matrix.hpp</includes>
+    <includes local="no">span</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="cyqlone_8hpp" local="no">src/cyqlone/include/cyqlone/cyqlone.hpp</includedby>
+    <includedby refid="cyqlone-storage_8cpp" local="no">src/cyqlone/src/cyqlone-storage.cpp</includedby>
+    <includedby refid="ocp-backend-cyqlone_8hpp" local="no">src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/cyqlone-storage.hpp</label>
+        <link refid="cyqlone-storage_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="7">
+        <label>batmat/matrix/matrix.hpp</label>
+      </node>
+      <node id="5">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="8">
+        <label>span</label>
+      </node>
+      <node id="6">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="24">
+        <label>benchmarks/cyqpalm/spring-mass.cpp</label>
+        <link refid="benchmarks_2cyqpalm_2spring-mass_8cpp"/>
+      </node>
+      <node id="3">
+        <label>examples/solve-block-tridiagonal.cpp</label>
+        <link refid="solve-block-tridiagonal_8cpp"/>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/cyqlone-storage.hpp</label>
+        <link refid="cyqlone-storage_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/cyqlone/include/cyqlone/cyqlone.hpp</label>
+        <link refid="cyqlone_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>src/cyqlone/include/cyqlone/implementation/cr.tpp</label>
+        <link refid="cr_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>src/cyqlone/include/cyqlone/implementation/data.tpp</label>
+        <link refid="data_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>src/cyqlone/include/cyqlone/implementation/factor.tpp</label>
+        <link refid="factor_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>src/cyqlone/include/cyqlone/implementation/indexing.tpp</label>
+        <link refid="indexing_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>src/cyqlone/include/cyqlone/implementation/mat-vec.tpp</label>
+        <link refid="mat-vec_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>src/cyqlone/include/cyqlone/implementation/pcg.tpp</label>
+        <link refid="pcg_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>src/cyqlone/include/cyqlone/implementation/pcr.tpp</label>
+        <link refid="pcr_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>src/cyqlone/include/cyqlone/implementation/riccati.tpp</label>
+        <link refid="riccati_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>src/cyqlone/include/cyqlone/implementation/schur.tpp</label>
+        <link refid="schur_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>src/cyqlone/include/cyqlone/implementation/sparse.tpp</label>
+        <link refid="sparse_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>src/cyqlone/include/cyqlone/implementation/update.tpp</label>
+        <link refid="update_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>src/cyqlone/src/cyqlone-storage.cpp</label>
+        <link refid="cyqlone-storage_8cpp"/>
+      </node>
+      <node id="5">
+        <label>src/cyqlone/src/cyqlone.cpp</label>
+        <link refid="cyqlone_8cpp"/>
+      </node>
+      <node id="17">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/ineq-constr.tpp</label>
+        <link refid="ineq-constr_8tpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/linalg.tpp</label>
+        <link refid="linalg_8tpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/linesearch.tpp</label>
+        <link refid="backends_2backend-cyqlone_2linesearch_8tpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/solve.tpp</label>
+        <link refid="solve_8tpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</label>
+        <link refid="ocp-backend-cyqlone_8hpp"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp</label>
+        <link refid="ocp-backend-cyqlone_8tpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>src/qpalm/src/ocp-backend-cyqlone.cpp</label>
+        <link refid="ocp-backend-cyqlone_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structcyqlone_1_1CyqloneStorage" prot="public">cyqlone::CyqloneStorage</innerclass>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <briefdescription>
+<para>Data structure for optimal control problems where the initial states are eliminated. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="3"><highlight class="comment">///<sp/>@file</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">///<sp/>Data<sp/>structure<sp/>for<sp/>optimal<sp/>control<sp/>problems<sp/>where<sp/>the<sp/>initial<sp/>states<sp/>are<sp/>eliminated.</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">///<sp/>@ingroup<sp/>topic-ocp-formulations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ocp_8hpp" kindref="compound">cyqlone/ocp.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/matrix/matrix.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;span&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref><sp/>{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="15"><highlight class="comment">///<sp/>Storage<sp/>for<sp/>a<sp/>linear-quadratic<sp/>OCP<sp/>with<sp/>the<sp/>initial<sp/>states<sp/>x₀<sp/>eliminated.</highlight></codeline>
+<codeline lineno="16"><highlight class="comment">///<sp/>~~~</highlight></codeline>
+<codeline lineno="17"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ₙ₋₁</highlight></codeline>
+<codeline lineno="18"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/>minimize<sp/><sp/><sp/><sp/>∑<sp/>[½<sp/>uᵢᵀ<sp/>Rᵢ<sp/>uᵢ<sp/>+<sp/>uᵢᵀ<sp/>Sᵢ<sp/>xᵢ<sp/>+<sp/>½<sp/>xᵢᵀ<sp/>Qᵢ<sp/>xᵢ<sp/>+<sp/>rᵢᵀuᵢ<sp/>+<sp/>qᵢᵀxᵢ]</highlight></codeline>
+<codeline lineno="19"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ⁱ⁼¹</highlight></codeline>
+<codeline lineno="20"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>½<sp/>u₀ᵀ<sp/>R₀<sp/>u₀<sp/>+<sp/>(r₀<sp/>+<sp/>S₀<sp/>xᵢₙᵢₜ)ᵀ<sp/>u₀</highlight></codeline>
+<codeline lineno="21"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>+<sp/>½<sp/>xₙᵀ<sp/>Qₙ<sp/>xₙ<sp/>+<sp/>qₙᵀ<sp/>xₙ</highlight></codeline>
+<codeline lineno="22"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/>s.t.<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>xᵢ₊₁<sp/>=<sp/>Aᵢ<sp/>xᵢ<sp/>+<sp/>Bᵢ<sp/>uᵢ<sp/>+<sp/>cᵢ</highlight></codeline>
+<codeline lineno="23"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lᵢ<sp/><sp/><sp/>≤<sp/>Cᵢ<sp/>xᵢ<sp/>+<sp/>Dᵢ<sp/>uᵢ<sp/>≤<sp/>uᵢ</highlight></codeline>
+<codeline lineno="24"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>l₀<sp/>-<sp/>C₀<sp/>xᵢₙᵢₜ<sp/>≤<sp/>D₀<sp/>U₀<sp/>≤<sp/>u₀<sp/>-<sp/>C₀<sp/>xᵢₙᵢₜ</highlight></codeline>
+<codeline lineno="25"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lₙ<sp/><sp/><sp/>≤<sp/>Cₙ<sp/>xₙ<sp/>≤<sp/>uₙ</highlight></codeline>
+<codeline lineno="26"><highlight class="comment">///<sp/>~~~</highlight></codeline>
+<codeline lineno="27"><highlight class="comment">///<sp/>The<sp/>matrices<sp/>are<sp/>combined<sp/>per<sp/>stage,<sp/>with<sp/>inputs<sp/>ordered<sp/>first.</highlight></codeline>
+<codeline lineno="28"><highlight class="comment">///<sp/>The<sp/>first<sp/>and<sp/>last<sp/>stage<sp/>are<sp/>special<sp/>because<sp/>of<sp/>the<sp/>lack<sp/>of<sp/>x₀<sp/>and<sp/>uₙ.</highlight></codeline>
+<codeline lineno="29"><highlight class="comment">///<sp/>~~~</highlight></codeline>
+<codeline lineno="30"><highlight class="comment">///<sp/>Hᵢ<sp/>=<sp/>[<sp/>Rᵢ<sp/><sp/>Sᵢ<sp/>],<sp/><sp/><sp/><sp/>H₀<sp/>=<sp/>[<sp/>R₀<sp/><sp/>0<sp/><sp/>],<sp/><sp/><sp/><sp/>Fᵢ<sp/>=<sp/>[<sp/>Bᵢ<sp/><sp/>Aᵢ<sp/>],<sp/><sp/><sp/><sp/>Gᵢ<sp/>=<sp/>[<sp/>Dᵢ<sp/><sp/>Cᵢ<sp/>],<sp/><sp/><sp/><sp/>G₀<sp/>=<sp/>[<sp/>D₀<sp/>Cₙ<sp/>]</highlight></codeline>
+<codeline lineno="31"><highlight class="comment">///<sp/><sp/><sp/><sp/><sp/><sp/>[<sp/>Sᵢᵀ<sp/>Qᵢ<sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/>0<sp/><sp/><sp/>Qₙ<sp/>]</highlight></codeline>
+<codeline lineno="32"><highlight class="comment">///<sp/>~~~</highlight></codeline>
+<codeline lineno="33"><highlight class="comment">///<sp/>Due<sp/>to<sp/>the<sp/>elimination<sp/>of<sp/>x₀,<sp/>there<sp/>may<sp/>be<sp/>fewer<sp/>constraints<sp/>for<sp/>the<sp/>first<sp/>stage,<sp/>which<sp/>is</highlight></codeline>
+<codeline lineno="34"><highlight class="comment">///<sp/>tracked<sp/>by<sp/>the<sp/>Ju0<sp/>mask.<sp/>When<sp/>reconstructing<sp/>the<sp/>solution,<sp/>the<sp/>multipliers<sp/>for<sp/>eliminated</highlight></codeline>
+<codeline lineno="35"><highlight class="comment">///<sp/>constraints<sp/>are<sp/>set<sp/>to<sp/>zero<sp/>(we<sp/>assume<sp/>that<sp/>the<sp/>initial<sp/>state<sp/>is<sp/>feasible<sp/>w.r.t.<sp/>the<sp/>state</highlight></codeline>
+<codeline lineno="36"><highlight class="comment">///<sp/>constraints).</highlight></codeline>
+<codeline lineno="37"><highlight class="comment">///<sp/>@ingroup<sp/>topic-ocp-formulations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T<sp/>=<sp/>real_t&gt;</highlight></codeline>
+<codeline lineno="39" refid="structcyqlone_1_1CyqloneStorage" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref><sp/>{</highlight></codeline>
+<codeline lineno="40" refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1CyqloneStorage_1a8d6d781181e8cf5578bc6d8df6c4fa0c" kindref="member">value_type</ref><sp/>=<sp/>T;</highlight></codeline>
+<codeline lineno="41" refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>index_t<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>;</highlight></codeline>
+<codeline lineno="42" refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>index_t<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>,<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref>,<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" kindref="member">ny</ref>,<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref>,<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" kindref="member">ny_N</ref>;</highlight></codeline>
+<codeline lineno="43" refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;bool&gt;<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" kindref="member">Ju0</ref>;</highlight></codeline>
+<codeline lineno="44" refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><sp/>=<sp/><ref refid="structbatmat_1_1matrix_1_1Matrix" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::Matrix&lt;value_type, index_t&gt;</ref>;</highlight></codeline>
+<codeline lineno="45" refid="structcyqlone_1_1CyqloneStorage_1ae59a1ad04812a951b67cffb555e2c46e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1ae59a1ad04812a951b67cffb555e2c46e" kindref="member">data_H</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>,<sp/>.cols<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>}};</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>}();</highlight></codeline>
+<codeline lineno="48" refid="structcyqlone_1_1CyqloneStorage_1a9858e75b9e77fa90942ae9e93bee6cd0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a9858e75b9e77fa90942ae9e93bee6cd0" kindref="member">data_F</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>,<sp/>.cols<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>}};<sp/>}();</highlight></codeline>
+<codeline lineno="49" refid="structcyqlone_1_1CyqloneStorage_1ac42f16fa5afd1539c75464abf5224c2e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1ac42f16fa5afd1539c75464abf5224c2e" kindref="member">data_G</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref><sp/>-<sp/>1,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" kindref="member">ny</ref>,<sp/>.cols<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>}};</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>}();</highlight></codeline>
+<codeline lineno="52" refid="structcyqlone_1_1CyqloneStorage_1a9d576ab731437a666d1779180ab0da93" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a9d576ab731437a666d1779180ab0da93" kindref="member">data_G0N</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/>1,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" kindref="member">ny_N</ref>,<sp/>.cols<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>}};</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>}();</highlight></codeline>
+<codeline lineno="55" refid="structcyqlone_1_1CyqloneStorage_1a210cf14825f736136173613ccba6e5a0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a210cf14825f736136173613ccba6e5a0" kindref="member">data_rq</ref><sp/><sp/><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a94f6e3df359a642db24a1314c5d6b834" kindref="member">nu</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>,<sp/>.cols<sp/>=<sp/>1}};<sp/>}();</highlight></codeline>
+<codeline lineno="56" refid="structcyqlone_1_1CyqloneStorage_1a0f2e51a560de04b725a2835530c9d6c1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a0f2e51a560de04b725a2835530c9d6c1" kindref="member">data_c</ref><sp/><sp/><sp/><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref>,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2a7e2b890c3d6c8feabb811aa7c9945b" kindref="member">nx</ref>,<sp/>.cols<sp/>=<sp/>1}};<sp/>}();</highlight></codeline>
+<codeline lineno="57" refid="structcyqlone_1_1CyqloneStorage_1a39945295b599e4e6eb8603d4545fbb01" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a39945295b599e4e6eb8603d4545fbb01" kindref="member">data_lb</ref><sp/><sp/><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref><sp/>-<sp/>1,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" kindref="member">ny</ref>,<sp/>.cols<sp/>=<sp/>1}};<sp/>}();</highlight></codeline>
+<codeline lineno="58" refid="structcyqlone_1_1CyqloneStorage_1af7d6268a019a69170affc90f45f6fcbb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1af7d6268a019a69170affc90f45f6fcbb" kindref="member">data_lb0N</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/>1,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" kindref="member">ny_N</ref>,<sp/>.cols<sp/>=<sp/>1}};<sp/>}();</highlight></codeline>
+<codeline lineno="59" refid="structcyqlone_1_1CyqloneStorage_1a02ff2708ce8de1cd931128a1f22c4de6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a02ff2708ce8de1cd931128a1f22c4de6" kindref="member">data_ub</ref><sp/><sp/><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a7eca197b9842281035693dfba5240da4" kindref="member">N_horiz</ref><sp/>-<sp/>1,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1aa105440032c8ead7014d78478855f559" kindref="member">ny</ref>,<sp/>.cols<sp/>=<sp/>1}};<sp/>}();</highlight></codeline>
+<codeline lineno="60" refid="structcyqlone_1_1CyqloneStorage_1a9a940b82db836d321c2b85af56718c26" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a9a940b82db836d321c2b85af56718c26" kindref="member">data_ub0N</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a461664ce662031ec80e24179d5aa160a" kindref="member">matrix</ref>{{.depth<sp/>=<sp/>1,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref><sp/>+<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1ac6c84b75bc758b0817e06d20d33d3dc0" kindref="member">ny_N</ref>,<sp/>.cols<sp/>=<sp/>1}};<sp/>}();</highlight></codeline>
+<codeline lineno="61" refid="structcyqlone_1_1CyqloneStorage_1a3a48efdcefe05de53bbf06d911ac2411" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;index_t&gt;<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a3a48efdcefe05de53bbf06d911ac2411" kindref="member">indices_G0</ref><sp/>=<sp/>std::vector&lt;index_t&gt;(<ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref>);</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" kindref="member">update_impl</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1aa2b03be361da3dc445fbe12a7f5b14e4" kindref="member">update</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" kindref="member">build</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp,<sp/>index_t<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1adcdc3f7d303534083908cc9e5efe331c" kindref="member">ny_0</ref><sp/>=<sp/>-1);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" kindref="member">reconstruct_ineq_multipliers</ref>(std::span&lt;const<sp/>value_type&gt;<sp/>y_compressed,</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;value_type&gt;<sp/>y)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;value_type&gt;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a67496e3ee37459cfd9fa6d9f98c70a5e" kindref="member">reconstruct_ineq_multipliers</ref>(std::span&lt;const<sp/>value_type&gt;<sp/>y_compressed)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>index_t<sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" kindref="member">count_constr_0</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp,<sp/>std::vector&lt;bool&gt;<sp/>&amp;<ref refid="structcyqlone_1_1CyqloneStorage_1ae49ba7578862d01d9d74b0393da36449" kindref="member">Ju0</ref>);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72" refid="structcyqlone_1_1CyqloneStorage_1a5077445bf9f6dd8b1d187db5eb8ecc20" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1CyqloneStorage_1a5077445bf9f6dd8b1d187db5eb8ecc20" kindref="member">Solution</ref><sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1_1Solution" kindref="compound">LinearOCPStorage::Solution</ref>;</highlight></codeline>
+<codeline lineno="73" refid="structcyqlone_1_1CyqloneStorage_1a8800a636bfb956a3750797b6849c82fb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1CyqloneStorage_1a8800a636bfb956a3750797b6849c82fb" kindref="member">KKTError</ref><sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError" kindref="compound">LinearOCPStorage::KKTError</ref>;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a5077445bf9f6dd8b1d187db5eb8ecc20" kindref="member">Solution</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a2c090e2365a930356da9667415e10bb3" kindref="member">reconstruct_solution</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp,</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>value_type&gt;<sp/>ux_compressed,</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>value_type&gt;<sp/>y_compressed,</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>value_type&gt;<sp/>λ_compressed)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1a8800a636bfb956a3750797b6849c82fb" kindref="member">KKTError</ref><sp/><ref refid="structcyqlone_1_1CyqloneStorage_1ad01b4d57231a32421e798a03be313310" kindref="member">compute_kkt_error</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp,</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>value_type&gt;<sp/>ux_compressed,</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>value_type&gt;<sp/>y_compressed,</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>value_type&gt;<sp/>λ_compressed)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/include/cyqlone/cyqlone-storage.hpp"/>
+  </compounddef>
+</doxygen>

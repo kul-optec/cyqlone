@@ -1,0 +1,267 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: src/cyqlone/include/cyqlone/conversion.hpp File Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('conversion_8hpp.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">conversion.hpp File Reference<div class="ingroups"><a class="el" href="group__topic-ocp-formulations.html">Optimal control problem formulations</a></div></div></div>
+</div><!--header-->
+<div class="contents">
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Conversion utilities for optimal control problems. </p>
+<p>For example: converting an OCP into a sparse “multiple shooting” quadratic program, or computing the gradient of the quadratic OCP cost function. </p>
+
+<p class="definition">Definition in file <a class="el" href="conversion_8hpp_source.html">conversion.hpp</a>.</p>
+</div><div class="textblock"><code>#include &lt;<a class="el" href="config_8hpp_source.html">cyqlone/config.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="ocp_8hpp_source.html">cyqlone/ocp.hpp</a>&gt;</code><br />
+<code>#include &lt;guanaqo/linalg/sparsity.hpp&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+</div>
+<p><a href="conversion_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:cyqlone_3A_3ALinearOCPSparseQP" id="r_cyqlone_3A_3ALinearOCPSparseQP"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1LinearOCPSparseQP.html">cyqlone::LinearOCPSparseQP</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a sparse multiple shooting formulation of the standard optimal control problem.  <a href="structcyqlone_1_1LinearOCPSparseQP.html#details">More...</a><br /></td></tr>
+<tr class="memitem:cyqlone_3A_3ALinearOCPSparseQP_3A_3AKKTMatrix_5Fstructcyqlone_5F1_5F1LinearOCPSparseQP_5F1_5F1KKTMatrix" id="r_cyqlone_3A_3ALinearOCPSparseQP_3A_3AKKTMatrix_5Fstructcyqlone_5F1_5F1LinearOCPSparseQP_5F1_5F1KKTMatrix"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1LinearOCPSparseQP.html#structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix">cyqlone::LinearOCPSparseQP::KKTMatrix</a></td></tr>
+<tr class="memitem:cyqlone_3A_3ASparseCSC_3C_20class_20Index_2C_20class_20StorageIndex_20_3E" id="r_cyqlone_3A_3ASparseCSC_3C_20class_20Index_2C_20class_20StorageIndex_20_3E"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1SparseCSC.html">cyqlone::SparseCSC&lt; class Index, class StorageIndex &gt;</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:cyqlone" id="r_cyqlone"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacecyqlone.html">cyqlone</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga61795701135500f6aaf49cc698e5976e" id="r_ga61795701135500f6aaf49cc698e5976e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-ocp-formulations.html#ga61795701135500f6aaf49cc698e5976e">cyqlone::reference_to_gradient</a> (const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp, std::span&lt; const real_t &gt; ref, std::span&lt; real_t &gt; qr)</td></tr>
+<tr class="memdesc:ga61795701135500f6aaf49cc698e5976e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simply computes the gradient of the quadratic cost \( J(x, u) = \sum_{j=1}^{N-1} \ell_j(x^j, u^j) + \ell_N(x^N) \), with  \( \ell_j(x, u) = \tfrac12 \left\| \begin{pmatrix} x - x^j_\text{ref}
+\\ u - u^j_\text{ref} \end{pmatrix} \right\|_{H_j}^2 \), with the Hessian \( H_j = \begin{pmatrix} Q_j &amp; S_j^\top \\ S_j &amp; R_j \end{pmatrix} \).  <br /></td></tr>
+<tr class="memitem:a551aa703936f7c27064994d2e8353d07" id="r_a551aa703936f7c27064994d2e8353d07"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="namespacecyqlone.html#a551aa703936f7c27064994d2e8353d07">cyqlone::reference_to_gradient</a> (<a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp, std::span&lt; const real_t &gt; ref)</td></tr>
+<tr class="memdesc:a551aa703936f7c27064994d2e8353d07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simply computes the gradient of the quadratic cost \( J(x, u) = \sum_{j=1}^{N-1} \ell_j(x^j, u^j) + \ell_N(x^N) \), with  \( \ell_j(x, u) = \tfrac12 \left\| \begin{pmatrix} x - x^j_\text{ref}
+\\ u - u^j_\text{ref} \end{pmatrix} \right\|_{H_j}^2 \), with the Hessian \( H_j = \begin{pmatrix} Q_j &amp; S_j^\top \\ S_j &amp; R_j \end{pmatrix} \).     <br /></td></tr>
+</table>
+<hr/><h2 id="header-inline_5Fclasses" class="groupheader">Class Documentation</h2>
+<a name="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix" id="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix">&#9670;&#160;</a></span>cyqlone::LinearOCPSparseQP::KKTMatrix</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct cyqlone::LinearOCPSparseQP::KKTMatrix</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="a56c5bcab8e01759d78424ffe138ee938" name="a56c5bcab8e01759d78424ffe138ee938"></a>vector&lt; index_t &gt;</td>
+<td class="fieldname">
+outer_ptr</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a8b4a204db97df41e3d002d296368ed66" name="a8b4a204db97df41e3d002d296368ed66"></a>vector&lt; index_t &gt;</td>
+<td class="fieldname">
+inner_idx</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a0ce9b4ea58045a7a4298f6442bb6e767" name="a0ce9b4ea58045a7a4298f6442bb6e767"></a>vector&lt; real_t &gt;</td>
+<td class="fieldname">
+values</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="adbdd8d3223597f63001ec9d9866feba5" name="adbdd8d3223597f63001ec9d9866feba5"></a><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC.html">SparseCSC</a>&lt; index_t, index_t &gt;</td>
+<td class="fieldname">
+sparsity</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_44ad1395222d8604571a7c368d1497ac.html">cyqlone</a></li><li class="navelem"><a href="dir_9199c9bb5bfaaac5b12cd21eebec9449.html">include</a></li><li class="navelem"><a href="dir_883a88dfe2d80794a3038754b6505506.html">cyqlone</a></li><li class="navelem"><a href="conversion_8hpp.html">conversion.hpp</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

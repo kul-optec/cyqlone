@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1detail_1_1backend__type_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::detail::backend_type&lt; std::unique_ptr&lt; T, D &gt; &gt;</compoundname>
+    <includes refid="solver_8hpp" local="no">cyqlone/qpalm/solver.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+      <param>
+        <type>class D</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1detail_1_1backend__type_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4_1a313cd78907068fe910b6b5fdbfe0d449" prot="public" static="no">
+        <type>T</type>
+        <definition>using cyqlone::qpalm::detail::backend_type&lt; std::unique_ptr&lt; T, D &gt; &gt;::type = T</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>cyqlone::qpalm::detail::backend_type&lt; std::unique_ptr&lt; T, D &gt; &gt;::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="63" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::detail::backend_type&lt; std::unique_ptr&lt; T, D &gt; &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1detail_1_1backend__type_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="62" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="62" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1detail_1_1backend__type_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4_1a313cd78907068fe910b6b5fdbfe0d449" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::detail::backend_type&lt; std::unique_ptr&lt; T, D &gt; &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

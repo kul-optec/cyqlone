@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="src_2example-problems_2src_2spring-mass_8cpp" kind="file" language="C++">
+    <compoundname>spring-mass.cpp</compoundname>
+    <includes refid="conversion_8hpp" local="no">cyqlone/conversion.hpp</includes>
+    <includes refid="spring-mass_8hpp" local="no">cyqlone/qpalm/example-problems/spring-mass.hpp</includes>
+    <includes refid="zoh_8hpp" local="no">cyqlone/qpalm/example-problems/zoh.hpp</includes>
+    <includes local="no">batmat/config.hpp</includes>
+    <includes local="no">guanaqo/eigen/view.hpp</includes>
+    <includes local="no">algorithm</includes>
+    <includes local="no">limits</includes>
+    <includes local="no">numeric</includes>
+    <includes local="no">random</includes>
+    <includes local="no">stdexcept</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone/conversion.hpp</label>
+        <link refid="conversion_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>cyqlone/qpalm/example-problems/spring-mass.hpp</label>
+        <link refid="spring-mass_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>cyqlone/qpalm/example-problems/zoh.hpp</label>
+        <link refid="zoh_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/example-problems/src/spring-mass.cpp</label>
+        <link refid="src_2example-problems_2src_2spring-mass_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>Eigen/Core</label>
+      </node>
+      <node id="16">
+        <label>algorithm</label>
+      </node>
+      <node id="4">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="14">
+        <label>cassert</label>
+      </node>
+      <node id="10">
+        <label>cyqlone/example-problems/export.h</label>
+      </node>
+      <node id="15">
+        <label>guanaqo/eigen/view.hpp</label>
+      </node>
+      <node id="8">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="6">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="17">
+        <label>limits</label>
+      </node>
+      <node id="18">
+        <label>numeric</label>
+      </node>
+      <node id="19">
+        <label>random</label>
+      </node>
+      <node id="20">
+        <label>stdexcept</label>
+      </node>
+      <node id="13">
+        <label>unsupported/Eigen/MatrixFunctions</label>
+      </node>
+      <node id="7">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm_1_1problems">cyqlone::qpalm::problems</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="conversion_8hpp" kindref="compound">cyqlone/conversion.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="spring-mass_8hpp" kindref="compound">cyqlone/qpalm/example-problems/spring-mass.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="zoh_8hpp" kindref="compound">cyqlone/qpalm/example-problems/zoh.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/config.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/eigen/view.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;algorithm&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;limits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;numeric&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;random&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdexcept&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="config_8hpp_1a1f4757b3a02c15cce8aeaa6906e55c17" kindref="member">CYQLONE_NS</ref>(<ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>::qpalm::problems)<sp/>{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15" refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" refkind="member"><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem" kindref="compound">SpringMassProblem</ref><sp/><ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" kindref="member">spring_mass</ref>(<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams" kindref="compound">SpringMassParams</ref><sp/>p)<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="group__linalg__views_1ga2ccef3dcd53320ccda2be9948781c65b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::as_view</ref>;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>inf<sp/>=<sp/>std::numeric_limits&lt;real_t&gt;::infinity();</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>n_masses<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">index_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>.size());</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>index_t<sp/>ny_x<sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a7aac80e23a91f8e1861dec691d5a03" kindref="member">v_max</ref><sp/>&gt;<sp/>0<sp/>?<sp/>2<sp/>*<sp/>n_masses<sp/>:<sp/>n_masses,</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ny_x_N<sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a89e4327b4809fdf0b0e61f111c2dfe" kindref="member">v_max_f</ref><sp/>&gt;<sp/>0<sp/>?<sp/>2<sp/>*<sp/>n_masses<sp/>:<sp/>n_masses;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>ocp{.dim{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.N_horiz<sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" kindref="member">N_horiz</ref>,</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.nx<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>2<sp/>*<sp/>n_masses,<sp/></highlight><highlight class="comment">//<sp/>position<sp/>+<sp/>velocity<sp/>for<sp/>each<sp/>mass</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.nu<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" kindref="member">n_actuators</ref>,</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ny<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>ny_x<sp/>+<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" kindref="member">n_actuators</ref>,</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ny_N<sp/><sp/><sp/><sp/>=<sp/>ny_x_N,</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>}};</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[N,<sp/>nx,<sp/>nu,<sp/>ny,<sp/>ny_N]<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" kindref="member">dim</ref>;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Continuous-time<sp/>dynamics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref><sp/>A<sp/>=<sp/>eigen_mat::Zero(nx,<sp/>nx),<sp/>B<sp/>=<sp/>eigen_mat::Zero(nx,<sp/>nu),<sp/>b<sp/>=<sp/>eigen_mat::Zero(nx,<sp/>1);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(Eigen::Index<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_masses;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>km<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ab5a2af96e4f38127c9e16a4581b86679" kindref="member">k_spring</ref><sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>];</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>A(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>ṗ(t)<sp/>=<sp/>v(t)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>A(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1dba013a3d54b283f9a36f97bd5f1f2e" kindref="member">friction</ref>;<sp/></highlight><highlight class="comment">//<sp/>v̇(t)<sp/>=<sp/>-ρ<sp/>v(t)<sp/>+<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>A(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-2<sp/>*<sp/>km;<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...<sp/>-<sp/>(2k/m)<sp/>p(t)<sp/>+<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&gt;<sp/>0)</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>A(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1)<sp/>=<sp/>km;<sp/></highlight><highlight class="comment">//<sp/>...<sp/>+<sp/>(k/m)<sp/>p_{v-1}(t)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_masses<sp/>-<sp/>1)</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>A(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/>=<sp/>km;<sp/></highlight><highlight class="comment">//<sp/>...<sp/>+<sp/>(k/m)<sp/>p_{v+1}(t)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>b(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/>km<sp/>*<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a887fc5679d33abe3be614792cddffd85" kindref="member">width</ref>;<sp/></highlight><highlight class="comment">//<sp/>Right<sp/>wall<sp/>force</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac172425aa0e56c2a6db220e71e700b3e" kindref="member">actuator_placement</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849" kindref="member">SpringMassParams::IndividualActuators</ref>:</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(Eigen::Index<sp/>a<sp/>=<sp/>0;<sp/>a<sp/>&lt;<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" kindref="member">n_actuators</ref>;<sp/>++a)</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>a,<sp/>a)<sp/>=<sp/>1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[a];</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a30d42f40d22544857de9a609caf07ae2" kindref="member">SpringMassParams::RandomActuators</ref>:<sp/>{</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::mt19937<sp/>rng(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" kindref="member">seed</ref>);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;index_t&gt;<sp/>actuator_indices(n_masses);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::ranges::iota(actuator_indices,<sp/>index_t{});</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::shuffle(actuator_indices.begin(),<sp/>actuator_indices.end(),<sp/>rng);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(Eigen::Index<sp/>a<sp/>=<sp/>0;<sp/>a<sp/>&lt;<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" kindref="member">n_actuators</ref>;<sp/>++a)</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>actuator_indices[a],<sp/>a)<sp/>=<sp/>1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[actuator_indices[a]];</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a617eba72fd8a383f9f58874e67c9e912" kindref="member">SpringMassParams::RandomPairsOfActuators</ref>:<sp/>{</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::mt19937<sp/>rng(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" kindref="member">seed</ref>);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;index_t&gt;<sp/>actuator_indices_l(n_masses),<sp/>actuator_indices_r(n_masses);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::ranges::iota(actuator_indices_l,<sp/>index_t{});</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::ranges::iota(actuator_indices_r,<sp/>index_t{});</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::shuffle(actuator_indices_l.begin(),<sp/>actuator_indices_l.end(),<sp/>rng);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::shuffle(actuator_indices_r.begin(),<sp/>actuator_indices_r.end(),<sp/>rng);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(Eigen::Index<sp/>a<sp/>=<sp/>0;<sp/>a<sp/>&lt;<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" kindref="member">n_actuators</ref>;<sp/>++a)<sp/>{</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>actuator_indices_l[a],<sp/>a)<sp/>=<sp/>+1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[actuator_indices_l[a]];</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>actuator_indices_r[a],<sp/>a)<sp/>=<sp/>-1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[actuator_indices_r[a]];</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a9ed41af8dca64bf2fe5d84464f710060" kindref="member">SpringMassParams::WangBoydActuators</ref>:</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(Eigen::Index<sp/>a<sp/>=<sp/>0;<sp/>a<sp/>&lt;<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" kindref="member">n_actuators</ref>;<sp/>++a)<sp/>{</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(a<sp/>%<sp/>3<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>v_l<sp/>=<sp/>2<sp/>*<sp/>a,<sp/>v_r<sp/>=<sp/>2<sp/>*<sp/>a<sp/>+<sp/>1;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(v_l<sp/>&lt;<sp/>n_masses)</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>v_l,<sp/>a)<sp/>=<sp/>+1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[v_l];</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(v_r<sp/>&lt;<sp/>n_masses)</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>v_r,<sp/>a)<sp/>=<sp/>-1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[v_r];</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(a<sp/>%<sp/>3<sp/>==<sp/>1)<sp/>{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>v_l<sp/>=<sp/>2<sp/>*<sp/>a,<sp/>v_r<sp/>=<sp/>2<sp/>*<sp/>a<sp/>+<sp/>2;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(v_l<sp/>&lt;<sp/>n_masses)</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>v_l,<sp/>a)<sp/>=<sp/>+1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[v_l];</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(v_r<sp/>&lt;<sp/>n_masses)</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>v_r,<sp/>a)<sp/>=<sp/>-1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[v_r];</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>v_l<sp/>=<sp/>2<sp/>*<sp/>a<sp/>-<sp/>1,<sp/>v_r<sp/>=<sp/>2<sp/>*<sp/>a<sp/>+<sp/>1;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(v_l<sp/>&lt;<sp/>n_masses)</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>v_l,<sp/>a)<sp/>=<sp/>+1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[v_l];</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(v_r<sp/>&lt;<sp/>n_masses)</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(n_masses<sp/>+<sp/>v_r,<sp/>a)<sp/>=<sp/>-1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" kindref="member">masses</ref>[v_r];</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">:<sp/></highlight><highlight class="keywordflow">throw</highlight><highlight class="normal"><sp/>std::invalid_argument(</highlight><highlight class="stringliteral">&quot;Invalid<sp/>actuator<sp/>placement&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ts<sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a202950abd5806db1f1dec39c2bb3d51b" kindref="member">T_horiz</ref><sp/>/<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" kindref="member">N_horiz</ref>);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>ẋ<sp/>=<sp/>Ax<sp/>+<sp/>Bu<sp/>+<sp/>b<sp/><sp/>→<sp/><sp/>x[k+1]<sp/>=<sp/>Ad<sp/>x[k]<sp/>+<sp/>Bd<sp/>u[k]<sp/>+<sp/>bd</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[Ad,<sp/>Bd,<sp/>bd]<sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1_1problems_1afba022677ff29a053cf23e0a4720da11" kindref="member">discretize_zoh</ref>(A,<sp/>B,<sp/>b,<sp/>Ts);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Constraints<sp/>rhs</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" kindref="member">b</ref>().set_constant(0);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" kindref="member">b_min</ref>().set_constant(-inf);</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" kindref="member">b_max</ref>().set_constant(+inf);</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>x0<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" kindref="member">b</ref>(0);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_masses;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/></highlight><highlight class="comment">//<sp/>Initial<sp/>positions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>x0(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/>*<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a887fc5679d33abe3be614792cddffd85" kindref="member">width</ref><sp/>/<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(n_masses<sp/>+<sp/>1);</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Dynamics<sp/>and<sp/>constraint<sp/>matrices</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>N;<sp/>++i)<sp/>{</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ai<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" kindref="member">A</ref>(i),<sp/>Bi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" kindref="member">B</ref>(i),<sp/>bi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" kindref="member">b</ref>(i<sp/>+<sp/>1),<sp/>Ci<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref>(i),<sp/>Di<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" kindref="member">D</ref>(i);</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Qi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref>(i),<sp/>Ri<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" kindref="member">R</ref>(i);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>lbi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" kindref="member">b_min</ref>(i),<sp/>ubi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" kindref="member">b_max</ref>(i);</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_masses;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ai<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>as_view(Ad);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Bi<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>as_view(Bd);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bi<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>as_view(bd);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/>=<sp/>1;<sp/></highlight><highlight class="comment">//<sp/>Measure<sp/>displacement</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/>x0(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>+<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a610a7a0c64707d230b7f120570aaf41f" kindref="member">p_min</ref>;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/>x0(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>+<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ae51c660af8c130707f451dde118e4a3c" kindref="member">p_max</ref>;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a7aac80e23a91f8e1861dec691d5a03" kindref="member">v_max</ref><sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>=<sp/>1;<sp/></highlight><highlight class="comment">//<sp/>Measure<sp/>velocity</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a7aac80e23a91f8e1861dec691d5a03" kindref="member">v_max</ref>;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>+p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a7aac80e23a91f8e1861dec691d5a03" kindref="member">v_max</ref>;</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af8a2fd9a992b8305847a25fd24c9d1bd" kindref="member">q_pos</ref>;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a9fbc86d261ebb7bdb01a7f37a58d0174" kindref="member">q_vel</ref>;</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>a<sp/>=<sp/>0;<sp/>a<sp/>&lt;<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" kindref="member">n_actuators</ref>;<sp/>++a)<sp/>{</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Di(ny_x<sp/>+<sp/>a,<sp/>a)<sp/><sp/>=<sp/>1;<sp/></highlight><highlight class="comment">//<sp/>Measure<sp/>input</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(ny_x<sp/>+<sp/>a,<sp/>0)<sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a522c2f182381139c34e576be1652e0d9" kindref="member">F_max</ref>;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(ny_x<sp/>+<sp/>a,<sp/>0)<sp/>=<sp/>+p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a522c2f182381139c34e576be1652e0d9" kindref="member">F_max</ref>;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ri(a,<sp/>a)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1ba21c87e90b5089efb04b787d5b4da9" kindref="member">r_act</ref>;</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ci<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref>(N),<sp/>Qi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref>(N);</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>lbi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" kindref="member">b_min</ref>(N),<sp/>ubi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" kindref="member">b_max</ref>(N);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_masses;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/>=<sp/>1;<sp/></highlight><highlight class="comment">//<sp/>Measure<sp/>displacement</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/>x0(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>+<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a70e147415444754a12f9d828c7a2d6d6" kindref="member">p_min_f</ref>;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/>x0(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>+<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a20401c1d408994186ca5f1316b346f40" kindref="member">p_max_f</ref>;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a89e4327b4809fdf0b0e61f111c2dfe" kindref="member">v_max_f</ref><sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>=<sp/>1;<sp/></highlight><highlight class="comment">//<sp/>Measure<sp/>velocity</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a89e4327b4809fdf0b0e61f111c2dfe" kindref="member">v_max_f</ref>;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>+p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a89e4327b4809fdf0b0e61f111c2dfe" kindref="member">v_max_f</ref>;</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac567b9cf366b0a724de6ac966e915e89" kindref="member">q_pos_f</ref>;</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>n_masses<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a5443953a7bc84041776f986b5fe0e519" kindref="member">q_vel_f</ref>;</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/>ref(nx<sp/>+<sp/>nu<sp/>+<sp/>nx);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_masses;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ref[<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>x0(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0);<sp/></highlight><highlight class="comment">//<sp/>position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ref[nx<sp/>+<sp/>nu<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>]<sp/>=<sp/>x0(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0);<sp/></highlight><highlight class="comment">//<sp/>final<sp/>position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" kindref="member">reference_to_gradient</ref>(ocp,<sp/>ref);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ocp<sp/>=<sp/>std::move(ocp),</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ref<sp/>=<sp/>std::move(ref),</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="159"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone::qpalm::problems)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/example-problems/src/spring-mass.cpp"/>
+  </compounddef>
+</doxygen>

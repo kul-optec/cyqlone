@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="random-ocp_8hpp" kind="file" language="C++">
+    <compoundname>random-ocp.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <includes local="no">random</includes>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/random-ocp.hpp</label>
+        <link refid="random-ocp_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="5">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="7">
+        <label>random</label>
+      </node>
+      <node id="6">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ocp_8hpp" kindref="compound">cyqlone/ocp.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;random&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref><sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="9"><highlight class="comment">///<sp/>Generates<sp/>a<sp/>random<sp/>linear<sp/>OCP<sp/>with<sp/>the<sp/>given<sp/>dimensions<sp/>and<sp/>random<sp/>seed.</highlight></codeline>
+<codeline lineno="10"><highlight class="comment">///<sp/>@ingroup<sp/>topic-ocp-formulations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/><ref refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" kindref="member">generate_random_ocp</ref>(<ref refid="structcyqlone_1_1OCPDim" kindref="compound">OCPDim</ref><sp/>dim,<sp/>uint_fast32_t<sp/>seed<sp/>=<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>ocp{dim};</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[N,<sp/>nx,<sp/>nu,<sp/>ny,<sp/>ny_N]<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" kindref="member">dim</ref>;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>std::mt19937<sp/>rng{seed};</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>std::uniform_real_distribution&lt;real_t&gt;<sp/>uni{-1,<sp/>1};</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>std::bernoulli_distribution<sp/>bernoulli{0.5};</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Dynamics<sp/>and<sp/>constraint<sp/>matrices</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>N;<sp/>++i)<sp/>{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ai<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" kindref="member">A</ref>(i),<sp/>Bi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" kindref="member">B</ref>(i),<sp/>Ci<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref>(i),<sp/>Di<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" kindref="member">D</ref>(i);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Qi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref>(i),<sp/>Ri<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" kindref="member">R</ref>(i),<sp/>Si<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" kindref="member">S</ref>(i),<sp/>Hi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" kindref="member">H</ref>(i);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ai.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng)<sp/>*<sp/>0.9;<sp/>});</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Bi.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng);<sp/>});</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng);<sp/>});</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Di.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng);<sp/>});</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng);<sp/>});</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ri.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng);<sp/>});</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Si.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng);<sp/>});</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>nx;<sp/>++j)</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(j,<sp/>j)<sp/>+=<sp/>2<sp/>*<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(nx<sp/>+<sp/>nu);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>nu;<sp/>++j)</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ri(j,<sp/>j)<sp/>+=<sp/>2<sp/>*<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(nx<sp/>+<sp/>nu);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>c<sp/>=<sp/>0;<sp/>c<sp/>&lt;<sp/>nx<sp/>+<sp/>nu;<sp/>++c)</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>r<sp/>=<sp/>c<sp/>+<sp/>1;<sp/>r<sp/>&lt;<sp/>nx<sp/>+<sp/>nu;<sp/>++r)</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Hi(c,<sp/>r)<sp/>=<sp/>Hi(r,<sp/>c);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ci<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref>(N),<sp/>Qi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref>(N);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>Ci.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng);<sp/>});</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>Qi.generate([&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uni(rng);<sp/>});</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>nx;<sp/>++j)</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(j,<sp/>j)<sp/>+=<sp/>2<sp/>*<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(nx);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>c<sp/>=<sp/>0;<sp/>c<sp/>&lt;<sp/>nx;<sp/>++c)</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>r<sp/>=<sp/>c<sp/>+<sp/>1;<sp/>r<sp/>&lt;<sp/>nx;<sp/>++r)</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(c,<sp/>r)<sp/>=<sp/>Qi(r,<sp/>c);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ocp;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/include/cyqlone/random-ocp.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::LinearOCPSparseQP::KKTMatrix</compoundname>
+    <includes refid="conversion_8hpp" local="no">cyqlone/conversion.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a56c5bcab8e01759d78424ffe138ee938" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::LinearOCPSparseQP::KKTMatrix::outer_ptr</definition>
+        <argsstring></argsstring>
+        <name>outer_ptr</name>
+        <qualifiedname>cyqlone::LinearOCPSparseQP::KKTMatrix::outer_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/conversion.hpp" line="36" column="21" bodyfile="src/cyqlone/include/cyqlone/conversion.hpp" bodystart="36" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1LinearOCPSparseQP_1ae9ee3917664f7a4ec2551c7c31ea8851" compoundref="conversion_8cpp" startline="151" endline="214">cyqlone::LinearOCPSparseQP::build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a8b4a204db97df41e3d002d296368ed66" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::LinearOCPSparseQP::KKTMatrix::inner_idx</definition>
+        <argsstring></argsstring>
+        <name>inner_idx</name>
+        <qualifiedname>cyqlone::LinearOCPSparseQP::KKTMatrix::inner_idx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/conversion.hpp" line="36" column="31" bodyfile="src/cyqlone/include/cyqlone/conversion.hpp" bodystart="36" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1LinearOCPSparseQP_1ae9ee3917664f7a4ec2551c7c31ea8851" compoundref="conversion_8cpp" startline="151" endline="214">cyqlone::LinearOCPSparseQP::build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a0ce9b4ea58045a7a4298f6442bb6e767" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::LinearOCPSparseQP::KKTMatrix::values</definition>
+        <argsstring></argsstring>
+        <name>values</name>
+        <qualifiedname>cyqlone::LinearOCPSparseQP::KKTMatrix::values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/conversion.hpp" line="37" column="21" bodyfile="src/cyqlone/include/cyqlone/conversion.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1LinearOCPSparseQP_1ae9ee3917664f7a4ec2551c7c31ea8851" compoundref="conversion_8cpp" startline="151" endline="214">cyqlone::LinearOCPSparseQP::build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1adbdd8d3223597f63001ec9d9866feba5" prot="public" static="no" mutable="no">
+        <type><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCSC</ref>&lt; index_t, index_t &gt;</type>
+        <definition>SparseCSC&lt;index_t, index_t&gt; cyqlone::LinearOCPSparseQP::KKTMatrix::sparsity</definition>
+        <argsstring></argsstring>
+        <name>sparsity</name>
+        <qualifiedname>cyqlone::LinearOCPSparseQP::KKTMatrix::sparsity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/conversion.hpp" line="38" column="19" bodyfile="src/cyqlone/include/cyqlone/conversion.hpp" bodystart="38" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1LinearOCPSparseQP_1ae9ee3917664f7a4ec2551c7c31ea8851" compoundref="conversion_8cpp" startline="151" endline="214">cyqlone::LinearOCPSparseQP::build_kkt</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::LinearOCPSparseQP::KKTMatrix</label>
+        <link refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+inner_idx</edgelabel>
+          <edgelabel>+outer_ptr</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+values</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+sparsity</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>guanaqo::linalg::sparsity::SparseCSC&lt; index_t, index_t &gt;</label>
+        <link refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+inner_idx</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+outer_ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::span&lt; const index_t &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::span&lt; const storage_index_t &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; index_t &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/conversion.hpp" line="35" column="5" bodyfile="src/cyqlone/include/cyqlone/conversion.hpp" bodystart="35" bodyend="39"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a8b4a204db97df41e3d002d296368ed66" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPSparseQP::KKTMatrix</scope><name>inner_idx</name></member>
+      <member refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a56c5bcab8e01759d78424ffe138ee938" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPSparseQP::KKTMatrix</scope><name>outer_ptr</name></member>
+      <member refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1adbdd8d3223597f63001ec9d9866feba5" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPSparseQP::KKTMatrix</scope><name>sparsity</name></member>
+      <member refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a0ce9b4ea58045a7a4298f6442bb6e767" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPSparseQP::KKTMatrix</scope><name>values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

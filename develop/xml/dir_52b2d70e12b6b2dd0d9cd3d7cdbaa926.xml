@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_52b2d70e12b6b2dd0d9cd3d7cdbaa926" kind="dir">
+    <compoundname>src/cyqlone/include/cyqlone/implementation</compoundname>
+    <innerfile refid="cr_8tpp">cr.tpp</innerfile>
+    <innerfile refid="data_8tpp">data.tpp</innerfile>
+    <innerfile refid="factor_8tpp">factor.tpp</innerfile>
+    <innerfile refid="indexing_8tpp">indexing.tpp</innerfile>
+    <innerfile refid="mat-vec_8tpp">mat-vec.tpp</innerfile>
+    <innerfile refid="pcg_8tpp">pcg.tpp</innerfile>
+    <innerfile refid="pcr_8tpp">pcr.tpp</innerfile>
+    <innerfile refid="riccati_8tpp">riccati.tpp</innerfile>
+    <innerfile refid="schur_8tpp">schur.tpp</innerfile>
+    <innerfile refid="sparse_8tpp">sparse.tpp</innerfile>
+    <innerfile refid="update_8tpp">update.tpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/cyqlone/include/cyqlone/implementation/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="csv_8hpp" kind="file" language="C++">
+    <compoundname>csv.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes local="no">cyqlone/example-problems/export.h</includes>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <includes local="no">filesystem</includes>
+    <includedby refid="csv_8cpp" local="no">src/example-problems/src/csv.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/example-problems/include/cyqlone/qpalm/example-problems/csv.hpp</label>
+        <link refid="csv_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="4">
+        <label>cyqlone/example-problems/export.h</label>
+      </node>
+      <node id="8">
+        <label>filesystem</label>
+      </node>
+      <node id="6">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="7">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/example-problems/include/cyqlone/qpalm/example-problems/csv.hpp</label>
+        <link refid="csv_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/example-problems/src/csv.cpp</label>
+        <link refid="csv_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm_1_1problems">cyqlone::qpalm::problems</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cyqlone/example-problems/export.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ocp_8hpp" kindref="compound">cyqlone/ocp.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;filesystem&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9" refid="namespacecyqlone_1_1qpalm" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="config_8hpp_1a1f4757b3a02c15cce8aeaa6906e55c17" kindref="member">CYQLONE_NS</ref>(<ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>::<ref refid="namespacecyqlone_1_1qpalm_1_1problems" kindref="compound">qpalm::problems</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">fs<sp/>=<sp/>std::filesystem;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>CYQLONE_EXAMPLE_PROBLEMS_EXPORT<sp/>load_from_csv(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>fs::path<sp/>&amp;folder,</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;name);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone::qpalm::problems)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/csv.hpp"/>
+  </compounddef>
+</doxygen>

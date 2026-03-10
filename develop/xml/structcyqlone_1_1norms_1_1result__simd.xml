@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1norms_1_1result__simd" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::norms::result_simd</compoundname>
+    <includes refid="reduce_8hpp" local="no">cyqlone/reduce.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1norms_1_1result__simd_1a4df711757b01f11eedfa2cee42e241b8" prot="public" static="no" mutable="no">
+        <type>simd</type>
+        <definition>simd cyqlone::norms&lt; T, simd &gt;::result_simd::amax</definition>
+        <argsstring></argsstring>
+        <name>amax</name>
+        <qualifiedname>cyqlone::norms::result_simd::amax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="31" column="14" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1norms_1a312d14b1e7e5274be8e6320d76ed33f4" compoundref="reduce_8hpp" startline="47" endline="52">cyqlone::norms&lt; T, simd &gt;::operator()</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_1a5cddc1c0b1676fd0b22f60a3638a0caf" compoundref="reduce_8hpp" startline="39" endline="44">cyqlone::norms&lt; T, simd &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1norms_1_1result__simd_1a1f39de7cc82aa5ce08d13fb0b0c4a162" prot="public" static="no" mutable="no">
+        <type>simd</type>
+        <definition>simd cyqlone::norms&lt; T, simd &gt;::result_simd::asum</definition>
+        <argsstring></argsstring>
+        <name>asum</name>
+        <qualifiedname>cyqlone::norms::result_simd::asum</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="32" column="14" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="32" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1norms_1a312d14b1e7e5274be8e6320d76ed33f4" compoundref="reduce_8hpp" startline="47" endline="52">cyqlone::norms&lt; T, simd &gt;::operator()</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_1a5cddc1c0b1676fd0b22f60a3638a0caf" compoundref="reduce_8hpp" startline="39" endline="44">cyqlone::norms&lt; T, simd &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1norms_1_1result__simd_1a9e93f56b0ed66e8942e571b1769b6ebb" prot="public" static="no" mutable="no">
+        <type>simd</type>
+        <definition>simd cyqlone::norms&lt; T, simd &gt;::result_simd::sumsq</definition>
+        <argsstring></argsstring>
+        <name>sumsq</name>
+        <qualifiedname>cyqlone::norms::result_simd::sumsq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="33" column="14" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="33" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1norms_1a312d14b1e7e5274be8e6320d76ed33f4" compoundref="reduce_8hpp" startline="47" endline="52">cyqlone::norms&lt; T, simd &gt;::operator()</referencedby>
+        <referencedby refid="structcyqlone_1_1norms_1a5cddc1c0b1676fd0b22f60a3638a0caf" compoundref="reduce_8hpp" startline="39" endline="44">cyqlone::norms&lt; T, simd &gt;::operator()</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Lane-wise accumulators. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::norms&lt; T, simd &gt;::result_simd</label>
+        <link refid="structcyqlone_1_1norms_1_1result__simd"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/reduce.hpp" line="30" column="5" bodyfile="src/cyqlone/include/cyqlone/reduce.hpp" bodystart="30" bodyend="34"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1norms_1_1result__simd_1a4df711757b01f11eedfa2cee42e241b8" prot="public" virt="non-virtual"><scope>cyqlone::norms::result_simd</scope><name>amax</name></member>
+      <member refid="structcyqlone_1_1norms_1_1result__simd_1a1f39de7cc82aa5ce08d13fb0b0c4a162" prot="public" virt="non-virtual"><scope>cyqlone::norms::result_simd</scope><name>asum</name></member>
+      <member refid="structcyqlone_1_1norms_1_1result__simd_1a9e93f56b0ed66e8942e571b1769b6ebb" prot="public" virt="non-virtual"><scope>cyqlone::norms::result_simd</scope><name>sumsq</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="group__topic-ocp-formulations" kind="group">
+    <compoundname>topic-ocp-formulations</compoundname>
+    <title>Optimal control problem formulations</title>
+    <innerfile refid="conversion_8hpp">conversion.hpp</innerfile>
+    <innerfile refid="cyqlone-storage_8hpp">cyqlone-storage.hpp</innerfile>
+    <innerfile refid="ocp_8hpp">ocp.hpp</innerfile>
+    <innerclass refid="structcyqlone_1_1LinearOCPSparseQP" prot="public">cyqlone::LinearOCPSparseQP</innerclass>
+    <innerclass refid="structcyqlone_1_1CyqloneStorage" prot="public">cyqlone::CyqloneStorage</innerclass>
+    <innerclass refid="structcyqlone_1_1OCPDim" prot="public">cyqlone::OCPDim</innerclass>
+    <innerclass refid="structcyqlone_1_1LinearOCPStorage" prot="public">cyqlone::LinearOCPStorage</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::reference_to_gradient</definition>
+        <argsstring>(const LinearOCPStorage &amp;ocp, std::span&lt; const real_t &gt; ref, std::span&lt; real_t &gt; qr)</argsstring>
+        <name>reference_to_gradient</name>
+        <qualifiedname>cyqlone::reference_to_gradient</qualifiedname>
+        <param>
+          <type>const LinearOCPStorage &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const real_t &gt;</type>
+          <declname>ref</declname>
+        </param>
+        <param>
+          <type>std::span&lt; real_t &gt;</type>
+          <declname>qr</declname>
+        </param>
+        <briefdescription>
+<para>Simply computes the gradient of the quadratic cost <formula id="0">$ J(x, u) = \sum_{j=1}^{N-1} \ell_j(x^j, u^j) + \ell_N(x^N) $</formula>, with  <formula id="1">$ \ell_j(x, u) = \tfrac12 \left\| \begin{pmatrix} x - x^j_\text{ref}
+\\ u - u^j_\text{ref} \end{pmatrix} \right\|_{H_j}^2 $</formula>, with the Hessian <formula id="2">$ H_j = \begin{pmatrix} Q_j &amp; S_j^\top \\ S_j &amp; R_j \end{pmatrix} $</formula>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Stores <formula id="3">$ \nabla J(0, 0) $</formula> to <computeroutput>qr</computeroutput>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/conversion.cpp" line="9" column="6" bodyfile="src/cyqlone/src/conversion.cpp" bodystart="9" bodyend="35" declfile="src/cyqlone/include/cyqlone/conversion.hpp" declline="53" declcolumn="6"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">cyqlone::LinearOCPStorage::dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">cyqlone::LinearOCPStorage::H</references>
+        <references refid="group__linalg__blas__ll_1gae4c5b1838ba9f871ca10eb61593522af">guanaqo::blas::xgemv</references>
+        <references refid="group__linalg__blas__ll_1ga7f4ee2a98766873c31729ff571896337">guanaqo::blas::xgemv_batch_strided</references>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="namespacecyqlone_1a551aa703936f7c27064994d2e8353d07" compoundref="conversion_8cpp" startline="37" endline="42">cyqlone::reference_to_gradient</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>LinearOCPStorage</type>
+        <definition>LinearOCPStorage cyqlone::generate_random_ocp</definition>
+        <argsstring>(OCPDim dim, uint_fast32_t seed=0)</argsstring>
+        <name>generate_random_ocp</name>
+        <qualifiedname>cyqlone::generate_random_ocp</qualifiedname>
+        <param>
+          <type>OCPDim</type>
+          <declname>dim</declname>
+        </param>
+        <param>
+          <type>uint_fast32_t</type>
+          <declname>seed</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>Generates a random linear OCP with the given dimensions and random seed. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/random-ocp.hpp" line="11" column="25" bodyfile="src/cyqlone/include/cyqlone/random-ocp.hpp" bodystart="11" bodyend="47"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" compoundref="ocp_8hpp" startline="127" endline="131">cyqlone::LinearOCPStorage::A</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" compoundref="ocp_8hpp" startline="132" endline="136">cyqlone::LinearOCPStorage::B</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">cyqlone::LinearOCPStorage::C</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" compoundref="ocp_8hpp" startline="111" endline="115">cyqlone::LinearOCPStorage::D</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">cyqlone::LinearOCPStorage::dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">cyqlone::LinearOCPStorage::H</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">cyqlone::LinearOCPStorage::Q</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" compoundref="ocp_8hpp" startline="80" endline="84">cyqlone::LinearOCPStorage::R</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" compoundref="ocp_8hpp" startline="85" endline="89">cyqlone::LinearOCPStorage::S</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Data structures for different formulations of optimal control problems. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

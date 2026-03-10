@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1TreeBarrier_1_1State" kind="struct" language="C++" prot="private">
+    <compoundname>cyqlone::TreeBarrier::State</compoundname>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1TreeBarrier_1_1State_1a4125d55e90315f39314cfe52fd2b49a3" prot="public" static="no">
+        <type>std::atomic&lt; unsigned char &gt;</type>
+        <definition>using cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::State::atomic_byte = std::atomic&lt;unsigned char&gt;</definition>
+        <argsstring></argsstring>
+        <name>atomic_byte</name>
+        <qualifiedname>cyqlone::TreeBarrier::State::atomic_byte</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="92" column="9" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1TreeBarrier_1_1State_1a125c9cb8ce01a4c1dda0ca11c0516170" prot="public" static="no">
+        <type>std::atomic&lt; uint32_t &gt;</type>
+        <definition>using cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::State::atomic_word = std::atomic&lt;uint32_t&gt;</definition>
+        <argsstring></argsstring>
+        <name>atomic_word</name>
+        <qualifiedname>cyqlone::TreeBarrier::State::atomic_word</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="93" column="9" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1TreeBarrier_1_1State_1aaeef4b36ea8581ca353d75bfa8a59bba" prot="public" static="no">
+        <type>std::conditional_t&lt; <ref refid="structcyqlone_1_1TreeBarrier_1_1State_1acf06ece412b111b3f52daf9066523229" kindref="member">only_word_lock_free</ref>, <ref refid="structcyqlone_1_1TreeBarrier_1_1State_1a125c9cb8ce01a4c1dda0ca11c0516170" kindref="member">atomic_word</ref>, <ref refid="structcyqlone_1_1TreeBarrier_1_1State_1a4125d55e90315f39314cfe52fd2b49a3" kindref="member">atomic_byte</ref> &gt;</type>
+        <definition>using cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::State::ticket_t = std::conditional_t&lt;only_word_lock_free, atomic_word, atomic_byte&gt;</definition>
+        <argsstring></argsstring>
+        <name>ticket_t</name>
+        <qualifiedname>cyqlone::TreeBarrier::State::ticket_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="98" column="9" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1TreeBarrier_1_1State_1acf06ece412b111b3f52daf9066523229" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>bool</type>
+        <definition>bool cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::State::only_word_lock_free</definition>
+        <argsstring></argsstring>
+        <name>only_word_lock_free</name>
+        <qualifiedname>cyqlone::TreeBarrier::State::only_word_lock_free</qualifiedname>
+        <initializer>                                      =
+atomic_word::is_always_lock_free &amp;&amp; !atomic_byte::is_always_lock_free</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="94" column="31" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TreeBarrier_1_1State_1a90b7ea856efdc3965247ddcfcea7ce92" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::State::num_levels</definition>
+        <argsstring></argsstring>
+        <name>num_levels</name>
+        <qualifiedname>cyqlone::TreeBarrier::State::num_levels</qualifiedname>
+        <initializer>= <ref refid="classcyqlone_1_1TreeBarrier_1a389929b1d19da95bbd820e0c62cbfa5c" kindref="member">cache_line_size</ref> / sizeof(<ref refid="structcyqlone_1_1TreeBarrier_1_1State_1aaeef4b36ea8581ca353d75bfa8a59bba" kindref="member">ticket_t</ref>)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="99" column="33" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1TreeBarrier_1_1State_1a386ec88e0ec815fe9fb73f49b27f2eba" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="structcyqlone_1_1TreeBarrier_1_1State_1aaeef4b36ea8581ca353d75bfa8a59bba" kindref="member">ticket_t</ref>, <ref refid="structcyqlone_1_1TreeBarrier_1_1State_1a90b7ea856efdc3965247ddcfcea7ce92" kindref="member">num_levels</ref> &gt;</type>
+        <definition>std::array&lt;ticket_t, num_levels&gt; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::State::tickets</definition>
+        <argsstring></argsstring>
+        <name>tickets</name>
+        <qualifiedname>cyqlone::TreeBarrier::State::tickets</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="100" column="20" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="100" bodyend="100"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Atomic counters for each level of the combining tree. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Aligned to avoid false sharing.  </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::State</label>
+        <link refid="structcyqlone_1_1TreeBarrier_1_1State"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+tickets</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::array&lt; ticket_t, num_levels &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="91" column="5" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="91" bodyend="101"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1State_1a4125d55e90315f39314cfe52fd2b49a3" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::State</scope><name>atomic_byte</name></member>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1State_1a125c9cb8ce01a4c1dda0ca11c0516170" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::State</scope><name>atomic_word</name></member>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1State_1a90b7ea856efdc3965247ddcfcea7ce92" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::State</scope><name>num_levels</name></member>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1State_1acf06ece412b111b3f52daf9066523229" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::State</scope><name>only_word_lock_free</name></member>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1State_1aaeef4b36ea8581ca353d75bfa8a59bba" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::State</scope><name>ticket_t</name></member>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1State_1a386ec88e0ec815fe9fb73f49b27f2eba" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::State</scope><name>tickets</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

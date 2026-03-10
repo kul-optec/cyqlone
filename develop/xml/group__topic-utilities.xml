@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="group__topic-utilities" kind="group">
+    <compoundname>topic-utilities</compoundname>
+    <title>Utilities</title>
+    <innerfile refid="neumaier_8hpp">neumaier.hpp</innerfile>
+    <innerfile refid="reduce_8hpp">reduce.hpp</innerfile>
+    <innerfile refid="sparse_8hpp">sparse.hpp</innerfile>
+    <innerclass refid="classcyqlone_1_1NeumaierSum" prot="public">cyqlone::NeumaierSum</innerclass>
+    <innerclass refid="structcyqlone_1_1norms" prot="public">cyqlone::norms</innerclass>
+    <innerclass refid="structcyqlone_1_1norms_3_01T_00_01void_01_4" prot="public">cyqlone::norms&lt; T, void &gt;</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseMatrix" prot="public">cyqlone::SparseMatrix</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseMatrixBuilder" prot="public">cyqlone::SparseMatrixBuilder</innerclass>
+    <innergroup refid="group__topic-util-matio">Exporting and loading .mat files</innergroup>
+    <briefdescription>
+<para>Various utility functions and classes. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

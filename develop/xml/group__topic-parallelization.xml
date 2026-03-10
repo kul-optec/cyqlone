@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="group__topic-parallelization" kind="group">
+    <compoundname>topic-parallelization</compoundname>
+    <title>Parallelization</title>
+    <innerfile refid="barrier_8hpp">barrier.hpp</innerfile>
+    <innerfile refid="parallel_8hpp">parallel.hpp</innerfile>
+    <innerclass refid="structcyqlone_1_1EmptyCompletion" prot="public">cyqlone::EmptyCompletion</innerclass>
+    <innerclass refid="classcyqlone_1_1TreeBarrier" prot="public">cyqlone::TreeBarrier</innerclass>
+    <innerclass refid="structcyqlone_1_1parallel_1_1SharedContext" prot="public">cyqlone::parallel::SharedContext</innerclass>
+    <innerclass refid="structcyqlone_1_1parallel_1_1Context" prot="public">cyqlone::parallel::Context</innerclass>
+    <briefdescription>
+<para>Utilities for parallelization and synchronization. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

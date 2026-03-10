@@ -1,0 +1,1264 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CyqloneSolver &#8212; cyqlone</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css?v=5fb06a78" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ref/cyqlonesolver';</script>
+    <script src="../_static/pypi-icon.js?v=9d6d7737"></script>
+    <link rel="icon" href="../_static/cyqlone-logo.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="TricyqleSolver" href="tricyqlesolver.html" />
+    <link rel="prev" title="C++ API Reference" href="../cpp.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/cyqlone-logo.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/cyqlone-logo.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">cyqlone</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kul-optec/cyqlone" title="Source code on GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Source code on GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.pypi.org/p/cyqlone" title="Python package on PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Python package on PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://arxiv.org/abs/2512.09058" title="Paper on arXiv" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-graduation-cap fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Paper on arXiv</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../python.html">Python API Reference</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp.html">C++ API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">CyqloneSolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tricyqlesolver.html">TricyqleSolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qpalm.html">QPALM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ocp.html">Optimal Control Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linalg.html">Linear Algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel.html">Parallelization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API reference</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/kul-optec/cyqlone/edit/develop/scripts/docs/source/ref/cyqlonesolver.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button"
+   title="Suggest edit"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ref/cyqlonesolver.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>CyqloneSolver</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="cyqlonesolver">
+<h1>CyqloneSolver<a class="headerlink" href="#cyqlonesolver" title="Link to this heading">#</a></h1>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VL</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">4</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">real_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone12StorageOrderE" title="cyqlone::StorageOrder"><span class="n"><span class="pre">StorageOrder</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DefaultOrder</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone12StorageOrderE" title="cyqlone::StorageOrder"><span class="n"><span class="pre">StorageOrder</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ColMajor</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Ctx</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallelE" title="cyqlone::parallel"><span class="n"><span class="pre">parallel</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7ContextE" title="cyqlone::parallel::Context"><span class="n"><span class="pre">Context</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CyqloneSolver</span></span></span><br /></dt>
+<dd><p>Linear solver for systems with optimal control structure. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>VL</strong> – Vector length. </p></li>
+<li><p><strong>T</strong> – Scalar type. </p></li>
+<li><p><strong>DefaultOrder</strong> – Storage order for the matrix workspaces (row/column major). </p></li>
+<li><p><strong>Ctx</strong> – Parallel execution context type, see <a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context"><span class="std std-ref">parallel::Context</span></a>. </p></li>
+</ul>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-parallelization-and-vectorization">Parallelization and vectorization</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tricyqle_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I_7index_t0_12StorageOrder0EN7cyqlone14TricyqleSolverE" title="cyqlone::TricyqleSolver"><span class="n"><span class="pre">TricyqleSolver</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I_7index_t0_12StorageOrder0EN7cyqlone13CyqloneSolverE" title="cyqlone::CyqloneSolver::VL"><span class="n"><span class="pre">VL</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I_7index_t0_12StorageOrder0EN7cyqlone13CyqloneSolverE" title="cyqlone::CyqloneSolver::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I_7index_t0_12StorageOrder0EN7cyqlone13CyqloneSolverE" title="cyqlone::CyqloneSolver::DefaultOrder"><span class="n"><span class="pre">DefaultOrder</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I_7index_t0_12StorageOrder0EN7cyqlone13CyqloneSolverE" title="cyqlone::CyqloneSolver::Ctx"><span class="n"><span class="pre">Ctx</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd><p>Tricyqle solver type for solving block-tridiagonal systems in parallel. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Context</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Context</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SharedContext</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">SharedContext</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simd</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">simd</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">p</span></span></span><br /></dt>
+<dd><p>Number of processors/threads. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">n</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver7N_horizE" title="cyqlone::CyqloneSolver::N_horiz"><span class="n"><span class="pre">N_horiz</span></span></a><span class="w"> </span><span class="o"><span class="pre">+</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver1pE" title="cyqlone::CyqloneSolver::p"><span class="n"><span class="pre">p</span></span></a><span class="w"> </span><span class="o"><span class="pre">*</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver1vE" title="cyqlone::CyqloneSolver::v"><span class="n"><span class="pre">v</span></span></a><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="o"><span class="pre">/</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver1pE" title="cyqlone::CyqloneSolver::p"><span class="n"><span class="pre">p</span></span></a><span class="w"> </span><span class="o"><span class="pre">*</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver1vE" title="cyqlone::CyqloneSolver::v"><span class="n"><span class="pre">v</span></span></a><span class="p"><span class="pre">)</span></span><br /></dt>
+<dd><p>Number of stages per thread per vector lane (rounded up). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">v</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I_7index_t0_12StorageOrder0EN7cyqlone13CyqloneSolverE" title="cyqlone::CyqloneSolver::VL"><span class="n"><span class="pre">VL</span></span></a><br /></dt>
+<dd><p>Vector length. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lv</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>log₂(v), logarithm of the vector length. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lp</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>log₂(p), logarithm of the number of processors/threads, rounded up. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ceil_p</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>The number of processors <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1adf8e80daae5cfdb1d12e0ba53352a545"><span class="std std-ref">p</span></a> rounded up to the next power of two. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ceil_P</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>The number of parallel execution units P rounded up to the next power of two. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver13SharedContextE" title="cyqlone::CyqloneSolver::SharedContext"><span class="n"><span class="pre">SharedContext</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_parallel_context</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">foreach_stage</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver7ContextE" title="cyqlone::CyqloneSolver::Context"><span class="n"><span class="pre">Context</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ctx</span></span>, <span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func</span></span>, <span class="kt"><span class="pre">auto</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Call a function for each stage in the horizon, passing the stage index, the data batch index, and optionally the corresponding batches of the given arrays. </p>
+<p>Iterates backwards in time (decreasing stage index j). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">foreach_stage_fwd</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver7ContextE" title="cyqlone::CyqloneSolver::Context"><span class="n"><span class="pre">Context</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ctx</span></span>, <span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func</span></span>, <span class="kt"><span class="pre">auto</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Call a function for each stage in the horizon, passing the stage index, the data batch index, and optionally the corresponding batches of the given arrays. </p>
+<p>Iterates forward in time (increasing stage index j). </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-matrix-data-structures">Matrix data structures</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone12StorageOrderE" title="cyqlone::StorageOrder"><span class="n"><span class="pre">StorageOrder</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">O</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver12column_majorE" title="cyqlone::CyqloneSolver::column_major"><span class="n"><span class="pre">column_major</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">matrix</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="k"><span class="pre">template</span></span><span class="w"> </span><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix::O"><span class="n"><span class="pre">O</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd><p>Owning type for a batch of matrices (with batch size v). </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone12StorageOrderE" title="cyqlone::StorageOrder"><span class="n"><span class="pre">StorageOrder</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">O</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver12column_majorE" title="cyqlone::CyqloneSolver::column_major"><span class="n"><span class="pre">column_major</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">view</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="k"><span class="pre">template</span></span><span class="w"> </span><span class="n"><span class="pre">view</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view::O"><span class="n"><span class="pre">O</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd><p>Non-owning immutable view type for <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a6c0c129cac2f6e09f5286e49f23a7c61"><span class="std std-ref">matrix</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone12StorageOrderE" title="cyqlone::StorageOrder"><span class="n"><span class="pre">StorageOrder</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">O</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver12column_majorE" title="cyqlone::CyqloneSolver::column_major"><span class="n"><span class="pre">column_major</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mut_view</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="k"><span class="pre">template</span></span><span class="w"> </span><span class="n"><span class="pre">mut_view</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view::O"><span class="n"><span class="pre">O</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd><p>Non-owning mutable view type for <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a6c0c129cac2f6e09f5286e49f23a7c61"><span class="std std-ref">matrix</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">layer_stride</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">layer_stride</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone12StorageOrderE" title="cyqlone::StorageOrder"><span class="n"><span class="pre">StorageOrder</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">O</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver12column_majorE" title="cyqlone::CyqloneSolver::column_major"><span class="n"><span class="pre">column_major</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batch_view</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="k"><span class="pre">template</span></span><span class="w"> </span><span class="n"><span class="pre">batch_view</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver10batch_viewE" title="cyqlone::CyqloneSolver::batch_view::O"><span class="n"><span class="pre">O</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd><p>Non-owning immutable view type for a single batch of v matrices. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone12StorageOrderE" title="cyqlone::StorageOrder"><span class="n"><span class="pre">StorageOrder</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">O</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver12column_majorE" title="cyqlone::CyqloneSolver::column_major"><span class="n"><span class="pre">column_major</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mut_batch_view</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="k"><span class="pre">template</span></span><span class="w"> </span><span class="n"><span class="pre">mut_batch_view</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver14mut_batch_viewE" title="cyqlone::CyqloneSolver::mut_batch_view::O"><span class="n"><span class="pre">O</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd><p>Non-owning mutable view type for a single batch of v matrices. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">default_order</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">default_order</span></span><br /></dt>
+<dd><p>Default storage order for most matrices. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">column_major</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10tricyqle_tE" title="cyqlone::CyqloneSolver::tricyqle_t"><span class="n"><span class="pre">tricyqle_t</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">column_major</span></span><br /></dt>
+<dd><p>Column-major storage order for column vectors and update matrices. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-problem-dimensions">Problem dimensions</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">N_horiz</span></span></span><br /></dt>
+<dd><p>Horizon length of the optimal control problem. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nx</span></span></span><br /></dt>
+<dd><p>Number of states of the OCP. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nu</span></span></span><br /></dt>
+<dd><p>Number of controls of the OCP. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ny</span></span></span><br /></dt>
+<dd><p>Number of general constraints of the OCP per stage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ny_0</span></span></span><br /></dt>
+<dd><p>Number of general constraints at stage 0, D(0) u(0). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ny_N</span></span></span><br /></dt>
+<dd><p>Number of general constraints at the final stage, C(N) x(N). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_variables</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get the total number of primal variables in the OCP. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The actual number of variable stored in Cyqlone’s internal data structures may be larger. </p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_dynamics_constraints</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get the total number of dynamics constraints in the OCP. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The actual number of constraints stored in Cyqlone’s internal data structures may be larger. </p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_general_constraints</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get the total number of general constraints in the OCP. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The actual number of constraints stored in Cyqlone’s internal data structures may be larger. </p>
+</div>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-solver-parameters">Solver parameters</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone13CyqloneParamsE" title="cyqlone::CyqloneParams"><span class="n"><span class="pre">CyqloneParams</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">params</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><br /></dt>
+<dd><p>Solver parameters and settings. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone13CyqloneParamsE" title="cyqlone::CyqloneParams"><span class="n"><span class="pre">CyqloneParams</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_params</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get the current Cyqlone solver parameters. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">update_params</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone13CyqloneParamsE" title="cyqlone::CyqloneParams"><span class="n"><span class="pre">CyqloneParams</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">new_params</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Update the Cyqlone solver parameters. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14TricyqleParamsE" title="cyqlone::TricyqleParams"><span class="n"><span class="pre">TricyqleParams</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_tricyqle_params</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get the current Tricyqle solver parameters. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">update_tricyqle_params</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14TricyqleParamsE" title="cyqlone::TricyqleParams"><span class="n"><span class="pre">TricyqleParams</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">new_params</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Update the Tricyqle solver parameters. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_params_string</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get a string representation of the main solver parameters. Used mainly for file names. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-tricyqle-solver-for-block-tridiagonal-systems">Tricyqle solver for block-tridiagonal systems</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">tricyqle_t</span> <span class="pre">tricyqle</span>&#160; <span class="pre">=</span> <span class="pre">{.block_size</span> <span class="pre">=nx,.max_rank</span>&#160;&#160; <span class="pre">=</span> <span class="pre">std::max(ny,</span> <span class="pre">ny_0</span> <span class="pre">+</span> <span class="pre">ny_N)</span> <span class="pre">*</span> <span class="pre">N_horiz,.p</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">p,}</span></span></dt>
+<dd><p>Block-tridiagonal solver (CR/PCR/PCG). </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-ocp-data-(reordered-for-use-during-the-cyqlone-algorithm)">OCP data (reordered for use during the Cyqlone algorithm)</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver13default_orderE" title="cyqlone::CyqloneSolver::default_order"><span class="n"><span class="pre">default_order</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">data_H</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><code class="docutils literal notranslate"><span class="pre">[this]</span> <span class="pre">{returnmatrix&lt;default_order&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">ceil_N(),</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nu</span> <span class="pre">+</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">nu</span> <span class="pre">+</span> <span class="pre">nx}};}()</span></code><br /></dt>
+<dd><p>Stage-wise Hessian blocks H(j) = [ R(j) S(j); S(j)ᵀ Q(j) ] of the OCP cost function. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver13default_orderE" title="cyqlone::CyqloneSolver::default_order"><span class="n"><span class="pre">default_order</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">data_F</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><code class="docutils literal notranslate"><span class="pre">[this]</span> <span class="pre">{returnmatrix&lt;default_order&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">ceil_N(),</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">nu</span> <span class="pre">+</span> <span class="pre">nx}};}()</span></code><br /></dt>
+<dd><p>Stage-wise dynamics matrices F(j) = [ B(j) A(j) ] of the OCP. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">matrix&lt;</span> <span class="pre">default_order</span> <span class="pre">&gt;</span> <span class="pre">data_Gᵀ</span>&#160; <span class="pre">=</span> <span class="pre">[this]</span> <span class="pre">{const</span> <span class="pre">auto</span> <span class="pre">nyM</span> <span class="pre">=</span> <span class="pre">std::max(ny,</span> <span class="pre">ny_0</span> <span class="pre">+</span> <span class="pre">ny_N);returnmatrix&lt;default_order&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">ceil_N(),</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nu</span> <span class="pre">+</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">nyM}};}()</span></span></dt>
+<dd><p>Stage-wise constraint Jacobians G(j)ᵀ = [ D(j) C(j) ]ᵀ of the OCP. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-modified-riccati-data-structures">Modified Riccati data structures</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver13default_orderE" title="cyqlone::CyqloneSolver::default_order"><span class="n"><span class="pre">default_order</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">riccati_LH</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><code class="docutils literal notranslate"><span class="pre">[this]</span> <span class="pre">{returnmatrix&lt;default_order&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">v,</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nu</span> <span class="pre">+</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">(nu</span> <span class="pre">+</span> <span class="pre">nx)}};}()</span></code><br /></dt>
+<dd><p>Cholesky factors of the Hessian blocks for the Riccati recursion. </p>
+<p>LH(j) = [ LR(j) 0; LS(j) LQ(j) ] </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver13default_orderE" title="cyqlone::CyqloneSolver::default_order"><span class="n"><span class="pre">default_order</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">riccati_LAB</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><code class="docutils literal notranslate"><span class="pre">[this]</span> <span class="pre">{returnmatrix&lt;default_order&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">v,</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">nx</span> <span class="pre">+</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">nu}};}()</span></code><br /></dt>
+<dd><p>Storage for the matrices LB(j), Acl(j) and LA(j₁) for the Riccati recursion. </p>
+<p>Grouped per thread, with layout [ Acl(jₙ) … Acl(j₂) LA(j₁) | LB(jₙ) … LB(j₁) ], so that LA(j₁) and LB(j) are contiguous (useful when evaluating the Schur complement). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver13default_orderE" title="cyqlone::CyqloneSolver::default_order"><span class="n"><span class="pre">default_order</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">riccati_V</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><code class="docutils literal notranslate"><span class="pre">[this]</span> <span class="pre">{const</span> <span class="pre">auto</span> <span class="pre">nyM</span> <span class="pre">=</span> <span class="pre">std::max(ny,</span> <span class="pre">ny_0</span> <span class="pre">+</span> <span class="pre">ny_N);returnmatrix&lt;default_order&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">v,</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nu</span> <span class="pre">+</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">nx+</span> <span class="pre">nyM}};}()</span></code><br /></dt>
+<dd><p>Temporary storage for the V(j) = [ B(j)ᵀ LQ(j); A(j)ᵀ LQ(j) ] matrices during the Riccati recursion. </p>
+<p>The workspace is wider than just V to also accommodate the active constraint Jacobians, since both are used to update the Hessian blocks during the Riccati recursion. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver12column_majorE" title="cyqlone::CyqloneSolver::column_major"><span class="n"><span class="pre">column_major</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">riccati_work</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><code class="docutils literal notranslate"><span class="pre">[this]</span> <span class="pre">{returnmatrix&lt;column_major&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">v,</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">1}};}()</span></code><br /></dt>
+<dd><p>Temporary workspace for the Riccati solve phase. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-riccati-factorization-update-data-structures">Riccati factorization update data structures</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">matrix&lt;</span> <span class="pre">column_major</span> <span class="pre">&gt;</span> <span class="pre">work_Σ</span>&#160; <span class="pre">=</span> <span class="pre">[this]</span> <span class="pre">{const</span> <span class="pre">auto</span> <span class="pre">nyM</span> <span class="pre">=</span> <span class="pre">std::max(ny,</span> <span class="pre">ny_0</span> <span class="pre">+</span> <span class="pre">ny_N);returnmatrix&lt;column_major&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">v,</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">n*</span> <span class="pre">nyM,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">1}};}()</span></span></dt>
+<dd><p>Compressed representation of the nonzero diagonal elements of the matrix Σ, populated for each thread separately during the factorization update of the Riccati recursion. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">matrix&lt;</span> <span class="pre">column_major</span> <span class="pre">&gt;</span> <span class="pre">riccati_Υ1</span>&#160; <span class="pre">=</span> <span class="pre">[this]</span> <span class="pre">{const</span> <span class="pre">auto</span> <span class="pre">nyM</span> <span class="pre">=</span> <span class="pre">std::max(ny,</span> <span class="pre">ny_0</span> <span class="pre">+</span> <span class="pre">ny_N);returnmatrix&lt;column_major&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">v,</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nu</span> <span class="pre">+</span> <span class="pre">nx</span> <span class="pre">+</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">n*</span> <span class="pre">nyM}};}()</span></span></dt>
+<dd><p>Workspace to store the update matrices Υu, Υx, Υλ, Φu, Φx and Φλ during the factorization update of the Riccati recursion. </p>
+<p>Both <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a9f85302f40e3e95d1b6278e89dbf1bc1"><span class="std std-ref">riccati_Υ1</span></a> and <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a916a92730abd3583c01dfdcc375d6c9e"><span class="std std-ref">riccati_Υ2</span></a> are used alternately. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">matrix&lt;</span> <span class="pre">column_major</span> <span class="pre">&gt;</span> <span class="pre">riccati_Υ2</span>&#160; <span class="pre">=</span> <span class="pre">[this]</span> <span class="pre">{const</span> <span class="pre">auto</span> <span class="pre">nyM</span> <span class="pre">=</span> <span class="pre">std::max(ny,</span> <span class="pre">ny_0</span> <span class="pre">+</span> <span class="pre">ny_N);returnmatrix&lt;column_major&gt;{{.depth</span> <span class="pre">=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">v,</span> <span class="pre">.rows</span> <span class="pre">=</span> <span class="pre">nu</span> <span class="pre">+</span> <span class="pre">nx</span> <span class="pre">+</span> <span class="pre">nx,</span> <span class="pre">.cols</span> <span class="pre">=</span> <span class="pre">n*</span> <span class="pre">nyM}};}()</span></span></dt>
+<dd><p>Alternate workspace to <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a9f85302f40e3e95d1b6278e89dbf1bc1"><span class="std std-ref">riccati_Υ1</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-indexing-utilities">Indexing utilities</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ceil_N</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Horizon length, rounded up to a multiple of the number of parallel execution units. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">index_t</span> <span class="pre">ν2</span> <span class="pre">(index_t</span> <span class="pre">i)</span> <span class="pre">const</span></span></dt>
+<dd><p>2-adic valuation ν₂. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">index_t</span> <span class="pre">ν2p</span> <span class="pre">(index_t</span> <span class="pre">i)</span> <span class="pre">const</span></span></dt>
+<dd><p>2-adic valuation modulo p, i.e. <code class="docutils literal notranslate"><span class="pre">ν2p(0)</span> <span class="pre">=</span> <span class="pre">ν2p(p)</span> <span class="pre">=</span> <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1aee01db15e6522e6a11e7e4e3dbf06b83"><span class="std std-ref"><span class="pre">lp()</span></span></a></code>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_wrap_ceil_N</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Add <code class="docutils literal notranslate"><span class="pre">b</span></code> to <code class="docutils literal notranslate"><span class="pre">a</span></code> modulo <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a6cf24ce87e31d5150b6bc07300bb5305"><span class="std std-ref">N_horiz</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sub_wrap_ceil_N</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Subtract <code class="docutils literal notranslate"><span class="pre">b</span></code> from <code class="docutils literal notranslate"><span class="pre">a</span></code> modulo <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a6cf24ce87e31d5150b6bc07300bb5305"><span class="std std-ref">N_horiz</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_wrap_p</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Add <code class="docutils literal notranslate"><span class="pre">b</span></code> to <code class="docutils literal notranslate"><span class="pre">a</span></code> modulo <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1adf8e80daae5cfdb1d12e0ba53352a545"><span class="std std-ref">p</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sub_wrap_p</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Subtract <code class="docutils literal notranslate"><span class="pre">b</span></code> from <code class="docutils literal notranslate"><span class="pre">a</span></code> modulo <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1adf8e80daae5cfdb1d12e0ba53352a545"><span class="std std-ref">p</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_wrap_ceil_p</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Add <code class="docutils literal notranslate"><span class="pre">b</span></code> to <code class="docutils literal notranslate"><span class="pre">a</span></code> modulo <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1acdf6900269bf5455d09918b3aaa7237d"><span class="std std-ref">ceil_p()</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sub_wrap_ceil_p</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Subtract <code class="docutils literal notranslate"><span class="pre">b</span></code> from <code class="docutils literal notranslate"><span class="pre">a</span></code> modulo <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1acdf6900269bf5455d09918b3aaa7237d"><span class="std std-ref">ceil_p()</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sub_wrap_ceil_P</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_wrap_ceil_P</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_linear_batch_offset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">biA</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-packing-and-unpacking-of-ocp-data-to-cyqlone-storage-format">Packing and unpacking of OCP data to Cyqlone storage format</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">update_data</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14CyqloneStorageE" title="cyqlone::CyqloneStorage"><span class="n"><span class="pre">CyqloneStorage</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ocp</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Update the internal data structures to reflect changes in the OCP data (without changing the problem size). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_rhs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14CyqloneStorageE" title="cyqlone::CyqloneStorage"><span class="n"><span class="pre">CyqloneStorage</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ocp</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view"><span class="n"><span class="pre">mut_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Initialize the right-hand side vector for the dynamics constraints of the OCP, using the custom Cyqlone storage format. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_rhs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14CyqloneStorageE" title="cyqlone::CyqloneStorage"><span class="n"><span class="pre">CyqloneStorage</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ocp</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Initialize the right-hand side vector for the dynamics constraints of the OCP, using the custom Cyqlone storage format.    </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_gradient</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14CyqloneStorageE" title="cyqlone::CyqloneStorage"><span class="n"><span class="pre">CyqloneStorage</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ocp</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view"><span class="n"><span class="pre">mut_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">grad</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Initialize the gradient vector for the OCP cost function, using the custom Cyqlone storage format. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_gradient</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14CyqloneStorageE" title="cyqlone::CyqloneStorage"><span class="n"><span class="pre">CyqloneStorage</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ocp</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Initialize the gradient vector for the OCP cost function, using the custom Cyqlone storage format.    </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_bounds</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14CyqloneStorageE" title="cyqlone::CyqloneStorage"><span class="n"><span class="pre">CyqloneStorage</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ocp</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view"><span class="n"><span class="pre">mut_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b_min</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view"><span class="n"><span class="pre">mut_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b_max</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Initialize the lower and upper bounds for the general constraints of the OCP, using the custom Cyqlone storage format. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_bounds</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14CyqloneStorageE" title="cyqlone::CyqloneStorage"><span class="n"><span class="pre">CyqloneStorage</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ocp</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Initialize the lower and upper bounds for the general constraints of the OCP, using the custom Cyqlone storage format.    </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pack_variables</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ux_lin</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view"><span class="n"><span class="pre">mut_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ux</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pack_variables</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ux_lin</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unpack_variables</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ux</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ux_lin</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unpack_variables</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ux</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">pack_dynamics</span> <span class="pre">(std::span&lt;</span> <span class="pre">const</span> <span class="pre">value_type</span> <span class="pre">&gt;</span> <span class="pre">λ_lin,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span> <span class="pre">const</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">matrix</span> <span class="pre">pack_dynamics</span> <span class="pre">(std::span&lt;</span> <span class="pre">const</span> <span class="pre">value_type</span> <span class="pre">&gt;</span> <span class="pre">λ_lin)</span> <span class="pre">const</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">unpack_dynamics</span> <span class="pre">(view&lt;&gt;</span> <span class="pre">λ,</span> <span class="pre">std::span&lt;</span> <span class="pre">value_type</span> <span class="pre">&gt;</span> <span class="pre">λ_lin)</span> <span class="pre">const</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">std::vector&lt;</span> <span class="pre">value_type</span> <span class="pre">&gt;</span> <span class="pre">unpack_dynamics</span> <span class="pre">(view&lt;&gt;</span> <span class="pre">λ)</span> <span class="pre">const</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pack_constraints</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">y_lin</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view"><span class="n"><span class="pre">mut_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">y</span></span>, <a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">fill</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pack_constraints</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">y_lin</span></span>, <a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">fill</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unpack_constraints</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">y</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">y_lin</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unpack_constraints</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">y</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_variables</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get a zero-initialized matrix for the primal variables u and x. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_dynamics_constraints</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get a zero-initialized matrix for the dynamics constraints (or their multipliers). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver6matrixE" title="cyqlone::CyqloneSolver::matrix"><span class="n"><span class="pre">matrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize_general_constraints</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Get a zero-initialized matrix for the general constraints (or their multipliers). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I_7index_t0_12StorageOrder0EN7cyqlone13CyqloneSolverE" title="cyqlone::CyqloneSolver"><span class="n"><span class="pre">CyqloneSolver</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">build</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone14CyqloneStorageE" title="cyqlone::CyqloneStorage"><span class="n"><span class="pre">CyqloneStorage</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ocp</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Initialize a Cyqlone solver for the given OCP. </p>
+<p>Note: constraints on u(0) and x(N) should be independent. <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>              nx  nu
+ocp.CD(0) = [ 0 | D ] ny₀
+            [ 0 | 0 ] ny - ny₀
+</pre></div>
+</div>
+</p>
+<p>Since ocp.D(0) and ocp.C(N) will be merged, the top ny₀ rows of ocp.C(N) should be zero.</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-ocp-cost-gradient-and-constraints-evaluation">OCP cost gradient and constraints evaluation</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">residual_dynamics_constr</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver7ContextE" title="cyqlone::CyqloneSolver::Context"><span class="n"><span class="pre">Context</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ctx</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view"><span class="n"><span class="pre">mut_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">Mxb</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Compute Mx + b, where M is the dynamics constraint Jacobian matrix of the OCP. </p>
+<p>In other words, evaluate the residuals for all stages, i.e., <span class="math notranslate nohighlight">\( A_j x^j + B_j u^j - x^{j+1} + b^j \)</span>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">transposed_dynamics_constr</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">λ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">Mᵀλ,</span> <span class="pre">bool</span> <span class="pre">accum=false)</span> <span class="pre">const</span></span></dt>
+<dd><p>Compute Mᵀλ, where M is the dynamics constraint Jacobian matrix of the OCP. </p>
+<p>Optionally add the result to the existing contents of Mᵀλ by setting <code class="docutils literal notranslate"><span class="pre">accum</span></code> to true. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">general_constr</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver7ContextE" title="cyqlone::CyqloneSolver::Context"><span class="n"><span class="pre">Context</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ctx</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ux</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver8mut_viewE" title="cyqlone::CyqloneSolver::mut_view"><span class="n"><span class="pre">mut_view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">DCux</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Compute the general constraints Gx, where G is the general constraint Jacobian matrix of the OCP. </p>
+<p>In other words, evaluate the constraints for all stages, i.e., <span class="math notranslate nohighlight">\( C_j x^j + D_j u^j \)</span>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">transposed_general_constr</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">y,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">DCᵀy)</span> <span class="pre">const</span></span></dt>
+<dd><p>Compute Gᵀy, where G is the general constraint Jacobian matrix of the OCP. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">transposed_general_constr</span> <span class="pre">(view&lt;&gt;</span> <span class="pre">y,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">DCᵀy)</span> <span class="pre">const</span></span></dt>
+<dd><p>Compute Gᵀy, where G is the general constraint Jacobian matrix of the OCP.    </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">cost_gradient</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">value_type</span> <span class="pre">α,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">q,</span> <span class="pre">value_type</span> <span class="pre">β,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">grad_f)</span> <span class="pre">const</span></span></dt>
+<dd><p>Compute the cost gradient, with optional scaling factors. </p>
+<p>grad_f ← Q ux + α q + β grad_f </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">cost_gradient_regularized</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">value_type</span> <span class="pre">γ,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">ux0,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">q,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">grad_f)</span> <span class="pre">const</span></span></dt>
+<dd><p>Compute the regularized cost gradient, with regularization parameter γ⁻¹, with respect to the point <code class="docutils literal notranslate"><span class="pre">ux0</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">cost_gradient_remove_regularization</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">value_type</span> <span class="pre">γ,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">x,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">x0,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">grad_f)</span> <span class="pre">const</span></span></dt>
+<dd><p>Subtract the regularization term from the cost gradient. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-factorization-and-solve-routines">Factorization and solve routines</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">factor_solve</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">value_type</span> <span class="pre">γ,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">Σ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>Compute the Cyqlone factorization of the KKT matrix of the OCP and perform a forward solve (fused for improved locality). </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a9136ec0b4dc1e68df91ababe7199303c"><span class="std std-ref">solve_reverse</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> – Parallel context. </p></li>
+<li><p><strong>γ</strong> – Reciprocal primal regularization. </p></li>
+<li><p><strong>Σ</strong> – ALM penalty factors. </p></li>
+<li><p><strong>ux</strong> – <strong>[inout]</strong> Negative augmented Lagrangian gradient on entry; solution of forward solve on exit. </p></li>
+<li><p><strong>λ</strong> – <strong>[inout]</strong> Constant term of the dynamics constraints on entry; solution of forward solve on exit. To obtain the solution of the KKT system, a reverse solve with the same factorization must be performed afterwards. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">factor</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">value_type</span> <span class="pre">γ,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">Σ)</span></span></dt>
+<dd><p>Compute the Cyqlone factorization of the KKT matrix of the OCP. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a3579cbcd843cefb7fe0ea3d7d8320e37"><span class="std std-ref">factor_solve</span></a></p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">solve_forward</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>Perform a forward solve with the Cyqlone factorization. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a3579cbcd843cefb7fe0ea3d7d8320e37"><span class="std std-ref">factor_solve</span></a></p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">solve_reverse</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>Perform a reverse solve with the Cyqlone factorization. </p>
+<p>[Cyqlone solve CR serial]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> – Parallel context. </p></li>
+<li><p><strong>ux</strong> – On entry, the result of the forward solve; on exit the solution of the primal variables of the KKT system. </p></li>
+<li><p><strong>λ</strong> – On entry, the result of the forward solve; on exit the solution of the dual variables corresponding to the dynamics constraints of the KKT system. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">solve_reverse_mul</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">Mᵀλ)</span></span></dt>
+<dd><p>Fused variant of <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a9136ec0b4dc1e68df91ababe7199303c"><span class="std std-ref">solve_reverse</span></a> and <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a4646e385c850455c91650ec145d1d248"><span class="std std-ref">transposed_dynamics_constr</span></a> (for improved locality of the dynamics Jacobians). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">update</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">ΔΣ)</span></span></dt>
+<dd><p>Perform factorization updates of the Cyqlone factorization as described by Algorithm 4 in the paper. </p>
+<p>[Cyqlone update]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> – Parallel context. </p></li>
+<li><p><strong>ΔΣ</strong> – Changes to the ALM penalty factors Σ. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">update_solve</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">ΔΣ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>Fused variant of <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a07fd275ab569ba3ef98b65ef3ee118d5"><span class="std std-ref">update</span></a> and <a class="reference internal" href="api.html#structcyqlone_1_1CyqloneSolver_1a71528fddc44d7d5f9086c7a47cccb9d7"><span class="std std-ref">solve_forward</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-low-level-factorization-and-forward-solve-routines">Low-level factorization and forward solve routines</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">riccati_thread_assignment</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver7ContextE" title="cyqlone::CyqloneSolver::Context"><span class="n"><span class="pre">Context</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ctx</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">template&lt;bool</span> <span class="pre">Factor</span> <span class="pre">=</span> <span class="pre">true,</span> <span class="pre">bool</span> <span class="pre">Solve</span> <span class="pre">=</span> <span class="pre">true&gt;</span> <span class="pre">void</span> <span class="pre">factor_riccati_solve</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">value_type</span> <span class="pre">γ,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">Σ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>[Modified Riccati factorization and fused forward solve] </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">template&lt;bool</span> <span class="pre">Factor</span> <span class="pre">=</span> <span class="pre">true,</span> <span class="pre">bool</span> <span class="pre">Solve</span> <span class="pre">=</span> <span class="pre">true&gt;</span> <span class="pre">void</span> <span class="pre">compute_schur</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>[Cyqlone compute Schur] </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-low-level-factorization-and-forward-solve-routines-for-parallel-cyclic-reduction">Low-level factorization and forward solve routines for parallel cyclic reduction</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">template&lt;bool</span> <span class="pre">Factor</span> <span class="pre">=</span> <span class="pre">true,</span> <span class="pre">bool</span> <span class="pre">Solve</span> <span class="pre">=</span> <span class="pre">true&gt;</span> <span class="pre">void</span> <span class="pre">factor_solve_impl</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">value_type</span> <span class="pre">γ,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">Σ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>[Cyqlone factorization and fused forward solve] </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-low-level-reverse-solve-routines">Low-level reverse solve routines</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">solve_riccati_reverse</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">work,</span> <span class="pre">std::optional&lt;</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">&gt;</span> <span class="pre">Mᵀλ)</span> <span class="pre">const</span></span></dt>
+<dd><p>[Modified Riccati factorization and fused forward solve] </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">void</span> <span class="pre">solve_reverse</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">work,</span> <span class="pre">std::optional&lt;</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">&gt;</span> <span class="pre">Mᵀλ=std::nullopt)</span> <span class="pre">const</span></span></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-low-level-factorization-update-routines">Low-level factorization update routines</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">template&lt;bool</span> <span class="pre">Solve</span> <span class="pre">=</span> <span class="pre">true&gt;</span> <span class="pre">void</span> <span class="pre">update_riccati_solve</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">ΔΣ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>Update the modified Riccati factorization of a single block column as described by Algorithm 3 in the paper. </p>
+<p>[Cyqlone update CR]</p>
+<p>[Cyqlone update Riccati] </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">inline</span> <span class="pre">void</span> <span class="pre">update_riccati</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">ΔΣ)</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">template&lt;bool</span> <span class="pre">Solve</span> <span class="pre">=</span> <span class="pre">true&gt;</span> <span class="pre">void</span> <span class="pre">update_solve_impl</span> <span class="pre">(Context</span> <span class="pre">&amp;ctx,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">ΔΣ,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">mut_view&lt;&gt;</span> <span class="pre">λ)</span></span></dt>
+<dd><p>[PCR update] </p>
+<p>[Cyqlone update] </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-build-sparse-representations-for-debugging-and-testing">Build sparse representations for debugging and testing</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">SparseMatrix</span> <span class="pre">build_sparse</span> <span class="pre">(const</span> <span class="pre">CyqloneStorage&lt;</span> <span class="pre">value_type</span> <span class="pre">&gt;</span> <span class="pre">&amp;ocp,</span> <span class="pre">std::span&lt;</span> <span class="pre">const</span> <span class="pre">value_type</span> <span class="pre">&gt;</span> <span class="pre">Σ)</span> <span class="pre">const</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">build_rhs</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rq</span></span>, <a class="reference internal" href="api.html#_CPPv4I_12StorageOrderEN7cyqlone13CyqloneSolver4viewE" title="cyqlone::CyqloneSolver::view"><span class="n"><span class="pre">view</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span>, <a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scale_rq</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <a class="reference internal" href="api.html#_CPPv4N7cyqlone13CyqloneSolver10value_typeE" title="cyqlone::CyqloneSolver::value_type"><span class="n"><span class="pre">value_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scale_b</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="pre">inline</span> <span class="pre">std::vector&lt;</span> <span class="pre">value_type</span> <span class="pre">&gt;</span> <span class="pre">build_sol</span> <span class="pre">(view&lt;&gt;</span> <span class="pre">ux,</span> <span class="pre">view&lt;&gt;</span> <span class="pre">λ)</span> <span class="pre">const</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4N7cyqlone12SparseMatrixE" title="cyqlone::SparseMatrix"><span class="n"><span class="pre">SparseMatrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">build_sparse_factor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4N7cyqlone12SparseMatrixE" title="cyqlone::SparseMatrix"><span class="n"><span class="pre">SparseMatrix</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">build_sparse_diag</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I_7index_t0_12StorageOrder0EN7cyqlone13CyqloneSolverE" title="cyqlone::CyqloneSolver::T"><span class="n"><span class="pre">T</span></span></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../cpp.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">C++ API Reference</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tricyqlesolver.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">TricyqleSolver</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pieter Pas
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Pieter Pas.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,626 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::problems::SpringMassParams</compoundname>
+    <includes refid="spring-mass_8hpp" local="no">cyqlone/qpalm/example-problems/spring-mass.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1" prot="public" static="no" strong="no">
+        <type></type>
+        <name>ActuatorPlacement</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::ActuatorPlacement</qualifiedname>
+        <enumvalue id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849" prot="public">
+          <name>IndividualActuators</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a30d42f40d22544857de9a609caf07ae2" prot="public">
+          <name>RandomActuators</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a617eba72fd8a383f9f58874e67c9e912" prot="public">
+          <name>RandomPairsOfActuators</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a9ed41af8dca64bf2fe5d84464f710060" prot="public">
+          <name>WangBoydActuators</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="31" column="5" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="31" bodyend="36"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1dba013a3d54b283f9a36f97bd5f1f2e" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::friction</definition>
+        <argsstring></argsstring>
+        <name>friction</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::friction</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>friction coefficient </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="12" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="12" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ab5a2af96e4f38127c9e16a4581b86679" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::k_spring</definition>
+        <argsstring></argsstring>
+        <name>k_spring</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::k_spring</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>spring constant between masses </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="13" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="13" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a522c2f182381139c34e576be1652e0d9" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::F_max</definition>
+        <argsstring></argsstring>
+        <name>F_max</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::F_max</qualifiedname>
+        <initializer>= 0.5</initializer>
+        <briefdescription>
+<para>maximum actuator force </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="14" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="14" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ae51c660af8c130707f451dde118e4a3c" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::p_max</definition>
+        <argsstring></argsstring>
+        <name>p_max</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::p_max</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+<para>maximum displacement of each mass </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="15" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="15" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a87c3add091c930e9266aaf6c71d5b499" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="106" endline="116">create_problem</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a610a7a0c64707d230b7f120570aaf41f" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::p_min</definition>
+        <argsstring></argsstring>
+        <name>p_min</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::p_min</qualifiedname>
+        <initializer>= -<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ae51c660af8c130707f451dde118e4a3c" kindref="member">p_max</ref></initializer>
+        <briefdescription>
+<para>minimum displacement of each mass </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="16" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="16" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a70e147415444754a12f9d828c7a2d6d6" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::p_min_f</definition>
+        <argsstring></argsstring>
+        <name>p_min_f</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::p_min_f</qualifiedname>
+        <initializer>= <ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a610a7a0c64707d230b7f120570aaf41f" kindref="member">p_min</ref></initializer>
+        <briefdescription>
+<para>minimum displacement of each mass for the final stage </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="17" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a20401c1d408994186ca5f1316b346f40" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::p_max_f</definition>
+        <argsstring></argsstring>
+        <name>p_max_f</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::p_max_f</qualifiedname>
+        <initializer>= <ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ae51c660af8c130707f451dde118e4a3c" kindref="member">p_max</ref></initializer>
+        <briefdescription>
+<para>maximum displacement of each mass for the final stage </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="18" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a7aac80e23a91f8e1861dec691d5a03" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::v_max</definition>
+        <argsstring></argsstring>
+        <name>v_max</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::v_max</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>maximum velocity of each mass (zero = no limit) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="19" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a89e4327b4809fdf0b0e61f111c2dfe" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::v_max_f</definition>
+        <argsstring></argsstring>
+        <name>v_max_f</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::v_max_f</qualifiedname>
+        <initializer>= <ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a7aac80e23a91f8e1861dec691d5a03" kindref="member">v_max</ref></initializer>
+        <briefdescription>
+<para>maximum velocity of each mass for the final stage </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="20" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="20" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a887fc5679d33abe3be614792cddffd85" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::width</definition>
+        <argsstring></argsstring>
+        <name>width</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::width</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>width of the setup (distance between the walls) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="21" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::problems::SpringMassParams::N_horiz</definition>
+        <argsstring></argsstring>
+        <name>N_horiz</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::N_horiz</qualifiedname>
+        <initializer>= 32</initializer>
+        <briefdescription>
+<para>number of discretization steps </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="22" column="13" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" compoundref="spring-mass_8hpp" startline="73" endline="94">domahidi_2012</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac8f9cdf3a81a4bd2ff3b8f01143035af" compoundref="spring-mass_8hpp" startline="39" endline="63">wang_boyd_2008</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a2c47e72483a5afacffa1fb7449ede6b5" compoundref="spring-mass_8hpp" startline="65" endline="71">wang_boyd_2008_width</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a202950abd5806db1f1dec39c2bb3d51b" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::T_horiz</definition>
+        <argsstring></argsstring>
+        <name>T_horiz</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::T_horiz</qualifiedname>
+        <initializer>= 15</initializer>
+        <briefdescription>
+<para>time horizon </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="23" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a9fbc86d261ebb7bdb01a7f37a58d0174" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::q_vel</definition>
+        <argsstring></argsstring>
+        <name>q_vel</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::q_vel</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>scaling factor for cost terms for the velocity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="24" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" compoundref="spring-mass_8hpp" startline="73" endline="94">domahidi_2012</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af8a2fd9a992b8305847a25fd24c9d1bd" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::q_pos</definition>
+        <argsstring></argsstring>
+        <name>q_pos</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::q_pos</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>scaling factor for cost terms for the position </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="25" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" compoundref="spring-mass_8hpp" startline="73" endline="94">domahidi_2012</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a5443953a7bc84041776f986b5fe0e519" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::q_vel_f</definition>
+        <argsstring></argsstring>
+        <name>q_vel_f</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::q_vel_f</qualifiedname>
+        <initializer>= <ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a9fbc86d261ebb7bdb01a7f37a58d0174" kindref="member">q_vel</ref></initializer>
+        <briefdescription>
+<para>scaling factor for terminal cost term for the velocity </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="26" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="26" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" compoundref="spring-mass_8hpp" startline="73" endline="94">domahidi_2012</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac567b9cf366b0a724de6ac966e915e89" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::q_pos_f</definition>
+        <argsstring></argsstring>
+        <name>q_pos_f</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::q_pos_f</qualifiedname>
+        <initializer>= <ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af8a2fd9a992b8305847a25fd24c9d1bd" kindref="member">q_pos</ref></initializer>
+        <briefdescription>
+<para>scaling factor for terminal cost term for the position </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="27" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="27" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" compoundref="spring-mass_8hpp" startline="73" endline="94">domahidi_2012</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1ba21c87e90b5089efb04b787d5b4da9" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::SpringMassParams::r_act</definition>
+        <argsstring></argsstring>
+        <name>r_act</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::r_act</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>scaling factor for cost terms for the actuators </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="28" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" compoundref="spring-mass_8hpp" startline="73" endline="94">domahidi_2012</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::qpalm::problems::SpringMassParams::masses</definition>
+        <argsstring></argsstring>
+        <name>masses</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::masses</qualifiedname>
+        <initializer>{1, 1, 1, 1, 1, 1}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="29" column="17" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="29" bodyend="29"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a87c3add091c930e9266aaf6c71d5b499" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="106" endline="116">create_problem</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" compoundref="spring-mass_8hpp" startline="73" endline="94">domahidi_2012</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::problems::SpringMassParams::n_actuators</definition>
+        <argsstring></argsstring>
+        <name>n_actuators</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::n_actuators</qualifiedname>
+        <initializer>= static_cast&lt;index_t&gt;(masses.size()) - 1</initializer>
+        <briefdescription>
+<para>number of actuators </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="30" column="13" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="30" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac172425aa0e56c2a6db220e71e700b3e" prot="public" static="no" mutable="no">
+        <type>enum <ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1" kindref="member">cyqlone::qpalm::problems::SpringMassParams::ActuatorPlacement</ref></type>
+        <definition>enum cyqlone::qpalm::problems::SpringMassParams::ActuatorPlacement cyqlone::qpalm::problems::SpringMassParams::actuator_placement</definition>
+        <argsstring></argsstring>
+        <name>actuator_placement</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::actuator_placement</qualifiedname>
+        <initializer>= <ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849" kindref="member">IndividualActuators</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="36" column="25"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac8f9cdf3a81a4bd2ff3b8f01143035af" compoundref="spring-mass_8hpp" startline="39" endline="63">wang_boyd_2008</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t cyqlone::qpalm::problems::SpringMassParams::seed</definition>
+        <argsstring></argsstring>
+        <name>seed</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::seed</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>random seed for actuator placement </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="37" column="14" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" compoundref="spring-mass_8hpp" startline="96" endline="128">active_state_constr</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a87c3add091c930e9266aaf6c71d5b499" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="106" endline="116">create_problem</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" compoundref="spring-mass_8hpp" startline="73" endline="94">domahidi_2012</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac8f9cdf3a81a4bd2ff3b8f01143035af" compoundref="spring-mass_8hpp" startline="39" endline="63">wang_boyd_2008</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a2c47e72483a5afacffa1fb7449ede6b5" compoundref="spring-mass_8hpp" startline="65" endline="71">wang_boyd_2008_width</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac8f9cdf3a81a4bd2ff3b8f01143035af" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structSpringMassParams" kindref="compound">SpringMassParams</ref></type>
+        <definition>static SpringMassParams cyqlone::qpalm::problems::SpringMassParams::wang_boyd_2008</definition>
+        <argsstring>(index_t n_masses, index_t N_horiz=30, uint64_t seed=0)</argsstring>
+        <name>wang_boyd_2008</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::wang_boyd_2008</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>n_masses</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>N_horiz</declname>
+          <defval>30</defval>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>seed</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="39" column="29" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="39" bodyend="63"/>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac172425aa0e56c2a6db220e71e700b3e">actuator_placement</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" compoundref="spring-mass_8hpp" startline="22">N_horiz</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" compoundref="spring-mass_8hpp" startline="37">seed</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a9ed41af8dca64bf2fe5d84464f710060" compoundref="spring-mass_8hpp" startline="35">WangBoydActuators</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a2c47e72483a5afacffa1fb7449ede6b5" compoundref="spring-mass_8hpp" startline="65" endline="71">wang_boyd_2008_width</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a2c47e72483a5afacffa1fb7449ede6b5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structSpringMassParams" kindref="compound">SpringMassParams</ref></type>
+        <definition>static SpringMassParams cyqlone::qpalm::problems::SpringMassParams::wang_boyd_2008_width</definition>
+        <argsstring>(index_t n_masses, index_t N_horiz=30, uint64_t seed=0, double steady_state_spring_length=0.1)</argsstring>
+        <name>wang_boyd_2008_width</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::wang_boyd_2008_width</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>n_masses</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>N_horiz</declname>
+          <defval>30</defval>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>seed</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>steady_state_spring_length</declname>
+          <defval>0.1</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="65" column="29" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="65" bodyend="71"/>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" compoundref="spring-mass_8hpp" startline="22">N_horiz</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" compoundref="spring-mass_8hpp" startline="37">seed</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac8f9cdf3a81a4bd2ff3b8f01143035af" compoundref="spring-mass_8hpp" startline="39" endline="63">wang_boyd_2008</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structSpringMassParams" kindref="compound">SpringMassParams</ref></type>
+        <definition>static SpringMassParams cyqlone::qpalm::problems::SpringMassParams::domahidi_2012</definition>
+        <argsstring>(index_t n_masses, index_t N_horiz, uint64_t seed=0)</argsstring>
+        <name>domahidi_2012</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::domahidi_2012</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>n_masses</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>N_horiz</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>seed</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="73" column="29" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="73" bodyend="94"/>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849" compoundref="spring-mass_8hpp" startline="32">IndividualActuators</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" compoundref="spring-mass_8hpp" startline="29" endline="29">masses</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" compoundref="spring-mass_8hpp" startline="22">N_horiz</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af8a2fd9a992b8305847a25fd24c9d1bd" compoundref="spring-mass_8hpp" startline="25">q_pos</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac567b9cf366b0a724de6ac966e915e89" compoundref="spring-mass_8hpp" startline="27">q_pos_f</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a9fbc86d261ebb7bdb01a7f37a58d0174" compoundref="spring-mass_8hpp" startline="24">q_vel</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a5443953a7bc84041776f986b5fe0e519" compoundref="spring-mass_8hpp" startline="26">q_vel_f</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1ba21c87e90b5089efb04b787d5b4da9" compoundref="spring-mass_8hpp" startline="28">r_act</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" compoundref="spring-mass_8hpp" startline="37">seed</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structSpringMassParams" kindref="compound">SpringMassParams</ref></type>
+        <definition>static SpringMassParams cyqlone::qpalm::problems::SpringMassParams::active_state_constr</definition>
+        <argsstring>(index_t n_masses=18, index_t N_horiz=256, uint64_t seed=0)</argsstring>
+        <name>active_state_constr</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassParams::active_state_constr</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>n_masses</declname>
+          <defval>18</defval>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>N_horiz</declname>
+          <defval>256</defval>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>seed</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="96" column="29" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="96" bodyend="128"/>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" compoundref="spring-mass_8hpp" startline="29" endline="29">masses</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" compoundref="spring-mass_8hpp" startline="22">N_horiz</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af8a2fd9a992b8305847a25fd24c9d1bd" compoundref="spring-mass_8hpp" startline="25">q_pos</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac567b9cf366b0a724de6ac966e915e89" compoundref="spring-mass_8hpp" startline="27">q_pos_f</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a9fbc86d261ebb7bdb01a7f37a58d0174" compoundref="spring-mass_8hpp" startline="24">q_vel</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a5443953a7bc84041776f986b5fe0e519" compoundref="spring-mass_8hpp" startline="26">q_vel_f</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1ba21c87e90b5089efb04b787d5b4da9" compoundref="spring-mass_8hpp" startline="28">r_act</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a30d42f40d22544857de9a609caf07ae2" compoundref="spring-mass_8hpp" startline="33">RandomActuators</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" compoundref="spring-mass_8hpp" startline="37">seed</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a202950abd5806db1f1dec39c2bb3d51b" compoundref="spring-mass_8hpp" startline="23">T_horiz</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::problems::SpringMassParams</label>
+        <link refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+masses</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="11" column="1" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="11" bodyend="129"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1abc65cdb2b4298fb3a0324b5aeaa81e8f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>active_state_constr</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac172425aa0e56c2a6db220e71e700b3e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>actuator_placement</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>ActuatorPlacement</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac85087e18caea8b4d4b755e273ae740d" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>domahidi_2012</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a522c2f182381139c34e576be1652e0d9" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>F_max</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1dba013a3d54b283f9a36f97bd5f1f2e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>friction</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>IndividualActuators</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ab5a2af96e4f38127c9e16a4581b86679" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>k_spring</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>masses</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>n_actuators</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>N_horiz</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ae51c660af8c130707f451dde118e4a3c" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>p_max</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a20401c1d408994186ca5f1316b346f40" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>p_max_f</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a610a7a0c64707d230b7f120570aaf41f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>p_min</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a70e147415444754a12f9d828c7a2d6d6" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>p_min_f</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af8a2fd9a992b8305847a25fd24c9d1bd" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>q_pos</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac567b9cf366b0a724de6ac966e915e89" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>q_pos_f</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a9fbc86d261ebb7bdb01a7f37a58d0174" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>q_vel</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a5443953a7bc84041776f986b5fe0e519" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>q_vel_f</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1ba21c87e90b5089efb04b787d5b4da9" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>r_act</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a30d42f40d22544857de9a609caf07ae2" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>RandomActuators</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a617eba72fd8a383f9f58874e67c9e912" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>RandomPairsOfActuators</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>seed</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a202950abd5806db1f1dec39c2bb3d51b" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>T_horiz</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a7aac80e23a91f8e1861dec691d5a03" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>v_max</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a89e4327b4809fdf0b0e61f111c2dfe" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>v_max_f</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac8f9cdf3a81a4bd2ff3b8f01143035af" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>wang_boyd_2008</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a2c47e72483a5afacffa1fb7449ede6b5" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>wang_boyd_2008_width</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a9ed41af8dca64bf2fe5d84464f710060" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>WangBoydActuators</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a887fc5679d33abe3be614792cddffd85" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassParams</scope><name>width</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

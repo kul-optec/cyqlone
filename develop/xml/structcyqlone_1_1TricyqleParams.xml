@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1TricyqleParams" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::TricyqleParams</compoundname>
+    <includes refid="cyqlone-params_8hpp" local="no">cyqlone/cyqlone-params.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+        <defval>real_t</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1TricyqleParams_1a1109b77e541118bc80ced3d3abd9a4c2" prot="public" static="no">
+        <type>T</type>
+        <definition>using cyqlone::TricyqleParams&lt; T &gt;::value_type = T</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>cyqlone::TricyqleParams::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="31" column="5" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1a3d92b585f8ec55a836c01da26d0d6fe7" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cyqlone::TricyqleParams&lt; T &gt;::enable_prefetching</definition>
+        <argsstring></argsstring>
+        <name>enable_prefetching</name>
+        <qualifiedname>cyqlone::TricyqleParams::enable_prefetching</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+<para>Use prefetching during the reverse CR solve phase. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="34" column="10" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1ae371a93ef1548774fe9521c69cad3ff8" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::TricyqleParams&lt; T &gt;::pcg_max_iter</definition>
+        <argsstring></argsstring>
+        <name>pcg_max_iter</name>
+        <qualifiedname>cyqlone::TricyqleParams::pcg_max_iter</qualifiedname>
+        <initializer>= 100</initializer>
+        <briefdescription>
+<para>Maximum number of preconditioned conjugate gradient iterations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="36" column="13" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1a9b29bcd17341e5a316ea61abd6b34e03" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1TricyqleParams_1a1109b77e541118bc80ced3d3abd9a4c2" kindref="member">value_type</ref></type>
+        <definition>value_type cyqlone::TricyqleParams&lt; T &gt;::pcg_tolerance</definition>
+        <argsstring></argsstring>
+        <name>pcg_tolerance</name>
+        <qualifiedname>cyqlone::TricyqleParams::pcg_tolerance</qualifiedname>
+        <initializer>= std::numeric_limits&lt;<ref refid="structcyqlone_1_1TricyqleParams_1a1109b77e541118bc80ced3d3abd9a4c2" kindref="member">value_type</ref>&gt;::epsilon() / 10</initializer>
+        <briefdescription>
+<para>Tolerance for the preconditioned conjugate gradient solver. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="38" column="16" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1a4f6ed4a429d5e696aa6652b4c92644e7" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cyqlone::TricyqleParams&lt; T &gt;::pcg_print_resid</definition>
+        <argsstring></argsstring>
+        <name>pcg_print_resid</name>
+        <qualifiedname>cyqlone::TricyqleParams::pcg_print_resid</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>Enable printing of the residuals during PCG. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="40" column="10" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1abf65052fa3d46aa4fee1f881aa739cf5" prot="public" static="no" mutable="no">
+        <type><ref refid="group__topic-block-tridiag-solvers_1ga922388e973fa665d5f5eb0c7d988c81f" kindref="member">SolveMethod</ref></type>
+        <definition>SolveMethod cyqlone::TricyqleParams&lt; T &gt;::solve_method</definition>
+        <argsstring></argsstring>
+        <name>solve_method</name>
+        <qualifiedname>cyqlone::TricyqleParams::solve_method</qualifiedname>
+        <initializer>= <ref refid="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fa91fa024e7c3efdd56efd4588853cf488" kindref="member">SolveMethod::StairPCG</ref></initializer>
+        <briefdescription>
+<para>Algorithm to use for solving the final reduced block tridiagonal system. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="42" column="17" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1ac3104388361a980a90810067441fdad2" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="343" endline="399">get_cyqlone_solvers</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1ad1ab0da44d008c8c43005f295943e64c" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double cyqlone::TricyqleParams&lt; T &gt;::pcr_max_update_fraction</definition>
+        <argsstring></argsstring>
+        <name>pcr_max_update_fraction</name>
+        <qualifiedname>cyqlone::TricyqleParams::pcr_max_update_fraction</qualifiedname>
+        <initializer>= 0.6</initializer>
+        <briefdescription>
+<para>Tuning parameter for deciding when to update or re-factor the PCR factorization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If the update rank exceeds this fraction of nx, the PCR factorization is recomputed </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="45" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1a06e0173d6207da3a1e86d313b670841c" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double cyqlone::TricyqleParams&lt; T &gt;::cr_max_update_fraction_Y0</definition>
+        <argsstring></argsstring>
+        <name>cr_max_update_fraction_Y0</name>
+        <qualifiedname>cyqlone::TricyqleParams::cr_max_update_fraction_Y0</qualifiedname>
+        <initializer>= 0.9</initializer>
+        <briefdescription>
+<para>Tuning parameter for deciding when to update or re-factor the last subdiagonal blocks in the CR factorization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If the update rank exceeds this fraction of nx, the last subdiagonal blocks are recomputed.  </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="51" column="12" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1a8b4ea43ef95ad75544213330c2ceb549" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::TricyqleParams&lt; T &gt;::parallel_solve_cr_threshold</definition>
+        <argsstring></argsstring>
+        <name>parallel_solve_cr_threshold</name>
+        <qualifiedname>cyqlone::TricyqleParams::parallel_solve_cr_threshold</qualifiedname>
+        <initializer>= 10</initializer>
+        <briefdescription>
+<para>Threshold on nx for switching to a serial implementation of the reverse CR solve. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="53" column="13" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1TricyqleParams_1aa3014457155b9bcb1e0ead17f91d3a7d" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::TricyqleParams&lt; T &gt;::parallel_factor_pcr_threshold</definition>
+        <argsstring></argsstring>
+        <name>parallel_factor_pcr_threshold</name>
+        <qualifiedname>cyqlone::TricyqleParams::parallel_factor_pcr_threshold</qualifiedname>
+        <initializer>= 20</initializer>
+        <briefdescription>
+<para>Threshold on nx for switching to a serial implementation of the PCR factorization. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="55" column="13" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Parameters and settings for the Tricyqle block-tridiagonal solver. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::TricyqleParams&lt; T &gt;</label>
+        <link refid="structcyqlone_1_1TricyqleParams"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="30" column="1" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="30" bodyend="56"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1TricyqleParams_1a06e0173d6207da3a1e86d313b670841c" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>cr_max_update_fraction_Y0</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1a3d92b585f8ec55a836c01da26d0d6fe7" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>enable_prefetching</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1aa3014457155b9bcb1e0ead17f91d3a7d" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>parallel_factor_pcr_threshold</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1a8b4ea43ef95ad75544213330c2ceb549" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>parallel_solve_cr_threshold</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1ae371a93ef1548774fe9521c69cad3ff8" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>pcg_max_iter</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1a4f6ed4a429d5e696aa6652b4c92644e7" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>pcg_print_resid</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1a9b29bcd17341e5a316ea61abd6b34e03" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>pcg_tolerance</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1ad1ab0da44d008c8c43005f295943e64c" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>pcr_max_update_fraction</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1abf65052fa3d46aa4fee1f881aa739cf5" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>solve_method</name></member>
+      <member refid="structcyqlone_1_1TricyqleParams_1a1109b77e541118bc80ced3d3abd9a4c2" prot="public" virt="non-virtual"><scope>cyqlone::TricyqleParams</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

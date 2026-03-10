@@ -1,0 +1,612 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespacecyqlone" kind="namespace" language="C++">
+    <compoundname>cyqlone</compoundname>
+    <innerclass refid="structcyqlone_1_1EmptyCompletion" prot="public">cyqlone::EmptyCompletion</innerclass>
+    <innerclass refid="classcyqlone_1_1TreeBarrier" prot="public">cyqlone::TreeBarrier</innerclass>
+    <innerclass refid="structcyqlone_1_1LinearOCPSparseQP" prot="public">cyqlone::LinearOCPSparseQP</innerclass>
+    <innerclass refid="structcyqlone_1_1TricyqleParams" prot="public">cyqlone::TricyqleParams</innerclass>
+    <innerclass refid="structcyqlone_1_1CyqloneParams" prot="public">cyqlone::CyqloneParams</innerclass>
+    <innerclass refid="structcyqlone_1_1CyqloneStorage" prot="public">cyqlone::CyqloneStorage</innerclass>
+    <innerclass refid="structcyqlone_1_1TricyqleSolver" prot="public">cyqlone::TricyqleSolver</innerclass>
+    <innerclass refid="structcyqlone_1_1CyqloneSolver" prot="public">cyqlone::CyqloneSolver</innerclass>
+    <innerclass refid="classcyqlone_1_1NeumaierSum" prot="public">cyqlone::NeumaierSum</innerclass>
+    <innerclass refid="structcyqlone_1_1OCPDim" prot="public">cyqlone::OCPDim</innerclass>
+    <innerclass refid="structcyqlone_1_1LinearOCPStorage" prot="public">cyqlone::LinearOCPStorage</innerclass>
+    <innerclass refid="structcyqlone_1_1norms" prot="public">cyqlone::norms</innerclass>
+    <innerclass refid="structcyqlone_1_1norms_3_01T_00_01void_01_4" prot="public">cyqlone::norms&lt; T, void &gt;</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseMatrix" prot="public">cyqlone::SparseMatrix</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseMatrixBuilder" prot="public">cyqlone::SparseMatrixBuilder</innerclass>
+    <innerclass refid="structcyqlone_1_1matio__traits" prot="public">cyqlone::matio_traits</innerclass>
+    <innerclass refid="structcyqlone_1_1matio__traits_3_01float_01_4" prot="public">cyqlone::matio_traits&lt; float &gt;</innerclass>
+    <innerclass refid="structcyqlone_1_1matio__traits_3_01double_01_4" prot="public">cyqlone::matio_traits&lt; double &gt;</innerclass>
+    <innerclass refid="structcyqlone_1_1matio__traits_3_01I_01_4" prot="public">cyqlone::matio_traits&lt; I &gt;</innerclass>
+    <innerclass refid="structcyqlone_1_1PCRFactorTest" prot="public">cyqlone::PCRFactorTest</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseCSC" prot="public">cyqlone::SparseCSC</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseCOO" prot="public">cyqlone::SparseCOO</innerclass>
+    <innernamespace refid="namespacecyqlone_1_1detail">cyqlone::detail</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1linalg">cyqlone::linalg</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1parallel">cyqlone::parallel</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <sectiondef kind="enum">
+      <member refid="group__topic-block-tridiag-solvers_1ga922388e973fa665d5f5eb0c7d988c81f" kind="enum"><name>SolveMethod</name></member>
+      <member refid="group__topic-util-matio_1ga8e268a5d303978ce26bb366dd8db62e4" kind="enum"><name>MatioOpenMode</name></member>
+      <memberdef kind="enum" id="namespacecyqlone_1a98ef36a3bcaa63feb09e9a30189c18fe" prot="public" static="no" strong="no">
+        <type></type>
+        <name>StorageOrder</name>
+        <qualifiedname>cyqlone::StorageOrder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="enum" id="namespacecyqlone_1a397fa707bcca52f40de82f40667e8382" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>Symmetry</name>
+        <qualifiedname>cyqlone::Symmetry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/sparse.hpp" line="23" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <member refid="group__topic-util-matio_1gac7f041cab5ae3c1471243d06da6f6469" kind="typedef"><name>mat_t</name></member>
+      <member refid="group__topic-util-matio_1gaceac871d1342196be7468d2bb3fcd386" kind="typedef"><name>MatFilePtr</name></member>
+      <memberdef kind="typedef" id="namespacecyqlone_1ab50cdc97a7f508bd11dbdeac98e83024" prot="public" static="no">
+        <type><ref refid="namespacebatmat" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::DefaultTimings</ref></type>
+        <definition>using cyqlone::DefaultTimings = batmat::DefaultTimings</definition>
+        <argsstring></argsstring>
+        <name>DefaultTimings</name>
+        <qualifiedname>cyqlone::DefaultTimings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/timing.hpp" line="7" column="1" bodyfile="src/cyqlone/include/cyqlone/timing.hpp" bodystart="7" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacecyqlone_1a93737f44f96b7895aa6d2ba4874d66b1" prot="public" static="no">
+        <type>std::unique_ptr&lt; matvar_t, decltype(&amp;Mat_VarFree)&gt;</type>
+        <definition>using cyqlone::MatVarPtr = std::unique_ptr&lt;matvar_t, decltype(&amp;Mat_VarFree)&gt;</definition>
+        <argsstring></argsstring>
+        <name>MatVarPtr</name>
+        <qualifiedname>cyqlone::MatVarPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="67" column="1" bodyfile="src/cyqlone/src/matio.cpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <member refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" kind="function"><name>reference_to_gradient</name></member>
+      <memberdef kind="function" id="namespacecyqlone_1a551aa703936f7c27064994d2e8353d07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::reference_to_gradient</definition>
+        <argsstring>(LinearOCPStorage &amp;ocp, std::span&lt; const real_t &gt; ref)</argsstring>
+        <name>reference_to_gradient</name>
+        <qualifiedname>cyqlone::reference_to_gradient</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const real_t &gt;</type>
+          <declname>ref</declname>
+        </param>
+        <briefdescription>
+<para>Simply computes the gradient of the quadratic cost <formula id="0">$ J(x, u) = \sum_{j=1}^{N-1} \ell_j(x^j, u^j) + \ell_N(x^N) $</formula>, with  <formula id="1">$ \ell_j(x, u) = \tfrac12 \left\| \begin{pmatrix} x - x^j_\text{ref}
+\\ u - u^j_\text{ref} \end{pmatrix} \right\|_{H_j}^2 $</formula>, with the Hessian <formula id="2">$ H_j = \begin{pmatrix} Q_j &amp; S_j^\top \\ S_j &amp; R_j \end{pmatrix} $</formula>.    </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Stores <formula id="3">$ \nabla J(0, 0) $</formula> to <computeroutput>qr</computeroutput>.    </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/conversion.cpp" line="37" column="6" bodyfile="src/cyqlone/src/conversion.cpp" bodystart="37" bodyend="42" declfile="src/cyqlone/include/cyqlone/conversion.hpp" declline="56" declcolumn="6"/>
+        <references refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95baea9e91437ff30e153a77db79d1a362893a">guanaqo::ColMajor</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">cyqlone::LinearOCPStorage::qr</references>
+        <references refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" compoundref="conversion_8cpp" startline="9" endline="35">reference_to_gradient</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a8a31b253ce198a9b911790669ab1f91a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char * cyqlone::enum_name</definition>
+        <argsstring>(SolveMethod s)</argsstring>
+        <name>enum_name</name>
+        <qualifiedname>cyqlone::enum_name</qualifiedname>
+        <param>
+          <type><ref refid="group__topic-block-tridiag-solvers_1ga922388e973fa665d5f5eb0c7d988c81f" kindref="member">SolveMethod</ref></type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="17" column="19" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="17" bodyend="25"/>
+        <references refid="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fa811f52a4a3648918ef143a0cb6a6e334" compoundref="cyqlone-params_8hpp" startline="13">JacobiPCG</references>
+        <references refid="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fac0ff1599838f84547b6668a463198617" compoundref="cyqlone-params_8hpp" startline="14">PCR</references>
+        <references refid="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fa91fa024e7c3efdd56efd4588853cf488" compoundref="cyqlone-params_8hpp" startline="12">StairPCG</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a8de86ba12c6b45e9164ba9c951a8eb78" prot="public" static="no" nodiscard="yes" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool cyqlone::is_pow_2</definition>
+        <argsstring>(index_t n)</argsstring>
+        <name>is_pow_2</name>
+        <qualifiedname>cyqlone::is_pow_2</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone.hpp" line="32" column="17" bodyfile="src/cyqlone/include/cyqlone/cyqlone.hpp" bodystart="32" bodyend="36"/>
+        <references refid="namespacecyqlone_1a8de86ba12c6b45e9164ba9c951a8eb78" compoundref="cyqlone_8hpp" startline="32" endline="36">is_pow_2</references>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a7f65a7abbe21c43f87ebd73e50724202" compoundref="data_8tpp" startline="41" endline="55">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1ae9a015047be9481d5e78394d7ce3b397" compoundref="sparse_8tpp" startline="105" endline="156">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build_rhs</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a548e1ca2ae355c26d32d6a0a497bd0f7" compoundref="sparse_8tpp" startline="15" endline="102">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build_sparse</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1ad5b252edc37cdcf3d6b026287a60bb68" compoundref="sparse_8tpp" startline="283" endline="317">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build_sparse_diag</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a07ad4a4aad9f82b0a327aafb3b4d5c92" compoundref="sparse_8tpp" startline="159" endline="280">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::build_sparse_factor</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1a88657d8567c66e6c943d38e438d79777" compoundref="factor_8tpp" startline="277" endline="288">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::cr_thread_assignment</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1a457309aeb8df1ca12b924167665dd89b" compoundref="factor_8tpp" startline="48" endline="113">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::factor_solve_skip_first</referencedby>
+        <referencedby refid="namespacecyqlone_1a8de86ba12c6b45e9164ba9c951a8eb78" compoundref="cyqlone_8hpp" startline="32" endline="36">is_pow_2</referencedby>
+        <referencedby refid="solve-block-tridiagonal_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="solve-block-tridiagonal_8cpp" startline="30" endline="111">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a65a236b4a58a2be6cc7768e05a583145" prot="public" static="no" nodiscard="yes" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>index_t</type>
+        <definition>index_t cyqlone::ceil_log2</definition>
+        <argsstring>(index_t n)</argsstring>
+        <name>ceil_log2</name>
+        <qualifiedname>cyqlone::ceil_log2</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone.hpp" line="38" column="20" bodyfile="src/cyqlone/include/cyqlone/cyqlone.hpp" bodystart="38" bodyend="42"/>
+        <references refid="namespacecyqlone_1a65a236b4a58a2be6cc7768e05a583145" compoundref="cyqlone_8hpp" startline="38" endline="42">ceil_log2</references>
+        <referencedby refid="namespacecyqlone_1a65a236b4a58a2be6cc7768e05a583145" compoundref="cyqlone_8hpp" startline="38" endline="42">ceil_log2</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1a012802e173a8dc5b1a52ab48d6fbdbc6" compoundref="cyqlone_8hpp" startline="105" endline="105">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::lp</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1a1b890c32ae59332f69161cbbe617b9b5" compoundref="cyqlone_8hpp" startline="111" endline="111">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::lv</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a028e7b47650ae9e52eeded0d2cff39a3" prot="public" static="no" nodiscard="yes" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>index_t</type>
+        <definition>index_t cyqlone::get_level</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>get_level</name>
+        <qualifiedname>cyqlone::get_level</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone.hpp" line="45" column="20" bodyfile="src/cyqlone/include/cyqlone/cyqlone.hpp" bodystart="45" bodyend="49"/>
+        <references refid="namespacecyqlone_1a028e7b47650ae9e52eeded0d2cff39a3" compoundref="cyqlone_8hpp" startline="45" endline="49">get_level</references>
+        <referencedby refid="namespacecyqlone_1a3e39a85e130b8ecc38f9f61cdcfcb0c1" compoundref="cyqlone_8hpp" startline="51" endline="56">get_index_in_level</referencedby>
+        <referencedby refid="namespacecyqlone_1a028e7b47650ae9e52eeded0d2cff39a3" compoundref="cyqlone_8hpp" startline="45" endline="49">get_level</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a5bb754bbd276fa7d8b766e2ddaeb5126" compoundref="indexing_8tpp" startline="112" endline="119">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::get_linear_batch_offset</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a3e39a85e130b8ecc38f9f61cdcfcb0c1" prot="public" static="no" nodiscard="yes" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>index_t</type>
+        <definition>index_t cyqlone::get_index_in_level</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>get_index_in_level</name>
+        <qualifiedname>cyqlone::get_index_in_level</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone.hpp" line="51" column="20" bodyfile="src/cyqlone/include/cyqlone/cyqlone.hpp" bodystart="51" bodyend="56"/>
+        <references refid="namespacecyqlone_1a3e39a85e130b8ecc38f9f61cdcfcb0c1" compoundref="cyqlone_8hpp" startline="51" endline="56">get_index_in_level</references>
+        <references refid="namespacecyqlone_1a028e7b47650ae9e52eeded0d2cff39a3" compoundref="cyqlone_8hpp" startline="45" endline="49">get_level</references>
+        <referencedby refid="namespacecyqlone_1a3e39a85e130b8ecc38f9f61cdcfcb0c1" compoundref="cyqlone_8hpp" startline="51" endline="56">get_index_in_level</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a5bb754bbd276fa7d8b766e2ddaeb5126" compoundref="indexing_8tpp" startline="112" endline="119">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::get_linear_batch_offset</referencedby>
+      </memberdef>
+      <member refid="group__topic-util-matio_1ga9a8d93b3cfc96c16fa9c70b969388c50" kind="function"><name>open_mat</name></member>
+      <member refid="group__topic-util-matio_1ga5b9bfdc6a8d4f53838511888e6724cb8" kind="function"><name>create_mat</name></member>
+      <member refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga42854ade7f449f8478e5e3015d800a30" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga98ba9fcc8ae30f52267a6ed391911aa5" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga318cacc90af5fd74e3949f88a3a0c7e3" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga3dd29ca4a01d166d48251c7a5ea8ce34" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gaea09b40b9de36a89d1c91e595170c7c5" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga60956f86298592566c35039d92a5edc3" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gafecae51b359b38c163783aba289d7218" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga1537cff5aed44fd0e58c4fee61675161" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga07ddf7772fe145d98e1ebdf2d9677cc1" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gaaf4aac1a36819fc07e647af186b19e76" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gad4f62a7347cceafe8574c7e741f991cf" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga7f4118c8f4b3b9fd0dccfc578989e2b6" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gadc1a730925581865e91ec60b5c2d1cc0" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga81a3620a6c3dabf0e6bfd8f56960c300" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga581b8a2280d7eff0b756086643618db8" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga8ce5583b813db30a7ff21fb2568a3b3b" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga2a4285ac5b76e2829f06405eeaa7f484" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gadeddae83552dc401d00f90d86df1e610" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gac2fda9834d3303e31d9fb598ef949809" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gaeac3d6a0248c962a3d5b29a91a0d08d0" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gaa20a79941500e76a4777644e83df8aa0" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga9007be7514cd0af283eb395d3396acc2" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gafb115ff7b2443481e6480f95caa3aaa0" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1gae79d8af02b2c40cfa0b8edd01ff7fa94" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga043f9e47579e7bf1529ad7baa0c86a12" kind="function"><name>add_to_mat</name></member>
+      <member refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" kind="function"><name>read_from_mat</name></member>
+      <member refid="group__topic-util-matio_1ga8400d97982852012a2f51f369a0da870" kind="function"><name>read_from_mat</name></member>
+      <member refid="group__topic-util-matio_1ga6f27d652223be08a963b98316c4b7b45" kind="function"><name>read_from_mat</name></member>
+      <member refid="group__topic-util-matio_1ga6d5e9459f93f03c070fed01a07cb66ba" kind="function"><name>read_from_mat</name></member>
+      <member refid="group__topic-util-matio_1ga710eb1987fa4f8b1fda296b05fdfc685" kind="function"><name>read_from_mat</name></member>
+      <member refid="group__topic-util-matio_1gaf1ab96eebb1218ba8573c6d61ec461bf" kind="function"><name>ocp_dump_mat</name></member>
+      <member refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" kind="function"><name>generate_random_ocp</name></member>
+      <memberdef kind="function" id="namespacecyqlone_1a7dd262e037bfffcdd646baa1182222af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="namespacecyqlone_1a93737f44f96b7895aa6d2ba4874d66b1" kindref="member">MatVarPtr</ref></type>
+        <definition>MatVarPtr cyqlone::create_tensor_var</definition>
+        <argsstring>(const char *name, std::span&lt; const T &gt; buffer, std::array&lt; index_t, N &gt; dims)</argsstring>
+        <name>create_tensor_var</name>
+        <qualifiedname>cyqlone::create_tensor_var</qualifiedname>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const T &gt;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>std::array&lt; index_t, N &gt;</type>
+          <declname>dims</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="70" column="11" bodyfile="src/cyqlone/src/matio.cpp" bodystart="70" bodyend="77"/>
+        <referencedby refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">write_tensor</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::write_tensor</definition>
+        <argsstring>(mat_t *matfp, const char *name, std::span&lt; const T &gt; buffer, std::array&lt; index_t, N &gt; dims)</argsstring>
+        <name>write_tensor</name>
+        <qualifiedname>cyqlone::write_tensor</qualifiedname>
+        <param>
+          <type><ref refid="group__topic-util-matio_1gac7f041cab5ae3c1471243d06da6f6469" kindref="member">mat_t</ref> *</type>
+          <declname>matfp</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const T &gt;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>std::array&lt; index_t, N &gt;</type>
+          <declname>dims</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="80" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="80" bodyend="87"/>
+        <references refid="namespacecyqlone_1a7dd262e037bfffcdd646baa1182222af" compoundref="matio_8cpp" startline="70" endline="77">create_tensor_var</references>
+        <referencedby refid="group__topic-util-matio_1ga42854ade7f449f8478e5e3015d800a30" compoundref="matio_8cpp" startline="126" endline="128">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" compoundref="matio_8cpp" startline="122" endline="124">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga318cacc90af5fd74e3949f88a3a0c7e3" compoundref="matio_8cpp" startline="150" endline="152">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gaea09b40b9de36a89d1c91e595170c7c5" compoundref="matio_8cpp" startline="158" endline="160">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga3dd29ca4a01d166d48251c7a5ea8ce34" compoundref="matio_8cpp" startline="154" endline="156">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga98ba9fcc8ae30f52267a6ed391911aa5" compoundref="matio_8cpp" startline="146" endline="148">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga581b8a2280d7eff0b756086643618db8" compoundref="matio_8cpp" startline="206" endline="208">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga81a3620a6c3dabf0e6bfd8f56960c300" compoundref="matio_8cpp" startline="202" endline="204">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gaa20a79941500e76a4777644e83df8aa0" compoundref="matio_8cpp" startline="232" endline="234">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9007be7514cd0af283eb395d3396acc2" compoundref="matio_8cpp" startline="236" endline="238">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gafb115ff7b2443481e6480f95caa3aaa0" compoundref="matio_8cpp" startline="240" endline="242">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gaeac3d6a0248c962a3d5b29a91a0d08d0" compoundref="matio_8cpp" startline="228" endline="230">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga2a4285ac5b76e2829f06405eeaa7f484" compoundref="matio_8cpp" startline="215" endline="217">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gadeddae83552dc401d00f90d86df1e610" compoundref="matio_8cpp" startline="219" endline="221">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gac2fda9834d3303e31d9fb598ef949809" compoundref="matio_8cpp" startline="223" endline="226">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga8ce5583b813db30a7ff21fb2568a3b3b" compoundref="matio_8cpp" startline="210" endline="213">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gafecae51b359b38c163783aba289d7218" compoundref="matio_8cpp" startline="134" endline="136">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga07ddf7772fe145d98e1ebdf2d9677cc1" compoundref="matio_8cpp" startline="142" endline="144">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga1537cff5aed44fd0e58c4fee61675161" compoundref="matio_8cpp" startline="138" endline="140">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga60956f86298592566c35039d92a5edc3" compoundref="matio_8cpp" startline="130" endline="132">add_to_mat</referencedby>
+        <referencedby refid="namespacecyqlone_1a27b68eeeac46e7c830d14cdd4e8c83d7" compoundref="matio_8cpp" startline="173" endline="190">add_to_mat_impl</referencedby>
+        <referencedby refid="namespacecyqlone_1a8c332e0901eb510e4793c517343b6f58" compoundref="matio_8cpp" startline="105" endline="120">add_to_mat_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a8c332e0901eb510e4793c517343b6f58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat_impl</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, guanaqo::MatrixView&lt; const T, index_t &gt; data)</argsstring>
+        <name>add_to_mat_impl</name>
+        <qualifiedname>cyqlone::add_to_mat_impl</qualifiedname>
+        <param>
+          <type><ref refid="group__topic-util-matio_1gac7f041cab5ae3c1471243d06da6f6469" kindref="member">mat_t</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const T, index_t &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="105" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="105" bodyend="120"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">write_tensor</references>
+        <referencedby refid="group__topic-util-matio_1ga7f4118c8f4b3b9fd0dccfc578989e2b6" compoundref="matio_8cpp" startline="192" endline="195">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gadc1a730925581865e91ec60b5c2d1cc0" compoundref="matio_8cpp" startline="197" endline="200">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gaaf4aac1a36819fc07e647af186b19e76" compoundref="matio_8cpp" startline="162" endline="165">add_to_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1gad4f62a7347cceafe8574c7e741f991cf" compoundref="matio_8cpp" startline="167" endline="170">add_to_mat</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a27b68eeeac46e7c830d14cdd4e8c83d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat_impl</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, batmat::matrix::View&lt; const T, index_t &gt; data)</argsstring>
+        <name>add_to_mat_impl</name>
+        <qualifiedname>cyqlone::add_to_mat_impl</qualifiedname>
+        <param>
+          <type><ref refid="group__topic-util-matio_1gac7f041cab5ae3c1471243d06da6f6469" kindref="member">mat_t</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type><ref refid="structbatmat_1_1matrix_1_1View" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::View</ref>&lt; const T, index_t &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="173" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="173" bodyend="190"/>
+        <references refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" compoundref="matio_8cpp" startline="122" endline="124">add_to_mat</references>
+        <references refid="group__topic-linalg_1ga9df61b993f7e79ad21eddb76b4c2089e">batmat::linalg::copy</references>
+        <references refid="structbatmat_1_1matrix_1_1Matrix_1a90548624c2e7bfcc30810846a2e72e77">batmat::matrix::Matrix&lt; class T, class I, class S, class D, StorageOrder O, class A &gt;::view</references>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a5ee0a358b384d4ffadc58319d367a3c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::validate_mat_var</definition>
+        <argsstring>(const matvar_t *var, const std::string &amp;name, int expected_rank)</argsstring>
+        <name>validate_mat_var</name>
+        <qualifiedname>cyqlone::validate_mat_var</qualifiedname>
+        <param>
+          <type>const matvar_t *</type>
+          <declname>var</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>expected_rank</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="351" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="351" bodyend="363"/>
+        <references refid="namespacecyqlone_1a5ee0a358b384d4ffadc58319d367a3c7" compoundref="matio_8cpp" startline="351" endline="363">validate_mat_var</references>
+        <referencedby refid="namespacecyqlone_1a62f2112e792f3d024ec5d651ed6fd94a" compoundref="matio_8cpp" startline="481" endline="489">open_vector_var</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">read_from_mat</referencedby>
+        <referencedby refid="namespacecyqlone_1a5ee0a358b384d4ffadc58319d367a3c7" compoundref="matio_8cpp" startline="351" endline="363">validate_mat_var</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a62f2112e792f3d024ec5d651ed6fd94a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto cyqlone::open_vector_var</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname)</argsstring>
+        <name>open_vector_var</name>
+        <qualifiedname>cyqlone::open_vector_var</qualifiedname>
+        <param>
+          <type><ref refid="group__topic-util-matio_1gac7f041cab5ae3c1471243d06da6f6469" kindref="member">mat_t</ref> *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="481" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="481" bodyend="489"/>
+        <references refid="namespacecyqlone_1a62f2112e792f3d024ec5d651ed6fd94a" compoundref="matio_8cpp" startline="481" endline="489">open_vector_var</references>
+        <references refid="namespacecyqlone_1a5ee0a358b384d4ffadc58319d367a3c7" compoundref="matio_8cpp" startline="351" endline="363">validate_mat_var</references>
+        <referencedby refid="namespacecyqlone_1a62f2112e792f3d024ec5d651ed6fd94a" compoundref="matio_8cpp" startline="481" endline="489">open_vector_var</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga710eb1987fa4f8b1fda296b05fdfc685" compoundref="matio_8cpp" startline="499" endline="505">read_from_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga6d5e9459f93f03c070fed01a07cb66ba" compoundref="matio_8cpp" startline="491" endline="497">read_from_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga6f27d652223be08a963b98316c4b7b45" compoundref="matio_8cpp" startline="515" endline="521">read_from_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga8400d97982852012a2f51f369a0da870" compoundref="matio_8cpp" startline="507" endline="513">read_from_mat</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a33fa61ac58e944169799f69b27212f92" prot="public" static="no" nodiscard="yes" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>index_t</type>
+        <definition>index_t cyqlone::get_depth</definition>
+        <argsstring>(index_t n)</argsstring>
+        <name>get_depth</name>
+        <qualifiedname>cyqlone::get_depth</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="test/test-pcr.cpp" line="23" column="20" bodyfile="test/test-pcr.cpp" bodystart="23" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a00902118a90d14866e828aefd56f4bd3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Mat</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto cyqlone::λ_max_power</definition>
+        <argsstring>(const Mat &amp;M, const Mat &amp;K, int max_it, typename Mat::value_type tol)</argsstring>
+        <name>λ_max_power</name>
+        <qualifiedname>cyqlone::λ_max_power</qualifiedname>
+        <param>
+          <type>const Mat &amp;</type>
+          <declname>M</declname>
+        </param>
+        <param>
+          <type>const Mat &amp;</type>
+          <declname>K</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>max_it</declname>
+        </param>
+        <param>
+          <type>typename Mat::value_type</type>
+          <declname>tol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="test/test-pcr.cpp" line="105" column="6" bodyfile="test/test-pcr.cpp" bodystart="105" bodyend="125"/>
+        <references refid="group__topic-linalg_1gac25c43a1c180bb6ad0faedbde44a20a9" compoundref="linalg_8hpp" startline="286" endline="289">cyqlone::linalg::dot</references>
+        <references refid="group__topic-linalg_1gae11e8e17f4b74608291fe5b2d389869c" compoundref="linalg_8hpp" startline="278" endline="281">cyqlone::linalg::norm_2</references>
+        <references refid="group__topic-linalg_1gaeee444a2231976efc5f93a58cada45c5" compoundref="linalg_8hpp" startline="294" endline="297">cyqlone::linalg::scale</references>
+        <references refid="structbatmat_1_1matrix_1_1Matrix_1a757dbd5cb7427a0375682a3df28865a0">batmat::matrix::Matrix&lt; class T, class I, class S, class D, StorageOrder O, class A &gt;::set_constant</references>
+        <references refid="group__topic-linalg_1gaf56b3f892871b53ff7dc0efedb0eac36">batmat::linalg::symv</references>
+        <references refid="group__topic-linalg_1ga1c157567ed0f419c4136ec2a69dc8a59">batmat::linalg::syomv</references>
+        <references refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4">batmat::linalg::tril</references>
+        <referencedby refid="test-pcr_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="test-pcr_8cpp" startline="137" endline="201">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class M</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto cyqlone::unpacked</definition>
+        <argsstring>(const M &amp;matrix)</argsstring>
+        <name>unpacked</name>
+        <qualifiedname>cyqlone::unpacked</qualifiedname>
+        <param>
+          <type>const M &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="test/test-pcr.cpp" line="128" column="6" bodyfile="test/test-pcr.cpp" bodystart="128" bodyend="133"/>
+        <references refid="group__topic-linalg_1ga526900bf6322e7c42895c80c36ac2f5e" compoundref="packing_8hpp" startline="147" endline="150">cyqlone::linalg::unpack</references>
+        <referencedby refid="test-pcr_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="test-pcr_8cpp" startline="137" endline="201">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1a83105b13bb65f22f974c2faffffd40fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="namespacebatmat_1_1linalg_1a4bd9921eb6500f6c64da965ba4f46050" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">simdified_view_t</ref>&lt; decltype(a)&gt;</type>
+        <definition>simdified_view_t&lt; decltype(a)&gt; batmat::linalg::simdify</definition>
+        <argsstring>(simdifiable auto &amp;&amp;a)</argsstring>
+        <name>simdify</name>
+        <qualifiedname>cyqlone::simdify</qualifiedname>
+        <param>
+          <type>simdifiable auto &amp;&amp;</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/implementation/data.tpp" line="13" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="25" column="1"/>
+  </compounddef>
+</doxygen>

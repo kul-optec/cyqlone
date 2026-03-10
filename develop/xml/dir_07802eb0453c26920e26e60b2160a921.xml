@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_07802eb0453c26920e26e60b2160a921" kind="dir">
+    <compoundname>src/example-problems/include/cyqlone/qpalm/example-problems</compoundname>
+    <innerfile refid="csv_8hpp">csv.hpp</innerfile>
+    <innerfile refid="platooning_8hpp">platooning.hpp</innerfile>
+    <innerfile refid="spring-mass_8hpp">spring-mass.hpp</innerfile>
+    <innerfile refid="zoh_8hpp">zoh.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/"/>
+  </compounddef>
+</doxygen>

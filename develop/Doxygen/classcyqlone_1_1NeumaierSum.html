@@ -1,0 +1,805 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone::NeumaierSum&lt; T &gt; Class Template Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('classcyqlone_1_1NeumaierSum.html','','classcyqlone_1_1NeumaierSum-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">cyqlone::NeumaierSum&lt; T &gt; Class Template Reference<div class="ingroups"><a class="el" href="group__topic-utilities.html">Utilities</a></div></div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="neumaier_8hpp_source.html">cyqlone/neumaier.hpp</a>&gt;</code></p>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;class T&gt;<br />
+class cyqlone::NeumaierSum&lt; T &gt;</div><p>Kahan-Babuška-Neumaier compensated summation. </p>
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00016">16</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a023246a8890b36f4196b2dfe7a6d40d6" id="r_a023246a8890b36f4196b2dfe7a6d40d6"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> (T <a class="el" href="#aadc3d20324c0a51493451fdeb3e1f411">sum</a>, T <a class="el" href="#a7ca4d34bf91570c1a170e9b12ae099d3">compensation</a>)</td></tr>
+<tr class="memitem:a7eae35f0eb6ff40578eb75bd3d0b97d8" id="r_a7eae35f0eb6ff40578eb75bd3d0b97d8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a7eae35f0eb6ff40578eb75bd3d0b97d8">NeumaierSum</a> (T value={})</td></tr>
+<tr class="memitem:a1e9d8e69fbe7fb21a7d22222ec32fa4c" id="r_a1e9d8e69fbe7fb21a7d22222ec32fa4c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a1e9d8e69fbe7fb21a7d22222ec32fa4c">operator T</a> () const</td></tr>
+<tr class="memitem:af4a486126bb2f5861efc3c36596de62f" id="r_af4a486126bb2f5861efc3c36596de62f"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#af4a486126bb2f5861efc3c36596de62f">operator-</a> () const</td></tr>
+<tr class="memitem:a7c9a9a7e0d20f1a26be61b3c1ac62913" id="r_a7c9a9a7e0d20f1a26be61b3c1ac62913"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a7c9a9a7e0d20f1a26be61b3c1ac62913">operator+=</a> (T <a class="el" href="solve-block-tridiagonal_8cpp.html#ac818a8f049bd46d6d6996d28f22de4a9">v</a>)</td></tr>
+<tr class="memitem:adfdfea95f2a07dcc5b5172bd86fb178e" id="r_adfdfea95f2a07dcc5b5172bd86fb178e"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#adfdfea95f2a07dcc5b5172bd86fb178e">operator+=</a> (const <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp;other)</td></tr>
+<tr class="memitem:ae0827ceb18a50a2352479817e15ea71c" id="r_ae0827ceb18a50a2352479817e15ea71c"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#ae0827ceb18a50a2352479817e15ea71c">operator-=</a> (T <a class="el" href="solve-block-tridiagonal_8cpp.html#ac818a8f049bd46d6d6996d28f22de4a9">v</a>)</td></tr>
+<tr class="memitem:ae2e1be6f876d0e24d67353b9d1205136" id="r_ae2e1be6f876d0e24d67353b9d1205136"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#ae2e1be6f876d0e24d67353b9d1205136">operator-=</a> (const <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp;other)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:aadc3d20324c0a51493451fdeb3e1f411" id="r_aadc3d20324c0a51493451fdeb3e1f411"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#aadc3d20324c0a51493451fdeb3e1f411">sum</a></td></tr>
+<tr class="memitem:a7ca4d34bf91570c1a170e9b12ae099d3" id="r_a7ca4d34bf91570c1a170e9b12ae099d3"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#a7ca4d34bf91570c1a170e9b12ae099d3">compensation</a> {}</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-friends" class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:aa1a0ff64fbd206621f3932fd3d889cbd" id="r_aa1a0ff64fbd206621f3932fd3d889cbd"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#aa1a0ff64fbd206621f3932fd3d889cbd">operator+</a> (<a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> lhs, T rhs)</td></tr>
+<tr class="memitem:a79b2b0a27d953a81fd12901e4aa92482" id="r_a79b2b0a27d953a81fd12901e4aa92482"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#a79b2b0a27d953a81fd12901e4aa92482">operator+</a> (T lhs, <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> rhs)</td></tr>
+<tr class="memitem:a81cc781ba392c62870490923aec1b788" id="r_a81cc781ba392c62870490923aec1b788"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#a81cc781ba392c62870490923aec1b788">operator+</a> (<a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> lhs, <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> rhs)</td></tr>
+<tr class="memitem:a7489c5f2d5249961c8edca3e95be9b30" id="r_a7489c5f2d5249961c8edca3e95be9b30"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7489c5f2d5249961c8edca3e95be9b30">operator-</a> (<a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> lhs, T rhs)</td></tr>
+<tr class="memitem:a561f4df562069d61ae54b6fc1e5e5ede" id="r_a561f4df562069d61ae54b6fc1e5e5ede"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#a561f4df562069d61ae54b6fc1e5e5ede">operator-</a> (T lhs, <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> rhs)</td></tr>
+<tr class="memitem:a7f28fe9f7125430a30e6a086a5812bd7" id="r_a7f28fe9f7125430a30e6a086a5812bd7"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7f28fe9f7125430a30e6a086a5812bd7">operator-</a> (<a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> lhs, const <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp;rhs)</td></tr>
+<tr class="memitem:a27ec7543c36110a2281af26a9bedd8e5" id="r_a27ec7543c36110a2281af26a9bedd8e5"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#a27ec7543c36110a2281af26a9bedd8e5">operator*</a> (<a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> lhs, <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> rhs)</td></tr>
+<tr class="memitem:a39555a9263f53e921f6606941f7325fe" id="r_a39555a9263f53e921f6606941f7325fe"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#a39555a9263f53e921f6606941f7325fe">operator*</a> (<a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> lhs, T rhs)</td></tr>
+<tr class="memitem:a78ba89c6c79ffd4b81408693c4b47171" id="r_a78ba89c6c79ffd4b81408693c4b47171"><td class="memItemLeft"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&#160;</td><td class="memItemRight"><a class="el" href="#a78ba89c6c79ffd4b81408693c4b47171">operator*</a> (T lhs, <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> rhs)</td></tr>
+</table>
+<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a023246a8890b36f4196b2dfe7a6d40d6" name="a023246a8890b36f4196b2dfe7a6d40d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a023246a8890b36f4196b2dfe7a6d40d6">&#9670;&#160;</a></span>NeumaierSum() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::NeumaierSum </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>sum</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>compensation</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00019">19</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7eae35f0eb6ff40578eb75bd3d0b97d8" name="a7eae35f0eb6ff40578eb75bd3d0b97d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eae35f0eb6ff40578eb75bd3d0b97d8">&#9670;&#160;</a></span>NeumaierSum() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::NeumaierSum </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>value</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00020">20</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a1e9d8e69fbe7fb21a7d22222ec32fa4c" name="a1e9d8e69fbe7fb21a7d22222ec32fa4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e9d8e69fbe7fb21a7d22222ec32fa4c">&#9670;&#160;</a></span>operator T()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::operator T </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00021">21</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af4a486126bb2f5861efc3c36596de62f" name="af4a486126bb2f5861efc3c36596de62f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4a486126bb2f5861efc3c36596de62f">&#9670;&#160;</a></span>operator-()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> <a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::operator- </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00023">23</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7c9a9a7e0d20f1a26be61b3c1ac62913" name="a7c9a9a7e0d20f1a26be61b3c1ac62913"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c9a9a7e0d20f1a26be61b3c1ac62913">&#9670;&#160;</a></span>operator+=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp; <a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00024">24</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="adfdfea95f2a07dcc5b5172bd86fb178e" name="adfdfea95f2a07dcc5b5172bd86fb178e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfdfea95f2a07dcc5b5172bd86fb178e">&#9670;&#160;</a></span>operator+=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp; <a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00045">45</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae0827ceb18a50a2352479817e15ea71c" name="ae0827ceb18a50a2352479817e15ea71c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0827ceb18a50a2352479817e15ea71c">&#9670;&#160;</a></span>operator-=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp; <a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00050">50</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae2e1be6f876d0e24d67353b9d1205136" name="ae2e1be6f876d0e24d67353b9d1205136"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2e1be6f876d0e24d67353b9d1205136">&#9670;&#160;</a></span>operator-=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> &amp; <a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00051">51</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-related-members" id="doc-related-members"></a><h2 id="header-doc-related-members" class="groupheader">Friends And Related Symbol Documentation</h2>
+<a id="aa1a0ff64fbd206621f3932fd3d889cbd" name="aa1a0ff64fbd206621f3932fd3d889cbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1a0ff64fbd206621f3932fd3d889cbd">&#9670;&#160;</a></span>operator+ <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator+ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00057">57</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a79b2b0a27d953a81fd12901e4aa92482" name="a79b2b0a27d953a81fd12901e4aa92482"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79b2b0a27d953a81fd12901e4aa92482">&#9670;&#160;</a></span>operator+ <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator+ </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00061">61</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a81cc781ba392c62870490923aec1b788" name="a81cc781ba392c62870490923aec1b788"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81cc781ba392c62870490923aec1b788">&#9670;&#160;</a></span>operator+ <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator+ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00065">65</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7489c5f2d5249961c8edca3e95be9b30" name="a7489c5f2d5249961c8edca3e95be9b30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7489c5f2d5249961c8edca3e95be9b30">&#9670;&#160;</a></span>operator- <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator- </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00070">70</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a561f4df562069d61ae54b6fc1e5e5ede" name="a561f4df562069d61ae54b6fc1e5e5ede"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a561f4df562069d61ae54b6fc1e5e5ede">&#9670;&#160;</a></span>operator- <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator- </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00074">74</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7f28fe9f7125430a30e6a086a5812bd7" name="a7f28fe9f7125430a30e6a086a5812bd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f28fe9f7125430a30e6a086a5812bd7">&#9670;&#160;</a></span>operator- <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator- </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00075">75</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a27ec7543c36110a2281af26a9bedd8e5" name="a27ec7543c36110a2281af26a9bedd8e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27ec7543c36110a2281af26a9bedd8e5">&#9670;&#160;</a></span>operator* <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator* </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00079">79</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a39555a9263f53e921f6606941f7325fe" name="a39555a9263f53e921f6606941f7325fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39555a9263f53e921f6606941f7325fe">&#9670;&#160;</a></span>operator* <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator* </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00086">86</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a78ba89c6c79ffd4b81408693c4b47171" name="a78ba89c6c79ffd4b81408693c4b47171"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78ba89c6c79ffd4b81408693c4b47171">&#9670;&#160;</a></span>operator* <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a> operator* </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>lhs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a023246a8890b36f4196b2dfe7a6d40d6">NeumaierSum</a>&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00089">89</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="aadc3d20324c0a51493451fdeb3e1f411" name="aadc3d20324c0a51493451fdeb3e1f411"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadc3d20324c0a51493451fdeb3e1f411">&#9670;&#160;</a></span>sum</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::sum</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00018">18</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7ca4d34bf91570c1a170e9b12ae099d3" name="a7ca4d34bf91570c1a170e9b12ae099d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ca4d34bf91570c1a170e9b12ae099d3">&#9670;&#160;</a></span>compensation</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classcyqlone_1_1NeumaierSum.html">cyqlone::NeumaierSum</a>&lt; T &gt;::compensation {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="neumaier_8hpp_source.html#l00018">18</a> of file <a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>src/cyqlone/include/cyqlone/<a class="el" href="neumaier_8hpp_source.html">neumaier.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacecyqlone.html">cyqlone</a></li><li class="navelem"><a href="classcyqlone_1_1NeumaierSum.html">NeumaierSum</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

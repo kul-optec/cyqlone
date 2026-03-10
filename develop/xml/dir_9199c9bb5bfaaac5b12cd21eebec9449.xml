@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_9199c9bb5bfaaac5b12cd21eebec9449" kind="dir">
+    <compoundname>src/cyqlone/include</compoundname>
+    <innerdir refid="dir_883a88dfe2d80794a3038754b6505506">src/cyqlone/include/cyqlone</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/cyqlone/include/"/>
+  </compounddef>
+</doxygen>

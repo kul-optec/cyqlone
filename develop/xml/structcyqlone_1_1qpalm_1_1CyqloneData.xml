@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1CyqloneData" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::CyqloneData</compoundname>
+    <includes refid="ocp-backend-cyqlone_8hpp" local="no">cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyqloneData_1aa9df25a26d4bf890fda706b310db2faf" prot="public" static="no" mutable="no">
+        <type>std::span&lt; const real_t &gt;</type>
+        <definition>std::span&lt;const real_t&gt; cyqlone::qpalm::CyqloneData::initial_variables</definition>
+        <argsstring></argsstring>
+        <name>initial_variables</name>
+        <qualifiedname>cyqlone::qpalm::CyqloneData::initial_variables</qualifiedname>
+        <initializer>= {}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="20" column="15" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="20" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyqloneData_1a8fcb8221fd005fd9e44c5593cb33855d" prot="public" static="no" mutable="no">
+        <type>std::span&lt; const real_t &gt;</type>
+        <definition>std::span&lt;const real_t&gt; cyqlone::qpalm::CyqloneData::initial_inequality_multipliers</definition>
+        <argsstring></argsstring>
+        <name>initial_inequality_multipliers</name>
+        <qualifiedname>cyqlone::qpalm::CyqloneData::initial_inequality_multipliers</qualifiedname>
+        <initializer>= {}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="20" column="34" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="20" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyqloneData_1a518733daa3ca0eb03f0d048a1756ca1e" prot="public" static="no" mutable="no">
+        <type>std::span&lt; const real_t &gt;</type>
+        <definition>std::span&lt;const real_t&gt; cyqlone::qpalm::CyqloneData::initial_equality_multipliers</definition>
+        <argsstring></argsstring>
+        <name>initial_equality_multipliers</name>
+        <qualifiedname>cyqlone::qpalm::CyqloneData::initial_equality_multipliers</qualifiedname>
+        <initializer>= {}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="21" column="29" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="21" bodyend="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::CyqloneData</label>
+        <link refid="structcyqlone_1_1qpalm_1_1CyqloneData"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+initial_equality_multipliers</edgelabel>
+          <edgelabel>+initial_inequality_multipliers</edgelabel>
+          <edgelabel>+initial_variables</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::span&lt; const real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="19" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="19" bodyend="22"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1CyqloneData_1a518733daa3ca0eb03f0d048a1756ca1e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyqloneData</scope><name>initial_equality_multipliers</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyqloneData_1a8fcb8221fd005fd9e44c5593cb33855d" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyqloneData</scope><name>initial_inequality_multipliers</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyqloneData_1aa9df25a26d4bf890fda706b310db2faf" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyqloneData</scope><name>initial_variables</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

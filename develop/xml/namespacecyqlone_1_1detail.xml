@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespacecyqlone_1_1detail" kind="namespace" language="C++">
+    <compoundname>cyqlone::detail</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecyqlone_1_1detail_1a3cbfac4ccd22478ebb900ef8a1a80c8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T1</type>
+          </param>
+          <param>
+            <type>class I1</type>
+          </param>
+          <param>
+            <type>class S1</type>
+          </param>
+          <param>
+            <type><ref refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95bae" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::StorageOrder</ref></type>
+            <declname>O1</declname>
+            <defname>O1</defname>
+          </param>
+          <param>
+            <type>class T2</type>
+          </param>
+          <param>
+            <type>class I2</type>
+          </param>
+          <param>
+            <type>class S2</type>
+          </param>
+          <param>
+            <type><ref refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95bae" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::StorageOrder</ref></type>
+            <declname>O2</declname>
+            <defname>O2</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::detail::copy</definition>
+        <argsstring>(guanaqo::MatrixView&lt; T1, I1, S1, O1 &gt; src, guanaqo::MatrixView&lt; T2, I2, S2, O2 &gt; dst)</argsstring>
+        <name>copy</name>
+        <qualifiedname>cyqlone::detail::copy</qualifiedname>
+        <param>
+          <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; T1, I1, S1, O1 &gt;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; T2, I2, S2, O2 &gt;</type>
+          <declname>dst</declname>
+        </param>
+        <briefdescription>
+<para>Simple (inefficient) matrix copy that supports slices with non-unit strides. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/implementation/data.tpp" line="19" column="6" bodyfile="src/cyqlone/include/cyqlone/implementation/data.tpp" bodystart="19" bodyend="25"/>
+        <references refid="structguanaqo_1_1MatrixView_1aa097c43922d29e04d9d8d649eabdf589">guanaqo::MatrixView&lt; class T, class I, class S, StorageOrder O &gt;::cols</references>
+        <references refid="namespacecyqlone_1_1detail_1a3cbfac4ccd22478ebb900ef8a1a80c8f" compoundref="data_8tpp" startline="19" endline="25">copy</references>
+        <references refid="structguanaqo_1_1MatrixView_1a45ea549d32e825c0f0d384c90f056a83">guanaqo::MatrixView&lt; class T, class I, class S, StorageOrder O &gt;::rows</references>
+        <referencedby refid="namespacecyqlone_1_1detail_1a3cbfac4ccd22478ebb900ef8a1a80c8f" compoundref="data_8tpp" startline="19" endline="25">copy</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1detail_1a9ac31d8e0699acdf2a99776e66251afe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T0</type>
+          </param>
+          <param>
+            <type>class T1</type>
+          </param>
+          <param>
+            <type>class I1</type>
+          </param>
+          <param>
+            <type>class S1</type>
+          </param>
+          <param>
+            <type><ref refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95bae" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::StorageOrder</ref></type>
+            <declname>O1</declname>
+            <defname>O1</defname>
+          </param>
+          <param>
+            <type>class T2</type>
+          </param>
+          <param>
+            <type>class I2</type>
+          </param>
+          <param>
+            <type>class S2</type>
+          </param>
+          <param>
+            <type><ref refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95bae" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::StorageOrder</ref></type>
+            <declname>O2</declname>
+            <defname>O2</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::detail::scale</definition>
+        <argsstring>(T0 scalar, guanaqo::MatrixView&lt; T1, I1, S1, O1 &gt; src, guanaqo::MatrixView&lt; T2, I2, S2, O2 &gt; dst)</argsstring>
+        <name>scale</name>
+        <qualifiedname>cyqlone::detail::scale</qualifiedname>
+        <param>
+          <type>T0</type>
+          <declname>scalar</declname>
+        </param>
+        <param>
+          <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; T1, I1, S1, O1 &gt;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; T2, I2, S2, O2 &gt;</type>
+          <declname>dst</declname>
+        </param>
+        <briefdescription>
+<para>Simple (inefficient) scaled matrix copy that supports slices with non-unit strides. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/implementation/data.tpp" line="29" column="6" bodyfile="src/cyqlone/include/cyqlone/implementation/data.tpp" bodystart="29" bodyend="36"/>
+        <references refid="structguanaqo_1_1MatrixView_1aa097c43922d29e04d9d8d649eabdf589">guanaqo::MatrixView&lt; class T, class I, class S, StorageOrder O &gt;::cols</references>
+        <references refid="structguanaqo_1_1MatrixView_1a45ea549d32e825c0f0d384c90f056a83">guanaqo::MatrixView&lt; class T, class I, class S, StorageOrder O &gt;::rows</references>
+        <references refid="namespacecyqlone_1_1detail_1a9ac31d8e0699acdf2a99776e66251afe" compoundref="data_8tpp" startline="29" endline="36">scale</references>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a39590c5614a24539b5fc72b3a580f5dd" compoundref="data_8tpp" startline="170" endline="201">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::initialize_gradient</referencedby>
+        <referencedby refid="namespacecyqlone_1_1detail_1a9ac31d8e0699acdf2a99776e66251afe" compoundref="data_8tpp" startline="29" endline="36">scale</referencedby>
+        <referencedby refid="group__topic-linalg_1ga16a11c4519ab1e0cf4946c57bf4d0671" compoundref="linalg_8hpp" startline="301" endline="304">cyqlone::linalg::scale</referencedby>
+        <referencedby refid="group__topic-linalg_1gaeee444a2231976efc5f93a58cada45c5" compoundref="linalg_8hpp" startline="294" endline="297">cyqlone::linalg::scale</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a1b97601624c8e98a597cf61c790fbdae" compoundref="data_8tpp" startline="94" endline="144">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_data</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/cyqlone/include/cyqlone/implementation/data.tpp" line="15" column="1"/>
+  </compounddef>
+</doxygen>

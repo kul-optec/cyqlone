@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespacecyqlone_1_1linalg_1_1multi" kind="namespace" inline="yes" language="C++">
+    <compoundname>cyqlone::linalg::multi</compoundname>
+    <sectiondef kind="user-defined">
+      <header>Multi-batch operations</header>
+      <member refid="group__topic-linalg_1gade4eb9023d1b94d7657f68dc256860b8" kind="function"><name>norms_all</name></member>
+      <member refid="group__topic-linalg_1ga55c086fc7235a79e26c3aa5b1154c224" kind="function"><name>norm_inf</name></member>
+      <member refid="group__topic-linalg_1gabf875f22442b0023c2142b00d0975554" kind="function"><name>norm_1</name></member>
+      <member refid="group__topic-linalg_1gae934751791c316edde36013271945bf3" kind="function"><name>norm_2_squared</name></member>
+      <member refid="group__topic-linalg_1ga91b1ca93bfba644b53749eeac8edb444" kind="function"><name>norm_2</name></member>
+      <member refid="group__topic-linalg_1gafac39321d4eca4894c8099e597a9b5f2" kind="function"><name>dot</name></member>
+      <member refid="group__topic-linalg_1gad40329bb0eea1a12dd5b510935b93fca" kind="function"><name>scale</name></member>
+      <member refid="group__topic-linalg_1ga4dd6dc0ecf27af5d2f74f12e0aaca26a" kind="function"><name>scale</name></member>
+      <member refid="group__topic-linalg_1ga192f6d5da228f92a9e16216064fdac0e" kind="function"><name>hadamard</name></member>
+      <member refid="group__topic-linalg_1ga970509394d0f01a224acb3eac0f97535" kind="function"><name>hadamard</name></member>
+      <member refid="group__topic-linalg_1gaaea202adb9d942b00a786f902e45307d" kind="function"><name>clamp</name></member>
+      <member refid="group__topic-linalg_1ga60b2783e234cd9c038d1067b4f529a38" kind="function"><name>clamp_resid</name></member>
+      <member refid="group__topic-linalg_1ga2c0d5fb8f9ea81725e5d54d7605129e3" kind="function"><name>axpby</name></member>
+      <member refid="group__topic-linalg_1gaca21e3c51e47359f16410a524f1a6896" kind="function"><name>axpby</name></member>
+      <member refid="group__topic-linalg_1gaede77b28f5e46753ee7b915935f144b5" kind="function"><name>axpy</name></member>
+      <member refid="group__topic-linalg_1ga30451a0e4f4100069ff65963d1bb0dbf" kind="function"><name>axpy</name></member>
+      <member refid="group__topic-linalg_1ga74efe6fd79de11b4fad66ce0444c2de3" kind="function"><name>axpy</name></member>
+      <member refid="group__topic-linalg_1ga4024401b27cb17a5982d63dca91df61b" kind="function"><name>negate</name></member>
+      <member refid="group__topic-linalg_1gadfa94d9946d30ead1c8a0896599bd313" kind="function"><name>negate</name></member>
+      <member refid="group__topic-linalg_1gaff7f734df0a2b041994f963e2226f858" kind="function"><name>sub</name></member>
+      <member refid="group__topic-linalg_1ga48d07be903d60f6d48b7c3af0e9da414" kind="function"><name>sub</name></member>
+      <member refid="group__topic-linalg_1gac534f2ffcc1821dedd98afd67b4d5e27" kind="function"><name>add</name></member>
+      <member refid="group__topic-linalg_1ga84c12f9e93355fcc36107e18086ef7a4" kind="function"><name>add</name></member>
+      <member refid="group__topic-linalg_1gaa72458de29526c1deb6a0519926b2cd0" kind="function"><name>for_each_elementwise</name></member>
+      <member refid="group__topic-linalg_1ga04fa9fa6e82563be75524b11f135bc2b" kind="function"><name>transform_elementwise</name></member>
+      <member refid="group__topic-linalg_1ga79cf0bb8d436a1cba7ce70fab44bfbf0" kind="function"><name>transform2_elementwise</name></member>
+      <member refid="group__topic-linalg_1ga52c5beff69e8bdfb213cd47caacc104f" kind="function"><name>transform_n_elementwise</name></member>
+      <member refid="group__topic-linalg_1ga85860ca1111492777572a2ba091cf5ca" kind="function"><name>copy</name></member>
+      <member refid="group__topic-linalg_1ga2e50e5f96654eb673d29ac8461143e91" kind="function"><name>copy</name></member>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/cyqlone/include/cyqlone/linalg.hpp" line="478" column="8"/>
+  </compounddef>
+</doxygen>

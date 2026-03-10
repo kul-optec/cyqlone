@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="platooning_8hpp" kind="file" language="C++">
+    <compoundname>platooning.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes local="no">cyqlone/example-problems/export.h</includes>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="platooning_8cpp" local="no">src/example-problems/src/platooning.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp</label>
+        <link refid="platooning_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="4">
+        <label>cyqlone/example-problems/export.h</label>
+      </node>
+      <node id="6">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="7">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp</label>
+        <link refid="platooning_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/example-problems/src/platooning.cpp</label>
+        <link refid="platooning_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams" prot="public">cyqlone::qpalm::problems::PlatooningParams</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem" prot="public">cyqlone::qpalm::problems::PlatooningProblem</innerclass>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm_1_1problems">cyqlone::qpalm::problems</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cyqlone/example-problems/export.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ocp_8hpp" kindref="compound">cyqlone/ocp.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone_1_1qpalm_1_1problems" kindref="compound">cyqlone::qpalm::problems</ref><sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams" kindref="compound">PlatooningParams</ref><sp/>{</highlight></codeline>
+<codeline lineno="12" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1ac81cc8bbaa2da1b7342dfdb0d9bbbb93" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1ac81cc8bbaa2da1b7342dfdb0d9bbbb93" kindref="member">friction</ref><sp/><sp/><sp/>=<sp/>0.1;</highlight></codeline>
+<codeline lineno="13" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a71a4b628fd4a6dad01041e374a17a648" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a71a4b628fd4a6dad01041e374a17a648" kindref="member">F_max</ref><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>20;</highlight></codeline>
+<codeline lineno="14" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" kindref="member">v_max</ref><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1.6;</highlight></codeline>
+<codeline lineno="15" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" kindref="member">dist_min</ref><sp/><sp/><sp/>=<sp/>5;</highlight></codeline>
+<codeline lineno="16" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a637adefd6c549cd259f10f7d12118539" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a637adefd6c549cd259f10f7d12118539" kindref="member">dist_init</ref><sp/><sp/>=<sp/>2<sp/>*<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" kindref="member">dist_min</ref>;</highlight></codeline>
+<codeline lineno="17" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1afa44560fbbbbd9e72ceb56b2c68a083a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1afa44560fbbbbd9e72ceb56b2c68a083a" kindref="member">p_target</ref><sp/><sp/><sp/>=<sp/>100;</highlight></codeline>
+<codeline lineno="18" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a99b5506c96a0fee3aa95cdef7f3d92d3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>index_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a99b5506c96a0fee3aa95cdef7f3d92d3" kindref="member">N_horiz</ref><sp/><sp/><sp/>=<sp/>512;</highlight></codeline>
+<codeline lineno="19" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a146ecce5b3ebc178809def4438370946" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a146ecce5b3ebc178809def4438370946" kindref="member">T_horiz</ref><sp/><sp/><sp/><sp/>=<sp/>30;</highlight></codeline>
+<codeline lineno="20" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a278998f75a9a28795fa59467492856e7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a278998f75a9a28795fa59467492856e7" kindref="member">scale_cost</ref><sp/>=<sp/>1e-3;</highlight></codeline>
+<codeline lineno="21" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a0b43e23740be9973cabb06551fa569a7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a0b43e23740be9973cabb06551fa569a7" kindref="member">masses</ref>{100,<sp/>150,<sp/>130,<sp/>70,<sp/>180};</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem" kindref="compound">PlatooningProblem</ref><sp/>{</highlight></codeline>
+<codeline lineno="25" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem_1afaad2533c84ecf56d28b0848410ca29f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem_1afaad2533c84ecf56d28b0848410ca29f" kindref="member">ocp</ref>;</highlight></codeline>
+<codeline lineno="26" refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem_1a919449a70bfca330f0c99653129867e1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem_1a919449a70bfca330f0c99653129867e1" kindref="member">ref</ref>;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone::qpalm::problems</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="config_8hpp_1a1f4757b3a02c15cce8aeaa6906e55c17" kindref="member">CYQLONE_NS</ref>(<ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>::<ref refid="namespacecyqlone_1_1qpalm_1_1problems" kindref="compound">qpalm::problems</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal">PlatooningProblem<sp/>CYQLONE_EXAMPLE_PROBLEMS_EXPORT<sp/>platooning(PlatooningParams<sp/>p);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone::qpalm::problems)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp"/>
+  </compounddef>
+</doxygen>

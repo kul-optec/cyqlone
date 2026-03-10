@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1detail_1_1backend__stats__type_3_01CyQPALMBackend_3_01VL_00_01DefaultOrder_01_4_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::detail::backend_stats_type&lt; CyQPALMBackend&lt; VL, DefaultOrder &gt; &gt;</compoundname>
+    <includes refid="ocp-backend-cyqlone_8hpp" local="no">cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>index_t</type>
+        <declname>VL</declname>
+        <defname>VL</defname>
+      </param>
+      <param>
+        <type><ref refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95bae" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">StorageOrder</ref></type>
+        <declname>DefaultOrder</declname>
+        <defname>DefaultOrder</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1detail_1_1backend__stats__type_3_01CyQPALMBackend_3_01VL_00_01DefaultOrder_01_4_01_4_1a0a25bc568bbf94ed6cb8909c9d0c57a6" prot="public" static="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats" kindref="compound">CyQPALMBackendStats</ref></type>
+        <definition>using cyqlone::qpalm::detail::backend_stats_type&lt; CyQPALMBackend&lt; VL, DefaultOrder &gt; &gt;::type = CyQPALMBackendStats</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>cyqlone::qpalm::detail::backend_stats_type&lt; CyQPALMBackend&lt; VL, DefaultOrder &gt; &gt;::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="65" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::detail::backend_stats_type&lt; CyQPALMBackend&lt; VL, DefaultOrder &gt; &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1detail_1_1backend__stats__type_3_01CyQPALMBackend_3_01VL_00_01DefaultOrder_01_4_01_4"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="64" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="64" bodyend="66"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1detail_1_1backend__stats__type_3_01CyQPALMBackend_3_01VL_00_01DefaultOrder_01_4_01_4_1a0a25bc568bbf94ed6cb8909c9d0c57a6" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::detail::backend_stats_type&lt; CyQPALMBackend&lt; VL, DefaultOrder &gt; &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

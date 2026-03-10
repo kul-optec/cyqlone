@@ -1,0 +1,1451 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: Exporting and loading .mat files</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('group__topic-util-matio.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Exporting and loading .mat files <div class="ingroups"><a class="el" href="group__topic-utilities.html">Utilities</a></div></div></div>
+</div><!--header-->
+<div class="contents">
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Functions for exporting and loading matrices and OCP data to and from .mat files. </p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
+Files</h2></td></tr>
+<tr class="memitem:matio_2Ehpp" id="r_matio_2Ehpp"><td class="memItemLeft">file &#160;</td><td class="memItemRight"><a class="el" href="matio_8hpp.html">matio.hpp</a></td></tr>
+<tr class="memdesc:matio_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functions for exporting and loading matrices and OCP data to and from .mat files. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:gac7f041cab5ae3c1471243d06da6f6469" id="r_gac7f041cab5ae3c1471243d06da6f6469"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">cyqlone::mat_t</a> = ::_mat_t</td></tr>
+<tr class="memdesc:gac7f041cab5ae3c1471243d06da6f6469"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incomplete matio struct type.  <br /></td></tr>
+<tr class="memitem:gaceac871d1342196be7468d2bb3fcd386" id="r_gaceac871d1342196be7468d2bb3fcd386"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#gaceac871d1342196be7468d2bb3fcd386">cyqlone::MatFilePtr</a> = std::unique_ptr&lt;<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a>, int (*)(<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *)&gt;</td></tr>
+<tr class="memdesc:gaceac871d1342196be7468d2bb3fcd386"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owning handle to a matio file. The file will be closed when the handle goes out of scope.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ga8e268a5d303978ce26bb366dd8db62e4" id="r_ga8e268a5d303978ce26bb366dd8db62e4"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#ga8e268a5d303978ce26bb366dd8db62e4">cyqlone::MatioOpenMode</a> { <a class="el" href="#gga8e268a5d303978ce26bb366dd8db62e4a7a1a5f3e79fdc91edf2f5ead9d66abb4">cyqlone::MatioOpenMode::Read</a>
+, <a class="el" href="#gga8e268a5d303978ce26bb366dd8db62e4a1129c0e4d43f2d121652a7302712cff6">cyqlone::MatioOpenMode::Write</a>
+ }</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga9a8d93b3cfc96c16fa9c70b969388c50" id="r_ga9a8d93b3cfc96c16fa9c70b969388c50"><td class="memItemLeft"><a class="el" href="#gaceac871d1342196be7468d2bb3fcd386">MatFilePtr</a>&#160;</td><td class="memItemRight"><a class="el" href="#ga9a8d93b3cfc96c16fa9c70b969388c50">cyqlone::open_mat</a> (const std::filesystem::path &amp;filename, <a class="el" href="#ga8e268a5d303978ce26bb366dd8db62e4">MatioOpenMode</a> mode=<a class="el" href="#gga8e268a5d303978ce26bb366dd8db62e4a7a1a5f3e79fdc91edf2f5ead9d66abb4">MatioOpenMode::Read</a>)</td></tr>
+<tr class="memdesc:ga9a8d93b3cfc96c16fa9c70b969388c50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a .mat file for reading or writing.  <br /></td></tr>
+<tr class="memitem:ga5b9bfdc6a8d4f53838511888e6724cb8" id="r_ga5b9bfdc6a8d4f53838511888e6724cb8"><td class="memItemLeft"><a class="el" href="#gaceac871d1342196be7468d2bb3fcd386">MatFilePtr</a>&#160;</td><td class="memItemRight"><a class="el" href="#ga5b9bfdc6a8d4f53838511888e6724cb8">cyqlone::create_mat</a> (const std::filesystem::path &amp;filename)</td></tr>
+<tr class="memdesc:ga5b9bfdc6a8d4f53838511888e6724cb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create and open a new .mat file for writing.  <br /></td></tr>
+<tr class="memitem:ga937f13ae7ced1e23973c106d256995a0" id="r_ga937f13ae7ced1e23973c106d256995a0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga937f13ae7ced1e23973c106d256995a0">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, float value)</td></tr>
+<tr class="memdesc:ga937f13ae7ced1e23973c106d256995a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga42854ade7f449f8478e5e3015d800a30" id="r_ga42854ade7f449f8478e5e3015d800a30"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga42854ade7f449f8478e5e3015d800a30">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, double value)</td></tr>
+<tr class="memdesc:ga42854ade7f449f8478e5e3015d800a30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga98ba9fcc8ae30f52267a6ed391911aa5" id="r_ga98ba9fcc8ae30f52267a6ed391911aa5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga98ba9fcc8ae30f52267a6ed391911aa5">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, short value)</td></tr>
+<tr class="memdesc:ga98ba9fcc8ae30f52267a6ed391911aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga318cacc90af5fd74e3949f88a3a0c7e3" id="r_ga318cacc90af5fd74e3949f88a3a0c7e3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga318cacc90af5fd74e3949f88a3a0c7e3">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, int value)</td></tr>
+<tr class="memdesc:ga318cacc90af5fd74e3949f88a3a0c7e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga3dd29ca4a01d166d48251c7a5ea8ce34" id="r_ga3dd29ca4a01d166d48251c7a5ea8ce34"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga3dd29ca4a01d166d48251c7a5ea8ce34">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, long value)</td></tr>
+<tr class="memdesc:ga3dd29ca4a01d166d48251c7a5ea8ce34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gaea09b40b9de36a89d1c91e595170c7c5" id="r_gaea09b40b9de36a89d1c91e595170c7c5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gaea09b40b9de36a89d1c91e595170c7c5">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, long long value)</td></tr>
+<tr class="memdesc:gaea09b40b9de36a89d1c91e595170c7c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga60956f86298592566c35039d92a5edc3" id="r_ga60956f86298592566c35039d92a5edc3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga60956f86298592566c35039d92a5edc3">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, unsigned short value)</td></tr>
+<tr class="memdesc:ga60956f86298592566c35039d92a5edc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gafecae51b359b38c163783aba289d7218" id="r_gafecae51b359b38c163783aba289d7218"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gafecae51b359b38c163783aba289d7218">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, unsigned int value)</td></tr>
+<tr class="memdesc:gafecae51b359b38c163783aba289d7218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga1537cff5aed44fd0e58c4fee61675161" id="r_ga1537cff5aed44fd0e58c4fee61675161"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga1537cff5aed44fd0e58c4fee61675161">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, unsigned long value)</td></tr>
+<tr class="memdesc:ga1537cff5aed44fd0e58c4fee61675161"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga07ddf7772fe145d98e1ebdf2d9677cc1" id="r_ga07ddf7772fe145d98e1ebdf2d9677cc1"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga07ddf7772fe145d98e1ebdf2d9677cc1">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, unsigned long long value)</td></tr>
+<tr class="memdesc:ga07ddf7772fe145d98e1ebdf2d9677cc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gaaf4aac1a36819fc07e647af186b19e76" id="r_gaaf4aac1a36819fc07e647af186b19e76"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gaaf4aac1a36819fc07e647af186b19e76">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const double, index_t &gt; data)</td></tr>
+<tr class="memdesc:gaaf4aac1a36819fc07e647af186b19e76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a matrix to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gad4f62a7347cceafe8574c7e741f991cf" id="r_gad4f62a7347cceafe8574c7e741f991cf"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gad4f62a7347cceafe8574c7e741f991cf">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const float, index_t &gt; data)</td></tr>
+<tr class="memdesc:gad4f62a7347cceafe8574c7e741f991cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a matrix to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga7f4118c8f4b3b9fd0dccfc578989e2b6" id="r_ga7f4118c8f4b3b9fd0dccfc578989e2b6"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga7f4118c8f4b3b9fd0dccfc578989e2b6">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1View.html">batmat::matrix::View</a>&lt; const double, index_t &gt; data)</td></tr>
+<tr class="memdesc:ga7f4118c8f4b3b9fd0dccfc578989e2b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a batch of matrices to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gadc1a730925581865e91ec60b5c2d1cc0" id="r_gadc1a730925581865e91ec60b5c2d1cc0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gadc1a730925581865e91ec60b5c2d1cc0">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1View.html">batmat::matrix::View</a>&lt; const float, index_t &gt; data)</td></tr>
+<tr class="memdesc:gadc1a730925581865e91ec60b5c2d1cc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a batch of matrices to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga81a3620a6c3dabf0e6bfd8f56960c300" id="r_ga81a3620a6c3dabf0e6bfd8f56960c300"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga81a3620a6c3dabf0e6bfd8f56960c300">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const float &gt; data)</td></tr>
+<tr class="memdesc:ga81a3620a6c3dabf0e6bfd8f56960c300"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga581b8a2280d7eff0b756086643618db8" id="r_ga581b8a2280d7eff0b756086643618db8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga581b8a2280d7eff0b756086643618db8">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const double &gt; data)</td></tr>
+<tr class="memdesc:ga581b8a2280d7eff0b756086643618db8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga8ce5583b813db30a7ff21fb2568a3b3b" id="r_ga8ce5583b813db30a7ff21fb2568a3b3b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga8ce5583b813db30a7ff21fb2568a3b3b">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const unsigned short &gt; data)</td></tr>
+<tr class="memdesc:ga8ce5583b813db30a7ff21fb2568a3b3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga2a4285ac5b76e2829f06405eeaa7f484" id="r_ga2a4285ac5b76e2829f06405eeaa7f484"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga2a4285ac5b76e2829f06405eeaa7f484">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const unsigned int &gt; data)</td></tr>
+<tr class="memdesc:ga2a4285ac5b76e2829f06405eeaa7f484"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gadeddae83552dc401d00f90d86df1e610" id="r_gadeddae83552dc401d00f90d86df1e610"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gadeddae83552dc401d00f90d86df1e610">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const unsigned long &gt; data)</td></tr>
+<tr class="memdesc:gadeddae83552dc401d00f90d86df1e610"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gac2fda9834d3303e31d9fb598ef949809" id="r_gac2fda9834d3303e31d9fb598ef949809"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gac2fda9834d3303e31d9fb598ef949809">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const unsigned long long &gt; data)</td></tr>
+<tr class="memdesc:gac2fda9834d3303e31d9fb598ef949809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gaeac3d6a0248c962a3d5b29a91a0d08d0" id="r_gaeac3d6a0248c962a3d5b29a91a0d08d0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gaeac3d6a0248c962a3d5b29a91a0d08d0">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const short &gt; data)</td></tr>
+<tr class="memdesc:gaeac3d6a0248c962a3d5b29a91a0d08d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gaa20a79941500e76a4777644e83df8aa0" id="r_gaa20a79941500e76a4777644e83df8aa0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gaa20a79941500e76a4777644e83df8aa0">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const int &gt; data)</td></tr>
+<tr class="memdesc:gaa20a79941500e76a4777644e83df8aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga9007be7514cd0af283eb395d3396acc2" id="r_ga9007be7514cd0af283eb395d3396acc2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga9007be7514cd0af283eb395d3396acc2">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const long &gt; data)</td></tr>
+<tr class="memdesc:ga9007be7514cd0af283eb395d3396acc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gafb115ff7b2443481e6480f95caa3aaa0" id="r_gafb115ff7b2443481e6480f95caa3aaa0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gafb115ff7b2443481e6480f95caa3aaa0">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; const long long &gt; data)</td></tr>
+<tr class="memdesc:gafb115ff7b2443481e6480f95caa3aaa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a vector to an open .mat file.  <br /></td></tr>
+<tr class="memitem:gae79d8af02b2c40cfa0b8edd01ff7fa94" id="r_gae79d8af02b2c40cfa0b8edd01ff7fa94"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gae79d8af02b2c40cfa0b8edd01ff7fa94">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, const <a class="el" href="structcyqlone_1_1SparseMatrix.html">SparseMatrix</a> &amp;<a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#aa93224d87d900a2dacc032305840169b">matrix</a>)</td></tr>
+<tr class="memdesc:gae79d8af02b2c40cfa0b8edd01ff7fa94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a sparse matrix to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga043f9e47579e7bf1529ad7baa0c86a12" id="r_ga043f9e47579e7bf1529ad7baa0c86a12"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga043f9e47579e7bf1529ad7baa0c86a12">cyqlone::add_to_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memdesc:ga043f9e47579e7bf1529ad7baa0c86a12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the data from a <a class="el" href="structcyqlone_1_1LinearOCPStorage.html" title="Storage for a linear-quadratic OCP of the form.">LinearOCPStorage</a> to an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga9811702bc5a357d1064eb05bff17d4b6" id="r_ga9811702bc5a357d1064eb05bff17d4b6"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga9811702bc5a357d1064eb05bff17d4b6">cyqlone::read_from_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memdesc:ga9811702bc5a357d1064eb05bff17d4b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a <a class="el" href="structcyqlone_1_1LinearOCPStorage.html" title="Storage for a linear-quadratic OCP of the form.">LinearOCPStorage</a> from a .mat file.  <br /></td></tr>
+<tr class="memitem:ga8400d97982852012a2f51f369a0da870" id="r_ga8400d97982852012a2f51f369a0da870"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga8400d97982852012a2f51f369a0da870">cyqlone::read_from_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::vector&lt; float &gt; &amp;data)</td></tr>
+<tr class="memdesc:ga8400d97982852012a2f51f369a0da870"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a vector from an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga6f27d652223be08a963b98316c4b7b45" id="r_ga6f27d652223be08a963b98316c4b7b45"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga6f27d652223be08a963b98316c4b7b45">cyqlone::read_from_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::vector&lt; double &gt; &amp;data)</td></tr>
+<tr class="memdesc:ga6f27d652223be08a963b98316c4b7b45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a vector from an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga6d5e9459f93f03c070fed01a07cb66ba" id="r_ga6d5e9459f93f03c070fed01a07cb66ba"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga6d5e9459f93f03c070fed01a07cb66ba">cyqlone::read_from_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; float &gt; data)</td></tr>
+<tr class="memdesc:ga6d5e9459f93f03c070fed01a07cb66ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a vector from an open .mat file.  <br /></td></tr>
+<tr class="memitem:ga710eb1987fa4f8b1fda296b05fdfc685" id="r_ga710eb1987fa4f8b1fda296b05fdfc685"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ga710eb1987fa4f8b1fda296b05fdfc685">cyqlone::read_from_mat</a> (<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *mat, const std::string &amp;varname, std::span&lt; double &gt; data)</td></tr>
+<tr class="memdesc:ga710eb1987fa4f8b1fda296b05fdfc685"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a vector from an open .mat file.  <br /></td></tr>
+<tr class="memitem:gaf1ab96eebb1218ba8573c6d61ec461bf" id="r_gaf1ab96eebb1218ba8573c6d61ec461bf"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#gaf1ab96eebb1218ba8573c6d61ec461bf">cyqlone::ocp_dump_mat</a> (const std::filesystem::path &amp;filename, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memdesc:gaf1ab96eebb1218ba8573c6d61ec461bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump the data from a <a class="el" href="structcyqlone_1_1LinearOCPStorage.html" title="Storage for a linear-quadratic OCP of the form.">LinearOCPStorage</a> to a new .mat file.  <br /></td></tr>
+</table>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="gac7f041cab5ae3c1471243d06da6f6469" name="gac7f041cab5ae3c1471243d06da6f6469"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac7f041cab5ae3c1471243d06da6f6469">&#9670;&#160;</a></span>mat_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">cyqlone::mat_t</a> = ::_mat_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Incomplete matio struct type. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8hpp_source.html#l00024">24</a> of file <a class="el" href="matio_8hpp_source.html">matio.hpp</a>.</p>
+
+</div>
+</div>
+<a id="gaceac871d1342196be7468d2bb3fcd386" name="gaceac871d1342196be7468d2bb3fcd386"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaceac871d1342196be7468d2bb3fcd386">&#9670;&#160;</a></span>MatFilePtr</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::unique_ptr&lt; <a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a>, decltype(&amp;Mat_Close)&gt; <a class="el" href="#gaceac871d1342196be7468d2bb3fcd386">cyqlone::MatFilePtr</a> = std::unique_ptr&lt;<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a>, int (*)(<a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Owning handle to a matio file. The file will be closed when the handle goes out of scope. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8hpp_source.html#l00026">26</a> of file <a class="el" href="matio_8hpp_source.html">matio.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<a id="ga8e268a5d303978ce26bb366dd8db62e4" name="ga8e268a5d303978ce26bb366dd8db62e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8e268a5d303978ce26bb366dd8db62e4">&#9670;&#160;</a></span>MatioOpenMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#ga8e268a5d303978ce26bb366dd8db62e4">cyqlone::MatioOpenMode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga8e268a5d303978ce26bb366dd8db62e4a7a1a5f3e79fdc91edf2f5ead9d66abb4" name="gga8e268a5d303978ce26bb366dd8db62e4a7a1a5f3e79fdc91edf2f5ead9d66abb4"></a>Read&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga8e268a5d303978ce26bb366dd8db62e4a1129c0e4d43f2d121652a7302712cff6" name="gga8e268a5d303978ce26bb366dd8db62e4a1129c0e4d43f2d121652a7302712cff6"></a>Write&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="matio_8hpp_source.html#l00028">28</a> of file <a class="el" href="matio_8hpp_source.html">matio.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="ga9a8d93b3cfc96c16fa9c70b969388c50" name="ga9a8d93b3cfc96c16fa9c70b969388c50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9a8d93b3cfc96c16fa9c70b969388c50">&#9670;&#160;</a></span>open_mat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#gaceac871d1342196be7468d2bb3fcd386">MatFilePtr</a> cyqlone::open_mat </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;</td>          <td class="paramname"><span class="paramname"><em>filename</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#ga8e268a5d303978ce26bb366dd8db62e4">MatioOpenMode</a></td>          <td class="paramname"><span class="paramname"><em>mode</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="#gga8e268a5d303978ce26bb366dd8db62e4a7a1a5f3e79fdc91edf2f5ead9d66abb4">MatioOpenMode::Read</a></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Opens a .mat file for reading or writing. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">runtime_error</td><td>if the file cannot be opened. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00089">89</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga5b9bfdc6a8d4f53838511888e6724cb8" name="ga5b9bfdc6a8d4f53838511888e6724cb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5b9bfdc6a8d4f53838511888e6724cb8">&#9670;&#160;</a></span>create_mat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#gaceac871d1342196be7468d2bb3fcd386">MatFilePtr</a> cyqlone::create_mat </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;</td>          <td class="paramname"><span class="paramname"><em>filename</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Create and open a new .mat file for writing. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">runtime_error</td><td>if the file cannot be opened. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a82">benchmarks/cyqpalm/spring-mass.cpp</a>, <a class="el" href="solve-block-tridiagonal_8cpp-example.html#a20">solve-block-tridiagonal.cpp</a>, <a class="el" href="solve-ocp_8cpp-example.html#a44">solve-ocp.cpp</a>, and <a class="el" href="test_2test-pcr_8cpp-example.html#a64">test/test-pcr.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00097">97</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga937f13ae7ced1e23973c106d256995a0" name="ga937f13ae7ced1e23973c106d256995a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga937f13ae7ced1e23973c106d256995a0">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[1/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a83">benchmarks/cyqpalm/spring-mass.cpp</a>, <a class="el" href="solve-block-tridiagonal_8cpp-example.html#a21">solve-block-tridiagonal.cpp</a>, <a class="el" href="solve-ocp_8cpp-example.html#a45">solve-ocp.cpp</a>, and <a class="el" href="test_2test-pcr_8cpp-example.html#a65">test/test-pcr.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00122">122</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga42854ade7f449f8478e5e3015d800a30" name="ga42854ade7f449f8478e5e3015d800a30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga42854ade7f449f8478e5e3015d800a30">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[2/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00126">126</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga98ba9fcc8ae30f52267a6ed391911aa5" name="ga98ba9fcc8ae30f52267a6ed391911aa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga98ba9fcc8ae30f52267a6ed391911aa5">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[3/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">short</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00146">146</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga318cacc90af5fd74e3949f88a3a0c7e3" name="ga318cacc90af5fd74e3949f88a3a0c7e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga318cacc90af5fd74e3949f88a3a0c7e3">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[4/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00150">150</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga3dd29ca4a01d166d48251c7a5ea8ce34" name="ga3dd29ca4a01d166d48251c7a5ea8ce34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3dd29ca4a01d166d48251c7a5ea8ce34">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[5/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00154">154</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gaea09b40b9de36a89d1c91e595170c7c5" name="gaea09b40b9de36a89d1c91e595170c7c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaea09b40b9de36a89d1c91e595170c7c5">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[6/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long long</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00158">158</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga60956f86298592566c35039d92a5edc3" name="ga60956f86298592566c35039d92a5edc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga60956f86298592566c35039d92a5edc3">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[7/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned short</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00130">130</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gafecae51b359b38c163783aba289d7218" name="gafecae51b359b38c163783aba289d7218"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafecae51b359b38c163783aba289d7218">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[8/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00134">134</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga1537cff5aed44fd0e58c4fee61675161" name="ga1537cff5aed44fd0e58c4fee61675161"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1537cff5aed44fd0e58c4fee61675161">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[9/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00138">138</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga07ddf7772fe145d98e1ebdf2d9677cc1" name="ga07ddf7772fe145d98e1ebdf2d9677cc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga07ddf7772fe145d98e1ebdf2d9677cc1">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[10/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long long</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a value to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00142">142</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gaaf4aac1a36819fc07e647af186b19e76" name="gaaf4aac1a36819fc07e647af186b19e76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaaf4aac1a36819fc07e647af186b19e76">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[11/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const double, index_t &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a matrix to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00162">162</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gad4f62a7347cceafe8574c7e741f991cf" name="gad4f62a7347cceafe8574c7e741f991cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad4f62a7347cceafe8574c7e741f991cf">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[12/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1MatrixView.html">guanaqo::MatrixView</a>&lt; const float, index_t &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a matrix to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00167">167</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga7f4118c8f4b3b9fd0dccfc578989e2b6" name="ga7f4118c8f4b3b9fd0dccfc578989e2b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7f4118c8f4b3b9fd0dccfc578989e2b6">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[13/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1View.html">batmat::matrix::View</a>&lt; const double, index_t &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a batch of matrices to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00192">192</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gadc1a730925581865e91ec60b5c2d1cc0" name="gadc1a730925581865e91ec60b5c2d1cc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadc1a730925581865e91ec60b5c2d1cc0">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[14/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1View.html">batmat::matrix::View</a>&lt; const float, index_t &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a batch of matrices to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00197">197</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga81a3620a6c3dabf0e6bfd8f56960c300" name="ga81a3620a6c3dabf0e6bfd8f56960c300"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga81a3620a6c3dabf0e6bfd8f56960c300">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[15/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const float &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00202">202</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga581b8a2280d7eff0b756086643618db8" name="ga581b8a2280d7eff0b756086643618db8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga581b8a2280d7eff0b756086643618db8">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[16/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const double &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00206">206</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga8ce5583b813db30a7ff21fb2568a3b3b" name="ga8ce5583b813db30a7ff21fb2568a3b3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8ce5583b813db30a7ff21fb2568a3b3b">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[17/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const unsigned short &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00210">210</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga2a4285ac5b76e2829f06405eeaa7f484" name="ga2a4285ac5b76e2829f06405eeaa7f484"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2a4285ac5b76e2829f06405eeaa7f484">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[18/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const unsigned int &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00215">215</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gadeddae83552dc401d00f90d86df1e610" name="gadeddae83552dc401d00f90d86df1e610"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadeddae83552dc401d00f90d86df1e610">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[19/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const unsigned long &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00219">219</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gac2fda9834d3303e31d9fb598ef949809" name="gac2fda9834d3303e31d9fb598ef949809"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac2fda9834d3303e31d9fb598ef949809">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[20/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const unsigned long long &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00223">223</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gaeac3d6a0248c962a3d5b29a91a0d08d0" name="gaeac3d6a0248c962a3d5b29a91a0d08d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaeac3d6a0248c962a3d5b29a91a0d08d0">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[21/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const short &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00228">228</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gaa20a79941500e76a4777644e83df8aa0" name="gaa20a79941500e76a4777644e83df8aa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa20a79941500e76a4777644e83df8aa0">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[22/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const int &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00232">232</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga9007be7514cd0af283eb395d3396acc2" name="ga9007be7514cd0af283eb395d3396acc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9007be7514cd0af283eb395d3396acc2">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[23/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const long &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00236">236</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gafb115ff7b2443481e6480f95caa3aaa0" name="gafb115ff7b2443481e6480f95caa3aaa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafb115ff7b2443481e6480f95caa3aaa0">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[24/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const long long &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a vector to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00240">240</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gae79d8af02b2c40cfa0b8edd01ff7fa94" name="gae79d8af02b2c40cfa0b8edd01ff7fa94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae79d8af02b2c40cfa0b8edd01ff7fa94">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[25/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1SparseMatrix.html">SparseMatrix</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>matrix</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add a sparse matrix to an open .mat file. </p>
+<p>On the Python side, you can use the following code to load the sparse matrix: </p><div class="fragment"><div class="line"><span class="keyword">from</span> scipy.io <span class="keyword">import</span> loadmat</div>
+<div class="line"><span class="keyword">from</span> scipy.sparse <span class="keyword">import</span> coo_matrix</div>
+<div class="line">mat = loadmat(<span class="stringliteral">&quot;file.mat&quot;</span>)</div>
+<div class="line">data = mat[<span class="stringliteral">&quot;varname&quot;</span>][0, 0]</div>
+<div class="line">shape = data[<span class="stringliteral">&quot;num_rows&quot;</span>].item(), data[<span class="stringliteral">&quot;num_cols&quot;</span>].item()</div>
+<div class="line">rows = data[<span class="stringliteral">&quot;row_indices&quot;</span>].flatten()</div>
+<div class="line">cols = data[<span class="stringliteral">&quot;col_indices&quot;</span>].flatten()</div>
+<div class="line">values = data[<span class="stringliteral">&quot;values&quot;</span>].flatten()</div>
+<div class="line">matrix = coo_matrix((values, (rows, cols)), shape=shape)</div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00244">244</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga043f9e47579e7bf1529ad7baa0c86a12" name="ga043f9e47579e7bf1529ad7baa0c86a12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga043f9e47579e7bf1529ad7baa0c86a12">&#9670;&#160;</a></span>add_to_mat() <span class="overload">[26/26]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::add_to_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Add the data from a <a class="el" href="structcyqlone_1_1LinearOCPStorage.html" title="Storage for a linear-quadratic OCP of the form.">LinearOCPStorage</a> to an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00282">282</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga9811702bc5a357d1064eb05bff17d4b6" name="ga9811702bc5a357d1064eb05bff17d4b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9811702bc5a357d1064eb05bff17d4b6">&#9670;&#160;</a></span>read_from_mat() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::read_from_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Load a <a class="el" href="structcyqlone_1_1LinearOCPStorage.html" title="Storage for a linear-quadratic OCP of the form.">LinearOCPStorage</a> from a .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00365">365</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga8400d97982852012a2f51f369a0da870" name="ga8400d97982852012a2f51f369a0da870"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8400d97982852012a2f51f369a0da870">&#9670;&#160;</a></span>read_from_mat() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::read_from_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; float &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Load a vector from an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00507">507</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga6f27d652223be08a963b98316c4b7b45" name="ga6f27d652223be08a963b98316c4b7b45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6f27d652223be08a963b98316c4b7b45">&#9670;&#160;</a></span>read_from_mat() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::read_from_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Load a vector from an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00515">515</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga6d5e9459f93f03c070fed01a07cb66ba" name="ga6d5e9459f93f03c070fed01a07cb66ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6d5e9459f93f03c070fed01a07cb66ba">&#9670;&#160;</a></span>read_from_mat() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::read_from_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Load a vector from an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00491">491</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ga710eb1987fa4f8b1fda296b05fdfc685" name="ga710eb1987fa4f8b1fda296b05fdfc685"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga710eb1987fa4f8b1fda296b05fdfc685">&#9670;&#160;</a></span>read_from_mat() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::read_from_mat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#gac7f041cab5ae3c1471243d06da6f6469">mat_t</a> *</td>          <td class="paramname"><span class="paramname"><em>mat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; double &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Load a vector from an open .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00499">499</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+<a id="gaf1ab96eebb1218ba8573c6d61ec461bf" name="gaf1ab96eebb1218ba8573c6d61ec461bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf1ab96eebb1218ba8573c6d61ec461bf">&#9670;&#160;</a></span>ocp_dump_mat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::ocp_dump_mat </td>
+          <td>(</td>
+          <td class="paramtype">const std::filesystem::path &amp;</td>          <td class="paramname"><span class="paramname"><em>filename</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="matio_8hpp.html">cyqlone/matio.hpp</a>&gt;</code></p>
+
+<p>Dump the data from a <a class="el" href="structcyqlone_1_1LinearOCPStorage.html" title="Storage for a linear-quadratic OCP of the form.">LinearOCPStorage</a> to a new .mat file. </p>
+
+<p class="definition">Definition at line <a class="el" href="matio_8cpp_source.html#l00523">523</a> of file <a class="el" href="matio_8cpp_source.html">matio.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

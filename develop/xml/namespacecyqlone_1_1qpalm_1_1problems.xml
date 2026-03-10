@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespacecyqlone_1_1qpalm_1_1problems" kind="namespace" language="C++">
+    <compoundname>cyqlone::qpalm::problems</compoundname>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams" prot="public">cyqlone::qpalm::problems::PlatooningParams</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem" prot="public">cyqlone::qpalm::problems::PlatooningProblem</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams" prot="public">cyqlone::qpalm::problems::SpringMassParams</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem" prot="public">cyqlone::qpalm::problems::SpringMassProblem</innerclass>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" prot="public" static="no">
+        <type>Eigen::MatrixX&lt; real_t &gt;</type>
+        <definition>typedef Eigen::MatrixX&lt; real_t &gt; cyqlone::qpalm::problems::eigen_mat = Eigen::MatrixX&lt;real_t&gt;</definition>
+        <argsstring></argsstring>
+        <name>eigen_mat</name>
+        <qualifiedname>cyqlone::qpalm::problems::eigen_mat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/zoh.hpp" line="9" column="1" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/zoh.hpp" bodystart="9" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref></type>
+        <definition>LinearOCPStorage cyqlone::qpalm::problems::load_from_csv</definition>
+        <argsstring>(const fs::path &amp;folder, const std::string &amp;name)</argsstring>
+        <name>load_from_csv</name>
+        <qualifiedname>cyqlone::qpalm::problems::load_from_csv</qualifiedname>
+        <param>
+          <type>const fs::path &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/src/csv.cpp" line="12" column="18" bodyfile="src/example-problems/src/csv.cpp" bodystart="12" bodyend="112" declfile="src/example-problems/include/cyqlone/qpalm/example-problems/csv.hpp" declline="13" declcolumn="19"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" compoundref="ocp_8hpp" startline="127" endline="131">cyqlone::LinearOCPStorage::A</references>
+        <references refid="group__linalg__views_1ga2ccef3dcd53320ccda2be9948781c65b">guanaqo::as_view</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" compoundref="ocp_8hpp" startline="132" endline="136">cyqlone::LinearOCPStorage::B</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">cyqlone::LinearOCPStorage::b</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">cyqlone::LinearOCPStorage::b_max</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">cyqlone::LinearOCPStorage::b_min</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">cyqlone::LinearOCPStorage::C</references>
+        <references refid="group__io_1ga7b55c259788953b68dc075f6c3f3859a">guanaqo::io::csv_read</references>
+        <references refid="group__io_1ga087c9290a0520b3f1b02b6787c921604">guanaqo::io::csv_read_row</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" compoundref="ocp_8hpp" startline="111" endline="115">cyqlone::LinearOCPStorage::D</references>
+        <references refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">load_from_csv</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">cyqlone::LinearOCPStorage::Q</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">cyqlone::LinearOCPStorage::qr</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" compoundref="ocp_8hpp" startline="80" endline="84">cyqlone::LinearOCPStorage::R</references>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">load_from_csv</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem" kindref="compound">PlatooningProblem</ref></type>
+        <definition>PlatooningProblem cyqlone::qpalm::problems::platooning</definition>
+        <argsstring>(PlatooningParams p)</argsstring>
+        <name>platooning</name>
+        <qualifiedname>cyqlone::qpalm::problems::platooning</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams" kindref="compound">PlatooningParams</ref></type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/src/platooning.cpp" line="11" column="19" bodyfile="src/example-problems/src/platooning.cpp" bodystart="11" bodyend="101" declfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" declline="33" declcolumn="20"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" compoundref="ocp_8hpp" startline="127" endline="131">cyqlone::LinearOCPStorage::A</references>
+        <references refid="group__linalg__views_1ga2ccef3dcd53320ccda2be9948781c65b">guanaqo::as_view</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" compoundref="ocp_8hpp" startline="132" endline="136">cyqlone::LinearOCPStorage::B</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">cyqlone::LinearOCPStorage::b</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">cyqlone::LinearOCPStorage::b_max</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">cyqlone::LinearOCPStorage::b_min</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">cyqlone::LinearOCPStorage::C</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" compoundref="ocp_8hpp" startline="111" endline="115">cyqlone::LinearOCPStorage::D</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">cyqlone::LinearOCPStorage::dim</references>
+        <references refid="namespacecyqlone_1_1qpalm_1_1problems_1afba022677ff29a053cf23e0a4720da11" compoundref="zoh_8hpp" startline="11" endline="21">discretize_zoh</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a637adefd6c549cd259f10f7d12118539" compoundref="platooning_8hpp" startline="16">cyqlone::qpalm::problems::PlatooningParams::dist_init</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" compoundref="platooning_8hpp" startline="15">cyqlone::qpalm::problems::PlatooningParams::dist_min</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a71a4b628fd4a6dad01041e374a17a648" compoundref="platooning_8hpp" startline="13">cyqlone::qpalm::problems::PlatooningParams::F_max</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1ac81cc8bbaa2da1b7342dfdb0d9bbbb93" compoundref="platooning_8hpp" startline="12">cyqlone::qpalm::problems::PlatooningParams::friction</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a0b43e23740be9973cabb06551fa569a7" compoundref="platooning_8hpp" startline="21" endline="21">cyqlone::qpalm::problems::PlatooningParams::masses</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a99b5506c96a0fee3aa95cdef7f3d92d3" compoundref="platooning_8hpp" startline="18">cyqlone::qpalm::problems::PlatooningParams::N_horiz</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1afa44560fbbbbd9e72ceb56b2c68a083a" compoundref="platooning_8hpp" startline="17">cyqlone::qpalm::problems::PlatooningParams::p_target</references>
+        <references refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">platooning</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">cyqlone::LinearOCPStorage::Q</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" compoundref="ocp_8hpp" startline="80" endline="84">cyqlone::LinearOCPStorage::R</references>
+        <references refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" compoundref="conversion_8cpp" startline="9" endline="35">cyqlone::reference_to_gradient</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a278998f75a9a28795fa59467492856e7" compoundref="platooning_8hpp" startline="20">cyqlone::qpalm::problems::PlatooningParams::scale_cost</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a146ecce5b3ebc178809def4438370946" compoundref="platooning_8hpp" startline="19">cyqlone::qpalm::problems::PlatooningParams::T_horiz</references>
+        <references refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" compoundref="solve-block-tridiagonal_8cpp" startline="19">v</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" compoundref="platooning_8hpp" startline="14">cyqlone::qpalm::problems::PlatooningParams::v_max</references>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">platooning</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem" kindref="compound">SpringMassProblem</ref></type>
+        <definition>SpringMassProblem cyqlone::qpalm::problems::spring_mass</definition>
+        <argsstring>(SpringMassParams p)</argsstring>
+        <name>spring_mass</name>
+        <qualifiedname>cyqlone::qpalm::problems::spring_mass</qualifiedname>
+        <param>
+          <type><ref refid="structSpringMassParams" kindref="compound">SpringMassParams</ref></type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/src/spring-mass.cpp" line="15" column="19" bodyfile="src/example-problems/src/spring-mass.cpp" bodystart="15" bodyend="159" declfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" declline="140" declcolumn="20"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" compoundref="ocp_8hpp" startline="127" endline="131">cyqlone::LinearOCPStorage::A</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac172425aa0e56c2a6db220e71e700b3e">cyqlone::qpalm::problems::SpringMassParams::actuator_placement</references>
+        <references refid="group__linalg__views_1ga2ccef3dcd53320ccda2be9948781c65b">guanaqo::as_view</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" compoundref="ocp_8hpp" startline="132" endline="136">cyqlone::LinearOCPStorage::B</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">cyqlone::LinearOCPStorage::b</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">cyqlone::LinearOCPStorage::b_max</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">cyqlone::LinearOCPStorage::b_min</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">cyqlone::LinearOCPStorage::C</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" compoundref="ocp_8hpp" startline="111" endline="115">cyqlone::LinearOCPStorage::D</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">cyqlone::LinearOCPStorage::dim</references>
+        <references refid="namespacecyqlone_1_1qpalm_1_1problems_1afba022677ff29a053cf23e0a4720da11" compoundref="zoh_8hpp" startline="11" endline="21">discretize_zoh</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a522c2f182381139c34e576be1652e0d9" compoundref="spring-mass_8hpp" startline="14">cyqlone::qpalm::problems::SpringMassParams::F_max</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1dba013a3d54b283f9a36f97bd5f1f2e" compoundref="spring-mass_8hpp" startline="12">cyqlone::qpalm::problems::SpringMassParams::friction</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849" compoundref="spring-mass_8hpp" startline="32">cyqlone::qpalm::problems::SpringMassParams::IndividualActuators</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ab5a2af96e4f38127c9e16a4581b86679" compoundref="spring-mass_8hpp" startline="13">cyqlone::qpalm::problems::SpringMassParams::k_spring</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a0a29b4bcbbbcb45b1874cd956a811071" compoundref="spring-mass_8hpp" startline="29" endline="29">cyqlone::qpalm::problems::SpringMassParams::masses</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1acfc2b8ef98e88e9b219e1eedd13f4b7b" compoundref="spring-mass_8hpp" startline="30">cyqlone::qpalm::problems::SpringMassParams::n_actuators</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af6edc6dec7fa7b2a9e15766d9748f9b4" compoundref="spring-mass_8hpp" startline="22">cyqlone::qpalm::problems::SpringMassParams::N_horiz</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ae51c660af8c130707f451dde118e4a3c" compoundref="spring-mass_8hpp" startline="15">cyqlone::qpalm::problems::SpringMassParams::p_max</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a20401c1d408994186ca5f1316b346f40" compoundref="spring-mass_8hpp" startline="18">cyqlone::qpalm::problems::SpringMassParams::p_max_f</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a610a7a0c64707d230b7f120570aaf41f" compoundref="spring-mass_8hpp" startline="16">cyqlone::qpalm::problems::SpringMassParams::p_min</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a70e147415444754a12f9d828c7a2d6d6" compoundref="spring-mass_8hpp" startline="17">cyqlone::qpalm::problems::SpringMassParams::p_min_f</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">cyqlone::LinearOCPStorage::Q</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1af8a2fd9a992b8305847a25fd24c9d1bd" compoundref="spring-mass_8hpp" startline="25">cyqlone::qpalm::problems::SpringMassParams::q_pos</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1ac567b9cf366b0a724de6ac966e915e89" compoundref="spring-mass_8hpp" startline="27">cyqlone::qpalm::problems::SpringMassParams::q_pos_f</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a9fbc86d261ebb7bdb01a7f37a58d0174" compoundref="spring-mass_8hpp" startline="24">cyqlone::qpalm::problems::SpringMassParams::q_vel</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a5443953a7bc84041776f986b5fe0e519" compoundref="spring-mass_8hpp" startline="26">cyqlone::qpalm::problems::SpringMassParams::q_vel_f</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" compoundref="ocp_8hpp" startline="80" endline="84">cyqlone::LinearOCPStorage::R</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a1ba21c87e90b5089efb04b787d5b4da9" compoundref="spring-mass_8hpp" startline="28">cyqlone::qpalm::problems::SpringMassParams::r_act</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a30d42f40d22544857de9a609caf07ae2" compoundref="spring-mass_8hpp" startline="33">cyqlone::qpalm::problems::SpringMassParams::RandomActuators</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a617eba72fd8a383f9f58874e67c9e912" compoundref="spring-mass_8hpp" startline="34">cyqlone::qpalm::problems::SpringMassParams::RandomPairsOfActuators</references>
+        <references refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" compoundref="conversion_8cpp" startline="9" endline="35">cyqlone::reference_to_gradient</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6c6b090dc45b6c7e373a408fbefdbe54" compoundref="spring-mass_8hpp" startline="37">cyqlone::qpalm::problems::SpringMassParams::seed</references>
+        <references refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">spring_mass</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a202950abd5806db1f1dec39c2bb3d51b" compoundref="spring-mass_8hpp" startline="23">cyqlone::qpalm::problems::SpringMassParams::T_horiz</references>
+        <references refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" compoundref="solve-block-tridiagonal_8cpp" startline="19">v</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a7aac80e23a91f8e1861dec691d5a03" compoundref="spring-mass_8hpp" startline="19">cyqlone::qpalm::problems::SpringMassParams::v_max</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a6a89e4327b4809fdf0b0e61f111c2dfe" compoundref="spring-mass_8hpp" startline="20">cyqlone::qpalm::problems::SpringMassParams::v_max_f</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a18d1032c9ae1e2b5bbe9df30c50413f1a9ed41af8dca64bf2fe5d84464f710060" compoundref="spring-mass_8hpp" startline="35">cyqlone::qpalm::problems::SpringMassParams::WangBoydActuators</references>
+        <references refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams_1a887fc5679d33abe3be614792cddffd85" compoundref="spring-mass_8hpp" startline="21">cyqlone::qpalm::problems::SpringMassParams::width</references>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a87c3add091c930e9266aaf6c71d5b499" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="106" endline="116">create_problem</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1_1problems_1afba022677ff29a053cf23e0a4720da11" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::tuple&lt; <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref>, <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref> &gt;</type>
+        <definition>std::tuple&lt; eigen_mat, eigen_mat &gt; cyqlone::qpalm::problems::discretize_zoh</definition>
+        <argsstring>(const Eigen::Ref&lt; const eigen_mat &gt; &amp;A, const Eigen::Ref&lt; const eigen_mat &gt; &amp;B, real_t Ts)</argsstring>
+        <name>discretize_zoh</name>
+        <qualifiedname>cyqlone::qpalm::problems::discretize_zoh</qualifiedname>
+        <param>
+          <type>const Eigen::Ref&lt; const <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref> &gt; &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>const Eigen::Ref&lt; const <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref> &gt; &amp;</type>
+          <declname>B</declname>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>Ts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/zoh.hpp" line="11" column="19" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/zoh.hpp" bodystart="11" bodyend="21"/>
+        <references refid="namespacecyqlone_1_1qpalm_1_1problems_1afba022677ff29a053cf23e0a4720da11" compoundref="zoh_8hpp" startline="11" endline="21">discretize_zoh</references>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1ac4ba60b62c874e543030832b2dc7b78b" compoundref="zoh_8hpp" startline="24" endline="35">discretize_zoh</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1afba022677ff29a053cf23e0a4720da11" compoundref="zoh_8hpp" startline="11" endline="21">discretize_zoh</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">platooning</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">spring_mass</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1_1problems_1ac4ba60b62c874e543030832b2dc7b78b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::tuple&lt; <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref>, <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref>, <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref> &gt;</type>
+        <definition>std::tuple&lt; eigen_mat, eigen_mat, eigen_mat &gt; cyqlone::qpalm::problems::discretize_zoh</definition>
+        <argsstring>(const Eigen::Ref&lt; const eigen_mat &gt; &amp;A, const Eigen::Ref&lt; const eigen_mat &gt; &amp;B, const Eigen::Ref&lt; const eigen_mat &gt; &amp;b, real_t Ts)</argsstring>
+        <name>discretize_zoh</name>
+        <qualifiedname>cyqlone::qpalm::problems::discretize_zoh</qualifiedname>
+        <param>
+          <type>const Eigen::Ref&lt; const <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref> &gt; &amp;</type>
+          <declname>A</declname>
+        </param>
+        <param>
+          <type>const Eigen::Ref&lt; const <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref> &gt; &amp;</type>
+          <declname>B</declname>
+        </param>
+        <param>
+          <type>const Eigen::Ref&lt; const <ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref> &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>Ts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/zoh.hpp" line="24" column="1" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/zoh.hpp" bodystart="24" bodyend="35"/>
+        <references refid="namespacecyqlone_1_1qpalm_1_1problems_1afba022677ff29a053cf23e0a4720da11" compoundref="zoh_8hpp" startline="11" endline="21">discretize_zoh</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/csv.hpp" line="9" column="1"/>
+  </compounddef>
+</doxygen>

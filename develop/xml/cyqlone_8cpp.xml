@@ -1,0 +1,682 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="cyqlone_8cpp" kind="file" language="C++">
+    <compoundname>cyqlone.cpp</compoundname>
+    <includes refid="cyqlone_8hpp" local="no">cyqlone/cyqlone.hpp</includes>
+    <includes refid="cr_8tpp" local="no">cyqlone/implementation/cr.tpp</includes>
+    <includes refid="data_8tpp" local="no">cyqlone/implementation/data.tpp</includes>
+    <includes refid="factor_8tpp" local="no">cyqlone/implementation/factor.tpp</includes>
+    <includes refid="indexing_8tpp" local="no">cyqlone/implementation/indexing.tpp</includes>
+    <includes refid="mat-vec_8tpp" local="no">cyqlone/implementation/mat-vec.tpp</includes>
+    <includes refid="pcg_8tpp" local="no">cyqlone/implementation/pcg.tpp</includes>
+    <includes refid="pcr_8tpp" local="no">cyqlone/implementation/pcr.tpp</includes>
+    <includes refid="riccati_8tpp" local="no">cyqlone/implementation/riccati.tpp</includes>
+    <includes refid="schur_8tpp" local="no">cyqlone/implementation/schur.tpp</includes>
+    <includes refid="sparse_8tpp" local="no">cyqlone/implementation/sparse.tpp</includes>
+    <includes refid="update_8tpp" local="no">cyqlone/implementation/update.tpp</includes>
+    <includes local="no">batmat/config.hpp</includes>
+    <incdepgraph>
+      <node id="15">
+        <label>cyqlone/barrier.hpp</label>
+        <link refid="barrier_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/cyqlone-params.hpp</label>
+        <link refid="cyqlone-params_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>cyqlone/cyqlone-storage.hpp</label>
+        <link refid="cyqlone-storage_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone/cyqlone.hpp</label>
+        <link refid="cyqlone_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>cyqlone/implementation/cr.tpp</label>
+        <link refid="cr_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>cyqlone/implementation/data.tpp</label>
+        <link refid="data_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>cyqlone/implementation/factor.tpp</label>
+        <link refid="factor_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>cyqlone/implementation/indexing.tpp</label>
+        <link refid="indexing_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>cyqlone/implementation/mat-vec.tpp</label>
+        <link refid="mat-vec_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+      </node>
+      <node id="63">
+        <label>cyqlone/implementation/pcg.tpp</label>
+        <link refid="pcg_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>cyqlone/implementation/pcr.tpp</label>
+        <link refid="pcr_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>cyqlone/implementation/riccati.tpp</label>
+        <link refid="riccati_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>cyqlone/implementation/schur.tpp</label>
+        <link refid="schur_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="72">
+        <label>cyqlone/implementation/sparse.tpp</label>
+        <link refid="sparse_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+      </node>
+      <node id="73">
+        <label>cyqlone/implementation/update.tpp</label>
+        <link refid="update_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>cyqlone/linalg.hpp</label>
+        <link refid="linalg_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>cyqlone/parallel.hpp</label>
+        <link refid="parallel_8hpp"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>cyqlone/reduce.hpp</label>
+        <link refid="reduce_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>cyqlone/sparse.hpp</label>
+        <link refid="sparse_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>cyqlone/timing.hpp</label>
+        <link refid="timing_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>cyqlone/tracing.hpp</label>
+        <link refid="tracing_8hpp"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/src/cyqlone.cpp</label>
+        <link refid="cyqlone_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="18">
+        <label>atomic</label>
+      </node>
+      <node id="16">
+        <label>batmat/assume.hpp</label>
+      </node>
+      <node id="4">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="67">
+        <label>batmat/linalg/compress.hpp</label>
+      </node>
+      <node id="45">
+        <label>batmat/linalg/copy.hpp</label>
+      </node>
+      <node id="68">
+        <label>batmat/linalg/gemm-diag.hpp</label>
+      </node>
+      <node id="51">
+        <label>batmat/linalg/gemm.hpp</label>
+      </node>
+      <node id="52">
+        <label>batmat/linalg/gemv.hpp</label>
+      </node>
+      <node id="34">
+        <label>batmat/linalg/hyhound.hpp</label>
+      </node>
+      <node id="53">
+        <label>batmat/linalg/potrf.hpp</label>
+      </node>
+      <node id="46">
+        <label>batmat/linalg/shift.hpp</label>
+      </node>
+      <node id="47">
+        <label>batmat/linalg/simdify.hpp</label>
+      </node>
+      <node id="28">
+        <label>batmat/linalg/structure.hpp</label>
+      </node>
+      <node id="60">
+        <label>batmat/linalg/symv.hpp</label>
+      </node>
+      <node id="65">
+        <label>batmat/linalg/syomv.hpp</label>
+      </node>
+      <node id="54">
+        <label>batmat/linalg/trsm.hpp</label>
+      </node>
+      <node id="69">
+        <label>batmat/linalg/trtri.hpp</label>
+      </node>
+      <node id="61">
+        <label>batmat/linalg/uview.hpp</label>
+      </node>
+      <node id="62">
+        <label>batmat/loop.hpp</label>
+      </node>
+      <node id="35">
+        <label>batmat/matrix/layout.hpp</label>
+      </node>
+      <node id="12">
+        <label>batmat/matrix/matrix.hpp</label>
+      </node>
+      <node id="24">
+        <label>batmat/openmp.h</label>
+      </node>
+      <node id="48">
+        <label>batmat/ops/rotate.hpp</label>
+      </node>
+      <node id="36">
+        <label>batmat/simd.hpp</label>
+      </node>
+      <node id="33">
+        <label>batmat/timing.hpp</label>
+      </node>
+      <node id="37">
+        <label>batmat/unroll.h</label>
+      </node>
+      <node id="39">
+        <label>bit</label>
+      </node>
+      <node id="40">
+        <label>cassert</label>
+      </node>
+      <node id="44">
+        <label>cmath</label>
+      </node>
+      <node id="30">
+        <label>concepts</label>
+      </node>
+      <node id="19">
+        <label>cstdint</label>
+      </node>
+      <node id="20">
+        <label>cstring</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="56">
+        <label>guanaqo/blas/hl-blas-interface.hpp</label>
+      </node>
+      <node id="29">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="10">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="25">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+      <node id="6">
+        <label>limits</label>
+      </node>
+      <node id="22">
+        <label>memory</label>
+      </node>
+      <node id="74">
+        <label>numeric</label>
+      </node>
+      <node id="64">
+        <label>print</label>
+      </node>
+      <node id="31">
+        <label>ranges</label>
+      </node>
+      <node id="13">
+        <label>span</label>
+      </node>
+      <node id="7">
+        <label>stdexcept</label>
+      </node>
+      <node id="49">
+        <label>tuple</label>
+      </node>
+      <node id="23">
+        <label>type_traits</label>
+      </node>
+      <node id="26">
+        <label>utility</label>
+      </node>
+      <node id="11">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="cyqlone_8cpp_1a39e072dda5243754590685f16f67e848" prot="public" static="no">
+        <name>CYQLONE_INSTANTIATE_TRICYQLE</name>
+        <param><defname>T</defname></param>
+        <param><defname>VL</defname></param>
+        <param><defname>O</defname></param>
+        <initializer>template struct TricyqleSolver&lt;VL, T, O&gt;;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/cyqlone.cpp" line="17" column="9" bodyfile="src/cyqlone/src/cyqlone.cpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="cyqlone_8cpp_1a56700da47cd2ddd2e55e71f57e5aedb4" prot="public" static="no">
+        <name>CYQLONE_INSTANTIATE_CYQLONE</name>
+        <param><defname>VL</defname></param>
+        <param><defname>O</defname></param>
+        <initializer>template struct CyqloneSolver&lt;VL, real_t, O&gt;;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/cyqlone.cpp" line="20" column="9" bodyfile="src/cyqlone/src/cyqlone.cpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="cyqlone_8hpp" kindref="compound">cyqlone/cyqlone.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="cr_8tpp" kindref="compound">cyqlone/implementation/cr.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="data_8tpp" kindref="compound">cyqlone/implementation/data.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="factor_8tpp" kindref="compound">cyqlone/implementation/factor.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="indexing_8tpp" kindref="compound">cyqlone/implementation/indexing.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="mat-vec_8tpp" kindref="compound">cyqlone/implementation/mat-vec.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="pcg_8tpp" kindref="compound">cyqlone/implementation/pcg.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="pcr_8tpp" kindref="compound">cyqlone/implementation/pcr.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="riccati_8tpp" kindref="compound">cyqlone/implementation/riccati.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="schur_8tpp" kindref="compound">cyqlone/implementation/schur.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="sparse_8tpp" kindref="compound">cyqlone/implementation/sparse.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="update_8tpp" kindref="compound">cyqlone/implementation/update.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/config.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">CYQLONE_NS(cyqlone)<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17" refid="cyqlone_8cpp_1a39e072dda5243754590685f16f67e848" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CYQLONE_INSTANTIATE_TRICYQLE(T,<sp/>VL,<sp/>O)<sp/>template<sp/>struct<sp/>TricyqleSolver&lt;VL,<sp/>T,<sp/>O&gt;;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal">BATMAT_FOREACH_DTYPE_VL(<ref refid="cyqlone_8cpp_1a39e072dda5243754590685f16f67e848" kindref="member">CYQLONE_INSTANTIATE_TRICYQLE</ref>,<sp/>StorageOrder::ColMajor)</highlight></codeline>
+<codeline lineno="19"><highlight class="normal">BATMAT_FOREACH_DTYPE_VL(<ref refid="cyqlone_8cpp_1a39e072dda5243754590685f16f67e848" kindref="member">CYQLONE_INSTANTIATE_TRICYQLE</ref>,<sp/>StorageOrder::RowMajor)</highlight></codeline>
+<codeline lineno="20" refid="cyqlone_8cpp_1a56700da47cd2ddd2e55e71f57e5aedb4" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CYQLONE_INSTANTIATE_CYQLONE(VL,<sp/>O)<sp/>template<sp/>struct<sp/>CyqloneSolver&lt;VL,<sp/>real_t,<sp/>O&gt;;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal">BATMAT_FOREACH_VL_DEFAULT(<ref refid="cyqlone_8cpp_1a56700da47cd2ddd2e55e71f57e5aedb4" kindref="member">CYQLONE_INSTANTIATE_CYQLONE</ref>,<sp/>StorageOrder::ColMajor)</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">BATMAT_FOREACH_VL_DEFAULT(<ref refid="cyqlone_8cpp_1a56700da47cd2ddd2e55e71f57e5aedb4" kindref="member">CYQLONE_INSTANTIATE_CYQLONE</ref>,<sp/>StorageOrder::RowMajor)</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/src/cyqlone.cpp"/>
+  </compounddef>
+</doxygen>

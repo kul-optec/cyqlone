@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::problems::PlatooningParams</compoundname>
+    <includes refid="platooning_8hpp" local="no">cyqlone/qpalm/example-problems/platooning.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1ac81cc8bbaa2da1b7342dfdb0d9bbbb93" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::PlatooningParams::friction</definition>
+        <argsstring></argsstring>
+        <name>friction</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::friction</qualifiedname>
+        <initializer>= 0.1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="12" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="12" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a71a4b628fd4a6dad01041e374a17a648" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::PlatooningParams::F_max</definition>
+        <argsstring></argsstring>
+        <name>F_max</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::F_max</qualifiedname>
+        <initializer>= 20</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="13" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="13" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::PlatooningParams::v_max</definition>
+        <argsstring></argsstring>
+        <name>v_max</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::v_max</qualifiedname>
+        <initializer>= 1.6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="14" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="14" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::PlatooningParams::dist_min</definition>
+        <argsstring></argsstring>
+        <name>dist_min</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::dist_min</qualifiedname>
+        <initializer>= 5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="15" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="15" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a637adefd6c549cd259f10f7d12118539" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::PlatooningParams::dist_init</definition>
+        <argsstring></argsstring>
+        <name>dist_init</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::dist_init</qualifiedname>
+        <initializer>= 2 * <ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" kindref="member">dist_min</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="16" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="16" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1afa44560fbbbbd9e72ceb56b2c68a083a" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::PlatooningParams::p_target</definition>
+        <argsstring></argsstring>
+        <name>p_target</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::p_target</qualifiedname>
+        <initializer>= 100</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="17" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a99b5506c96a0fee3aa95cdef7f3d92d3" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::problems::PlatooningParams::N_horiz</definition>
+        <argsstring></argsstring>
+        <name>N_horiz</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::N_horiz</qualifiedname>
+        <initializer>= 512</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="18" column="13" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a146ecce5b3ebc178809def4438370946" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::PlatooningParams::T_horiz</definition>
+        <argsstring></argsstring>
+        <name>T_horiz</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::T_horiz</qualifiedname>
+        <initializer>= 30</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="19" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a278998f75a9a28795fa59467492856e7" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::problems::PlatooningParams::scale_cost</definition>
+        <argsstring></argsstring>
+        <name>scale_cost</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::scale_cost</qualifiedname>
+        <initializer>= 1e-3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="20" column="12" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="20" bodyend="-1"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a0b43e23740be9973cabb06551fa569a7" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::qpalm::problems::PlatooningParams::masses</definition>
+        <argsstring></argsstring>
+        <name>masses</name>
+        <qualifiedname>cyqlone::qpalm::problems::PlatooningParams::masses</qualifiedname>
+        <initializer>{100, 150, 130, 70, 180}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="21" column="17" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="21" bodyend="21"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::problems::PlatooningParams</label>
+        <link refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+masses</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" line="11" column="1" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/platooning.hpp" bodystart="11" bodyend="22"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a637adefd6c549cd259f10f7d12118539" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>dist_init</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>dist_min</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a71a4b628fd4a6dad01041e374a17a648" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>F_max</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1ac81cc8bbaa2da1b7342dfdb0d9bbbb93" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>friction</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a0b43e23740be9973cabb06551fa569a7" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>masses</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a99b5506c96a0fee3aa95cdef7f3d92d3" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>N_horiz</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1afa44560fbbbbd9e72ceb56b2c68a083a" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>p_target</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a278998f75a9a28795fa59467492856e7" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>scale_cost</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a146ecce5b3ebc178809def4438370946" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>T_horiz</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::PlatooningParams</scope><name>v_max</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

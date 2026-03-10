@@ -1,0 +1,1028 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespacecyqlone_1_1qpalm" kind="namespace" language="C++">
+    <compoundname>cyqlone::qpalm</compoundname>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1CyqloneData" prot="public">cyqlone::qpalm::CyqloneData</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" prot="public">cyqlone::qpalm::CyQPALMBackendSettings</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats" prot="public">cyqlone::qpalm::CyQPALMBackendStats</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" prot="public">cyqlone::qpalm::CyQPALMBackend</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" prot="public">cyqlone::qpalm::unique_CyQPALMBackend</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1DetailedStats" prot="public">cyqlone::qpalm::DetailedStats</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1Breakpoint" prot="public">cyqlone::qpalm::Breakpoint</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1ABSums" prot="public">cyqlone::qpalm::ABSums</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints" prot="public">cyqlone::qpalm::PartitionedBreakpoints</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1BreakpointsResult" prot="public">cyqlone::qpalm::BreakpointsResult</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn" prot="public">cyqlone::qpalm::compute_breakpoints_fn</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1get__partitioned__breakpoints__fn" prot="public">cyqlone::qpalm::get_partitioned_breakpoints_fn</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1get__breakpoints__fn" prot="public">cyqlone::qpalm::get_breakpoints_fn</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1LineSearchSettings" prot="public">cyqlone::qpalm::LineSearchSettings</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1LineSearch" prot="public">cyqlone::qpalm::LineSearch</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1SolverImplementation" prot="public">cyqlone::qpalm::SolverImplementation</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1Settings" prot="public">cyqlone::qpalm::Settings</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1SolverTimings" prot="public">cyqlone::qpalm::SolverTimings</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1SolverStats" prot="public">cyqlone::qpalm::SolverStats</innerclass>
+    <innerclass refid="classcyqlone_1_1qpalm_1_1Solver" prot="public">cyqlone::qpalm::Solver</innerclass>
+    <innernamespace refid="namespacecyqlone_1_1qpalm_1_1problems">cyqlone::qpalm::problems</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm_1_1detail">cyqlone::qpalm::detail</innernamespace>
+    <sectiondef kind="enum">
+      <member refid="group__topic-optimization-solvers-ocp_1gaeb4dd1f31c1ec8d3d9e0f9023da5cec3" kind="enum"><name>WarmStartingStrategy</name></member>
+      <member refid="group__topic-optimization-solvers_1gade0917661457f4dc0d6396ded24277a4" kind="enum"><name>SolverStatus</name></member>
+      <memberdef kind="enum" id="namespacecyqlone_1_1qpalm_1a12561d95ffd5ca9cc074d7b3edceb429" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>StorageOrder</name>
+        <qualifiedname>cyqlone::qpalm::StorageOrder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="56" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" prot="public" static="no">
+        <type>real_t</type>
+        <definition>using cyqlone::qpalm::ABSum_t = real_t</definition>
+        <argsstring></argsstring>
+        <name>ABSum_t</name>
+        <qualifiedname>cyqlone::qpalm::ABSum_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="26" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacecyqlone_1_1qpalm_1a7e1db9ae6e521ae2f4ce103e38f3f934" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn" kindref="compound">cyqlone::qpalm::compute_breakpoints_fn</ref></type>
+        <definition>struct cyqlone::qpalm::compute_breakpoints_fn cyqlone::qpalm::compute_breakpoints</definition>
+        <argsstring></argsstring>
+        <name>compute_breakpoints</name>
+        <qualifiedname>cyqlone::qpalm::compute_breakpoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="98" column="38"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1get__partitioned__breakpoints__fn_1a54afee935b44ad846bab46b06c5a7023" compoundref="breakpoint_8hpp" startline="133" endline="141">cyqlone::qpalm::get_partitioned_breakpoints_fn::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecyqlone_1_1qpalm_1a3908dbec9d527354fdfc9eebec4d8d30" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structcyqlone_1_1qpalm_1_1get__partitioned__breakpoints__fn" kindref="compound">cyqlone::qpalm::get_partitioned_breakpoints_fn</ref></type>
+        <definition>struct cyqlone::qpalm::get_partitioned_breakpoints_fn cyqlone::qpalm::get_partitioned_breakpoints</definition>
+        <argsstring></argsstring>
+        <name>get_partitioned_breakpoints</name>
+        <qualifiedname>cyqlone::qpalm::get_partitioned_breakpoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="142" column="46"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1get__breakpoints__fn_1a5393edf9c40b1875f0cb8bb3d87467a0" compoundref="breakpoint_8hpp" startline="176" endline="184">cyqlone::qpalm::get_breakpoints_fn::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecyqlone_1_1qpalm_1acefd63912f9919fa5ab62ac0a305c3f2" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structcyqlone_1_1qpalm_1_1get__breakpoints__fn" kindref="compound">cyqlone::qpalm::get_breakpoints_fn</ref></type>
+        <definition>struct cyqlone::qpalm::get_breakpoints_fn cyqlone::qpalm::get_breakpoints</definition>
+        <argsstring></argsstring>
+        <name>get_breakpoints</name>
+        <qualifiedname>cyqlone::qpalm::get_breakpoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="185" column="34"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <member refid="group__topic-optimization-solvers-ocp_1gae148b32eb392bb39d685929069cfabdb" kind="function"><name>make_cyqpalm_backend</name></member>
+      <member refid="group__topic-optimization-solvers-ocp_1gaf5dbe2437a5f7176b58b7743cba83d1c" kind="function"><name>update_cyqpalm_backend</name></member>
+      <member refid="group__topic-optimization-solvers-ocp_1ga8aac8ebf6f85aba82b32a927bc9bea00" kind="function"><name>update_cyqpalm_backend</name></member>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a0d06e7a2fb9288cf51ce720d27a14baf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>index_t</type>
+            <declname>VL</declname>
+            <defname>VL</defname>
+          </param>
+          <param>
+            <type>StorageOrder</type>
+            <declname>DefaultOrder</declname>
+            <defname>DefaultOrder</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" kindref="compound">unique_CyQPALMBackend</ref>&lt; VL, DefaultOrder &gt;</type>
+        <definition>unique_CyQPALMBackend&lt; VL, DefaultOrder &gt; cyqlone::qpalm::make_cyqpalm_backend</definition>
+        <argsstring>(const CyqloneStorage&lt;&gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings)</argsstring>
+        <name>make_cyqpalm_backend</name>
+        <qualifiedname>cyqlone::qpalm::make_cyqpalm_backend</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyqloneData" kindref="compound">CyqloneData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" kindref="compound">CyQPALMBackendSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="602" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="602" bodyend="605"/>
+        <references refid="group__topic-optimization-solvers-ocp_1gae148b32eb392bb39d685929069cfabdb">make_cyqpalm_backend</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1aaa9bd6f0faae51b2d93379a451da5206" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void cyqlone::qpalm::sort</definition>
+        <argsstring>(R &amp;&amp;range, F key)</argsstring>
+        <name>sort</name>
+        <qualifiedname>cyqlone::qpalm::sort</qualifiedname>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" line="17" column="13" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" bodystart="17" bodyend="25"/>
+        <references refid="namespacecyqlone_1_1qpalm_1aaa9bd6f0faae51b2d93379a451da5206" compoundref="algorithms_8hpp" startline="17" endline="25">sort</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" compoundref="implementation_2linesearch_8tpp" startline="54" endline="74">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize_base</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1aaa9bd6f0faae51b2d93379a451da5206" compoundref="algorithms_8hpp" startline="17" endline="25">sort</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1af0491991e6f9a32072489c45d934541b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void cyqlone::qpalm::nth_element</definition>
+        <argsstring>(R &amp;&amp;range, I mid, F key)</argsstring>
+        <name>nth_element</name>
+        <qualifiedname>cyqlone::qpalm::nth_element</qualifiedname>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>mid</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" line="28" column="13" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" bodystart="28" bodyend="32"/>
+        <references refid="namespacecyqlone_1_1qpalm_1af0491991e6f9a32072489c45d934541b" compoundref="algorithms_8hpp" startline="28" endline="32">nth_element</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" compoundref="implementation_2linesearch_8tpp" startline="77" endline="116">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1af0491991e6f9a32072489c45d934541b" compoundref="algorithms_8hpp" startline="28" endline="32">nth_element</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a907fb321c6e4e7fa1375233be5c9f815" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::ranges::bidirectional_range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+          <param>
+            <type>class C</type>
+          </param>
+        </templateparamlist>
+        <type>std::ranges::subrange&lt; std::ranges::iterator_t&lt; R &gt; &gt;</type>
+        <definition>static std::ranges::subrange&lt; std::ranges::iterator_t&lt; R &gt; &gt; cyqlone::qpalm::partition_min</definition>
+        <argsstring>(R &amp;&amp;range, F pred, C cmp)</argsstring>
+        <name>partition_min</name>
+        <qualifiedname>cyqlone::qpalm::partition_min</qualifiedname>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>pred</declname>
+        </param>
+        <param>
+          <type>C</type>
+          <declname>cmp</declname>
+        </param>
+        <briefdescription>
+<para>A variant of std::ranges::partition where the first element of the return value is the smallest element of the &quot;false&quot; partition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" line="37" column="30" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" bodystart="37" bodyend="90"/>
+        <references refid="namespacecyqlone_1_1qpalm_1a907fb321c6e4e7fa1375233be5c9f815" compoundref="algorithms_8hpp" startline="37" endline="90">partition_min</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" compoundref="implementation_2linesearch_8tpp" startline="77" endline="116">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a907fb321c6e4e7fa1375233be5c9f815" compoundref="algorithms_8hpp" startline="37" endline="90">partition_min</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a1f120beae4aaa6b4c80f83809088d0e3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::ranges::forward_range</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>static decltype(auto) cyqlone::qpalm::partition</definition>
+        <argsstring>(R &amp;&amp;range, F key)</argsstring>
+        <name>partition</name>
+        <qualifiedname>cyqlone::qpalm::partition</qualifiedname>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" line="93" column="17" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" bodystart="93" bodyend="96"/>
+        <references refid="namespacecyqlone_1_1qpalm_1a1f120beae4aaa6b4c80f83809088d0e3" compoundref="algorithms_8hpp" startline="93" endline="96">partition</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1a640bb174c3f290758b4336f4304e1512" compoundref="backends_2backend-cyqlone_2linesearch_8tpp" startline="36" endline="113">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::compute_partition_breakpoints</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a6446ea453ccfe8d17c950f1a9a348e12" compoundref="algorithms_8hpp" startline="98" endline="101">partition</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a1f120beae4aaa6b4c80f83809088d0e3" compoundref="algorithms_8hpp" startline="93" endline="96">partition</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a57b32dc88357c5b2b160d9c09b949c93" compoundref="breakpoint_8cpp" startline="7" endline="23">partition_breakpoints_default</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a6446ea453ccfe8d17c950f1a9a348e12" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::permutable</type>
+            <declname>I</declname>
+            <defname>I</defname>
+          </param>
+          <param>
+            <type>std::sentinel_for&lt; I &gt;</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>static decltype(auto) cyqlone::qpalm::partition</definition>
+        <argsstring>(I first, S last, F key)</argsstring>
+        <name>partition</name>
+        <qualifiedname>cyqlone::qpalm::partition</qualifiedname>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>S</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" line="98" column="17" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" bodystart="98" bodyend="101"/>
+        <references refid="namespacecyqlone_1_1qpalm_1a1f120beae4aaa6b4c80f83809088d0e3" compoundref="algorithms_8hpp" startline="93" endline="96">partition</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1acc34e5d9c2599830eb0f4f519dc2c791" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class R</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>decltype(auto)</type>
+        <definition>static decltype(auto) cyqlone::qpalm::min_element</definition>
+        <argsstring>(R &amp;&amp;range, F key)</argsstring>
+        <name>min_element</name>
+        <qualifiedname>cyqlone::qpalm::min_element</qualifiedname>
+        <param>
+          <type>R &amp;&amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" line="104" column="17" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" bodystart="104" bodyend="107"/>
+        <references refid="namespacecyqlone_1_1qpalm_1acc34e5d9c2599830eb0f4f519dc2c791" compoundref="algorithms_8hpp" startline="104" endline="107">min_element</references>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1acc34e5d9c2599830eb0f4f519dc2c791" compoundref="algorithms_8hpp" startline="104" endline="107">min_element</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a278e2594d3f1fc905558b7b5c8c1378e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class I</type>
+          </param>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class BinOp</type>
+          </param>
+          <param>
+            <type>class UnOp</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T cyqlone::qpalm::transform_reduce</definition>
+        <argsstring>(I first, I last, T init, BinOp binary_op, UnOp unary_op)</argsstring>
+        <name>transform_reduce</name>
+        <qualifiedname>cyqlone::qpalm::transform_reduce</qualifiedname>
+        <param>
+          <type>I</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>I</type>
+          <declname>last</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>init</declname>
+        </param>
+        <param>
+          <type>BinOp</type>
+          <declname>binary_op</declname>
+        </param>
+        <param>
+          <type>UnOp</type>
+          <declname>unary_op</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" line="110" column="3" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/algorithms.hpp" bodystart="110" bodyend="113"/>
+        <references refid="namespacecyqlone_1_1qpalm_1a278e2594d3f1fc905558b7b5c8c1378e" compoundref="algorithms_8hpp" startline="110" endline="113">transform_reduce</references>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a3e3de90bb2d8bb912950e1aa6141b065" compoundref="breakpoint_8cpp" startline="25" endline="41">partial_sum_negative</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a278e2594d3f1fc905558b7b5c8c1378e" compoundref="algorithms_8hpp" startline="110" endline="113">transform_reduce</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a3e3de90bb2d8bb912950e1aa6141b065" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1ABSums" kindref="compound">ABSums</ref></type>
+        <definition>ABSums cyqlone::qpalm::partial_sum_negative</definition>
+        <argsstring>(PartitionedBreakpoints breakpoints, real_t η=0, real_t β=0)</argsstring>
+        <name>partial_sum_negative</name>
+        <qualifiedname>cyqlone::qpalm::partial_sum_negative</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints" kindref="compound">PartitionedBreakpoints</ref></type>
+          <declname>breakpoints</declname>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>η</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>β</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/breakpoint.cpp" line="25" column="8" bodyfile="src/qpalm/src/breakpoint.cpp" bodystart="25" bodyend="41" declfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" declline="40" declcolumn="8"/>
+        <references refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a39e61a555be8f3e459906d7b57408662" compoundref="breakpoint_8hpp" startline="37">cyqlone::qpalm::PartitionedBreakpoints::neg_bp</references>
+        <references refid="namespacecyqlone_1_1qpalm_1a3e3de90bb2d8bb912950e1aa6141b065" compoundref="breakpoint_8cpp" startline="25" endline="41">partial_sum_negative</references>
+        <references refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a7ad314946fc51eb1d2a40f650b75ffbe" compoundref="breakpoint_8hpp" startline="37">cyqlone::qpalm::PartitionedBreakpoints::pos_bp</references>
+        <references refid="namespacecyqlone_1_1qpalm_1a278e2594d3f1fc905558b7b5c8c1378e" compoundref="algorithms_8hpp" startline="110" endline="113">transform_reduce</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1a640bb174c3f290758b4336f4304e1512" compoundref="backends_2backend-cyqlone_2linesearch_8tpp" startline="36" endline="113">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::compute_partition_breakpoints</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1get__breakpoints__fn_1a5393edf9c40b1875f0cb8bb3d87467a0" compoundref="breakpoint_8hpp" startline="176" endline="184">cyqlone::qpalm::get_breakpoints_fn::operator()</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a3e3de90bb2d8bb912950e1aa6141b065" compoundref="breakpoint_8cpp" startline="25" endline="41">partial_sum_negative</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1ac2625e16a723c214f3e23b72f59ad817" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Vec</type>
+          </param>
+        </templateparamlist>
+        <type>std::span&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt;</type>
+        <definition>std::span&lt; Breakpoint &gt; cyqlone::qpalm::compute_breakpoints_default</definition>
+        <argsstring>(std::vector&lt; Breakpoint &gt; &amp;breakpoints, const Vec &amp;Σ, const Vec &amp;y, const Vec &amp;Ad, const Vec &amp;Ax, const Vec &amp;b_min, const Vec &amp;b_max)</argsstring>
+        <name>compute_breakpoints_default</name>
+        <qualifiedname>cyqlone::qpalm::compute_breakpoints_default</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt; &amp;</type>
+          <declname>breakpoints</declname>
+        </param>
+        <param>
+          <type>const Vec &amp;</type>
+          <declname>Σ</declname>
+        </param>
+        <param>
+          <type>const Vec &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>const Vec &amp;</type>
+          <declname>Ad</declname>
+        </param>
+        <param>
+          <type>const Vec &amp;</type>
+          <declname>Ax</declname>
+        </param>
+        <param>
+          <type>const Vec &amp;</type>
+          <declname>b_min</declname>
+        </param>
+        <param>
+          <type>const Vec &amp;</type>
+          <declname>b_max</declname>
+        </param>
+        <briefdescription>
+<para>Compute the break points t[i] using formula (3.6) in the QPALM paper. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>t, α, δ </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.tpp" line="11" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.tpp" bodystart="11" bodyend="29" declfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" declline="51" declcolumn="1"/>
+        <references refid="namespacecyqlone_1_1qpalm_1ac2625e16a723c214f3e23b72f59ad817" compoundref="breakpoint_8tpp" startline="11" endline="29">compute_breakpoints_default</references>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1ac2625e16a723c214f3e23b72f59ad817" compoundref="breakpoint_8tpp" startline="11" endline="29">compute_breakpoints_default</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1ae2965682e3646b02b83388fcbb3233b7" compoundref="breakpoint_8hpp" startline="90" endline="97">cyqlone::qpalm::compute_breakpoints_fn::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a57b32dc88357c5b2b160d9c09b949c93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints" kindref="compound">PartitionedBreakpoints</ref></type>
+        <definition>PartitionedBreakpoints cyqlone::qpalm::partition_breakpoints_default</definition>
+        <argsstring>(std::span&lt; Breakpoint &gt; breakpoints)</argsstring>
+        <name>partition_breakpoints_default</name>
+        <qualifiedname>cyqlone::qpalm::partition_breakpoints_default</qualifiedname>
+        <param>
+          <type>std::span&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt;</type>
+          <declname>breakpoints</declname>
+        </param>
+        <briefdescription>
+<para>Moves any non-finite elements in t to the end of the range, and all negative elements to the front. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the negative and positive partitions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/breakpoint.cpp" line="7" column="24" bodyfile="src/qpalm/src/breakpoint.cpp" bodystart="7" bodyend="23" declfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" declline="56" declcolumn="24"/>
+        <references refid="namespacecyqlone_1_1qpalm_1a1f120beae4aaa6b4c80f83809088d0e3" compoundref="algorithms_8hpp" startline="93" endline="96">partition</references>
+        <references refid="namespacecyqlone_1_1qpalm_1a57b32dc88357c5b2b160d9c09b949c93" compoundref="breakpoint_8cpp" startline="7" endline="23">partition_breakpoints_default</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1get__partitioned__breakpoints__fn_1a54afee935b44ad846bab46b06c5a7023" compoundref="breakpoint_8hpp" startline="133" endline="141">cyqlone::qpalm::get_partitioned_breakpoints_fn::operator()</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a57b32dc88357c5b2b160d9c09b949c93" compoundref="breakpoint_8cpp" startline="7" endline="23">partition_breakpoints_default</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a58838550654934492da37499013b24d8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char * cyqlone::qpalm::enum_name</definition>
+        <argsstring>(SolverStatus s)</argsstring>
+        <name>enum_name</name>
+        <qualifiedname>cyqlone::qpalm::enum_name</qualifiedname>
+        <param>
+          <type><ref refid="group__topic-optimization-solvers_1gade0917661457f4dc0d6396ded24277a4" kindref="member">SolverStatus</ref></type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/status.hpp" line="23" column="19" bodyfile="src/qpalm/include/cyqlone/qpalm/status.hpp" bodystart="23" bodyend="36"/>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4ad8a942ef2b04672adfafef0ad817a407" compoundref="status_8hpp" startline="13">Busy</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4ada5418b1eb4e80d05f2c1c7c4fa1b6ec" compoundref="status_8hpp" startline="14">Converged</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4ab0d4998a26f5b5742ad38c4af8817e32" compoundref="status_8hpp" startline="20">Exception</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4a12c37c4278b8c0db6c2f65052569cd80" compoundref="status_8hpp" startline="19">Interrupted</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4abbf52264f7a6e91c48a242f95aeed3db" compoundref="status_8hpp" startline="16">MaxIter</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4a9e8b9350c8f1716701ec1f9bbe76432e" compoundref="status_8hpp" startline="15">MaxTime</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4ab644b4f0de4cf0c46acb4583602e168c" compoundref="status_8hpp" startline="18">NoProgress</references>
+        <references refid="group__topic-optimization-solvers_1ggade0917661457f4dc0d6396ded24277a4aff6e97b110349dae9c6e8be0ff7a85c3" compoundref="status_8hpp" startline="17">NotFinite</references>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a8c85a6a89dd8e96977a86abad68b5d5c" compoundref="status_8cpp" startline="6" endline="6">operator&lt;&lt;</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a8c85a6a89dd8e96977a86abad68b5d5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream &amp; cyqlone::qpalm::operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;os, SolverStatus s)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>cyqlone::qpalm::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>os</declname>
+        </param>
+        <param>
+          <type><ref refid="group__topic-optimization-solvers_1gade0917661457f4dc0d6396ded24277a4" kindref="member">SolverStatus</ref></type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/status.cpp" line="6" column="1" bodyfile="src/qpalm/src/status.cpp" bodystart="6" bodyend="6" declfile="src/qpalm/include/cyqlone/qpalm/status.hpp" declline="38" declcolumn="2"/>
+        <references refid="namespacecyqlone_1_1qpalm_1a58838550654934492da37499013b24d8" compoundref="status_8hpp" startline="23" endline="36">enum_name</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a2f204cd23b6824fa6bc96a5509d41edb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template <ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" kindref="compound">unique_CyQPALMBackend</ref>&lt; 1, StorageOrder::ColMajor &gt;</type>
+        <definition>template unique_CyQPALMBackend&lt; 1, StorageOrder::ColMajor &gt; cyqlone::qpalm::make_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(const CyqloneStorage&lt;&gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings)</argsstring>
+        <name>make_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::make_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyqloneData" kindref="compound">CyqloneData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" kindref="compound">CyQPALMBackendSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="97" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="97"/>
+        <references refid="ocp-backend-cyqlone_8cpp_1a76a67ff6a8b41587d5f86389cd45e853" compoundref="ocp-backend-cyqlone_8cpp" startline="7" endline="18">CYQLONE_INSTANTIATE_QPALM_Cyqlone</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1ab585f169928943f6459d5842bf956468" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 1, StorageOrder::ColMajor &gt; &amp;, const CyqloneStorage&lt;&gt; &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 1, StorageOrder::ColMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="172" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="172"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a1b42a175a558c7d15014e8d1e5f35e17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 1, StorageOrder::ColMajor &gt; &amp;, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 1, StorageOrder::ColMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="220" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="220"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a79f0ae995ed7eb26c1190599436819e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template <ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" kindref="compound">unique_CyQPALMBackend</ref>&lt; 4, StorageOrder::ColMajor &gt;</type>
+        <definition>template unique_CyQPALMBackend&lt; 4, StorageOrder::ColMajor &gt; cyqlone::qpalm::make_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(const CyqloneStorage&lt;&gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings)</argsstring>
+        <name>make_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::make_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyqloneData" kindref="compound">CyqloneData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" kindref="compound">CyQPALMBackendSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="351" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="351"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a97f95a80f835db53479b55aede5c5727" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 4, StorageOrder::ColMajor &gt; &amp;, const CyqloneStorage&lt;&gt; &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 4, StorageOrder::ColMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="426" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="426"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1aac8173f4f423dec08f6d05883a487f2c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 4, StorageOrder::ColMajor &gt; &amp;, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 4, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 4, StorageOrder::ColMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="474" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="474"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a934baf37e367a903f0011b30b8a4aed7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template <ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" kindref="compound">unique_CyQPALMBackend</ref>&lt; 8, StorageOrder::ColMajor &gt;</type>
+        <definition>template unique_CyQPALMBackend&lt; 8, StorageOrder::ColMajor &gt; cyqlone::qpalm::make_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(const CyqloneStorage&lt;&gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings)</argsstring>
+        <name>make_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::make_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyqloneData" kindref="compound">CyqloneData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" kindref="compound">CyQPALMBackendSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="605" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="605"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a6c72550fee87ca239bd8cf6ebf328294" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 8, StorageOrder::ColMajor &gt; &amp;, const CyqloneStorage&lt;&gt; &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 8, StorageOrder::ColMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="680" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="680"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1af1728fda54e6061da9342445412b957d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 8, StorageOrder::ColMajor &gt; &amp;, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 8, StorageOrder::ColMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 8, StorageOrder::ColMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="20" column="728" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="20" declcolumn="728"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1ac583ca9eff1c425f194434aec7b48b63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template <ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" kindref="compound">unique_CyQPALMBackend</ref>&lt; 1, StorageOrder::RowMajor &gt;</type>
+        <definition>template unique_CyQPALMBackend&lt; 1, StorageOrder::RowMajor &gt; cyqlone::qpalm::make_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(const CyqloneStorage&lt;&gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings)</argsstring>
+        <name>make_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::make_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyqloneData" kindref="compound">CyqloneData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" kindref="compound">CyQPALMBackendSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="97" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="97"/>
+        <references refid="ocp-backend-cyqlone_8cpp_1a76a67ff6a8b41587d5f86389cd45e853" compoundref="ocp-backend-cyqlone_8cpp" startline="7" endline="18">CYQLONE_INSTANTIATE_QPALM_Cyqlone</references>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a3c2d9d42bb1ddc3f169cec3a93c28646" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 1, StorageOrder::RowMajor &gt; &amp;, const CyqloneStorage&lt;&gt; &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 1, StorageOrder::RowMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="172" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="172"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a01b08da46621a7c625ba8b4f3ee3021a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 1, StorageOrder::RowMajor &gt; &amp;, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 1, StorageOrder::RowMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="220" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="220"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1aa59386df69f60ced9a2dd111d5ebd6db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template <ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" kindref="compound">unique_CyQPALMBackend</ref>&lt; 4, StorageOrder::RowMajor &gt;</type>
+        <definition>template unique_CyQPALMBackend&lt; 4, StorageOrder::RowMajor &gt; cyqlone::qpalm::make_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(const CyqloneStorage&lt;&gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings)</argsstring>
+        <name>make_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::make_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyqloneData" kindref="compound">CyqloneData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" kindref="compound">CyQPALMBackendSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="351" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="351"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a4fe47de5c740f85dfd2fe730ed892539" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 4, StorageOrder::RowMajor &gt; &amp;, const CyqloneStorage&lt;&gt; &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 4, StorageOrder::RowMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="426" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="426"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1abec2428948043461b0a8ad92e3bb3d44" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 4, StorageOrder::RowMajor &gt; &amp;, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 4, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 4, StorageOrder::RowMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="474" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="474"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a1ca8f68ee1e0bc4e089eb3db751a2f6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template <ref refid="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend" kindref="compound">unique_CyQPALMBackend</ref>&lt; 8, StorageOrder::RowMajor &gt;</type>
+        <definition>template unique_CyQPALMBackend&lt; 8, StorageOrder::RowMajor &gt; cyqlone::qpalm::make_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(const CyqloneStorage&lt;&gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings)</argsstring>
+        <name>make_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::make_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyqloneData" kindref="compound">CyqloneData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings" kindref="compound">CyQPALMBackendSettings</ref> &amp;</type>
+          <declname>settings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="605" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="605"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a52066fb50c5a90391061dcc71365fafb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 8, StorageOrder::RowMajor &gt; &amp;, const CyqloneStorage&lt;&gt; &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 8, StorageOrder::RowMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1CyqloneStorage" kindref="compound">CyqloneStorage</ref>&lt;&gt; &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="680" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="680"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecyqlone_1_1qpalm_1a37219f7b9f34c0ff4e574e598d2d308b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template void</type>
+        <definition>template void cyqlone::qpalm::update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</definition>
+        <argsstring>(CyQPALMBackend&lt; 8, StorageOrder::RowMajor &gt; &amp;, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</name>
+        <qualifiedname>cyqlone::qpalm::update_cyqpalm_backend&lt; 8, StorageOrder::RowMajor &gt;</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend" kindref="compound">CyQPALMBackend</ref>&lt; 8, StorageOrder::RowMajor &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="21" column="728" declfile="src/qpalm/src/ocp-backend-cyqlone.cpp" declline="21" declcolumn="728"/>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1SolverTimings_1a3177822c4e8bd78867cb8736f643e562" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream &amp; operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;, const SolverTimings &amp;)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>cyqlone::qpalm::SolverTimings::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1SolverTimings" kindref="compound">SolverTimings</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="39" column="2" declfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" declline="39" declcolumn="2"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/csv.hpp" line="9" column="1"/>
+  </compounddef>
+</doxygen>

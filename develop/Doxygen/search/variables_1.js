@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['b_0',['b',['../structcyqlone_1_1qpalm_1_1ABSums.html#a105db14f929ad2468f1b41ebfb09b92f',1,'cyqlone::qpalm::ABSums::b'],['../solve-block-tridiagonal_8cpp.html#aa5af71777abff45ccfd6f6a4c715f1d1',1,'TridiagSystem::b']]],
+  ['b_5feq_5fstrided_1',['b_eq_strided',['../structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#af56b21463035e447565d2254a6b4a2d2',1,'cyqlone::qpalm::CyQPALMBackend']]],
+  ['b_5fmax_5fstrided_2',['b_max_strided',['../structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a44ad7dfbff49abe09d7d33232bf86638',1,'cyqlone::qpalm::CyQPALMBackend']]],
+  ['b_5fmin_5fstrided_3',['b_min_strided',['../structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#ace528e2b25eea563fe60068f3eebee98',1,'cyqlone::qpalm::CyQPALMBackend']]],
+  ['backend_4',['backend',['../structcyqlone_1_1qpalm_1_1SolverTimings.html#a1f2d0413d9e3d80270f2674513876e51',1,'cyqlone::qpalm::SolverTimings::backend'],['../classcyqlone_1_1qpalm_1_1Solver.html#af80c04f3638569ca5961d5c4f249e5bf',1,'cyqlone::qpalm::Solver::backend']]],
+  ['backend_5fbound_5fslots_5',['backend_bound_slots',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__trace__pcm.html#ac2fa47674e43295bf59b01e0d3d9ecc4',1,'guanaqo::pcm::ThreadPerfCounters']]],
+  ['bad_5fspeculation_5fslots_6',['bad_speculation_slots',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__trace__pcm.html#a18d99d4c8ba4038b40927614ff628d09',1,'guanaqo::pcm::ThreadPerfCounters']]],
+  ['barrier_7',['barrier',['../structcyqlone_1_1parallel_1_1SharedContext.html#a036e911c7fd2098f291a7cc59e395765',1,'cyqlone::parallel::SharedContext']]],
+  ['batch_5fsize_8',['batch_size',['https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1Layout.html#a95f2a085f27e819b459d224585a7ff1e',1,'batmat::matrix::Layout::batch_size'],['https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1Layout.html#a1272b35ef72199a1ef66ab733f496a2e',1,'batmat::matrix::Layout::PlainLayout::batch_size'],['https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1View.html#ac5158829f15b39691a0612cb0e56f482',1,'batmat::matrix::View::PlainBatchedMatrixView::batch_size'],['https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1View_1_1linear__iterator.html#a6d22e538859b075408dff7cca8e586b7',1,'batmat::matrix::View::linear_iterator::batch_size']]],
+  ['block_5fsize_9',['block_size',['../structcyqlone_1_1TricyqleSolver.html#ad75b0e935664202d452a2b78cb850fa4',1,'cyqlone::TricyqleSolver']]],
+  ['boost_5fpenalty_5fx_10',['boost_penalty_x',['../structcyqlone_1_1qpalm_1_1Settings.html#ac46e5da8b5e1033ffee4c50b1b888878',1,'cyqlone::qpalm::Settings']]],
+  ['boost_5fregularization_11',['boost_regularization',['../structcyqlone_1_1qpalm_1_1SolverTimings.html#a3525a9be60e61aaa7249a8aa45b10d6f',1,'cyqlone::qpalm::SolverTimings']]],
+  ['bp_12',['bp',['../namespacecyqlone_1_1qpalm.html#abe3f31fef0fe9ec9df164a59a621c1ce',1,'cyqlone::qpalm::BreakpointsResult']]],
+  ['branch_5fmisses_13',['branch_misses',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__trace__pcm.html#adfc206da056d68636b74a9e21764395d',1,'guanaqo::pcm::ThreadPerfCounters']]],
+  ['breakpoints_14',['breakpoints',['../structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#af694ceffb0c3b4c5adbc12aebbfb56df',1,'cyqlone::qpalm::CyQPALMBackend::Timings::breakpoints'],['../structcyqlone_1_1qpalm_1_1LineSearch.html#ad1e43b47a4edae60aedf187f6f1706b2',1,'cyqlone::qpalm::LineSearch::breakpoints']]],
+  ['breakpoints_5ftemp_15',['breakpoints_temp',['../structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#adea6a5ba64814771940995594daf0558',1,'cyqlone::qpalm::CyQPALMBackend']]],
+  ['broadcast_5fstorage_16',['broadcast_storage',['../classcyqlone_1_1TreeBarrier.html#adb1514abba71637d7606bc7d3a2bb584',1,'cyqlone::TreeBarrier']]],
+  ['buffer_17',['buffer',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/classguanaqo_1_1MaxHistory.html#a26f6e788387557f97573e19227f09090',1,'guanaqo::MaxHistory::buffer'],['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/classguanaqo_1_1callback__streambuf.html#a6b4486d4ec740abbf98de17b0e8bde2a',1,'guanaqo::callback_streambuf::buffer']]],
+  ['bufidx_18',['bufidx',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1io_1_1CSVReader.html#a94e2f197ce753efbf83dbce46426ce57',1,'guanaqo::io::CSVReader']]],
+  ['bufmaxsize_19',['bufmaxsize',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1io_1_1CSVReader.html#addb88eb53fa8eee64227546b30732f2c',1,'guanaqo::io::CSVReader']]]
+];

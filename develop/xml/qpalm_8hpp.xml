@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="qpalm_8hpp" kind="file" language="C++">
+    <compoundname>qpalm.hpp</compoundname>
+    <includedby refid="qpalm_8cpp" local="no">src/qpalm/src/qpalm.cpp</includedby>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/qpalm/include/cyqlone/qpalm/qpalm.hpp</label>
+        <link refid="qpalm_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/qpalm/src/qpalm.cpp</label>
+        <link refid="qpalm_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/qpalm/include/cyqlone/qpalm/qpalm.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,932 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Parallelization &#8212; cyqlone</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css?v=5fb06a78" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ref/parallel';</script>
+    <script src="../_static/pypi-icon.js?v=9d6d7737"></script>
+    <link rel="icon" href="../_static/cyqlone-logo.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="api.html" />
+    <link rel="prev" title="Linear Algebra" href="linalg.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/cyqlone-logo.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/cyqlone-logo.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">cyqlone</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/kul-optec/cyqlone" title="Source code on GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Source code on GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.pypi.org/p/cyqlone" title="Python package on PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Python package on PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://arxiv.org/abs/2512.09058" title="Paper on arXiv" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-graduation-cap fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Paper on arXiv</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../python.html">Python API Reference</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp.html">C++ API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cyqlonesolver.html">CyqloneSolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tricyqlesolver.html">TricyqleSolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qpalm.html">QPALM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ocp.html">Optimal Control Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linalg.html">Linear Algebra</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Parallelization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API reference</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/kul-optec/cyqlone/edit/develop/scripts/docs/source/ref/parallel.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button"
+   title="Suggest edit"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ref/parallel.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Parallelization</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#treebarrier">TreeBarrier</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sharedcontext">SharedContext</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context">Context</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="parallelization">
+<h1>Parallelization<a class="headerlink" href="#parallelization" title="Link to this heading">#</a></h1>
+<section id="treebarrier">
+<h2>TreeBarrier<a class="headerlink" href="#treebarrier" title="Link to this heading">#</a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CompletionFn</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone15EmptyCompletionE" title="cyqlone::EmptyCompletion"><span class="n"><span class="pre">EmptyCompletion</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PhaseType</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TreeBarrier</span></span></span><br /></dt>
+<dd><p>Fairly vanilla combining tree barrier. </p>
+<p>It is inspired by GCC 15.2’s __tree_barrier, with some important API differences:<ul class="simple">
+<li><p>Every thread has a unique thread ID in [0, expected-1]. This eliminates the need for hashing the pthread thread IDs and for the inner search loop to find free slots in the tree.</p></li>
+<li><p>Wait tries to spin for a given number of iterations before falling back to a futex-based atomic wait.</p></li>
+<li><p>The barrier phase is exposed to the user.</p></li>
+<li><p>Custom completion functions can be provided at arrival time.</p></li>
+<li><p>Reductions and broadcasts on small values are supported. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BarrierPhase</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier::PhaseType"><span class="n"><span class="pre">PhaseType</span></span></a><br /></dt>
+<dd><p><em>Values:</em></p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TreeBarrier</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">expected</span></span>, <a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier::CompletionFn"><span class="n"><span class="pre">CompletionFn</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">completion</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Create a barrier with <code class="docutils literal notranslate"><span class="pre">expected</span></code> participating threads and a completion function that is called by the last thread that arrives at each phase. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="n"><span class="pre">TreeBarrier</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier11TreeBarrierERK11TreeBarrier" title="cyqlone::TreeBarrier::TreeBarrier"><span class="n"><span class="pre">TreeBarrier</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="n"><span class="pre">TreeBarrier</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier11TreeBarrierERR11TreeBarrier" title="cyqlone::TreeBarrier::TreeBarrier"><span class="n"><span class="pre">TreeBarrier</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier"><span class="n"><span class="pre">TreeBarrier</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier"><span class="n"><span class="pre">TreeBarrier</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier"><span class="n"><span class="pre">TreeBarrier</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier"><span class="n"><span class="pre">TreeBarrier</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_with_completion</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span>, <a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier22arrive_with_completionE13arrival_token8uint32_tRR1C" title="cyqlone::TreeBarrier::arrive_with_completion::C"><span class="n"><span class="pre">C</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">custom_completion</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Arrive at the barrier with a custom completion function that is called by the last thread that arrives, before advancing the barrier phase and notifying all waiting threads. </p>
+<p>The completion function of the barrier is not called in this case. Each thread should use a unique thread ID in [0, expected-1]. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Arrive at the barrier. </p>
+<p>The barrier’s completion function is called by the last thread that arrives, before advancing the barrier phase and notifying all waiting threads. Each thread should use a unique thread ID in [0, expected-1]. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">line</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Arrive at the barrier, recording the given line number for sanity checking to make sure that all threads arrive from the same line or statement in the source code. </p>
+<p>This is useful for debugging purposes to detect mismatched barrier calls, but should not really be used otherwise. If CYQLONE_SANITY_CHECKS_BARRIER is disabled, the line number is ignored and this function is equivalent to <a class="reference internal" href="api.html#classcyqlone_1_1TreeBarrier_1a4c337b67cc8d868958fef5acc11b7e74"><span class="std std-ref">arrive(uint32_t)</span></a>. Each thread should use a unique thread ID in [0, expected-1]. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier12BarrierPhaseE" title="cyqlone::TreeBarrier::BarrierPhase"><span class="n"><span class="pre">BarrierPhase</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">current_phase</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Query the current barrier phase. </p>
+<p>May wrap around on overflow, but all threads will see the same phase values in the same order. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_may_block</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">token</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><br /></dt>
+<dd><p>Check if <a class="reference internal" href="api.html#classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334"><span class="std std-ref">wait()</span></a> may block. </p>
+<p>If it returns false, the caller can call <a class="reference internal" href="api.html#classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334"><span class="std std-ref">wait()</span></a> and it will return immediately without spinning or sleeping. This is useful if the caller has other non-critical work to do while waiting for other threads. Users should still call <a class="reference internal" href="api.html#classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334"><span class="std std-ref">wait()</span></a> before arriving again. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function does not impose any memory ordering, so even when it returns false, changes made before the arrival of other threads may not be visible yet. In contrast, <a class="reference internal" href="api.html#classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334"><span class="std std-ref">wait()</span></a> does ensure proper synchronization. </p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">token</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Wait for the barrier to complete after an arrival, using the given token. </p>
+<p>Separating the arrival and wait phases allows for overlapping computation with waiting, hiding the synchronization latency. Waiting on the same token multiple times is not allowed. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_and_wait</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Convenience function to arrive and wait in a single call. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_and_wait</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">line</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Convenience function to arrive and wait in a single call (with optional sanity check). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_and_wait_with_completion</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span>, <a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier31arrive_and_wait_with_completionEv8uint32_tRR1C" title="cyqlone::TreeBarrier::arrive_and_wait_with_completion::C"><span class="n"><span class="pre">C</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">custom_completion</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Convenience function to arrive and wait in a single call (with custom completion). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_and_wait_with_completion</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span>, <a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier31arrive_and_wait_with_completionEDa8uint32_tRR1C" title="cyqlone::TreeBarrier::arrive_and_wait_with_completion::C"><span class="n"><span class="pre">C</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">custom_completion</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Convenience function to arrive and wait in a single call (with custom completion). </p>
+<p>Broadcasts the return value of the custom completion function to all threads. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier19arrival_token_typedE" title="cyqlone::TreeBarrier::arrival_token_typed"><span class="n"><span class="pre">arrival_token_typed</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrier13arrive_reduceE19arrival_token_typedI1TE8uint32_t1T1F" title="cyqlone::TreeBarrier::arrive_reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_reduce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span>, <a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrier13arrive_reduceE19arrival_token_typedI1TE8uint32_t1T1F" title="cyqlone::TreeBarrier::arrive_reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, <a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrier13arrive_reduceE19arrival_token_typedI1TE8uint32_t1T1F" title="cyqlone::TreeBarrier::arrive_reduce::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reduce</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Combining tree reduction across all threads. </p>
+<p>Deterministic application order for a given number of threads. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier11wait_reduceE1TRR19arrival_token_typedI1TE" title="cyqlone::TreeBarrier::wait_reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_reduce</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier19arrival_token_typedE" title="cyqlone::TreeBarrier::arrival_token_typed"><span class="n"><span class="pre">arrival_token_typed</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier11wait_reduceE1TRR19arrival_token_typedI1TE" title="cyqlone::TreeBarrier::wait_reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">token</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Wait for the result of an <a class="reference internal" href="api.html#classcyqlone_1_1TreeBarrier_1a490cae3d5765604a127f119ca8984c44"><span class="std std-ref">arrive_reduce</span></a> call and obtain the reduced value. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrier6reduceE1T8uint32_t1T1F" title="cyqlone::TreeBarrier::reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reduce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span>, <a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrier6reduceE1T8uint32_t1T1F" title="cyqlone::TreeBarrier::reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, <a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrier6reduceE1T8uint32_t1T1F" title="cyqlone::TreeBarrier::reduce::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reduce</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Combining tree reduction across all threads. </p>
+<p>Deterministic application order for a given number of threads. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier9broadcastE1T8uint32_tRR1T8uint32_t" title="cyqlone::TreeBarrier::broadcast::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">broadcast</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">thread_id</span></span>, <a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone11TreeBarrier9broadcastE1T8uint32_tRR1T8uint32_t" title="cyqlone::TreeBarrier::broadcast::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Broadcast a value from the source thread to all other threads. </p>
+<p>All threads must call this function with the same source thread ID. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spin_count</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1000</span></span><br /></dt>
+<dd><p>Number of spin iterations before falling back to futex-based wait. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Maximum number of threads supported by this barrier implementation. </p>
+</dd></dl>
+
+</div>
+<dl class="cpp class">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrival_token</span></span></span><br /></dt>
+<dd><p>Subclassed by <a class="reference internal" href="api.html#classcyqlone_1_1TreeBarrier_1_1arrival__token__typed"><span class="std std-ref">cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrival_token_typed&lt; T &gt;</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrival_token</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier12BarrierPhaseE" title="cyqlone::TreeBarrier::BarrierPhase"><span class="n"><span class="pre">BarrierPhase</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">phase</span></span><span class="sig-paren">)</span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="n"><span class="pre">arrival_token</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_token13arrival_tokenERK13arrival_token" title="cyqlone::TreeBarrier::arrival_token::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">phase</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="sig-name descname"><span class="n"><span class="pre">arrival_token</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_token13arrival_tokenERR13arrival_token" title="cyqlone::TreeBarrier::arrival_token::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">phase</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">phase</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier13arrival_tokenE" title="cyqlone::TreeBarrier::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">phase</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier12BarrierPhaseE" title="cyqlone::TreeBarrier::BarrierPhase"><span class="n"><span class="pre">BarrierPhase</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrival_token_typed</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv47cyqlone" title="cyqlone"><span class="n"><span class="pre">cyqlone</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier"><span class="n"><span class="pre">TreeBarrier</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier::CompletionFn"><span class="n"><span class="pre">CompletionFn</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier::PhaseType"><span class="n"><span class="pre">PhaseType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">arrival_token</span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone11TreeBarrier12BarrierPhaseE" title="cyqlone::TreeBarrier::BarrierPhase"><span class="n"><span class="pre">BarrierPhase</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EmptyCompletion</span></span></span><br /></dt>
+<dd><p>No-op completion function for the <a class="reference internal" href="api.html#classcyqlone_1_1TreeBarrier"><span class="std std-ref">TreeBarrier</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><br /></dt>
+<dd><p>Does nothing. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="sharedcontext">
+<h2>SharedContext<a class="headerlink" href="#sharedcontext" title="Link to this heading">#</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SharedContext</span></span></span><br /></dt>
+<dd><p>Abstraction for a parallel execution context: a set of threads that can synchronize and communicate with each other using barriers. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context"><span class="std std-ref">Context</span></a></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">completion_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone15EmptyCompletionE" title="cyqlone::EmptyCompletion"><span class="n"><span class="pre">EmptyCompletion</span></span></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">barrier_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone11TreeBarrierE" title="cyqlone::TreeBarrier"><span class="n"><span class="pre">TreeBarrier</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel13SharedContext15completion_typeE" title="cyqlone::parallel::SharedContext::completion_type"><span class="n"><span class="pre">completion_type</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">uint16_t</span></span><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel13SharedContext3runEvRR1F" title="cyqlone::parallel::SharedContext::run::F"><span class="n"><span class="pre">F</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Execute the given function in parallel on all threads, blocking until completion. </p>
+<p>The function will be called with a <a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context"><span class="std std-ref">Context</span></a> that contains the thread index, and that can be used to synchronize and communicate between threads. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_barrier_spin_count</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">spin_count</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Configure the barrier spin count used in parallel synchronization before falling back to a futex wait. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_thr</span></span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel13SharedContext12barrier_typeE" title="cyqlone::parallel::SharedContext::barrier_type"><span class="n"><span class="pre">barrier_type</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">barrier</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="k"><span class="pre">static_cast</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel13SharedContext7num_thrE" title="cyqlone::parallel::SharedContext::num_thr"><span class="n"><span class="pre">num_thr</span></span></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="p"><span class="pre">}</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="context">
+<h2>Context<a class="headerlink" href="#context" title="Link to this heading">#</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SC</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Context</span></span></span><br /></dt>
+<dd><p>Thread context for parallel execution. </p>
+<p>Each thread has a unique thread index, and can synchronize and communicate with other threads in the same shared context. <div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1SharedContext"><span class="std std-ref">SharedContext</span></a></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">shared_context_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7ContextE" title="cyqlone::parallel::Context::SC"><span class="n"><span class="pre">SC</span></span></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrival_token</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel7Context19shared_context_typeE" title="cyqlone::parallel::Context::shared_context_type"><span class="n"><span class="pre">shared_context_type</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">barrier_type</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">arrival_token</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_master</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Check if this thread is the master thread (thread index 0). </p>
+<p>Useful for determining which thread should perform operations like printing to the console, which should be done by a single thread and does not require synchronization. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel7Context13arrival_tokenE" title="cyqlone::parallel::Context::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Arrive at the barrier and obtain a token that can be used to wait for completion of the current barrier phase. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Token must be awaited before any other call to arrive. </p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel7Context13arrival_tokenE" title="cyqlone::parallel::Context::arrival_token"><span class="n"><span class="pre">arrival_token</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">token</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Await a token returned by <a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context_1aef10e2b4232a902976b61df51b076479"><span class="std std-ref">arrive()</span></a>, waiting for the barrier phase to complete. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_and_wait</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Arrive at the barrier and wait for the barrier phase to complete. </p>
+<p>This is a convenience wrapper around <a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context_1aef10e2b4232a902976b61df51b076479"><span class="std std-ref">arrive()</span></a> and <a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context_1ae266e8ec4d5ef7380b5d882fbe641e70"><span class="std std-ref">wait()</span></a> for the common case where the thread does not have other work to do while waiting. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_and_wait</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">line</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Debug version of <a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context_1a6963c65991275ff3585e3e688bcb551c"><span class="std std-ref">arrive_and_wait()</span></a> that performs a sanity check to ensure that all threads are arriving at the same line of code. </p>
+<p>The <code class="docutils literal notranslate"><span class="pre">line</span></code> parameter should be the same for all threads arriving at the same barrier. It is only verified in debug builds, and is equivalent to <a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context_1a6963c65991275ff3585e3e688bcb551c"><span class="std std-ref">arrive_and_wait()</span></a> in release builds. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7Context9broadcastE1T1T7index_t" title="cyqlone::parallel::Context::broadcast::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">broadcast</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7Context9broadcastE1T1T7index_t" title="cyqlone::parallel::Context::broadcast::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Broadcast a value <code class="docutils literal notranslate"><span class="pre">x</span></code> from the thread with index <code class="docutils literal notranslate"><span class="pre">src</span></code> to all threads. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">invoke_result_t</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I0DpEN7cyqlone8parallel7Context14call_broadcastENSt15invoke_result_tI1FDp4ArgsEERR1FDpRR4Args" title="cyqlone::parallel::Context::call_broadcast::F"><span class="n"><span class="pre">F</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0DpEN7cyqlone8parallel7Context14call_broadcastENSt15invoke_result_tI1FDp4ArgsEERR1FDpRR4Args" title="cyqlone::parallel::Context::call_broadcast::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">call_broadcast</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I0DpEN7cyqlone8parallel7Context14call_broadcastENSt15invoke_result_tI1FDp4ArgsEERR1FDpRR4Args" title="cyqlone::parallel::Context::call_broadcast::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span>, <a class="reference internal" href="api.html#_CPPv4I0DpEN7cyqlone8parallel7Context14call_broadcastENSt15invoke_result_tI1FDp4ArgsEERR1FDpRR4Args" title="cyqlone::parallel::Context::call_broadcast::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Call a function <code class="docutils literal notranslate"><span class="pre">f</span></code> with the given <code class="docutils literal notranslate"><span class="pre">args</span></code> on a single thread and broadcast the return value to all threads. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrive_reduce</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone8parallel7Context13arrive_reduceEDa1T1F" title="cyqlone::parallel::Context::arrive_reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, <a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone8parallel7Context13arrive_reduceEDa1T1F" title="cyqlone::parallel::Context::arrive_reduce::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">func</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Perform a reduction of <code class="docutils literal notranslate"><span class="pre">x</span></code> across all threads using the given binary function <code class="docutils literal notranslate"><span class="pre">func</span></code>. </p>
+<p>Returns a token that can be used to wait for the reduction to complete and obtain the reduced value. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7Context11wait_reduceE1TRRN19shared_context_type12barrier_type19arrival_token_typedI1TEE" title="cyqlone::parallel::Context::wait_reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_reduce</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel7Context19shared_context_typeE" title="cyqlone::parallel::Context::shared_context_type"><span class="n"><span class="pre">shared_context_type</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">barrier_type</span></span><span class="p"><span class="pre">::</span></span><span class="k"><span class="pre">template</span></span><span class="w"> </span><span class="n"><span class="pre">arrival_token_typed</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7Context11wait_reduceE1TRRN19shared_context_type12barrier_type19arrival_token_typedI1TEE" title="cyqlone::parallel::Context::wait_reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">token</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Wait for the reduction initiated by <a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context_1aa993898c2ab5cc872e6b012fde96f064"><span class="std std-ref">arrive_reduce()</span></a> to complete and obtain the reduced value. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone8parallel7Context6reduceE1T1T1F" title="cyqlone::parallel::Context::reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reduce</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone8parallel7Context6reduceE1T1T1F" title="cyqlone::parallel::Context::reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span>, <a class="reference internal" href="api.html#_CPPv4I00EN7cyqlone8parallel7Context6reduceE1T1T1F" title="cyqlone::parallel::Context::reduce::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">func</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Perform a reduction of <code class="docutils literal notranslate"><span class="pre">x</span></code> across all threads using the given binary function <code class="docutils literal notranslate"><span class="pre">func</span></code>, and wait for the result. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7Context6reduceE1T1T" title="cyqlone::parallel::Context::reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reduce</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7Context6reduceE1T1T" title="cyqlone::parallel::Context::reduce::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Reduction with <code class="docutils literal notranslate"><span class="pre">std::plus</span></code>, i.e., summation across all threads. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="api.html#structcyqlone_1_1parallel_1_1Context_1acfda285f17d9c76cb07d0a62c4ca42d2"><span class="std std-ref">reduce(T,F)</span></a></p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">F</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_single_sync</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7Context15run_single_syncEvRR1F" title="cyqlone::parallel::Context::run_single_sync::F"><span class="n"><span class="pre">F</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Wait for all threads to reach this point, then run the given function on a single thread before releasing all threads again. </p>
+<p>Changes by all threads are visible during the call to <code class="docutils literal notranslate"><span class="pre">f</span></code> and changes made by <code class="docutils literal notranslate"><span class="pre">f</span></code> are visible to all threads after this function returns. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel7Context19shared_context_typeE" title="cyqlone::parallel::Context::shared_context_type"><span class="n"><span class="pre">shared_context_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">shared</span></span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index</span></span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">index_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num_thr</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4N7cyqlone8parallel7Context6sharedE" title="cyqlone::parallel::Context::shared"><span class="n"><span class="pre">shared</span></span></a><span class="p"><span class="pre">.</span></span><span class="n"><span class="pre">num_thr</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7ContextE" title="cyqlone::parallel::Context"><span class="n"><span class="pre">Context</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="api.html#_CPPv4I0EN7cyqlone8parallel7ContextE" title="cyqlone::parallel::Context"><span class="n"><span class="pre">Context</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="linalg.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Linear Algebra</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#treebarrier">TreeBarrier</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sharedcontext">SharedContext</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context">Context</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pieter Pas
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Pieter Pas.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

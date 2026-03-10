@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1SparseCSC" kind="struct" language="Unknown" prot="public">
+    <compoundname>cyqlone::qpalm::SparseCSC</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class</type>
+        <declname>class Index</declname>
+        <defname>class Index</defname>
+      </param>
+      <param>
+        <type>class</type>
+        <declname>class StorageIndex</declname>
+        <defname>class StorageIndex</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a25088538485413d8f8e7daac82781c5b" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Order</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::Order</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="2964" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a4d3d7be293a6fcd324063624e4c9f3de" prot="public" static="no">
+        <type>Index</type>
+        <definition>typedef Index guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::index_t</definition>
+        <argsstring></argsstring>
+        <name>index_t</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::index_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="2983" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1afe66049570dee4d3e877b5846525b3de" prot="public" static="no">
+        <type>StorageIndex</type>
+        <definition>typedef StorageIndex guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::storage_index_t</definition>
+        <argsstring></argsstring>
+        <name>storage_index_t</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::storage_index_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="2990" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a25088538485413d8f8e7daac82781c5ba5ca03a5407dcb966cbe5419bf81f9149" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::Unsorted</definition>
+        <argsstring></argsstring>
+        <name>Unsorted</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::Unsorted</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="2971" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a25088538485413d8f8e7daac82781c5baaa051ab53391804fb4153c768ec345a0" prot="public" static="no" mutable="no">
+        <type></type>
+        <definition>guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::SortedRows</definition>
+        <argsstring></argsstring>
+        <name>SortedRows</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::SortedRows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="2977" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a8c2b45c7b3f285a106220a65ae8ff00a" prot="public" static="no" mutable="no">
+        <type><ref refid="group__linalg__views_1gadfafaf4bd964b5f7122f263031bc472d" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">length_t</ref></type>
+        <definition>length_t guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::rows</definition>
+        <argsstring></argsstring>
+        <name>rows</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::rows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="3016" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a6bdcde1a9626727c84aad36d36ad5a90" prot="public" static="no" mutable="no">
+        <type><ref refid="group__linalg__views_1gadfafaf4bd964b5f7122f263031bc472d" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">length_t</ref></type>
+        <definition>length_t guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::cols</definition>
+        <argsstring></argsstring>
+        <name>cols</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::cols</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="3023" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1acbd9b26cfc1f0f9c2fe3641335384404" prot="public" static="no" mutable="no">
+        <type><ref refid="group__linalg__sparsity_1gae1bb6ee70c1d06fc6940a7a867b5754a" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">Symmetry</ref></type>
+        <definition>Symmetry guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::symmetry</definition>
+        <argsstring></argsstring>
+        <name>symmetry</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::symmetry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="3030" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a5a3ef4a2178e360a0d3e74cb69b0ab11" prot="public" static="no" mutable="no">
+        <type>std::span&lt; const <ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a4d3d7be293a6fcd324063624e4c9f3de" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">index_t</ref> &gt;</type>
+        <definition>std::span&lt; const index_t &gt; guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::inner_idx</definition>
+        <argsstring></argsstring>
+        <name>inner_idx</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::inner_idx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="3037" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a9bd9cd13f771572f1db92d2abf216223" prot="public" static="no" mutable="no">
+        <type>std::span&lt; const <ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1afe66049570dee4d3e877b5846525b3de" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">storage_index_t</ref> &gt;</type>
+        <definition>std::span&lt; const storage_index_t &gt; guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::outer_ptr</definition>
+        <argsstring></argsstring>
+        <name>outer_ptr</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::outer_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="3044" column="1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a70fca9076aa2ee0cd00bdc6814a4baea" prot="public" static="no" mutable="no">
+        <type><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a25088538485413d8f8e7daac82781c5b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">Order</ref></type>
+        <definition>Order guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::order</definition>
+        <argsstring></argsstring>
+        <name>order</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::order</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="3051" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a6b8d12652e00d96d98105c653954da7e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="group__linalg__views_1gadfafaf4bd964b5f7122f263031bc472d" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">length_t</ref></type>
+        <definition>length_t guanaqo::linalg::sparsity::SparseCSC&lt; class Index, class StorageIndex &gt;::nnz</definition>
+        <argsstring>() const</argsstring>
+        <name>nnz</name>
+        <qualifiedname>cyqlone::qpalm::SparseCSC::nnz</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="3009" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::SparseCSC&lt; class Index, class StorageIndex &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1SparseCSC"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+inner_idx</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+outer_ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::span&lt; const index_t &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::span&lt; const storage_index_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="build/Debug/docs/guanaqo-1.0.0-alpha.25.tag" line="2959" column="1"/>
+    <listofallmembers>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a6bdcde1a9626727c84aad36d36ad5a90" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>cols</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a4d3d7be293a6fcd324063624e4c9f3de" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>index_t</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a5a3ef4a2178e360a0d3e74cb69b0ab11" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>inner_idx</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a6b8d12652e00d96d98105c653954da7e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>nnz</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a25088538485413d8f8e7daac82781c5b" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>Order</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a70fca9076aa2ee0cd00bdc6814a4baea" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>order</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a9bd9cd13f771572f1db92d2abf216223" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>outer_ptr</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a8c2b45c7b3f285a106220a65ae8ff00a" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>rows</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a25088538485413d8f8e7daac82781c5baaa051ab53391804fb4153c768ec345a0" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>SortedRows</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1afe66049570dee4d3e877b5846525b3de" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>storage_index_t</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1acbd9b26cfc1f0f9c2fe3641335384404" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>symmetry</name></member>
+      <member refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC_1a25088538485413d8f8e7daac82781c5ba5ca03a5407dcb966cbe5419bf81f9149" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SparseCSC</scope><name>Unsorted</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

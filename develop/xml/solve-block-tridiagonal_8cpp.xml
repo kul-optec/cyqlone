@@ -1,0 +1,604 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="solve-block-tridiagonal_8cpp" kind="file" language="C++">
+    <compoundname>solve-block-tridiagonal.cpp</compoundname>
+    <includes refid="cyqlone_8hpp" local="no">cyqlone/cyqlone.hpp</includes>
+    <includes refid="packing_8hpp" local="no">cyqlone/packing.hpp</includes>
+    <includes local="no">batmat/matrix/matrix.hpp</includes>
+    <includes local="no">guanaqo/blas/hl-blas-interface.hpp</includes>
+    <includes local="no">guanaqo/print.hpp</includes>
+    <includes local="no">algorithm</includes>
+    <includes local="no">iostream</includes>
+    <includes local="no">random</includes>
+    <includes local="no">string</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>examples/solve-block-tridiagonal.cpp</label>
+        <link refid="solve-block-tridiagonal_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>cyqlone/barrier.hpp</label>
+        <link refid="barrier_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/cyqlone-params.hpp</label>
+        <link refid="cyqlone-params_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>cyqlone/cyqlone-storage.hpp</label>
+        <link refid="cyqlone-storage_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone/cyqlone.hpp</label>
+        <link refid="cyqlone_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>cyqlone/packing.hpp</label>
+        <link refid="packing_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>cyqlone/parallel.hpp</label>
+        <link refid="parallel_8hpp"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>cyqlone/sparse.hpp</label>
+        <link refid="sparse_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>cyqlone/timing.hpp</label>
+        <link refid="timing_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>algorithm</label>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="18">
+        <label>atomic</label>
+      </node>
+      <node id="16">
+        <label>batmat/assume.hpp</label>
+      </node>
+      <node id="4">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="34">
+        <label>batmat/linalg/hyhound.hpp</label>
+      </node>
+      <node id="42">
+        <label>batmat/linalg/simdify.hpp</label>
+      </node>
+      <node id="28">
+        <label>batmat/linalg/structure.hpp</label>
+      </node>
+      <node id="43">
+        <label>batmat/linalg/uview.hpp</label>
+      </node>
+      <node id="44">
+        <label>batmat/loop.hpp</label>
+      </node>
+      <node id="45">
+        <label>batmat/lut.hpp</label>
+      </node>
+      <node id="35">
+        <label>batmat/matrix/layout.hpp</label>
+      </node>
+      <node id="12">
+        <label>batmat/matrix/matrix.hpp</label>
+      </node>
+      <node id="24">
+        <label>batmat/openmp.h</label>
+      </node>
+      <node id="46">
+        <label>batmat/ops/transpose.hpp</label>
+      </node>
+      <node id="36">
+        <label>batmat/simd.hpp</label>
+      </node>
+      <node id="33">
+        <label>batmat/timing.hpp</label>
+      </node>
+      <node id="37">
+        <label>batmat/unroll.h</label>
+      </node>
+      <node id="39">
+        <label>bit</label>
+      </node>
+      <node id="40">
+        <label>cassert</label>
+      </node>
+      <node id="30">
+        <label>concepts</label>
+      </node>
+      <node id="19">
+        <label>cstdint</label>
+      </node>
+      <node id="20">
+        <label>cstring</label>
+      </node>
+      <node id="21">
+        <label>functional</label>
+      </node>
+      <node id="47">
+        <label>guanaqo/blas/hl-blas-interface.hpp</label>
+      </node>
+      <node id="29">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="10">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="48">
+        <label>guanaqo/print.hpp</label>
+      </node>
+      <node id="25">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+      <node id="49">
+        <label>iostream</label>
+      </node>
+      <node id="6">
+        <label>limits</label>
+      </node>
+      <node id="22">
+        <label>memory</label>
+      </node>
+      <node id="50">
+        <label>random</label>
+      </node>
+      <node id="31">
+        <label>ranges</label>
+      </node>
+      <node id="13">
+        <label>span</label>
+      </node>
+      <node id="7">
+        <label>stdexcept</label>
+      </node>
+      <node id="51">
+        <label>string</label>
+      </node>
+      <node id="23">
+        <label>type_traits</label>
+      </node>
+      <node id="26">
+        <label>utility</label>
+      </node>
+      <node id="11">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structTridiagSystem" prot="public">TridiagSystem</innerclass>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" prot="public" static="no">
+        <type><ref refid="structbatmat_1_1matrix_1_1Matrix" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::Matrix</ref>&lt; real_t, index_t &gt;</type>
+        <definition>using matrices = batmat::matrix::Matrix&lt;real_t, index_t&gt;</definition>
+        <argsstring></argsstring>
+        <name>matrices</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/solve-block-tridiagonal.cpp" line="17" column="1" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="solve-block-tridiagonal_8cpp_1a0c3eb48e479b222199064a957874ffee" prot="public" static="no">
+        <type><ref refid="structcyqlone_1_1TricyqleSolver" kindref="compound">cyqlone::TricyqleSolver</ref>&lt; <ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, real_t &gt;</type>
+        <definition>using Solver = cyqlone::TricyqleSolver&lt;v, real_t&gt;</definition>
+        <argsstring></argsstring>
+        <name>Solver</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/solve-block-tridiagonal.cpp" line="20" column="1" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>index_t</type>
+        <definition>index_t v</definition>
+        <argsstring></argsstring>
+        <name>v</name>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/solve-block-tridiagonal.cpp" line="19" column="19" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a151b1c60490223468d41623ebfdde774" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="425" endline="438">get_cyqlone_solvers_vl</referencedby>
+        <referencedby refid="solve-block-tridiagonal_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="solve-block-tridiagonal_8cpp" startline="30" endline="111">main</referencedby>
+        <referencedby refid="classcyqlone_1_1NeumaierSum_1a7c9a9a7e0d20f1a26be61b3c1ac62913" compoundref="neumaier_8hpp" startline="24" endline="44">cyqlone::NeumaierSum&lt; T &gt;::operator+=</referencedby>
+        <referencedby refid="classcyqlone_1_1NeumaierSum_1ae0827ceb18a50a2352479817e15ea71c" compoundref="neumaier_8hpp" startline="50" endline="50">cyqlone::NeumaierSum&lt; T &gt;::operator-=</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a5e87583157c03d1f72c32e615762ca84" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="448" endline="467">register_benchmarks</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1a63107e32e493e60a87e7e98e52a5a958" compoundref="ocp-backend-cyqlone_8tpp" startline="143" endline="193">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::warm_start</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="solve-block-tridiagonal_8cpp_1aea5086e4f91c5ef217def0c6e0a7b3e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structTridiagSystem" kindref="compound">TridiagSystem</ref></type>
+        <definition>TridiagSystem init_random_system</definition>
+        <argsstring>(index_t block_size, index_t num_blocks, bool circular=false)</argsstring>
+        <name>init_random_system</name>
+        <param>
+          <type>index_t</type>
+          <declname>block_size</declname>
+        </param>
+        <param>
+          <type>index_t</type>
+          <declname>num_blocks</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>circular</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/solve-block-tridiagonal.cpp" line="113" column="15" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="113" bodyend="139" declfile="examples/solve-block-tridiagonal.cpp" declline="27" declcolumn="15"/>
+        <references refid="structbatmat_1_1matrix_1_1Matrix_1a757dbd5cb7427a0375682a3df28865a0">batmat::matrix::Matrix&lt; class T, class I, class S, class D, StorageOrder O, class A &gt;::set_constant</references>
+        <references refid="group__topic-matrix-utils_1gae1611b15c38c77550ccbe46aff4bdcea">batmat::matrix::uninitialized</references>
+        <references refid="group__linalg__blas__hl_1gaaca0d2aa4f6081d9ed621b64f4f50a42">guanaqo::blas::xgemm_NT</references>
+        <references refid="group__linalg__blas__hl_1ga7428194867449b2ee9c6d92e5cc3bc53">guanaqo::blas::xsyrk_LN</references>
+        <referencedby refid="solve-block-tridiagonal_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="solve-block-tridiagonal_8cpp" startline="30" endline="111">main</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="solve-block-tridiagonal_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int main</definition>
+        <argsstring>(int argc, char *argv[])</argsstring>
+        <name>main</name>
+        <param>
+          <type>int</type>
+          <declname>argc</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>argv</declname>
+          <array>[]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/solve-block-tridiagonal.cpp" line="30" column="5" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="30" bodyend="111"/>
+        <references refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" compoundref="matio_8cpp" startline="122" endline="124">cyqlone::add_to_mat</references>
+        <references refid="group__topic-util-matio_1ga5b9bfdc6a8d4f53838511888e6724cb8" compoundref="matio_8cpp" startline="97" endline="102">cyqlone::create_mat</references>
+        <references refid="solve-block-tridiagonal_8cpp_1aea5086e4f91c5ef217def0c6e0a7b3e6" compoundref="solve-block-tridiagonal_8cpp" startline="113" endline="139">init_random_system</references>
+        <references refid="namespacecyqlone_1a8de86ba12c6b45e9164ba9c951a8eb78" compoundref="cyqlone_8hpp" startline="32" endline="36">cyqlone::is_pow_2</references>
+        <references refid="structbatmat_1_1matrix_1_1Matrix_1a2c6c2eae555828dcc25d7033c7ecaaa7">batmat::matrix::Matrix&lt; class T, class I, class S, class D, StorageOrder O, class A &gt;::middle_batches</references>
+        <references refid="group__topic-linalg_1gae29d94393be39ebcd6ce5f909e28787c" compoundref="packing_8hpp" startline="157" endline="160">cyqlone::linalg::pack</references>
+        <references refid="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fac0ff1599838f84547b6668a463198617" compoundref="cyqlone-params_8hpp" startline="14">cyqlone::PCR</references>
+        <references refid="group__io_1ga756d1c6bfac4b93da66e64e5f9c2b463">guanaqo::print_python</references>
+        <references refid="structSolver_1aae9371b91862765a1a99f1287ed4cdf7" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="337">Solver::run</references>
+        <references refid="group__topic-linalg_1ga526900bf6322e7c42895c80c36ac2f5e" compoundref="packing_8hpp" startline="147" endline="150">cyqlone::linalg::unpack</references>
+        <references refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" compoundref="solve-block-tridiagonal_8cpp" startline="19">v</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="cyqlone_8hpp" kindref="compound">cyqlone/cyqlone.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="packing_8hpp" kindref="compound">cyqlone/packing.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/matrix/matrix.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/blas/hl-blas-interface.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/print.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;algorithm&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;random&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>CYQLONE_WITH_MATIO</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="matio_8hpp" kindref="compound">cyqlone/matio.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">cyqlone::index_t;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Integer<sp/>type<sp/>for<sp/>indices</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">cyqlone::real_t;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Floating-point<sp/>type<sp/>for<sp/>scalars</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17" refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref><sp/>=<sp/><ref refid="structbatmat_1_1matrix_1_1Matrix" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::Matrix&lt;real_t, index_t&gt;</ref>;<sp/></highlight><highlight class="comment">//<sp/>Array<sp/>of<sp/>matrices</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19" refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>4;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Vector<sp/>length<sp/>to<sp/>use</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20" refid="solve-block-tridiagonal_8cpp_1a0c3eb48e479b222199064a957874ffee" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structSolver" kindref="compound">Solver</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1TricyqleSolver" kindref="compound">cyqlone::TricyqleSolver&lt;v, real_t&gt;</ref>;<sp/></highlight><highlight class="comment">//<sp/>Block<sp/>tridiagonal<sp/>solver<sp/>to<sp/>use</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22" refid="structTridiagSystem" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structTridiagSystem" kindref="compound">TridiagSystem</ref><sp/>{</highlight></codeline>
+<codeline lineno="23" refid="structTridiagSystem_1aa5af71777abff45ccfd6f6a4c715f1d1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref><sp/><ref refid="structTridiagSystem_1abc697170b9533d791d25d633fb52b837" kindref="member">M</ref>,<sp/><ref refid="structTridiagSystem_1a83a123410ddf401f3cab7e507d8eb50d" kindref="member">K</ref>,<sp/><ref refid="structTridiagSystem_1aa5af71777abff45ccfd6f6a4c715f1d1" kindref="member">b</ref>;<sp/></highlight><highlight class="comment">//<sp/>Diagonal<sp/>blocks<sp/>M,<sp/>subdiagonal<sp/>blocks<sp/>K<sp/>and<sp/>right-hand<sp/>side<sp/>b</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Generate<sp/>a<sp/>random<sp/>SPD<sp/>block<sp/>tridiagonal<sp/>system<sp/>with<sp/>given<sp/>block<sp/>size<sp/>and<sp/>number<sp/>of<sp/>blocks.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><ref refid="structTridiagSystem" kindref="compound">TridiagSystem</ref><sp/><ref refid="solve-block-tridiagonal_8cpp_1aea5086e4f91c5ef217def0c6e0a7b3e6" kindref="member">init_random_system</ref>(index_t<sp/>block_size,<sp/>index_t<sp/>num_blocks,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>circular<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Example<sp/>of<sp/>solving<sp/>a<sp/>block<sp/>tridiagonal<sp/>system<sp/>using<sp/>the<sp/>TricyqleSolver.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30" refid="solve-block-tridiagonal_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="example_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">main</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*argv[])<sp/></highlight><highlight class="keyword">try</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Problem<sp/>dimensions<sp/>and<sp/>parameters</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>index_t<sp/>p<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>8;<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Number<sp/>of<sp/>processors/threads</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>index_t<sp/>block_size<sp/>=<sp/>5;<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Size<sp/>of<sp/>each<sp/>block<sp/>of<sp/>the<sp/>block<sp/>tridiagonal<sp/>system</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>circular<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;<sp/></highlight><highlight class="comment">//<sp/>Is<sp/>K(num_blocks-1)<sp/>nonzero?</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Parse<sp/>arguments</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(argc<sp/>&gt;<sp/>1)</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>p<sp/>=<sp/>std::stoi(argv[1]);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(argc<sp/>&gt;<sp/>2)</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>block_size<sp/>=<sp/>std::stoi(argv[2]);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(argc<sp/>&gt;<sp/>3)</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>circular<sp/>=<sp/>std::stoi(argv[3])<sp/>!=<sp/>0;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>The<sp/>number<sp/>of<sp/>blocks<sp/>in<sp/>the<sp/>block<sp/>tridiagonal<sp/>system<sp/>always<sp/>equals<sp/>p<sp/>*<sp/>v.<sp/>If<sp/>your<sp/>system<sp/>is</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>larger,<sp/>first<sp/>reduce<sp/>it<sp/>to<sp/>this<sp/>size<sp/>(in<sp/>parallel).<sp/>If<sp/>it<sp/>is<sp/>smaller,<sp/>manually<sp/>add<sp/>padding,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>or<sp/>reduce<sp/>p<sp/>and/or<sp/>v.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a64f9b433541d79ef4ca7cd707bcbb2bd" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSERT</ref>(<ref refid="namespacecyqlone_1a8de86ba12c6b45e9164ba9c951a8eb78" kindref="member">cyqlone::is_pow_2</ref>(p));</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>index_t<sp/>num_blocks<sp/>=<sp/>p<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Diagonal<sp/>blocks<sp/>M,<sp/>subdiagonal<sp/>blocks<sp/>K<sp/>and<sp/>right-hand<sp/>side<sp/>b<sp/>of<sp/>a<sp/>block<sp/>tridiagonal<sp/>system</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[M,<sp/>K,<sp/>b]<sp/>=<sp/><ref refid="solve-block-tridiagonal_8cpp_1aea5086e4f91c5ef217def0c6e0a7b3e6" kindref="member">init_random_system</ref>(block_size,<sp/>num_blocks,<sp/>circular);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Create<sp/>a<sp/>solver<sp/>for<sp/>the<sp/>block<sp/>tridiagonal<sp/>system</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structSolver" kindref="compound">Solver</ref><sp/>solver{.block_size<sp/>=<sp/>block_size,<sp/>.circular<sp/>=<sp/>circular,<sp/>.p<sp/>=<sp/>p};</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>solver.params.solve_method<sp/>=<sp/><ref refid="group__topic-block-tridiag-solvers_1gga922388e973fa665d5f5eb0c7d988c81fac0ff1599838f84547b6668a463198617" kindref="member">cyqlone::SolveMethod::PCR</ref>;<sp/></highlight><highlight class="comment">//<sp/>Use<sp/>the<sp/>PCR<sp/>solver<sp/>instead<sp/>of<sp/>PCG.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Create<sp/>a<sp/>compact<sp/>copy<sp/>of<sp/>the<sp/>right-hand<sp/>side<sp/>and<sp/>allocate<sp/>storage<sp/>for<sp/>the<sp/>solution</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1af2d639079f2a4177927e21ba1bc185e3" kindref="member">Solver::matrix</ref><sp/>b_solve{{.depth<sp/>=<sp/>num_blocks,<sp/>.rows<sp/>=<sp/>block_size,<sp/>.cols<sp/>=<sp/>1}};</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref><sp/>x{{.depth<sp/>=<sp/>num_blocks,<sp/>.rows<sp/>=<sp/>block_size,<sp/>.cols<sp/>=<sp/>1}};</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Call<sp/>the<sp/>solver<sp/>in<sp/>parallel,<sp/>passing<sp/>a<sp/>lambda<sp/>that<sp/>is<sp/>executed<sp/>by<sp/>each<sp/>thread.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>pctx<sp/>=<sp/>solver.create_parallel_context();</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>pctx-&gt;<ref refid="structSolver_1aae9371b91862765a1a99f1287ed4cdf7" kindref="member">run</ref>([&amp;](<ref refid="structcyqlone_1_1TricyqleSolver_1affb1753c99cde7e3136139a84f8fbb54" kindref="member">Solver::Context</ref><sp/>&amp;ctx)<sp/>{</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Copy<sp/>the<sp/>data<sp/>to<sp/>the<sp/>solver&apos;s<sp/>internal<sp/>data<sp/>structures</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="group__topic-linalg_1gae29d94393be39ebcd6ce5f909e28787c" kindref="member">cyqlone::linalg::pack</ref>;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>pack_M<sp/>=<sp/>[&amp;](index_t<sp/>i,<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ms)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>pack(M.middle_batches(i,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>p),<sp/>Ms);<sp/>};</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>pack_K<sp/>=<sp/>[&amp;](index_t<sp/>i,<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ks)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>pack(K.middle_batches(i,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>p),<sp/>Ks);<sp/>};</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>pack_b<sp/>=<sp/>[&amp;](index_t<sp/>i,<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>bs)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>pack(b.middle_batches(i,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>p),<sp/>bs);<sp/>};</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>solver.init_diag(ctx,<sp/>pack_M);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>solver.init_subdiag(ctx,<sp/>pack_K);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>solver.init_rhs(ctx,<sp/>b_solve,<sp/>pack_b);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Perform<sp/>the<sp/>factorization<sp/>and<sp/>the<sp/>forward<sp/>solve<sp/>(fused),<sp/>followed<sp/>by<sp/>the<sp/>backward<sp/>solve</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>solver.factor_solve(ctx,<sp/>b_solve);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>solver.solve_reverse(ctx,<sp/>b_solve);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Copy<sp/>the<sp/>solution<sp/>back<sp/>to<sp/>the<sp/>original<sp/>layout</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="group__topic-linalg_1ga526900bf6322e7c42895c80c36ac2f5e" kindref="member">cyqlone::linalg::unpack</ref>;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>unpack_x<sp/>=<sp/>[&amp;](index_t<sp/>i,<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>xs)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>unpack(xs,<sp/>x.<ref refid="structbatmat_1_1matrix_1_1Matrix_1a2c6c2eae555828dcc25d7033c7ecaaa7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">middle_batches</ref>(i,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>p));<sp/>};</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>solver.get_solution(ctx,<sp/>b_solve,<sp/>unpack_x);</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>});<sp/></highlight><highlight class="comment">//<sp/>blocks<sp/>until<sp/>all<sp/>threads<sp/>have<sp/>joined</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>CYQLONE_WITH_MATIO</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Export<sp/>the<sp/>original<sp/>system<sp/>and<sp/>the<sp/>solution<sp/>as<sp/>a<sp/>.mat<sp/>file</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>std::filesystem::path<sp/>filename<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;block_tridiagonal_system.mat&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>matfile<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="group__topic-util-matio_1ga5b9bfdc6a8d4f53838511888e6724cb8" kindref="member">cyqlone::create_mat</ref>(filename);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;M&quot;</highlight><highlight class="normal">,<sp/>M);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;K&quot;</highlight><highlight class="normal">,<sp/>K);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;b&quot;</highlight><highlight class="normal">,<sp/>b);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;x&quot;</highlight><highlight class="normal">,<sp/>x);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Saved<sp/>system<sp/>and<sp/>solution<sp/>to<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>filename<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Print<sp/>the<sp/>original<sp/>system<sp/>and<sp/>the<sp/>solution<sp/>in<sp/>a<sp/>format<sp/>that&apos;s<sp/>easy<sp/>to<sp/>check<sp/>using<sp/>Python</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;import<sp/>numpy<sp/>as<sp/>np\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;v<sp/>=<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;n<sp/>=<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>block_size<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;N<sp/>=<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>num_blocks<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;M<sp/>=<sp/>np.array([\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>num_blocks;<sp/>++i)</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__io_1ga756d1c6bfac4b93da66e64e5f9c2b463" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::print_python</ref>(std::cout,<sp/>M(i),<sp/></highlight><highlight class="stringliteral">&quot;,\n&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;])\nK<sp/>=<sp/>np.array([\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>num_blocks;<sp/>++i)</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__io_1ga756d1c6bfac4b93da66e64e5f9c2b463" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::print_python</ref>(std::cout,<sp/>K(i),<sp/></highlight><highlight class="stringliteral">&quot;,\n&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;])\nb<sp/>=<sp/>np.array([\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>num_blocks;<sp/>++i)</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__io_1ga756d1c6bfac4b93da66e64e5f9c2b463" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::print_python</ref>(std::cout,<sp/>b(i),<sp/></highlight><highlight class="stringliteral">&quot;,\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;])\nx<sp/>=<sp/>np.array([\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>num_blocks;<sp/>++i)</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__io_1ga756d1c6bfac4b93da66e64e5f9c2b463" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::print_python</ref>(std::cout,<sp/>x(i),<sp/></highlight><highlight class="stringliteral">&quot;,\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;])\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal">}<sp/></highlight><highlight class="keywordflow">catch</highlight><highlight class="normal"><sp/>(std::exception<sp/>&amp;e)<sp/>{</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cerr<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Error:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>e.what()<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113" refid="solve-block-tridiagonal_8cpp_1aea5086e4f91c5ef217def0c6e0a7b3e6" refkind="member"><highlight class="normal"><ref refid="structTridiagSystem" kindref="compound">TridiagSystem</ref><sp/><ref refid="solve-block-tridiagonal_8cpp_1aea5086e4f91c5ef217def0c6e0a7b3e6" kindref="member">init_random_system</ref>(index_t<sp/>block_size,<sp/>index_t<sp/>num_blocks,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>circular)<sp/>{</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="group__topic-matrix-utils_1gae1611b15c38c77550ccbe46aff4bdcea" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::uninitialized</ref>;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/>std::mt19937<sp/>rng(12345);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>std::normal_distribution&lt;real_t&gt;<sp/>dist(0.0,<sp/>1.0);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Generate<sp/>a<sp/>random<sp/>lower<sp/>block<sp/>bidiagonal<sp/>matrix<sp/>with<sp/>diagonal<sp/>blocks<sp/>A(i)<sp/>and<sp/>subdiagonal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>blocks<sp/>B(i).</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref><sp/>A{{.depth<sp/>=<sp/>num_blocks,<sp/>.rows<sp/>=<sp/>block_size,<sp/>.cols<sp/>=<sp/>block_size},<sp/>uninitialized};</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref><sp/>B{{.depth<sp/>=<sp/>num_blocks,<sp/>.rows<sp/>=<sp/>block_size,<sp/>.cols<sp/>=<sp/>block_size},<sp/>uninitialized};</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>std::ranges::generate(A,<sp/>[&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>dist(rng);<sp/>});</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/>std::ranges::generate(B,<sp/>[&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>dist(rng);<sp/>});</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Allocate<sp/>storage<sp/>for<sp/>a<sp/>block<sp/>tridiagonal<sp/>system</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref><sp/>M{{.depth<sp/>=<sp/>num_blocks,<sp/>.rows<sp/>=<sp/>block_size,<sp/>.cols<sp/>=<sp/>block_size},<sp/>uninitialized};</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref><sp/>K{{.depth<sp/>=<sp/>num_blocks,<sp/>.rows<sp/>=<sp/>block_size,<sp/>.cols<sp/>=<sp/>block_size},<sp/>uninitialized};</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref><sp/>b{{.depth<sp/>=<sp/>num_blocks,<sp/>.rows<sp/>=<sp/>block_size,<sp/>.cols<sp/>=<sp/>1},<sp/>uninitialized};</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>std::ranges::generate(b,<sp/>[&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>dist(rng);<sp/>});</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!circular)</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(num_blocks<sp/>-<sp/>1).<ref refid="structbatmat_1_1matrix_1_1Matrix_1a757dbd5cb7427a0375682a3df28865a0" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">set_constant</ref>(0);</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Diagonal<sp/>blocks<sp/>M(i)<sp/>=<sp/>A(i)<sp/>A(i)ᵀ<sp/>+<sp/>B(i-1)<sp/>B(i-1)ᵀ<sp/>and<sp/>subdiagonal<sp/>blocks<sp/>K(i)<sp/>=<sp/>B(i)<sp/>A(i)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>num_blocks;<sp/>++i)<sp/>{</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>index_t<sp/>i_prev<sp/>=<sp/>(i<sp/>-<sp/>1<sp/>+<sp/>num_blocks)<sp/>%<sp/>num_blocks;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1ga7428194867449b2ee9c6d92e5cc3bc53" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xsyrk_LN&lt;real_t&gt;</ref>(1,<sp/>A(i),<sp/>0,<sp/>M(i));<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>M(i)<sp/>=<sp/>A(i)<sp/>A(i)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1ga7428194867449b2ee9c6d92e5cc3bc53" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xsyrk_LN&lt;real_t&gt;</ref>(1,<sp/>B(i_prev),<sp/>1,<sp/>M(i));<sp/><sp/></highlight><highlight class="comment">//<sp/>M(i)<sp/>+=<sp/>B(i-1)<sp/>B(i-1)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gaaca0d2aa4f6081d9ed621b64f4f50a42" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xgemm_NT&lt;real_t&gt;</ref>(1,<sp/>B(i),<sp/>A(i),<sp/>0,<sp/>K(i));<sp/></highlight><highlight class="comment">//<sp/>K(i)<sp/>=<sp/>B(i)<sp/>A(i)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>M(i).add_to_diagonal(1e-4);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Ensure<sp/>positive<sp/>definiteness</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structTridiagSystem" kindref="compound">TridiagSystem</ref>{.M<sp/>=<sp/>std::move(M),<sp/>.K<sp/>=<sp/>std::move(K),<sp/>.b<sp/>=<sp/>std::move(b)};</highlight></codeline>
+<codeline lineno="139"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="examples/solve-block-tridiagonal.cpp"/>
+  </compounddef>
+</doxygen>

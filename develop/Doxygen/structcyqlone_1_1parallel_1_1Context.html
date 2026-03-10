@@ -1,0 +1,790 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone::parallel::Context&lt; SC &gt; Struct Template Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('structcyqlone_1_1parallel_1_1Context.html','','structcyqlone_1_1parallel_1_1Context-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">cyqlone::parallel::Context&lt; SC &gt; Struct Template Reference<div class="ingroups"><a class="el" href="group__topic-parallelization.html">Parallelization</a></div></div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="parallel_8hpp_source.html">cyqlone/parallel.hpp</a>&gt;</code></p>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;class SC&gt;<br />
+struct cyqlone::parallel::Context&lt; SC &gt;</div><p>Thread context for parallel execution. </p>
+<p>Each thread has a unique thread index, and can synchronize and communicate with other threads in the same shared context. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="structcyqlone_1_1parallel_1_1SharedContext.html" title="Abstraction for a parallel execution context: a set of threads that can synchronize and communicate w...">SharedContext</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00064">64</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:aa99484189beec640c46e1fb396493f67" id="r_aa99484189beec640c46e1fb396493f67"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#aa99484189beec640c46e1fb396493f67">shared_context_type</a> = SC</td></tr>
+<tr class="memitem:a89686f17bc2ad6f01c5f6a96d7042048" id="r_a89686f17bc2ad6f01c5f6a96d7042048"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a89686f17bc2ad6f01c5f6a96d7042048">arrival_token</a> = typename shared_context_type::barrier_type::arrival_token</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a887da19d804556462d028e09f557124d" id="r_a887da19d804556462d028e09f557124d"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a887da19d804556462d028e09f557124d">is_master</a> () const</td></tr>
+<tr class="memdesc:a887da19d804556462d028e09f557124d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if this thread is the master thread (thread index 0).  <br /></td></tr>
+<tr class="memitem:aef10e2b4232a902976b61df51b076479" id="r_aef10e2b4232a902976b61df51b076479"><td class="memItemLeft"><a class="el" href="#a89686f17bc2ad6f01c5f6a96d7042048">arrival_token</a>&#160;</td><td class="memItemRight"><a class="el" href="#aef10e2b4232a902976b61df51b076479">arrive</a> ()</td></tr>
+<tr class="memdesc:aef10e2b4232a902976b61df51b076479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arrive at the barrier and obtain a token that can be used to wait for completion of the current barrier phase.  <br /></td></tr>
+<tr class="memitem:ae266e8ec4d5ef7380b5d882fbe641e70" id="r_ae266e8ec4d5ef7380b5d882fbe641e70"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae266e8ec4d5ef7380b5d882fbe641e70">wait</a> (<a class="el" href="#a89686f17bc2ad6f01c5f6a96d7042048">arrival_token</a> &amp;&amp;token)</td></tr>
+<tr class="memdesc:ae266e8ec4d5ef7380b5d882fbe641e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Await a token returned by <a class="el" href="#aef10e2b4232a902976b61df51b076479" title="arrive()">arrive()</a>, waiting for the barrier phase to complete.  <br /></td></tr>
+<tr class="memitem:a6963c65991275ff3585e3e688bcb551c" id="r_a6963c65991275ff3585e3e688bcb551c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6963c65991275ff3585e3e688bcb551c">arrive_and_wait</a> ()</td></tr>
+<tr class="memdesc:a6963c65991275ff3585e3e688bcb551c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arrive at the barrier and wait for the barrier phase to complete.  <br /></td></tr>
+<tr class="memitem:acc28682a90042ba9237897afb57e9480" id="r_acc28682a90042ba9237897afb57e9480"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#acc28682a90042ba9237897afb57e9480">arrive_and_wait</a> (int line)</td></tr>
+<tr class="memdesc:acc28682a90042ba9237897afb57e9480"><td class="mdescLeft">&#160;</td><td class="mdescRight">Debug version of <a class="el" href="#a6963c65991275ff3585e3e688bcb551c" title="arrive_and_wait()">arrive_and_wait()</a> that performs a sanity check to ensure that all threads are arriving at the same line of code.  <br /></td></tr>
+<tr class="memitem:a0f46566118026dbf50b3fa78d05aaa19" id="r_a0f46566118026dbf50b3fa78d05aaa19"><td class="memTemplParams" colspan="2">template&lt;class T&gt; </td></tr>
+<tr class="memitem:a0f46566118026dbf50b3fa78d05aaa19 template"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#a0f46566118026dbf50b3fa78d05aaa19">broadcast</a> (T x, index_t src=0)</td></tr>
+<tr class="memdesc:a0f46566118026dbf50b3fa78d05aaa19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Broadcast a value <code class="param">x</code> from the thread with index <code class="param">src</code> to all threads.  <br /></td></tr>
+<tr class="memitem:a3738b26f863e058b5f67bf605d578673" id="r_a3738b26f863e058b5f67bf605d578673"><td class="memTemplParams" colspan="2">template&lt;class F, class... Args&gt; </td></tr>
+<tr class="memitem:a3738b26f863e058b5f67bf605d578673 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a3738b26f863e058b5f67bf605d578673">call_broadcast</a> (F &amp;&amp;f, Args &amp;&amp;...args) -&gt; std::invoke_result_t&lt; F, Args... &gt;</td></tr>
+<tr class="memdesc:a3738b26f863e058b5f67bf605d578673"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call a function <code class="param">f</code> with the given <code class="param">args</code> on a single thread and broadcast the return value to all threads.  <br /></td></tr>
+<tr class="memitem:aa993898c2ab5cc872e6b012fde96f064" id="r_aa993898c2ab5cc872e6b012fde96f064"><td class="memTemplParams" colspan="2">template&lt;class T, class F&gt; </td></tr>
+<tr class="memitem:aa993898c2ab5cc872e6b012fde96f064 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#aa993898c2ab5cc872e6b012fde96f064">arrive_reduce</a> (T x, F func)</td></tr>
+<tr class="memdesc:aa993898c2ab5cc872e6b012fde96f064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a reduction of <code class="param">x</code> across all threads using the given binary function <code class="param">func</code>.  <br /></td></tr>
+<tr class="memitem:aa9b103c071e149666500fc45589417b0" id="r_aa9b103c071e149666500fc45589417b0"><td class="memTemplParams" colspan="2">template&lt;class T&gt; </td></tr>
+<tr class="memitem:aa9b103c071e149666500fc45589417b0 template"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#aa9b103c071e149666500fc45589417b0">wait_reduce</a> (shared_context_type::barrier_type::template arrival_token_typed&lt; T &gt; &amp;&amp;token)</td></tr>
+<tr class="memdesc:aa9b103c071e149666500fc45589417b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for the reduction initiated by <a class="el" href="#aa993898c2ab5cc872e6b012fde96f064" title="arrive_reduce()">arrive_reduce()</a> to complete and obtain the reduced value.  <br /></td></tr>
+<tr class="memitem:acfda285f17d9c76cb07d0a62c4ca42d2" id="r_acfda285f17d9c76cb07d0a62c4ca42d2"><td class="memTemplParams" colspan="2">template&lt;class T, class F&gt; </td></tr>
+<tr class="memitem:acfda285f17d9c76cb07d0a62c4ca42d2 template"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#acfda285f17d9c76cb07d0a62c4ca42d2">reduce</a> (T x, F func)</td></tr>
+<tr class="memdesc:acfda285f17d9c76cb07d0a62c4ca42d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a reduction of <code class="param">x</code> across all threads using the given binary function <code class="param">func</code>, and wait for the result.  <br /></td></tr>
+<tr class="memitem:a35e4cdfc4b57d6c60e8edc126dbc4a83" id="r_a35e4cdfc4b57d6c60e8edc126dbc4a83"><td class="memTemplParams" colspan="2">template&lt;class T&gt; </td></tr>
+<tr class="memitem:a35e4cdfc4b57d6c60e8edc126dbc4a83 template"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#a35e4cdfc4b57d6c60e8edc126dbc4a83">reduce</a> (T x)</td></tr>
+<tr class="memdesc:a35e4cdfc4b57d6c60e8edc126dbc4a83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduction with <span class="tt">std::plus</span>, i.e., summation across all threads.  <br /></td></tr>
+<tr class="memitem:a42fd8615d3d4fa66a36319cc5aef3b91" id="r_a42fd8615d3d4fa66a36319cc5aef3b91"><td class="memTemplParams" colspan="2">template&lt;class F&gt; </td></tr>
+<tr class="memitem:a42fd8615d3d4fa66a36319cc5aef3b91 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a42fd8615d3d4fa66a36319cc5aef3b91">run_single_sync</a> (F &amp;&amp;f)</td></tr>
+<tr class="memdesc:a42fd8615d3d4fa66a36319cc5aef3b91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for all threads to reach this point, then run the given function on a single thread before releasing all threads again.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:af571ba6868ab56af0d2a510891d48ac3" id="r_af571ba6868ab56af0d2a510891d48ac3"><td class="memItemLeft"><a class="el" href="#aa99484189beec640c46e1fb396493f67">shared_context_type</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#af571ba6868ab56af0d2a510891d48ac3">shared</a></td></tr>
+<tr class="memitem:ada96a787c05abfa1ec56308fa189d7a6" id="r_ada96a787c05abfa1ec56308fa189d7a6"><td class="memItemLeft">const index_t&#160;</td><td class="memItemRight"><a class="el" href="#ada96a787c05abfa1ec56308fa189d7a6">index</a></td></tr>
+<tr class="memitem:af82ec77bbfa2eb48834ed8971c51b45e" id="r_af82ec77bbfa2eb48834ed8971c51b45e"><td class="memItemLeft">const index_t&#160;</td><td class="memItemRight"><a class="el" href="#af82ec77bbfa2eb48834ed8971c51b45e">num_thr</a> = shared.num_thr</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-friends" class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:ae464c8a4dc0d8acc3e410fa51d3c33fd" id="r_ae464c8a4dc0d8acc3e410fa51d3c33fd"><td class="memItemLeft">constexpr bool&#160;</td><td class="memItemRight"><a class="el" href="#ae464c8a4dc0d8acc3e410fa51d3c33fd">operator==</a> (const <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">Context</a> &amp;a, const <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">Context</a> &amp;b)</td></tr>
+</table>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a id="aa99484189beec640c46e1fb396493f67" name="aa99484189beec640c46e1fb396493f67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa99484189beec640c46e1fb396493f67">&#9670;&#160;</a></span>shared_context_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::shared_context_type = SC</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00065">65</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a89686f17bc2ad6f01c5f6a96d7042048" name="a89686f17bc2ad6f01c5f6a96d7042048"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89686f17bc2ad6f01c5f6a96d7042048">&#9670;&#160;</a></span>arrival_token</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::arrival_token = typename shared_context_type::barrier_type::arrival_token</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00073">73</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a887da19d804556462d028e09f557124d" name="a887da19d804556462d028e09f557124d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a887da19d804556462d028e09f557124d">&#9670;&#160;</a></span>is_master()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::is_master </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if this thread is the master thread (thread index 0). </p>
+<p>Useful for determining which thread should perform operations like printing to the console, which should be done by a single thread and does not require synchronization. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00086">86</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aef10e2b4232a902976b61df51b076479" name="aef10e2b4232a902976b61df51b076479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef10e2b4232a902976b61df51b076479">&#9670;&#160;</a></span>arrive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a89686f17bc2ad6f01c5f6a96d7042048">arrival_token</a> <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::arrive </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Arrive at the barrier and obtain a token that can be used to wait for completion of the current barrier phase. </p>
+<dl class="section note"><dt>Note</dt><dd>Token must be awaited before any other call to arrive. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00091">91</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae266e8ec4d5ef7380b5d882fbe641e70" name="ae266e8ec4d5ef7380b5d882fbe641e70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae266e8ec4d5ef7380b5d882fbe641e70">&#9670;&#160;</a></span>wait()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::wait </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a89686f17bc2ad6f01c5f6a96d7042048">arrival_token</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>token</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Await a token returned by <a class="el" href="#aef10e2b4232a902976b61df51b076479" title="arrive()">arrive()</a>, waiting for the barrier phase to complete. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00100">100</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6963c65991275ff3585e3e688bcb551c" name="a6963c65991275ff3585e3e688bcb551c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6963c65991275ff3585e3e688bcb551c">&#9670;&#160;</a></span>arrive_and_wait() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::arrive_and_wait </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Arrive at the barrier and wait for the barrier phase to complete. </p>
+<p>This is a convenience wrapper around <a class="el" href="#aef10e2b4232a902976b61df51b076479" title="arrive()">arrive()</a> and <a class="el" href="#ae266e8ec4d5ef7380b5d882fbe641e70" title="wait()">wait()</a> for the common case where the thread does not have other work to do while waiting. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00112">112</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acc28682a90042ba9237897afb57e9480" name="acc28682a90042ba9237897afb57e9480"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc28682a90042ba9237897afb57e9480">&#9670;&#160;</a></span>arrive_and_wait() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::arrive_and_wait </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>line</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Debug version of <a class="el" href="#a6963c65991275ff3585e3e688bcb551c" title="arrive_and_wait()">arrive_and_wait()</a> that performs a sanity check to ensure that all threads are arriving at the same line of code. </p>
+<p>The <code class="param">line</code> parameter should be the same for all threads arriving at the same barrier. It is only verified in debug builds, and is equivalent to <a class="el" href="#a6963c65991275ff3585e3e688bcb551c" title="arrive_and_wait()">arrive_and_wait()</a> in release builds. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00122">122</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0f46566118026dbf50b3fa78d05aaa19" name="a0f46566118026dbf50b3fa78d05aaa19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f46566118026dbf50b3fa78d05aaa19">&#9670;&#160;</a></span>broadcast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::broadcast </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>src</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Broadcast a value <code class="param">x</code> from the thread with index <code class="param">src</code> to all threads. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00131">131</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3738b26f863e058b5f67bf605d578673" name="a3738b26f863e058b5f67bf605d578673"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3738b26f863e058b5f67bf605d578673">&#9670;&#160;</a></span>call_broadcast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<div class="memtemplate">
+template&lt;class F, class... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::call_broadcast </td>
+          <td>(</td>
+          <td class="paramtype">F &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>f</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args &amp;&amp;...</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;) -&gt; std::invoke_result_t&lt; F, Args... &gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Call a function <code class="param">f</code> with the given <code class="param">args</code> on a single thread and broadcast the return value to all threads. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00139">139</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa993898c2ab5cc872e6b012fde96f064" name="aa993898c2ab5cc872e6b012fde96f064"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa993898c2ab5cc872e6b012fde96f064">&#9670;&#160;</a></span>arrive_reduce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<div class="memtemplate">
+template&lt;class T, class F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::arrive_reduce </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F</td>          <td class="paramname"><span class="paramname"><em>func</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Perform a reduction of <code class="param">x</code> across all threads using the given binary function <code class="param">func</code>. </p>
+<p>Returns a token that can be used to wait for the reduction to complete and obtain the reduced value. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00154">154</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa9b103c071e149666500fc45589417b0" name="aa9b103c071e149666500fc45589417b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9b103c071e149666500fc45589417b0">&#9670;&#160;</a></span>wait_reduce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::wait_reduce </td>
+          <td>(</td>
+          <td class="paramtype">shared_context_type::barrier_type::template arrival_token_typed&lt; T &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>token</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Wait for the reduction initiated by <a class="el" href="#aa993898c2ab5cc872e6b012fde96f064" title="arrive_reduce()">arrive_reduce()</a> to complete and obtain the reduced value. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00162">162</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acfda285f17d9c76cb07d0a62c4ca42d2" name="acfda285f17d9c76cb07d0a62c4ca42d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfda285f17d9c76cb07d0a62c4ca42d2">&#9670;&#160;</a></span>reduce() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<div class="memtemplate">
+template&lt;class T, class F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::reduce </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">F</td>          <td class="paramname"><span class="paramname"><em>func</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Perform a reduction of <code class="param">x</code> across all threads using the given binary function <code class="param">func</code>, and wait for the result. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00169">169</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a35e4cdfc4b57d6c60e8edc126dbc4a83" name="a35e4cdfc4b57d6c60e8edc126dbc4a83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35e4cdfc4b57d6c60e8edc126dbc4a83">&#9670;&#160;</a></span>reduce() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::reduce </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reduction with <span class="tt">std::plus</span>, i.e., summation across all threads. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="#acfda285f17d9c76cb07d0a62c4ca42d2" title="Perform a reduction of x across all threads using the given binary function func, and wait for the re...">reduce(T,F)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00176">176</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a42fd8615d3d4fa66a36319cc5aef3b91" name="a42fd8615d3d4fa66a36319cc5aef3b91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42fd8615d3d4fa66a36319cc5aef3b91">&#9670;&#160;</a></span>run_single_sync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<div class="memtemplate">
+template&lt;class F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::run_single_sync </td>
+          <td>(</td>
+          <td class="paramtype">F &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>f</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Wait for all threads to reach this point, then run the given function on a single thread before releasing all threads again. </p>
+<p>Changes by all threads are visible during the call to <code class="param">f</code> and changes made by <code class="param">f</code> are visible to all threads after this function returns. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00184">184</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-related-members" id="doc-related-members"></a><h2 id="header-doc-related-members" class="groupheader">Friends And Related Symbol Documentation</h2>
+<a id="ae464c8a4dc0d8acc3e410fa51d3c33fd" name="ae464c8a4dc0d8acc3e410fa51d3c33fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae464c8a4dc0d8acc3e410fa51d3c33fd">&#9670;&#160;</a></span>operator==</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">Context</a>&lt; SC &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">Context</a>&lt; SC &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>b</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel friend">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00079">79</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="af571ba6868ab56af0d2a510891d48ac3" name="af571ba6868ab56af0d2a510891d48ac3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af571ba6868ab56af0d2a510891d48ac3">&#9670;&#160;</a></span>shared</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#aa99484189beec640c46e1fb396493f67">shared_context_type</a>&amp; <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::shared</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00076">76</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ada96a787c05abfa1ec56308fa189d7a6" name="ada96a787c05abfa1ec56308fa189d7a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada96a787c05abfa1ec56308fa189d7a6">&#9670;&#160;</a></span>index</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const index_t <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::index</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00077">77</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af82ec77bbfa2eb48834ed8971c51b45e" name="af82ec77bbfa2eb48834ed8971c51b45e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af82ec77bbfa2eb48834ed8971c51b45e">&#9670;&#160;</a></span>num_thr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class SC&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const index_t <a class="el" href="structcyqlone_1_1parallel_1_1Context.html">cyqlone::parallel::Context</a>&lt; SC &gt;::num_thr = shared.num_thr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00077">77</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>src/cyqlone/include/cyqlone/<a class="el" href="parallel_8hpp_source.html">parallel.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacecyqlone.html">cyqlone</a></li><li class="navelem"><a href="namespacecyqlone_1_1parallel.html">parallel</a></li><li class="navelem"><a href="structcyqlone_1_1parallel_1_1Context.html">Context</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

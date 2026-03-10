@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['backward_0',['Backward',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__core.html#ga5d6bb8c635f50b4d523fe29ba494ab63ab3263eb38f8903efc271cc7a760da510',1,'guanaqo::Backward'],['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__core.html#ga5d6bb8c635f50b4d523fe29ba494ab63ab3263eb38f8903efc271cc7a760da510',1,'guanaqo::Backward'],['https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-utils.html#gaa625a055ebbfa5ba05a1fd8f1f104807ab3263eb38f8903efc271cc7a760da510',1,'batmat::Backward'],['https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-utils.html#gaa625a055ebbfa5ba05a1fd8f1f104807ab3263eb38f8903efc271cc7a760da510',1,'batmat::Backward']]],
+  ['busy_1',['Busy',['../structcyqlone_1_1qpalm_1_1DetailedStats.html#afbba2d5a7368b173c108f104e7d7459ca31ddc63b44ee2a594e7254f88cb46a85',1,'cyqlone::qpalm::DetailedStats::Busy'],['../group__topic-optimization-solvers.html#ggade0917661457f4dc0d6396ded24277a4ad8a942ef2b04672adfafef0ad817a407',1,'cyqlone::qpalm::Busy']]]
+];

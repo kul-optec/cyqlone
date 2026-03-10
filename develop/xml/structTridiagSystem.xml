@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structTridiagSystem" kind="struct" language="C++" prot="public">
+    <compoundname>TridiagSystem</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structTridiagSystem_1abc697170b9533d791d25d633fb52b837" prot="public" static="no" mutable="no">
+        <type><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref></type>
+        <definition>matrices TridiagSystem::M</definition>
+        <argsstring></argsstring>
+        <name>M</name>
+        <qualifiedname>TridiagSystem::M</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/solve-block-tridiagonal.cpp" line="23" column="14" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTridiagSystem_1a83a123410ddf401f3cab7e507d8eb50d" prot="public" static="no" mutable="no">
+        <type><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref></type>
+        <definition>matrices TridiagSystem::K</definition>
+        <argsstring></argsstring>
+        <name>K</name>
+        <qualifiedname>TridiagSystem::K</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/solve-block-tridiagonal.cpp" line="23" column="16" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structTridiagSystem_1aa5af71777abff45ccfd6f6a4c715f1d1" prot="public" static="no" mutable="no">
+        <type><ref refid="solve-block-tridiagonal_8cpp_1a93ebb2b3c08761f352b56f5a0ffa5606" kindref="member">matrices</ref></type>
+        <definition>matrices TridiagSystem::b</definition>
+        <argsstring></argsstring>
+        <name>b</name>
+        <qualifiedname>TridiagSystem::b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="examples/solve-block-tridiagonal.cpp" line="23" column="18" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>TridiagSystem</label>
+        <link refid="structTridiagSystem"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+K</edgelabel>
+          <edgelabel>+M</edgelabel>
+          <edgelabel>+b</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>batmat::matrix::Matrix&lt; real_t, index_t &gt;</label>
+        <link refid="structbatmat_1_1matrix_1_1Matrix" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag"/>
+      </node>
+    </collaborationgraph>
+    <location file="examples/solve-block-tridiagonal.cpp" line="22" column="1" bodyfile="examples/solve-block-tridiagonal.cpp" bodystart="22" bodyend="24"/>
+    <listofallmembers>
+      <member refid="structTridiagSystem_1aa5af71777abff45ccfd6f6a4c715f1d1" prot="public" virt="non-virtual"><scope>TridiagSystem</scope><name>b</name></member>
+      <member refid="structTridiagSystem_1a83a123410ddf401f3cab7e507d8eb50d" prot="public" virt="non-virtual"><scope>TridiagSystem</scope><name>K</name></member>
+      <member refid="structTridiagSystem_1abc697170b9533d791d25d633fb52b837" prot="public" virt="non-virtual"><scope>TridiagSystem</scope><name>M</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

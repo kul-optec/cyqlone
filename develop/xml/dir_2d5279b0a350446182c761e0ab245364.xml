@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_2d5279b0a350446182c761e0ab245364" kind="dir">
+    <compoundname>src/qpalm/include/cyqlone/qpalm</compoundname>
+    <innerdir refid="dir_5a761708a043e211fe4c2c5b381fa9bf">src/qpalm/include/cyqlone/qpalm/backends</innerdir>
+    <innerdir refid="dir_a866254f62e3a09dbc49bd760cf63499">src/qpalm/include/cyqlone/qpalm/implementation</innerdir>
+    <innerfile refid="detailed-stats_8hpp">detailed-stats.hpp</innerfile>
+    <innerfile refid="qpalm_8hpp">qpalm.hpp</innerfile>
+    <innerfile refid="settings_8hpp">settings.hpp</innerfile>
+    <innerfile refid="solver_8hpp">solver.hpp</innerfile>
+    <innerfile refid="status_8hpp">status.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/qpalm/include/cyqlone/qpalm/"/>
+  </compounddef>
+</doxygen>

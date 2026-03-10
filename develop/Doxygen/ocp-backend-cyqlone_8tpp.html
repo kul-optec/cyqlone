@@ -1,0 +1,464 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp File Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('ocp-backend-cyqlone_8tpp.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">ocp-backend-cyqlone.tpp File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;<a class="el" href="config_8hpp_source.html">cyqlone/config.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="cyqlone_8hpp_source.html">cyqlone/cyqlone.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="linalg_8hpp_source.html">cyqlone/linalg.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="neumaier_8hpp_source.html">cyqlone/neumaier.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="ocp-backend-cyqlone_8hpp_source.html">cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="breakpoint_8hpp_source.html">cyqlone/qpalm/implementation/breakpoint.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="reduce_8hpp_source.html">cyqlone/reduce.hpp</a>&gt;</code><br />
+<code>#include &lt;batmat/assume.hpp&gt;</code><br />
+<code>#include &lt;batmat/config.hpp&gt;</code><br />
+<code>#include &lt;batmat/linalg/copy.hpp&gt;</code><br />
+<code>#include &lt;batmat/openmp.h&gt;</code><br />
+<code>#include &lt;batmat/simd.hpp&gt;</code><br />
+<code>#include &lt;guanaqo/print.hpp&gt;</code><br />
+<code>#include &lt;guanaqo/timed-cpu.hpp&gt;</code><br />
+<code>#include &lt;guanaqo/trace.hpp&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;array&gt;</code><br />
+<code>#include &lt;cassert&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
+<code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;numeric&gt;</code><br />
+<code>#include &lt;optional&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;tuple&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;<a class="el" href="ineq-constr_8tpp_source.html">cyqlone/qpalm/backends/backend-cyqlone/ineq-constr.tpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="linalg_8tpp_source.html">cyqlone/qpalm/backends/backend-cyqlone/linalg.tpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="backends_2backend-cyqlone_2linesearch_8tpp_source.html">cyqlone/qpalm/backends/backend-cyqlone/linesearch.tpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="solve_8tpp_source.html">cyqlone/qpalm/backends/backend-cyqlone/solve.tpp</a>&gt;</code><br />
+</div>
+<p><a href="ocp-backend-cyqlone_8tpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E" id="r_cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;</a></td></tr>
+<tr class="memitem:cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3Avar_5Fvec_5Ft" id="r_cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3Avar_5Fvec_5Ft"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1var__vec__t.html">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::var_vec_t</a></td></tr>
+<tr class="memitem:cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3Aeq_5Fconstr_5Fvec_5Ft" id="r_cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3Aeq_5Fconstr_5Fvec_5Ft"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1eq__constr__vec__t.html">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::eq_constr_vec_t</a></td></tr>
+<tr class="memitem:cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3Aineq_5Fconstr_5Fvec_5Ft" id="r_cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3Aineq_5Fconstr_5Fvec_5Ft"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1ineq__constr__vec__t.html">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::ineq_constr_vec_t</a></td></tr>
+<tr class="memitem:cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3Aactive_5Fset_5Ft" id="r_cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3Aactive_5Fset_5Ft"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t.html">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t</a></td></tr>
+<tr class="memitem:cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3ATimings_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyQPALMBackend_5F1_5F1Timings" id="r_cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3ATimings_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyQPALMBackend_5F1_5F1Timings"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1Timings">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::Timings</a></td></tr>
+<tr class="memitem:cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3APenaltySettings_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyQPALMBackend_5F1_5F1PenaltySettings" id="r_cyqlone_3A_3Aqpalm_3A_3ACyQPALMBackend_3C_20VL_2C_20DefaultOrder_20_3E_3A_3APenaltySettings_5Fstructcyqlone_5F1_5F1qpalm_5F1_5F1CyQPALMBackend_5F1_5F1PenaltySettings"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::PenaltySettings</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:cyqlone" id="r_cyqlone"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacecyqlone.html">cyqlone</a></td></tr>
+<tr class="memitem:cyqlone_3A_3Aqpalm" id="r_cyqlone_3A_3Aqpalm"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacecyqlone_1_1qpalm.html">cyqlone::qpalm</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a0d06e7a2fb9288cf51ce720d27a14baf" id="r_a0d06e7a2fb9288cf51ce720d27a14baf"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">StorageOrder</a> DefaultOrder&gt; </td></tr>
+<tr class="memitem:a0d06e7a2fb9288cf51ce720d27a14baf template"><td class="memItemLeft"><a class="el" href="structcyqlone_1_1qpalm_1_1unique__CyQPALMBackend.html">unique_CyQPALMBackend</a>&lt; VL, DefaultOrder &gt;&#160;</td><td class="memItemRight"><a class="el" href="namespacecyqlone_1_1qpalm.html#a0d06e7a2fb9288cf51ce720d27a14baf">cyqlone::qpalm::make_cyqpalm_backend</a> (const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt;&gt; &amp;ocp, <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyqloneData">CyqloneData</a> data, const <a class="el" href="group__topic-optimization-solvers-ocp.html#structcyqlone_1_1qpalm_1_1CyQPALMBackendSettings">CyQPALMBackendSettings</a> &amp;settings)</td></tr>
+<tr class="memitem:gaf5dbe2437a5f7176b58b7743cba83d1c" id="r_gaf5dbe2437a5f7176b58b7743cba83d1c"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">StorageOrder</a> DefaultOrder = StorageOrder::ColMajor&gt; </td></tr>
+<tr class="memitem:gaf5dbe2437a5f7176b58b7743cba83d1c template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#gaf5dbe2437a5f7176b58b7743cba83d1c">cyqlone::qpalm::update_cyqpalm_backend</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; VL, DefaultOrder &gt; &amp;backend, const <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt; real_t &gt; &amp;ocp)</td></tr>
+<tr class="memitem:ga8aac8ebf6f85aba82b32a927bc9bea00" id="r_ga8aac8ebf6f85aba82b32a927bc9bea00"><td class="memTemplParams" colspan="2">template&lt;index_t VL, <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__linalg__views.html#gac0a39236f11af6725f2dc1d339c95bae">StorageOrder</a> DefaultOrder = StorageOrder::ColMajor&gt; </td></tr>
+<tr class="memitem:ga8aac8ebf6f85aba82b32a927bc9bea00 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-optimization-solvers-ocp.html#ga8aac8ebf6f85aba82b32a927bc9bea00">cyqlone::qpalm::update_cyqpalm_backend</a> (<a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html">CyQPALMBackend</a>&lt; VL, DefaultOrder &gt; &amp;backend, const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+</table>
+<hr/><h2 id="header-inline_5Fclasses" class="groupheader">Class Documentation</h2>
+<a name="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1Timings" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1Timings"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1Timings">&#9670;&#160;</a></span>cyqlone::qpalm::CyQPALMBackend::Timings</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct cyqlone::qpalm::CyQPALMBackend::Timings</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="a1a4dc4a1734c726a442ef2e41a9862fa" name="a1a4dc4a1734c726a442ef2e41a9862fa"></a>typedef <a class="el" href="namespacecyqlone.html#ab50cdc97a7f508bd11dbdeac98e83024">DefaultTimings</a></td>
+<td class="fieldname">
+type <a class="el" href="namespacecyqlone.html#ab50cdc97a7f508bd11dbdeac98e83024">DefaultTimings</a></td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="abe51e320bcf5ed3554d5eae33042f599" name="abe51e320bcf5ed3554d5eae33042f599"></a>typedef Timed&lt; <a class="el" href="namespacecyqlone.html#ab50cdc97a7f508bd11dbdeac98e83024">DefaultTimings</a> &gt;</td>
+<td class="fieldname">
+timed_t <a class="elRef" href="https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__timing.html">guanaqo::Timed</a>&lt;<a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat.html">batmat::DefaultTimings</a>&gt;</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="af694ceffb0c3b4c5adbc12aebbfb56df" name="af694ceffb0c3b4c5adbc12aebbfb56df"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+breakpoints {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a16dea9b5b59872f315ee5999b4563976" name="a16dea9b5b59872f315ee5999b4563976"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+calc_y_hat {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a90ab447f62a735ea3241498b07fdf12c" name="a90ab447f62a735ea3241498b07fdf12c"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+calc_y_hat_AT {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a5bba09dad767dbd1942c9eb26e815e32" name="a5bba09dad767dbd1942c9eb26e815e32"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+update_active_set_change {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a24a908b457523bc2f4b15f5bfaf8da65" name="a24a908b457523bc2f4b15f5bfaf8da65"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+update_factorization {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a213dcf4f3a08a88ce2b981ab83e4af09" name="a213dcf4f3a08a88ce2b981ab83e4af09"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+factor {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a443290022a2449e43a253933aeae6e77" name="a443290022a2449e43a253933aeae6e77"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+solve {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ab3b8d53955512df2c1ebd0c16244a17d" name="ab3b8d53955512df2c1ebd0c16244a17d"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+solve_MT {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ad268450dea367c7e9443dd7c3817cb63" name="ad268450dea367c7e9443dd7c3817cb63"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+solve_A {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="adf86c39ae2d8e25f36839561cb2ae9d1" name="adf86c39ae2d8e25f36839561cb2ae9d1"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+solve_grad {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a1d1fc41b74cddaa73a038e7b5993cc1f" name="a1d1fc41b74cddaa73a038e7b5993cc1f"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+solve_resid {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a53f3b86b882ba21cd935a8f4239076ec" name="a53f3b86b882ba21cd935a8f4239076ec"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+recompute_outer_grad {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a33e2858e6d2cd7b0ec95e1336ba28541" name="a33e2858e6d2cd7b0ec95e1336ba28541"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+recompute_outer_A {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ab0d61a3df654d92123d871ba29507a53" name="ab0d61a3df654d92123d871ba29507a53"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+recompute_outer_AT {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="aa9ffc065fa11aac61ec9029e699be39c" name="aa9ffc065fa11aac61ec9029e699be39c"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+recompute_outer_MT {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ae59a438b41054d50128a85e69515d883" name="ae59a438b41054d50128a85e69515d883"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+recompute_outer_norm {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ade1b78d1a2f74f465a81aca43bf642a3" name="ade1b78d1a2f74f465a81aca43bf642a3"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+recompute_inner_grad {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a4bb19e2f76538538a715c24cdc731e95" name="a4bb19e2f76538538a715c24cdc731e95"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+recompute_inner_A {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="aca4b6243bb26791d74915fa6471e3e26" name="aca4b6243bb26791d74915fa6471e3e26"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+recompute_inner_MT {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="af24b3f3af397a739f53609a47de10fc1" name="af24b3f3af397a739f53609a47de10fc1"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+ineq_constr_resid {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a0408adfc416f83ca3e035e38e5098f43" name="a0408adfc416f83ca3e035e38e5098f43"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+ineq_constr_viol {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="afe87c80e422a2f9d1acef049270f2e2c" name="afe87c80e422a2f9d1acef049270f2e2c"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+ineq_constr_resid_al {}</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a3248c60e7e7484a222af16e8384c72a5" name="a3248c60e7e7484a222af16e8384c72a5"></a><a class="el" href="structcyqlone_1_1qpalm_1_1CyQPALMBackend.html#a1a4dc4a1734c726a442ef2e41a9862fa">type</a></td>
+<td class="fieldname">
+update_penalty_y {}</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a name="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1PenaltySettings">&#9670;&#160;</a></span>cyqlone::qpalm::CyQPALMBackend::PenaltySettings</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct cyqlone::qpalm::CyQPALMBackend::PenaltySettings</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="3">Class Members</th></tr>
+<tr><td class="fieldtype">
+<a id="ab415575db2fb46bdc65c98bef9cd7a7b" name="ab415575db2fb46bdc65c98bef9cd7a7b"></a>real_t</td>
+<td class="fieldname">
+θ</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a46e4b816757eb36919adcd8a8d3c299c" name="a46e4b816757eb36919adcd8a8d3c299c"></a>real_t</td>
+<td class="fieldname">
+Δy</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a560cef30409d81f0c2c2c0954f409ba6" name="a560cef30409d81f0c2c2c0954f409ba6"></a>real_t</td>
+<td class="fieldname">
+Δy_always</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="aff96dc973f14bd43277c46b5d39d3e18" name="aff96dc973f14bd43277c46b5d39d3e18"></a>real_t</td>
+<td class="fieldname">
+max_penalty_y</td>
+<td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_4f447dd82efef87cc1e4609c8432bde2.html">qpalm</a></li><li class="navelem"><a href="dir_3f2f9b6a483e8fb1fb5becef34cc0a81.html">include</a></li><li class="navelem"><a href="dir_c6f75b28a14edee788b557d3d0164195.html">cyqlone</a></li><li class="navelem"><a href="dir_2d5279b0a350446182c761e0ab245364.html">qpalm</a></li><li class="navelem"><a href="dir_5a761708a043e211fe4c2c5b381fa9bf.html">backends</a></li><li class="navelem"><a href="ocp-backend-cyqlone_8tpp.html">ocp-backend-cyqlone.tpp</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

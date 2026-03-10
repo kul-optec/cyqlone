@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="README_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">[![arXiv<sp/>Preprint](https://img.shields.io/badge/arXiv-Preprint-b31b1b)](https://arxiv.org/abs/2512.09058)</highlight></codeline>
+<codeline><highlight class="normal">[![Documentation](https://img.shields.io/badge/Documentation-develop-blue)](https://kul-optec.github.io/cyqlone/develop/Doxygen)</highlight></codeline>
+<codeline><highlight class="normal">[![CI:<sp/>Linux](https://github.com/kul-optec/cyqlone/actions/workflows/linux.yml/badge.svg)](https://github.com/kul-optec/cyqlone/actions/workflows/linux.yml)</highlight></codeline>
+<codeline><highlight class="normal">[![GitHub<sp/>License](https://img.shields.io/github/license/kul-optec/alpaqa?label=License&amp;logo=gnu)](https://github.com/kul-optec/alpaqa/blob/develop/LICENSE)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&lt;p<sp/>align=&quot;center&quot;&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;img<sp/>src=&quot;docs/source/images/cyqlone-logo-text.svg&quot;<sp/>width=300&gt;</highlight></codeline>
+<codeline><highlight class="normal">&lt;/p&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Cyqlone</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Fast,<sp/>**parallel<sp/>and<sp/>vectorized<sp/>solver**<sp/>for<sp/>linear<sp/>systems<sp/>with<sp/>**optimal<sp/>control<sp/>structure**.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Also<sp/>includes<sp/>an<sp/>implementation<sp/>of<sp/>the<sp/>**CyQPALM**<sp/>solver<sp/>that<sp/>uses<sp/>the<sp/>Cyqlone<sp/>linear<sp/>solver<sp/>as<sp/>a</highlight></codeline>
+<codeline><highlight class="normal">backend,<sp/>with<sp/>parallel<sp/>factorization<sp/>update<sp/>routines<sp/>to<sp/>handle<sp/>active<sp/>set<sp/>changes<sp/>and<sp/>a<sp/>parallel</highlight></codeline>
+<codeline><highlight class="normal">exact<sp/>line<sp/>search.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Preprint</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>paper<sp/>describing<sp/>the<sp/>algorithms<sp/>in<sp/>this<sp/>repository<sp/>can<sp/>be<sp/>found<sp/>on<sp/>arXiv:<sp/>[**arxiv.org/abs/2512.09058**](https://arxiv.org/abs/2512.09058)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bibtex</highlight></codeline>
+<codeline><highlight class="normal">@misc{pas_cyqlone_2025,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>title<sp/>=<sp/>{Cyqlone:<sp/>{A}<sp/>{Parallel},<sp/>{High}-{Performance}<sp/>{Linear}<sp/>{Solver}<sp/>for<sp/>{Optimal}<sp/>{Control}},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>url<sp/>=<sp/>{http://arxiv.org/abs/2512.09058},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>doi<sp/>=<sp/>{10.48550/arXiv.2512.09058},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>publisher<sp/>=<sp/>{arXiv},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>author<sp/>=<sp/>{Pas,<sp/>Pieter<sp/>and<sp/>Patrinos,<sp/>Panagiotis},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>month<sp/>=<sp/>dec,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>year<sp/>=<sp/>{2025},</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Reproduction<sp/>of<sp/>benchmark<sp/>results<sp/>from<sp/>the<sp/>paper</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">A<sp/>script<sp/>to<sp/>reproduce<sp/>the<sp/>benchmark<sp/>results<sp/>from<sp/>the<sp/>paper<sp/>can<sp/>be<sp/>found<sp/>in<sp/>`benchmarks/cyqpalm`.</highlight></codeline>
+<codeline><highlight class="normal">See<sp/>[`benchmarks/cyqpalm/README.md`](benchmarks/cyqpalm/README.md)<sp/>for<sp/>instructions.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Documentation</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>[Detailed<sp/>algorithm<sp/>descriptions](https://kul-optec.github.io/cyqlone/develop/Doxygen/algorithms.html)<sp/>(matching<sp/>the<sp/>pseudocode<sp/>in<sp/>the<sp/>paper)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Examples](https://kul-optec.github.io/cyqlone/develop/Doxygen/examples.html)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[API<sp/>documentation](https://kul-optec.github.io/cyqlone/develop/Doxygen/topics.html)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Installation</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Requirements:<sp/>Linux,<sp/>CMake,<sp/>Conan<sp/>2.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Prepare<sp/>environment<sp/>and<sp/>dependencies</highlight></codeline>
+<codeline><highlight class="normal">python3<sp/>-m<sp/>pip<sp/>install<sp/>-U<sp/>conan</highlight></codeline>
+<codeline><highlight class="normal">export<sp/>CONAN_HOME=&quot;$PWD/.conan2&quot;<sp/><sp/>#<sp/>Use<sp/>a<sp/>local<sp/>directory<sp/>for<sp/>Conan<sp/>data</highlight></codeline>
+<codeline><highlight class="normal">conan<sp/>profile<sp/>detect<sp/>--exist-ok</highlight></codeline>
+<codeline><highlight class="normal">conan<sp/>remote<sp/>add<sp/>tttapa-conan-recipes<sp/>&quot;$PWD/scripts/ci/conan-recipes&quot;</highlight></codeline>
+<codeline><highlight class="normal">conan<sp/>config<sp/>install<sp/>scripts/ci/conan-profiles/settings_user.yml</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>C++<sp/>project</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Install<sp/>dependencies<sp/>(including<sp/>GCC)<sp/>and<sp/>build<sp/>from<sp/>source</highlight></codeline>
+<codeline><highlight class="normal">conan<sp/>build<sp/>.<sp/>--build=missing<sp/>-pr:h<sp/>scripts/dev/profiles/dev<sp/>-o<sp/>\&amp;:with_benchmarks=True<sp/>-c<sp/>tools.build:jobs=4</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>build<sp/>using<sp/>Clang<sp/>instead<sp/>of<sp/>GCC,<sp/>add<sp/>`-pr:h<sp/>scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile`<sp/>to<sp/>the<sp/>command<sp/>above<sp/>(in<sp/>addition<sp/>to<sp/>the<sp/>`dev`<sp/>profile).<sp/>To<sp/>use<sp/>the<sp/>Intel<sp/>compiler,<sp/>add<sp/>`-pr:h<sp/>scripts/ci/conan-profiles/profiles/toolchain/icx-linux.profile`<sp/>instead.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>have<sp/>sufficient<sp/>RAM<sp/>available,<sp/>the<sp/>number<sp/>of<sp/>parallel<sp/>build<sp/>jobs<sp/>can<sp/>be<sp/>increased.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>re-build<sp/>after<sp/>code<sp/>changes,<sp/>simply<sp/>run<sp/>`cmake<sp/>--build<sp/>--preset<sp/>conan-release`<sp/>(or<sp/>rebuild<sp/>the</highlight></codeline>
+<codeline><highlight class="normal">`conan-release`<sp/>preset<sp/>from<sp/>your<sp/>IDE).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Manual<sp/>installation<sp/>using<sp/>CMake<sp/>(without<sp/>the<sp/>Conan<sp/>package<sp/>manager)<sp/>is<sp/>also<sp/>supported,<sp/>provided<sp/>that<sp/>the<sp/>necessary<sp/>dependencies<sp/>are<sp/>installed.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Python<sp/>bindings<sp/>(development)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>install<sp/>the<sp/>Python<sp/>bindings<sp/>for<sp/>local<sp/>development,</highlight></codeline>
+<codeline><highlight class="normal">use<sp/>the<sp/>`install-linux-dev.sh`<sp/>script<sp/>(without<sp/>arguments).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Requirements:<sp/>Python<sp/>3.8+,<sp/>uv,<sp/>Conan<sp/>2<sp/>(as<sp/>configured<sp/>above).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./scripts/dev/install-linux-dev.sh</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">By<sp/>default,<sp/>this<sp/>script<sp/>builds<sp/>the<sp/>package<sp/>for<sp/>both<sp/>AVX2<sp/>and<sp/>AVX-512<sp/>targets,<sp/>which<sp/>may<sp/>be<sp/>wasteful<sp/>if<sp/>you<sp/>only<sp/>need<sp/>AVX2.<sp/>You<sp/>can<sp/>remove<sp/>`avx512`<sp/>from<sp/>the<sp/>`archs`<sp/>array<sp/>in<sp/>the<sp/>script<sp/>to<sp/>only<sp/>build<sp/>for<sp/>AVX2.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>run<sp/>the<sp/>tests,<sp/>use<sp/>`pytest`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>re-build<sp/>the<sp/>AVX2<sp/>version<sp/>after<sp/>code<sp/>changes,<sp/>run<sp/>`cmake<sp/>--build<sp/>--preset<sp/>conan-cp312-abi3-linux_x86_64-1-release`<sp/>(replace<sp/>`cp312-abi3`<sp/>with<sp/>your<sp/>Python<sp/>version<sp/>and<sp/>ABI,<sp/>and<sp/>replace<sp/>`-1-`<sp/>with<sp/>`-2-`<sp/>to<sp/>re-build<sp/>the<sp/>AVX-512<sp/>version).<sp/>You<sp/>will<sp/>need<sp/>to<sp/>restart<sp/>the<sp/>Python<sp/>interpreter<sp/>to<sp/>load<sp/>the<sp/>new<sp/>version<sp/>of<sp/>the<sp/>package.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Python<sp/>bindings<sp/>(distribution)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>build<sp/>the<sp/>Python<sp/>package<sp/>for<sp/>distribution,<sp/>use<sp/>the<sp/>scripts<sp/>in<sp/>`scripts/ci`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Build<sp/>the<sp/>wheel<sp/>for<sp/>distribution,<sp/>and<sp/>generate<sp/>the<sp/>stubs</highlight></codeline>
+<codeline><highlight class="normal">./scripts/ci/build-linux-cross.sh<sp/>3.12<sp/>x86_64-bionic-linux-gnu<sp/>.<sp/>dist<sp/>true</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>are<sp/>cross-compiling,<sp/>you<sp/>will<sp/>need<sp/>to<sp/>generate<sp/>the<sp/>stubs<sp/>using<sp/>a<sp/>native<sp/>build<sp/>first,<sp/>since<sp/>this<sp/>requires<sp/>running<sp/>the<sp/>built<sp/>extension<sp/>module.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Native<sp/>build<sp/>to<sp/>generate<sp/>the<sp/>stub<sp/>files</highlight></codeline>
+<codeline><highlight class="normal">./scripts/ci/build-linux-native.sh<sp/>.<sp/>dist<sp/>python</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Build<sp/>the<sp/>wheel<sp/>for<sp/>distribution</highlight></codeline>
+<codeline><highlight class="normal">./scripts/ci/build-linux-cross.sh<sp/>3.12<sp/>x86_64-bionic-linux-gnu<sp/>.<sp/>dist</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Either<sp/>way,<sp/>generated<sp/>Wheel<sp/>files<sp/>will<sp/>be<sp/>placed<sp/>in<sp/>the<sp/>`dist`<sp/>directory.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Related<sp/>projects</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>[QPALM](https://github.com/kul-optec/QPALM):<sp/>general-purpose<sp/>quadratic<sp/>programming<sp/>solver<sp/>on<sp/>which<sp/>CyQPALM<sp/>is<sp/>based</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[batmat](https://github.com/tttapa/batmat):<sp/>high-performance<sp/>batched<sp/>linear<sp/>algebra<sp/>routines<sp/>(used<sp/>by<sp/>cyqlone)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[hyhound](https://github.com/kul-optec/hyhound):<sp/>low-rank<sp/>Cholesky<sp/>factorization<sp/>up-<sp/>and<sp/>downdate<sp/>routines<sp/>based<sp/>on<sp/>hyperbolic<sp/>Householder<sp/>transformations<sp/>(with<sp/>applications<sp/>to<sp/>e.g.<sp/>Riccati<sp/>recursion)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[alpaqa](https://github.com/kul-optec/alpaqa):<sp/>matrix-free,<sp/>nonlinear<sp/>programming<sp/>solver</highlight></codeline>
+    </programlisting>
+    <location file="README.md"/>
+  </compounddef>
+</doxygen>

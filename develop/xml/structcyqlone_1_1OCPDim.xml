@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1OCPDim" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::OCPDim</compoundname>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1OCPDim_1af0d2cff4cc9ab2b414ca90a4e58ce089" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::OCPDim::N_horiz</definition>
+        <argsstring></argsstring>
+        <name>N_horiz</name>
+        <qualifiedname>cyqlone::OCPDim::N_horiz</qualifiedname>
+        <briefdescription>
+<para>Horizon length (one less than the number of stages). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="17" column="13" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1OCPDim_1a54587b454b1ad43b73db4c3f3cd2873d" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::OCPDim::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>cyqlone::OCPDim::nx</qualifiedname>
+        <briefdescription>
+<para>Number of state variables. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="18" column="13" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1OCPDim_1a2609e1bcd727d61e5b66401077daf2f4" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::OCPDim::nu</definition>
+        <argsstring></argsstring>
+        <name>nu</name>
+        <qualifiedname>cyqlone::OCPDim::nu</qualifiedname>
+        <briefdescription>
+<para>Number of input variables. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="19" column="13" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1OCPDim_1a1fc89a4bacdd348d614d0940679f176c" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::OCPDim::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>cyqlone::OCPDim::ny</qualifiedname>
+        <briefdescription>
+<para>Number of output variables. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="20" column="13" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1OCPDim_1a294b9f592b558363999f15d77d74a2f3" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::OCPDim::ny_N</definition>
+        <argsstring></argsstring>
+        <name>ny_N</name>
+        <qualifiedname>cyqlone::OCPDim::ny_N</qualifiedname>
+        <initializer>= <ref refid="structcyqlone_1_1OCPDim_1a1fc89a4bacdd348d614d0940679f176c" kindref="member">ny</ref></initializer>
+        <briefdescription>
+<para>Number of output variables in the last stage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="21" column="13" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="structcyqlone_1_1OCPDim_1a4511f2022217e0599d1d2bc20054f1c9" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool operator==</definition>
+        <argsstring>(OCPDim, OCPDim)=default</argsstring>
+        <name>operator==</name>
+        <qualifiedname>cyqlone::OCPDim::operator==</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1OCPDim" kindref="compound">OCPDim</ref></type>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1OCPDim" kindref="compound">OCPDim</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="22" column="27"/>
+      </memberdef>
+      <memberdef kind="friend" id="structcyqlone_1_1OCPDim_1aebd30f5cebe1ca27cfdfd8354a0fa805" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool operator!=</definition>
+        <argsstring>(OCPDim, OCPDim)=default</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>cyqlone::OCPDim::operator!=</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1OCPDim" kindref="compound">OCPDim</ref></type>
+        </param>
+        <param>
+          <type><ref refid="structcyqlone_1_1OCPDim" kindref="compound">OCPDim</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="23" column="27"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Dimensions of an optimal control problem. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::OCPDim</label>
+        <link refid="structcyqlone_1_1OCPDim"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="16" column="1" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="16" bodyend="24"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1OCPDim_1af0d2cff4cc9ab2b414ca90a4e58ce089" prot="public" virt="non-virtual"><scope>cyqlone::OCPDim</scope><name>N_horiz</name></member>
+      <member refid="structcyqlone_1_1OCPDim_1a2609e1bcd727d61e5b66401077daf2f4" prot="public" virt="non-virtual"><scope>cyqlone::OCPDim</scope><name>nu</name></member>
+      <member refid="structcyqlone_1_1OCPDim_1a54587b454b1ad43b73db4c3f3cd2873d" prot="public" virt="non-virtual"><scope>cyqlone::OCPDim</scope><name>nx</name></member>
+      <member refid="structcyqlone_1_1OCPDim_1a1fc89a4bacdd348d614d0940679f176c" prot="public" virt="non-virtual"><scope>cyqlone::OCPDim</scope><name>ny</name></member>
+      <member refid="structcyqlone_1_1OCPDim_1a294b9f592b558363999f15d77d74a2f3" prot="public" virt="non-virtual"><scope>cyqlone::OCPDim</scope><name>ny_N</name></member>
+      <member refid="structcyqlone_1_1OCPDim_1aebd30f5cebe1ca27cfdfd8354a0fa805" prot="public" virt="non-virtual"><scope>cyqlone::OCPDim</scope><name>operator!=</name></member>
+      <member refid="structcyqlone_1_1OCPDim_1a4511f2022217e0599d1d2bc20054f1c9" prot="public" virt="non-virtual"><scope>cyqlone::OCPDim</scope><name>operator==</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

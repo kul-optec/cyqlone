@@ -1,0 +1,379 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="sparse_8hpp" kind="file" language="C++">
+    <compoundname>sparse.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes local="no">batmat/assume.hpp</includes>
+    <includes local="no">batmat/linalg/structure.hpp</includes>
+    <includes local="no">guanaqo/linalg/sparsity.hpp</includes>
+    <includes local="no">guanaqo/mat-view.hpp</includes>
+    <includes local="no">concepts</includes>
+    <includes local="no">ranges</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="cyqlone_8hpp" local="no">src/cyqlone/include/cyqlone/cyqlone.hpp</includedby>
+    <includedby refid="matio_8hpp" local="no">src/cyqlone/include/cyqlone/matio.hpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/sparse.hpp</label>
+        <link refid="sparse_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>batmat/assume.hpp</label>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="5">
+        <label>batmat/linalg/structure.hpp</label>
+      </node>
+      <node id="8">
+        <label>concepts</label>
+      </node>
+      <node id="6">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="7">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="9">
+        <label>ranges</label>
+      </node>
+      <node id="10">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="23">
+        <label>benchmarks/cyqpalm/spring-mass.cpp</label>
+        <link refid="benchmarks_2cyqpalm_2spring-mass_8cpp"/>
+      </node>
+      <node id="3">
+        <label>examples/solve-block-tridiagonal.cpp</label>
+        <link refid="solve-block-tridiagonal_8cpp"/>
+      </node>
+      <node id="2">
+        <label>src/cyqlone/include/cyqlone/cyqlone.hpp</label>
+        <link refid="cyqlone_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>src/cyqlone/include/cyqlone/implementation/cr.tpp</label>
+        <link refid="cr_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>src/cyqlone/include/cyqlone/implementation/data.tpp</label>
+        <link refid="data_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>src/cyqlone/include/cyqlone/implementation/factor.tpp</label>
+        <link refid="factor_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>src/cyqlone/include/cyqlone/implementation/indexing.tpp</label>
+        <link refid="indexing_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>src/cyqlone/include/cyqlone/implementation/mat-vec.tpp</label>
+        <link refid="mat-vec_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>src/cyqlone/include/cyqlone/implementation/pcg.tpp</label>
+        <link refid="pcg_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>src/cyqlone/include/cyqlone/implementation/pcr.tpp</label>
+        <link refid="pcr_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>src/cyqlone/include/cyqlone/implementation/riccati.tpp</label>
+        <link refid="riccati_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>src/cyqlone/include/cyqlone/implementation/schur.tpp</label>
+        <link refid="schur_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>src/cyqlone/include/cyqlone/implementation/sparse.tpp</label>
+        <link refid="sparse_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>src/cyqlone/include/cyqlone/implementation/update.tpp</label>
+        <link refid="update_8tpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>src/cyqlone/include/cyqlone/matio.hpp</label>
+        <link refid="matio_8hpp"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/sparse.hpp</label>
+        <link refid="sparse_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>src/cyqlone/src/cyqlone.cpp</label>
+        <link refid="cyqlone_8cpp"/>
+      </node>
+      <node id="24">
+        <label>src/cyqlone/src/matio.cpp</label>
+        <link refid="matio_8cpp"/>
+      </node>
+      <node id="17">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/ineq-constr.tpp</label>
+        <link refid="ineq-constr_8tpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/linalg.tpp</label>
+        <link refid="linalg_8tpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/linesearch.tpp</label>
+        <link refid="backends_2backend-cyqlone_2linesearch_8tpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/backend-cyqlone/solve.tpp</label>
+        <link refid="solve_8tpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp</label>
+        <link refid="ocp-backend-cyqlone_8tpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>src/qpalm/src/ocp-backend-cyqlone.cpp</label>
+        <link refid="ocp-backend-cyqlone_8cpp"/>
+      </node>
+      <node id="25">
+        <label>test/test-pcr.cpp</label>
+        <link refid="test-pcr_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structcyqlone_1_1SparseMatrix" prot="public">cyqlone::SparseMatrix</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseMatrixBuilder" prot="public">cyqlone::SparseMatrixBuilder</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseCOO" prot="public">cyqlone::SparseCOO</innerclass>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <briefdescription>
+<para>Sparse matrix utilities. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="3"><highlight class="comment">///<sp/>@file</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">///<sp/>Sparse<sp/>matrix<sp/>utilities.</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">///<sp/>@ingroup<sp/>topic-utilities</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/assume.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/structure.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/linalg/sparsity.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/mat-view.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;concepts&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;ranges&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref><sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="19"><highlight class="comment">///<sp/>@addtogroup<sp/>topic-utilities</highlight></codeline>
+<codeline lineno="20"><highlight class="comment">///<sp/>@{</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">guanaqo::linalg::sparsity::SparseCOO;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="group__linalg__sparsity_1gae1bb6ee70c1d06fc6940a7a867b5754a" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::linalg::sparsity::Symmetry</ref>;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="25"><highlight class="comment">///<sp/>A<sp/>sparse<sp/>matrix<sp/>in<sp/>COO<sp/>format.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26" refid="structcyqlone_1_1SparseMatrix" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1SparseMatrix" kindref="compound">SparseMatrix</ref><sp/>{</highlight></codeline>
+<codeline lineno="27" refid="structcyqlone_1_1SparseMatrix_1aff52eb48294d9712d48d795ea08cd413" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;index_t&gt;<sp/><ref refid="structcyqlone_1_1SparseMatrix_1a4d79e8a7c7688a17c4989b2a8f44a075" kindref="member">row_indices</ref>,<sp/><ref refid="structcyqlone_1_1SparseMatrix_1aff52eb48294d9712d48d795ea08cd413" kindref="member">col_indices</ref>;</highlight></codeline>
+<codeline lineno="28" refid="structcyqlone_1_1SparseMatrix_1affcc16b1597ec5f4726e480f16afecc0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;real_t&gt;<sp/><ref refid="structcyqlone_1_1SparseMatrix_1affcc16b1597ec5f4726e480f16afecc0" kindref="member">values</ref>;</highlight></codeline>
+<codeline lineno="29" refid="structcyqlone_1_1SparseMatrix_1a15da14f54f507c2f4f3d99cc835dea77" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCOO" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCOO&lt;index_t&gt;</ref><sp/><ref refid="structcyqlone_1_1SparseMatrix_1a15da14f54f507c2f4f3d99cc835dea77" kindref="member">sparsity</ref>;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31" refid="structcyqlone_1_1SparseMatrix_1af045ed16c8458b849c5d5efd78dcc614" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1SparseMatrix_1af045ed16c8458b849c5d5efd78dcc614" kindref="member">iter_coo</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::views::zip(<ref refid="structcyqlone_1_1SparseMatrix_1a4d79e8a7c7688a17c4989b2a8f44a075" kindref="member">row_indices</ref>,<sp/><ref refid="structcyqlone_1_1SparseMatrix_1aff52eb48294d9712d48d795ea08cd413" kindref="member">col_indices</ref>,<sp/><ref refid="structcyqlone_1_1SparseMatrix_1affcc16b1597ec5f4726e480f16afecc0" kindref="member">values</ref>);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="36"><highlight class="comment">///<sp/>A<sp/>builder<sp/>for<sp/>constructing<sp/>a<sp/>SparseMatrix<sp/>incrementally.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37" refid="structcyqlone_1_1SparseMatrixBuilder" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1SparseMatrixBuilder" kindref="compound">SparseMatrixBuilder</ref><sp/>{</highlight></codeline>
+<codeline lineno="38" refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>index_t<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref><sp/>=<sp/>-1,<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref><sp/>=<sp/>-1;</highlight></codeline>
+<codeline lineno="39" refid="structcyqlone_1_1SparseMatrixBuilder_1a19ecbe0cd231677dec36961eb9f6c2f5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__linalg__sparsity_1gae1bb6ee70c1d06fc6940a7a867b5754a" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">Symmetry</ref><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a19ecbe0cd231677dec36961eb9f6c2f5" kindref="member">symmetry</ref><sp/>=<sp/>Symmetry::Unsymmetric;</highlight></codeline>
+<codeline lineno="40" refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;index_t&gt;<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" kindref="member">row_indices</ref>{},<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" kindref="member">col_indices</ref>{};</highlight></codeline>
+<codeline lineno="41" refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" kindref="member">values</ref>{};</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43" refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" kindref="member">add</ref>(index_t<sp/>row,<sp/>index_t<sp/>col,<sp/>real_t<sp/>value)<sp/>{</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(row<sp/>&gt;=<sp/>0);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(col<sp/>&gt;=<sp/>0);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref><sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(row<sp/>&lt;<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref>);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref><sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(col<sp/>&lt;<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref>);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" kindref="member">row_indices</ref>.push_back(row);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" kindref="member">col_indices</ref>.push_back(col);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" kindref="member">values</ref>.push_back(value);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::convertible_to&lt;real_t&gt;<sp/>T,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>I,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>S,<sp/>guanaqo::StorageOrder<sp/>O&gt;</highlight></codeline>
+<codeline lineno="56" refid="structcyqlone_1_1SparseMatrixBuilder_1ad993733a1dec0503e7673f660a4bad9d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ad993733a1dec0503e7673f660a4bad9d" kindref="member">add</ref>(index_t<sp/>row,<sp/>index_t<sp/>col,<sp/><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView&lt;T, I, S, O&gt;</ref><sp/>dense,</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::remove_cvref_t&lt;T&gt;<sp/><ref refid="group__topic-linalg_1gaeee444a2231976efc5f93a58cada45c5" kindref="member">scale</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1,</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::MatrixStructure</ref><sp/>structure<sp/>=<sp/><ref refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629ca0db377921f4ce762c62526131097968f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::MatrixStructure::General</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref><sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(row<sp/>+<sp/>dense.<ref refid="structguanaqo_1_1MatrixView_1a45ea549d32e825c0f0d384c90f056a83" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">rows</ref><sp/>&lt;=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref>);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref><sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(col<sp/>+<sp/>dense.<ref refid="structguanaqo_1_1MatrixView_1aa097c43922d29e04d9d8d649eabdf589" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">cols</ref><sp/>&lt;=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref>);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(structure)<sp/>{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629ca0db377921f4ce762c62526131097968f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::MatrixStructure::General</ref>:</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>dense.<ref refid="structguanaqo_1_1MatrixView_1aa097c43922d29e04d9d8d649eabdf589" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">cols</ref>;<sp/>++j)</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>dense.<ref refid="structguanaqo_1_1MatrixView_1a45ea549d32e825c0f0d384c90f056a83" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">rows</ref>;<sp/>++i)</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" kindref="member">add</ref>(row<sp/>+<sp/>i,<sp/>col<sp/>+<sp/>j,<sp/><ref refid="group__topic-linalg_1gaeee444a2231976efc5f93a58cada45c5" kindref="member">scale</ref><sp/>*<sp/>dense(i,<sp/>j));</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629ca8b6fd06efea0c23bd14af4292b609553" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::MatrixStructure::LowerTriangular</ref>:</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>dense.<ref refid="structguanaqo_1_1MatrixView_1aa097c43922d29e04d9d8d649eabdf589" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">cols</ref>;<sp/>++j)</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>j;<sp/>i<sp/>&lt;<sp/>dense.<ref refid="structguanaqo_1_1MatrixView_1a45ea549d32e825c0f0d384c90f056a83" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">rows</ref>;<sp/>++i)</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" kindref="member">add</ref>(row<sp/>+<sp/>i,<sp/>col<sp/>+<sp/>j,<sp/><ref refid="group__topic-linalg_1gaeee444a2231976efc5f93a58cada45c5" kindref="member">scale</ref><sp/>*<sp/>dense(i,<sp/>j));</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="group__topic-linalg_1ga90f301363f149f1f28ee20000558629cace546798a67931b38dee5a153f9cf688" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::linalg::MatrixStructure::UpperTriangular</ref>:</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a64f9b433541d79ef4ca7cd707bcbb2bd" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSERT</ref>(dense.<ref refid="structguanaqo_1_1MatrixView_1a45ea549d32e825c0f0d384c90f056a83" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">rows</ref><sp/>==<sp/>dense.<ref refid="structguanaqo_1_1MatrixView_1aa097c43922d29e04d9d8d649eabdf589" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">cols</ref>);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>dense.<ref refid="structguanaqo_1_1MatrixView_1aa097c43922d29e04d9d8d649eabdf589" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">cols</ref>;<sp/>++j)</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;=<sp/>j;<sp/>++i)</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" kindref="member">add</ref>(row<sp/>+<sp/>i,<sp/>col<sp/>+<sp/>j,<sp/><ref refid="group__topic-linalg_1gaeee444a2231976efc5f93a58cada45c5" kindref="member">scale</ref><sp/>*<sp/>dense(i,<sp/>j));</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">:<sp/><ref refid="assume_8hpp_1a64f9b433541d79ef4ca7cd707bcbb2bd" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSERT</ref>(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84" refid="structcyqlone_1_1SparseMatrixBuilder_1a41d1b610717191be7fc1e42be93a0b39" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a41d1b610717191be7fc1e42be93a0b39" kindref="member">add_diag</ref>(index_t<sp/>row,<sp/>index_t<sp/>col,<sp/>real_t<sp/>value,<sp/>index_t<sp/>n)<sp/>{</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref><sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(row<sp/>+<sp/>n<sp/>&lt;=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref>);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref><sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a3faa5ac45bae73eaef7408258e817e5f" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSUME</ref>(col<sp/>+<sp/>n<sp/>&lt;=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref>);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>n;<sp/>++i)</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a8ab034246635fec83768f94488038064" kindref="member">add</ref>(row<sp/>+<sp/>i,<sp/>col<sp/>+<sp/>i,<sp/>value);</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93" refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/><ref refid="structcyqlone_1_1SparseMatrix" kindref="compound">SparseMatrix</ref><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a7fa11a02b1f0e55d4df17d4373263fbb" kindref="member">build</ref>()<sp/>const<sp/>&amp;<sp/>{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{.row_indices<sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" kindref="member">row_indices</ref>,</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.col_indices<sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" kindref="member">col_indices</ref>,</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.values<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" kindref="member">values</ref>,</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.sparsity<sp/><sp/><sp/><sp/>=<sp/><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCOO" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCOO&lt;index_t&gt;</ref>{.rows<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref>,</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.cols<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref>,</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.symmetry<sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a19ecbe0cd231677dec36961eb9f6c2f5" kindref="member">symmetry</ref>,</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.row_indices<sp/>=<sp/>std::span{<ref refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" kindref="member">row_indices</ref>},</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.col_indices<sp/>=<sp/>std::span{<ref refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" kindref="member">col_indices</ref>}}};</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104" refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/><ref refid="structcyqlone_1_1SparseMatrix" kindref="compound">SparseMatrix</ref><sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1afc8fc02520b34d299e508991371f9eb2" kindref="member">build</ref>()<sp/>&amp;&amp;<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCOO" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCOO&lt;index_t&gt;</ref><sp/>sparsity{.rows<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a2c9945ed6621b2501b848abcc1cd43e3" kindref="member">rows</ref>,</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.cols<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1ab250de50d86e2de15dfcf4754f99ca2e" kindref="member">cols</ref>,</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.symmetry<sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1SparseMatrixBuilder_1a19ecbe0cd231677dec36961eb9f6c2f5" kindref="member">symmetry</ref>,</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.row_indices<sp/>=<sp/>std::span{<ref refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" kindref="member">row_indices</ref>},</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.col_indices<sp/>=<sp/>std::span{<ref refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" kindref="member">col_indices</ref>}};</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{.row_indices<sp/>=<sp/>std::move(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1acac935b09002da232819e3fc1b7ceacd" kindref="member">row_indices</ref>),</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.col_indices<sp/>=<sp/>std::move(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1ae1d6f63145da26847a8c75cc4ffa04fc" kindref="member">col_indices</ref>),</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.values<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>std::move(<ref refid="structcyqlone_1_1SparseMatrixBuilder_1ad94400ad0a7d0ccc8d2d0a26b2898abc" kindref="member">values</ref>),</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.sparsity<sp/><sp/><sp/><sp/>=<sp/>std::move(sparsity)};</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="115"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="117"><highlight class="comment">///<sp/>@}</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/include/cyqlone/sparse.hpp"/>
+  </compounddef>
+</doxygen>

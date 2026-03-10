@@ -1,0 +1,743 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="ocp-backend-cyqlone_8cpp" kind="file" language="C++">
+    <compoundname>ocp-backend-cyqlone.cpp</compoundname>
+    <includes refid="ocp-backend-cyqlone_8tpp" local="no">cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp</includes>
+    <includes refid="solver_8tpp" local="no">cyqlone/qpalm/implementation/solver.tpp</includes>
+    <includes local="no">batmat/config.hpp</includes>
+    <incdepgraph>
+      <node id="16">
+        <label>cyqlone/barrier.hpp</label>
+        <link refid="barrier_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>cyqlone/cyqlone-params.hpp</label>
+        <link refid="cyqlone-params_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>cyqlone/cyqlone-storage.hpp</label>
+        <link refid="cyqlone-storage_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/cyqlone.hpp</label>
+        <link refid="cyqlone_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>cyqlone/linalg.hpp</label>
+        <link refid="linalg_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>cyqlone/neumaier.hpp</label>
+        <link refid="neumaier_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>cyqlone/parallel.hpp</label>
+        <link refid="parallel_8hpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>cyqlone/reduce.hpp</label>
+        <link refid="reduce_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>cyqlone/sparse.hpp</label>
+        <link refid="sparse_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>cyqlone/timing.hpp</label>
+        <link refid="timing_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>cyqlone/qpalm/backends/backend-cyqlone/ineq-constr.tpp</label>
+        <link refid="ineq-constr_8tpp"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>cyqlone/qpalm/backends/backend-cyqlone/linalg.tpp</label>
+        <link refid="linalg_8tpp"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>cyqlone/qpalm/backends/backend-cyqlone/linesearch.tpp</label>
+        <link refid="backends_2backend-cyqlone_2linesearch_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="72">
+        <label>cyqlone/qpalm/backends/backend-cyqlone/solve.tpp</label>
+        <link refid="solve_8tpp"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</label>
+        <link refid="ocp-backend-cyqlone_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp</label>
+        <link refid="ocp-backend-cyqlone_8tpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>cyqlone/qpalm/detailed-stats.hpp</label>
+        <link refid="detailed-stats_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="76">
+        <label>cyqlone/qpalm/implementation/algorithms.hpp</label>
+        <link refid="algorithms_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>cyqlone/qpalm/implementation/breakpoint.hpp</label>
+        <link refid="breakpoint_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="78">
+        <label>cyqlone/qpalm/implementation/breakpoint.tpp</label>
+        <link refid="breakpoint_8tpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>cyqlone/qpalm/implementation/linesearch.tpp</label>
+        <link refid="implementation_2linesearch_8tpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+      </node>
+      <node id="74">
+        <label>cyqlone/qpalm/implementation/solver.tpp</label>
+        <link refid="solver_8tpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>cyqlone/qpalm/settings.hpp</label>
+        <link refid="settings_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>cyqlone/qpalm/solver.hpp</label>
+        <link refid="solver_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>cyqlone/qpalm/status.hpp</label>
+        <link refid="status_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/qpalm/src/ocp-backend-cyqlone.cpp</label>
+        <link refid="ocp-backend-cyqlone_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>algorithm</label>
+      </node>
+      <node id="18">
+        <label>array</label>
+      </node>
+      <node id="19">
+        <label>atomic</label>
+      </node>
+      <node id="17">
+        <label>batmat/assume.hpp</label>
+      </node>
+      <node id="4">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="45">
+        <label>batmat/linalg/copy.hpp</label>
+      </node>
+      <node id="35">
+        <label>batmat/linalg/hyhound.hpp</label>
+      </node>
+      <node id="46">
+        <label>batmat/linalg/shift.hpp</label>
+      </node>
+      <node id="47">
+        <label>batmat/linalg/simdify.hpp</label>
+      </node>
+      <node id="29">
+        <label>batmat/linalg/structure.hpp</label>
+      </node>
+      <node id="36">
+        <label>batmat/matrix/layout.hpp</label>
+      </node>
+      <node id="13">
+        <label>batmat/matrix/matrix.hpp</label>
+      </node>
+      <node id="25">
+        <label>batmat/openmp.h</label>
+      </node>
+      <node id="48">
+        <label>batmat/ops/rotate.hpp</label>
+      </node>
+      <node id="37">
+        <label>batmat/simd.hpp</label>
+      </node>
+      <node id="34">
+        <label>batmat/timing.hpp</label>
+      </node>
+      <node id="38">
+        <label>batmat/unroll.h</label>
+      </node>
+      <node id="40">
+        <label>bit</label>
+      </node>
+      <node id="41">
+        <label>cassert</label>
+      </node>
+      <node id="56">
+        <label>chrono</label>
+      </node>
+      <node id="44">
+        <label>cmath</label>
+      </node>
+      <node id="31">
+        <label>concepts</label>
+      </node>
+      <node id="20">
+        <label>cstdint</label>
+      </node>
+      <node id="21">
+        <label>cstring</label>
+      </node>
+      <node id="54">
+        <label>cyqlone/qpalm/export.h</label>
+      </node>
+      <node id="22">
+        <label>functional</label>
+      </node>
+      <node id="59">
+        <label>guanaqo/atomic-stop-signal.hpp</label>
+      </node>
+      <node id="30">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="11">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="66">
+        <label>guanaqo/print.hpp</label>
+      </node>
+      <node id="65">
+        <label>guanaqo/tag-invoke.hpp</label>
+      </node>
+      <node id="67">
+        <label>guanaqo/timed-cpu.hpp</label>
+      </node>
+      <node id="60">
+        <label>guanaqo/timed.hpp</label>
+      </node>
+      <node id="26">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+      <node id="58">
+        <label>iosfwd</label>
+      </node>
+      <node id="73">
+        <label>iostream</label>
+      </node>
+      <node id="77">
+        <label>iterator</label>
+      </node>
+      <node id="7">
+        <label>limits</label>
+      </node>
+      <node id="61">
+        <label>map</label>
+      </node>
+      <node id="23">
+        <label>memory</label>
+      </node>
+      <node id="68">
+        <label>numeric</label>
+      </node>
+      <node id="62">
+        <label>optional</label>
+      </node>
+      <node id="79">
+        <label>print</label>
+      </node>
+      <node id="32">
+        <label>ranges</label>
+      </node>
+      <node id="14">
+        <label>span</label>
+      </node>
+      <node id="8">
+        <label>stdexcept</label>
+      </node>
+      <node id="63">
+        <label>string</label>
+      </node>
+      <node id="49">
+        <label>tuple</label>
+      </node>
+      <node id="24">
+        <label>type_traits</label>
+      </node>
+      <node id="27">
+        <label>utility</label>
+      </node>
+      <node id="12">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="ocp-backend-cyqlone_8cpp_1a76a67ff6a8b41587d5f86389cd45e853" prot="public" static="no">
+        <name>CYQLONE_INSTANTIATE_QPALM_Cyqlone</name>
+        <param><defname>v</defname></param>
+        <param><defname>order</defname></param>
+        <initializer>                                                                                               \
+template class <ref refid="structSolver" kindref="compound">Solver</ref>&lt;CyQPALMBackend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt; *&gt;;                                             \
+template class <ref refid="structSolver" kindref="compound">Solver</ref>&lt;unique_CyQPALMBackend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt;&gt;;                                        \
+template struct unique_CyQPALMBackend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt;;                                               \
+                                                                                               \
+template unique_CyQPALMBackend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt; make_cyqpalm_backend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt;(                 \
+    const CyqloneStorage&lt;&gt; &amp;ocp, CyqloneData data, const CyQPALMBackendSettings &amp;settings);    \
+template void update_cyqpalm_backend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt;(CyQPALMBackend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt; &amp;,               \
+                                                     const CyqloneStorage&lt;&gt; &amp;ocp);             \
+template void update_cyqpalm_backend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt;(CyQPALMBackend&lt;<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>, <ref refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1af61fff0ad381f171d5c3d5fdbb5835d5" kindref="member">order</ref>&gt; &amp;,               \
+                                                     const LinearOCPStorage &amp;ocp);</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/src/ocp-backend-cyqlone.cpp" line="7" column="9" bodyfile="src/qpalm/src/ocp-backend-cyqlone.cpp" bodystart="7" bodyend="18"/>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1a2f204cd23b6824fa6bc96a5509d41edb">cyqlone::qpalm::make_cyqpalm_backend&lt; 1, StorageOrder::ColMajor &gt;</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1ac583ca9eff1c425f194434aec7b48b63">cyqlone::qpalm::make_cyqpalm_backend&lt; 1, StorageOrder::RowMajor &gt;</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ocp-backend-cyqlone_8tpp" kindref="compound">cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="solver_8tpp" kindref="compound">cyqlone/qpalm/implementation/solver.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/config.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="config_8hpp_1a1f4757b3a02c15cce8aeaa6906e55c17" kindref="member">CYQLONE_NS</ref>(<ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>::qpalm)<sp/>{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7" refid="ocp-backend-cyqlone_8cpp_1a76a67ff6a8b41587d5f86389cd45e853" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CYQLONE_INSTANTIATE_QPALM_Cyqlone(v,<sp/>order)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="8"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="9"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>template<sp/>class<sp/>Solver&lt;CyQPALMBackend&lt;v,<sp/>order&gt;<sp/>*&gt;;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="10"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>template<sp/>class<sp/>Solver&lt;unique_CyQPALMBackend&lt;v,<sp/>order&gt;&gt;;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="11"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>template<sp/>struct<sp/>unique_CyQPALMBackend&lt;v,<sp/>order&gt;;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="12"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="13"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>template<sp/>unique_CyQPALMBackend&lt;v,<sp/>order&gt;<sp/>make_cyqpalm_backend&lt;v,<sp/>order&gt;(<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="14"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>const<sp/>CyqloneStorage&lt;&gt;<sp/>&amp;ocp,<sp/>CyqloneData<sp/>data,<sp/>const<sp/>CyQPALMBackendSettings<sp/>&amp;settings);<sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="15"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>template<sp/>void<sp/>update_cyqpalm_backend&lt;v,<sp/>order&gt;(CyQPALMBackend&lt;v,<sp/>order&gt;<sp/>&amp;,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="16"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>const<sp/>CyqloneStorage&lt;&gt;<sp/>&amp;ocp);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="17"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>template<sp/>void<sp/>update_cyqpalm_backend&lt;v,<sp/>order&gt;(CyQPALMBackend&lt;v,<sp/>order&gt;<sp/>&amp;,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="18"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>const<sp/>LinearOCPStorage<sp/>&amp;ocp);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20" refid="namespacecyqlone_1_1qpalm_1a2f204cd23b6824fa6bc96a5509d41edb" refkind="member"><highlight class="normal">BATMAT_FOREACH_VL_DEFAULT(<ref refid="ocp-backend-cyqlone_8cpp_1a76a67ff6a8b41587d5f86389cd45e853" kindref="member">CYQLONE_INSTANTIATE_QPALM_Cyqlone</ref>,<sp/>StorageOrder::ColMajor)</highlight></codeline>
+<codeline lineno="21" refid="namespacecyqlone_1_1qpalm_1ac583ca9eff1c425f194434aec7b48b63" refkind="member"><highlight class="normal">BATMAT_FOREACH_VL_DEFAULT(<ref refid="ocp-backend-cyqlone_8cpp_1a76a67ff6a8b41587d5f86389cd45e853" kindref="member">CYQLONE_INSTANTIATE_QPALM_Cyqlone</ref>,<sp/><ref refid="group__linalg__views_1gac0a39236f11af6725f2dc1d339c95bae" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">StorageOrder</ref>::RowMajor)</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone::qpalm)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/qpalm/src/ocp-backend-cyqlone.cpp"/>
+  </compounddef>
+</doxygen>

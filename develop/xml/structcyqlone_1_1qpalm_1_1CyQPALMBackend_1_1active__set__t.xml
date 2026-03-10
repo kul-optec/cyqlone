@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::CyQPALMBackend::active_set_t</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">storage_t</basecompoundref>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1a300eb9b4cb5df0e67fa932395906b64e" prot="public" static="no" mutable="no">
+        <type>friend</type>
+        <definition>friend cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t::CyQPALMBackend</definition>
+        <argsstring></argsstring>
+        <name>CyQPALMBackend</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackend::active_set_t::CyQPALMBackend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="48" column="40" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="48" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1ab79d4f5bbeb5638ba59218b9e8885921">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t::active_set_t</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1ab79d4f5bbeb5638ba59218b9e8885921" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t::active_set_t</definition>
+        <argsstring>()=default</argsstring>
+        <name>active_set_t</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackend::active_set_t::active_set_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="48" column="55"/>
+        <references refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1ab79d4f5bbeb5638ba59218b9e8885921">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t::active_set_t</references>
+        <references refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1a300eb9b4cb5df0e67fa932395906b64e" compoundref="ocp-backend-cyqlone_8tpp" startline="48">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t::CyQPALMBackend</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1ab79d4f5bbeb5638ba59218b9e8885921">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t::active_set_t</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1ae3f5385d3fb7419a1aec30a041067675" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t::active_set_t</definition>
+        <argsstring>(storage_t &amp;&amp;o)</argsstring>
+        <name>active_set_t</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackend::active_set_t::active_set_t</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1ad70fc5596db9b5cf41fd4b66a27a414f" kindref="member">storage_t</ref> &amp;&amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="48" column="92" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="48" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t</label>
+        <link refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>storage_t</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::active_set_t</label>
+        <link refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>storage_t</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" line="48" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.tpp" bodystart="48" bodyend="48"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1ab79d4f5bbeb5638ba59218b9e8885921" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackend::active_set_t</scope><name>active_set_t</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1ae3f5385d3fb7419a1aec30a041067675" prot="private" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackend::active_set_t</scope><name>active_set_t</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1_1active__set__t_1a300eb9b4cb5df0e67fa932395906b64e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackend::active_set_t</scope><name>CyQPALMBackend</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

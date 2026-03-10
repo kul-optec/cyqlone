@@ -1,0 +1,390 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="implementation_2linesearch_8tpp" kind="file" language="C++">
+    <compoundname>linesearch.tpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes refid="neumaier_8hpp" local="no">cyqlone/neumaier.hpp</includes>
+    <includes refid="algorithms_8hpp" local="no">cyqlone/qpalm/implementation/algorithms.hpp</includes>
+    <includes refid="breakpoint_8hpp" local="no">cyqlone/qpalm/implementation/breakpoint.hpp</includes>
+    <includes refid="breakpoint_8tpp" local="no">cyqlone/qpalm/implementation/breakpoint.tpp</includes>
+    <includes local="no">batmat/assume.hpp</includes>
+    <includes local="no">guanaqo/trace.hpp</includes>
+    <includes local="no">cmath</includes>
+    <includes local="no">ranges</includes>
+    <includes local="no">span</includes>
+    <includes local="no">utility</includes>
+    <includes local="no">vector</includes>
+    <includes local="no">iostream</includes>
+    <includes local="no">print</includes>
+    <includedby refid="solver_8tpp" local="no">src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>cyqlone/neumaier.hpp</label>
+        <link refid="neumaier_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>cyqlone/qpalm/implementation/algorithms.hpp</label>
+        <link refid="algorithms_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>cyqlone/qpalm/implementation/breakpoint.hpp</label>
+        <link refid="breakpoint_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>cyqlone/qpalm/implementation/breakpoint.tpp</label>
+        <link refid="breakpoint_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp</label>
+        <link refid="implementation_2linesearch_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>algorithm</label>
+      </node>
+      <node id="8">
+        <label>batmat/assume.hpp</label>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="5">
+        <label>cmath</label>
+      </node>
+      <node id="15">
+        <label>guanaqo/tag-invoke.hpp</label>
+      </node>
+      <node id="9">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+      <node id="20">
+        <label>iostream</label>
+      </node>
+      <node id="11">
+        <label>iterator</label>
+      </node>
+      <node id="12">
+        <label>numeric</label>
+      </node>
+      <node id="21">
+        <label>print</label>
+      </node>
+      <node id="13">
+        <label>ranges</label>
+      </node>
+      <node id="16">
+        <label>span</label>
+      </node>
+      <node id="6">
+        <label>type_traits</label>
+      </node>
+      <node id="19">
+        <label>utility</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp</label>
+        <link refid="implementation_2linesearch_8tpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/qpalm/include/cyqlone/qpalm/implementation/solver.tpp</label>
+        <link refid="solver_8tpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>src/qpalm/src/ocp-backend-cyqlone.cpp</label>
+        <link refid="ocp-backend-cyqlone_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1LineSearchSettings" prot="public">cyqlone::qpalm::LineSearchSettings</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1LineSearch" prot="public">cyqlone::qpalm::LineSearch</innerclass>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" prot="public">cyqlone::qpalm::LineSearch::Result</innerclass>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="implementation_2linesearch_8tpp_1acd7da36899cf9c72a6805d3aa8d632c3" prot="public" static="no">
+        <name>LINE_SEARCH_COMPARE_IMPLEMENTATIONS</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="18" column="9" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="neumaier_8hpp" kindref="compound">cyqlone/neumaier.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="algorithms_8hpp" kindref="compound">cyqlone/qpalm/implementation/algorithms.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="breakpoint_8hpp" kindref="compound">cyqlone/qpalm/implementation/breakpoint.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="breakpoint_8tpp" kindref="compound">cyqlone/qpalm/implementation/breakpoint.tpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/assume.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/trace.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cmath&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;ranges&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;span&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;utility&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>NDEBUG</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18" refid="implementation_2linesearch_8tpp_1acd7da36899cf9c72a6805d3aa8d632c3" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LINE_SEARCH_COMPARE_IMPLEMENTATIONS<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LINE_SEARCH_COMPARE_IMPLEMENTATIONS<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>LINE_SEARCH_COMPARE_IMPLEMENTATIONS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;print&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="config_8hpp_1a1f4757b3a02c15cce8aeaa6906e55c17" kindref="member">CYQLONE_NS</ref>(<ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>::qpalm)<sp/>{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30" refid="structcyqlone_1_1qpalm_1_1LineSearchSettings" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1LineSearchSettings" kindref="compound">LineSearchSettings</ref><sp/>{</highlight></codeline>
+<codeline lineno="31" refid="structcyqlone_1_1qpalm_1_1LineSearchSettings_1ac2fff19946adc7531bc0afc11226ad8f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearchSettings_1ac2fff19946adc7531bc0afc11226ad8f" kindref="member">find_smallest_breakpoint_first</ref><sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Vec&gt;</highlight></codeline>
+<codeline lineno="35" refid="structcyqlone_1_1qpalm_1_1LineSearch" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1LineSearch" kindref="compound">LineSearch</ref><sp/>{</highlight></codeline>
+<codeline lineno="36" refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>=<sp/>Vec;</highlight></codeline>
+<codeline lineno="37" refid="structcyqlone_1_1qpalm_1_1LineSearch_1adbfceb401a1d883e631da54bbaf8d6a8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearchSettings" kindref="compound">LineSearchSettings</ref><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1adbfceb401a1d883e631da54bbaf8d6a8" kindref="member">settings</ref>;</highlight></codeline>
+<codeline lineno="38" refid="structcyqlone_1_1qpalm_1_1LineSearch_1ad1e43b47a4edae60aedf187f6f1706b2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;Breakpoint&gt;<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1ad1e43b47a4edae60aedf187f6f1706b2" kindref="member">breakpoints</ref>;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40" refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kindref="compound">Result</ref><sp/>{</highlight></codeline>
+<codeline lineno="41" refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result_1a03019a07486a0ab6b644061f8d29851a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>real_t<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result_1a03019a07486a0ab6b644061f8d29851a" kindref="member">τ</ref>;</highlight></codeline>
+<codeline lineno="42" refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result_1aa6c898ea0066772bb85a4a540b1feba5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result_1aa6c898ea0066772bb85a4a540b1feba5" kindref="member">index</ref>;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45" refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Result<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" kindref="member">operator()</ref>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>&amp;ctx,<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>&amp;backend,<sp/>real_t<sp/>η,<sp/>real_t<sp/>β,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;Σ,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;y,</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;Ad,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;Ax,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;b_min,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;b_max);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48" refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>Result<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" kindref="member">find_stepsize_base</ref>(<ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>a,<sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>b,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i0,<sp/>std::span&lt;Breakpoint&gt;<sp/>pos_bp);</highlight></codeline>
+<codeline lineno="49" refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>Result<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" kindref="member">find_stepsize</ref>(<ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>a,<sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>b,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i0,<sp/>std::span&lt;Breakpoint&gt;<sp/>pos_bp,</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>partition_1<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Vec&gt;</highlight></codeline>
+<codeline lineno="54" refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" kindref="member">LineSearch&lt;Vec&gt;::find_stepsize_base</ref>(<ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>a,<sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>b,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i0,</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;Breakpoint&gt;<sp/>pos_bp)<sp/>-&gt;<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kindref="compound">Result</ref><sp/>{</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::abs;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Base<sp/>case</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pos_bp.empty())</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{.τ<sp/>=<sp/>i0<sp/>==<sp/>0<sp/>?<sp/>1<sp/>:<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(b<sp/>/<sp/>a),<sp/>.index<sp/>=<sp/>i0};</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Order<sp/>all<sp/>breakpoints<sp/>by<sp/>increasing<sp/>ti</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecyqlone_1_1qpalm_1aaa9bd6f0faae51b2d93379a451da5206" kindref="member">sort</ref>(pos_bp,<sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>b)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>b.<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" kindref="member">t</ref>;<sp/>});</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Find<sp/>the<sp/>first<sp/>i<sp/>for<sp/>which<sp/>ψʹ(t[i])<sp/>≥<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>ψʹ<sp/>=<sp/>pos_bp[0].t<sp/>*<sp/>a<sp/>-<sp/>b;<sp/>i0<sp/>==<sp/>0<sp/>&amp;&amp;<sp/>ψʹ<sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{.τ<sp/>=<sp/>1,<sp/>.index<sp/>=<sp/>0};<sp/></highlight><highlight class="comment">//<sp/>linear<sp/>interpolation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>pos_bp.size();<sp/>++i)<sp/>{</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>ψʹ<sp/>=<sp/>pos_bp[i].t<sp/>*<sp/>a<sp/>-<sp/>b;<sp/>ψʹ<sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{.τ<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(b<sp/>/<sp/>a),<sp/>.index<sp/>=<sp/>i0<sp/>+<sp/>i};<sp/></highlight><highlight class="comment">//<sp/>linear<sp/>interpolation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Recursive<sp/>update<sp/>formula<sp/>for<sp/>a_j<sp/>and<sp/>b_j<sp/>(see<sp/>notes)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>a<sp/>+=<sp/>pos_bp[i].δ<sp/>*<sp/>abs(pos_bp[i].δ);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>b<sp/>+=<sp/>pos_bp[i].<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a3b71b2f757fe16a5631fb31ff9efe565" kindref="member">α</ref>()<sp/>*<sp/>abs(pos_bp[i].δ);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>No<sp/>positive<sp/>entries,<sp/>or<sp/>solution<sp/>lies<sp/>above<sp/>all<sp/>breakpoints</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{.τ<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(b<sp/>/<sp/>a),<sp/>.index<sp/>=<sp/>i0<sp/>+<sp/>pos_bp.size()};<sp/></highlight><highlight class="comment">//<sp/>extrapolate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Vec&gt;</highlight></codeline>
+<codeline lineno="77" refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" kindref="member">LineSearch&lt;Vec&gt;::find_stepsize</ref>(<ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>a,<sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>b,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i0,<sp/>std::span&lt;Breakpoint&gt;<sp/>pos_bp,</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>partition_1)<sp/>-&gt;<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kindref="compound">Result</ref><sp/>{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::abs;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pos_bp.size()<sp/>&lt;<sp/>8)</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" kindref="member">find_stepsize_base</ref>(a,<sp/>b,<sp/>i0,<sp/>pos_bp);</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[i_mid,<sp/>mid]<sp/>=<sp/>[&amp;]<sp/>{</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(partition_1)<sp/>{</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>cmp<sp/><sp/>=<sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>p1,<sp/><ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>p2)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p1.<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" kindref="member">t</ref><sp/>&lt;<sp/>p2.t;<sp/>};</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>gt_1<sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1a907fb321c6e4e7fa1375233be5c9f815" kindref="member">partition_min</ref>(pos_bp,<sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>p)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" kindref="member">t</ref><sp/>&lt;=<sp/>1;<sp/>},<sp/>cmp);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!gt_1.empty())<sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>mid<sp/>=<sp/>std::ranges::begin(gt_1);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>LINE_SEARCH_COMPARE_IMPLEMENTATIONS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a64f9b433541d79ef4ca7cd707bcbb2bd" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSERT</ref>(mid<sp/>==<sp/>std::ranges::min_element(gt_1,<sp/>cmp));</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>i_mid<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">std::size_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(mid<sp/>-<sp/>std::ranges::begin(pos_bp));</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::make_pair(i_mid,<sp/>mid);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>i_mid<sp/>=<sp/>pos_bp.size()<sp/>/<sp/>4;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>mid<sp/><sp/><sp/>=<sp/>std::ranges::next(pos_bp.begin(),<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">std::ptrdiff_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(i_mid));</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="namespacecyqlone_1_1qpalm_1af0491991e6f9a32072489c45d934541b" kindref="member">nth_element</ref>(pos_bp,<sp/>mid,<sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>b)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>b.<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" kindref="member">t</ref>;<sp/>});</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::make_pair(i_mid,<sp/>mid);</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>}();</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="assume_8hpp_1a64f9b433541d79ef4ca7cd707bcbb2bd" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">BATMAT_ASSERT</ref>(i_mid<sp/>&lt;<sp/>pos_bp.size());</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>left<sp/>=<sp/>pos_bp.first(i_mid<sp/>+<sp/>1),<sp/>right<sp/>=<sp/>pos_bp.subspan(i_mid);<sp/></highlight><highlight class="comment">//<sp/>Both<sp/>halves<sp/>contain<sp/>mid</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Recursive<sp/>update<sp/>formula<sp/>for<sp/>a_j<sp/>and<sp/>b_j<sp/>(see<sp/>notes)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref><sp/>a_mid<sp/>=<sp/>a,<sp/>b_mid<sp/>=<sp/>b;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>bp<sp/>:<sp/>left.first(i_mid))<sp/>{</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>a_mid<sp/>+=<sp/>bp.δ<sp/>*<sp/>abs(bp.δ);</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>b_mid<sp/>+=<sp/>bp.α()<sp/>*<sp/>abs(bp.δ);</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Check<sp/>dir<sp/>deriv<sp/>at<sp/>mid</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>ψʹ_mid<sp/>=<sp/>mid-&gt;t<sp/>*<sp/>a_mid<sp/>-<sp/>b_mid;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ψʹ_mid<sp/>&gt;=<sp/>0)<sp/>{<sp/></highlight><highlight class="comment">//<sp/>zero<sp/>crossing<sp/>lies<sp/>in<sp/>the<sp/>left<sp/>half</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" kindref="member">find_stepsize</ref>(a,<sp/>b,<sp/>i0,<sp/>left,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{<sp/></highlight><highlight class="comment">//<sp/>zero<sp/>crossing<sp/>lies<sp/>in<sp/>the<sp/>right<sp/>half</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" kindref="member">find_stepsize</ref>(a_mid,<sp/>b_mid,<sp/>i0<sp/>+<sp/>i_mid,<sp/>right,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="116"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="118"><highlight class="comment">///<sp/>Perform<sp/>an<sp/>exact<sp/>line<sp/>search<sp/>on<sp/>the<sp/>augmented<sp/>Lagrangian.</highlight></codeline>
+<codeline lineno="119"><highlight class="comment">///<sp/>Implements<sp/>Algorithm<sp/>2<sp/>in<sp/>the<sp/>QPALM<sp/>paper.</highlight></codeline>
+<codeline lineno="120"><highlight class="comment">///</highlight></codeline>
+<codeline lineno="121"><highlight class="comment">///<sp/>@return<sp/>τ<sp/>Optimal<sp/>step<sp/>size<sp/>@f$<sp/>\tau_\star<sp/>@f$</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Vec&gt;</highlight></codeline>
+<codeline lineno="123" refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" kindref="member">LineSearch&lt;Vec&gt;::operator()</ref>(</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>&amp;ctx,<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>&amp;backend,<sp/>real_t<sp/>η,<sp/></highlight><highlight class="comment">///&lt;<sp/>@f$<sp/>\eta<sp/>=<sp/>\inprod{d}{\xi}<sp/>@f$</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/>β,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>@f$<sp/>\beta<sp/>=<sp/>\inprod{d}{\grad\tilde<sp/>f_k(x^{k,\nu})}<sp/>@f$</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;Σ,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>Penalty<sp/>factor<sp/>@f$<sp/>\Sigma_k<sp/>@f$<sp/>(diagonal)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;y,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>Lagrange<sp/>multipliers<sp/>@f$<sp/>y^k<sp/>@f$</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;Ad,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>Matrix-vector<sp/>product<sp/>@f$<sp/>A<sp/>d<sp/>@f$</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;Ax,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>Matrix-vector<sp/>product<sp/>@f$<sp/>A<sp/>x^{k,\nu}<sp/>@f$</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;b_min,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>Constraint<sp/>lower<sp/>bound<sp/>@f$<sp/>b_\mathrm{min}<sp/>@f$</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref><sp/>&amp;b_max<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>Constraint<sp/>upper<sp/>bound<sp/>@f$<sp/>b_\mathrm{max}<sp/>@f$</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/>-&gt;<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kindref="compound">Result</ref><sp/>{</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::abs;</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compute<sp/>breakpoints<sp/>t[i]<sp/>and<sp/>intermediate<sp/>values<sp/>α[i]<sp/>and<sp/>δ[i],<sp/>then<sp/>partition<sp/>them<sp/>by<sp/>t[i]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>and<sp/>compute<sp/>a0<sp/>and<sp/>b0,<sp/>summing<sp/>over<sp/>all<sp/>negative<sp/>breakpoints.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1qpalm_1_1BreakpointsResult" kindref="compound">BreakpointsResult</ref><sp/>bp<sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1acefd63912f9919fa5ab62ac0a305c3f2" kindref="member">get_breakpoints</ref>(backend,<sp/>ctx,<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1ad1e43b47a4edae60aedf187f6f1706b2" kindref="member">breakpoints</ref>,<sp/>Σ,<sp/>y,<sp/>Ad,<sp/>Ax,<sp/>b_min,<sp/>b_max);</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>pos_bp<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>bp.<ref refid="structcyqlone_1_1qpalm_1_1BreakpointsResult_1abe3f31fef0fe9ec9df164a59a621c1ce" kindref="member">bp</ref>.<ref refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a7ad314946fc51eb1d2a40f650b75ffbe" kindref="member">pos_bp</ref>;</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[a,<sp/>b]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>bp.<ref refid="structcyqlone_1_1qpalm_1_1BreakpointsResult_1ac56a2f8be122302fb793476a68f1e0f0" kindref="member">ab_neg</ref>;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>a<sp/>+=<sp/>η;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>b<sp/>-=<sp/>β;</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ctx.call_broadcast([&amp;]()<sp/>-&gt;<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kindref="compound">Result</ref><sp/>{</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>LINE_SEARCH_COMPARE_IMPLEMENTATIONS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;Breakpoint&gt;<sp/>pos_bp_debug(pos_bp.begin(),<sp/>pos_bp.end());</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>step_size_debug<sp/>=<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" kindref="member">find_stepsize_base</ref>(a,<sp/>b,<sp/>0,<sp/>std::span{pos_bp_debug});</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Handle<sp/>the<sp/>trivial<sp/>cases<sp/>first:</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>If<sp/>there<sp/>are<sp/>no<sp/>positive<sp/>breakpoints,<sp/>then<sp/>ψ<sp/>is<sp/>simply<sp/>quadratic<sp/>on<sp/>[0,<sp/>+∞),<sp/>so<sp/>we<sp/>can<sp/>safely</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>accept<sp/>unit<sp/>step<sp/>size.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pos_bp.size()<sp/>==<sp/>0)</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{1,<sp/>0};</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>index_t<sp/>i<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Optimization:<sp/>check<sp/>the<sp/>first<sp/>interval<sp/>for<sp/>an<sp/>early<sp/>return<sp/>if<sp/>there<sp/>is<sp/>no<sp/>active<sp/>set<sp/>change.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>If<sp/>the<sp/>smallest<sp/>breakpoint<sp/>already<sp/>has<sp/>ψʹ<sp/>≥<sp/>0,<sp/>then<sp/>there&apos;s<sp/>no<sp/>need<sp/>to<sp/>sort<sp/>all<sp/>breakpoints.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Find<sp/>the<sp/>smallest<sp/>positive<sp/>t[i]<sp/>and<sp/>move<sp/>it<sp/>to<sp/>the<sp/>beginning<sp/>of<sp/>positive</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1adbfceb401a1d883e631da54bbaf8d6a8" kindref="member">settings</ref>.find_smallest_breakpoint_first)<sp/>{</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>smallest<sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1acc34e5d9c2599830eb0f4f519dc2c791" kindref="member">min_element</ref>(pos_bp,<sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>b)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>b.<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" kindref="member">t</ref>;<sp/>});</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>first_pos_it<sp/>=<sp/>std::ranges::begin(pos_bp);</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(first_pos_it<sp/>!=<sp/>smallest)</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::ranges::iter_swap(first_pos_it,<sp/>smallest);</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>ψʹ0<sp/>=<sp/>pos_bp[0].t<sp/>*<sp/>a<sp/>-<sp/>b;<sp/>ψʹ0<sp/>&gt;=<sp/>0)</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{1,<sp/>0};</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Otherwise,<sp/>skip<sp/>the<sp/>first<sp/>breakpoint,<sp/>and<sp/>perform<sp/>an<sp/>actual<sp/>search.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>a<sp/>+=<sp/>pos_bp[0].δ<sp/>*<sp/>abs(pos_bp[0].δ);</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>b<sp/>+=<sp/>pos_bp[0].<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a3b71b2f757fe16a5631fb31ff9efe565" kindref="member">α</ref>()<sp/>*<sp/>abs(pos_bp[0].δ);</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>++i;</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pos_bp<sp/>=<sp/>pos_bp.subspan(1);</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;linesearch<sp/>find<sp/>stepsize&quot;</highlight><highlight class="normal">,<sp/>0);</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>step_size<sp/>=<sp/><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" kindref="member">find_stepsize</ref>(a,<sp/>b,<sp/>i,<sp/>pos_bp);</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>LINE_SEARCH_COMPARE_IMPLEMENTATIONS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(step_size.index<sp/>!=<sp/>step_size_debug.index)</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::println(std::cerr,<sp/></highlight><highlight class="stringliteral">&quot;Line<sp/>search<sp/>index<sp/>mismatch:<sp/>{}<sp/>(optimized)<sp/>vs<sp/>{}<sp/>(debug)&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>step_size.index,<sp/>step_size_debug.index);</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>tol<sp/>=<sp/>real_t(1e4)<sp/>*<sp/>std::numeric_limits&lt;real_t&gt;::epsilon();</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(abs(step_size.τ<sp/>-<sp/>step_size_debug.τ)<sp/>&gt;<sp/>tol)</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::println(std::cerr,<sp/></highlight><highlight class="stringliteral">&quot;Line<sp/>search<sp/>mismatch:<sp/>{:.17e}<sp/>(optimized)<sp/>vs<sp/>{:.17e}<sp/>(debug)&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>step_size.τ,<sp/>step_size_debug.τ);</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>step_size;</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="183"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"></highlight></codeline>
+<codeline lineno="185"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone::qpalm)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp"/>
+  </compounddef>
+</doxygen>

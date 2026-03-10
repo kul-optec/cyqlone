@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1TreeBarrier_1_1Storage" kind="struct" language="C++" prot="private">
+    <compoundname>cyqlone::TreeBarrier::Storage</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1TreeBarrier_1_1Storage_1aedb627fbe200d130180ea9e4526b3b64" prot="public" static="no" mutable="no">
+        <type>std::array&lt; std::byte, <ref refid="classcyqlone_1_1TreeBarrier_1a389929b1d19da95bbd820e0c62cbfa5c" kindref="member">cache_line_size</ref> &gt;</type>
+        <definition>std::array&lt;std::byte, cache_line_size&gt; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage::payload</definition>
+        <argsstring></argsstring>
+        <name>payload</name>
+        <qualifiedname>cyqlone::TreeBarrier::Storage::payload</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="69" column="28" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="69" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1TreeBarrier_1_1Storage_1a6de786f0f1f7f30901b89c2fd05cbd92" compoundref="barrier_8hpp" startline="77" endline="83">cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage::load</referencedby>
+        <referencedby refid="structcyqlone_1_1TreeBarrier_1_1Storage_1a5ce2b2060ea157d53021884d41689cc2" compoundref="barrier_8hpp" startline="71" endline="75">cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage::store</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1TreeBarrier_1_1Storage_1a432288f246cd6783ff7ffe3ae626e04d" prot="public" static="yes" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage::is_compatible</definition>
+        <argsstring></argsstring>
+        <name>is_compatible</name>
+        <qualifiedname>cyqlone::TreeBarrier::Storage::is_compatible</qualifiedname>
+        <initializer>                                =
+sizeof(T) &lt;= sizeof(<ref refid="structcyqlone_1_1TreeBarrier_1_1Storage_1aedb627fbe200d130180ea9e4526b3b64" kindref="member">payload</ref>) &amp;&amp; std::is_trivially_copyable_v&lt;T&gt;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="85" column="31" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1TreeBarrier_1_1Storage_1a5ce2b2060ea157d53021884d41689cc2" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage::store</definition>
+        <argsstring>(T t) noexcept</argsstring>
+        <name>store</name>
+        <qualifiedname>cyqlone::TreeBarrier::Storage::store</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="71" column="14" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="71" bodyend="75"/>
+        <references refid="structcyqlone_1_1TreeBarrier_1_1Storage_1aedb627fbe200d130180ea9e4526b3b64" compoundref="barrier_8hpp" startline="69">cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage::payload</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1TreeBarrier_1_1Storage_1a6de786f0f1f7f30901b89c2fd05cbd92" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage::load</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>load</name>
+        <qualifiedname>cyqlone::TreeBarrier::Storage::load</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="77" column="11" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="77" bodyend="83"/>
+        <references refid="structcyqlone_1_1TreeBarrier_1_1Storage_1aedb627fbe200d130180ea9e4526b3b64" compoundref="barrier_8hpp" startline="69">cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage::payload</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="structcyqlone_1_1TreeBarrier_1_1Storage" kindref="compound">Storage</ref> for small values used in reductions and broadcasts. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage</label>
+        <link refid="structcyqlone_1_1TreeBarrier_1_1Storage"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+payload</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::array&lt; std::byte, cache_line_size &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="68" column="5" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="68" bodyend="87"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1Storage_1a432288f246cd6783ff7ffe3ae626e04d" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::Storage</scope><name>is_compatible</name></member>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1Storage_1a6de786f0f1f7f30901b89c2fd05cbd92" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::Storage</scope><name>load</name></member>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1Storage_1aedb627fbe200d130180ea9e4526b3b64" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::Storage</scope><name>payload</name></member>
+      <member refid="structcyqlone_1_1TreeBarrier_1_1Storage_1a5ce2b2060ea157d53021884d41689cc2" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier::Storage</scope><name>store</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

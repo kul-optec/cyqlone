@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1DetailedStats" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::DetailedStats</compoundname>
+    <includes refid="detailed-stats_8hpp" local="no">cyqlone/qpalm/detailed-stats.hpp</includes>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1DetailedStats_1_1Entry" prot="public">cyqlone::qpalm::DetailedStats::Entry</innerclass>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459c" prot="public" static="no" strong="no">
+        <type></type>
+        <name>ExitReason</name>
+        <qualifiedname>cyqlone::qpalm::DetailedStats::ExitReason</qualifiedname>
+        <enumvalue id="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca31ddc63b44ee2a594e7254f88cb46a85" prot="public">
+          <name>Busy</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca4d1f8c96fbbe0840d849f750db3bbde8" prot="public">
+          <name>Converged</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca6f8138db1d6c4dcc155498c9f0f65bed" prot="public">
+          <name>NoActiveSetChange</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca9e193bc9332f68e38de95c9f6d7dd471" prot="public">
+          <name>Fail</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/detailed-stats.hpp" line="10" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/detailed-stats.hpp" bodystart="10" bodyend="15"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1DetailedStats_1aeaa90761415eaeacbdf2468777bfd8c3" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structcyqlone_1_1qpalm_1_1DetailedStats_1_1Entry" kindref="compound">Entry</ref> &gt;</type>
+        <definition>std::vector&lt;Entry&gt; cyqlone::qpalm::DetailedStats::entries</definition>
+        <argsstring></argsstring>
+        <name>entries</name>
+        <qualifiedname>cyqlone::qpalm::DetailedStats::entries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/detailed-stats.hpp" line="24" column="17" bodyfile="src/qpalm/include/cyqlone/qpalm/detailed-stats.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::DetailedStats</label>
+        <link refid="structcyqlone_1_1qpalm_1_1DetailedStats"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+entries</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cyqlone::qpalm::DetailedStats::Entry</label>
+        <link refid="structcyqlone_1_1qpalm_1_1DetailedStats_1_1Entry"/>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; cyqlone::qpalm::DetailedStats::Entry &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/detailed-stats.hpp" line="9" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/detailed-stats.hpp" bodystart="9" bodyend="25"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca31ddc63b44ee2a594e7254f88cb46a85" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::DetailedStats</scope><name>Busy</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca4d1f8c96fbbe0840d849f750db3bbde8" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::DetailedStats</scope><name>Converged</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1DetailedStats_1aeaa90761415eaeacbdf2468777bfd8c3" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::DetailedStats</scope><name>entries</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459c" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::DetailedStats</scope><name>ExitReason</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca9e193bc9332f68e38de95c9f6d7dd471" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::DetailedStats</scope><name>Fail</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1DetailedStats_1afbba2d5a7368b173c108f104e7d7459ca6f8138db1d6c4dcc155498c9f0f65bed" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::DetailedStats</scope><name>NoActiveSetChange</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

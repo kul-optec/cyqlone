@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespacecyqlone_1_1parallel" kind="namespace" language="C++">
+    <compoundname>cyqlone::parallel</compoundname>
+    <innerclass refid="structcyqlone_1_1parallel_1_1Context" prot="public">cyqlone::parallel::Context</innerclass>
+    <innerclass refid="structcyqlone_1_1parallel_1_1SharedContext" prot="public">cyqlone::parallel::SharedContext</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/cyqlone/include/cyqlone/parallel.hpp" line="21" column="1"/>
+  </compounddef>
+</doxygen>

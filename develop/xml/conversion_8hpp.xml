@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="conversion_8hpp" kind="file" language="C++">
+    <compoundname>conversion.hpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <includes local="no">guanaqo/linalg/sparsity.hpp</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="conversion_8cpp" local="no">src/cyqlone/src/conversion.cpp</includedby>
+    <includedby refid="platooning_8cpp" local="no">src/example-problems/src/platooning.cpp</includedby>
+    <includedby refid="src_2example-problems_2src_2spring-mass_8cpp" local="no">src/example-problems/src/spring-mass.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/conversion.hpp</label>
+        <link refid="conversion_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="7">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="5">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="6">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/conversion.hpp</label>
+        <link refid="conversion_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/cyqlone/src/conversion.cpp</label>
+        <link refid="conversion_8cpp"/>
+      </node>
+      <node id="3">
+        <label>src/example-problems/src/platooning.cpp</label>
+        <link refid="platooning_8cpp"/>
+      </node>
+      <node id="4">
+        <label>src/example-problems/src/spring-mass.cpp</label>
+        <link refid="src_2example-problems_2src_2spring-mass_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structcyqlone_1_1LinearOCPSparseQP" prot="public">cyqlone::LinearOCPSparseQP</innerclass>
+    <innerclass refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix" prot="public">cyqlone::LinearOCPSparseQP::KKTMatrix</innerclass>
+    <innerclass refid="structcyqlone_1_1SparseCSC" prot="public">cyqlone::SparseCSC</innerclass>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <briefdescription>
+<para>Conversion utilities for optimal control problems. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>For example: converting an OCP into a sparse “multiple shooting” quadratic program, or computing the gradient of the quadratic OCP cost function. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/**</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/>@file</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>Conversion<sp/>utilities<sp/>for<sp/>optimal<sp/>control<sp/>problems.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/>For<sp/>example:<sp/>converting<sp/>an<sp/>OCP<sp/>into<sp/>a<sp/>sparse<sp/>“multiple<sp/>shooting”</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>quadratic<sp/>program,<sp/>or<sp/>computing<sp/>the<sp/>gradient<sp/>of<sp/>the<sp/>quadratic<sp/>OCP</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>cost<sp/>function.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>@ingroup<sp/>topic-ocp-formulations</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ocp_8hpp" kindref="compound">cyqlone/ocp.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/linalg/sparsity.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref><sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">guanaqo::linalg::sparsity::SparseCSC;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="21"><highlight class="comment">///<sp/>Represents<sp/>a<sp/>sparse<sp/>multiple<sp/>shooting<sp/>formulation<sp/>of<sp/>the<sp/>standard<sp/>optimal</highlight></codeline>
+<codeline lineno="22"><highlight class="comment">///<sp/>control<sp/>problem.</highlight></codeline>
+<codeline lineno="23"><highlight class="comment">///<sp/>@ingroup<sp/>topic-ocp-formulations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="structcyqlone_1_1LinearOCPSparseQP" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1LinearOCPSparseQP" kindref="compound">LinearOCPSparseQP</ref><sp/>{</highlight></codeline>
+<codeline lineno="25" refid="structcyqlone_1_1LinearOCPSparseQP_1ad14fd39b30a87b5aa11ebae22bc0c0df" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;index_t&gt;<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1aa853d04b50ecfd335c6e5c57c31188db" kindref="member">Q_outer_ptr</ref>,<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1ad14fd39b30a87b5aa11ebae22bc0c0df" kindref="member">Q_inner_idx</ref>;</highlight></codeline>
+<codeline lineno="26" refid="structcyqlone_1_1LinearOCPSparseQP_1af8de074f5f4d602a788448bfc2fd0b36" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1af8de074f5f4d602a788448bfc2fd0b36" kindref="member">Q_values</ref>;</highlight></codeline>
+<codeline lineno="27" refid="structcyqlone_1_1LinearOCPSparseQP_1a8dc6e2385fb4b96a22739e2c1bb0f786" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCSC&lt;index_t, index_t&gt;</ref><sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a8dc6e2385fb4b96a22739e2c1bb0f786" kindref="member">Q_sparsity</ref>;</highlight></codeline>
+<codeline lineno="28" refid="structcyqlone_1_1LinearOCPSparseQP_1a6614256b4762efc491821cbf2eb6a8a2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;index_t&gt;<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a41899c587babe5186af00a8a36524271" kindref="member">A_outer_ptr</ref>,<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a6614256b4762efc491821cbf2eb6a8a2" kindref="member">A_inner_idx</ref>;</highlight></codeline>
+<codeline lineno="29" refid="structcyqlone_1_1LinearOCPSparseQP_1a3a1b6f7b21b3ad1fef1bb5d6e1c93c79" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a3a1b6f7b21b3ad1fef1bb5d6e1c93c79" kindref="member">A_values</ref>;</highlight></codeline>
+<codeline lineno="30" refid="structcyqlone_1_1LinearOCPSparseQP_1a0edc88c0e3c809e3fed970b03faee232" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCSC&lt;index_t, index_t&gt;</ref><sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a0edc88c0e3c809e3fed970b03faee232" kindref="member">A_sparsity</ref>;</highlight></codeline>
+<codeline lineno="31" refid="structcyqlone_1_1LinearOCPSparseQP_1a245d1d336c4b4d926aaffe1c23fad9b7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>index_t<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a71916e1a99b3913b68c32ec91cf26c89" kindref="member">n</ref>,<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a245d1d336c4b4d926aaffe1c23fad9b7" kindref="member">m_eq</ref>,<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a8c61d6796749c4ebfb43dcc95df0334c" kindref="member">m_ineq</ref>;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP" kindref="compound">LinearOCPSparseQP</ref><sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1a4c173a4c959b79f6a3bb82b29b4351c6" kindref="member">build</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35" refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix" kindref="compound">KKTMatrix</ref><sp/>{</highlight></codeline>
+<codeline lineno="36" refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a8b4a204db97df41e3d002d296368ed66" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;index_t&gt;<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a56c5bcab8e01759d78424ffe138ee938" kindref="member">outer_ptr</ref>,<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a8b4a204db97df41e3d002d296368ed66" kindref="member">inner_idx</ref>;</highlight></codeline>
+<codeline lineno="37" refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a0ce9b4ea58045a7a4298f6442bb6e767" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1a0ce9b4ea58045a7a4298f6442bb6e767" kindref="member">values</ref>;</highlight></codeline>
+<codeline lineno="38" refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1adbdd8d3223597f63001ec9d9866feba5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCSC&lt;index_t, index_t&gt;</ref><sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix_1adbdd8d3223597f63001ec9d9866feba5" kindref="member">sparsity</ref>;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="40"><highlight class="comment"><sp/><sp/><sp/><sp/>///<sp/>Returns<sp/>the<sp/>lower<sp/>part<sp/>of<sp/>the<sp/>symmetric<sp/>indefinite<sp/>KKT<sp/>matrix<sp/>for<sp/>the</highlight></codeline>
+<codeline lineno="41"><highlight class="comment"><sp/><sp/><sp/><sp/>///<sp/>active<sp/>set<sp/>@p<sp/>J<sp/>and<sp/>penalty<sp/>factors<sp/>@p<sp/>Σ.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>[[nodiscard]]<sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1_1KKTMatrix" kindref="compound">KKTMatrix</ref><sp/><ref refid="structcyqlone_1_1LinearOCPSparseQP_1ae9ee3917664f7a4ec2551c7c31ea8851" kindref="member">build_kkt</ref>(real_t<sp/>S,<sp/>std::span&lt;const<sp/>real_t&gt;<sp/>Σ,</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>bool&gt;<sp/>J)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="46"><highlight class="comment">///<sp/>Simply<sp/>computes<sp/>the<sp/>gradient<sp/>of<sp/>the<sp/>quadratic<sp/>cost</highlight></codeline>
+<codeline lineno="47"><highlight class="comment">///<sp/>@f$<sp/>J(x,<sp/>u)<sp/>=<sp/>\sum_{j=1}^{N-1}<sp/>\ell_j(x^j,<sp/>u^j)<sp/>+<sp/>\ell_N(x^N)<sp/>@f$,</highlight></codeline>
+<codeline lineno="48"><highlight class="comment">///<sp/>with<sp/>@f$<sp/>\ell_j(x,<sp/>u)<sp/>=<sp/>\tfrac12<sp/>\left\|<sp/>\begin{pmatrix}<sp/>x<sp/>-<sp/>x^j_\text{ref}</highlight></codeline>
+<codeline lineno="49"><highlight class="comment">///<sp/>\\<sp/>u<sp/>-<sp/>u^j_\text{ref}<sp/>\end{pmatrix}<sp/>\right\|_{H_j}^2<sp/>@f$,<sp/>with<sp/>the<sp/>Hessian</highlight></codeline>
+<codeline lineno="50"><highlight class="comment">///<sp/>@f$<sp/>H_j<sp/>=<sp/>\begin{pmatrix}<sp/>Q_j<sp/>&amp;<sp/>S_j^\top<sp/>\\<sp/>S_j<sp/>&amp;<sp/>R_j<sp/>\end{pmatrix}<sp/>@f$.</highlight></codeline>
+<codeline lineno="51"><highlight class="comment">///<sp/>Stores<sp/>@f$<sp/>\nabla<sp/>J(0,<sp/>0)<sp/>@f$<sp/>to<sp/>@p<sp/>qr.</highlight></codeline>
+<codeline lineno="52"><highlight class="comment">///<sp/>@ingroup<sp/>topic-ocp-formulations</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" kindref="member">reference_to_gradient</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp,<sp/>std::span&lt;const<sp/>real_t&gt;<sp/>ref,</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;real_t&gt;<sp/>qr);</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="55"><highlight class="comment">///<sp/>@copydoc<sp/>reference_to_gradient</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" kindref="member">reference_to_gradient</ref>(<ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>&amp;ocp,<sp/>std::span&lt;const<sp/>real_t&gt;<sp/>ref);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/include/cyqlone/conversion.hpp"/>
+  </compounddef>
+</doxygen>

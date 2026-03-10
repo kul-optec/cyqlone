@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_b7c7187cfc7c2dae6fb436abbbfac846" kind="dir">
+    <compoundname>src/example-problems/src</compoundname>
+    <innerfile refid="csv_8cpp">csv.cpp</innerfile>
+    <innerfile refid="platooning_8cpp">platooning.cpp</innerfile>
+    <innerfile refid="src_2example-problems_2src_2spring-mass_8cpp">spring-mass.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/example-problems/src/"/>
+  </compounddef>
+</doxygen>

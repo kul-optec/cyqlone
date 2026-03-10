@@ -1,0 +1,342 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone::parallel::SharedContext Struct Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('structcyqlone_1_1parallel_1_1SharedContext.html','','structcyqlone_1_1parallel_1_1SharedContext-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">cyqlone::parallel::SharedContext Struct Reference<div class="ingroups"><a class="el" href="group__topic-parallelization.html">Parallelization</a></div></div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="parallel_8hpp_source.html">cyqlone/parallel.hpp</a>&gt;</code></p>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstraction for a parallel execution context: a set of threads that can synchronize and communicate with each other using barriers. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structcyqlone_1_1parallel_1_1Context.html" title="Thread context for parallel execution.">Context</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00031">31</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a8541d7bb84b40a889200aa2b8281e455" id="r_a8541d7bb84b40a889200aa2b8281e455"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a8541d7bb84b40a889200aa2b8281e455">completion_type</a> = <a class="el" href="structcyqlone_1_1EmptyCompletion.html">EmptyCompletion</a></td></tr>
+<tr class="memitem:a8c23779f4d3e9282e8a0f4414a7a02df" id="r_a8c23779f4d3e9282e8a0f4414a7a02df"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a8c23779f4d3e9282e8a0f4414a7a02df">barrier_type</a> = <a class="el" href="classcyqlone_1_1TreeBarrier.html">TreeBarrier</a>&lt;<a class="el" href="#a8541d7bb84b40a889200aa2b8281e455">completion_type</a>, uint16_t&gt;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a070d23cba7fbc854c1834e130eaaa1ec" id="r_a070d23cba7fbc854c1834e130eaaa1ec"><td class="memTemplParams" colspan="2">template&lt;class F&gt; </td></tr>
+<tr class="memitem:a070d23cba7fbc854c1834e130eaaa1ec template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a070d23cba7fbc854c1834e130eaaa1ec">run</a> (F &amp;&amp;)</td></tr>
+<tr class="memdesc:a070d23cba7fbc854c1834e130eaaa1ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given function in parallel on all threads, blocking until completion.  <br /></td></tr>
+<tr class="memitem:a2d25e5fdf88c13360ada15986fcc98d1" id="r_a2d25e5fdf88c13360ada15986fcc98d1"><td class="memItemLeft">uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#a2d25e5fdf88c13360ada15986fcc98d1">set_barrier_spin_count</a> (uint32_t spin_count)</td></tr>
+<tr class="memdesc:a2d25e5fdf88c13360ada15986fcc98d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure the barrier spin count used in parallel synchronization before falling back to a futex wait.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a1b0dfe21418e9ebf681373cea1b1dd97" id="r_a1b0dfe21418e9ebf681373cea1b1dd97"><td class="memItemLeft">const index_t&#160;</td><td class="memItemRight"><a class="el" href="#a1b0dfe21418e9ebf681373cea1b1dd97">num_thr</a></td></tr>
+<tr class="memitem:a036e911c7fd2098f291a7cc59e395765" id="r_a036e911c7fd2098f291a7cc59e395765"><td class="memItemLeft"><a class="el" href="#a8c23779f4d3e9282e8a0f4414a7a02df">barrier_type</a>&#160;</td><td class="memItemRight"><a class="el" href="#a036e911c7fd2098f291a7cc59e395765">barrier</a> {static_cast&lt;uint32_t&gt;(<a class="el" href="#a1b0dfe21418e9ebf681373cea1b1dd97">num_thr</a>), {}}</td></tr>
+</table>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a id="a8541d7bb84b40a889200aa2b8281e455" name="a8541d7bb84b40a889200aa2b8281e455"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8541d7bb84b40a889200aa2b8281e455">&#9670;&#160;</a></span>completion_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a8541d7bb84b40a889200aa2b8281e455">cyqlone::parallel::SharedContext::completion_type</a> = <a class="el" href="structcyqlone_1_1EmptyCompletion.html">EmptyCompletion</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00037">37</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8c23779f4d3e9282e8a0f4414a7a02df" name="a8c23779f4d3e9282e8a0f4414a7a02df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c23779f4d3e9282e8a0f4414a7a02df">&#9670;&#160;</a></span>barrier_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a8c23779f4d3e9282e8a0f4414a7a02df">cyqlone::parallel::SharedContext::barrier_type</a> = <a class="el" href="classcyqlone_1_1TreeBarrier.html">TreeBarrier</a>&lt;<a class="el" href="#a8541d7bb84b40a889200aa2b8281e455">completion_type</a>, uint16_t&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00039">39</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a070d23cba7fbc854c1834e130eaaa1ec" name="a070d23cba7fbc854c1834e130eaaa1ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a070d23cba7fbc854c1834e130eaaa1ec">&#9670;&#160;</a></span>run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class F&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void cyqlone::parallel::SharedContext::run </td>
+          <td>(</td>
+          <td class="paramtype">F &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>f</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Execute the given function in parallel on all threads, blocking until completion. </p>
+<p>The function will be called with a <a class="el" href="structcyqlone_1_1parallel_1_1Context.html" title="Context">Context</a> that contains the thread index, and that can be used to synchronize and communicate between threads. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00191">191</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2d25e5fdf88c13360ada15986fcc98d1" name="a2d25e5fdf88c13360ada15986fcc98d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d25e5fdf88c13360ada15986fcc98d1">&#9670;&#160;</a></span>set_barrier_spin_count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t cyqlone::parallel::SharedContext::set_barrier_spin_count </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>spin_count</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Configure the barrier spin count used in parallel synchronization before falling back to a futex wait. </p>
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00053">53</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a1b0dfe21418e9ebf681373cea1b1dd97" name="a1b0dfe21418e9ebf681373cea1b1dd97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b0dfe21418e9ebf681373cea1b1dd97">&#9670;&#160;</a></span>num_thr</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const index_t cyqlone::parallel::SharedContext::num_thr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00040">40</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a036e911c7fd2098f291a7cc59e395765" name="a036e911c7fd2098f291a7cc59e395765"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a036e911c7fd2098f291a7cc59e395765">&#9670;&#160;</a></span>barrier</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a8c23779f4d3e9282e8a0f4414a7a02df">barrier_type</a> cyqlone::parallel::SharedContext::barrier {static_cast&lt;uint32_t&gt;(<a class="el" href="#a1b0dfe21418e9ebf681373cea1b1dd97">num_thr</a>), {}}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="parallel_8hpp_source.html#l00041">41</a> of file <a class="el" href="parallel_8hpp_source.html">parallel.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>src/cyqlone/include/cyqlone/<a class="el" href="parallel_8hpp_source.html">parallel.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacecyqlone.html">cyqlone</a></li><li class="navelem"><a href="namespacecyqlone_1_1parallel.html">parallel</a></li><li class="navelem"><a href="structcyqlone_1_1parallel_1_1SharedContext.html">SharedContext</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

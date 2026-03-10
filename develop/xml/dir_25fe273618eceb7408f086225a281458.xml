@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_25fe273618eceb7408f086225a281458" kind="dir">
+    <compoundname>src/qpalm/src</compoundname>
+    <innerfile refid="breakpoint_8cpp">breakpoint.cpp</innerfile>
+    <innerfile refid="ocp-backend-cyqlone_8cpp">ocp-backend-cyqlone.cpp</innerfile>
+    <innerfile refid="qpalm_8cpp">qpalm.cpp</innerfile>
+    <innerfile refid="status_8cpp">status.cpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/qpalm/src/"/>
+  </compounddef>
+</doxygen>

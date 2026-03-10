@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1matio__traits_3_01I_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::matio_traits&lt; I &gt;</compoundname>
+    <templateparamlist>
+      <param>
+        <type>std::unsigned_integral</type>
+        <declname>I</declname>
+        <defname>I</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1matio__traits_3_01I_01_4_1a10ae717db2e7b1bd20fdcd50b4ddcb82" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>auto</type>
+        <definition>static constexpr auto cyqlone::matio_traits&lt; I &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>cyqlone::matio_traits&lt; I &gt;::type</qualifiedname>
+        <initializer>= sizeof(I) == 1   ? MAT_T_UINT8
+  : sizeof(I) == 2 ? MAT_T_UINT16
+  : sizeof(I) == 4 ? MAT_T_UINT32
+  : sizeof(I) == 8 ? MAT_T_UINT64
+                   : MAT_T_UNKNOWN</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="34" column="27" bodyfile="src/cyqlone/src/matio.cpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1matio__traits_3_01I_01_4_1a2bbc49ee7419c9c28cb7529240af5e41" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>auto</type>
+        <definition>static constexpr auto cyqlone::matio_traits&lt; I &gt;::class_</definition>
+        <argsstring></argsstring>
+        <name>class_</name>
+        <qualifiedname>cyqlone::matio_traits&lt; I &gt;::class_</qualifiedname>
+        <initializer>= sizeof(I) == 1   ? MAT_C_UINT8
+  : sizeof(I) == 2 ? MAT_C_UINT16
+  : sizeof(I) == 4 ? MAT_C_UINT32
+  : sizeof(I) == 8 ? MAT_C_UINT64
+                   : MAT_C_EMPTY</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="39" column="27" bodyfile="src/cyqlone/src/matio.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::matio_traits&lt; I &gt;</label>
+        <link refid="structcyqlone_1_1matio__traits_3_01I_01_4"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/src/matio.cpp" line="33" column="1" bodyfile="src/cyqlone/src/matio.cpp" bodystart="33" bodyend="47"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1matio__traits_3_01I_01_4_1a2bbc49ee7419c9c28cb7529240af5e41" prot="public" virt="non-virtual"><scope>cyqlone::matio_traits&lt; I &gt;</scope><name>class_</name></member>
+      <member refid="structcyqlone_1_1matio__traits_3_01I_01_4_1a10ae717db2e7b1bd20fdcd50b4ddcb82" prot="public" virt="non-virtual"><scope>cyqlone::matio_traits&lt; I &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

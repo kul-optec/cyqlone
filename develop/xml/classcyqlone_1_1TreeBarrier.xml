@@ -1,0 +1,920 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classcyqlone_1_1TreeBarrier" kind="class" language="C++" prot="public">
+    <compoundname>cyqlone::TreeBarrier</compoundname>
+    <includes refid="barrier_8hpp" local="no">cyqlone/barrier.hpp</includes>
+    <innerclass refid="classcyqlone_1_1TreeBarrier_1_1arrival__token" prot="public">cyqlone::TreeBarrier::arrival_token</innerclass>
+    <innerclass refid="classcyqlone_1_1TreeBarrier_1_1arrival__token__typed" prot="public">cyqlone::TreeBarrier::arrival_token_typed</innerclass>
+    <innerclass refid="structcyqlone_1_1TreeBarrier_1_1Storage" prot="private">cyqlone::TreeBarrier::Storage</innerclass>
+    <innerclass refid="structcyqlone_1_1TreeBarrier_1_1State" prot="private">cyqlone::TreeBarrier::State</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename CompletionFn</type>
+        <defval><ref refid="structcyqlone_1_1EmptyCompletion" kindref="compound">EmptyCompletion</ref></defval>
+      </param>
+      <param>
+        <type>class PhaseType</type>
+        <defval>uint32_t</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="classcyqlone_1_1TreeBarrier_1a50fd92d9bf505a3e94b41afc10beeb41" prot="public" static="no" strong="yes">
+        <type>PhaseType</type>
+        <name>BarrierPhase</name>
+        <qualifiedname>cyqlone::TreeBarrier::BarrierPhase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="48" column="5" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="48" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="classcyqlone_1_1TreeBarrier_1addb39c372a0c03009ac0616313d910f0" prot="private" static="no">
+        <type>typename State::ticket_t::value_type</type>
+        <definition>using cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::ticket_value_type = typename State::ticket_t::value_type</definition>
+        <argsstring></argsstring>
+        <name>ticket_value_type</name>
+        <qualifiedname>cyqlone::TreeBarrier::ticket_value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="102" column="5" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classcyqlone_1_1TreeBarrier_1a389929b1d19da95bbd820e0c62cbfa5c" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::cache_line_size</definition>
+        <argsstring></argsstring>
+        <name>cache_line_size</name>
+        <qualifiedname>cyqlone::TreeBarrier::cache_line_size</qualifiedname>
+        <initializer>= 64</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="65" column="29" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcyqlone_1_1TreeBarrier_1a034f2edaf5394e71e1d72a4b762846a0" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::expected</definition>
+        <argsstring></argsstring>
+        <name>expected</name>
+        <qualifiedname>cyqlone::TreeBarrier::expected</qualifiedname>
+        <briefdescription>
+<para>Number of participating threads. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="104" column="14" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcyqlone_1_1TreeBarrier_1a2bc1e0767efb7d3fb220f09bb7b3873e" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="structcyqlone_1_1TreeBarrier_1_1State" kindref="compound">State</ref>[]&gt;</type>
+        <definition>std::unique_ptr&lt;State[]&gt; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>cyqlone::TreeBarrier::state</qualifiedname>
+        <briefdescription>
+<para>Combining tree state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="105" column="21" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcyqlone_1_1TreeBarrier_1aeb50ca8dad5468c919ffb1678ab686ba" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="structcyqlone_1_1TreeBarrier_1_1Storage" kindref="compound">Storage</ref>[]&gt;</type>
+        <definition>std::unique_ptr&lt;Storage[]&gt; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::storage</definition>
+        <argsstring></argsstring>
+        <name>storage</name>
+        <qualifiedname>cyqlone::TreeBarrier::storage</qualifiedname>
+        <briefdescription>
+<para>Used for reductions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="106" column="21" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcyqlone_1_1TreeBarrier_1adb1514abba71637d7606bc7d3a2bb584" prot="private" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1TreeBarrier_1_1Storage" kindref="compound">Storage</ref></type>
+        <definition>Storage cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::broadcast_storage</definition>
+        <argsstring></argsstring>
+        <name>broadcast_storage</name>
+        <qualifiedname>cyqlone::TreeBarrier::broadcast_storage</qualifiedname>
+        <briefdescription>
+<para>Used for broadcasts (including after reductions). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="107" column="13" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcyqlone_1_1TreeBarrier_1a4e8072d66efe7d0bc170060e6cd69e91" prot="private" static="no" mutable="no">
+        <type>CompletionFn</type>
+        <definition>CompletionFn cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::completion</definition>
+        <argsstring></argsstring>
+        <name>completion</name>
+        <qualifiedname>cyqlone::TreeBarrier::completion</qualifiedname>
+        <briefdescription>
+<para>Called when last thread arrives. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="108" column="19" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcyqlone_1_1TreeBarrier_1acab69cd401008a32fef359eeccae1afb" prot="private" static="no" mutable="no">
+        <type>std::atomic&lt; <ref refid="classcyqlone_1_1TreeBarrier_1a50fd92d9bf505a3e94b41afc10beeb41" kindref="member">BarrierPhase</ref> &gt;</type>
+        <definition>std::atomic&lt;BarrierPhase&gt; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::phase</definition>
+        <argsstring></argsstring>
+        <name>phase</name>
+        <qualifiedname>cyqlone::TreeBarrier::phase</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="109" column="25" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="109" bodyend="109"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classcyqlone_1_1TreeBarrier_1a8e4d5d2a5e3235978ea3a4b661e96949" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::spin_count</definition>
+        <argsstring></argsstring>
+        <name>spin_count</name>
+        <qualifiedname>cyqlone::TreeBarrier::spin_count</qualifiedname>
+        <initializer>= 1000</initializer>
+        <briefdescription>
+<para>Number of spin iterations before falling back to futex-based wait. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="291" column="14" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="291" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1acc984d93658146f49529146d2d2234f0" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1TreeBarrier_1_1State_1aaeef4b36ea8581ca353d75bfa8a59bba" kindref="member">State::ticket_t</ref> &amp;</type>
+        <definition>State::ticket_t &amp; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::get_local_phase</definition>
+        <argsstring>(uint32_t thread_id) noexcept</argsstring>
+        <name>get_local_phase</name>
+        <qualifiedname>cyqlone::TreeBarrier::get_local_phase</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="112" column="21" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="112" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a2e139954998ab1f002e259038a56dedf" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1TreeBarrier_1_1State_1aaeef4b36ea8581ca353d75bfa8a59bba" kindref="member">State::ticket_t</ref> &amp;</type>
+        <definition>State::ticket_t &amp; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::get_local_line</definition>
+        <argsstring>(uint32_t thread_id) noexcept</argsstring>
+        <name>get_local_line</name>
+        <qualifiedname>cyqlone::TreeBarrier::get_local_line</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="115" column="21" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="115" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1aa427fe1c89ea92b0858cbf520e010a97" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::sanity_check_arrival</definition>
+        <argsstring>(uint32_t thread_id, BarrierPhase cur_phase) noexcept</argsstring>
+        <name>sanity_check_arrival</name>
+        <qualifiedname>cyqlone::TreeBarrier::sanity_check_arrival</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type><ref refid="classcyqlone_1_1TreeBarrier_1a50fd92d9bf505a3e94b41afc10beeb41" kindref="member">BarrierPhase</ref></type>
+          <declname>cur_phase</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="118" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="118" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1ae26c82825d976e99584e6ffbc987ba09" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_impl</definition>
+        <argsstring>(BarrierPhase old_phase, uint32_t thread_id)</argsstring>
+        <name>arrive_impl</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_impl</qualifiedname>
+        <param>
+          <type><ref refid="classcyqlone_1_1TreeBarrier_1a50fd92d9bf505a3e94b41afc10beeb41" kindref="member">BarrierPhase</ref></type>
+          <declname>old_phase</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <briefdescription>
+<para>Combining tree arrival. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The last thread arriving at a certain ticket (counter) moves on to the next level of the tree. When reaching the root, it returns true. The number of tickets halves at each level, with at most two threads per ticket. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="128" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="128" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a2eb476deaed0b2e74c1e0a7945cbc323" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_impl</definition>
+        <argsstring>(BarrierPhase old_phase, uint32_t thread_id, T value, F reduce)</argsstring>
+        <name>arrive_impl</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_impl</qualifiedname>
+        <param>
+          <type><ref refid="classcyqlone_1_1TreeBarrier_1a50fd92d9bf505a3e94b41afc10beeb41" kindref="member">BarrierPhase</ref></type>
+          <declname>old_phase</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>reduce</declname>
+        </param>
+        <briefdescription>
+<para>Fused implementation of the combining tree arrival and a reduction operation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The last thread arriving at a certain ticket (counter) moves on to the next level of the tree. When it does so, it reads the value written by the other thread that arrived at the same ticket, applies the reduction function, and writes the result to be used in the next level. When reaching the root, it stores the final value and returns true. Note that the left and right arguments to the reduction function are determined by the thread IDs, regardless of the order in which threads arrive. In other words, for a given number of threads, the order of the reduction operations is fully deterministic. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="159" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="159" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a96560e3d829ee7e3e274bb73ce6b1e1a" prot="private" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class A</type>
+          </param>
+          <param>
+            <type>class C</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classcyqlone_1_1TreeBarrier_1_1arrival__token" kindref="compound">arrival_token</ref></type>
+        <definition>arrival_token cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_with_completion</definition>
+        <argsstring>(uint32_t thread_id, A arrival, C &amp;&amp;custom_completion)</argsstring>
+        <name>arrive_with_completion</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_with_completion</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>A</type>
+          <declname>arrival</declname>
+        </param>
+        <param>
+          <type>C &amp;&amp;</type>
+          <declname>custom_completion</declname>
+        </param>
+        <briefdescription>
+<para>Generic implementation of arrive with custom completion function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The arrival function should return true when the thread is the last to arrive at the root of the tree. Returns a token that can be used to wait for the barrier to complete. The custom completion function is called by the last thread arriving at the root, before advancing the barrier phase and notifying all waiting threads. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="202" column="20" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="202" bodyend="216"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a028c34ec619414c0ff074e7f7367d6be" prot="public" static="yes" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static constexpr uint32_t cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::max</definition>
+        <argsstring>()</argsstring>
+        <name>max</name>
+        <qualifiedname>cyqlone::TreeBarrier::max</qualifiedname>
+        <briefdescription>
+<para>Maximum number of threads supported by this barrier implementation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="220" column="31" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="220" bodyend="227"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a198aa3c6d872f16ce45755eee389dc6b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::TreeBarrier</definition>
+        <argsstring>(uint32_t expected, CompletionFn completion)</argsstring>
+        <name>TreeBarrier</name>
+        <qualifiedname>cyqlone::TreeBarrier::TreeBarrier</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>expected</declname>
+        </param>
+        <param>
+          <type>CompletionFn</type>
+          <declname>completion</declname>
+        </param>
+        <briefdescription>
+<para>Create a barrier with <computeroutput>expected</computeroutput> participating threads and a completion function that is called by the last thread that arrives at each phase. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="231" column="5" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="231" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a458a9a0e4e44c1db3c643cbe1a222025" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::TreeBarrier</definition>
+        <argsstring>(const TreeBarrier &amp;)=delete</argsstring>
+        <name>TreeBarrier</name>
+        <qualifiedname>cyqlone::TreeBarrier::TreeBarrier</qualifiedname>
+        <param>
+          <type>const TreeBarrier &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="239" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a5a7ca6198a9a8d0348737bf58a28c944" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::TreeBarrier</definition>
+        <argsstring>(TreeBarrier &amp;&amp;)=default</argsstring>
+        <name>TreeBarrier</name>
+        <qualifiedname>cyqlone::TreeBarrier::TreeBarrier</qualifiedname>
+        <param>
+          <type>TreeBarrier &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="240" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1ac9175faa019c3f367f51582fabc85bbd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcyqlone_1_1TreeBarrier_1a198aa3c6d872f16ce45755eee389dc6b" kindref="member">TreeBarrier</ref> &amp;</type>
+        <definition>TreeBarrier &amp; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::operator=</definition>
+        <argsstring>(const TreeBarrier &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>cyqlone::TreeBarrier::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classcyqlone_1_1TreeBarrier_1a198aa3c6d872f16ce45755eee389dc6b" kindref="member">TreeBarrier</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="241" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1ab2d8f9aee39fe0dd293ce02f87411321" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classcyqlone_1_1TreeBarrier_1a198aa3c6d872f16ce45755eee389dc6b" kindref="member">TreeBarrier</ref> &amp;</type>
+        <definition>TreeBarrier &amp; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::operator=</definition>
+        <argsstring>(TreeBarrier &amp;&amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>cyqlone::TreeBarrier::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classcyqlone_1_1TreeBarrier_1a198aa3c6d872f16ce45755eee389dc6b" kindref="member">TreeBarrier</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="242" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a7411730540f4e108e50ae9075dd0324b" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class C</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classcyqlone_1_1TreeBarrier_1_1arrival__token" kindref="compound">arrival_token</ref></type>
+        <definition>arrival_token cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_with_completion</definition>
+        <argsstring>(uint32_t thread_id, C &amp;&amp;custom_completion)</argsstring>
+        <name>arrive_with_completion</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_with_completion</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>C &amp;&amp;</type>
+          <declname>custom_completion</declname>
+        </param>
+        <briefdescription>
+<para>Arrive at the barrier with a custom completion function that is called by the last thread that arrives, before advancing the barrier phase and notifying all waiting threads. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The completion function of the barrier is not called in this case. Each thread should use a unique thread ID in [0, expected-1]. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="249" column="20" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="249" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a4c337b67cc8d868958fef5acc11b7e74" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcyqlone_1_1TreeBarrier_1_1arrival__token" kindref="compound">arrival_token</ref></type>
+        <definition>arrival_token cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive</definition>
+        <argsstring>(uint32_t thread_id)</argsstring>
+        <name>arrive</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <briefdescription>
+<para>Arrive at the barrier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The barrier&apos;s completion function is called by the last thread that arrives, before advancing the barrier phase and notifying all waiting threads. Each thread should use a unique thread ID in [0, expected-1]. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="259" column="20" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="259" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1aa5776a8bc40dbc6cae4188494ebde10a" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcyqlone_1_1TreeBarrier_1_1arrival__token" kindref="compound">arrival_token</ref></type>
+        <definition>arrival_token cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive</definition>
+        <argsstring>(uint32_t thread_id, int line)</argsstring>
+        <name>arrive</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Arrive at the barrier, recording the given line number for sanity checking to make sure that all threads arrive from the same line or statement in the source code. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This is useful for debugging purposes to detect mismatched barrier calls, but should not really be used otherwise. If <ref refid="barrier_8hpp_1a4d1e252dc13b658ff525ba615f94ae8b" kindref="member">CYQLONE_SANITY_CHECKS_BARRIER</ref> is disabled, the line number is ignored and this function is equivalent to <ref refid="classcyqlone_1_1TreeBarrier_1a4c337b67cc8d868958fef5acc11b7e74" kindref="member">arrive(uint32_t)</ref>. Each thread should use a unique thread ID in [0, expected-1]. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="269" column="20" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="269" bodyend="282"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a3daea9482b5a6a0c24eaf5e5b9bf5543" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classcyqlone_1_1TreeBarrier_1a50fd92d9bf505a3e94b41afc10beeb41" kindref="member">BarrierPhase</ref></type>
+        <definition>BarrierPhase cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::current_phase</definition>
+        <argsstring>() const</argsstring>
+        <name>current_phase</name>
+        <qualifiedname>cyqlone::TreeBarrier::current_phase</qualifiedname>
+        <briefdescription>
+<para>Query the current barrier phase. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>May wrap around on overflow, but all threads will see the same phase values in the same order. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="286" column="19" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="286" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a20da7a78bcb74b76631517918cc84953" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::wait_may_block</definition>
+        <argsstring>(const arrival_token &amp;token) const noexcept</argsstring>
+        <name>wait_may_block</name>
+        <qualifiedname>cyqlone::TreeBarrier::wait_may_block</qualifiedname>
+        <param>
+          <type>const <ref refid="classcyqlone_1_1TreeBarrier_1_1arrival__token" kindref="compound">arrival_token</ref> &amp;</type>
+          <declname>token</declname>
+        </param>
+        <briefdescription>
+<para>Check if <ref refid="classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334" kindref="member">wait()</ref> may block. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If it returns false, the caller can call <ref refid="classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334" kindref="member">wait()</ref> and it will return immediately without spinning or sleeping. This is useful if the caller has other non-critical work to do while waiting for other threads. Users should still call <ref refid="classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334" kindref="member">wait()</ref> before arriving again. <simplesect kind="note"><para>This function does not impose any memory ordering, so even when it returns false, changes made before the arrival of other threads may not be visible yet. In contrast, <ref refid="classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334" kindref="member">wait()</ref> does ensure proper synchronization. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="300" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="300" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::wait</definition>
+        <argsstring>(arrival_token &amp;&amp;token) const</argsstring>
+        <name>wait</name>
+        <qualifiedname>cyqlone::TreeBarrier::wait</qualifiedname>
+        <param>
+          <type><ref refid="classcyqlone_1_1TreeBarrier_1_1arrival__token" kindref="compound">arrival_token</ref> &amp;&amp;</type>
+          <declname>token</declname>
+        </param>
+        <briefdescription>
+<para>Wait for the barrier to complete after an arrival, using the given token. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Separating the arrival and wait phases allows for overlapping computation with waiting, hiding the synchronization latency. Waiting on the same token multiple times is not allowed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="308" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="308" bodyend="318"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1ac491f75b3a472594fc122dc4fbdbac99" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_and_wait</definition>
+        <argsstring>(uint32_t thread_id)</argsstring>
+        <name>arrive_and_wait</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_and_wait</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <briefdescription>
+<para>Convenience function to arrive and wait in a single call. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="321" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="321" bodyend="321"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a456977b149d9c8af2938ae2271f06f68" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_and_wait</definition>
+        <argsstring>(uint32_t thread_id, int line)</argsstring>
+        <name>arrive_and_wait</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_and_wait</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Convenience function to arrive and wait in a single call (with optional sanity check). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="323" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="323" bodyend="323"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a209bc761da78fc11ba9187781efae9ab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class C</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_and_wait_with_completion</definition>
+        <argsstring>(uint32_t thread_id, C &amp;&amp;custom_completion)</argsstring>
+        <name>arrive_and_wait_with_completion</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_and_wait_with_completion</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>C &amp;&amp;</type>
+          <declname>custom_completion</declname>
+        </param>
+        <briefdescription>
+<para>Convenience function to arrive and wait in a single call (with custom completion). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="327" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="327" bodyend="329"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a8c324216000deff76413134d9d20f2ac" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class C</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_and_wait_with_completion</definition>
+        <argsstring>(uint32_t thread_id, C &amp;&amp;custom_completion)</argsstring>
+        <name>arrive_and_wait_with_completion</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_and_wait_with_completion</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>C &amp;&amp;</type>
+          <declname>custom_completion</declname>
+        </param>
+        <briefdescription>
+<para>Convenience function to arrive and wait in a single call (with custom completion). </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Broadcasts the return value of the custom completion function to all threads. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="336" column="11" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="336" bodyend="343"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a490cae3d5765604a127f119ca8984c44" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classcyqlone_1_1TreeBarrier_1_1arrival__token__typed" kindref="compound">arrival_token_typed</ref>&lt; T &gt;</type>
+        <definition>arrival_token_typed&lt; T &gt; cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::arrive_reduce</definition>
+        <argsstring>(uint32_t thread_id, T x, F reduce)</argsstring>
+        <name>arrive_reduce</name>
+        <qualifiedname>cyqlone::TreeBarrier::arrive_reduce</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>reduce</declname>
+        </param>
+        <briefdescription>
+<para>Combining tree reduction across all threads. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Deterministic application order for a given number of threads. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="348" column="26" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="348" bodyend="353"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a3ab486e926ed61a093a52f07b4b9e059" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::wait_reduce</definition>
+        <argsstring>(arrival_token_typed&lt; T &gt; &amp;&amp;token)</argsstring>
+        <name>wait_reduce</name>
+        <qualifiedname>cyqlone::TreeBarrier::wait_reduce</qualifiedname>
+        <param>
+          <type><ref refid="classcyqlone_1_1TreeBarrier_1_1arrival__token__typed" kindref="compound">arrival_token_typed</ref>&lt; T &gt; &amp;&amp;</type>
+          <declname>token</declname>
+        </param>
+        <briefdescription>
+<para>Wait for the result of an <ref refid="classcyqlone_1_1TreeBarrier_1a490cae3d5765604a127f119ca8984c44" kindref="member">arrive_reduce</ref> call and obtain the reduced value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="357" column="8" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="357" bodyend="360"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1a8e5647fb88ae223437ad82fac5042d49" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::reduce</definition>
+        <argsstring>(uint32_t thread_id, T x, F reduce)</argsstring>
+        <name>reduce</name>
+        <qualifiedname>cyqlone::TreeBarrier::reduce</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>F</type>
+          <declname>reduce</declname>
+        </param>
+        <briefdescription>
+<para>Combining tree reduction across all threads. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Deterministic application order for a given number of threads. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="365" column="8" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="365" bodyend="367"/>
+      </memberdef>
+      <memberdef kind="function" id="classcyqlone_1_1TreeBarrier_1ae15228d22aea106aa918a8c68700b845" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::broadcast</definition>
+        <argsstring>(uint32_t thread_id, T &amp;&amp;x, uint32_t src=0)</argsstring>
+        <name>broadcast</name>
+        <qualifiedname>cyqlone::TreeBarrier::broadcast</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>thread_id</declname>
+        </param>
+        <param>
+          <type>T &amp;&amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>src</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>Broadcast a value from the source thread to all other threads. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>All threads must call this function with the same source thread ID. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="372" column="8" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="372" bodyend="382"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Fairly vanilla combining tree barrier. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>It is inspired by GCC 15.2&apos;s __tree_barrier, with some important API differences:<itemizedlist>
+<listitem><para>Every thread has a unique thread ID in [0, expected-1]. This eliminates the need for hashing the pthread thread IDs and for the inner search loop to find free slots in the tree.</para>
+</listitem><listitem><para>Wait tries to spin for a given number of iterations before falling back to a futex-based atomic wait.</para>
+</listitem><listitem><para>The barrier phase is exposed to the user.</para>
+</listitem><listitem><para>Custom completion functions can be provided at arrival time.</para>
+</listitem><listitem><para>Reductions and broadcasts on small values are supported. </para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="8">
+        <label>cyqlone::EmptyCompletion</label>
+        <link refid="structcyqlone_1_1EmptyCompletion"/>
+      </node>
+      <node id="3">
+        <label>cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::State</label>
+        <link refid="structcyqlone_1_1TreeBarrier_1_1State"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+tickets</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;::Storage</label>
+        <link refid="structcyqlone_1_1TreeBarrier_1_1Storage"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>+payload</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>cyqlone::TreeBarrier&lt; CompletionFn, PhaseType &gt;</label>
+        <link refid="classcyqlone_1_1TreeBarrier"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>-state</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>-storage</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>-broadcast_storage</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>-completion</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>-phase</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; std::byte, cache_line_size &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; ticket_t, num_levels &gt;</label>
+      </node>
+      <node id="9">
+        <label>std::atomic&lt; BarrierPhase &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; cyqlone::TreeBarrier::State[]&gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; cyqlone::TreeBarrier::Storage[]&gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+ptr</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="46" column="1" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="46" bodyend="383"/>
+    <listofallmembers>
+      <member refid="classcyqlone_1_1TreeBarrier_1a4c337b67cc8d868958fef5acc11b7e74" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1aa5776a8bc40dbc6cae4188494ebde10a" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1ac491f75b3a472594fc122dc4fbdbac99" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_and_wait</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a456977b149d9c8af2938ae2271f06f68" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_and_wait</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a209bc761da78fc11ba9187781efae9ab" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_and_wait_with_completion</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a8c324216000deff76413134d9d20f2ac" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_and_wait_with_completion</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1ae26c82825d976e99584e6ffbc987ba09" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_impl</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a2eb476deaed0b2e74c1e0a7945cbc323" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_impl</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a490cae3d5765604a127f119ca8984c44" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_reduce</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a96560e3d829ee7e3e274bb73ce6b1e1a" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_with_completion</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a7411730540f4e108e50ae9075dd0324b" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>arrive_with_completion</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a50fd92d9bf505a3e94b41afc10beeb41" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>BarrierPhase</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1ae15228d22aea106aa918a8c68700b845" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>broadcast</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1adb1514abba71637d7606bc7d3a2bb584" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>broadcast_storage</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a389929b1d19da95bbd820e0c62cbfa5c" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>cache_line_size</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a4e8072d66efe7d0bc170060e6cd69e91" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>completion</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a3daea9482b5a6a0c24eaf5e5b9bf5543" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>current_phase</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a034f2edaf5394e71e1d72a4b762846a0" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>expected</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a2e139954998ab1f002e259038a56dedf" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>get_local_line</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1acc984d93658146f49529146d2d2234f0" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>get_local_phase</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a028c34ec619414c0ff074e7f7367d6be" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>max</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1ac9175faa019c3f367f51582fabc85bbd" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>operator=</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1ab2d8f9aee39fe0dd293ce02f87411321" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>operator=</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1acab69cd401008a32fef359eeccae1afb" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>phase</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a8e5647fb88ae223437ad82fac5042d49" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>reduce</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1aa427fe1c89ea92b0858cbf520e010a97" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>sanity_check_arrival</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a8e4d5d2a5e3235978ea3a4b661e96949" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>spin_count</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a2bc1e0767efb7d3fb220f09bb7b3873e" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>state</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1aeb50ca8dad5468c919ffb1678ab686ba" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>storage</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1addb39c372a0c03009ac0616313d910f0" prot="private" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>ticket_value_type</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a198aa3c6d872f16ce45755eee389dc6b" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>TreeBarrier</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a458a9a0e4e44c1db3c643cbe1a222025" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>TreeBarrier</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a5a7ca6198a9a8d0348737bf58a28c944" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>TreeBarrier</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a863cb1f12340ccb2a5cd4a2825956334" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>wait</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a20da7a78bcb74b76631517918cc84953" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>wait_may_block</name></member>
+      <member refid="classcyqlone_1_1TreeBarrier_1a3ab486e926ed61a093a52f07b4b9e059" prot="public" virt="non-virtual"><scope>cyqlone::TreeBarrier</scope><name>wait_reduce</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

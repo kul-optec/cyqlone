@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1CyqloneParams" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::CyqloneParams</compoundname>
+    <includes refid="cyqlone-params_8hpp" local="no">cyqlone/cyqlone-params.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+        <defval>real_t</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1CyqloneParams_1a04be825e012f3109c62742ea3dd1a39c" prot="public" static="no">
+        <type>T</type>
+        <definition>using cyqlone::CyqloneParams&lt; T &gt;::value_type = T</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>cyqlone::CyqloneParams::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="62" column="5" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Parameters and settings for the Cyqlone solver. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::CyqloneParams&lt; T &gt;</label>
+        <link refid="structcyqlone_1_1CyqloneParams"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/cyqlone-params.hpp" line="61" column="1" bodyfile="src/cyqlone/include/cyqlone/cyqlone-params.hpp" bodystart="61" bodyend="65"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1CyqloneParams_1a04be825e012f3109c62742ea3dd1a39c" prot="public" virt="non-virtual"><scope>cyqlone::CyqloneParams</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

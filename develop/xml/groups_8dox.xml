@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="groups_8dox" kind="file" language="C++">
+    <compoundname>groups.dox</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/**<sp/>@defgroup<sp/>topic-lin-solvers<sp/>Linear<sp/>solvers</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/><sp/>@brief<sp/>Solvers<sp/>for<sp/>structured<sp/>linear<sp/>systems<sp/>(block<sp/>tridiagonal<sp/>and<sp/>optimal<sp/>control<sp/>structure).</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*/</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/><sp/><sp/><sp/>/**<sp/>@defgroup<sp/>topic-block-tridiag-solvers<sp/>Block<sp/>tridiagonal<sp/>solvers</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*<sp/><sp/>@brief<sp/>Solvers<sp/>for<sp/>block<sp/>tridiagonal<sp/>linear<sp/>systems.</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*<sp/><sp/>@ingroup<sp/>topic-lin-solvers</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/><sp/><sp/><sp/>/**<sp/>@defgroup<sp/>topic-ocp-solvers<sp/>Optimal<sp/>control<sp/>solvers</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*<sp/><sp/>@brief<sp/>Solvers<sp/>for<sp/>linear<sp/>systems<sp/>with<sp/>optimal<sp/>control<sp/>structure.</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*<sp/>@ingroup<sp/>topic-lin-solvers</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="13"><highlight class="comment">/**<sp/>@defgroup<sp/>topic-optimization-solvers<sp/>Optimization<sp/>solvers</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*<sp/><sp/>@brief<sp/>Solvers<sp/>for<sp/>structured<sp/>optimization<sp/>problems<sp/>(QP<sp/>and<sp/>linear-quadratic<sp/>optimal<sp/>control).</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/>*/</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/><sp/><sp/><sp/>/**<sp/>@defgroup<sp/>topic-optimization-solvers-ocp<sp/>Optimal<sp/>control<sp/>solvers</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*<sp/><sp/>@brief<sp/>Solvers<sp/>for<sp/>optimal<sp/>control<sp/>problems.</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*<sp/><sp/>@ingroup<sp/>topic-optimization-solvers</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="21"><highlight class="comment">/**<sp/>@defgroup<sp/>topic-ocp-formulations<sp/>Optimal<sp/>control<sp/>problem<sp/>formulations</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/>*<sp/><sp/>@brief<sp/>Data<sp/>structures<sp/>for<sp/>different<sp/>formulations<sp/>of<sp/>optimal<sp/>control<sp/>problems.</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="25"><highlight class="comment">/**<sp/>@defgroup<sp/>topic-parallelization<sp/>Parallelization</highlight></codeline>
+<codeline lineno="26"><highlight class="comment"><sp/>*<sp/><sp/>@brief<sp/>Utilities<sp/>for<sp/>parallelization<sp/>and<sp/>synchronization.</highlight></codeline>
+<codeline lineno="27"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="29"><highlight class="comment">/**<sp/>@defgroup<sp/>topic-linalg<sp/>Linear<sp/>algebra</highlight></codeline>
+<codeline lineno="30"><highlight class="comment"><sp/>*<sp/><sp/>@brief<sp/>Linear<sp/>algebra<sp/>utilities<sp/>(mostly<sp/>vector<sp/>operations).</highlight></codeline>
+<codeline lineno="31"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="33"><highlight class="comment">/**<sp/>@defgroup<sp/>topic-utilities<sp/>Utilities</highlight></codeline>
+<codeline lineno="34"><highlight class="comment"><sp/>*<sp/><sp/>@brief<sp/>Various<sp/>utility<sp/>functions<sp/>and<sp/>classes.</highlight></codeline>
+<codeline lineno="35"><highlight class="comment"><sp/>*/</highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="36"><highlight class="comment"><sp/><sp/><sp/><sp/>/**<sp/>@defgroup<sp/>topic-util-matio<sp/>Exporting<sp/>and<sp/>loading<sp/>.mat<sp/>files</highlight></codeline>
+<codeline lineno="37"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>*<sp/><sp/>@brief<sp/>Functions<sp/>for<sp/>exporting<sp/>and<sp/>loading<sp/>matrices<sp/>and<sp/>OCP<sp/>data<sp/>to<sp/>and<sp/>from<sp/>.mat<sp/>files.</highlight></codeline>
+<codeline lineno="38"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>*<sp/><sp/>@ingroup<sp/>topic-utilities</highlight></codeline>
+<codeline lineno="39"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="docs/source/doxygen/groups.dox"/>
+  </compounddef>
+</doxygen>

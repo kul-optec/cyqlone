@@ -1,0 +1,284 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone::linalg::multi Namespace Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('namespacecyqlone_1_1linalg_1_1multi.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">cyqlone::linalg::multi Namespace Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-member-group" class="groupheader"><a id="member-group" name="member-group"></a>
+Multi-batch operations</h2></td></tr>
+<tr class="memitem:gade4eb9023d1b94d7657f68dc256860b8" id="r_gade4eb9023d1b94d7657f68dc256860b8"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx&gt; </td></tr>
+<tr class="memitem:gade4eb9023d1b94d7657f68dc256860b8 template"><td class="memItemLeft"><a class="el" href="structcyqlone_1_1norms.html">norms</a>&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt;::result&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gade4eb9023d1b94d7657f68dc256860b8">norms_all</a> (Vx &amp;&amp;x)</td></tr>
+<tr class="memdesc:gade4eb9023d1b94d7657f68dc256860b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the norms (max, 1-norm, and 2-norm) of a vector.  <br /></td></tr>
+<tr class="memitem:ga55c086fc7235a79e26c3aa5b1154c224" id="r_ga55c086fc7235a79e26c3aa5b1154c224"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx&gt; </td></tr>
+<tr class="memitem:ga55c086fc7235a79e26c3aa5b1154c224 template"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt;&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga55c086fc7235a79e26c3aa5b1154c224">norm_inf</a> (Vx &amp;&amp;x)</td></tr>
+<tr class="memdesc:ga55c086fc7235a79e26c3aa5b1154c224"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the infinity norm of a vector.  <br /></td></tr>
+<tr class="memitem:gabf875f22442b0023c2142b00d0975554" id="r_gabf875f22442b0023c2142b00d0975554"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx&gt; </td></tr>
+<tr class="memitem:gabf875f22442b0023c2142b00d0975554 template"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt;&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gabf875f22442b0023c2142b00d0975554">norm_1</a> (Vx &amp;&amp;x)</td></tr>
+<tr class="memdesc:gabf875f22442b0023c2142b00d0975554"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the 1-norm of a vector.  <br /></td></tr>
+<tr class="memitem:gae934751791c316edde36013271945bf3" id="r_gae934751791c316edde36013271945bf3"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx&gt; </td></tr>
+<tr class="memitem:gae934751791c316edde36013271945bf3 template"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt;&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gae934751791c316edde36013271945bf3">norm_2_squared</a> (Vx &amp;&amp;x)</td></tr>
+<tr class="memdesc:gae934751791c316edde36013271945bf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the squared 2-norm of a vector.  <br /></td></tr>
+<tr class="memitem:ga91b1ca93bfba644b53749eeac8edb444" id="r_ga91b1ca93bfba644b53749eeac8edb444"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx&gt; </td></tr>
+<tr class="memitem:ga91b1ca93bfba644b53749eeac8edb444 template"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt;&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga91b1ca93bfba644b53749eeac8edb444">norm_2</a> (Vx &amp;&amp;x)</td></tr>
+<tr class="memdesc:ga91b1ca93bfba644b53749eeac8edb444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the 2-norm of a vector.  <br /></td></tr>
+<tr class="memitem:gafac39321d4eca4894c8099e597a9b5f2" id="r_gafac39321d4eca4894c8099e597a9b5f2"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vy&gt; </td></tr>
+<tr class="memitem:gafac39321d4eca4894c8099e597a9b5f2 template"><td class="memItemLeft"><a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt;&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gafac39321d4eca4894c8099e597a9b5f2">dot</a> (Vx &amp;&amp;x, Vy &amp;&amp;y)</td></tr>
+<tr class="memdesc:gafac39321d4eca4894c8099e597a9b5f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the dot product of two vectors.  <br /></td></tr>
+<tr class="memitem:gad40329bb0eea1a12dd5b510935b93fca" id="r_gad40329bb0eea1a12dd5b510935b93fca"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vz, std::convertible_to&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt; T&gt; </td></tr>
+<tr class="memitem:gad40329bb0eea1a12dd5b510935b93fca template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gad40329bb0eea1a12dd5b510935b93fca">scale</a> (T alpha, Vx &amp;&amp;x, Vz &amp;&amp;z)</td></tr>
+<tr class="memdesc:gad40329bb0eea1a12dd5b510935b93fca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply a vector by a scalar z = αx.  <br /></td></tr>
+<tr class="memitem:ga4dd6dc0ecf27af5d2f74f12e0aaca26a" id="r_ga4dd6dc0ecf27af5d2f74f12e0aaca26a"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, std::convertible_to&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt; T&gt; </td></tr>
+<tr class="memitem:ga4dd6dc0ecf27af5d2f74f12e0aaca26a template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga4dd6dc0ecf27af5d2f74f12e0aaca26a">scale</a> (T alpha, Vx &amp;&amp;x)</td></tr>
+<tr class="memdesc:ga4dd6dc0ecf27af5d2f74f12e0aaca26a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply a vector by a scalar x = αx.  <br /></td></tr>
+<tr class="memitem:ga192f6d5da228f92a9e16216064fdac0e" id="r_ga192f6d5da228f92a9e16216064fdac0e"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vy, simdifiable_multi Vz&gt; </td></tr>
+<tr class="memitem:ga192f6d5da228f92a9e16216064fdac0e template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga192f6d5da228f92a9e16216064fdac0e">hadamard</a> (Vx &amp;&amp;x, Vy &amp;&amp;y, Vz &amp;&amp;z)</td></tr>
+<tr class="memdesc:ga192f6d5da228f92a9e16216064fdac0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Hadamard (elementwise) product of two vectors z = x ⊙ y.  <br /></td></tr>
+<tr class="memitem:ga970509394d0f01a224acb3eac0f97535" id="r_ga970509394d0f01a224acb3eac0f97535"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vy&gt; </td></tr>
+<tr class="memitem:ga970509394d0f01a224acb3eac0f97535 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga970509394d0f01a224acb3eac0f97535">hadamard</a> (Vx &amp;&amp;x, Vy &amp;&amp;y)</td></tr>
+<tr class="memdesc:ga970509394d0f01a224acb3eac0f97535"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Hadamard (elementwise) product of two vectors x = x ⊙ y.  <br /></td></tr>
+<tr class="memitem:gaaea202adb9d942b00a786f902e45307d" id="r_gaaea202adb9d942b00a786f902e45307d"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vlo, simdifiable_multi Vhi, simdifiable_multi Vz&gt; </td></tr>
+<tr class="memitem:gaaea202adb9d942b00a786f902e45307d template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gaaea202adb9d942b00a786f902e45307d">clamp</a> (Vx &amp;&amp;x, Vlo &amp;&amp;lo, Vhi &amp;&amp;hi, Vz &amp;&amp;z)</td></tr>
+<tr class="memdesc:gaaea202adb9d942b00a786f902e45307d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Elementwise clamping z = max(lo, min(x, hi)).  <br /></td></tr>
+<tr class="memitem:ga60b2783e234cd9c038d1067b4f529a38" id="r_ga60b2783e234cd9c038d1067b4f529a38"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vlo, simdifiable_multi Vhi, simdifiable_multi Vz&gt; </td></tr>
+<tr class="memitem:ga60b2783e234cd9c038d1067b4f529a38 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga60b2783e234cd9c038d1067b4f529a38">clamp_resid</a> (Vx &amp;&amp;x, Vlo &amp;&amp;lo, Vhi &amp;&amp;hi, Vz &amp;&amp;z)</td></tr>
+<tr class="memdesc:ga60b2783e234cd9c038d1067b4f529a38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Elementwise clamping residual z = x - max(lo, min(x, hi)).  <br /></td></tr>
+<tr class="memitem:ga2c0d5fb8f9ea81725e5d54d7605129e3" id="r_ga2c0d5fb8f9ea81725e5d54d7605129e3"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vy, simdifiable_multi Vz, std::convertible_to&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt; Ta, std::convertible_to&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt; Tb&gt; </td></tr>
+<tr class="memitem:ga2c0d5fb8f9ea81725e5d54d7605129e3 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga2c0d5fb8f9ea81725e5d54d7605129e3">axpby</a> (Ta alpha, Vx &amp;&amp;x, Tb beta, Vy &amp;&amp;y, Vz &amp;&amp;z)</td></tr>
+<tr class="memdesc:ga2c0d5fb8f9ea81725e5d54d7605129e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add scaled vector z = αx + βy.  <br /></td></tr>
+<tr class="memitem:gaca21e3c51e47359f16410a524f1a6896" id="r_gaca21e3c51e47359f16410a524f1a6896"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vy, std::convertible_to&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt; Ta, std::convertible_to&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt; Tb&gt; </td></tr>
+<tr class="memitem:gaca21e3c51e47359f16410a524f1a6896 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gaca21e3c51e47359f16410a524f1a6896">axpby</a> (Ta alpha, Vx &amp;&amp;x, Tb beta, Vy &amp;&amp;y)</td></tr>
+<tr class="memdesc:gaca21e3c51e47359f16410a524f1a6896"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add scaled vector y = αx + βy.  <br /></td></tr>
+<tr class="memitem:gaede77b28f5e46753ee7b915935f144b5" id="r_gaede77b28f5e46753ee7b915935f144b5"><td class="memTemplParams" colspan="2">template&lt;auto Beta = 1, simdifiable_multi Vy, simdifiable_multi... Vx&gt; </td></tr>
+<tr class="memitem:gaede77b28f5e46753ee7b915935f144b5 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gaede77b28f5e46753ee7b915935f144b5">axpy</a> (Vy &amp;&amp;y, const std::array&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vy &gt;, sizeof...(Vx)&gt; &amp;alphas, Vx &amp;&amp;...x)</td></tr>
+<tr class="memdesc:gaede77b28f5e46753ee7b915935f144b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add scaled vector y = ∑ᵢ αᵢxᵢ + βy.  <br /></td></tr>
+<tr class="memitem:ga30451a0e4f4100069ff65963d1bb0dbf" id="r_ga30451a0e4f4100069ff65963d1bb0dbf"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi Vx, simdifiable_multi Vy, simdifiable_multi Vz, std::convertible_to&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt; Ta&gt; </td></tr>
+<tr class="memitem:ga30451a0e4f4100069ff65963d1bb0dbf template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga30451a0e4f4100069ff65963d1bb0dbf">axpy</a> (Ta alpha, Vx &amp;&amp;x, Vy &amp;&amp;y, Vz &amp;&amp;z)</td></tr>
+<tr class="memdesc:ga30451a0e4f4100069ff65963d1bb0dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add scaled vector z = αx + y.  <br /></td></tr>
+<tr class="memitem:ga74efe6fd79de11b4fad66ce0444c2de3" id="r_ga74efe6fd79de11b4fad66ce0444c2de3"><td class="memTemplParams" colspan="2">template&lt;auto Beta = 1, simdifiable_multi Vx, simdifiable_multi Vy, std::convertible_to&lt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg.html#a06ed92cc4e6bc6418b81329ce5355426">simdified_value_t</a>&lt; Vx &gt; &gt; Ta&gt; </td></tr>
+<tr class="memitem:ga74efe6fd79de11b4fad66ce0444c2de3 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga74efe6fd79de11b4fad66ce0444c2de3">axpy</a> (Ta alpha, Vx &amp;&amp;x, Vy &amp;&amp;y)</td></tr>
+<tr class="memdesc:ga74efe6fd79de11b4fad66ce0444c2de3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add scaled vector y = αx + βy (where β is a compile-time constant).  <br /></td></tr>
+<tr class="memitem:ga4024401b27cb17a5982d63dca91df61b" id="r_ga4024401b27cb17a5982d63dca91df61b"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0&gt; </td></tr>
+<tr class="memitem:ga4024401b27cb17a5982d63dca91df61b template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga4024401b27cb17a5982d63dca91df61b">negate</a> (VA &amp;&amp;A, VB &amp;&amp;B, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1linalg_1_1with__rotate__t.html">with_rotate_t</a>&lt; Rotate &gt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-low-level-ops.html#gaf86c438318c89dd7be953a0633285ef8">rot</a>={})</td></tr>
+<tr class="memdesc:ga4024401b27cb17a5982d63dca91df61b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Negate a matrix or vector B = -A.  <br /></td></tr>
+<tr class="memitem:gadfa94d9946d30ead1c8a0896599bd313" id="r_gadfa94d9946d30ead1c8a0896599bd313"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi VA, int Rotate = 0&gt; </td></tr>
+<tr class="memitem:gadfa94d9946d30ead1c8a0896599bd313 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gadfa94d9946d30ead1c8a0896599bd313">negate</a> (VA &amp;&amp;A, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1linalg_1_1with__rotate__t.html">with_rotate_t</a>&lt; Rotate &gt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-low-level-ops.html#gaf86c438318c89dd7be953a0633285ef8">rot</a>={})</td></tr>
+<tr class="memdesc:gadfa94d9946d30ead1c8a0896599bd313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Negate a matrix or vector A = -A.  <br /></td></tr>
+<tr class="memitem:gaff7f734df0a2b041994f963e2226f858" id="r_gaff7f734df0a2b041994f963e2226f858"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi VA, simdifiable_multi VB, simdifiable_multi VC, int Rotate = 0&gt; </td></tr>
+<tr class="memitem:gaff7f734df0a2b041994f963e2226f858 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gaff7f734df0a2b041994f963e2226f858">sub</a> (VA &amp;&amp;A, VB &amp;&amp;B, VC &amp;&amp;C, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1linalg_1_1with__rotate__t.html">with_rotate_t</a>&lt; Rotate &gt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-low-level-ops.html#gaf86c438318c89dd7be953a0633285ef8">rot</a>={})</td></tr>
+<tr class="memdesc:gaff7f734df0a2b041994f963e2226f858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract two matrices or vectors C = A - B. Rotate affects B.  <br /></td></tr>
+<tr class="memitem:ga48d07be903d60f6d48b7c3af0e9da414" id="r_ga48d07be903d60f6d48b7c3af0e9da414"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0&gt; </td></tr>
+<tr class="memitem:ga48d07be903d60f6d48b7c3af0e9da414 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga48d07be903d60f6d48b7c3af0e9da414">sub</a> (VA &amp;&amp;A, VB &amp;&amp;B, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1linalg_1_1with__rotate__t.html">with_rotate_t</a>&lt; Rotate &gt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-low-level-ops.html#gaf86c438318c89dd7be953a0633285ef8">rot</a>={})</td></tr>
+<tr class="memdesc:ga48d07be903d60f6d48b7c3af0e9da414"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract two matrices or vectors A = A - B. Rotate affects B.  <br /></td></tr>
+<tr class="memitem:gac534f2ffcc1821dedd98afd67b4d5e27" id="r_gac534f2ffcc1821dedd98afd67b4d5e27"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi VA, simdifiable_multi VB, simdifiable_multi VC, int Rotate = 0&gt; </td></tr>
+<tr class="memitem:gac534f2ffcc1821dedd98afd67b4d5e27 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gac534f2ffcc1821dedd98afd67b4d5e27">add</a> (VA &amp;&amp;A, VB &amp;&amp;B, VC &amp;&amp;C, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1linalg_1_1with__rotate__t.html">with_rotate_t</a>&lt; Rotate &gt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-low-level-ops.html#gaf86c438318c89dd7be953a0633285ef8">rot</a>={})</td></tr>
+<tr class="memdesc:gac534f2ffcc1821dedd98afd67b4d5e27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add two matrices or vectors C = A + B. Rotate affects B.  <br /></td></tr>
+<tr class="memitem:ga84c12f9e93355fcc36107e18086ef7a4" id="r_ga84c12f9e93355fcc36107e18086ef7a4"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi VA, simdifiable_multi VB, int Rotate = 0&gt; </td></tr>
+<tr class="memitem:ga84c12f9e93355fcc36107e18086ef7a4 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga84c12f9e93355fcc36107e18086ef7a4">add</a> (VA &amp;&amp;A, VB &amp;&amp;B, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1linalg_1_1with__rotate__t.html">with_rotate_t</a>&lt; Rotate &gt; <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-low-level-ops.html#gaf86c438318c89dd7be953a0633285ef8">rot</a>={})</td></tr>
+<tr class="memdesc:ga84c12f9e93355fcc36107e18086ef7a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add two matrices or vectors A = A + B. Rotate affects B.  <br /></td></tr>
+<tr class="memitem:gaa72458de29526c1deb6a0519926b2cd0" id="r_gaa72458de29526c1deb6a0519926b2cd0"><td class="memTemplParams" colspan="2">template&lt;class F, simdifiable_multi VA, simdifiable_multi... VAs&gt; </td></tr>
+<tr class="memitem:gaa72458de29526c1deb6a0519926b2cd0 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#gaa72458de29526c1deb6a0519926b2cd0">for_each_elementwise</a> (F &amp;&amp;fun, VA &amp;&amp;A, VAs &amp;&amp;...As)</td></tr>
+<tr class="memdesc:gaa72458de29526c1deb6a0519926b2cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function to all elements of the given matrices or vectors.  <br /></td></tr>
+<tr class="memitem:ga04fa9fa6e82563be75524b11f135bc2b" id="r_ga04fa9fa6e82563be75524b11f135bc2b"><td class="memTemplParams" colspan="2">template&lt;class F, simdifiable_multi VA, simdifiable_multi... VAs&gt; </td></tr>
+<tr class="memitem:ga04fa9fa6e82563be75524b11f135bc2b template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga04fa9fa6e82563be75524b11f135bc2b">transform_elementwise</a> (F &amp;&amp;fun, VA &amp;&amp;A, VAs &amp;&amp;...As)</td></tr>
+<tr class="memdesc:ga04fa9fa6e82563be75524b11f135bc2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function to all elements of the given matrices or vectors, storing the result in the first argument.  <br /></td></tr>
+<tr class="memitem:ga79cf0bb8d436a1cba7ce70fab44bfbf0" id="r_ga79cf0bb8d436a1cba7ce70fab44bfbf0"><td class="memTemplParams" colspan="2">template&lt;class F, simdifiable_multi VA, simdifiable_multi VB, simdifiable_multi... VAs&gt; </td></tr>
+<tr class="memitem:ga79cf0bb8d436a1cba7ce70fab44bfbf0 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga79cf0bb8d436a1cba7ce70fab44bfbf0">transform2_elementwise</a> (F &amp;&amp;fun, VA &amp;&amp;A, VB &amp;&amp;B, VAs &amp;&amp;...As)</td></tr>
+<tr class="memdesc:ga79cf0bb8d436a1cba7ce70fab44bfbf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function to all elements of the given matrices or vectors, storing the results in the first two arguments.  <br /></td></tr>
+<tr class="memitem:ga52c5beff69e8bdfb213cd47caacc104f" id="r_ga52c5beff69e8bdfb213cd47caacc104f"><td class="memTemplParams" colspan="2">template&lt;class F, simdifiable_multi... VAs, simdifiable_multi... VBs&gt; </td></tr>
+<tr class="memitem:ga52c5beff69e8bdfb213cd47caacc104f template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga52c5beff69e8bdfb213cd47caacc104f">transform_n_elementwise</a> (F &amp;&amp;fun, std::tuple&lt; VAs... &gt; As, VBs &amp;&amp;...Bs)</td></tr>
+<tr class="memdesc:ga52c5beff69e8bdfb213cd47caacc104f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function to all elements of the given matrices or vectors, storing the results in the tuple of matrices given as the first argument.  <br /></td></tr>
+<tr class="memitem:ga85860ca1111492777572a2ba091cf5ca" id="r_ga85860ca1111492777572a2ba091cf5ca"><td class="memTemplParams" colspan="2">template&lt;simdifiable_multi VA, simdifiable_multi VB, batmat::linalg::rotate_opt... Opts&gt; </td></tr>
+<tr class="memitem:ga85860ca1111492777572a2ba091cf5ca template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga85860ca1111492777572a2ba091cf5ca">copy</a> (VA &amp;&amp;A, VB &amp;&amp;B, Opts... opts)</td></tr>
+<tr class="memdesc:ga85860ca1111492777572a2ba091cf5ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a matrix or vector B = A.  <br /></td></tr>
+<tr class="memitem:ga2e50e5f96654eb673d29ac8461143e91" id="r_ga2e50e5f96654eb673d29ac8461143e91"><td class="memTemplParams" colspan="2">template&lt;<a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/group__topic-linalg.html#ga90f301363f149f1f28ee20000558629c">MatrixStructure</a> S, simdifiable_multi VA, simdifiable_multi VB, batmat::linalg::rotate_opt... Opts&gt; </td></tr>
+<tr class="memitem:ga2e50e5f96654eb673d29ac8461143e91 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="group__topic-linalg.html#ga2e50e5f96654eb673d29ac8461143e91">copy</a> (<a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1linalg_1_1Structured.html">Structured</a>&lt; VA, S &gt; A, <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1linalg_1_1Structured.html">Structured</a>&lt; VB, S &gt; B, Opts... opts)</td></tr>
+<tr class="memdesc:ga2e50e5f96654eb673d29ac8461143e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy a matrix or vector B = A.  <br /></td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacecyqlone.html">cyqlone</a></li><li class="navelem"><a href="namespacecyqlone_1_1linalg.html">linalg</a></li><li class="navelem"><a href="namespacecyqlone_1_1linalg_1_1multi.html">multi</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

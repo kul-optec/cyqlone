@@ -1,0 +1,1236 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1LinearOCPStorage" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::LinearOCPStorage</compoundname>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <innerclass refid="structcyqlone_1_1LinearOCPStorage_1_1Solution" prot="public">cyqlone::LinearOCPStorage::Solution</innerclass>
+    <innerclass refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError" prot="public">cyqlone::LinearOCPStorage::KKTError</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1OCPDim" kindref="compound">OCPDim</ref></type>
+        <definition>OCPDim cyqlone::LinearOCPStorage::dim</definition>
+        <argsstring></argsstring>
+        <name>dim</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::dim</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="38" column="12" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="38" bodyend="38"/>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1ac83413181846e0d2f8b916fb8b40a463" compoundref="ocp_8hpp" startline="408" endline="414">cyqlone::LinearOCPStorage::Solution::λ</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1aed5345c2f09e35727671a4dcc156fec0" compoundref="ocp_8hpp" startline="415" endline="421">cyqlone::LinearOCPStorage::Solution::λ</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a993e894897541ab5b71b0cd60ce9b502" compoundref="ocp_8hpp" startline="422" endline="424">cyqlone::LinearOCPStorage::Solution::λ</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1af926d24915f29acde923176de7e598f9" compoundref="ocp_8hpp" startline="425" endline="427">cyqlone::LinearOCPStorage::Solution::λ</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" compoundref="ocp_8hpp" startline="127" endline="131">A</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a27d61e750b9e9555d1044a3b301c7d37" compoundref="ocp_8hpp" startline="201" endline="205">A</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">AB</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ae99e0b7a571b2478b9c1ba110cc9987c" compoundref="ocp_8hpp" startline="190" endline="200">AB</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga043f9e47579e7bf1529ad7baa0c86a12" compoundref="matio_8cpp" startline="282" endline="349">cyqlone::add_to_mat</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" compoundref="ocp_8hpp" startline="132" endline="136">B</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a698af7f1cb6918a0bb80c08f36e15c9c" compoundref="ocp_8hpp" startline="206" endline="210">B</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">b</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a89d340ab09b81625dbc99f78de5a9643" compoundref="ocp_8hpp" startline="326" endline="334">b</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ad66945575e7fca5f8454f273bffb0ee4" compoundref="ocp_8hpp" startline="260" endline="265">b</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ad8db594998e23cbbe90cec64d8219ca7" compoundref="ocp_8hpp" startline="335" endline="340">b</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">b_max</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ab95d280f08c51e2339c29c34bb40fb42" compoundref="ocp_8hpp" startline="358" endline="367">b_max</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1afac7110d732c43f85010408d16e7f27f" compoundref="ocp_8hpp" startline="293" endline="298">b_max</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a24e5e12fd63f149c0bb67af7f5544037" compoundref="ocp_8hpp" startline="368" endline="373">b_max</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">b_min</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a72a94dd852aea524c1b02f1d5ac841ed" compoundref="ocp_8hpp" startline="342" endline="350">b_min</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1aaa0f7456157a720cef41973d04a8474d" compoundref="ocp_8hpp" startline="276" endline="281">b_min</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1af25b911a98ccd90a688645bcc80c84fb" compoundref="ocp_8hpp" startline="351" endline="356">b_min</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1afebcc052a5712f3998178d3583d00f1c" compoundref="cyqlone-storage_8cpp" startline="148" endline="166">cyqlone::CyqloneStorage&lt; T &gt;::build</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPSparseQP_1a4c173a4c959b79f6a3bb82b29b4351c6" compoundref="conversion_8cpp" startline="44" endline="149">cyqlone::LinearOCPSparseQP::build</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">C</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ab3f086541ed2e71626f68e4ec4a6d49d" compoundref="ocp_8hpp" startline="180" endline="184">C</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">CD</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a52a9956d36c16eba2692383937c785b1" compoundref="ocp_8hpp" startline="169" endline="179">CD</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a6ba4f8f1df4ac6636d3009c5791fbfa7" compoundref="ocp_8hpp" startline="58" endline="63">create_storage</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" compoundref="ocp_8hpp" startline="111" endline="115">D</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a6e80ef9ed9fafd8550220cdd6f2037ee" compoundref="ocp_8hpp" startline="185" endline="189">D</referencedby>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a64c07d11eb851d4d5a930521a30949f8" compoundref="ocp_8hpp" startline="138" endline="148">H</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a8a2352b8f9754dde69173d4de522181c" compoundref="ocp_8hpp" startline="216" endline="219">num_constraints</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1aa1b329745b5c682f335cff88c8c138ad" compoundref="ocp_8hpp" startline="220" endline="223">num_dynamics_constraints</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1acdc3b51f3656b50266bacb98751c547b" compoundref="ocp_8hpp" startline="212" endline="215">num_variables</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">Q</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1afec56db3e879ff34cae2fc2f954fd243" compoundref="ocp_8hpp" startline="149" endline="153">Q</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a18987fd40bfbf98512ea0a831184fceb" compoundref="ocp_8hpp" startline="240" endline="244">q</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a58f77ebdcb6b8cf6fa6500ba66789b55" compoundref="ocp_8hpp" startline="315" endline="319">q</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1adac176f7c73d80b07e97991daab86299" compoundref="ocp_8hpp" startline="300" endline="308">qr</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a1c2b1370ce21a0bde81419000e878848" compoundref="ocp_8hpp" startline="234" endline="239">qr</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ac1b125944a15698658a99f2d38ed44a8" compoundref="ocp_8hpp" startline="309" endline="314">qr</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" compoundref="ocp_8hpp" startline="80" endline="84">R</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ac1af58a300b10128dc38647c21008874" compoundref="ocp_8hpp" startline="154" endline="158">R</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a00cf31fb617a4375e87e3bc94b2c023e" compoundref="ocp_8hpp" startline="245" endline="249">r</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ac49eab2351c2727fc65901bcaef25634" compoundref="ocp_8hpp" startline="320" endline="324">r</referencedby>
+        <referencedby refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" compoundref="conversion_8cpp" startline="9" endline="35">cyqlone::reference_to_gradient</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" compoundref="ocp_8hpp" startline="85" endline="89">S</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a505571e8071bd5342bf34e8dced7cd2f" compoundref="ocp_8hpp" startline="159" endline="163">S</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a84859ccb81131e7a5bc78e2bada07cf4" compoundref="ocp_8hpp" startline="90" endline="94">S_trans</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1aaa9e756091a07ec76fa0300c77ae67f6" compoundref="ocp_8hpp" startline="164" endline="168">S_trans</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a044e078de78960184f902efdfd6ce595" compoundref="ocp_8hpp" startline="393" endline="396">cyqlone::LinearOCPStorage::Solution::u</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a909337e8f2f7ef1bb34ad6ff0f495cf1" compoundref="ocp_8hpp" startline="397" endline="400">cyqlone::LinearOCPStorage::Solution::u</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a2ba673966e3f39ae3c0855ce704fccda" compoundref="ocp_8hpp" startline="401" endline="403">cyqlone::LinearOCPStorage::Solution::u</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1aed0aed3c97c95b98d46e70c3a0ec8def" compoundref="ocp_8hpp" startline="404" endline="406">cyqlone::LinearOCPStorage::Solution::u</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a425c2d4bb9e7dcd53037df08727d5136" compoundref="ocp_8hpp" startline="378" endline="381">cyqlone::LinearOCPStorage::Solution::x</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a52a40c70f02131892376d28fbe697918" compoundref="ocp_8hpp" startline="382" endline="385">cyqlone::LinearOCPStorage::Solution::x</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a503548b931fe97fd871677e77c713644" compoundref="ocp_8hpp" startline="386" endline="388">cyqlone::LinearOCPStorage::Solution::x</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1ac85fac03cc34432f60c0c515d41c04b0" compoundref="ocp_8hpp" startline="389" endline="391">cyqlone::LinearOCPStorage::Solution::x</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a464d8ebc2fe1a51b00ba3fefc538494b" compoundref="ocp_8hpp" startline="429" endline="434">cyqlone::LinearOCPStorage::Solution::y</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1_1Solution_1a30a55a890a025eaa4ca6d45dc60266d1" compoundref="ocp_8hpp" startline="435" endline="440">cyqlone::LinearOCPStorage::Solution::y</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::LinearOCPStorage::storage</definition>
+        <argsstring></argsstring>
+        <name>storage</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::storage</qualifiedname>
+        <initializer>= <ref refid="structcyqlone_1_1LinearOCPStorage_1a6ba4f8f1df4ac6636d3009c5791fbfa7" kindref="member">create_storage</ref>(<ref refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" kindref="member">dim</ref>)</initializer>
+        <briefdescription>
+<para>Create a single contiguous storage for all problem data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><programlisting><codeline><highlight class="normal">Storage<sp/>layout:<sp/><sp/><sp/><sp/><sp/>size<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>offset</highlight></codeline>
+<codeline><highlight class="normal">N<sp/>×<sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref><sp/>Sᵀ]<sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" kindref="member">H</ref><sp/><sp/><sp/><sp/><sp/>(nx+nu)²<sp/><sp/><sp/><sp/>0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" kindref="member">S</ref><sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" kindref="member">R</ref><sp/>]</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>×<sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref><sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nx²<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(nx+nu)²</highlight></codeline>
+<codeline><highlight class="normal">N<sp/>×<sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref><sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" kindref="member">D</ref><sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ny(nx+nu)<sp/><sp/><sp/>N<sp/>(nx+nu)²<sp/>+<sp/>nx²</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>×<sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref><sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ny_N<sp/>nx<sp/><sp/><sp/><sp/><sp/>N<sp/>(nx+nu+ny)(nx+nu)<sp/>+<sp/>nx²</highlight></codeline>
+<codeline><highlight class="normal">N<sp/>×<sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" kindref="member">A</ref><sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" kindref="member">B</ref><sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nx(nx+nu)<sp/><sp/><sp/>N<sp/>(nx+nu+ny)(nx+nu)<sp/>+<sp/>(nx+ny_N)nx</highlight></codeline>
+<codeline><highlight class="normal">N<sp/>×<sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a18987fd40bfbf98512ea0a831184fceb" kindref="member">q</ref><sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a00cf31fb617a4375e87e3bc94b2c023e" kindref="member">r</ref><sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nx+nu<sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(2nx+nu+ny)(nx+nu)<sp/>+<sp/>(nx+ny_N)nx</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>×<sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a18987fd40bfbf98512ea0a831184fceb" kindref="member">q</ref><sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nx<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(2nx+nu+ny+1)(nx+nu)<sp/>+<sp/>(nx+ny_N)nx</highlight></codeline>
+<codeline><highlight class="normal">N+1<sp/>×<sp/>[<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" kindref="member">b</ref><sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nx<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(2nx+nu+ny+1)(nx+nu)<sp/>+<sp/>(nx+ny_N+1)nx</highlight></codeline>
+<codeline><highlight class="normal">N<sp/>×<sp/>[<sp/>l<sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ny<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(2nx+nu+ny+1)(nx+nu)<sp/>+<sp/>(nx+ny_N+2+N)nx</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>×<sp/>[<sp/>l<sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ny_N<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(2nx+nu+ny+1)(nx+nu)<sp/>+<sp/>(nx+ny_N+2+N)nx<sp/>+<sp/>N<sp/>ny</highlight></codeline>
+<codeline><highlight class="normal">N<sp/>×<sp/>[<sp/>u<sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ny<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(2nx+nu+ny+1)(nx+nu)<sp/>+<sp/>(nx+ny_N+2+N)nx<sp/>+<sp/>N<sp/>ny<sp/>+<sp/>ny_N</highlight></codeline>
+<codeline><highlight class="normal">1<sp/>×<sp/>[<sp/>u<sp/>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ny_N<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(2nx+nu+ny+1)(nx+nu)<sp/>+<sp/>(nx+ny_N+2+N)nx<sp/>+<sp/>N<sp/>(2ny)<sp/>+<sp/>ny_N</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>N<sp/>(2nx+nu+ny+1)(nx+nu)<sp/>+<sp/>(nx+ny_N+2+N)nx<sp/>+<sp/>N<sp/>(2ny)<sp/>+<sp/>2ny_N</highlight></codeline>
+</programlisting> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="57" column="17" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="57" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">AB</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ae99e0b7a571b2478b9c1ba110cc9987c" compoundref="ocp_8hpp" startline="190" endline="200">AB</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">b</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a89d340ab09b81625dbc99f78de5a9643" compoundref="ocp_8hpp" startline="326" endline="334">b</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">b_max</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ab95d280f08c51e2339c29c34bb40fb42" compoundref="ocp_8hpp" startline="358" endline="367">b_max</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">b_min</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a72a94dd852aea524c1b02f1d5ac841ed" compoundref="ocp_8hpp" startline="342" endline="350">b_min</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">CD</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a52a9956d36c16eba2692383937c785b1" compoundref="ocp_8hpp" startline="169" endline="179">CD</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a64c07d11eb851d4d5a930521a30949f8" compoundref="ocp_8hpp" startline="138" endline="148">H</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1adac176f7c73d80b07e97991daab86299" compoundref="ocp_8hpp" startline="300" endline="308">qr</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a6ba4f8f1df4ac6636d3009c5791fbfa7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>static std::vector&lt; real_t &gt; cyqlone::LinearOCPStorage::create_storage</definition>
+        <argsstring>(OCPDim dim)</argsstring>
+        <name>create_storage</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::create_storage</qualifiedname>
+        <param>
+          <type><ref refid="structcyqlone_1_1OCPDim" kindref="compound">OCPDim</ref></type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="58" column="24" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="58" bodyend="63"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::H</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>H</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::H</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="64" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="64" bodyend="74"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+        <referencedby refid="group__topic-util-matio_1ga043f9e47579e7bf1529ad7baa0c86a12" compoundref="matio_8cpp" startline="282" endline="349">cyqlone::add_to_mat</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPSparseQP_1a4c173a4c959b79f6a3bb82b29b4351c6" compoundref="conversion_8cpp" startline="44" endline="149">cyqlone::LinearOCPSparseQP::build</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">Q</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1afec56db3e879ff34cae2fc2f954fd243" compoundref="ocp_8hpp" startline="149" endline="153">Q</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" compoundref="ocp_8hpp" startline="80" endline="84">R</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ac1af58a300b10128dc38647c21008874" compoundref="ocp_8hpp" startline="154" endline="158">R</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" compoundref="conversion_8cpp" startline="9" endline="35">cyqlone::reference_to_gradient</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" compoundref="ocp_8hpp" startline="85" endline="89">S</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a505571e8071bd5342bf34e8dced7cd2f" compoundref="ocp_8hpp" startline="159" endline="163">S</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a84859ccb81131e7a5bc78e2bada07cf4" compoundref="ocp_8hpp" startline="90" endline="94">S_trans</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1aaa9e756091a07ec76fa0300c77ae67f6" compoundref="ocp_8hpp" startline="164" endline="168">S_trans</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::Q</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>Q</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::Q</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="75" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="75" bodyend="79"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::R</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>R</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::R</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="80" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="80" bodyend="84"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::S</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>S</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::S</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="85" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="85" bodyend="89"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a84859ccb81131e7a5bc78e2bada07cf4" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::S_trans</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>S_trans</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::S_trans</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="90" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="90" bodyend="94"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::CD</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>CD</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::CD</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="95" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="95" bodyend="105"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+        <referencedby refid="structcyqlone_1_1LinearOCPSparseQP_1a4c173a4c959b79f6a3bb82b29b4351c6" compoundref="conversion_8cpp" startline="44" endline="149">cyqlone::LinearOCPSparseQP::build</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">C</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ab3f086541ed2e71626f68e4ec4a6d49d" compoundref="ocp_8hpp" startline="180" endline="184">C</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" compoundref="ocp_8hpp" startline="111" endline="115">D</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a6e80ef9ed9fafd8550220cdd6f2037ee" compoundref="ocp_8hpp" startline="185" endline="189">D</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::C</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>C</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::C</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="106" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="106" bodyend="110"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">CD</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::D</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>D</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::D</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="111" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="111" bodyend="115"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">CD</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a128cfe523b35c66b0f292e75e027ba11" compoundref="cyqlone-storage_8cpp" startline="68" endline="76">cyqlone::CyqloneStorage&lt; T &gt;::count_constr_0</referencedby>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::AB</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>AB</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::AB</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="116" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="116" bodyend="126"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" compoundref="ocp_8hpp" startline="127" endline="131">A</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a27d61e750b9e9555d1044a3b301c7d37" compoundref="ocp_8hpp" startline="201" endline="205">A</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" compoundref="ocp_8hpp" startline="132" endline="136">B</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a698af7f1cb6918a0bb80c08f36e15c9c" compoundref="ocp_8hpp" startline="206" endline="210">B</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPSparseQP_1a4c173a4c959b79f6a3bb82b29b4351c6" compoundref="conversion_8cpp" startline="44" endline="149">cyqlone::LinearOCPSparseQP::build</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::A</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>A</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::A</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="127" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="127" bodyend="131"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">AB</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::B</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>B</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::B</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="132" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="132" bodyend="136"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">AB</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <referencedby refid="group__topic-ocp-formulations_1gafc61f634e110905af0dffeb3e27a4fd8" compoundref="random-ocp_8hpp" startline="11" endline="47">cyqlone::generate_random_ocp</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a64c07d11eb851d4d5a930521a30949f8" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::H</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>H</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::H</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="138" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="138" bodyend="148"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1afec56db3e879ff34cae2fc2f954fd243" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::Q</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>Q</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::Q</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="149" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="149" bodyend="153"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ac1af58a300b10128dc38647c21008874" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::R</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>R</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::R</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="154" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="154" bodyend="158"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a505571e8071bd5342bf34e8dced7cd2f" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::S</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>S</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::S</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="159" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="159" bodyend="163"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1aaa9e756091a07ec76fa0300c77ae67f6" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::S_trans</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>S_trans</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::S_trans</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="164" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="164" bodyend="168"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a52a9956d36c16eba2692383937c785b1" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::CD</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>CD</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::CD</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="169" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="169" bodyend="179"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ab3f086541ed2e71626f68e4ec4a6d49d" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::C</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>C</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::C</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="180" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="180" bodyend="184"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">CD</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a6e80ef9ed9fafd8550220cdd6f2037ee" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::D</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>D</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::D</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="185" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="185" bodyend="189"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">CD</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ae99e0b7a571b2478b9c1ba110cc9987c" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::AB</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>AB</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::AB</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="190" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="190" bodyend="200"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a27d61e750b9e9555d1044a3b301c7d37" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::A</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>A</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::A</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="201" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="201" bodyend="205"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">AB</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a698af7f1cb6918a0bb80c08f36e15c9c" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::B</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>B</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::B</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="206" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="206" bodyend="210"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">AB</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1acdc3b51f3656b50266bacb98751c547b" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>index_t</type>
+        <definition>index_t cyqlone::LinearOCPStorage::num_variables</definition>
+        <argsstring>() const</argsstring>
+        <name>num_variables</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::num_variables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="212" column="14" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="212" bodyend="215"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a8a2352b8f9754dde69173d4de522181c" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>index_t</type>
+        <definition>index_t cyqlone::LinearOCPStorage::num_constraints</definition>
+        <argsstring>() const</argsstring>
+        <name>num_constraints</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::num_constraints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="216" column="14" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="216" bodyend="219"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1aa1b329745b5c682f335cff88c8c138ad" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>index_t</type>
+        <definition>index_t cyqlone::LinearOCPStorage::num_dynamics_constraints</definition>
+        <argsstring>() const</argsstring>
+        <name>num_dynamics_constraints</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::num_dynamics_constraints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="220" column="14" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="220" bodyend="223"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::qr</definition>
+        <argsstring>()</argsstring>
+        <name>qr</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::qr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="225" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="225" bodyend="233"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a18987fd40bfbf98512ea0a831184fceb" compoundref="ocp_8hpp" startline="240" endline="244">q</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a58f77ebdcb6b8cf6fa6500ba66789b55" compoundref="ocp_8hpp" startline="315" endline="319">q</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a1c2b1370ce21a0bde81419000e878848" compoundref="ocp_8hpp" startline="234" endline="239">qr</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ac1b125944a15698658a99f2d38ed44a8" compoundref="ocp_8hpp" startline="309" endline="314">qr</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a00cf31fb617a4375e87e3bc94b2c023e" compoundref="ocp_8hpp" startline="245" endline="249">r</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ac49eab2351c2727fc65901bcaef25634" compoundref="ocp_8hpp" startline="320" endline="324">r</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="namespacecyqlone_1a551aa703936f7c27064994d2e8353d07" compoundref="conversion_8cpp" startline="37" endline="42">cyqlone::reference_to_gradient</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a1c2b1370ce21a0bde81419000e878848" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::qr</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>qr</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::qr</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="234" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="234" bodyend="239"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a18987fd40bfbf98512ea0a831184fceb" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::q</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>q</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::q</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="240" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="240" bodyend="244"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</references>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a00cf31fb617a4375e87e3bc94b2c023e" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::r</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>r</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::r</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="245" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="245" bodyend="249"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</references>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::b</definition>
+        <argsstring>()</argsstring>
+        <name>b</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="251" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="251" bodyend="259"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ad66945575e7fca5f8454f273bffb0ee4" compoundref="ocp_8hpp" startline="260" endline="265">b</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1ad8db594998e23cbbe90cec64d8219ca7" compoundref="ocp_8hpp" startline="335" endline="340">b</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ad66945575e7fca5f8454f273bffb0ee4" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::b</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>b</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="260" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="260" bodyend="265"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">b</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::b_min</definition>
+        <argsstring>()</argsstring>
+        <name>b_min</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="267" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="267" bodyend="275"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1aaa0f7456157a720cef41973d04a8474d" compoundref="ocp_8hpp" startline="276" endline="281">b_min</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1af25b911a98ccd90a688645bcc80c84fb" compoundref="ocp_8hpp" startline="351" endline="356">b_min</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1aaa0f7456157a720cef41973d04a8474d" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::b_min</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>b_min</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b_min</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="276" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="276" bodyend="281"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">b_min</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::b_max</definition>
+        <argsstring>()</argsstring>
+        <name>b_max</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="283" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="283" bodyend="292"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1afac7110d732c43f85010408d16e7f27f" compoundref="ocp_8hpp" startline="293" endline="298">b_max</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a24e5e12fd63f149c0bb67af7f5544037" compoundref="ocp_8hpp" startline="368" endline="373">b_max</referencedby>
+        <referencedby refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" compoundref="ocp_8cpp" startline="10" endline="99">compute_kkt_error</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a46202fdbc35f05256b2b61be3fbfe8b6" compoundref="csv_8cpp" startline="12" endline="112">cyqlone::qpalm::problems::load_from_csv</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" compoundref="platooning_8cpp" startline="11" endline="101">cyqlone::qpalm::problems::platooning</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="namespacecyqlone_1_1qpalm_1_1problems_1a593bba2e8cff6a0ff4383a4ac595c9f1" compoundref="src_2example-problems_2src_2spring-mass_8cpp" startline="15" endline="159">cyqlone::qpalm::problems::spring_mass</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneStorage_1a802bedcc1527e40bf4d0a73b532dd1a2" compoundref="cyqlone-storage_8cpp" startline="86" endline="145">cyqlone::CyqloneStorage&lt; T &gt;::update_impl</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1afac7110d732c43f85010408d16e7f27f" prot="public" static="no" nodiscard="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; real_t, index_t &gt; cyqlone::LinearOCPStorage::b_max</definition>
+        <argsstring>(index_t i)</argsstring>
+        <name>b_max</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b_max</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="293" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="293" bodyend="298"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">b_max</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1adac176f7c73d80b07e97991daab86299" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::qr</definition>
+        <argsstring>() const</argsstring>
+        <name>qr</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::qr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="300" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="300" bodyend="308"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ac1b125944a15698658a99f2d38ed44a8" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::qr</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>qr</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::qr</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="309" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="309" bodyend="314"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a58f77ebdcb6b8cf6fa6500ba66789b55" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::q</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>q</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::q</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="315" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="315" bodyend="319"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ac49eab2351c2727fc65901bcaef25634" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::r</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>r</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::r</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="320" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="320" bodyend="324"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a89d340ab09b81625dbc99f78de5a9643" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::b</definition>
+        <argsstring>() const</argsstring>
+        <name>b</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="326" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="326" bodyend="334"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ad8db594998e23cbbe90cec64d8219ca7" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::b</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>b</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="335" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="335" bodyend="340"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">b</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a72a94dd852aea524c1b02f1d5ac841ed" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::b_min</definition>
+        <argsstring>() const</argsstring>
+        <name>b_min</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="342" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="342" bodyend="350"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1af25b911a98ccd90a688645bcc80c84fb" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::b_min</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>b_min</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b_min</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="351" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="351" bodyend="356"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">b_min</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1ab95d280f08c51e2339c29c34bb40fb42" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::b_max</definition>
+        <argsstring>() const</argsstring>
+        <name>b_max</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="358" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="358" bodyend="367"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" compoundref="ocp_8hpp" startline="57">storage</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a24e5e12fd63f149c0bb67af7f5544037" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const real_t, index_t &gt;</type>
+        <definition>guanaqo::MatrixView&lt; const real_t, index_t &gt; cyqlone::LinearOCPStorage::b_max</definition>
+        <argsstring>(index_t i) const</argsstring>
+        <name>b_max</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::b_max</qualifiedname>
+        <param>
+          <type>index_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="368" column="26" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="368" bodyend="373"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">b_max</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError" kindref="compound">KKTError</ref></type>
+        <definition>auto cyqlone::LinearOCPStorage::compute_kkt_error</definition>
+        <argsstring>(const Solution &amp;sol) const</argsstring>
+        <name>compute_kkt_error</name>
+        <qualifiedname>cyqlone::LinearOCPStorage::compute_kkt_error</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage_1_1Solution" kindref="compound">Solution</ref> &amp;</type>
+          <declname>sol</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="447" column="15" bodyfile="src/cyqlone/src/ocp.cpp" bodystart="10" bodyend="99"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">AB</references>
+        <references refid="structguanaqo_1_1MatrixView_1aca1731674c012b0c6a295703172f189b">guanaqo::MatrixView&lt; class T, class I, class S, StorageOrder O &gt;::as_column</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">b</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">b_max</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">b_min</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">C</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">CD</references>
+        <references refid="group__topic-linalg_1gacd0f6a1148300c8895b047baafd80619" compoundref="linalg_8hpp" startline="325" endline="328">cyqlone::linalg::clamp</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">H</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">Q</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">qr</references>
+        <references refid="group__linalg__blas__hl_1gaccc9fb68863497d4cc452d36057781bf">guanaqo::blas::xgemv_N</references>
+        <references refid="group__linalg__blas__hl_1gaed74d5df153a525f319dd183aee84622">guanaqo::blas::xgemv_T</references>
+        <references refid="group__linalg__blas__hl_1gac9091441d928e985a0bdcd8170bf3d86">guanaqo::blas::xsymv_L</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Storage for a linear-quadratic OCP of the form. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><programlisting><codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ₙ₋₁</highlight></codeline>
+<codeline><highlight class="normal">minimize<sp/><sp/><sp/><sp/>∑<sp/>[½<sp/>uᵢᵀ<sp/>Rᵢ<sp/>uᵢ<sp/>+<sp/>uᵢᵀ<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" kindref="member">S</ref><sp/>xᵢ<sp/>+<sp/>½<sp/>xᵢᵀ<sp/>Qᵢ<sp/>xᵢ<sp/>+<sp/>rᵢᵀuᵢ<sp/>+<sp/>qᵢᵀxᵢ]<sp/>+<sp/>½<sp/>xₙᵀ<sp/>Qₙ<sp/>xₙ<sp/>+<sp/>qₙᵀ<sp/>xₙ</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ⁱ⁼⁰</highlight></codeline>
+<codeline><highlight class="normal">s.t.<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>x₀<sp/><sp/><sp/>=<sp/>b₀</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>xᵢ₊₁<sp/>=<sp/>Aᵢ<sp/>xᵢ<sp/>+<sp/>Bᵢ<sp/>uᵢ<sp/>+<sp/>bᵢ₊₁</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lᵢ<sp/><sp/><sp/>≤<sp/>Cᵢ<sp/>xᵢ<sp/>+<sp/>Dᵢ<sp/>uᵢ<sp/>≤<sp/>uᵢ</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lₙ<sp/><sp/><sp/>≤<sp/>Cₙ<sp/>xₙ<sp/>≤<sp/>uₙ</highlight></codeline>
+</programlisting> </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::LinearOCPStorage</label>
+        <link refid="structcyqlone_1_1LinearOCPStorage"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+dim</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+storage</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone::OCPDim</label>
+        <link refid="structcyqlone_1_1OCPDim"/>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/ocp.hpp" line="37" column="1" bodyfile="src/cyqlone/include/cyqlone/ocp.hpp" bodystart="37" bodyend="448"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>A</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a27d61e750b9e9555d1044a3b301c7d37" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>A</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>AB</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ae99e0b7a571b2478b9c1ba110cc9987c" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>AB</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>B</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a698af7f1cb6918a0bb80c08f36e15c9c" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>B</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ad66945575e7fca5f8454f273bffb0ee4" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a89d340ab09b81625dbc99f78de5a9643" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ad8db594998e23cbbe90cec64d8219ca7" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b_max</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1afac7110d732c43f85010408d16e7f27f" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b_max</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ab95d280f08c51e2339c29c34bb40fb42" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b_max</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a24e5e12fd63f149c0bb67af7f5544037" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b_max</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b_min</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1aaa0f7456157a720cef41973d04a8474d" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b_min</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a72a94dd852aea524c1b02f1d5ac841ed" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b_min</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1af25b911a98ccd90a688645bcc80c84fb" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>b_min</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>C</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ab3f086541ed2e71626f68e4ec4a6d49d" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>C</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>CD</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a52a9956d36c16eba2692383937c785b1" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>CD</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>compute_kkt_error</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a6ba4f8f1df4ac6636d3009c5791fbfa7" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>create_storage</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>D</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a6e80ef9ed9fafd8550220cdd6f2037ee" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>D</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>dim</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>H</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a64c07d11eb851d4d5a930521a30949f8" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>H</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a8a2352b8f9754dde69173d4de522181c" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>num_constraints</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1aa1b329745b5c682f335cff88c8c138ad" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>num_dynamics_constraints</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1acdc3b51f3656b50266bacb98751c547b" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>num_variables</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>Q</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1afec56db3e879ff34cae2fc2f954fd243" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>Q</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a18987fd40bfbf98512ea0a831184fceb" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>q</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a58f77ebdcb6b8cf6fa6500ba66789b55" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>q</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>qr</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a1c2b1370ce21a0bde81419000e878848" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>qr</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1adac176f7c73d80b07e97991daab86299" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>qr</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ac1b125944a15698658a99f2d38ed44a8" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>qr</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>R</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ac1af58a300b10128dc38647c21008874" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>R</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a00cf31fb617a4375e87e3bc94b2c023e" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>r</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1ac49eab2351c2727fc65901bcaef25634" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>r</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a7d1057eb3b8246f290f314d5124948cc" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>S</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a505571e8071bd5342bf34e8dced7cd2f" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>S</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a84859ccb81131e7a5bc78e2bada07cf4" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>S_trans</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1aaa9e756091a07ec76fa0300c77ae67f6" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>S_trans</name></member>
+      <member refid="structcyqlone_1_1LinearOCPStorage_1a1e392bacae8af0e27b96c08037b7aec8" prot="public" virt="non-virtual"><scope>cyqlone::LinearOCPStorage</scope><name>storage</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

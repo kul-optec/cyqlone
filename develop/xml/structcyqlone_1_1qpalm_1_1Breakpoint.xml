@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1Breakpoint" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::Breakpoint</compoundname>
+    <includes refid="breakpoint_8hpp" local="no">cyqlone/qpalm/implementation/breakpoint.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::Breakpoint::t</definition>
+        <argsstring></argsstring>
+        <name>t</name>
+        <qualifiedname>cyqlone::qpalm::Breakpoint::t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="17" column="12" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a3b71b2f757fe16a5631fb31ff9efe565" compoundref="breakpoint_8hpp" startline="18" endline="18">α</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1CyQPALMBackend_1a640bb174c3f290758b4336f4304e1512" compoundref="backends_2backend-cyqlone_2linesearch_8tpp" startline="36" endline="113">cyqlone::qpalm::CyQPALMBackend&lt; VL, DefaultOrder &gt;::compute_partition_breakpoints</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" compoundref="implementation_2linesearch_8tpp" startline="77" endline="116">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" compoundref="implementation_2linesearch_8tpp" startline="54" endline="74">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize_base</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1Breakpoint_1a5323f4decf9616946291234021820120" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::Breakpoint::δ</definition>
+        <argsstring></argsstring>
+        <name>δ</name>
+        <qualifiedname>cyqlone::qpalm::Breakpoint::δ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="17" column="14" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a3b71b2f757fe16a5631fb31ff9efe565" compoundref="breakpoint_8hpp" startline="18" endline="18">α</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1Breakpoint_1a3b71b2f757fe16a5631fb31ff9efe565" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::Breakpoint::α</definition>
+        <argsstring>() const</argsstring>
+        <name>α</name>
+        <qualifiedname>cyqlone::qpalm::Breakpoint::α</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="18" column="13" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="18" bodyend="18"/>
+        <references refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a5323f4decf9616946291234021820120" compoundref="breakpoint_8hpp" startline="17">δ</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" compoundref="breakpoint_8hpp" startline="17">t</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" compoundref="implementation_2linesearch_8tpp" startline="54" endline="74">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize_base</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::Breakpoint</label>
+        <link refid="structcyqlone_1_1qpalm_1_1Breakpoint"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="15" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="15" bodyend="19"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a3b71b2f757fe16a5631fb31ff9efe565" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::Breakpoint</scope><name>α</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a5323f4decf9616946291234021820120" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::Breakpoint</scope><name>δ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::Breakpoint</scope><name>t</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

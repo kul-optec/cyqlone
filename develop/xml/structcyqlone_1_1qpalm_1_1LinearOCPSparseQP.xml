@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::LinearOCPSparseQP</compoundname>
+    <includes refid="conversion_8hpp" local="no">cyqlone/qpalm/example-problems/conversion.hpp</includes>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1_1KKTMatrix" prot="public">cyqlone::qpalm::LinearOCPSparseQP::KKTMatrix</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a60ce912654308a02f7c0b66f9b6399fd" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::qpalm::LinearOCPSparseQP::Q_outer_ptr</definition>
+        <argsstring></argsstring>
+        <name>Q_outer_ptr</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::Q_outer_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="25" column="17" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1abcbdcae91e2d853521fe0bac79ecfe6f" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::qpalm::LinearOCPSparseQP::Q_inner_idx</definition>
+        <argsstring></argsstring>
+        <name>Q_inner_idx</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::Q_inner_idx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="25" column="29" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a60b4b3867ef3a8caa0f3efec69c36ac4" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::qpalm::LinearOCPSparseQP::Q_values</definition>
+        <argsstring></argsstring>
+        <name>Q_values</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::Q_values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="26" column="17" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="26" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a1a548338d54946086ccfe37cca6c3c3f" prot="public" static="no" mutable="no">
+        <type><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCSC</ref>&lt; index_t, index_t &gt;</type>
+        <definition>SparseCSC&lt;index_t, index_t&gt; cyqlone::qpalm::LinearOCPSparseQP::Q_sparsity</definition>
+        <argsstring></argsstring>
+        <name>Q_sparsity</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::Q_sparsity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="27" column="15" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="27" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a409ba51fa84ce217c8cb187b304985d2" compoundref="conversion_8cpp" startline="48" endline="153">build</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1abee6af71dc8e2176ec1e508cfecfb13f" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::qpalm::LinearOCPSparseQP::A_outer_ptr</definition>
+        <argsstring></argsstring>
+        <name>A_outer_ptr</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::A_outer_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="28" column="17" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a0b9a55d818c536532d5c83a700bbc5e6" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; index_t &gt;</type>
+        <definition>std::vector&lt;index_t&gt; cyqlone::qpalm::LinearOCPSparseQP::A_inner_idx</definition>
+        <argsstring></argsstring>
+        <name>A_inner_idx</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::A_inner_idx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="28" column="29" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a61ab7323c8c585ca3d725c0696dfb17b" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::qpalm::LinearOCPSparseQP::A_values</definition>
+        <argsstring></argsstring>
+        <name>A_values</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::A_values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="29" column="17" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="29" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1aca1d6e9d3ccf4b21d37bbd9c3268fa2e" prot="public" static="no" mutable="no">
+        <type><ref refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">SparseCSC</ref>&lt; index_t, index_t &gt;</type>
+        <definition>SparseCSC&lt;index_t, index_t&gt; cyqlone::qpalm::LinearOCPSparseQP::A_sparsity</definition>
+        <argsstring></argsstring>
+        <name>A_sparsity</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::A_sparsity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="30" column="15" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="30" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a409ba51fa84ce217c8cb187b304985d2" compoundref="conversion_8cpp" startline="48" endline="153">build</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a4e252ac2fbc31ddba6ba284a2de02b59" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::LinearOCPSparseQP::n</definition>
+        <argsstring></argsstring>
+        <name>n</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::n</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="31" column="13" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a9b6db5937c394d9706ec534d3201a8c1" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::LinearOCPSparseQP::m_eq</definition>
+        <argsstring></argsstring>
+        <name>m_eq</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::m_eq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="31" column="15" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a657457ece30e7ea9974a42664478d282" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::LinearOCPSparseQP::m_ineq</definition>
+        <argsstring></argsstring>
+        <name>m_ineq</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::m_ineq</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="31" column="20" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" compoundref="conversion_8cpp" startline="155" endline="218">build_kkt</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a409ba51fa84ce217c8cb187b304985d2" prot="public" static="yes" nodiscard="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP" kindref="compound">LinearOCPSparseQP</ref></type>
+        <definition>LinearOCPSparseQP cyqlone::qpalm::LinearOCPSparseQP::build</definition>
+        <argsstring>(const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>build</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::build</qualifiedname>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="33" column="31" bodyfile="src/example-problems/src/conversion.cpp" bodystart="48" bodyend="153"/>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1aca1d6e9d3ccf4b21d37bbd9c3268fa2e" compoundref="conversion_8hpp" startline="30">A_sparsity</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">cyqlone::LinearOCPStorage::AB</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">cyqlone::LinearOCPStorage::CD</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">cyqlone::LinearOCPStorage::dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">cyqlone::LinearOCPStorage::H</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a1a548338d54946086ccfe37cca6c3c3f" compoundref="conversion_8hpp" startline="27">Q_sparsity</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" prot="public" static="no" nodiscard="yes" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1_1KKTMatrix" kindref="compound">KKTMatrix</ref></type>
+        <definition>auto cyqlone::qpalm::LinearOCPSparseQP::build_kkt</definition>
+        <argsstring>(real_t S, std::span&lt; const real_t &gt; Σ, std::span&lt; const bool &gt; J) const</argsstring>
+        <name>build_kkt</name>
+        <qualifiedname>cyqlone::qpalm::LinearOCPSparseQP::build_kkt</qualifiedname>
+        <param>
+          <type>real_t</type>
+          <declname>S</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const real_t &gt;</type>
+          <declname>Σ</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const bool &gt;</type>
+          <declname>J</declname>
+        </param>
+        <briefdescription>
+<para>Returns the lower part of the symmetric indefinite KKT matrix for the active set <computeroutput>J</computeroutput> and penalty factors <computeroutput>Σ</computeroutput>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="42" column="16" bodyfile="src/example-problems/src/conversion.cpp" bodystart="155" bodyend="218"/>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a0b9a55d818c536532d5c83a700bbc5e6" compoundref="conversion_8hpp" startline="28">A_inner_idx</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1abee6af71dc8e2176ec1e508cfecfb13f" compoundref="conversion_8hpp" startline="28">A_outer_ptr</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1aca1d6e9d3ccf4b21d37bbd9c3268fa2e" compoundref="conversion_8hpp" startline="30">A_sparsity</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a61ab7323c8c585ca3d725c0696dfb17b" compoundref="conversion_8hpp" startline="29">A_values</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1_1KKTMatrix_1aba4929e1cd23c947749e211a6217e28f" compoundref="conversion_8hpp" startline="36">cyqlone::qpalm::LinearOCPSparseQP::KKTMatrix::inner_idx</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a9b6db5937c394d9706ec534d3201a8c1" compoundref="conversion_8hpp" startline="31">m_eq</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a657457ece30e7ea9974a42664478d282" compoundref="conversion_8hpp" startline="31">m_ineq</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a4e252ac2fbc31ddba6ba284a2de02b59" compoundref="conversion_8hpp" startline="31">n</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1_1KKTMatrix_1acddf3a9d843aeed67a0c6d20b652b561" compoundref="conversion_8hpp" startline="36">cyqlone::qpalm::LinearOCPSparseQP::KKTMatrix::outer_ptr</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1abcbdcae91e2d853521fe0bac79ecfe6f" compoundref="conversion_8hpp" startline="25">Q_inner_idx</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a60ce912654308a02f7c0b66f9b6399fd" compoundref="conversion_8hpp" startline="25">Q_outer_ptr</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a1a548338d54946086ccfe37cca6c3c3f" compoundref="conversion_8hpp" startline="27">Q_sparsity</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a60b4b3867ef3a8caa0f3efec69c36ac4" compoundref="conversion_8hpp" startline="26">Q_values</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1_1KKTMatrix_1a637611dbf3f4f681fd0a75f5ffa8f5d5" compoundref="conversion_8hpp" startline="38">cyqlone::qpalm::LinearOCPSparseQP::KKTMatrix::sparsity</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1_1KKTMatrix_1a978daeb18f359e9792d30590120ed123" compoundref="conversion_8hpp" startline="37">cyqlone::qpalm::LinearOCPSparseQP::KKTMatrix::values</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Represents a sparse multiple shooting formulation of the standard optimal control problem. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::LinearOCPSparseQP</label>
+        <link refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+A_inner_idx</edgelabel>
+          <edgelabel>+A_outer_ptr</edgelabel>
+          <edgelabel>+Q_inner_idx</edgelabel>
+          <edgelabel>+Q_outer_ptr</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+A_values</edgelabel>
+          <edgelabel>+Q_values</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+A_sparsity</edgelabel>
+          <edgelabel>+Q_sparsity</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>guanaqo::linalg::sparsity::SparseCSC&lt; index_t, index_t &gt;</label>
+        <link refid="structguanaqo_1_1linalg_1_1sparsity_1_1SparseCSC" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+inner_idx</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+outer_ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::span&lt; const index_t &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::span&lt; const storage_index_t &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; index_t &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" line="24" column="1" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/conversion.hpp" bodystart="24" bodyend="44"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a0b9a55d818c536532d5c83a700bbc5e6" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>A_inner_idx</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1abee6af71dc8e2176ec1e508cfecfb13f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>A_outer_ptr</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1aca1d6e9d3ccf4b21d37bbd9c3268fa2e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>A_sparsity</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a61ab7323c8c585ca3d725c0696dfb17b" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>A_values</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a409ba51fa84ce217c8cb187b304985d2" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>build</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a04c06cb33b79d9f5e014305f44a16fc2" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>build_kkt</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a9b6db5937c394d9706ec534d3201a8c1" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>m_eq</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a657457ece30e7ea9974a42664478d282" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>m_ineq</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a4e252ac2fbc31ddba6ba284a2de02b59" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>n</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1abcbdcae91e2d853521fe0bac79ecfe6f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>Q_inner_idx</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a60ce912654308a02f7c0b66f9b6399fd" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>Q_outer_ptr</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a1a548338d54946086ccfe37cca6c3c3f" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>Q_sparsity</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LinearOCPSparseQP_1a60b4b3867ef3a8caa0f3efec69c36ac4" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LinearOCPSparseQP</scope><name>Q_values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::LineSearch::Result</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result_1a03019a07486a0ab6b644061f8d29851a" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::LineSearch&lt; Vec &gt;::Result::τ</definition>
+        <argsstring></argsstring>
+        <name>τ</name>
+        <qualifiedname>cyqlone::qpalm::LineSearch::Result::τ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="41" column="16" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result_1aa6c898ea0066772bb85a4a540b1feba5" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t cyqlone::qpalm::LineSearch&lt; Vec &gt;::Result::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>cyqlone::qpalm::LineSearch::Result::index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="42" column="16" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::LineSearch&lt; Vec &gt;::Result</label>
+        <link refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="40" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="40" bodyend="43"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result_1a03019a07486a0ab6b644061f8d29851a" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearch::Result</scope><name>τ</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result_1aa6c898ea0066772bb85a4a540b1feba5" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearch::Result</scope><name>index</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

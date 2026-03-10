@@ -1,0 +1,5 @@
+bib*.aux
+citelist.doc*
+.conan2
+build
+tttapa-conan-recipes

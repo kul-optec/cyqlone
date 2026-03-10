@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="examples_8md" kind="file" language="Markdown">
+    <compoundname>examples.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Examples<sp/>{#examples}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>[Solving<sp/>a<sp/>block<sp/>tridiagonal<sp/>system](@ref<sp/>solve-block-tridiagonal.cpp)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Solving<sp/>an<sp/>optimal<sp/>control<sp/>problem<sp/>using<sp/>Cyqlone](@ref<sp/>solve-ocp.cpp)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Spring-mass<sp/>OCP<sp/>benchmark](@ref<sp/>benchmarks/cyqpalm/spring-mass.cpp)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Standalone<sp/>PCR<sp/>solver](@ref<sp/>test/test-pcr.cpp)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@example{lineno}<sp/>solve-block-tridiagonal.cpp</highlight></codeline>
+<codeline><highlight class="normal">@par<sp/>Example<sp/>demonstrating<sp/>how<sp/>to<sp/>solve<sp/>a<sp/>block<sp/>tridiagonal<sp/>system<sp/>in<sp/>parallel</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>system<sp/>has<sp/>the<sp/>form</highlight></codeline>
+<codeline><highlight class="normal">@f[</highlight></codeline>
+<codeline><highlight class="normal">\begin{pmatrix}</highlight></codeline>
+<codeline><highlight class="normal">M_0<sp/>&amp;<sp/>\tp{K_0}<sp/>&amp;<sp/>0<sp/>&amp;<sp/>0<sp/>&amp;<sp/>\cdots<sp/>&amp;<sp/>K_{N-1}<sp/>\\</highlight></codeline>
+<codeline><highlight class="normal">K_0<sp/>&amp;<sp/>M_1<sp/>&amp;<sp/>\tp{K_1}<sp/>&amp;<sp/>0<sp/>&amp;<sp/>\cdots<sp/>&amp;<sp/>0<sp/>\\</highlight></codeline>
+<codeline><highlight class="normal">0<sp/>&amp;<sp/>K_1<sp/>&amp;<sp/>M_2<sp/>&amp;<sp/>\tp{K_2}<sp/>&amp;<sp/>\cdots<sp/>&amp;<sp/>0<sp/>\\</highlight></codeline>
+<codeline><highlight class="normal">0<sp/>&amp;<sp/>0<sp/>&amp;<sp/>K_2<sp/>&amp;<sp/>M_3<sp/>&amp;<sp/>\cdots<sp/>&amp;<sp/>0<sp/>\\</highlight></codeline>
+<codeline><highlight class="normal">\vdots<sp/>&amp;<sp/>\vdots<sp/>&amp;<sp/>\vdots<sp/>&amp;<sp/>\vdots<sp/>&amp;<sp/>\ddots<sp/>&amp;<sp/>\vdots<sp/>\\</highlight></codeline>
+<codeline><highlight class="normal">\tp{K_{N-1}}<sp/>&amp;<sp/>0<sp/>&amp;<sp/>0<sp/>&amp;<sp/>0<sp/>&amp;<sp/>\cdots<sp/>&amp;<sp/>M_{N-1}</highlight></codeline>
+<codeline><highlight class="normal">\end{pmatrix}</highlight></codeline>
+<codeline><highlight class="normal">\begin{pmatrix}</highlight></codeline>
+<codeline><highlight class="normal">x^0<sp/>\\<sp/>x^1<sp/>\\<sp/>x^2<sp/>\\<sp/>x^3<sp/>\\<sp/>\vdots<sp/>\\<sp/>x^{N-1}</highlight></codeline>
+<codeline><highlight class="normal">\end{pmatrix}</highlight></codeline>
+<codeline><highlight class="normal">=</highlight></codeline>
+<codeline><highlight class="normal">\begin{pmatrix}</highlight></codeline>
+<codeline><highlight class="normal">b^0<sp/>\\<sp/>b^1<sp/>\\<sp/>b^2<sp/>\\<sp/>b^3<sp/>\\<sp/>\vdots<sp/>\\<sp/>b^{N-1}</highlight></codeline>
+<codeline><highlight class="normal">\end{pmatrix}</highlight></codeline>
+<codeline><highlight class="normal">@f]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">We<sp/>use<sp/>@ref<sp/>cyqlone::TricyqleSolver<sp/>to<sp/>solve<sp/>the<sp/>system<sp/>in<sp/>parallel.<sp/>Since<sp/>this<sp/>solver<sp/>uses</highlight></codeline>
+<codeline><highlight class="normal">vectorization<sp/>using<sp/>batched<sp/>linear<sp/>algebra<sp/>operations<sp/>and<sp/>partitions<sp/>the<sp/>matrices<sp/>and<sp/>vectors</highlight></codeline>
+<codeline><highlight class="normal">across<sp/>multiple<sp/>threads,<sp/>each<sp/>thread<sp/>needs<sp/>to<sp/>pack<sp/>its<sp/>local<sp/>portion<sp/>of<sp/>the<sp/>system<sp/>into<sp/>batches</highlight></codeline>
+<codeline><highlight class="normal">of<sp/>matrices<sp/>and<sp/>vectors.<sp/>In<sp/>this<sp/>example,<sp/>we<sp/>prepare<sp/>the<sp/>system<sp/>in<sp/>the<sp/>batches<sp/>of<sp/>matrices</highlight></codeline>
+<codeline><highlight class="normal">`M`<sp/>and<sp/>`K`,<sp/>but<sp/>in<sp/>practice,<sp/>it<sp/>is<sp/>often<sp/>more<sp/>efficient<sp/>to<sp/>prepare<sp/>the<sp/>system<sp/>in<sp/>parallel,<sp/>writing</highlight></codeline>
+<codeline><highlight class="normal">the<sp/>local<sp/>blocks<sp/>into<sp/>the<sp/>solver&apos;s<sp/>workspace<sp/>directly.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>solution<sp/>produced<sp/>by<sp/>this<sp/>example<sp/>is<sp/>stored<sp/>in<sp/>a<sp/>`.mat`<sp/>file,<sp/>which<sp/>can<sp/>be<sp/>loaded<sp/>and<sp/>verified</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>the<sp/>Python<sp/>script<sp/>@ref<sp/>solve-block-tridiagonal.py.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@example{lineno}<sp/>solve-block-tridiagonal.py</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@example{lineno}<sp/>solve-ocp.cpp</highlight></codeline>
+<codeline><highlight class="normal">@par<sp/>Example<sp/>demonstrating<sp/>how<sp/>to<sp/>solve<sp/>an<sp/>optimal<sp/>control<sp/>problem<sp/>using<sp/>Cyqlone.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>example<sp/>generates<sp/>a<sp/>random<sp/>optimal<sp/>control<sp/>problem<sp/>(without<sp/>inequality<sp/>constraints),</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>solves<sp/>the<sp/>resulting<sp/>KKT<sp/>system<sp/>using<sp/>Cyqlone.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@example{lineno}<sp/>benchmarks/cyqpalm/spring-mass.cpp</highlight></codeline>
+<codeline><highlight class="normal">@par<sp/>Benchmarks<sp/>from<sp/>the<sp/>paper</highlight></codeline>
+<codeline><highlight class="normal">@see<sp/>@ref<sp/>benchmarks/cyqpalm/README.md<sp/>for<sp/>instructions<sp/>to<sp/>reproduce<sp/>the<sp/>results<sp/>from<sp/>the<sp/>paper.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@example{lineno}<sp/>test/test-pcr.cpp</highlight></codeline>
+<codeline><highlight class="normal">@par<sp/>Standalone<sp/>vectorized<sp/>PCR<sp/>solver<sp/>(independent<sp/>of<sp/>the<sp/>main<sp/>CyqloneSolver).</highlight></codeline>
+    </programlisting>
+    <location file="docs/source/doxygen/examples.md"/>
+  </compounddef>
+</doxygen>

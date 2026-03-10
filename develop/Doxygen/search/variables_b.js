@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['l2_5fhits_0',['l2_hits',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__trace__pcm.html#ad4dc723e47966a18714c960fdc9f9bcc',1,'guanaqo::pcm::ThreadPerfCounters']]],
+  ['l2_5fmisses_1',['l2_misses',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__trace__pcm.html#ad4b358e568f8baf7daf9f882c8853bd2',1,'guanaqo::pcm::ThreadPerfCounters']]],
+  ['l3_5fmisses_2',['l3_misses',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__trace__pcm.html#a5ac654948d4fb730cdaa0a3d759d5045',1,'guanaqo::pcm::ThreadPerfCounters']]],
+  ['last1_3',['last1',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1set__intersection__iterable_1_1iter__t.html#a22bcd782a23eb0d53da62c6d3ab5434b',1,'guanaqo::set_intersection_iterable::iter_t']]],
+  ['last2_4',['last2',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1set__intersection__iterable_1_1iter__t.html#a46ffb3ba882ed8f047f7a51bb55cc6ea',1,'guanaqo::set_intersection_iterable::iter_t']]],
+  ['last_5fcolumn_5',['last_column',['https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg_1_1micro__kernels_1_1gemm.html#a19c649ba5762668c0619054114573e58',1,'batmat::linalg::micro_kernels::gemm::last_column'],['https://tttapa.github.io/batmat/0.0.18/Doxygen/namespacebatmat_1_1linalg_1_1micro__kernels_1_1gemm__diag.html#a536c6b4c514dbe03ac382ab028165a20',1,'batmat::linalg::micro_kernels::gemm_diag::last_column']]],
+  ['layer_5fstride_6',['layer_stride',['https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1Layout.html#afb8a312aa8127b4a4654e1a8bf26bb73',1,'batmat::matrix::Layout::layer_stride'],['https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1Layout.html#a46d2d23986d62f8b92371abf900c0246',1,'batmat::matrix::Layout::PlainLayout::layer_stride'],['https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1View.html#a74a1b4972f447d16480ca9cbbe7cbcd9',1,'batmat::matrix::View::PlainBatchedMatrixView::layer_stride']]],
+  ['layout_7',['layout',['https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1View.html#a130d341c328c2e848593a609a3e22a21',1,'batmat::matrix::View']]],
+  ['lazy_8',['lazy',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1DynamicLoadFlags.html#aa303bb03cde674eae8c96943888f4516',1,'guanaqo::DynamicLoadFlags']]],
+  ['line_5fend_9',['line_end',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__io.html#a4cb17726db12718c3a6bcec9ff5c39e5',1,'guanaqo::PrintOpts']]],
+  ['line_5fsearch_10',['line_search',['../structcyqlone_1_1qpalm_1_1SolverTimings.html#a5e598eb1eb75831ade2d39c6ef763962',1,'cyqlone::qpalm::SolverTimings']]],
+  ['line_5fstart_11',['line_start',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/group__io.html#a163d03f624a2e052bf2c62b8e39e435a',1,'guanaqo::PrintOpts']]],
+  ['linesearch_12',['linesearch',['../structcyqlone_1_1qpalm_1_1SolverImplementation.html#acd99d245f212c2a5153d3e21a53a5cac',1,'cyqlone::qpalm::SolverImplementation']]],
+  ['linesearch_5fbreakpoint_5findex_13',['linesearch_breakpoint_index',['../structcyqlone_1_1qpalm_1_1DetailedStats.html#aa26bb4a0e27c9ae6d45799d45f34720f',1,'cyqlone::qpalm::DetailedStats::Entry']]],
+  ['linesearch_5finclude_5fmultipliers_14',['linesearch_include_multipliers',['../structcyqlone_1_1qpalm_1_1Settings.html#a1c2e46b3ed3272228a765d1f25780e26',1,'cyqlone::qpalm::Settings']]],
+  ['linesearch_5fstep_5fsize_15',['linesearch_step_size',['../structcyqlone_1_1qpalm_1_1DetailedStats.html#a4ae0e7ddc7f95c483730f6d18e94be1e',1,'cyqlone::qpalm::DetailedStats::Entry']]],
+  ['log_16',['log',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1TraceLogger_1_1ScopedLog.html#abc5ccea6dd4326cc55e63947f6f233c1',1,'guanaqo::TraceLogger::ScopedLog']]],
+  ['logs_17',['logs',['https://tttapa.github.io/guanaqo/1.0.0-alpha.25/Doxygen/structguanaqo_1_1TraceLogger.html#a52b71498a636605f0fa457dbc5f0bae2',1,'guanaqo::TraceLogger']]],
+  ['lv_18',['lv',['../structcyqlone_1_1PCRFactorTest.html#ace34111c93973ae12caae65d094c17b2',1,'cyqlone::PCRFactorTest']]]
+];

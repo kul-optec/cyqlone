@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1parallel_1_1SharedContext" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::parallel::SharedContext</compoundname>
+    <includes refid="parallel_8hpp" local="no">cyqlone/parallel.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1parallel_1_1SharedContext_1a8541d7bb84b40a889200aa2b8281e455" prot="public" static="no">
+        <type><ref refid="structcyqlone_1_1EmptyCompletion" kindref="compound">EmptyCompletion</ref></type>
+        <definition>using cyqlone::parallel::SharedContext::completion_type = EmptyCompletion</definition>
+        <argsstring></argsstring>
+        <name>completion_type</name>
+        <qualifiedname>cyqlone::parallel::SharedContext::completion_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/parallel.hpp" line="37" column="5" bodyfile="src/cyqlone/include/cyqlone/parallel.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="structcyqlone_1_1parallel_1_1SharedContext_1a8c23779f4d3e9282e8a0f4414a7a02df" prot="public" static="no">
+        <type><ref refid="classcyqlone_1_1TreeBarrier" kindref="compound">TreeBarrier</ref>&lt; <ref refid="structcyqlone_1_1parallel_1_1SharedContext_1a8541d7bb84b40a889200aa2b8281e455" kindref="member">completion_type</ref>, uint16_t &gt;</type>
+        <definition>using cyqlone::parallel::SharedContext::barrier_type = TreeBarrier&lt;completion_type, uint16_t&gt;</definition>
+        <argsstring></argsstring>
+        <name>barrier_type</name>
+        <qualifiedname>cyqlone::parallel::SharedContext::barrier_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/parallel.hpp" line="39" column="5" bodyfile="src/cyqlone/include/cyqlone/parallel.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1parallel_1_1SharedContext_1a1b0dfe21418e9ebf681373cea1b1dd97" prot="public" static="no" mutable="no">
+        <type>const index_t</type>
+        <definition>const index_t cyqlone::parallel::SharedContext::num_thr</definition>
+        <argsstring></argsstring>
+        <name>num_thr</name>
+        <qualifiedname>cyqlone::parallel::SharedContext::num_thr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/parallel.hpp" line="40" column="19" bodyfile="src/cyqlone/include/cyqlone/parallel.hpp" bodystart="40" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1parallel_1_1SharedContext_1a070d23cba7fbc854c1834e130eaaa1ec" compoundref="parallel_8hpp" startline="191" endline="204">run</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1parallel_1_1SharedContext_1a036e911c7fd2098f291a7cc59e395765" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1parallel_1_1SharedContext_1a8c23779f4d3e9282e8a0f4414a7a02df" kindref="member">barrier_type</ref></type>
+        <definition>barrier_type cyqlone::parallel::SharedContext::barrier</definition>
+        <argsstring></argsstring>
+        <name>barrier</name>
+        <qualifiedname>cyqlone::parallel::SharedContext::barrier</qualifiedname>
+        <initializer>{static_cast&lt;uint32_t&gt;(<ref refid="structcyqlone_1_1parallel_1_1SharedContext_1a1b0dfe21418e9ebf681373cea1b1dd97" kindref="member">num_thr</ref>), {}}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/parallel.hpp" line="41" column="18" bodyfile="src/cyqlone/include/cyqlone/parallel.hpp" bodystart="41" bodyend="41"/>
+        <referencedby refid="structcyqlone_1_1parallel_1_1SharedContext_1a2d25e5fdf88c13360ada15986fcc98d1" compoundref="parallel_8hpp" startline="53" endline="56">set_barrier_spin_count</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1parallel_1_1SharedContext_1a070d23cba7fbc854c1834e130eaaa1ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class F</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void cyqlone::parallel::SharedContext::run</definition>
+        <argsstring>(F &amp;&amp;)</argsstring>
+        <name>run</name>
+        <qualifiedname>cyqlone::parallel::SharedContext::run</qualifiedname>
+        <param>
+          <type>F &amp;&amp;</type>
+          <defname>f</defname>
+        </param>
+        <briefdescription>
+<para>Execute the given function in parallel on all threads, blocking until completion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The function will be called with a <ref refid="structcyqlone_1_1parallel_1_1Context" kindref="compound">Context</ref> that contains the thread index, and that can be used to synchronize and communicate between threads. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/parallel.hpp" line="49" column="10" bodyfile="src/cyqlone/include/cyqlone/parallel.hpp" bodystart="191" bodyend="204"/>
+        <references refid="structcyqlone_1_1parallel_1_1SharedContext_1a1b0dfe21418e9ebf681373cea1b1dd97" compoundref="parallel_8hpp" startline="40">num_thr</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1parallel_1_1SharedContext_1a2d25e5fdf88c13360ada15986fcc98d1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t cyqlone::parallel::SharedContext::set_barrier_spin_count</definition>
+        <argsstring>(uint32_t spin_count)</argsstring>
+        <name>set_barrier_spin_count</name>
+        <qualifiedname>cyqlone::parallel::SharedContext::set_barrier_spin_count</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>spin_count</declname>
+        </param>
+        <briefdescription>
+<para>Configure the barrier spin count used in parallel synchronization before falling back to a futex wait. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/parallel.hpp" line="53" column="14" bodyfile="src/cyqlone/include/cyqlone/parallel.hpp" bodystart="53" bodyend="56"/>
+        <references refid="structcyqlone_1_1parallel_1_1SharedContext_1a036e911c7fd2098f291a7cc59e395765" compoundref="parallel_8hpp" startline="41" endline="41">barrier</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Abstraction for a parallel execution context: a set of threads that can synchronize and communicate with each other using barriers. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="structcyqlone_1_1parallel_1_1Context" kindref="compound">Context</ref> </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>cyqlone::TreeBarrier&lt; completion_type, uint16_t &gt;</label>
+        <link refid="classcyqlone_1_1TreeBarrier"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::parallel::SharedContext</label>
+        <link refid="structcyqlone_1_1parallel_1_1SharedContext"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+barrier</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/parallel.hpp" line="31" column="1" bodyfile="src/cyqlone/include/cyqlone/parallel.hpp" bodystart="31" bodyend="57"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1parallel_1_1SharedContext_1a036e911c7fd2098f291a7cc59e395765" prot="public" virt="non-virtual"><scope>cyqlone::parallel::SharedContext</scope><name>barrier</name></member>
+      <member refid="structcyqlone_1_1parallel_1_1SharedContext_1a8c23779f4d3e9282e8a0f4414a7a02df" prot="public" virt="non-virtual"><scope>cyqlone::parallel::SharedContext</scope><name>barrier_type</name></member>
+      <member refid="structcyqlone_1_1parallel_1_1SharedContext_1a8541d7bb84b40a889200aa2b8281e455" prot="public" virt="non-virtual"><scope>cyqlone::parallel::SharedContext</scope><name>completion_type</name></member>
+      <member refid="structcyqlone_1_1parallel_1_1SharedContext_1a1b0dfe21418e9ebf681373cea1b1dd97" prot="public" virt="non-virtual"><scope>cyqlone::parallel::SharedContext</scope><name>num_thr</name></member>
+      <member refid="structcyqlone_1_1parallel_1_1SharedContext_1a070d23cba7fbc854c1834e130eaaa1ec" prot="public" virt="non-virtual"><scope>cyqlone::parallel::SharedContext</scope><name>run</name></member>
+      <member refid="structcyqlone_1_1parallel_1_1SharedContext_1a2d25e5fdf88c13360ada15986fcc98d1" prot="public" virt="non-virtual"><scope>cyqlone::parallel::SharedContext</scope><name>set_barrier_spin_count</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

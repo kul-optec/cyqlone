@@ -1,0 +1,900 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone::CyqloneStorage&lt; T &gt; Struct Template Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('structcyqlone_1_1CyqloneStorage.html','','structcyqlone_1_1CyqloneStorage-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">cyqlone::CyqloneStorage&lt; T &gt; Struct Template Reference<div class="ingroups"><a class="el" href="group__topic-ocp-formulations.html">Optimal control problem formulations</a></div></div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone/cyqlone-storage.hpp</a>&gt;</code></p>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;class T = real_t&gt;<br />
+struct cyqlone::CyqloneStorage&lt; T &gt;</div><p>Storage for a linear-quadratic OCP with the initial states x₀ eliminated. </p>
+<div class="fragment"><div class="line">           ₙ₋₁</div>
+<div class="line">minimize    ∑ [½ uᵢᵀ Rᵢ uᵢ + uᵢᵀ Sᵢ xᵢ + ½ xᵢᵀ Qᵢ xᵢ + rᵢᵀuᵢ + qᵢᵀxᵢ]</div>
+<div class="line">           ⁱ⁼¹</div>
+<div class="line">           + ½ u₀ᵀ R₀ u₀ + (r₀ + S₀ xᵢₙᵢₜ)ᵀ u₀</div>
+<div class="line">           + ½ xₙᵀ Qₙ xₙ + qₙᵀ xₙ</div>
+<div class="line">s.t.        xᵢ₊₁ = Aᵢ xᵢ + Bᵢ uᵢ + cᵢ</div>
+<div class="line">            lᵢ   ≤ Cᵢ xᵢ + Dᵢ uᵢ ≤ uᵢ</div>
+<div class="line">            l₀ - C₀ xᵢₙᵢₜ ≤ D₀ U₀ ≤ u₀ - C₀ xᵢₙᵢₜ</div>
+<div class="line">            lₙ   ≤ Cₙ xₙ ≤ uₙ</div>
+</div><!-- fragment --><p> The matrices are combined per stage, with inputs ordered first. The first and last stage are special because of the lack of x₀ and uₙ. </p><div class="fragment"><div class="line">Hᵢ = [ Rᵢ  Sᵢ ],    H₀ = [ R₀  0  ],    Fᵢ = [ Bᵢ  Aᵢ ],    Gᵢ = [ Dᵢ  Cᵢ ],    G₀ = [ D₀ Cₙ ]</div>
+<div class="line">     [ Sᵢᵀ Qᵢ ]          [ 0   Qₙ ]</div>
+</div><!-- fragment --><p> Due to the elimination of x₀, there may be fewer constraints for the first stage, which is tracked by the Ju0 mask. When reconstructing the solution, the multipliers for eliminated constraints are set to zero (we assume that the initial state is feasible w.r.t. the state constraints). </p>
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00039">39</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a8d6d781181e8cf5578bc6d8df6c4fa0c" id="r_a8d6d781181e8cf5578bc6d8df6c4fa0c"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> = T</td></tr>
+<tr class="memitem:a461664ce662031ec80e24179d5aa160a" id="r_a461664ce662031ec80e24179d5aa160a"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> = <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1Matrix.html">batmat::matrix::Matrix</a>&lt;<a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a>, index_t&gt;</td></tr>
+<tr class="memitem:a5077445bf9f6dd8b1d187db5eb8ecc20" id="r_a5077445bf9f6dd8b1d187db5eb8ecc20"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a5077445bf9f6dd8b1d187db5eb8ecc20">Solution</a> = <a class="el" href="structcyqlone_1_1LinearOCPStorage_1_1Solution.html">LinearOCPStorage::Solution</a></td></tr>
+<tr class="memitem:a8800a636bfb956a3750797b6849c82fb" id="r_a8800a636bfb956a3750797b6849c82fb"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a8800a636bfb956a3750797b6849c82fb">KKTError</a> = <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#structcyqlone_1_1LinearOCPStorage_1_1KKTError">LinearOCPStorage::KKTError</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a802bedcc1527e40bf4d0a73b532dd1a2" id="r_a802bedcc1527e40bf4d0a73b532dd1a2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a802bedcc1527e40bf4d0a73b532dd1a2">update_impl</a> (const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:aa2b03be361da3dc445fbe12a7f5b14e4" id="r_aa2b03be361da3dc445fbe12a7f5b14e4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa2b03be361da3dc445fbe12a7f5b14e4">update</a> (const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp)</td></tr>
+<tr class="memitem:a67496e3ee37459cfd9fa6d9f98c70a5e" id="r_a67496e3ee37459cfd9fa6d9f98c70a5e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a67496e3ee37459cfd9fa6d9f98c70a5e">reconstruct_ineq_multipliers</a> (std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; y_compressed, std::span&lt; <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; y) const</td></tr>
+<tr class="memitem:a43c82f3ed7f435db9b028baba5419b91" id="r_a43c82f3ed7f435db9b028baba5419b91"><td class="memItemLeft">std::vector&lt; <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a43c82f3ed7f435db9b028baba5419b91">reconstruct_ineq_multipliers</a> (std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; y_compressed) const</td></tr>
+<tr class="memitem:a2c090e2365a930356da9667415e10bb3" id="r_a2c090e2365a930356da9667415e10bb3"><td class="memItemLeft"><a class="el" href="#a5077445bf9f6dd8b1d187db5eb8ecc20">Solution</a>&#160;</td><td class="memItemRight"><a class="el" href="#a2c090e2365a930356da9667415e10bb3">reconstruct_solution</a> (const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp, std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; ux_compressed, std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; y_compressed, std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; λ_compressed) const</td></tr>
+<tr class="memitem:ad01b4d57231a32421e798a03be313310" id="r_ad01b4d57231a32421e798a03be313310"><td class="memItemLeft"><a class="el" href="#a8800a636bfb956a3750797b6849c82fb">KKTError</a>&#160;</td><td class="memItemRight"><a class="el" href="#ad01b4d57231a32421e798a03be313310">compute_kkt_error</a> (const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp, std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; ux_compressed, std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; y_compressed, std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt; λ_compressed) const</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:afebcc052a5712f3998178d3583d00f1c" id="r_afebcc052a5712f3998178d3583d00f1c"><td class="memItemLeft">static <a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&#160;</td><td class="memItemRight"><a class="el" href="#afebcc052a5712f3998178d3583d00f1c">build</a> (const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp, index_t <a class="el" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a>=-1)</td></tr>
+<tr class="memitem:a128cfe523b35c66b0f292e75e027ba11" id="r_a128cfe523b35c66b0f292e75e027ba11"><td class="memItemLeft">static index_t&#160;</td><td class="memItemRight"><a class="el" href="#a128cfe523b35c66b0f292e75e027ba11">count_constr_0</a> (const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;ocp, std::vector&lt; bool &gt; &amp;<a class="el" href="#ae49ba7578862d01d9d74b0393da36449">Ju0</a>)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a7eca197b9842281035693dfba5240da4" id="r_a7eca197b9842281035693dfba5240da4"><td class="memItemLeft">index_t&#160;</td><td class="memItemRight"><a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a></td></tr>
+<tr class="memitem:a2a7e2b890c3d6c8feabb811aa7c9945b" id="r_a2a7e2b890c3d6c8feabb811aa7c9945b"><td class="memItemLeft">index_t&#160;</td><td class="memItemRight"><a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a></td></tr>
+<tr class="memitem:a94f6e3df359a642db24a1314c5d6b834" id="r_a94f6e3df359a642db24a1314c5d6b834"><td class="memItemLeft">index_t&#160;</td><td class="memItemRight"><a class="el" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a></td></tr>
+<tr class="memitem:aa105440032c8ead7014d78478855f559" id="r_aa105440032c8ead7014d78478855f559"><td class="memItemLeft">index_t&#160;</td><td class="memItemRight"><a class="el" href="#aa105440032c8ead7014d78478855f559">ny</a></td></tr>
+<tr class="memitem:adcdc3f7d303534083908cc9e5efe331c" id="r_adcdc3f7d303534083908cc9e5efe331c"><td class="memItemLeft">index_t&#160;</td><td class="memItemRight"><a class="el" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a></td></tr>
+<tr class="memitem:ac6c84b75bc758b0817e06d20d33d3dc0" id="r_ac6c84b75bc758b0817e06d20d33d3dc0"><td class="memItemLeft">index_t&#160;</td><td class="memItemRight"><a class="el" href="#ac6c84b75bc758b0817e06d20d33d3dc0">ny_N</a></td></tr>
+<tr class="memitem:ae49ba7578862d01d9d74b0393da36449" id="r_ae49ba7578862d01d9d74b0393da36449"><td class="memItemLeft">std::vector&lt; bool &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ae49ba7578862d01d9d74b0393da36449">Ju0</a></td></tr>
+<tr class="memitem:ae59a1ad04812a951b67cffb555e2c46e" id="r_ae59a1ad04812a951b67cffb555e2c46e"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#ae59a1ad04812a951b67cffb555e2c46e">data_H</a></td></tr>
+<tr class="memitem:a9858e75b9e77fa90942ae9e93bee6cd0" id="r_a9858e75b9e77fa90942ae9e93bee6cd0"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#a9858e75b9e77fa90942ae9e93bee6cd0">data_F</a> = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a>, .rows = <a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>, .cols = <a class="el" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a> + <a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>}}; }()</td></tr>
+<tr class="memitem:ac42f16fa5afd1539c75464abf5224c2e" id="r_ac42f16fa5afd1539c75464abf5224c2e"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#ac42f16fa5afd1539c75464abf5224c2e">data_G</a></td></tr>
+<tr class="memitem:a9d576ab731437a666d1779180ab0da93" id="r_a9d576ab731437a666d1779180ab0da93"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#a9d576ab731437a666d1779180ab0da93">data_G0N</a></td></tr>
+<tr class="memitem:a210cf14825f736136173613ccba6e5a0" id="r_a210cf14825f736136173613ccba6e5a0"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#a210cf14825f736136173613ccba6e5a0">data_rq</a> = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a>, .rows = <a class="el" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a> + <a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>, .cols = 1}}; }()</td></tr>
+<tr class="memitem:a0f2e51a560de04b725a2835530c9d6c1" id="r_a0f2e51a560de04b725a2835530c9d6c1"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#a0f2e51a560de04b725a2835530c9d6c1">data_c</a> = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a>, .rows = <a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>, .cols = 1}}; }()</td></tr>
+<tr class="memitem:a39945295b599e4e6eb8603d4545fbb01" id="r_a39945295b599e4e6eb8603d4545fbb01"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#a39945295b599e4e6eb8603d4545fbb01">data_lb</a> = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a> - 1, .rows = <a class="el" href="#aa105440032c8ead7014d78478855f559">ny</a>, .cols = 1}}; }()</td></tr>
+<tr class="memitem:af7d6268a019a69170affc90f45f6fcbb" id="r_af7d6268a019a69170affc90f45f6fcbb"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#af7d6268a019a69170affc90f45f6fcbb">data_lb0N</a> = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = 1, .rows = <a class="el" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a> + <a class="el" href="#ac6c84b75bc758b0817e06d20d33d3dc0">ny_N</a>, .cols = 1}}; }()</td></tr>
+<tr class="memitem:a02ff2708ce8de1cd931128a1f22c4de6" id="r_a02ff2708ce8de1cd931128a1f22c4de6"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#a02ff2708ce8de1cd931128a1f22c4de6">data_ub</a> = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a> - 1, .rows = <a class="el" href="#aa105440032c8ead7014d78478855f559">ny</a>, .cols = 1}}; }()</td></tr>
+<tr class="memitem:a9a940b82db836d321c2b85af56718c26" id="r_a9a940b82db836d321c2b85af56718c26"><td class="memItemLeft"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>&#160;</td><td class="memItemRight"><a class="el" href="#a9a940b82db836d321c2b85af56718c26">data_ub0N</a> = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = 1, .rows = <a class="el" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a> + <a class="el" href="#ac6c84b75bc758b0817e06d20d33d3dc0">ny_N</a>, .cols = 1}}; }()</td></tr>
+<tr class="memitem:a3a48efdcefe05de53bbf06d911ac2411" id="r_a3a48efdcefe05de53bbf06d911ac2411"><td class="memItemLeft">std::vector&lt; index_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a3a48efdcefe05de53bbf06d911ac2411">indices_G0</a> = std::vector&lt;index_t&gt;(<a class="el" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a>)</td></tr>
+</table>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a id="a8d6d781181e8cf5578bc6d8df6c4fa0c" name="a8d6d781181e8cf5578bc6d8df6c4fa0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">&#9670;&#160;</a></span>value_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::value_type = T</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00040">40</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a461664ce662031ec80e24179d5aa160a" name="a461664ce662031ec80e24179d5aa160a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a461664ce662031ec80e24179d5aa160a">&#9670;&#160;</a></span>matrix</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::matrix = <a class="elRef" href="https://tttapa.github.io/batmat/0.0.18/Doxygen/structbatmat_1_1matrix_1_1Matrix.html">batmat::matrix::Matrix</a>&lt;<a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a>, index_t&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00044">44</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5077445bf9f6dd8b1d187db5eb8ecc20" name="a5077445bf9f6dd8b1d187db5eb8ecc20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5077445bf9f6dd8b1d187db5eb8ecc20">&#9670;&#160;</a></span>Solution</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::Solution = <a class="el" href="structcyqlone_1_1LinearOCPStorage_1_1Solution.html">LinearOCPStorage::Solution</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00072">72</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8800a636bfb956a3750797b6849c82fb" name="a8800a636bfb956a3750797b6849c82fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8800a636bfb956a3750797b6849c82fb">&#9670;&#160;</a></span>KKTError</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::KKTError = <a class="el" href="structcyqlone_1_1LinearOCPStorage.html#structcyqlone_1_1LinearOCPStorage_1_1KKTError">LinearOCPStorage::KKTError</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00073">73</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a802bedcc1527e40bf4d0a73b532dd1a2" name="a802bedcc1527e40bf4d0a73b532dd1a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a802bedcc1527e40bf4d0a73b532dd1a2">&#9670;&#160;</a></span>update_impl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::update_impl </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8cpp_source.html#l00086">86</a> of file <a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aa2b03be361da3dc445fbe12a7f5b14e4" name="aa2b03be361da3dc445fbe12a7f5b14e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2b03be361da3dc445fbe12a7f5b14e4">&#9670;&#160;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::update </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8cpp_source.html#l00079">79</a> of file <a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a>.</p>
+
+</div>
+</div>
+<a id="afebcc052a5712f3998178d3583d00f1c" name="afebcc052a5712f3998178d3583d00f1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afebcc052a5712f3998178d3583d00f1c">&#9670;&#160;</a></span>build()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a>&lt; T &gt; <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::build </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>ny_0</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-1</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#a63">benchmarks/cyqpalm/spring-mass.cpp</a>, and <a class="el" href="solve-ocp_8cpp-example.html#a20">solve-ocp.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8cpp_source.html#l00148">148</a> of file <a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a67496e3ee37459cfd9fa6d9f98c70a5e" name="a67496e3ee37459cfd9fa6d9f98c70a5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67496e3ee37459cfd9fa6d9f98c70a5e">&#9670;&#160;</a></span>reconstruct_ineq_multipliers() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::reconstruct_ineq_multipliers </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>y_compressed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>y</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8cpp_source.html#l00018">18</a> of file <a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a43c82f3ed7f435db9b028baba5419b91" name="a43c82f3ed7f435db9b028baba5419b91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43c82f3ed7f435db9b028baba5419b91">&#9670;&#160;</a></span>reconstruct_ineq_multipliers() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::reconstruct_ineq_multipliers </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>y_compressed</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8cpp_source.html#l00010">10</a> of file <a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a128cfe523b35c66b0f292e75e027ba11" name="a128cfe523b35c66b0f292e75e027ba11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a128cfe523b35c66b0f292e75e027ba11">&#9670;&#160;</a></span>count_constr_0()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::count_constr_0 </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; bool &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>Ju0</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8cpp_source.html#l00068">68</a> of file <a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2c090e2365a930356da9667415e10bb3" name="a2c090e2365a930356da9667415e10bb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c090e2365a930356da9667415e10bb3">&#9670;&#160;</a></span>reconstruct_solution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::reconstruct_solution </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>ux_compressed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>y_compressed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>λ_compressed</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8cpp_source.html#l00032">32</a> of file <a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad01b4d57231a32421e798a03be313310" name="ad01b4d57231a32421e798a03be313310"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad01b4d57231a32421e798a03be313310">&#9670;&#160;</a></span>compute_kkt_error()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::compute_kkt_error </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcyqlone_1_1LinearOCPStorage.html">LinearOCPStorage</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ocp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>ux_compressed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>y_compressed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const <a class="el" href="#a8d6d781181e8cf5578bc6d8df6c4fa0c">value_type</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>λ_compressed</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8cpp_source.html#l00058">58</a> of file <a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a7eca197b9842281035693dfba5240da4" name="a7eca197b9842281035693dfba5240da4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eca197b9842281035693dfba5240da4">&#9670;&#160;</a></span>N_horiz</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::N_horiz</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00041">41</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2a7e2b890c3d6c8feabb811aa7c9945b" name="a2a7e2b890c3d6c8feabb811aa7c9945b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a7e2b890c3d6c8feabb811aa7c9945b">&#9670;&#160;</a></span>nx</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::nx</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00042">42</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a94f6e3df359a642db24a1314c5d6b834" name="a94f6e3df359a642db24a1314c5d6b834"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94f6e3df359a642db24a1314c5d6b834">&#9670;&#160;</a></span>nu</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::nu</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00042">42</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa105440032c8ead7014d78478855f559" name="aa105440032c8ead7014d78478855f559"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa105440032c8ead7014d78478855f559">&#9670;&#160;</a></span>ny</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::ny</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00042">42</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="adcdc3f7d303534083908cc9e5efe331c" name="adcdc3f7d303534083908cc9e5efe331c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcdc3f7d303534083908cc9e5efe331c">&#9670;&#160;</a></span>ny_0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::ny_0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00042">42</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac6c84b75bc758b0817e06d20d33d3dc0" name="ac6c84b75bc758b0817e06d20d33d3dc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6c84b75bc758b0817e06d20d33d3dc0">&#9670;&#160;</a></span>ny_N</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::ny_N</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00042">42</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae49ba7578862d01d9d74b0393da36449" name="ae49ba7578862d01d9d74b0393da36449"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae49ba7578862d01d9d74b0393da36449">&#9670;&#160;</a></span>Ju0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;bool&gt; <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::Ju0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00043">43</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae59a1ad04812a951b67cffb555e2c46e" name="ae59a1ad04812a951b67cffb555e2c46e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae59a1ad04812a951b67cffb555e2c46e">&#9670;&#160;</a></span>data_H</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_H</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">              = [<span class="keyword">this</span>] {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code hl_typedef" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="code hl_variable" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a>, .rows = <a class="code hl_variable" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a> + <a class="code hl_variable" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>, .cols = <a class="code hl_variable" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a> + <a class="code hl_variable" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>}};</div>
+<div class="line">}()</div>
+<div class="ttc" id="astructcyqlone_1_1CyqloneStorage_html_a2a7e2b890c3d6c8feabb811aa7c9945b"><div class="ttname"><a href="#a2a7e2b890c3d6c8feabb811aa7c9945b">cyqlone::CyqloneStorage::nx</a></div><div class="ttdeci">index_t nx</div><div class="ttdef"><b>Definition</b> <a href="cyqlone-storage_8hpp_source.html#l00042">cyqlone-storage.hpp:42</a></div></div>
+<div class="ttc" id="astructcyqlone_1_1CyqloneStorage_html_a461664ce662031ec80e24179d5aa160a"><div class="ttname"><a href="#a461664ce662031ec80e24179d5aa160a">cyqlone::CyqloneStorage::matrix</a></div><div class="ttdeci">batmat::matrix::Matrix&lt; value_type, index_t &gt; matrix</div><div class="ttdef"><b>Definition</b> <a href="cyqlone-storage_8hpp_source.html#l00044">cyqlone-storage.hpp:44</a></div></div>
+<div class="ttc" id="astructcyqlone_1_1CyqloneStorage_html_a7eca197b9842281035693dfba5240da4"><div class="ttname"><a href="#a7eca197b9842281035693dfba5240da4">cyqlone::CyqloneStorage::N_horiz</a></div><div class="ttdeci">index_t N_horiz</div><div class="ttdef"><b>Definition</b> <a href="cyqlone-storage_8hpp_source.html#l00041">cyqlone-storage.hpp:41</a></div></div>
+<div class="ttc" id="astructcyqlone_1_1CyqloneStorage_html_a94f6e3df359a642db24a1314c5d6b834"><div class="ttname"><a href="#a94f6e3df359a642db24a1314c5d6b834">cyqlone::CyqloneStorage::nu</a></div><div class="ttdeci">index_t nu</div><div class="ttdef"><b>Definition</b> <a href="cyqlone-storage_8hpp_source.html#l00042">cyqlone-storage.hpp:42</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00045">45</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9858e75b9e77fa90942ae9e93bee6cd0" name="a9858e75b9e77fa90942ae9e93bee6cd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9858e75b9e77fa90942ae9e93bee6cd0">&#9670;&#160;</a></span>data_F</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_F = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a>, .rows = <a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>, .cols = <a class="el" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a> + <a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>}}; }()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00048">48</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac42f16fa5afd1539c75464abf5224c2e" name="ac42f16fa5afd1539c75464abf5224c2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac42f16fa5afd1539c75464abf5224c2e">&#9670;&#160;</a></span>data_G</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_G</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">              = [<span class="keyword">this</span>] {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code hl_typedef" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="code hl_variable" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a> - 1, .rows = <a class="code hl_variable" href="#aa105440032c8ead7014d78478855f559">ny</a>, .cols = <a class="code hl_variable" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a> + <a class="code hl_variable" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>}};</div>
+<div class="line">}()</div>
+<div class="ttc" id="astructcyqlone_1_1CyqloneStorage_html_aa105440032c8ead7014d78478855f559"><div class="ttname"><a href="#aa105440032c8ead7014d78478855f559">cyqlone::CyqloneStorage::ny</a></div><div class="ttdeci">index_t ny</div><div class="ttdef"><b>Definition</b> <a href="cyqlone-storage_8hpp_source.html#l00042">cyqlone-storage.hpp:42</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00049">49</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9d576ab731437a666d1779180ab0da93" name="a9d576ab731437a666d1779180ab0da93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d576ab731437a666d1779180ab0da93">&#9670;&#160;</a></span>data_G0N</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_G0N</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">                = [<span class="keyword">this</span>] {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code hl_typedef" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = 1, .rows = <a class="code hl_variable" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a> + <a class="code hl_variable" href="#ac6c84b75bc758b0817e06d20d33d3dc0">ny_N</a>, .cols = <a class="code hl_variable" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a> + <a class="code hl_variable" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>}};</div>
+<div class="line">}()</div>
+<div class="ttc" id="astructcyqlone_1_1CyqloneStorage_html_ac6c84b75bc758b0817e06d20d33d3dc0"><div class="ttname"><a href="#ac6c84b75bc758b0817e06d20d33d3dc0">cyqlone::CyqloneStorage::ny_N</a></div><div class="ttdeci">index_t ny_N</div><div class="ttdef"><b>Definition</b> <a href="cyqlone-storage_8hpp_source.html#l00042">cyqlone-storage.hpp:42</a></div></div>
+<div class="ttc" id="astructcyqlone_1_1CyqloneStorage_html_adcdc3f7d303534083908cc9e5efe331c"><div class="ttname"><a href="#adcdc3f7d303534083908cc9e5efe331c">cyqlone::CyqloneStorage::ny_0</a></div><div class="ttdeci">index_t ny_0</div><div class="ttdef"><b>Definition</b> <a href="cyqlone-storage_8hpp_source.html#l00042">cyqlone-storage.hpp:42</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00052">52</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a210cf14825f736136173613ccba6e5a0" name="a210cf14825f736136173613ccba6e5a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a210cf14825f736136173613ccba6e5a0">&#9670;&#160;</a></span>data_rq</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_rq = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a>, .rows = <a class="el" href="#a94f6e3df359a642db24a1314c5d6b834">nu</a> + <a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>, .cols = 1}}; }()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00055">55</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0f2e51a560de04b725a2835530c9d6c1" name="a0f2e51a560de04b725a2835530c9d6c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f2e51a560de04b725a2835530c9d6c1">&#9670;&#160;</a></span>data_c</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_c = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a>, .rows = <a class="el" href="#a2a7e2b890c3d6c8feabb811aa7c9945b">nx</a>, .cols = 1}}; }()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00056">56</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a39945295b599e4e6eb8603d4545fbb01" name="a39945295b599e4e6eb8603d4545fbb01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39945295b599e4e6eb8603d4545fbb01">&#9670;&#160;</a></span>data_lb</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_lb = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a> - 1, .rows = <a class="el" href="#aa105440032c8ead7014d78478855f559">ny</a>, .cols = 1}}; }()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00057">57</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af7d6268a019a69170affc90f45f6fcbb" name="af7d6268a019a69170affc90f45f6fcbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7d6268a019a69170affc90f45f6fcbb">&#9670;&#160;</a></span>data_lb0N</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_lb0N = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = 1, .rows = <a class="el" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a> + <a class="el" href="#ac6c84b75bc758b0817e06d20d33d3dc0">ny_N</a>, .cols = 1}}; }()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00058">58</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a02ff2708ce8de1cd931128a1f22c4de6" name="a02ff2708ce8de1cd931128a1f22c4de6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02ff2708ce8de1cd931128a1f22c4de6">&#9670;&#160;</a></span>data_ub</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_ub = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = <a class="el" href="#a7eca197b9842281035693dfba5240da4">N_horiz</a> - 1, .rows = <a class="el" href="#aa105440032c8ead7014d78478855f559">ny</a>, .cols = 1}}; }()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00059">59</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9a940b82db836d321c2b85af56718c26" name="a9a940b82db836d321c2b85af56718c26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a940b82db836d321c2b85af56718c26">&#9670;&#160;</a></span>data_ub0N</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a> <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::data_ub0N = [this] { return <a class="el" href="#a461664ce662031ec80e24179d5aa160a">matrix</a>{{.depth = 1, .rows = <a class="el" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a> + <a class="el" href="#ac6c84b75bc758b0817e06d20d33d3dc0">ny_N</a>, .cols = 1}}; }()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00060">60</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3a48efdcefe05de53bbf06d911ac2411" name="a3a48efdcefe05de53bbf06d911ac2411"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a48efdcefe05de53bbf06d911ac2411">&#9670;&#160;</a></span>indices_G0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T = real_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;index_t&gt; <a class="el" href="structcyqlone_1_1CyqloneStorage.html">cyqlone::CyqloneStorage</a>&lt; T &gt;::indices_G0 = std::vector&lt;index_t&gt;(<a class="el" href="#adcdc3f7d303534083908cc9e5efe331c">ny_0</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cyqlone-storage_8hpp_source.html#l00061">61</a> of file <a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following files:<ul>
+<li>src/cyqlone/include/cyqlone/<a class="el" href="cyqlone-storage_8hpp_source.html">cyqlone-storage.hpp</a></li>
+<li>src/cyqlone/src/<a class="el" href="cyqlone-storage_8cpp_source.html">cyqlone-storage.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacecyqlone.html">cyqlone</a></li><li class="navelem"><a href="structcyqlone_1_1CyqloneStorage.html">CyqloneStorage</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

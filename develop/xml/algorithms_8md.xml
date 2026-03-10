@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="algorithms_8md" kind="file" language="Markdown">
+    <compoundname>algorithms.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Algorithms<sp/>{#algorithms}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>page<sp/>lists<sp/>the<sp/>implementations<sp/>of<sp/>the<sp/>algorithms<sp/>described<sp/>in<sp/>the</highlight></codeline>
+<codeline><highlight class="normal">Cyqlone<sp/>paper<sp/>@cite<sp/>pas_cyqlone_2025,</highlight></codeline>
+<codeline><highlight class="normal">with<sp/>discussions<sp/>of<sp/>the<sp/>differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code,</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>with<sp/>line-by-line<sp/>comments<sp/>referencing<sp/>the<sp/>corresponding<sp/>steps<sp/>in<sp/>the<sp/>paper.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Algorithm<sp/>1:<sp/>Factorization<sp/>of<sp/>a<sp/>single<sp/>modified<sp/>Riccati<sp/>block<sp/>column<sp/>{#algorithm-1}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Factorization<sp/>of<sp/>the<sp/>smaller<sp/>OCPs<sp/>on<sp/>each<sp/>sub-interval<sp/>using<sp/>a<sp/>modified<sp/>Riccati<sp/>recursion.</highlight></codeline>
+<codeline><highlight class="normal">Optionally<sp/>fused<sp/>with<sp/>the<sp/>forward<sp/>solve.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Many<sp/>operations<sp/>are<sp/>performed<sp/>in-place<sp/>to<sp/>reduce<sp/>memory<sp/>usage.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>For<sp/>example,<sp/>the<sp/>matrices<sp/>R̂,<sp/>Ŝ<sp/>and<sp/>Q̂<sp/>are<sp/>replaced<sp/>by<sp/>their<sp/>Cholesky<sp/>factors<sp/>LR,<sp/>LS<sp/>and<sp/>LQ.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Solution<sp/>is<sp/>fused/interleaved<sp/>with<sp/>the<sp/>factorization<sp/>steps<sp/>to<sp/>improve<sp/>temporal<sp/>locality<sp/>and</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>reduce<sp/>memory<sp/>bandwidth.<sp/>This<sp/>is<sp/>controlled<sp/>by<sp/>the<sp/>`Factor`<sp/>and<sp/>`Solve`<sp/>template<sp/>parameters.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>addition<sp/>of<sp/>the<sp/>penalty<sp/>term<sp/>DCᵀ<sp/>Σ<sp/>DC<sp/>is<sp/>fused<sp/>with<sp/>the<sp/>rest<sp/>of<sp/>the<sp/>operations,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>avoiding<sp/>an<sp/>explicit<sp/>formation<sp/>of<sp/>the<sp/>intermediate<sp/>matrix<sp/>and<sp/>improving<sp/>cache<sp/>locality.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>See<sp/>§5.1<sp/>“The<sp/>augmented<sp/>Lagrangian<sp/>inner<sp/>problem”<sp/>for<sp/>details<sp/>about<sp/>the<sp/>penalty<sp/>term.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>product<sp/>V(j-1)<sp/>V(j-1)ᵀ<sp/>is<sp/>not<sp/>added<sp/>to<sp/>the<sp/>Hessian<sp/>at<sp/>the<sp/>end<sp/>of<sp/>an<sp/>iteration,<sp/>but<sp/>rather</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>at<sp/>the<sp/>beginning<sp/>of<sp/>the<sp/>next<sp/>iteration,<sp/>so<sp/>it<sp/>can<sp/>be<sp/>fused<sp/>with<sp/>the<sp/>addition<sp/>of<sp/>DCᵀ<sp/>Σ<sp/>DC</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>and<sp/>the<sp/>Cholesky<sp/>factorization<sp/>of<sp/>the<sp/>sum.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Data<sp/>batch<sp/>indices<sp/>where<sp/>the<sp/>problem<sp/>data<sp/>and<sp/>the<sp/>factorization<sp/>are<sp/>stored<sp/>are<sp/>reversed</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>compared<sp/>to<sp/>the<sp/>stage<sp/>indices,<sp/>matching<sp/>the<sp/>iteration<sp/>order<sp/>and<sp/>simplifying<sp/>the<sp/>per-thread</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>contiguous<sp/>storage.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/riccati.tpp<sp/>Modified<sp/>Riccati<sp/>factorization<sp/>and<sp/>fused<sp/>forward<sp/>solve</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Algorithm<sp/>2:<sp/>Cyqlone<sp/>factorization<sp/>{#algorithm-2}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Factorization<sp/>of<sp/>the<sp/>entire<sp/>KKT<sp/>system<sp/>using<sp/>the<sp/>Cyqlone<sp/>algorithm.<sp/>Optionally<sp/>fused<sp/>with<sp/>the</highlight></codeline>
+<codeline><highlight class="normal">forward<sp/>solve.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Described<sp/>by<sp/>§4<sp/>“Cyqlone:<sp/>Parallel<sp/>factorization<sp/>and<sp/>solution<sp/>of<sp/>KKT<sp/>systems<sp/>with<sp/>optimal<sp/>control<sp/>structure”</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>penalty<sp/>terms<sp/>DCᵀ<sp/>Σ<sp/>DC<sp/>and<sp/>the<sp/>regularizers<sp/>Γₓ<sp/>=<sp/>γI<sp/>are<sp/>added<sp/>to<sp/>the<sp/>cost<sp/>Hessians<sp/>during</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>the<sp/>Riccati<sp/>factorization<sp/>step,<sp/>as<sp/>described<sp/>in<sp/>§5.1<sp/>“The<sp/>augmented<sp/>Lagrangian<sp/>inner<sp/>problem”.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Solution<sp/>is<sp/>fused/interleaved<sp/>with<sp/>the<sp/>factorization<sp/>steps<sp/>to<sp/>improve<sp/>temporal<sp/>locality<sp/>and</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>reduce<sp/>memory<sp/>bandwidth.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>factorization<sp/>and<sp/>solution<sp/>are<sp/>done<sp/>mostly<sp/>in-place<sp/>(without<sp/>overwriting<sp/>the<sp/>OCP<sp/>data).</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Factorization<sp/>of<sp/>the<sp/>odd<sp/>diagonal<sp/>blocks<sp/>M(i)<sp/>is<sp/>performed<sp/>in<sp/>the<sp/>compute_schur<sp/>function</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>instead<sp/>of<sp/>at<sp/>the<sp/>first<sp/>level<sp/>of<sp/>the<sp/>CR<sp/>code.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>last<sp/>level<sp/>is<sp/>factored<sp/>and<sp/>solved<sp/>using<sp/>PCR<sp/>or<sp/>PCG,<sp/>as<sp/>described<sp/>in<sp/>§7.5.2<sp/>“Handling<sp/>of</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>the<sp/>final<sp/>scalar<sp/>levels”.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>High-level<sp/>factorization<sp/>procedure</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/factor.tpp<sp/>Cyqlone<sp/>factorization<sp/>and<sp/>fused<sp/>forward<sp/>solve</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Schur<sp/>complement<sp/>computation</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>is<sp/>the<sp/>&lt;span<sp/>style=&quot;font-variant:small-caps&quot;&gt;compute-schur&lt;/span&gt;<sp/>function<sp/>in<sp/>the<sp/>paper,</highlight></codeline>
+<codeline><highlight class="normal">including<sp/>the<sp/>factorization<sp/>of<sp/>the<sp/>first<sp/>level<sp/>of<sp/>CR.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/schur.tpp<sp/>Cyqlone<sp/>compute<sp/>Schur</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Schur<sp/>complement<sp/>factorization</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>is<sp/>the<sp/>&lt;span<sp/>style=&quot;font-variant:small-caps&quot;&gt;factor-schur&lt;/span&gt;<sp/>function<sp/>in<sp/>the<sp/>paper,<sp/>but</highlight></codeline>
+<codeline><highlight class="normal">without<sp/>the<sp/>first<sp/>level<sp/>of<sp/>CR,<sp/>which<sp/>is<sp/>fused<sp/>with<sp/>the</highlight></codeline>
+<codeline><highlight class="normal">&lt;span<sp/>style=&quot;font-variant:small-caps&quot;&gt;compute-schur&lt;/span&gt;<sp/>function<sp/>above.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/factor.tpp<sp/>Cyqlone<sp/>factor<sp/>Schur</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>CR<sp/>helper<sp/>functions</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>factorization<sp/>is<sp/>done<sp/>in-place<sp/>on<sp/>cr_L,<sp/>cr_U,<sp/>and<sp/>cr_Y.<sp/>Subdiagonal<sp/>blocks<sp/>K˂<sp/>and<sp/>K˃<sp/>are</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>temporarily<sp/>stored<sp/>in<sp/>cr_U<sp/>and<sp/>cr_Y<sp/>respectively.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Syrk<sp/>and<sp/>potrf<sp/>operations<sp/>are<sp/>fused<sp/>where<sp/>possible<sp/>to<sp/>improve<sp/>performance.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Additional<sp/>masking<sp/>is<sp/>performed<sp/>for<sp/>the<sp/>scalar<sp/>case<sp/>(v<sp/>==<sp/>1),<sp/>corresponding<sp/>to<sp/>the<sp/>boundary</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>conditions<sp/>K˃(p-2^l)=0<sp/>(i.e.<sp/>no<sp/>periodic<sp/>coupling<sp/>between<sp/>the<sp/>last<sp/>and<sp/>first<sp/>stages).<sp/>This</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>serves<sp/>two<sp/>main<sp/>purposes:<sp/>it<sp/>avoids<sp/>unnecessary<sp/>computations<sp/>on<sp/>zero<sp/>blocks,<sp/>and<sp/>it<sp/>allows</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>for<sp/>processor<sp/>counts<sp/>p<sp/>that<sp/>are<sp/>not<sp/>powers<sp/>of<sp/>two.<sp/>In<sp/>contrast,<sp/>the<sp/>vectorized<sp/>case<sp/>requires</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>periodic<sp/>boundary<sp/>conditions,<sp/>so<sp/>this<sp/>masking<sp/>is<sp/>not<sp/>applied<sp/>for<sp/>v<sp/>&gt;<sp/>1.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/cr.tpp<sp/>Cyqlone<sp/>factor<sp/>CR<sp/>helper</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Algorithm<sp/>3:<sp/>Factorization<sp/>update<sp/>of<sp/>a<sp/>single<sp/>modified<sp/>Riccati<sp/>block<sp/>column<sp/>{#algorithm-3}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Many<sp/>operations<sp/>are<sp/>performed<sp/>in-place<sp/>to<sp/>reduce<sp/>memory<sp/>usage.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>For<sp/>example,<sp/>all<sp/>original<sp/>Cholesky<sp/>factors<sp/>are<sp/>replaced<sp/>by<sp/>the<sp/>updated<sp/>ones.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Solution<sp/>is<sp/>fused/interleaved<sp/>with<sp/>the<sp/>factorization<sp/>steps<sp/>to<sp/>improve<sp/>temporal<sp/>locality<sp/>and</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>reduce<sp/>memory<sp/>bandwidth.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>workspaces<sp/>Υ1<sp/>and<sp/>Υ2<sp/>are<sp/>reused<sp/>for<sp/>the<sp/>variables<sp/>Υ<sp/>and<sp/>Φ<sp/>in<sp/>the<sp/>paper.<sp/>Two<sp/>workspaces</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>are<sp/>required<sp/>because<sp/>the<sp/>matrix<sp/>multiplication<sp/>by<sp/>Φx(j)<sp/>cannot<sp/>be<sp/>done<sp/>in-place.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Only<sp/>the<sp/>constraints<sp/>for<sp/>which<sp/>ΔΣ<sp/>is<sp/>nonzero<sp/>are<sp/>used<sp/>during<sp/>the<sp/>update.<sp/>This<sp/>is<sp/>done<sp/>by</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>compressing<sp/>the<sp/>relevant<sp/>columns<sp/>of<sp/>Dᵀ<sp/>and<sp/>Cᵀ<sp/>into<sp/>Υu<sp/>and<sp/>Υx<sp/>respectively.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>A<sp/>global<sp/>communication<sp/>step<sp/>is<sp/>used<sp/>at<sp/>the<sp/>end<sp/>to<sp/>compute<sp/>the<sp/>total<sp/>update<sp/>rank<sp/>for<sp/>the<sp/>entire</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>problem,<sp/>and<sp/>to<sp/>partition<sp/>the<sp/>workspace<sp/>for<sp/>Υ˃<sp/>and<sp/>Υ˂<sp/>to<sp/>prepare<sp/>for<sp/>the<sp/>CR<sp/>phase.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>update<sp/>for<sp/>u(0)<sp/>is<sp/>handled<sp/>as<sp/>a<sp/>special<sp/>case<sp/>to<sp/>exploit<sp/>its<sp/>mostly<sp/>independent<sp/>structure.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>If<sp/>the<sp/>number<sp/>of<sp/>processors<sp/>p<sp/>is<sp/>not<sp/>a<sp/>power<sp/>of<sp/>two,<sp/>the<sp/>workspace<sp/>allocation<sp/>of<sp/>Υ˃(0)<sp/>is</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>adjusted<sp/>to<sp/>ensure<sp/>that<sp/>it<sp/>does<sp/>not<sp/>overlap<sp/>with<sp/>Υ˂(p-2^l).<sp/>Note<sp/>that<sp/>this<sp/>is<sp/>only<sp/>necessary</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>when<sp/>u(0)<sp/>is<sp/>not<sp/>isolated.<sp/>See<sp/>@ref<sp/>cyqlone::TricyqleSolver::work_Ups_fwd_w<sp/>&quot;work_Ups_fwd_w&quot;.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>In<sp/>the<sp/>vectorized<sp/>case,<sp/>Υ˃(0)<sp/>and<sp/>Υ˂(0)<sp/>are<sp/>stored<sp/>in<sp/>different<sp/>workspaces<sp/>in<sp/>the<sp/>last<sp/>level</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>of<sp/>CR,<sp/>since<sp/>this<sp/>is<sp/>not<sp/>actually<sp/>the<sp/>last<sp/>level<sp/>of<sp/>the<sp/>full<sp/>reduction<sp/>(PCR<sp/>handles<sp/>the<sp/>rest).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>See<sp/>@ref<sp/>cyqlone::TricyqleSolver::work_Ups_bwd_w<sp/>&quot;work_Ups_bwd_w&quot;.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/update.tpp<sp/>Cyqlone<sp/>update<sp/>Riccati</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Algorithm<sp/>4:<sp/>Cyqlone<sp/>factorization<sp/>updates<sp/>{#algorithm-4}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>update<sp/>of<sp/>the<sp/>last<sp/>has<sp/>been<sp/>modified<sp/>to<sp/>allow<sp/>for<sp/>vectorization<sp/>(v&gt;1),<sp/>updating<sp/>the</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>PCR<sp/>factorization<sp/>if<sp/>necessary.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Solution<sp/>is<sp/>fused/interleaved<sp/>with<sp/>the<sp/>factorization<sp/>steps<sp/>to<sp/>improve<sp/>temporal<sp/>locality<sp/>and</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>reduce<sp/>memory<sp/>bandwidth.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>A<sp/>heuristic<sp/>rank<sp/>check<sp/>is<sp/>used<sp/>to<sp/>decide<sp/>whether<sp/>to<sp/>update<sp/>or<sp/>re-factorize<sp/>the<sp/>last<sp/>level.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>update<sp/>matrices<sp/>Y˃(0)<sp/>are<sp/>skipped<sp/>when<sp/>they<sp/>are<sp/>zero<sp/>(i.e.<sp/>when<sp/>the<sp/>updates<sp/>to<sp/>u(0)<sp/>are</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>handled<sp/>separately).<sp/>This<sp/>saves<sp/>some<sp/>unnecessary<sp/>computation<sp/>in<sp/>the<sp/>scalar<sp/>case.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>High-level<sp/>update<sp/>procedure</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/update.tpp<sp/>Cyqlone<sp/>update</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Update<sp/>of<sp/>the<sp/>CR<sp/>factorization</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/update.tpp<sp/>Cyqlone<sp/>update<sp/>CR</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>CR<sp/>factorization<sp/>update<sp/>helper<sp/>functions</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Most<sp/>of<sp/>the<sp/>space<sp/>here<sp/>is<sp/>taken<sp/>up<sp/>by<sp/>the<sp/>updates<sp/>of<sp/>the<sp/>last<sp/>level,<sp/>which<sp/>needs<sp/>to<sp/>handle<sp/>some</highlight></codeline>
+<codeline><highlight class="normal">special<sp/>cases<sp/>depending<sp/>on<sp/>the<sp/>final<sp/>PCR<sp/>or<sp/>PCG<sp/>solver,<sp/>and<sp/>depending<sp/>on<sp/>whether<sp/>we<sp/>perform</highlight></codeline>
+<codeline><highlight class="normal">updates<sp/>or<sp/>re-factorization.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>special<sp/>cases<sp/>`if<sp/>constexpr<sp/>(v<sp/>==<sp/>1)`<sp/>add<sp/>some<sp/>visual<sp/>overhead,<sp/>and<sp/>can<sp/>safely<sp/>be<sp/>ignored.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/update.tpp<sp/>Cyqlone<sp/>update<sp/>CR<sp/>helper</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Algorithm<sp/>5:<sp/>CR:<sp/>Solution<sp/>of<sp/>a<sp/>symmetric<sp/>block-tridiagonal<sp/>system<sp/>using<sp/>cyclic<sp/>reduction<sp/>{#algorithm-5}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>We<sp/>use<sp/>an<sp/>iterative<sp/>approach<sp/>to<sp/>factor<sp/>all<sp/>levels,<sp/>instead<sp/>of<sp/>recursion.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>right-hand<sp/>side<sp/>vector<sp/>λ<sp/>is<sp/>updated<sp/>in-place.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>It<sp/>contains<sp/>all<sp/>stages<sp/>of<sp/>the<sp/>original<sp/>problem,<sp/>not<sp/>just<sp/>the<sp/>stages<sp/>that<sp/>are<sp/>handled<sp/>by<sp/>CR.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>Therefore,<sp/>we<sp/>use<sp/>the<sp/>data<sp/>batch<sp/>index<sp/>di<sp/>=<sp/>n<sp/>bi,<sp/>not<sp/>the<sp/>cyclic<sp/>reduction<sp/>batch<sp/>index<sp/>bi.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Y(k-2^l)<sp/>b̃(k-2^l)<sp/>is<sp/>stored<sp/>in<sp/>a<sp/>temporary<sp/>workspace<sp/>to<sp/>allow<sp/>it<sp/>to<sp/>be<sp/>evaluated<sp/>concurrently</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>with<sp/>U(k+2^l)<sp/>b̃(k+2^l),<sp/>as<sp/>they<sp/>both<sp/>update<sp/>b(k)⁺.<sp/>Similarly<sp/>for<sp/>the<sp/>backward<sp/>solve,<sp/>where</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>U(k)ᵀ<sp/>x(k-2^l)<sp/>is<sp/>stored<sp/>in<sp/>a<sp/>temporary<sp/>workspace<sp/>to<sp/>avoid<sp/>races<sp/>on<sp/>x(k).</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>last<sp/>level<sp/>is<sp/>not<sp/>handled<sp/>here,<sp/>because<sp/>it<sp/>is<sp/>solved<sp/>using<sp/>PCG<sp/>or<sp/>PCR.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>forward<sp/>solve<sp/>is<sp/>fused<sp/>with<sp/>the<sp/>factorization<sp/>above.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Serial<sp/>reverse<sp/>solve</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/factor.tpp<sp/>Cyqlone<sp/>solve<sp/>CR<sp/>serial</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Parallel<sp/>reverse<sp/>solve</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/factor.tpp<sp/>Cyqlone<sp/>solve<sp/>CR</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>CR<sp/>solve<sp/>helper<sp/>functions</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/cr.tpp<sp/>Cyqlone<sp/>solve<sp/>CR<sp/>helper</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Algorithm<sp/>6:<sp/>PCR:<sp/>Solution<sp/>of<sp/>a<sp/>symmetric<sp/>block-tridiagonal<sp/>system<sp/>using<sp/>parallel<sp/>cyclic<sp/>reduction<sp/>{#algorithm-6}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>solution<sp/>step<sp/>is<sp/>separated<sp/>from<sp/>the<sp/>factorization<sp/>step.<sp/>For<sp/>the<sp/>factorization,<sp/>we<sp/>use<sp/>the</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>periodic<sp/>version<sp/>[below](#algorithm-7).</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>solution<sp/>is<sp/>done<sp/>in-place<sp/>on<sp/>the<sp/>input<sp/>λ.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>We<sp/>use<sp/>an<sp/>iterative<sp/>approach<sp/>to<sp/>factor<sp/>all<sp/>levels,<sp/>instead<sp/>of<sp/>recursion.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/pcr.tpp<sp/>Cyqlone<sp/>solve<sp/>PCR</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Algorithm<sp/>7:<sp/>Periodic<sp/>PCR<sp/>factorization<sp/>of<sp/>a<sp/>block-tridiagonal<sp/>matrix<sp/>{#algorithm-7}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>The<sp/>factorization<sp/>is<sp/>done<sp/>in-place<sp/>on<sp/>pcr_L,<sp/>and<sp/>the<sp/>intermediate<sp/>matrices<sp/>K˂<sp/>and<sp/>K˃<sp/>are<sp/>stored</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>in<sp/>pcr_U<sp/>and<sp/>pcr_Y,<sp/>before<sp/>solving<sp/>them<sp/>in-place.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Triangular<sp/>solves<sp/>of<sp/>the<sp/>subdiagonal<sp/>blocks<sp/>are<sp/>optionally<sp/>parallelized.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Serial<sp/>PCR<sp/>factorization</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/pcr.tpp<sp/>PCR<sp/>factor<sp/>serial</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Parallel<sp/>PCR<sp/>factorization</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/pcr.tpp<sp/>PCR<sp/>factor</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Algorithm<sp/>8:<sp/>Periodic<sp/>PCR<sp/>factorization<sp/>updates<sp/>by<sp/>a<sp/>block-bidiagonal<sp/>matrix<sp/>{#algorithm-8}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Differences<sp/>compared<sp/>to<sp/>the<sp/>pseudo-code<sp/>in<sp/>the<sp/>paper:</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Updates<sp/>are<sp/>performed<sp/>in-place<sp/>on<sp/>pcr_L,<sp/>pcr_U<sp/>and<sp/>pcr_Y.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>-<sp/>Intermediate<sp/>update<sp/>matrices<sp/>are<sp/>left<sp/>rotated<sp/>in<sp/>memory<sp/>to<sp/>minimize<sp/>the<sp/>number<sp/>of<sp/>rotations</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>required.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@snippet{lineno}<sp/>cyqlone/include/cyqlone/implementation/update.tpp<sp/>PCR<sp/>update</highlight></codeline>
+    </programlisting>
+    <location file="docs/source/doxygen/algorithms.md"/>
+  </compounddef>
+</doxygen>

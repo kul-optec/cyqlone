@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="group__topic-ocp-solvers" kind="group">
+    <compoundname>topic-ocp-solvers</compoundname>
+    <title>Optimal control solvers</title>
+    <innerclass refid="structcyqlone_1_1CyqloneParams" prot="public">cyqlone::CyqloneParams</innerclass>
+    <innerclass refid="structcyqlone_1_1CyqloneSolver" prot="public">cyqlone::CyqloneSolver</innerclass>
+    <briefdescription>
+<para>Solvers for linear systems with optimal control structure. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

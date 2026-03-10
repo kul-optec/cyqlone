@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="platooning_8cpp" kind="file" language="C++">
+    <compoundname>platooning.cpp</compoundname>
+    <includes refid="conversion_8hpp" local="no">cyqlone/conversion.hpp</includes>
+    <includes refid="platooning_8hpp" local="no">cyqlone/qpalm/example-problems/platooning.hpp</includes>
+    <includes refid="zoh_8hpp" local="no">cyqlone/qpalm/example-problems/zoh.hpp</includes>
+    <includes local="no">guanaqo/eigen/view.hpp</includes>
+    <includes local="no">algorithm</includes>
+    <includes local="no">limits</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone/conversion.hpp</label>
+        <link refid="conversion_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>cyqlone/qpalm/example-problems/platooning.hpp</label>
+        <link refid="platooning_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>cyqlone/qpalm/example-problems/zoh.hpp</label>
+        <link refid="zoh_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/example-problems/src/platooning.cpp</label>
+        <link refid="platooning_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>Eigen/Core</label>
+      </node>
+      <node id="16">
+        <label>algorithm</label>
+      </node>
+      <node id="4">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="14">
+        <label>cassert</label>
+      </node>
+      <node id="10">
+        <label>cyqlone/example-problems/export.h</label>
+      </node>
+      <node id="15">
+        <label>guanaqo/eigen/view.hpp</label>
+      </node>
+      <node id="8">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="6">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="17">
+        <label>limits</label>
+      </node>
+      <node id="13">
+        <label>unsupported/Eigen/MatrixFunctions</label>
+      </node>
+      <node id="7">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm_1_1problems">cyqlone::qpalm::problems</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="conversion_8hpp" kindref="compound">cyqlone/conversion.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="platooning_8hpp" kindref="compound">cyqlone/qpalm/example-problems/platooning.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="zoh_8hpp" kindref="compound">cyqlone/qpalm/example-problems/zoh.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/eigen/view.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;algorithm&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;limits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="config_8hpp_1a1f4757b3a02c15cce8aeaa6906e55c17" kindref="member">CYQLONE_NS</ref>(<ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>::qpalm::problems)<sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" refkind="member"><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningProblem" kindref="compound">PlatooningProblem</ref><sp/><ref refid="namespacecyqlone_1_1qpalm_1_1problems_1af4239cf33132e3cc8dc9be009df1350f" kindref="member">platooning</ref>(<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams" kindref="compound">PlatooningParams</ref><sp/>p)<sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="group__linalg__views_1ga2ccef3dcd53320ccda2be9948781c65b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::as_view</ref>;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>inf<sp/>=<sp/>std::numeric_limits&lt;real_t&gt;::infinity();</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>n_vehicle<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">index_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a0b43e23740be9973cabb06551fa569a7" kindref="member">masses</ref>.size());</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref><sp/>ocp{.dim{</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.N_horiz<sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a99b5506c96a0fee3aa95cdef7f3d92d3" kindref="member">N_horiz</ref>,</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.nx<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>2<sp/>*<sp/>n_vehicle,</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.nu<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>n_vehicle,</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ny<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>2<sp/>*<sp/>n_vehicle<sp/>+<sp/>(n_vehicle<sp/>-<sp/>1),</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ny_N<sp/><sp/><sp/><sp/>=<sp/>n_vehicle<sp/>+<sp/>(n_vehicle<sp/>-<sp/>1),</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>}};</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[N,<sp/>nx,<sp/>nu,<sp/>ny,<sp/>ny_N]<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" kindref="member">dim</ref>;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Continuous-time<sp/>dynamics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacecyqlone_1_1qpalm_1_1problems_1a8aefe0780e8354abdf3e5e24c3e48128" kindref="member">eigen_mat</ref><sp/>A<sp/>=<sp/>eigen_mat::Zero(nx,<sp/>nx),<sp/>B<sp/>=<sp/>eigen_mat::Zero(nx,<sp/>nu);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(Eigen::Index<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_vehicle;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>A(2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/><sp/><sp/><sp/><sp/>=<sp/>1;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Velocity<sp/>→<sp/>position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>A(2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1ac81cc8bbaa2da1b7342dfdb0d9bbbb93" kindref="member">friction</ref>;<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Friction</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>B(2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1<sp/>/<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a0b43e23740be9973cabb06551fa569a7" kindref="member">masses</ref>[<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>];<sp/></highlight><highlight class="comment">//<sp/>Accel<sp/>→<sp/>velocity</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ts<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a146ecce5b3ebc178809def4438370946" kindref="member">T_horiz</ref><sp/>/<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a99b5506c96a0fee3aa95cdef7f3d92d3" kindref="member">N_horiz</ref>);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[Ad,<sp/>Bd]<sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1_1problems_1afba022677ff29a053cf23e0a4720da11" kindref="member">discretize_zoh</ref>(A,<sp/>B,<sp/>Ts);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>real_t<sp/>scal<sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a278998f75a9a28795fa59467492856e7" kindref="member">scale_cost</ref><sp/>/<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a99b5506c96a0fee3aa95cdef7f3d92d3" kindref="member">N_horiz</ref>);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Constraints<sp/>rhs</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" kindref="member">b</ref>().set_constant(0);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_vehicle;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" kindref="member">b</ref>(0)(2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/>-</highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">real_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>*<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a637adefd6c549cd259f10f7d12118539" kindref="member">dist_init</ref>;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" kindref="member">b_min</ref>().set_constant(-inf);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" kindref="member">b_max</ref>().set_constant(+inf);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Dynamics<sp/>and<sp/>constraint<sp/>matrices</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>N;<sp/>++i)<sp/>{</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ai<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a80e92e086228f987316f1c8a46d1a213" kindref="member">A</ref>(i),<sp/>Bi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a2a240d539848ef1b9cdb68ce56f172bf" kindref="member">B</ref>(i),<sp/>Ci<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref>(i),<sp/>Di<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a3287504c95654a514de8513e2b21f582" kindref="member">D</ref>(i);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Qi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref>(i),<sp/>Ri<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a4b6c769284d0c9f39a0d799b1455d154" kindref="member">R</ref>(i);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>lbi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" kindref="member">b_min</ref>(i),<sp/>ubi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" kindref="member">b_max</ref>(i);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_vehicle;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ai<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>as_view(Ad);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Bi<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>as_view(Bd);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1;<sp/></highlight><highlight class="comment">//<sp/>Measure<sp/>velocity</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" kindref="member">v_max</ref>;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>+p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" kindref="member">v_max</ref>;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Di(2<sp/>*<sp/>n_vehicle<sp/>-<sp/>1<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/>=<sp/>1;<sp/></highlight><highlight class="comment">//<sp/>Measure<sp/>input</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(2<sp/>*<sp/>n_vehicle<sp/>-<sp/>1<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a71a4b628fd4a6dad01041e374a17a648" kindref="member">F_max</ref>;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(2<sp/>*<sp/>n_vehicle<sp/>-<sp/>1<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/>=<sp/>+p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a71a4b628fd4a6dad01041e374a17a648" kindref="member">F_max</ref>;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>p[0]<sp/>+<sp/>Ts<sp/>v[0]<sp/>≥<sp/>p[1]<sp/>+<sp/>v[1]<sp/>+<sp/>d</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>p[v]<sp/>-<sp/>p[v-1]<sp/>+<sp/>Ts<sp/>(v[k]<sp/>-<sp/>v[k-1])<sp/>≤<sp/>-d</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>2<sp/>*<sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1))<sp/><sp/><sp/><sp/><sp/>=<sp/>-1;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>Ts;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>2<sp/>*<sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1)<sp/>+<sp/>1)<sp/>=<sp/>-Ts;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-inf;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" kindref="member">dist_min</ref>;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>scal<sp/>*<sp/>10;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/>=<sp/>scal<sp/>*<sp/>1;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ri(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>scal<sp/>*<sp/>5;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>Ci<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref>(N),<sp/>Qi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref>(N);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>lbi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" kindref="member">b_min</ref>(N),<sp/>ubi<sp/>=<sp/>ocp.<ref refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" kindref="member">b_max</ref>(N);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_vehicle;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/>=<sp/>1;<sp/></highlight><highlight class="comment">//<sp/>Measure<sp/>velocity</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" kindref="member">v_max</ref>;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>+p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1a2f8210dc4646636458fbe795d639fc68" kindref="member">v_max</ref>;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>p[v]<sp/>-<sp/>p[v-1]<sp/>+<sp/>Ts<sp/>(v[k]<sp/>-<sp/>v[k-1])<sp/>≤<sp/>-d</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>2<sp/>*<sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1))<sp/><sp/><sp/><sp/><sp/>=<sp/>-1;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>Ts;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ci(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>2<sp/>*<sp/>(<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1)<sp/>+<sp/>1)<sp/>=<sp/>-Ts;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lbi(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-inf;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ubi(n_vehicle<sp/>+<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>-<sp/>1,<sp/>0)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>-p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1abd5d627970536543324be1a34283e96c" kindref="member">dist_min</ref>;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>scal<sp/>*<sp/>100;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Qi(2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1,<sp/>2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>1)<sp/>=<sp/>scal<sp/>*<sp/>1;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/>ref(nx<sp/>+<sp/>nu<sp/>+<sp/>nx);</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>=<sp/>0;<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>&lt;<sp/>n_vehicle;<sp/>++<ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ref[2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref>]<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1afa44560fbbbbd9e72ceb56b2c68a083a" kindref="member">p_target</ref>;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ref[2<sp/>*<sp/><ref refid="solve-block-tridiagonal_8cpp_1ac818a8f049bd46d6d6996d28f22de4a9" kindref="member">v</ref><sp/>+<sp/>nx<sp/>+<sp/>nu]<sp/>=<sp/>p.<ref refid="structcyqlone_1_1qpalm_1_1problems_1_1PlatooningParams_1afa44560fbbbbd9e72ceb56b2c68a083a" kindref="member">p_target</ref>;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-ocp-formulations_1ga61795701135500f6aaf49cc698e5976e" kindref="member">reference_to_gradient</ref>(ocp,<sp/>ref);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ocp<sp/>=<sp/>std::move(ocp),</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.ref<sp/>=<sp/>std::move(ref),</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="101"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone::qpalm::problems)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/example-problems/src/platooning.cpp"/>
+  </compounddef>
+</doxygen>

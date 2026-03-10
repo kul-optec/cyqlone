@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::problems::SpringMassProblem</compoundname>
+    <includes refid="spring-mass_8hpp" local="no">cyqlone/qpalm/example-problems/spring-mass.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem_1a5c10891cab55f962cdb9e2679df4b2ce" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref></type>
+        <definition>LinearOCPStorage cyqlone::qpalm::problems::SpringMassProblem::ocp</definition>
+        <argsstring></argsstring>
+        <name>ocp</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassProblem::ocp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="132" column="22" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem_1a9bfbe7b1b19fbc1fe7d5ffa8c7234910" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; real_t &gt;</type>
+        <definition>std::vector&lt;real_t&gt; cyqlone::qpalm::problems::SpringMassProblem::ref</definition>
+        <argsstring></argsstring>
+        <name>ref</name>
+        <qualifiedname>cyqlone::qpalm::problems::SpringMassProblem::ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="133" column="17" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>cyqlone::LinearOCPStorage</label>
+        <link refid="structcyqlone_1_1LinearOCPStorage"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+dim</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+storage</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cyqlone::OCPDim</label>
+        <link refid="structcyqlone_1_1OCPDim"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::problems::SpringMassProblem</label>
+        <link refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+ocp</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+ref</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; real_t &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" line="131" column="1" bodyfile="src/example-problems/include/cyqlone/qpalm/example-problems/spring-mass.hpp" bodystart="131" bodyend="134"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem_1a5c10891cab55f962cdb9e2679df4b2ce" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassProblem</scope><name>ocp</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassProblem_1a9bfbe7b1b19fbc1fe7d5ffa8c7234910" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::problems::SpringMassProblem</scope><name>ref</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

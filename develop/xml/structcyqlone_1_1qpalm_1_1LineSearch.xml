@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1LineSearch" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::LineSearch</compoundname>
+    <innerclass refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" prot="public">cyqlone::qpalm::LineSearch::Result</innerclass>
+    <templateparamlist>
+      <param>
+        <type>class Vec</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" prot="public" static="no">
+        <type>Vec</type>
+        <definition>using cyqlone::qpalm::LineSearch&lt; Vec &gt;::vec_t = Vec</definition>
+        <argsstring></argsstring>
+        <name>vec_t</name>
+        <qualifiedname>cyqlone::qpalm::LineSearch::vec_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="36" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LineSearch_1adbfceb401a1d883e631da54bbaf8d6a8" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1LineSearchSettings" kindref="compound">LineSearchSettings</ref></type>
+        <definition>LineSearchSettings cyqlone::qpalm::LineSearch&lt; Vec &gt;::settings</definition>
+        <argsstring></argsstring>
+        <name>settings</name>
+        <qualifiedname>cyqlone::qpalm::LineSearch::settings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="37" column="24" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1LineSearch_1ad1e43b47a4edae60aedf187f6f1706b2" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt;</type>
+        <definition>std::vector&lt;Breakpoint&gt; cyqlone::qpalm::LineSearch&lt; Vec &gt;::breakpoints</definition>
+        <argsstring></argsstring>
+        <name>breakpoints</name>
+        <qualifiedname>cyqlone::qpalm::LineSearch::breakpoints</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="38" column="17" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="38" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kindref="compound">Result</ref></type>
+        <definition>auto cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</definition>
+        <argsstring>(auto &amp;ctx, auto &amp;backend, real_t η, real_t β, const vec_t &amp;Σ, const vec_t &amp;y, const vec_t &amp;Ad, const vec_t &amp;Ax, const vec_t &amp;b_min, const vec_t &amp;b_max)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>cyqlone::qpalm::LineSearch::operator()</qualifiedname>
+        <param>
+          <type>auto &amp;</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>auto &amp;</type>
+          <declname>backend</declname>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>η</declname>
+          <briefdescription><para><formula id="7">$ \eta = \inprod{d}{\xi} $</formula> </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>real_t</type>
+          <declname>β</declname>
+          <briefdescription><para><formula id="8">$ \beta = \inprod{d}{\grad\tilde f_k(x^{k,\nu})} $</formula> </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref> &amp;</type>
+          <declname>Σ</declname>
+          <briefdescription><para>Penalty factor <formula id="9">$ \Sigma_k $</formula> (diagonal) </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref> &amp;</type>
+          <declname>y</declname>
+          <briefdescription><para>Lagrange multipliers <formula id="10">$ y^k $</formula> </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref> &amp;</type>
+          <declname>Ad</declname>
+          <briefdescription><para>Matrix-vector product <formula id="11">$ A d $</formula> </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref> &amp;</type>
+          <declname>Ax</declname>
+          <briefdescription><para>Matrix-vector product <formula id="12">$ A x^{k,\nu} $</formula> </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref> &amp;</type>
+          <declname>b_min</declname>
+          <briefdescription><para>Constraint lower bound <formula id="13">$ b_\mathrm{min} $</formula> </para>
+</briefdescription>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" kindref="member">vec_t</ref> &amp;</type>
+          <declname>b_max</declname>
+          <briefdescription><para>Constraint upper bound <formula id="14">$ b_\mathrm{max} $</formula> </para>
+</briefdescription>
+        </param>
+        <briefdescription>
+<para>Perform an exact line search on the augmented Lagrangian. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Implements Algorithm 2 in the QPALM paper.</para>
+<para><simplesect kind="return"><para>τ Optimal step size <formula id="6">$ \tau_\star $</formula> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="45" column="12" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="123" bodyend="183"/>
+        <references refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a3b71b2f757fe16a5631fb31ff9efe565" compoundref="breakpoint_8hpp" startline="18" endline="18">cyqlone::qpalm::Breakpoint::α</references>
+        <references refid="structcyqlone_1_1qpalm_1_1BreakpointsResult_1ac56a2f8be122302fb793476a68f1e0f0" compoundref="breakpoint_8hpp" startline="44">cyqlone::qpalm::BreakpointsResult::ab_neg</references>
+        <references refid="structcyqlone_1_1qpalm_1_1BreakpointsResult_1abe3f31fef0fe9ec9df164a59a621c1ce" compoundref="breakpoint_8hpp" startline="43">cyqlone::qpalm::BreakpointsResult::bp</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LineSearch_1ad1e43b47a4edae60aedf187f6f1706b2" compoundref="implementation_2linesearch_8tpp" startline="38">cyqlone::qpalm::LineSearch&lt; Vec &gt;::breakpoints</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" compoundref="implementation_2linesearch_8tpp" startline="77" endline="116">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" compoundref="implementation_2linesearch_8tpp" startline="54" endline="74">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize_base</references>
+        <references refid="namespacecyqlone_1_1qpalm_1acefd63912f9919fa5ab62ac0a305c3f2">cyqlone::qpalm::get_breakpoints</references>
+        <references refid="namespacecyqlone_1_1qpalm_1acc34e5d9c2599830eb0f4f519dc2c791" compoundref="algorithms_8hpp" startline="104" endline="107">cyqlone::qpalm::min_element</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</references>
+        <references refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a7ad314946fc51eb1d2a40f650b75ffbe" compoundref="breakpoint_8hpp" startline="37">cyqlone::qpalm::PartitionedBreakpoints::pos_bp</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LineSearch_1adbfceb401a1d883e631da54bbaf8d6a8" compoundref="implementation_2linesearch_8tpp" startline="37">cyqlone::qpalm::LineSearch&lt; Vec &gt;::settings</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" compoundref="breakpoint_8hpp" startline="17">cyqlone::qpalm::Breakpoint::t</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kindref="compound">Result</ref></type>
+        <definition>auto cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize_base</definition>
+        <argsstring>(ABSum_t a, ABSum_t b, size_t i0, std::span&lt; Breakpoint &gt; pos_bp)</argsstring>
+        <name>find_stepsize_base</name>
+        <qualifiedname>cyqlone::qpalm::LineSearch::find_stepsize_base</qualifiedname>
+        <param>
+          <type><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref></type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref></type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>i0</declname>
+        </param>
+        <param>
+          <type>std::span&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt;</type>
+          <declname>pos_bp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="48" column="19" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="54" bodyend="74"/>
+        <references refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a3b71b2f757fe16a5631fb31ff9efe565" compoundref="breakpoint_8hpp" startline="18" endline="18">cyqlone::qpalm::Breakpoint::α</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" compoundref="implementation_2linesearch_8tpp" startline="54" endline="74">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize_base</references>
+        <references refid="namespacecyqlone_1_1qpalm_1aaa9bd6f0faae51b2d93379a451da5206" compoundref="algorithms_8hpp" startline="17" endline="25">cyqlone::qpalm::sort</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" compoundref="breakpoint_8hpp" startline="17">cyqlone::qpalm::Breakpoint::t</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" compoundref="implementation_2linesearch_8tpp" startline="77" endline="116">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" compoundref="implementation_2linesearch_8tpp" startline="54" endline="74">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize_base</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1LineSearch_1_1Result" kindref="compound">Result</ref></type>
+        <definition>auto cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize</definition>
+        <argsstring>(ABSum_t a, ABSum_t b, size_t i0, std::span&lt; Breakpoint &gt; pos_bp, bool partition_1=true)</argsstring>
+        <name>find_stepsize</name>
+        <qualifiedname>cyqlone::qpalm::LineSearch::find_stepsize</qualifiedname>
+        <param>
+          <type><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref></type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref></type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>i0</declname>
+        </param>
+        <param>
+          <type>std::span&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt;</type>
+          <declname>pos_bp</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>partition_1</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="49" column="19" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="77" bodyend="116"/>
+        <references refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" compoundref="implementation_2linesearch_8tpp" startline="77" endline="116">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize</references>
+        <references refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" compoundref="implementation_2linesearch_8tpp" startline="54" endline="74">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize_base</references>
+        <references refid="namespacecyqlone_1_1qpalm_1af0491991e6f9a32072489c45d934541b" compoundref="algorithms_8hpp" startline="28" endline="32">cyqlone::qpalm::nth_element</references>
+        <references refid="namespacecyqlone_1_1qpalm_1a907fb321c6e4e7fa1375233be5c9f815" compoundref="algorithms_8hpp" startline="37" endline="90">cyqlone::qpalm::partition_min</references>
+        <references refid="structcyqlone_1_1qpalm_1_1Breakpoint_1a094b11f513e341a4a772048859576503" compoundref="breakpoint_8hpp" startline="17">cyqlone::qpalm::Breakpoint::t</references>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" compoundref="implementation_2linesearch_8tpp" startline="77" endline="116">cyqlone::qpalm::LineSearch&lt; Vec &gt;::find_stepsize</referencedby>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" compoundref="implementation_2linesearch_8tpp" startline="123" endline="183">cyqlone::qpalm::LineSearch&lt; Vec &gt;::operator()</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>cyqlone::qpalm::Breakpoint</label>
+        <link refid="structcyqlone_1_1qpalm_1_1Breakpoint"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::LineSearch&lt; Vec &gt;</label>
+        <link refid="structcyqlone_1_1qpalm_1_1LineSearch"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+settings</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+breakpoints</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone::qpalm::LineSearchSettings</label>
+        <link refid="structcyqlone_1_1qpalm_1_1LineSearchSettings"/>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; cyqlone::qpalm::Breakpoint &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" line="35" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/linesearch.tpp" bodystart="35" bodyend="51"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearch_1ad1e43b47a4edae60aedf187f6f1706b2" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearch</scope><name>breakpoints</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearch_1aa66bec6f6a6ef4001ebc7d36604f6a7e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearch</scope><name>find_stepsize</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearch_1a797e329bf07df40fe5e812676f928f99" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearch</scope><name>find_stepsize_base</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearch_1adabd73aeb68da24688d265bd83410c77" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearch</scope><name>operator()</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearch_1adbfceb401a1d883e631da54bbaf8d6a8" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearch</scope><name>settings</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1LineSearch_1a4011f0635bf0fa62ecae607bd1847b2d" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::LineSearch</scope><name>vec_t</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

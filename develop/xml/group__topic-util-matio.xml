@@ -1,0 +1,1077 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="group__topic-util-matio" kind="group">
+    <compoundname>topic-util-matio</compoundname>
+    <title>Exporting and loading .mat files</title>
+    <innerfile refid="matio_8hpp">matio.hpp</innerfile>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="group__topic-util-matio_1ga8e268a5d303978ce26bb366dd8db62e4" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>MatioOpenMode</name>
+        <qualifiedname>cyqlone::MatioOpenMode</qualifiedname>
+        <enumvalue id="group__topic-util-matio_1gga8e268a5d303978ce26bb366dd8db62e4a7a1a5f3e79fdc91edf2f5ead9d66abb4" prot="public">
+          <name>Read</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="group__topic-util-matio_1gga8e268a5d303978ce26bb366dd8db62e4a1129c0e4d43f2d121652a7302712cff6" prot="public">
+          <name>Write</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/matio.hpp" line="28" column="1" bodyfile="src/cyqlone/include/cyqlone/matio.hpp" bodystart="28" bodyend="31"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="group__topic-util-matio_1gac7f041cab5ae3c1471243d06da6f6469" prot="public" static="no">
+        <type>::_mat_t</type>
+        <definition>using cyqlone::mat_t = ::_mat_t</definition>
+        <argsstring></argsstring>
+        <name>mat_t</name>
+        <qualifiedname>cyqlone::mat_t</qualifiedname>
+        <briefdescription>
+<para>Incomplete matio struct type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/matio.hpp" line="24" column="1" bodyfile="src/cyqlone/include/cyqlone/matio.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="group__topic-util-matio_1gaceac871d1342196be7468d2bb3fcd386" prot="public" static="no">
+        <type>std::unique_ptr&lt; mat_t, int(*)(mat_t *)&gt;</type>
+        <definition>typedef std::unique_ptr&lt; mat_t, decltype(&amp;Mat_Close)&gt; cyqlone::MatFilePtr = std::unique_ptr&lt;mat_t, int (*)(mat_t *)&gt;</definition>
+        <argsstring></argsstring>
+        <name>MatFilePtr</name>
+        <qualifiedname>cyqlone::MatFilePtr</qualifiedname>
+        <briefdescription>
+<para>Owning handle to a matio file. The file will be closed when the handle goes out of scope. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/matio.hpp" line="26" column="1" bodyfile="src/cyqlone/include/cyqlone/matio.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="group__topic-util-matio_1ga9a8d93b3cfc96c16fa9c70b969388c50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>MatFilePtr</type>
+        <definition>MatFilePtr cyqlone::open_mat</definition>
+        <argsstring>(const std::filesystem::path &amp;filename, MatioOpenMode mode=MatioOpenMode::Read)</argsstring>
+        <name>open_mat</name>
+        <qualifiedname>cyqlone::open_mat</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>MatioOpenMode</type>
+          <declname>mode</declname>
+          <defval>MatioOpenMode::Read</defval>
+        </param>
+        <briefdescription>
+<para>Opens a .mat file for reading or writing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="exception"><parameteritem>
+<parameternamelist>
+<parametername>runtime_error</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>if the file cannot be opened. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="89" column="12" bodyfile="src/cyqlone/src/matio.cpp" bodystart="89" bodyend="95" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="35" declcolumn="12"/>
+        <references refid="group__topic-util-matio_1gga8e268a5d303978ce26bb366dd8db62e4a1129c0e4d43f2d121652a7302712cff6" compoundref="matio_8hpp" startline="30">cyqlone::Write</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga5b9bfdc6a8d4f53838511888e6724cb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>MatFilePtr</type>
+        <definition>MatFilePtr cyqlone::create_mat</definition>
+        <argsstring>(const std::filesystem::path &amp;filename)</argsstring>
+        <name>create_mat</name>
+        <qualifiedname>cyqlone::create_mat</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+<para>Create and open a new .mat file for writing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="exception"><parameteritem>
+<parameternamelist>
+<parametername>runtime_error</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>if the file cannot be opened. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="97" column="12" bodyfile="src/cyqlone/src/matio.cpp" bodystart="97" bodyend="102" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="39" declcolumn="12"/>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a14f468c71f063f09688477ea3fd75bb8" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="320" endline="333">export_problem</referencedby>
+        <referencedby refid="test-pcr_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="test-pcr_8cpp" startline="137" endline="201">main</referencedby>
+        <referencedby refid="solve-block-tridiagonal_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="solve-block-tridiagonal_8cpp" startline="30" endline="111">main</referencedby>
+        <referencedby refid="group__topic-util-matio_1gaf1ab96eebb1218ba8573c6d61ec461bf" compoundref="matio_8cpp" startline="523" endline="526">cyqlone::ocp_dump_mat</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, float value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="122" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="122" bodyend="124" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="41" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+        <referencedby refid="namespacecyqlone_1a27b68eeeac46e7c830d14cdd4e8c83d7" compoundref="matio_8cpp" startline="173" endline="190">cyqlone::add_to_mat_impl</referencedby>
+        <referencedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp_1a14f468c71f063f09688477ea3fd75bb8" compoundref="benchmarks_2cyqpalm_2spring-mass_8cpp" startline="320" endline="333">export_problem</referencedby>
+        <referencedby refid="test-pcr_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" compoundref="test-pcr_8cpp" startline="137" endline="201">main</referencedby>
+        <referencedby refid="solve-block-tridiagonal_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" compoundref="solve-block-tridiagonal_8cpp" startline="30" endline="111">main</referencedby>
+        <referencedby refid="group__topic-util-matio_1gaf1ab96eebb1218ba8573c6d61ec461bf" compoundref="matio_8cpp" startline="523" endline="526">cyqlone::ocp_dump_mat</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga42854ade7f449f8478e5e3015d800a30" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, double value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="126" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="126" bodyend="128" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="43" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga98ba9fcc8ae30f52267a6ed391911aa5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, short value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>short</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="146" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="146" bodyend="148" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="45" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga318cacc90af5fd74e3949f88a3a0c7e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, int value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="150" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="150" bodyend="152" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="47" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga3dd29ca4a01d166d48251c7a5ea8ce34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, long value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="154" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="154" bodyend="156" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="49" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gaea09b40b9de36a89d1c91e595170c7c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, long long value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>long long</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="158" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="158" bodyend="160" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="51" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga60956f86298592566c35039d92a5edc3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, unsigned short value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>unsigned short</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="130" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="130" bodyend="132" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="53" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gafecae51b359b38c163783aba289d7218" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, unsigned int value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="134" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="134" bodyend="136" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="55" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga1537cff5aed44fd0e58c4fee61675161" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, unsigned long value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>unsigned long</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="138" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="138" bodyend="140" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="57" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga07ddf7772fe145d98e1ebdf2d9677cc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, unsigned long long value)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>unsigned long long</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Add a value to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="142" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="142" bodyend="144" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="59" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gaaf4aac1a36819fc07e647af186b19e76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, guanaqo::MatrixView&lt; const double, index_t &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const double, index_t &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a matrix to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="162" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="162" bodyend="165" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="61" declcolumn="6"/>
+        <references refid="namespacecyqlone_1a8c332e0901eb510e4793c517343b6f58" compoundref="matio_8cpp" startline="105" endline="120">cyqlone::add_to_mat_impl</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gad4f62a7347cceafe8574c7e741f991cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, guanaqo::MatrixView&lt; const float, index_t &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type><ref refid="structguanaqo_1_1MatrixView" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView</ref>&lt; const float, index_t &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a matrix to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="167" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="167" bodyend="170" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="64" declcolumn="6"/>
+        <references refid="namespacecyqlone_1a8c332e0901eb510e4793c517343b6f58" compoundref="matio_8cpp" startline="105" endline="120">cyqlone::add_to_mat_impl</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga7f4118c8f4b3b9fd0dccfc578989e2b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, batmat::matrix::View&lt; const double, index_t &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type><ref refid="structbatmat_1_1matrix_1_1View" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::View</ref>&lt; const double, index_t &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a batch of matrices to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="192" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="192" bodyend="195" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="67" declcolumn="6"/>
+        <references refid="namespacecyqlone_1a8c332e0901eb510e4793c517343b6f58" compoundref="matio_8cpp" startline="105" endline="120">cyqlone::add_to_mat_impl</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gadc1a730925581865e91ec60b5c2d1cc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, batmat::matrix::View&lt; const float, index_t &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type><ref refid="structbatmat_1_1matrix_1_1View" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::View</ref>&lt; const float, index_t &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a batch of matrices to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="197" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="197" bodyend="200" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="70" declcolumn="6"/>
+        <references refid="namespacecyqlone_1a8c332e0901eb510e4793c517343b6f58" compoundref="matio_8cpp" startline="105" endline="120">cyqlone::add_to_mat_impl</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga81a3620a6c3dabf0e6bfd8f56960c300" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const float &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const float &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="202" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="202" bodyend="204" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="73" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga581b8a2280d7eff0b756086643618db8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const double &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const double &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="206" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="206" bodyend="208" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="75" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga8ce5583b813db30a7ff21fb2568a3b3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const unsigned short &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const unsigned short &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="210" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="210" bodyend="213" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="77" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga2a4285ac5b76e2829f06405eeaa7f484" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const unsigned int &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const unsigned int &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="215" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="215" bodyend="217" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="79" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gadeddae83552dc401d00f90d86df1e610" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const unsigned long &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const unsigned long &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="219" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="219" bodyend="221" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="81" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gac2fda9834d3303e31d9fb598ef949809" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const unsigned long long &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const unsigned long long &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="223" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="223" bodyend="226" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="83" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gaeac3d6a0248c962a3d5b29a91a0d08d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const short &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const short &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="228" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="228" bodyend="230" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="85" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gaa20a79941500e76a4777644e83df8aa0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const int &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const int &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="232" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="232" bodyend="234" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="87" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga9007be7514cd0af283eb395d3396acc2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const long &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const long &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="236" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="236" bodyend="238" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="89" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gafb115ff7b2443481e6480f95caa3aaa0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; const long long &gt; data)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const long long &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Add a vector to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="240" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="240" bodyend="242" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="91" declcolumn="6"/>
+        <references refid="namespacecyqlone_1af0a5391e8b15b281535db221cbcc0ddd" compoundref="matio_8cpp" startline="80" endline="87">cyqlone::write_tensor</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gae79d8af02b2c40cfa0b8edd01ff7fa94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, const SparseMatrix &amp;matrix)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>const SparseMatrix &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Add a sparse matrix to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>On the Python side, you can use the following code to load the sparse matrix: <programlisting filename=".py"><codeline><highlight class="keyword">from</highlight><highlight class="normal"><sp/>scipy.io<sp/></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>loadmat</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">from</highlight><highlight class="normal"><sp/>scipy.sparse<sp/></highlight><highlight class="keyword">import</highlight><highlight class="normal"><sp/>coo_matrix</highlight></codeline>
+<codeline><highlight class="normal">mat<sp/>=<sp/>loadmat(</highlight><highlight class="stringliteral">&quot;file.mat&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal">data<sp/>=<sp/>mat[</highlight><highlight class="stringliteral">&quot;varname&quot;</highlight><highlight class="normal">][0,<sp/>0]</highlight></codeline>
+<codeline><highlight class="normal">shape<sp/>=<sp/>data[</highlight><highlight class="stringliteral">&quot;num_rows&quot;</highlight><highlight class="normal">].item(),<sp/>data[</highlight><highlight class="stringliteral">&quot;num_cols&quot;</highlight><highlight class="normal">].item()</highlight></codeline>
+<codeline><highlight class="normal">rows<sp/>=<sp/>data[</highlight><highlight class="stringliteral">&quot;row_indices&quot;</highlight><highlight class="normal">].flatten()</highlight></codeline>
+<codeline><highlight class="normal">cols<sp/>=<sp/>data[</highlight><highlight class="stringliteral">&quot;col_indices&quot;</highlight><highlight class="normal">].flatten()</highlight></codeline>
+<codeline><highlight class="normal">values<sp/>=<sp/>data[</highlight><highlight class="stringliteral">&quot;values&quot;</highlight><highlight class="normal">].flatten()</highlight></codeline>
+<codeline><highlight class="normal">matrix<sp/>=<sp/>coo_matrix((values,<sp/>(rows,<sp/>cols)),<sp/>shape=shape)</highlight></codeline>
+</programlisting> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="244" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="244" bodyend="280" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="106" declcolumn="6"/>
+        <references refid="structcyqlone_1_1SparseMatrix_1a4d79e8a7c7688a17c4989b2a8f44a075" compoundref="sparse_8hpp" startline="27">cyqlone::SparseMatrix::row_indices</references>
+        <references refid="structcyqlone_1_1SparseMatrix_1affcc16b1597ec5f4726e480f16afecc0" compoundref="sparse_8hpp" startline="28">cyqlone::SparseMatrix::values</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga043f9e47579e7bf1529ad7baa0c86a12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::add_to_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>add_to_mat</name>
+        <qualifiedname>cyqlone::add_to_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>const LinearOCPStorage &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+<para>Add the data from a <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> to an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="282" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="282" bodyend="349" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="108" declcolumn="6"/>
+        <references refid="group__topic-linalg_1ga9df61b993f7e79ad21eddb76b4c2089e">batmat::linalg::copy</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" compoundref="ocp_8hpp" startline="38" endline="38">cyqlone::LinearOCPStorage::dim</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">cyqlone::LinearOCPStorage::H</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::read_from_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, LinearOCPStorage &amp;ocp)</argsstring>
+        <name>read_from_mat</name>
+        <qualifiedname>cyqlone::read_from_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>LinearOCPStorage &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+<para>Load a <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> from a .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="365" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="365" bodyend="479" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="110" declcolumn="6"/>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" compoundref="ocp_8hpp" startline="116" endline="126">cyqlone::LinearOCPStorage::AB</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" compoundref="ocp_8hpp" startline="251" endline="259">cyqlone::LinearOCPStorage::b</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" compoundref="ocp_8hpp" startline="283" endline="292">cyqlone::LinearOCPStorage::b_max</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" compoundref="ocp_8hpp" startline="267" endline="275">cyqlone::LinearOCPStorage::b_min</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" compoundref="ocp_8hpp" startline="106" endline="110">cyqlone::LinearOCPStorage::C</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" compoundref="ocp_8hpp" startline="95" endline="105">cyqlone::LinearOCPStorage::CD</references>
+        <references refid="group__topic-linalg_1ga9df61b993f7e79ad21eddb76b4c2089e">batmat::linalg::copy</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" compoundref="ocp_8hpp" startline="64" endline="74">cyqlone::LinearOCPStorage::H</references>
+        <references refid="group__strings_1ga1aadd313c05b1719f6e161a1f8e0e8f3">guanaqo::join</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" compoundref="ocp_8hpp" startline="75" endline="79">cyqlone::LinearOCPStorage::Q</references>
+        <references refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" compoundref="ocp_8hpp" startline="225" endline="233">cyqlone::LinearOCPStorage::qr</references>
+        <references refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</references>
+        <references refid="namespacecyqlone_1a5ee0a358b384d4ffadc58319d367a3c7" compoundref="matio_8cpp" startline="351" endline="363">cyqlone::validate_mat_var</references>
+        <referencedby refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga710eb1987fa4f8b1fda296b05fdfc685" compoundref="matio_8cpp" startline="499" endline="505">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga6d5e9459f93f03c070fed01a07cb66ba" compoundref="matio_8cpp" startline="491" endline="497">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga6f27d652223be08a963b98316c4b7b45" compoundref="matio_8cpp" startline="515" endline="521">cyqlone::read_from_mat</referencedby>
+        <referencedby refid="group__topic-util-matio_1ga8400d97982852012a2f51f369a0da870" compoundref="matio_8cpp" startline="507" endline="513">cyqlone::read_from_mat</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga8400d97982852012a2f51f369a0da870" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::read_from_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::vector&lt; float &gt; &amp;data)</argsstring>
+        <name>read_from_mat</name>
+        <qualifiedname>cyqlone::read_from_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; float &gt; &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Load a vector from an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="507" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="507" bodyend="513" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="112" declcolumn="6"/>
+        <references refid="namespacecyqlone_1a62f2112e792f3d024ec5d651ed6fd94a" compoundref="matio_8cpp" startline="481" endline="489">cyqlone::open_vector_var</references>
+        <references refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga6f27d652223be08a963b98316c4b7b45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::read_from_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::vector&lt; double &gt; &amp;data)</argsstring>
+        <name>read_from_mat</name>
+        <qualifiedname>cyqlone::read_from_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; double &gt; &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Load a vector from an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="515" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="515" bodyend="521" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="114" declcolumn="6"/>
+        <references refid="namespacecyqlone_1a62f2112e792f3d024ec5d651ed6fd94a" compoundref="matio_8cpp" startline="481" endline="489">cyqlone::open_vector_var</references>
+        <references refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga6d5e9459f93f03c070fed01a07cb66ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::read_from_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; float &gt; data)</argsstring>
+        <name>read_from_mat</name>
+        <qualifiedname>cyqlone::read_from_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; float &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Load a vector from an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="491" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="491" bodyend="497" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="116" declcolumn="6"/>
+        <references refid="namespacecyqlone_1a62f2112e792f3d024ec5d651ed6fd94a" compoundref="matio_8cpp" startline="481" endline="489">cyqlone::open_vector_var</references>
+        <references refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1ga710eb1987fa4f8b1fda296b05fdfc685" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::read_from_mat</definition>
+        <argsstring>(mat_t *mat, const std::string &amp;varname, std::span&lt; double &gt; data)</argsstring>
+        <name>read_from_mat</name>
+        <qualifiedname>cyqlone::read_from_mat</qualifiedname>
+        <param>
+          <type>mat_t *</type>
+          <declname>mat</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>varname</declname>
+        </param>
+        <param>
+          <type>std::span&lt; double &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Load a vector from an open .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="499" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="499" bodyend="505" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="118" declcolumn="6"/>
+        <references refid="namespacecyqlone_1a62f2112e792f3d024ec5d651ed6fd94a" compoundref="matio_8cpp" startline="481" endline="489">cyqlone::open_vector_var</references>
+        <references refid="group__topic-util-matio_1ga9811702bc5a357d1064eb05bff17d4b6" compoundref="matio_8cpp" startline="365" endline="479">cyqlone::read_from_mat</references>
+      </memberdef>
+      <memberdef kind="function" id="group__topic-util-matio_1gaf1ab96eebb1218ba8573c6d61ec461bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::ocp_dump_mat</definition>
+        <argsstring>(const std::filesystem::path &amp;filename, const LinearOCPStorage &amp;ocp)</argsstring>
+        <name>ocp_dump_mat</name>
+        <qualifiedname>cyqlone::ocp_dump_mat</qualifiedname>
+        <param>
+          <type>const std::filesystem::path &amp;</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>const LinearOCPStorage &amp;</type>
+          <declname>ocp</declname>
+        </param>
+        <briefdescription>
+<para>Dump the data from a <ref refid="structcyqlone_1_1LinearOCPStorage" kindref="compound">LinearOCPStorage</ref> to a new .mat file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="523" column="6" bodyfile="src/cyqlone/src/matio.cpp" bodystart="523" bodyend="526" declfile="src/cyqlone/include/cyqlone/matio.hpp" declline="120" declcolumn="6"/>
+        <references refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" compoundref="matio_8cpp" startline="122" endline="124">cyqlone::add_to_mat</references>
+        <references refid="group__topic-util-matio_1ga5b9bfdc6a8d4f53838511888e6724cb8" compoundref="matio_8cpp" startline="97" endline="102">cyqlone::create_mat</references>
+        <references refid="group__topic-util-matio_1gaf1ab96eebb1218ba8573c6d61ec461bf" compoundref="matio_8cpp" startline="523" endline="526">cyqlone::ocp_dump_mat</references>
+        <referencedby refid="group__topic-util-matio_1gaf1ab96eebb1218ba8573c6d61ec461bf" compoundref="matio_8cpp" startline="523" endline="526">cyqlone::ocp_dump_mat</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Functions for exporting and loading matrices and OCP data to and from .mat files. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

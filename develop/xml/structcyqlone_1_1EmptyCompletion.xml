@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1EmptyCompletion" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::EmptyCompletion</compoundname>
+    <includes refid="barrier_8hpp" local="no">cyqlone/barrier.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1EmptyCompletion_1ae966a81a50062589cf052e3173e87555" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void cyqlone::EmptyCompletion::operator()</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator()</name>
+        <qualifiedname>cyqlone::EmptyCompletion::operator()</qualifiedname>
+        <briefdescription>
+<para>Does nothing. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="30" column="10" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>No-op completion function for the <ref refid="classcyqlone_1_1TreeBarrier" kindref="compound">TreeBarrier</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::EmptyCompletion</label>
+        <link refid="structcyqlone_1_1EmptyCompletion"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/include/cyqlone/barrier.hpp" line="29" column="1" bodyfile="src/cyqlone/include/cyqlone/barrier.hpp" bodystart="29" bodyend="31"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1EmptyCompletion_1ae966a81a50062589cf052e3173e87555" prot="public" virt="non-virtual"><scope>cyqlone::EmptyCompletion</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

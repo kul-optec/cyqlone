@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::CyQPALMBackendStats</compoundname>
+    <includes refid="ocp-backend-cyqlone_8hpp" local="no">cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats_1ae3d57c48a5bcfe825b3100c5102c2c19" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::CyQPALMBackendStats::num_updates</definition>
+        <argsstring></argsstring>
+        <name>num_updates</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendStats::num_updates</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="45" column="13" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats_1af567449d5e242199aeb87353eccee6d8" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::CyQPALMBackendStats::rank_updates</definition>
+        <argsstring></argsstring>
+        <name>rank_updates</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendStats::rank_updates</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="46" column="13" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats_1a7cb6ec6aec26e9353537758a13fe55d1" prot="public" static="no" mutable="no">
+        <type>index_t</type>
+        <definition>index_t cyqlone::qpalm::CyQPALMBackendStats::num_factor</definition>
+        <argsstring></argsstring>
+        <name>num_factor</name>
+        <qualifiedname>cyqlone::qpalm::CyQPALMBackendStats::num_factor</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="47" column="13" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::CyQPALMBackendStats</label>
+        <link refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" line="44" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/backends/ocp-backend-cyqlone.hpp" bodystart="44" bodyend="48"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats_1a7cb6ec6aec26e9353537758a13fe55d1" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendStats</scope><name>num_factor</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats_1ae3d57c48a5bcfe825b3100c5102c2c19" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendStats</scope><name>num_updates</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1CyQPALMBackendStats_1af567449d5e242199aeb87353eccee6d8" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::CyQPALMBackendStats</scope><name>rank_updates</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

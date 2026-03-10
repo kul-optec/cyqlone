@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="ocp_8cpp" kind="file" language="C++">
+    <compoundname>ocp.cpp</compoundname>
+    <includes refid="ocp_8hpp" local="no">cyqlone/ocp.hpp</includes>
+    <includes refid="reduce_8hpp" local="no">cyqlone/reduce.hpp</includes>
+    <includes local="no">guanaqo/blas/hl-blas-interface.hpp</includes>
+    <includes local="no">limits</includes>
+    <includes local="no">numeric</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>cyqlone/reduce.hpp</label>
+        <link refid="reduce_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/src/ocp.cpp</label>
+        <link refid="ocp_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="8">
+        <label>batmat/simd.hpp</label>
+      </node>
+      <node id="9">
+        <label>cmath</label>
+      </node>
+      <node id="10">
+        <label>guanaqo/blas/hl-blas-interface.hpp</label>
+      </node>
+      <node id="5">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="11">
+        <label>limits</label>
+      </node>
+      <node id="12">
+        <label>numeric</label>
+      </node>
+      <node id="6">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ocp_8hpp" kindref="compound">cyqlone/ocp.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="reduce_8hpp" kindref="compound">cyqlone/reduce.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/blas/hl-blas-interface.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;limits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;numeric&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref><sp/>{</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10" refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a477befd0b7ebf9341d399fa43d4e6176" kindref="member">LinearOCPStorage::compute_kkt_error</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1_1Solution" kindref="compound">Solution</ref><sp/>&amp;sol)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>-&gt;<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1_1KKTError" kindref="compound">KKTError</ref><sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::clamp;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[N,<sp/>nx,<sp/>nu,<sp/>ny,<sp/>ny_N]<sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1af6e9e4a08238975565a9f2769e5fc121" kindref="member">dim</ref>;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;real_t&gt;<sp/>dual_residual_sto(sol.solution.size());</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>dual_residual<sp/>=<sp/><ref refid="structguanaqo_1_1MatrixView_1aca1731674c012b0c6a295703172f189b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView&lt;real_t, index_t&gt;::as_column</ref>(dual_residual_sto);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>x<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structguanaqo_1_1MatrixView_1aca1731674c012b0c6a295703172f189b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView&lt;const real_t, index_t&gt;::as_column</ref>(sol.solution),</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>y<sp/>=<sp/><ref refid="structguanaqo_1_1MatrixView_1aca1731674c012b0c6a295703172f189b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView&lt;const real_t, index_t&gt;::as_column</ref>(sol.inequality_multipliers),</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>λ<sp/>=<sp/><ref refid="structguanaqo_1_1MatrixView_1aca1731674c012b0c6a295703172f189b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView&lt;const real_t, index_t&gt;::as_column</ref>(sol.equality_multipliers);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Stationarity</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>dual_residual<sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1ad245c03b13212aaa2289c075db5896cd" kindref="member">qr</ref>();</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>N;<sp/>++j)<sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>xuj<sp/>=<sp/>x.middle_rows(j<sp/>*<sp/>(nx<sp/>+<sp/>nu),<sp/>nx<sp/>+<sp/>nu),<sp/>λj<sp/>=<sp/>λ.middle_rows(j<sp/>*<sp/>nx,<sp/>nx),</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>λj_next<sp/>=<sp/>λ.middle_rows((j<sp/>+<sp/>1)<sp/>*<sp/>nx,<sp/>nx),<sp/>yj<sp/>=<sp/>y.middle_rows(j<sp/>*<sp/>ny,<sp/>ny);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>rj<sp/>=<sp/>dual_residual.middle_rows(j<sp/>*<sp/>(nx<sp/>+<sp/>nu),<sp/>nx<sp/>+<sp/>nu);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gac9091441d928e985a0bdcd8170bf3d86" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xsymv_L</ref>(real_t{1},<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a59af5d28ff7e416d02a97f2ed80bfbe3" kindref="member">H</ref>(j),<sp/>xuj,<sp/>real_t{1},<sp/>rj);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gaed74d5df153a525f319dd183aee84622" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xgemv_T</ref>(real_t{1},<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" kindref="member">AB</ref>(j),<sp/>λj_next,<sp/>real_t{1},<sp/>rj);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ny<sp/>&gt;<sp/>0)</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gaed74d5df153a525f319dd183aee84622" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xgemv_T</ref>(real_t{1},<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" kindref="member">CD</ref>(j),<sp/>yj,<sp/>real_t{1},<sp/>rj);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>nx;<sp/>++i)</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rj(i,<sp/>0)<sp/>-=<sp/>λj(i,<sp/>0);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>xN<sp/>=<sp/>x.bottom_rows(nx),<sp/>λN<sp/>=<sp/>λ.bottom_rows(nx),<sp/>yN<sp/>=<sp/>y.bottom_rows(ny_N);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>rN<sp/>=<sp/>dual_residual.bottom_rows(nx);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gac9091441d928e985a0bdcd8170bf3d86" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xsymv_L</ref>(real_t{1},<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7d67863311c04bf6d04dff4ffc0501a8" kindref="member">Q</ref>(N),<sp/>xN,<sp/>real_t{1},<sp/>rN);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ny_N<sp/>&gt;<sp/>0)</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gaed74d5df153a525f319dd183aee84622" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xgemv_T</ref>(real_t{1},<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref>(N),<sp/>yN,<sp/>real_t{1},<sp/>rN);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>nx;<sp/>++i)</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rN(i,<sp/>0)<sp/>-=<sp/>λN(i,<sp/>0);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref><sp/>=<sp/><ref refid="structcyqlone_1_1norms" kindref="compound">cyqlone::norms&lt;real_t&gt;</ref>{};</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>stat_norm<sp/><sp/><sp/>=<sp/>std::accumulate(dual_residual.data,<sp/>dual_residual.data<sp/>+<sp/>dual_residual.rows,</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>.zero(),<sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Inequality<sp/>constraints</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>ineq_res_sto<sp/>=<sp/>std::vector&lt;real_t&gt;(sol.inequality_multipliers.size());</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>ineq_res<sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structguanaqo_1_1MatrixView_1aca1731674c012b0c6a295703172f189b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView&lt;real_t, index_t&gt;::as_column</ref>(ineq_res_sto);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>compl_norm<sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>.zero();</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::fmax;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::fmin;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>eps<sp/>=<sp/>std::numeric_limits&lt;real_t&gt;::epsilon(),<sp/>big<sp/>=<sp/>1<sp/>/<sp/>(eps<sp/>*<sp/>eps);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>N;<sp/>++j)<sp/>{</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>xuj<sp/>=<sp/>x.middle_rows(j<sp/>*<sp/>(nx<sp/>+<sp/>nu),<sp/>nx<sp/>+<sp/>nu),<sp/>yj<sp/>=<sp/>y.middle_rows(j<sp/>*<sp/>ny,<sp/>ny);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>lbj<sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" kindref="member">b_min</ref>(j),<sp/>ubj<sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" kindref="member">b_max</ref>(j);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>cj<sp/>=<sp/>ineq_res.middle_rows(j<sp/>*<sp/>ny,<sp/>ny);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ny<sp/>&gt;<sp/>0)</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gaccc9fb68863497d4cc452d36057781bf" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xgemv_N</ref>(real_t{1},<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a2d7427bf59ec58926b372466a082066a" kindref="member">CD</ref>(j),<sp/>xuj,<sp/>real_t{-1},<sp/>cj);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>ny;<sp/>++i)<sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>compl_norm<sp/>=</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>(compl_norm,<sp/>yj(i,<sp/>0)<sp/>&gt;<sp/>0<sp/>?<sp/>yj(i,<sp/>0)<sp/>*<sp/>(cj(i,<sp/>0)<sp/>-<sp/>fmin(ubj(i,<sp/>0),<sp/>+big))</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>yj(i,<sp/>0)<sp/>*<sp/>(cj(i,<sp/>0)<sp/>-<sp/>fmax(lbj(i,<sp/>0),<sp/>-big)));</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cj(i,<sp/>0)<sp/>-=<sp/><ref refid="group__topic-linalg_1gacd0f6a1148300c8895b047baafd80619" kindref="member">clamp</ref>(cj(i,<sp/>0),<sp/>lbj(i,<sp/>0),<sp/>ubj(i,<sp/>0));</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>cN<sp/>=<sp/>ineq_res.bottom_rows(ny_N);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ny_N<sp/>&gt;<sp/>0)</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gaccc9fb68863497d4cc452d36057781bf" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xgemv_N</ref>(real_t{1},<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a7aefb81825e44d5526b906ca37d66c23" kindref="member">C</ref>(N),<sp/>xN,<sp/>real_t{-1},<sp/>cN);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>lbN<sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a403b4636df1f0e24a1c3e69b9f956513" kindref="member">b_min</ref>().bottom_rows(ny_N),<sp/>ubN<sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a879debd68bbc90316317761550b5b797" kindref="member">b_max</ref>().bottom_rows(ny_N);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>ny_N;<sp/>++i)<sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>compl_norm<sp/>=</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>(compl_norm,<sp/>yN(i,<sp/>0)<sp/>&gt;<sp/>0<sp/>?<sp/>yN(i,<sp/>0)<sp/>*<sp/>(cN(i,<sp/>0)<sp/>-<sp/>fmin(ubN(i,<sp/>0),<sp/>+big))</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>yN(i,<sp/>0)<sp/>*<sp/>(cN(i,<sp/>0)<sp/>-<sp/>fmax(lbN(i,<sp/>0),<sp/>-big)));</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cN(i,<sp/>0)<sp/>-=<sp/><ref refid="group__topic-linalg_1gacd0f6a1148300c8895b047baafd80619" kindref="member">clamp</ref>(cN(i,<sp/>0),<sp/>lbN(i,<sp/>0),<sp/>ubN(i,<sp/>0));</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>ineq_norm<sp/>=</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::accumulate(ineq_res.data,<sp/>ineq_res.data<sp/>+<sp/>ineq_res.rows,<sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>.zero(),<sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Complementarity:<sp/>lb<sp/>-<sp/>Cx<sp/>&lt;=<sp/>0<sp/><sp/><sp/><sp/>and<sp/><sp/><sp/><sp/>Cx<sp/>-<sp/>ub<sp/>&lt;=<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Equality<sp/>constraints</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>eq_res_sto<sp/>=<sp/>std::vector&lt;real_t&gt;(sol.equality_multipliers.size());</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>eq_res<sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structguanaqo_1_1MatrixView_1aca1731674c012b0c6a295703172f189b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::MatrixView&lt;real_t, index_t&gt;::as_column</ref>(eq_res_sto);</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>eq_res<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1a48a1dec77ab4f51bf1e4f179fa63299b" kindref="member">b</ref>();</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;=<sp/>N;<sp/>++j)<sp/>{</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>xj<sp/>=<sp/>x.middle_rows(j<sp/>*<sp/>(nx<sp/>+<sp/>nu),<sp/>nx);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>cj<sp/>=<sp/>eq_res.middle_rows(j<sp/>*<sp/>nx,<sp/>nx);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(index_t<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>nx;<sp/>++i)</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cj(i,<sp/>0)<sp/>-=<sp/>xj(i,<sp/>0);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(j<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>xu_prev<sp/>=<sp/>x.middle_rows((j<sp/>-<sp/>1)<sp/>*<sp/>(nx<sp/>+<sp/>nu),<sp/>nx<sp/>+<sp/>nu);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__linalg__blas__hl_1gaccc9fb68863497d4cc452d36057781bf" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::blas::xgemv_N</ref>(real_t{1},<sp/><ref refid="structcyqlone_1_1LinearOCPStorage_1aaece1976d63161b367c0c755f576774e" kindref="member">AB</ref>(j<sp/>-<sp/>1),<sp/>xu_prev,<sp/>real_t{1},<sp/>cj);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>eq_norm<sp/>=<sp/>std::accumulate(eq_res.data,<sp/>eq_res.data<sp/>+<sp/>eq_res.rows,<sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>.zero(),<sp/><ref refid="structcyqlone_1_1norms" kindref="compound">norms</ref>);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.stationarity<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>stat_norm.norm_inf(),</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.inequality_residual<sp/>=<sp/>ineq_norm.norm_inf(),</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.equality_residual<sp/><sp/><sp/>=<sp/>eq_norm.norm_inf(),</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.complementarity<sp/><sp/><sp/><sp/><sp/>=<sp/>compl_norm.norm_inf(),</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="99"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/src/ocp.cpp"/>
+  </compounddef>
+</doxygen>

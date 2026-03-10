@@ -1,0 +1,808 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone::qpalm::problems::SpringMassParams Struct Reference</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams.html','','structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">cyqlone::qpalm::problems::SpringMassParams Struct Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="spring-mass_8hpp_source.html">cyqlone/qpalm/example-problems/spring-mass.hpp</a>&gt;</code></p>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="benchmarks_2cyqpalm_2spring-mass_8cpp-example.html#_a38">benchmarks/cyqpalm/spring-mass.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00011">11</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a18d1032c9ae1e2b5bbe9df30c50413f1" id="r_a18d1032c9ae1e2b5bbe9df30c50413f1"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1">ActuatorPlacement</a> { <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849">IndividualActuators</a>
+, <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1a30d42f40d22544857de9a609caf07ae2">RandomActuators</a>
+, <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1a617eba72fd8a383f9f58874e67c9e912">RandomPairsOfActuators</a>
+, <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1a9ed41af8dca64bf2fe5d84464f710060">WangBoydActuators</a>
+ }</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ac8f9cdf3a81a4bd2ff3b8f01143035af" id="r_ac8f9cdf3a81a4bd2ff3b8f01143035af"><td class="memItemLeft">static <a class="el" href="structSpringMassParams.html">SpringMassParams</a>&#160;</td><td class="memItemRight"><a class="el" href="#ac8f9cdf3a81a4bd2ff3b8f01143035af">wang_boyd_2008</a> (index_t n_masses, index_t <a class="el" href="#af6edc6dec7fa7b2a9e15766d9748f9b4">N_horiz</a>=30, uint64_t <a class="el" href="#a6c6b090dc45b6c7e373a408fbefdbe54">seed</a>=0)</td></tr>
+<tr class="memitem:a2c47e72483a5afacffa1fb7449ede6b5" id="r_a2c47e72483a5afacffa1fb7449ede6b5"><td class="memItemLeft">static <a class="el" href="structSpringMassParams.html">SpringMassParams</a>&#160;</td><td class="memItemRight"><a class="el" href="#a2c47e72483a5afacffa1fb7449ede6b5">wang_boyd_2008_width</a> (index_t n_masses, index_t <a class="el" href="#af6edc6dec7fa7b2a9e15766d9748f9b4">N_horiz</a>=30, uint64_t <a class="el" href="#a6c6b090dc45b6c7e373a408fbefdbe54">seed</a>=0, double steady_state_spring_length=0.1)</td></tr>
+<tr class="memitem:ac85087e18caea8b4d4b755e273ae740d" id="r_ac85087e18caea8b4d4b755e273ae740d"><td class="memItemLeft">static <a class="el" href="structSpringMassParams.html">SpringMassParams</a>&#160;</td><td class="memItemRight"><a class="el" href="#ac85087e18caea8b4d4b755e273ae740d">domahidi_2012</a> (index_t n_masses, index_t <a class="el" href="#af6edc6dec7fa7b2a9e15766d9748f9b4">N_horiz</a>, uint64_t <a class="el" href="#a6c6b090dc45b6c7e373a408fbefdbe54">seed</a>=0)</td></tr>
+<tr class="memitem:abc65cdb2b4298fb3a0324b5aeaa81e8f" id="r_abc65cdb2b4298fb3a0324b5aeaa81e8f"><td class="memItemLeft">static <a class="el" href="structSpringMassParams.html">SpringMassParams</a>&#160;</td><td class="memItemRight"><a class="el" href="#abc65cdb2b4298fb3a0324b5aeaa81e8f">active_state_constr</a> (index_t n_masses=18, index_t <a class="el" href="#af6edc6dec7fa7b2a9e15766d9748f9b4">N_horiz</a>=256, uint64_t <a class="el" href="#a6c6b090dc45b6c7e373a408fbefdbe54">seed</a>=0)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a1dba013a3d54b283f9a36f97bd5f1f2e" id="r_a1dba013a3d54b283f9a36f97bd5f1f2e"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a1dba013a3d54b283f9a36f97bd5f1f2e">friction</a> = 0</td></tr>
+<tr class="memdesc:a1dba013a3d54b283f9a36f97bd5f1f2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">friction coefficient  <br /></td></tr>
+<tr class="memitem:ab5a2af96e4f38127c9e16a4581b86679" id="r_ab5a2af96e4f38127c9e16a4581b86679"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#ab5a2af96e4f38127c9e16a4581b86679">k_spring</a> = 1</td></tr>
+<tr class="memdesc:ab5a2af96e4f38127c9e16a4581b86679"><td class="mdescLeft">&#160;</td><td class="mdescRight">spring constant between masses  <br /></td></tr>
+<tr class="memitem:a522c2f182381139c34e576be1652e0d9" id="r_a522c2f182381139c34e576be1652e0d9"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a522c2f182381139c34e576be1652e0d9">F_max</a> = 0.5</td></tr>
+<tr class="memdesc:a522c2f182381139c34e576be1652e0d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum actuator force  <br /></td></tr>
+<tr class="memitem:ae51c660af8c130707f451dde118e4a3c" id="r_ae51c660af8c130707f451dde118e4a3c"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#ae51c660af8c130707f451dde118e4a3c">p_max</a> = 4</td></tr>
+<tr class="memdesc:ae51c660af8c130707f451dde118e4a3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum displacement of each mass  <br /></td></tr>
+<tr class="memitem:a610a7a0c64707d230b7f120570aaf41f" id="r_a610a7a0c64707d230b7f120570aaf41f"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a610a7a0c64707d230b7f120570aaf41f">p_min</a> = -<a class="el" href="#ae51c660af8c130707f451dde118e4a3c">p_max</a></td></tr>
+<tr class="memdesc:a610a7a0c64707d230b7f120570aaf41f"><td class="mdescLeft">&#160;</td><td class="mdescRight">minimum displacement of each mass  <br /></td></tr>
+<tr class="memitem:a70e147415444754a12f9d828c7a2d6d6" id="r_a70e147415444754a12f9d828c7a2d6d6"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a70e147415444754a12f9d828c7a2d6d6">p_min_f</a> = <a class="el" href="#a610a7a0c64707d230b7f120570aaf41f">p_min</a></td></tr>
+<tr class="memdesc:a70e147415444754a12f9d828c7a2d6d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">minimum displacement of each mass for the final stage  <br /></td></tr>
+<tr class="memitem:a20401c1d408994186ca5f1316b346f40" id="r_a20401c1d408994186ca5f1316b346f40"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a20401c1d408994186ca5f1316b346f40">p_max_f</a> = <a class="el" href="#ae51c660af8c130707f451dde118e4a3c">p_max</a></td></tr>
+<tr class="memdesc:a20401c1d408994186ca5f1316b346f40"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum displacement of each mass for the final stage  <br /></td></tr>
+<tr class="memitem:a6a7aac80e23a91f8e1861dec691d5a03" id="r_a6a7aac80e23a91f8e1861dec691d5a03"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a6a7aac80e23a91f8e1861dec691d5a03">v_max</a> = 0</td></tr>
+<tr class="memdesc:a6a7aac80e23a91f8e1861dec691d5a03"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum velocity of each mass (zero = no limit)  <br /></td></tr>
+<tr class="memitem:a6a89e4327b4809fdf0b0e61f111c2dfe" id="r_a6a89e4327b4809fdf0b0e61f111c2dfe"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a6a89e4327b4809fdf0b0e61f111c2dfe">v_max_f</a> = <a class="el" href="#a6a7aac80e23a91f8e1861dec691d5a03">v_max</a></td></tr>
+<tr class="memdesc:a6a89e4327b4809fdf0b0e61f111c2dfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">maximum velocity of each mass for the final stage  <br /></td></tr>
+<tr class="memitem:a887fc5679d33abe3be614792cddffd85" id="r_a887fc5679d33abe3be614792cddffd85"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a887fc5679d33abe3be614792cddffd85">width</a> = 1</td></tr>
+<tr class="memdesc:a887fc5679d33abe3be614792cddffd85"><td class="mdescLeft">&#160;</td><td class="mdescRight">width of the setup (distance between the walls)  <br /></td></tr>
+<tr class="memitem:af6edc6dec7fa7b2a9e15766d9748f9b4" id="r_af6edc6dec7fa7b2a9e15766d9748f9b4"><td class="memItemLeft">index_t&#160;</td><td class="memItemRight"><a class="el" href="#af6edc6dec7fa7b2a9e15766d9748f9b4">N_horiz</a> = 32</td></tr>
+<tr class="memdesc:af6edc6dec7fa7b2a9e15766d9748f9b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of discretization steps  <br /></td></tr>
+<tr class="memitem:a202950abd5806db1f1dec39c2bb3d51b" id="r_a202950abd5806db1f1dec39c2bb3d51b"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a202950abd5806db1f1dec39c2bb3d51b">T_horiz</a> = 15</td></tr>
+<tr class="memdesc:a202950abd5806db1f1dec39c2bb3d51b"><td class="mdescLeft">&#160;</td><td class="mdescRight">time horizon  <br /></td></tr>
+<tr class="memitem:a9fbc86d261ebb7bdb01a7f37a58d0174" id="r_a9fbc86d261ebb7bdb01a7f37a58d0174"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a9fbc86d261ebb7bdb01a7f37a58d0174">q_vel</a> = 1</td></tr>
+<tr class="memdesc:a9fbc86d261ebb7bdb01a7f37a58d0174"><td class="mdescLeft">&#160;</td><td class="mdescRight">scaling factor for cost terms for the velocity  <br /></td></tr>
+<tr class="memitem:af8a2fd9a992b8305847a25fd24c9d1bd" id="r_af8a2fd9a992b8305847a25fd24c9d1bd"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#af8a2fd9a992b8305847a25fd24c9d1bd">q_pos</a> = 1</td></tr>
+<tr class="memdesc:af8a2fd9a992b8305847a25fd24c9d1bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">scaling factor for cost terms for the position  <br /></td></tr>
+<tr class="memitem:a5443953a7bc84041776f986b5fe0e519" id="r_a5443953a7bc84041776f986b5fe0e519"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a5443953a7bc84041776f986b5fe0e519">q_vel_f</a> = <a class="el" href="#a9fbc86d261ebb7bdb01a7f37a58d0174">q_vel</a></td></tr>
+<tr class="memdesc:a5443953a7bc84041776f986b5fe0e519"><td class="mdescLeft">&#160;</td><td class="mdescRight">scaling factor for terminal cost term for the velocity  <br /></td></tr>
+<tr class="memitem:ac567b9cf366b0a724de6ac966e915e89" id="r_ac567b9cf366b0a724de6ac966e915e89"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#ac567b9cf366b0a724de6ac966e915e89">q_pos_f</a> = <a class="el" href="#af8a2fd9a992b8305847a25fd24c9d1bd">q_pos</a></td></tr>
+<tr class="memdesc:ac567b9cf366b0a724de6ac966e915e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">scaling factor for terminal cost term for the position  <br /></td></tr>
+<tr class="memitem:a1ba21c87e90b5089efb04b787d5b4da9" id="r_a1ba21c87e90b5089efb04b787d5b4da9"><td class="memItemLeft">real_t&#160;</td><td class="memItemRight"><a class="el" href="#a1ba21c87e90b5089efb04b787d5b4da9">r_act</a> = 1</td></tr>
+<tr class="memdesc:a1ba21c87e90b5089efb04b787d5b4da9"><td class="mdescLeft">&#160;</td><td class="mdescRight">scaling factor for cost terms for the actuators  <br /></td></tr>
+<tr class="memitem:a0a29b4bcbbbcb45b1874cd956a811071" id="r_a0a29b4bcbbbcb45b1874cd956a811071"><td class="memItemLeft">std::vector&lt; real_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a0a29b4bcbbbcb45b1874cd956a811071">masses</a> {1, 1, 1, 1, 1, 1}</td></tr>
+<tr class="memitem:acfc2b8ef98e88e9b219e1eedd13f4b7b" id="r_acfc2b8ef98e88e9b219e1eedd13f4b7b"><td class="memItemLeft">index_t&#160;</td><td class="memItemRight"><a class="el" href="#acfc2b8ef98e88e9b219e1eedd13f4b7b">n_actuators</a> = static_cast&lt;index_t&gt;(masses.size()) - 1</td></tr>
+<tr class="memdesc:acfc2b8ef98e88e9b219e1eedd13f4b7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of actuators  <br /></td></tr>
+<tr class="memitem:ac172425aa0e56c2a6db220e71e700b3e" id="r_ac172425aa0e56c2a6db220e71e700b3e"><td class="memItemLeft">enum <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1">cyqlone::qpalm::problems::SpringMassParams::ActuatorPlacement</a>&#160;</td><td class="memItemRight"><a class="el" href="#ac172425aa0e56c2a6db220e71e700b3e">actuator_placement</a> = <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849">IndividualActuators</a></td></tr>
+<tr class="memitem:a6c6b090dc45b6c7e373a408fbefdbe54" id="r_a6c6b090dc45b6c7e373a408fbefdbe54"><td class="memItemLeft">uint64_t&#160;</td><td class="memItemRight"><a class="el" href="#a6c6b090dc45b6c7e373a408fbefdbe54">seed</a> = 0</td></tr>
+<tr class="memdesc:a6c6b090dc45b6c7e373a408fbefdbe54"><td class="mdescLeft">&#160;</td><td class="mdescRight">random seed for actuator placement  <br /></td></tr>
+</table>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Member Enumeration Documentation</h2>
+<a id="a18d1032c9ae1e2b5bbe9df30c50413f1" name="a18d1032c9ae1e2b5bbe9df30c50413f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18d1032c9ae1e2b5bbe9df30c50413f1">&#9670;&#160;</a></span>ActuatorPlacement</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1">cyqlone::qpalm::problems::SpringMassParams::ActuatorPlacement</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849" name="a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849"></a>IndividualActuators&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a18d1032c9ae1e2b5bbe9df30c50413f1a30d42f40d22544857de9a609caf07ae2" name="a18d1032c9ae1e2b5bbe9df30c50413f1a30d42f40d22544857de9a609caf07ae2"></a>RandomActuators&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a18d1032c9ae1e2b5bbe9df30c50413f1a617eba72fd8a383f9f58874e67c9e912" name="a18d1032c9ae1e2b5bbe9df30c50413f1a617eba72fd8a383f9f58874e67c9e912"></a>RandomPairsOfActuators&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a18d1032c9ae1e2b5bbe9df30c50413f1a9ed41af8dca64bf2fe5d84464f710060" name="a18d1032c9ae1e2b5bbe9df30c50413f1a9ed41af8dca64bf2fe5d84464f710060"></a>WangBoydActuators&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00031">31</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="ac8f9cdf3a81a4bd2ff3b8f01143035af" name="ac8f9cdf3a81a4bd2ff3b8f01143035af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8f9cdf3a81a4bd2ff3b8f01143035af">&#9670;&#160;</a></span>wang_boyd_2008()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structSpringMassParams.html">SpringMassParams</a> cyqlone::qpalm::problems::SpringMassParams::wang_boyd_2008 </td>
+          <td>(</td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>n_masses</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>N_horiz</em></span><span class="paramdefsep"> = </span><span class="paramdefval">30</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t</td>          <td class="paramname"><span class="paramname"><em>seed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00039">39</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2c47e72483a5afacffa1fb7449ede6b5" name="a2c47e72483a5afacffa1fb7449ede6b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c47e72483a5afacffa1fb7449ede6b5">&#9670;&#160;</a></span>wang_boyd_2008_width()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structSpringMassParams.html">SpringMassParams</a> cyqlone::qpalm::problems::SpringMassParams::wang_boyd_2008_width </td>
+          <td>(</td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>n_masses</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>N_horiz</em></span><span class="paramdefsep"> = </span><span class="paramdefval">30</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t</td>          <td class="paramname"><span class="paramname"><em>seed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>steady_state_spring_length</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.1</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00065">65</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac85087e18caea8b4d4b755e273ae740d" name="ac85087e18caea8b4d4b755e273ae740d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac85087e18caea8b4d4b755e273ae740d">&#9670;&#160;</a></span>domahidi_2012()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structSpringMassParams.html">SpringMassParams</a> cyqlone::qpalm::problems::SpringMassParams::domahidi_2012 </td>
+          <td>(</td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>n_masses</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>N_horiz</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t</td>          <td class="paramname"><span class="paramname"><em>seed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00073">73</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abc65cdb2b4298fb3a0324b5aeaa81e8f" name="abc65cdb2b4298fb3a0324b5aeaa81e8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc65cdb2b4298fb3a0324b5aeaa81e8f">&#9670;&#160;</a></span>active_state_constr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structSpringMassParams.html">SpringMassParams</a> cyqlone::qpalm::problems::SpringMassParams::active_state_constr </td>
+          <td>(</td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>n_masses</em></span><span class="paramdefsep"> = </span><span class="paramdefval">18</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_t</td>          <td class="paramname"><span class="paramname"><em>N_horiz</em></span><span class="paramdefsep"> = </span><span class="paramdefval">256</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t</td>          <td class="paramname"><span class="paramname"><em>seed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00096">96</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a1dba013a3d54b283f9a36f97bd5f1f2e" name="a1dba013a3d54b283f9a36f97bd5f1f2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dba013a3d54b283f9a36f97bd5f1f2e">&#9670;&#160;</a></span>friction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::friction = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>friction coefficient </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00012">12</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab5a2af96e4f38127c9e16a4581b86679" name="ab5a2af96e4f38127c9e16a4581b86679"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5a2af96e4f38127c9e16a4581b86679">&#9670;&#160;</a></span>k_spring</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::k_spring = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>spring constant between masses </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00013">13</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a522c2f182381139c34e576be1652e0d9" name="a522c2f182381139c34e576be1652e0d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a522c2f182381139c34e576be1652e0d9">&#9670;&#160;</a></span>F_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::F_max = 0.5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>maximum actuator force </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00014">14</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae51c660af8c130707f451dde118e4a3c" name="ae51c660af8c130707f451dde118e4a3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51c660af8c130707f451dde118e4a3c">&#9670;&#160;</a></span>p_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::p_max = 4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>maximum displacement of each mass </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00015">15</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a610a7a0c64707d230b7f120570aaf41f" name="a610a7a0c64707d230b7f120570aaf41f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a610a7a0c64707d230b7f120570aaf41f">&#9670;&#160;</a></span>p_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::p_min = -<a class="el" href="#ae51c660af8c130707f451dde118e4a3c">p_max</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>minimum displacement of each mass </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00016">16</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a70e147415444754a12f9d828c7a2d6d6" name="a70e147415444754a12f9d828c7a2d6d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70e147415444754a12f9d828c7a2d6d6">&#9670;&#160;</a></span>p_min_f</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::p_min_f = <a class="el" href="#a610a7a0c64707d230b7f120570aaf41f">p_min</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>minimum displacement of each mass for the final stage </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00017">17</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a20401c1d408994186ca5f1316b346f40" name="a20401c1d408994186ca5f1316b346f40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20401c1d408994186ca5f1316b346f40">&#9670;&#160;</a></span>p_max_f</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::p_max_f = <a class="el" href="#ae51c660af8c130707f451dde118e4a3c">p_max</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>maximum displacement of each mass for the final stage </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00018">18</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6a7aac80e23a91f8e1861dec691d5a03" name="a6a7aac80e23a91f8e1861dec691d5a03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a7aac80e23a91f8e1861dec691d5a03">&#9670;&#160;</a></span>v_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::v_max = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>maximum velocity of each mass (zero = no limit) </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00019">19</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6a89e4327b4809fdf0b0e61f111c2dfe" name="a6a89e4327b4809fdf0b0e61f111c2dfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a89e4327b4809fdf0b0e61f111c2dfe">&#9670;&#160;</a></span>v_max_f</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::v_max_f = <a class="el" href="#a6a7aac80e23a91f8e1861dec691d5a03">v_max</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>maximum velocity of each mass for the final stage </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00020">20</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a887fc5679d33abe3be614792cddffd85" name="a887fc5679d33abe3be614792cddffd85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a887fc5679d33abe3be614792cddffd85">&#9670;&#160;</a></span>width</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::width = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>width of the setup (distance between the walls) </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00021">21</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af6edc6dec7fa7b2a9e15766d9748f9b4" name="af6edc6dec7fa7b2a9e15766d9748f9b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6edc6dec7fa7b2a9e15766d9748f9b4">&#9670;&#160;</a></span>N_horiz</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t cyqlone::qpalm::problems::SpringMassParams::N_horiz = 32</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>number of discretization steps </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00022">22</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a202950abd5806db1f1dec39c2bb3d51b" name="a202950abd5806db1f1dec39c2bb3d51b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a202950abd5806db1f1dec39c2bb3d51b">&#9670;&#160;</a></span>T_horiz</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::T_horiz = 15</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>time horizon </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00023">23</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9fbc86d261ebb7bdb01a7f37a58d0174" name="a9fbc86d261ebb7bdb01a7f37a58d0174"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fbc86d261ebb7bdb01a7f37a58d0174">&#9670;&#160;</a></span>q_vel</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::q_vel = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>scaling factor for cost terms for the velocity </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00024">24</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af8a2fd9a992b8305847a25fd24c9d1bd" name="af8a2fd9a992b8305847a25fd24c9d1bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8a2fd9a992b8305847a25fd24c9d1bd">&#9670;&#160;</a></span>q_pos</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::q_pos = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>scaling factor for cost terms for the position </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00025">25</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5443953a7bc84041776f986b5fe0e519" name="a5443953a7bc84041776f986b5fe0e519"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5443953a7bc84041776f986b5fe0e519">&#9670;&#160;</a></span>q_vel_f</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::q_vel_f = <a class="el" href="#a9fbc86d261ebb7bdb01a7f37a58d0174">q_vel</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>scaling factor for terminal cost term for the velocity </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00026">26</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac567b9cf366b0a724de6ac966e915e89" name="ac567b9cf366b0a724de6ac966e915e89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac567b9cf366b0a724de6ac966e915e89">&#9670;&#160;</a></span>q_pos_f</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::q_pos_f = <a class="el" href="#af8a2fd9a992b8305847a25fd24c9d1bd">q_pos</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>scaling factor for terminal cost term for the position </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00027">27</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1ba21c87e90b5089efb04b787d5b4da9" name="a1ba21c87e90b5089efb04b787d5b4da9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ba21c87e90b5089efb04b787d5b4da9">&#9670;&#160;</a></span>r_act</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real_t cyqlone::qpalm::problems::SpringMassParams::r_act = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>scaling factor for cost terms for the actuators </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00028">28</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0a29b4bcbbbcb45b1874cd956a811071" name="a0a29b4bcbbbcb45b1874cd956a811071"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a29b4bcbbbcb45b1874cd956a811071">&#9670;&#160;</a></span>masses</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;real_t&gt; cyqlone::qpalm::problems::SpringMassParams::masses {1, 1, 1, 1, 1, 1}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00029">29</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acfc2b8ef98e88e9b219e1eedd13f4b7b" name="acfc2b8ef98e88e9b219e1eedd13f4b7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfc2b8ef98e88e9b219e1eedd13f4b7b">&#9670;&#160;</a></span>n_actuators</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_t cyqlone::qpalm::problems::SpringMassParams::n_actuators = static_cast&lt;index_t&gt;(masses.size()) - 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>number of actuators </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00030">30</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac172425aa0e56c2a6db220e71e700b3e" name="ac172425aa0e56c2a6db220e71e700b3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac172425aa0e56c2a6db220e71e700b3e">&#9670;&#160;</a></span>actuator_placement</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1">cyqlone::qpalm::problems::SpringMassParams::ActuatorPlacement</a> cyqlone::qpalm::problems::SpringMassParams::actuator_placement = <a class="el" href="#a18d1032c9ae1e2b5bbe9df30c50413f1ac68a5dc9e1917b565380d1ab6e675849">IndividualActuators</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6c6b090dc45b6c7e373a408fbefdbe54" name="a6c6b090dc45b6c7e373a408fbefdbe54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c6b090dc45b6c7e373a408fbefdbe54">&#9670;&#160;</a></span>seed</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t cyqlone::qpalm::problems::SpringMassParams::seed = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>random seed for actuator placement </p>
+
+<p class="definition">Definition at line <a class="el" href="spring-mass_8hpp_source.html#l00037">37</a> of file <a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>src/example-problems/include/cyqlone/qpalm/example-problems/<a class="el" href="spring-mass_8hpp_source.html">spring-mass.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacecyqlone.html">cyqlone</a></li><li class="navelem"><a href="namespacecyqlone_1_1qpalm.html">qpalm</a></li><li class="navelem"><a href="namespacecyqlone_1_1qpalm_1_1problems.html">problems</a></li><li class="navelem"><a href="structcyqlone_1_1qpalm_1_1problems_1_1SpringMassParams.html">SpringMassParams</a></li>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>

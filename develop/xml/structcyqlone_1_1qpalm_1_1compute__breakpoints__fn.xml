@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::compute_breakpoints_fn</compoundname>
+    <includes refid="breakpoint_8hpp" local="no">cyqlone/qpalm/implementation/breakpoint.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>class Backend</type>
+          </param>
+        </templateparamlist>
+        <type>typename std::remove_cvref_t&lt; Backend &gt;::ineq_constr_vec_t</type>
+        <definition>using cyqlone::qpalm::compute_breakpoints_fn::vec_t = typename std::remove_cvref_t&lt;Backend&gt;::ineq_constr_vec_t</definition>
+        <argsstring></argsstring>
+        <name>vec_t</name>
+        <qualifiedname>cyqlone::qpalm::compute_breakpoints_fn::vec_t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="60" column="5" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a87a41f81975359188235249804f938a7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" noexceptexpression="guanaqo::is_nothrow_tag_invocable_v&lt; compute_breakpoints_fn, Backend &amp;, typename Backend::Context &amp;, std::vector&lt; Breakpoint &gt; &amp;, const vec_t&lt; Backend &gt; &amp;, const vec_t&lt; Backend &gt; &amp;, const vec_t&lt; Backend &gt; &amp;, const vec_t&lt; Backend &gt; &amp;, const vec_t&lt; Backend &gt; &amp;, const vec_t&lt; Backend &gt; &amp; &gt;" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Backend</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto cyqlone::qpalm::compute_breakpoints_fn::operator()</definition>
+        <argsstring>(Backend &amp;backend, typename Backend::Context &amp;ctx, std::vector&lt; Breakpoint &gt; &amp;breakpoints, const vec_t&lt; Backend &gt; &amp;Σ, const vec_t&lt; Backend &gt; &amp;y, const vec_t&lt; Backend &gt; &amp;Ad, const vec_t&lt; Backend &gt; &amp;Ax, const vec_t&lt; Backend &gt; &amp;b_min, const vec_t&lt; Backend &gt; &amp;b_max) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>cyqlone::qpalm::compute_breakpoints_fn::operator()</qualifiedname>
+        <param>
+          <type>Backend &amp;</type>
+          <declname>backend</declname>
+        </param>
+        <param>
+          <type>typename Backend::Context &amp;</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt; &amp;</type>
+          <declname>breakpoints</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>Σ</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>Ad</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>Ax</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>b_min</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>b_max</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="70" column="10" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="70" bodyend="81"/>
+        <references refid="group__customization_1ga51e4dcea6a7e514f02c7c730868bdde2">guanaqo::is_nothrow_tag_invocable_v</references>
+      </memberdef>
+      <memberdef kind="function" id="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1ae2965682e3646b02b83388fcbb3233b7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class Backend</type>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto cyqlone::qpalm::compute_breakpoints_fn::operator()</definition>
+        <argsstring>(Backend &amp;, typename Backend::Context &amp;ctx, std::vector&lt; Breakpoint &gt; &amp;breakpoints, const vec_t&lt; Backend &gt; &amp;Σ, const vec_t&lt; Backend &gt; &amp;y, const vec_t&lt; Backend &gt; &amp;Ad, const vec_t&lt; Backend &gt; &amp;Ax, const vec_t&lt; Backend &gt; &amp;b_min, const vec_t&lt; Backend &gt; &amp;b_max) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>cyqlone::qpalm::compute_breakpoints_fn::operator()</qualifiedname>
+        <param>
+          <type>Backend &amp;</type>
+        </param>
+        <param>
+          <type>typename Backend::Context &amp;</type>
+          <declname>ctx</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref> &gt; &amp;</type>
+          <declname>breakpoints</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>Σ</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>Ad</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>Ax</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>b_min</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" kindref="member">vec_t</ref>&lt; Backend &gt; &amp;</type>
+          <declname>b_max</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="90" column="10" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="90" bodyend="97"/>
+        <references refid="namespacecyqlone_1_1qpalm_1ac2625e16a723c214f3e23b72f59ad817" compoundref="breakpoint_8tpp" startline="11" endline="29">cyqlone::qpalm::compute_breakpoints_default</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::qpalm::compute_breakpoints_fn</label>
+        <link refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" line="58" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/implementation/breakpoint.hpp" bodystart="58" bodyend="98"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a87a41f81975359188235249804f938a7" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::compute_breakpoints_fn</scope><name>operator()</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1ae2965682e3646b02b83388fcbb3233b7" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::compute_breakpoints_fn</scope><name>operator()</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1compute__breakpoints__fn_1a298d4f4bdb51013f64c72457c2430c2e" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::compute_breakpoints_fn</scope><name>vec_t</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

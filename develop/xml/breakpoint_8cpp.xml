@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="breakpoint_8cpp" kind="file" language="C++">
+    <compoundname>breakpoint.cpp</compoundname>
+    <includes refid="algorithms_8hpp" local="no">cyqlone/qpalm/implementation/algorithms.hpp</includes>
+    <includes refid="breakpoint_8hpp" local="no">cyqlone/qpalm/implementation/breakpoint.hpp</includes>
+    <includes local="no">guanaqo/trace.hpp</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>cyqlone/neumaier.hpp</label>
+        <link refid="neumaier_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone/qpalm/implementation/algorithms.hpp</label>
+        <link refid="algorithms_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>cyqlone/qpalm/implementation/breakpoint.hpp</label>
+        <link refid="breakpoint_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/qpalm/src/breakpoint.cpp</label>
+        <link refid="breakpoint_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>algorithm</label>
+      </node>
+      <node id="5">
+        <label>batmat/assume.hpp</label>
+      </node>
+      <node id="4">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="13">
+        <label>cmath</label>
+      </node>
+      <node id="15">
+        <label>guanaqo/tag-invoke.hpp</label>
+      </node>
+      <node id="6">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+      <node id="8">
+        <label>iterator</label>
+      </node>
+      <node id="9">
+        <label>numeric</label>
+      </node>
+      <node id="10">
+        <label>ranges</label>
+      </node>
+      <node id="16">
+        <label>span</label>
+      </node>
+      <node id="14">
+        <label>type_traits</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <innernamespace refid="namespacecyqlone_1_1qpalm">cyqlone::qpalm</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="algorithms_8hpp" kindref="compound">cyqlone/qpalm/implementation/algorithms.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="breakpoint_8hpp" kindref="compound">cyqlone/qpalm/implementation/breakpoint.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/trace.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="config_8hpp_1a1f4757b3a02c15cce8aeaa6906e55c17" kindref="member">CYQLONE_NS</ref>(<ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>::qpalm)<sp/>{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7" refid="namespacecyqlone_1_1qpalm_1a57b32dc88357c5b2b160d9c09b949c93" refkind="member"><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints" kindref="compound">PartitionedBreakpoints</ref><sp/><ref refid="namespacecyqlone_1_1qpalm_1a57b32dc88357c5b2b160d9c09b949c93" kindref="member">partition_breakpoints_default</ref>(std::span&lt;Breakpoint&gt;<sp/>breakpoints)<sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;linesearch<sp/>partition&quot;</highlight><highlight class="normal">,<sp/>0);</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::isfinite;</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Move<sp/>all<sp/>infinite<sp/>t[i]<sp/>to<sp/>the<sp/>back</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>is_finite<sp/>=<sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>b)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>isfinite(b.t);<sp/>};</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>infinite<sp/><sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1a1f120beae4aaa6b4c80f83809088d0e3" kindref="member">partition</ref>(breakpoints,<sp/>is_finite);</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>finite<sp/><sp/><sp/><sp/>=<sp/>breakpoints.first(breakpoints.size()<sp/>-<sp/>infinite.size());</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Move<sp/>all<sp/>nonpositive<sp/>t[i]<sp/>to<sp/>the<sp/>front</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>le_zero<sp/><sp/><sp/>=<sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>b)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>b.t<sp/>&lt;=<sp/>0;<sp/>};</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>positive<sp/><sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1a1f120beae4aaa6b4c80f83809088d0e3" kindref="member">partition</ref>(finite,<sp/>le_zero);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>first_pos<sp/>=<sp/>finite.size()<sp/>-<sp/>positive.size();</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Return<sp/>the<sp/>negative<sp/>and<sp/>positive<sp/>partitions.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.neg_bp<sp/>=<sp/>finite.first(first_pos),</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.pos_bp<sp/>=<sp/>finite.subspan(first_pos),</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="23"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25" refid="namespacecyqlone_1_1qpalm_1a3e3de90bb2d8bb912950e1aa6141b065" refkind="member"><highlight class="normal"><ref refid="structcyqlone_1_1qpalm_1_1ABSums" kindref="compound">ABSums</ref><sp/><ref refid="namespacecyqlone_1_1qpalm_1a3e3de90bb2d8bb912950e1aa6141b065" kindref="member">partial_sum_negative</ref>(<ref refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints" kindref="compound">PartitionedBreakpoints</ref><sp/>breakpoints,<sp/>real_t<sp/>η,<sp/>real_t<sp/>β)<sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>single<sp/>pass<sp/>over<sp/>each<sp/>partition.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__trace__perfetto_1gaa65968f611678506ddcc15135aeb0cc1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_TRACE</ref>(</highlight><highlight class="stringliteral">&quot;partial<sp/>sum<sp/>negative&quot;</highlight><highlight class="normal">,<sp/>0);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>&amp;neg_bp<sp/>=<sp/>breakpoints.<ref refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a39e61a555be8f3e459906d7b57408662" kindref="member">neg_bp</ref>,<sp/>&amp;pos_bp<sp/>=<sp/>breakpoints.<ref refid="structcyqlone_1_1qpalm_1_1PartitionedBreakpoints_1a7ad314946fc51eb1d2a40f650b75ffbe" kindref="member">pos_bp</ref>;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Initialize<sp/>a_j<sp/>and<sp/>b_j,<sp/>where<sp/>t_j<sp/>is<sp/>the<sp/>first<sp/>positive<sp/>(see<sp/>notes)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>a_plus<sp/><sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1a278e2594d3f1fc905558b7b5c8c1378e" kindref="member">qpalm::transform_reduce</ref>(neg_bp.begin(),<sp/>neg_bp.end(),<sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref>{},<sp/>std::plus{},</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>p)<sp/>{<sp/>return<sp/>p.δ<sp/>&gt;<sp/>0<sp/>?<sp/>p.δ<sp/>*<sp/>p.δ<sp/>:<sp/>0;<sp/>});</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>a_minus<sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1a278e2594d3f1fc905558b7b5c8c1378e" kindref="member">qpalm::transform_reduce</ref>(pos_bp.begin(),<sp/>pos_bp.end(),<sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref>{},<sp/>std::plus{},</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>p)<sp/>{<sp/>return<sp/>p.δ<sp/>&lt;<sp/>0<sp/>?<sp/>p.δ<sp/>*<sp/>p.δ<sp/>:<sp/>0;<sp/>});</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>a<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>a_plus<sp/>+<sp/>a_minus<sp/>+<sp/>η;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>b_plus<sp/><sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1a278e2594d3f1fc905558b7b5c8c1378e" kindref="member">qpalm::transform_reduce</ref>(neg_bp.begin(),<sp/>neg_bp.end(),<sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref>{},<sp/>std::plus{},</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>p)<sp/>{<sp/>return<sp/>p.δ<sp/>&gt;<sp/>0<sp/>?<sp/>p.δ<sp/>*<sp/>p.α()<sp/>:<sp/>0;<sp/>});</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>b_minus<sp/>=<sp/><ref refid="namespacecyqlone_1_1qpalm_1a278e2594d3f1fc905558b7b5c8c1378e" kindref="member">qpalm::transform_reduce</ref>(pos_bp.begin(),<sp/>pos_bp.end(),<sp/><ref refid="namespacecyqlone_1_1qpalm_1a584914f2e3545fba9420d6b1c5c09059" kindref="member">ABSum_t</ref>{},<sp/>std::plus{},</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[](<ref refid="structcyqlone_1_1qpalm_1_1Breakpoint" kindref="compound">Breakpoint</ref><sp/>p)<sp/>{<sp/>return<sp/>p.δ<sp/>&lt;<sp/>0<sp/>?<sp/>p.δ<sp/>*<sp/>p.α()<sp/>:<sp/>0;<sp/>});</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>b<sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>b_plus<sp/>+<sp/>b_minus<sp/>-<sp/>β;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{.a<sp/>=<sp/>a,<sp/>.b<sp/>=<sp/>b};</highlight></codeline>
+<codeline lineno="41"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CYQLONE_NS(cyqlone::qpalm)</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/qpalm/src/breakpoint.cpp"/>
+  </compounddef>
+</doxygen>

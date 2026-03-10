@@ -1,0 +1,526 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="test-pcr_8cpp" kind="file" language="C++">
+    <compoundname>test-pcr.cpp</compoundname>
+    <includes refid="config_8hpp" local="no">cyqlone/config.hpp</includes>
+    <includes refid="linalg_8hpp" local="no">cyqlone/linalg.hpp</includes>
+    <includes refid="matio_8hpp" local="no">cyqlone/matio.hpp</includes>
+    <includes refid="packing_8hpp" local="no">cyqlone/packing.hpp</includes>
+    <includes local="no">batmat/dtypes.hpp</includes>
+    <includes local="no">batmat/linalg/gemm.hpp</includes>
+    <includes local="no">batmat/linalg/gemv.hpp</includes>
+    <includes local="no">batmat/linalg/potrf.hpp</includes>
+    <includes local="no">batmat/linalg/shift.hpp</includes>
+    <includes local="no">batmat/linalg/symv.hpp</includes>
+    <includes local="no">batmat/linalg/syomv.hpp</includes>
+    <includes local="no">batmat/linalg/trsm.hpp</includes>
+    <includes local="no">guanaqo/print.hpp</includes>
+    <includes local="no">cmath</includes>
+    <includes local="no">iostream</includes>
+    <includes local="no">random</includes>
+    <incdepgraph>
+      <node id="2">
+        <label>cyqlone/config.hpp</label>
+        <link refid="config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>cyqlone/linalg.hpp</label>
+        <link refid="linalg_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>cyqlone/matio.hpp</label>
+        <link refid="matio_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>cyqlone/ocp.hpp</label>
+        <link refid="ocp_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>cyqlone/packing.hpp</label>
+        <link refid="packing_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>cyqlone/reduce.hpp</label>
+        <link refid="reduce_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>cyqlone/sparse.hpp</label>
+        <link refid="sparse_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>test/test-pcr.cpp</label>
+        <link refid="test-pcr_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>array</label>
+      </node>
+      <node id="8">
+        <label>batmat/assume.hpp</label>
+      </node>
+      <node id="3">
+        <label>batmat/config.hpp</label>
+      </node>
+      <node id="35">
+        <label>batmat/dtypes.hpp</label>
+      </node>
+      <node id="9">
+        <label>batmat/linalg/copy.hpp</label>
+      </node>
+      <node id="36">
+        <label>batmat/linalg/gemm.hpp</label>
+      </node>
+      <node id="37">
+        <label>batmat/linalg/gemv.hpp</label>
+      </node>
+      <node id="38">
+        <label>batmat/linalg/potrf.hpp</label>
+      </node>
+      <node id="10">
+        <label>batmat/linalg/shift.hpp</label>
+      </node>
+      <node id="11">
+        <label>batmat/linalg/simdify.hpp</label>
+      </node>
+      <node id="22">
+        <label>batmat/linalg/structure.hpp</label>
+      </node>
+      <node id="39">
+        <label>batmat/linalg/symv.hpp</label>
+      </node>
+      <node id="40">
+        <label>batmat/linalg/syomv.hpp</label>
+      </node>
+      <node id="41">
+        <label>batmat/linalg/trsm.hpp</label>
+      </node>
+      <node id="29">
+        <label>batmat/linalg/uview.hpp</label>
+      </node>
+      <node id="30">
+        <label>batmat/loop.hpp</label>
+      </node>
+      <node id="31">
+        <label>batmat/lut.hpp</label>
+      </node>
+      <node id="25">
+        <label>batmat/matrix/view.hpp</label>
+      </node>
+      <node id="12">
+        <label>batmat/ops/rotate.hpp</label>
+      </node>
+      <node id="32">
+        <label>batmat/ops/transpose.hpp</label>
+      </node>
+      <node id="6">
+        <label>batmat/simd.hpp</label>
+      </node>
+      <node id="7">
+        <label>cmath</label>
+      </node>
+      <node id="14">
+        <label>concepts</label>
+      </node>
+      <node id="26">
+        <label>filesystem</label>
+      </node>
+      <node id="23">
+        <label>guanaqo/linalg/sparsity.hpp</label>
+      </node>
+      <node id="19">
+        <label>guanaqo/mat-view.hpp</label>
+      </node>
+      <node id="42">
+        <label>guanaqo/print.hpp</label>
+      </node>
+      <node id="33">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+      <node id="43">
+        <label>iostream</label>
+      </node>
+      <node id="27">
+        <label>memory</label>
+      </node>
+      <node id="44">
+        <label>random</label>
+      </node>
+      <node id="24">
+        <label>ranges</label>
+      </node>
+      <node id="15">
+        <label>tuple</label>
+      </node>
+      <node id="34">
+        <label>type_traits</label>
+      </node>
+      <node id="16">
+        <label>utility</label>
+      </node>
+      <node id="20">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structcyqlone_1_1PCRFactorTest" prot="public">cyqlone::PCRFactorTest</innerclass>
+    <innernamespace refid="namespacecyqlone">cyqlone</innernamespace>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="test-pcr_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int main</definition>
+        <argsstring>()</argsstring>
+        <name>main</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="test/test-pcr.cpp" line="137" column="5" bodyfile="test/test-pcr.cpp" bodystart="137" bodyend="201"/>
+        <references refid="namespacecyqlone_1a00902118a90d14866e828aefd56f4bd3" compoundref="test-pcr_8cpp" startline="105" endline="125">cyqlone::λ_max_power</references>
+        <references refid="structbatmat_1_1matrix_1_1Matrix_1a062d4739cab4e2bbca7439aa0354636a">batmat::matrix::Matrix&lt; class T, class I, class S, class D, StorageOrder O, class A &gt;::add_to_diagonal</references>
+        <references refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" compoundref="matio_8cpp" startline="122" endline="124">cyqlone::add_to_mat</references>
+        <references refid="group__topic-util-matio_1ga5b9bfdc6a8d4f53838511888e6724cb8" compoundref="matio_8cpp" startline="97" endline="102">cyqlone::create_mat</references>
+        <references refid="group__io_1gaad039ddbace5b0948cececedd1a7973c">guanaqo::float_to_str</references>
+        <references refid="group__topic-linalg_1ga8107de760e8af9ee6dddc4f9878c1339" compoundref="linalg_8hpp" startline="386" endline="389">cyqlone::linalg::negate</references>
+        <references refid="group__topic-linalg_1gae11e8e17f4b74608291fe5b2d389869c" compoundref="linalg_8hpp" startline="278" endline="281">cyqlone::linalg::norm_2</references>
+        <references refid="group__topic-linalg_1ga5b021d3e61d99e49576a574e7c919923" compoundref="linalg_8hpp" startline="254" endline="256">cyqlone::linalg::norms_all</references>
+        <references refid="structbatmat_1_1matrix_1_1Matrix_1ae450ea40239ee9c2f8370928d76901e9">batmat::matrix::Matrix&lt; class T, class I, class S, class D, StorageOrder O, class A &gt;::transposed</references>
+        <references refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" compoundref="test-pcr_8cpp" startline="128" endline="133">cyqlone::unpacked</references>
+        <references refid="namespacebatmat_1_1types_1a9894d775cdeab01330210c447969e304">batmat::types::vl_or_largest</references>
+        <references refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5">batmat::linalg::with_rotate_C</references>
+        <references refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e">batmat::linalg::with_rotate_D</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&lt;<ref refid="config_8hpp" kindref="compound">cyqlone/config.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="linalg_8hpp" kindref="compound">cyqlone/linalg.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="matio_8hpp" kindref="compound">cyqlone/matio.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="packing_8hpp" kindref="compound">cyqlone/packing.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/dtypes.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/gemm.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/gemv.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/potrf.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/shift.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/symv.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/syomv.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;batmat/linalg/trsm.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/print.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cmath&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;random&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref><sp/>{</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">batmat::linalg;</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">cyqlone::linalg;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23" refid="namespacecyqlone_1a33fa61ac58e944169799f69b27212f92" refkind="member"><highlight class="normal">[[nodiscard]]<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>index_t<sp/><ref refid="namespacecyqlone_1a33fa61ac58e944169799f69b27212f92" kindref="member">get_depth</ref>(index_t<sp/>n)<sp/>{</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">index_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(std::bit_width(</highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">std::make_unsigned_t&lt;index_t&gt;</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(n)<sp/>-<sp/>1));</highlight></codeline>
+<codeline lineno="25"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Standalone<sp/>PCR<sp/>factorization<sp/>class<sp/>for<sp/>testing</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>VL,<sp/></highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T,<sp/>StorageOrder<sp/>DefaultOrder&gt;</highlight></codeline>
+<codeline lineno="29" refid="structcyqlone_1_1PCRFactorTest" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1PCRFactorTest" kindref="compound">PCRFactorTest</ref><sp/>{</highlight></codeline>
+<codeline lineno="30" refid="structcyqlone_1_1PCRFactorTest_1aca9db3f60b5726ab772b6dcf1ebebb7c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1PCRFactorTest_1aca9db3f60b5726ab772b6dcf1ebebb7c" kindref="member">value_type</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>T;</highlight></codeline>
+<codeline lineno="31" refid="structcyqlone_1_1PCRFactorTest_1a009916850f2956dfb3cc4dc3095ac96d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1PCRFactorTest_1a009916850f2956dfb3cc4dc3095ac96d" kindref="member">vl_t</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>std::integral_constant&lt;index_t,<sp/>VL&gt;;</highlight></codeline>
+<codeline lineno="32" refid="structcyqlone_1_1PCRFactorTest_1a2e383cb7f58ffcf0a3a4c28e05ebe6f6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1PCRFactorTest_1a2e383cb7f58ffcf0a3a4c28e05ebe6f6" kindref="member">align_t</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>std::integral_constant&lt;index_t,<sp/>VL<sp/>*<sp/></highlight><highlight class="keyword">alignof</highlight><highlight class="normal">(T)&gt;;</highlight></codeline>
+<codeline lineno="33" refid="structcyqlone_1_1PCRFactorTest_1ace6465f995fe5f1d403e1fe795f3ea4c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>index_t<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace6465f995fe5f1d403e1fe795f3ea4c" kindref="member">v</ref><sp/><sp/>=<sp/>VL;</highlight></codeline>
+<codeline lineno="34" refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>index_t<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref><sp/>=<sp/><ref refid="namespacecyqlone_1a33fa61ac58e944169799f69b27212f92" kindref="member">get_depth</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1ace6465f995fe5f1d403e1fe795f3ea4c" kindref="member">v</ref>);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;StorageOrder<sp/>O<sp/>=<sp/>DefaultOrder&gt;</highlight></codeline>
+<codeline lineno="37" refid="structcyqlone_1_1PCRFactorTest_1a0796a706ee7eefe3903e0af5b7a6ac24" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1PCRFactorTest_1a0796a706ee7eefe3903e0af5b7a6ac24" kindref="member">bmatrix</ref><sp/>=<sp/><ref refid="structbatmat_1_1matrix_1_1Matrix" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::Matrix&lt;value_type, index_t, vl_t, index_t, O, align_t&gt;</ref>;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;StorageOrder<sp/>O<sp/>=<sp/>DefaultOrder&gt;</highlight></codeline>
+<codeline lineno="39" refid="structcyqlone_1_1PCRFactorTest_1a4dab56b41d82c2b9a8d73b71b2717442" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1PCRFactorTest_1a4dab56b41d82c2b9a8d73b71b2717442" kindref="member">matrix</ref><sp/>=<sp/><ref refid="structbatmat_1_1matrix_1_1Matrix" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::Matrix&lt;value_type, index_t, vl_t, vl_t, O, align_t&gt;</ref>;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;StorageOrder<sp/>O<sp/>=<sp/>DefaultOrder&gt;</highlight></codeline>
+<codeline lineno="41" refid="structcyqlone_1_1PCRFactorTest_1a4d28f52645afaeba06b8db248f9d8618" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1PCRFactorTest_1a4d28f52645afaeba06b8db248f9d8618" kindref="member">mut_view</ref><sp/>=<sp/><ref refid="structbatmat_1_1matrix_1_1Matrix_1a171bf7e529d147fc19aaf8f64a322dc5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">matrix&lt;O&gt;::view_type</ref>;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;StorageOrder<sp/>O<sp/>=<sp/>DefaultOrder&gt;</highlight></codeline>
+<codeline lineno="43" refid="structcyqlone_1_1PCRFactorTest_1a23b6f97fffaae2f2f64c34b85cf8ea58" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structcyqlone_1_1PCRFactorTest_1a23b6f97fffaae2f2f64c34b85cf8ea58" kindref="member">view</ref><sp/>=<sp/><ref refid="structbatmat_1_1matrix_1_1Matrix_1aad28dd71b045a7ececc317cf4059eaf3" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">matrix&lt;O&gt;::const_view_type</ref>;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45" refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>index_t<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47" refid="structcyqlone_1_1PCRFactorTest_1a09dd56d6e4bc3fecfae0799f87232a4b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a0796a706ee7eefe3903e0af5b7a6ac24" kindref="member">bmatrix&lt;&gt;</ref><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a09dd56d6e4bc3fecfae0799f87232a4b" kindref="member">pcr_L</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a0796a706ee7eefe3903e0af5b7a6ac24" kindref="member">bmatrix&lt;&gt;</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace6465f995fe5f1d403e1fe795f3ea4c" kindref="member">v</ref><sp/>*<sp/>(<ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref><sp/>+<sp/>1),<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>,<sp/>.cols<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>}};<sp/>}();</highlight></codeline>
+<codeline lineno="48" refid="structcyqlone_1_1PCRFactorTest_1ab048dce464f3f844fd5f3281c5cda611" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a0796a706ee7eefe3903e0af5b7a6ac24" kindref="member">bmatrix&lt;&gt;</ref><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ab048dce464f3f844fd5f3281c5cda611" kindref="member">pcr_Y</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a0796a706ee7eefe3903e0af5b7a6ac24" kindref="member">bmatrix&lt;&gt;</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace6465f995fe5f1d403e1fe795f3ea4c" kindref="member">v</ref><sp/>*<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref>,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>,<sp/>.cols<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>}};<sp/>}();</highlight></codeline>
+<codeline lineno="49" refid="structcyqlone_1_1PCRFactorTest_1ae240c0792cdd5a4e39afd38b7a3e0974" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a0796a706ee7eefe3903e0af5b7a6ac24" kindref="member">bmatrix&lt;&gt;</ref><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ae240c0792cdd5a4e39afd38b7a3e0974" kindref="member">pcr_U</ref><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a0796a706ee7eefe3903e0af5b7a6ac24" kindref="member">bmatrix&lt;&gt;</ref>{{.depth<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace6465f995fe5f1d403e1fe795f3ea4c" kindref="member">v</ref><sp/>*<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref>,<sp/>.rows<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>,<sp/>.cols<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>}};<sp/>}();</highlight></codeline>
+<codeline lineno="50" refid="structcyqlone_1_1PCRFactorTest_1a899d7b61892ca3df5bcb7f8d66016552" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a4dab56b41d82c2b9a8d73b71b2717442" kindref="member">matrix&lt;&gt;</ref><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a899d7b61892ca3df5bcb7f8d66016552" kindref="member">pcr_M</ref><sp/><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a4dab56b41d82c2b9a8d73b71b2717442" kindref="member">matrix&lt;&gt;</ref>{{.rows<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>,<sp/>.cols<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>}};<sp/>}();</highlight></codeline>
+<codeline lineno="51" refid="structcyqlone_1_1PCRFactorTest_1ab826c73f29eb3b50108c82003c4be946" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a4dab56b41d82c2b9a8d73b71b2717442" kindref="member">matrix&lt;&gt;</ref><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ab826c73f29eb3b50108c82003c4be946" kindref="member">work</ref><sp/><sp/><sp/>=<sp/>[</highlight><highlight class="keyword">this</highlight><highlight class="normal">]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a4dab56b41d82c2b9a8d73b71b2717442" kindref="member">matrix&lt;&gt;</ref>{{.rows<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a1744ddc978aa75c1c78d996cb8365ebc" kindref="member">n</ref>,<sp/>.cols<sp/>=<sp/>1}};<sp/>}();</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53" refid="structcyqlone_1_1PCRFactorTest_1a36949d781145d957b57d53208f74d9fa" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a36949d781145d957b57d53208f74d9fa" kindref="member">factor_pcr</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1a23b6f97fffaae2f2f64c34b85cf8ea58" kindref="member">view&lt;&gt;</ref><sp/>M0,<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a23b6f97fffaae2f2f64c34b85cf8ea58" kindref="member">view&lt;&gt;</ref><sp/>K0)<sp/>{</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;]&lt;index_t...<sp/>Levels&gt;(std::integer_sequence&lt;index_t,<sp/>Levels...&gt;)<sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(this-&gt;</highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a2615315b158b8a26e8e85cf070120575" kindref="member">factor_pcr_level&lt;Levels&gt;</ref>(M0,<sp/>K0),<sp/>...);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}(std::make_integer_sequence&lt;index_t,<sp/>lv&gt;{});</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>M<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref><sp/>==<sp/>0<sp/>?<sp/>M0<sp/>:<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a899d7b61892ca3df5bcb7f8d66016552" kindref="member">pcr_M</ref>.batch(0);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>L<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a09dd56d6e4bc3fecfae0799f87232a4b" kindref="member">pcr_L</ref>.batch(<ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref>);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gaa5a48352d831fa72f651dfb4a53bba9e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">potrf</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(L));</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>l&gt;</highlight></codeline>
+<codeline lineno="63" refid="structcyqlone_1_1PCRFactorTest_1a2615315b158b8a26e8e85cf070120575" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a2615315b158b8a26e8e85cf070120575" kindref="member">factor_pcr_level</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1a23b6f97fffaae2f2f64c34b85cf8ea58" kindref="member">view&lt;&gt;</ref><sp/>M0,<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a23b6f97fffaae2f2f64c34b85cf8ea58" kindref="member">view&lt;&gt;</ref><sp/>K0)<sp/>{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>r<sp/>=<sp/>1<sp/>&lt;&lt;<sp/>l;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>M<sp/>=<sp/>l<sp/>==<sp/>0<sp/>?<sp/>M0<sp/>:<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a899d7b61892ca3df5bcb7f8d66016552" kindref="member">pcr_M</ref>.batch(0),<sp/>K<sp/>=<sp/>l<sp/>==<sp/>0<sp/>?<sp/>K0<sp/>:<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ab048dce464f3f844fd5f3281c5cda611" kindref="member">pcr_Y</ref>.batch(l);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>L<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a09dd56d6e4bc3fecfae0799f87232a4b" kindref="member">pcr_L</ref>.batch(l),<sp/>Y<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ab048dce464f3f844fd5f3281c5cda611" kindref="member">pcr_Y</ref>.batch(l),<sp/>U<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ae240c0792cdd5a4e39afd38b7a3e0974" kindref="member">pcr_U</ref>.batch(l);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>M_next<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a899d7b61892ca3df5bcb7f8d66016552" kindref="member">pcr_M</ref>.batch(0);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gaa5a48352d831fa72f651dfb4a53bba9e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">potrf</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(L));</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(l<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>K_next<sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ab048dce464f3f844fd5f3281c5cda611" kindref="member">pcr_Y</ref>.batch(l<sp/>+<sp/>1);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(K.transposed(),<sp/><ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(L.transposed()),<sp/>U,<sp/><ref refid="namespacebatmat_1_1linalg_1ad955091c80d01d8d4201c828ec0c4c2c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_A&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(K,<sp/><ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(L.transposed()),<sp/>Y);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga19841b227bc4cf6d0949b85b6e201033" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk_sub</ref>(U,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga19841b227bc4cf6d0949b85b6e201033" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk_sub</ref>(Y,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;+r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;+r&gt;</ref>);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga2ecaacbba5614bcbbf95c79023424e64" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">gemm_neg</ref>(Y,<sp/>U.transposed(),<sp/>K_next,<sp/>{},<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga9df61b993f7e79ad21eddb76b4c2089e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">copy</ref>(K,<sp/>U,<sp/><ref refid="namespacebatmat_1_1linalg_1a18f5c2df0c1ec2ea5038ad05d81946d1" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate&lt;+r&gt;</ref>);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga63e5d7edfbf2831545aea00d9a75966b" kindref="member">add</ref>(U,<sp/>K.transposed());<sp/></highlight><highlight class="comment">//<sp/>U<sp/>contains<sp/>Kᵀ<sp/>now</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(U,<sp/><ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(L.transposed()),<sp/><ref refid="namespacebatmat_1_1linalg_1ad955091c80d01d8d4201c828ec0c4c2c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_A&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga19841b227bc4cf6d0949b85b6e201033" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk_sub</ref>(U,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M_next),<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84" refid="structcyqlone_1_1PCRFactorTest_1a4c5a042d9bc82a9dd62e57a171db16c3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a4c5a042d9bc82a9dd62e57a171db16c3" kindref="member">solve_pcr</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1a4d28f52645afaeba06b8db248f9d8618" kindref="member">mut_view&lt;&gt;</ref><sp/>λ)<sp/>{<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a4c5a042d9bc82a9dd62e57a171db16c3" kindref="member">solve_pcr</ref>(λ,<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ab826c73f29eb3b50108c82003c4be946" kindref="member">work</ref>.batch(0));<sp/>}</highlight></codeline>
+<codeline lineno="85" refid="structcyqlone_1_1PCRFactorTest_1afbaa848d6b95cefd877e9fcbba209c16" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1afbaa848d6b95cefd877e9fcbba209c16" kindref="member">solve_pcr</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1a4d28f52645afaeba06b8db248f9d8618" kindref="member">mut_view&lt;&gt;</ref><sp/>λ,<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a4d28f52645afaeba06b8db248f9d8618" kindref="member">mut_view&lt;&gt;</ref><sp/>work_pcr)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;]&lt;index_t...<sp/>Levels&gt;(std::integer_sequence&lt;index_t,<sp/>Levels...&gt;)<sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(this-&gt;</highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a8dfeed2551482c24d36fed815072cbe5" kindref="member">solve_pcr_level&lt;Levels&gt;</ref>(λ,<sp/>work_pcr),<sp/>...);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}(std::make_integer_sequence&lt;index_t,<sp/>lv&gt;{});</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1a09dd56d6e4bc3fecfae0799f87232a4b" kindref="member">pcr_L</ref>.batch(<ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref>)),<sp/>λ);</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(<ref refid="group__topic-linalg_1gaf6d9519ee15d51a0ba7243e640d8be71" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">triu</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1a09dd56d6e4bc3fecfae0799f87232a4b" kindref="member">pcr_L</ref>.batch(<ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref>).transposed()),<sp/>λ);</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;index_t<sp/>l&gt;</highlight></codeline>
+<codeline lineno="94" refid="structcyqlone_1_1PCRFactorTest_1a8dfeed2551482c24d36fed815072cbe5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a8dfeed2551482c24d36fed815072cbe5" kindref="member">solve_pcr_level</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1a4d28f52645afaeba06b8db248f9d8618" kindref="member">mut_view&lt;&gt;</ref><sp/>λ,<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1a4d28f52645afaeba06b8db248f9d8618" kindref="member">mut_view&lt;&gt;</ref><sp/>work_pcr)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>r<sp/>=<sp/>1<sp/>&lt;&lt;<sp/>l;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga21c503ca31b0d06b1a0e93ccf0b754c7" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">trsm</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1a09dd56d6e4bc3fecfae0799f87232a4b" kindref="member">pcr_L</ref>.batch(l)),<sp/>λ,<sp/>work_pcr);<sp/></highlight><highlight class="comment">//<sp/>w<sp/>=<sp/>L⁻¹<sp/>λ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gac4246c2e6b61282811138d8232f9d737" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">gemv_sub</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1ae240c0792cdd5a4e39afd38b7a3e0974" kindref="member">pcr_U</ref>.batch(l),<sp/>work_pcr,<sp/>λ,<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;-r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;-r&gt;</ref>);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>(l<sp/>+<sp/>1<sp/>&lt;<sp/><ref refid="structcyqlone_1_1PCRFactorTest_1ace34111c93973ae12caae65d094c17b2" kindref="member">lv</ref>)</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gac4246c2e6b61282811138d8232f9d737" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">gemv_sub</ref>(<ref refid="structcyqlone_1_1PCRFactorTest_1ab048dce464f3f844fd5f3281c5cda611" kindref="member">pcr_Y</ref>.batch(l),<sp/>work_pcr,<sp/>λ,<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;+r&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;+r&gt;</ref>);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="101"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Quick-and-dirty<sp/>power<sp/>iteration<sp/>to<sp/>estimate<sp/>the<sp/>spectral<sp/>norm<sp/>of<sp/>a<sp/>block<sp/>tridiagonal<sp/>matrix.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>Mat&gt;</highlight></codeline>
+<codeline lineno="105" refid="namespacecyqlone_1a00902118a90d14866e828aefd56f4bd3" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="namespacecyqlone_1a00902118a90d14866e828aefd56f4bd3" kindref="member">λ_max_power</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Mat<sp/>&amp;M,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Mat<sp/>&amp;K,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>max_it,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mat::value_type<sp/>tol)<sp/>{</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::abs;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::sqrt;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">T<sp/>=<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mat::value_type;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structbatmat_1_1matrix_1_1Matrix" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::Matrix</ref>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mat::value_type,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mat::index_type,</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mat::batch_size_type,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Mat::depth_type&gt;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>x{{.rows<sp/>=<sp/>M.rows(),<sp/>.cols<sp/>=<sp/>1}},<sp/>Ax{{.rows<sp/>=<sp/>M.rows(),<sp/>.cols<sp/>=<sp/>1}};</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>x.<ref refid="structbatmat_1_1matrix_1_1Matrix_1a757dbd5cb7427a0375682a3df28865a0" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">set_constant</ref>(T(1)<sp/>/<sp/>sqrt(T(M.rows())));</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>T<sp/>λ<sp/>=<sp/>0,<sp/>λ_old<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>max_it;<sp/>++k)<sp/>{</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gaf56b3f892871b53ff7dc0efedb0eac36" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">symv</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/>x,<sp/>Ax);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>y<sp/>=<sp/>M<sp/>x</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga1c157567ed0f419c4136ec2a69dc8a59" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syomv</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(K),<sp/>x,<sp/>Ax);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>y<sp/>+=<sp/>K<sp/>x</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>λ_old<sp/><sp/><sp/><sp/><sp/>=<sp/>std::exchange(λ,<sp/><ref refid="group__topic-linalg_1gac25c43a1c180bb6ad0faedbde44a20a9" kindref="member">dot</ref>(x,<sp/>Ax));<sp/></highlight><highlight class="comment">//<sp/>λ<sp/>=<sp/>xᵀAx<sp/>(Rayleigh<sp/>quotient,<sp/>‖x‖=1)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>norm<sp/>=<sp/><ref refid="group__topic-linalg_1gae11e8e17f4b74608291fe5b2d389869c" kindref="member">norm_2</ref>(Ax);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>‖Ax‖</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1gaeee444a2231976efc5f93a58cada45c5" kindref="member">scale</ref>(T(1)<sp/>/<sp/>norm,<sp/>Ax,<sp/>x);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>x<sp/>←<sp/>Ax/‖Ax‖</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(abs(λ<sp/>-<sp/>λ_old)<sp/>&lt;<sp/>tol<sp/>*<sp/>abs(λ))</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::make_pair(λ,<sp/>k<sp/>+<sp/>1);</highlight></codeline>
+<codeline lineno="125"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>M&gt;</highlight></codeline>
+<codeline lineno="128" refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" kindref="member">unpacked</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>M<sp/>&amp;<ref refid="namespacebatmat_1_1linalg_1aa93224d87d900a2dacc032305840169b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">matrix</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structbatmat_1_1matrix_1_1Matrix" kindref="compound" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::matrix::Matrix&lt;typename M::value_type, typename M::index_type&gt;</ref><sp/>res{</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{.depth<sp/>=<sp/><ref refid="namespacebatmat_1_1linalg_1aa93224d87d900a2dacc032305840169b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">matrix</ref>.depth(),<sp/>.rows<sp/>=<sp/><ref refid="namespacebatmat_1_1linalg_1aa93224d87d900a2dacc032305840169b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">matrix</ref>.rows(),<sp/>.cols<sp/>=<sp/><ref refid="namespacebatmat_1_1linalg_1aa93224d87d900a2dacc032305840169b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">matrix</ref>.cols()}};</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga526900bf6322e7c42895c80c36ac2f5e" kindref="member">unpack</ref>(<ref refid="namespacebatmat_1_1linalg_1aa93224d87d900a2dacc032305840169b" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">matrix</ref>,<sp/>res);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>res;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="137" refid="test-pcr_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="example_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">main</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::abs;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">std::sqrt;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref>;</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">T<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>batmat::real_t;</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>index_t<sp/>N<sp/>=<sp/><ref refid="namespacebatmat_1_1types_1a9894d775cdeab01330210c447969e304" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">batmat::types::vl_or_largest&lt;T, 8&gt;</ref>;<sp/></highlight><highlight class="comment">//<sp/>number<sp/>of<sp/>blocks<sp/>==<sp/>vector<sp/>length</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static_assert</highlight><highlight class="normal">(N<sp/>&gt;<sp/>1,<sp/></highlight><highlight class="stringliteral">&quot;No<sp/>suitable<sp/>vector<sp/>length<sp/>available&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="structSolver" kindref="compound">Solver</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="structcyqlone_1_1PCRFactorTest" kindref="compound">PCRFactorTest&lt;N, T, StorageOrder::ColMajor&gt;</ref>;</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>index_t<sp/>n<sp/>=<sp/>15;<sp/></highlight><highlight class="comment">//<sp/>block<sp/>size</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1af2d639079f2a4177927e21ba1bc185e3" kindref="member">Solver::matrix&lt;&gt;</ref><sp/>A{{.rows<sp/>=<sp/>n,<sp/>.cols<sp/>=<sp/>n}},<sp/>B{{.rows<sp/>=<sp/>n,<sp/>.cols<sp/>=<sp/>n}};<sp/></highlight><highlight class="comment">//<sp/>(for<sp/>initialization)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1af2d639079f2a4177927e21ba1bc185e3" kindref="member">Solver::matrix&lt;&gt;</ref><sp/>M{{.rows<sp/>=<sp/>n,<sp/>.cols<sp/>=<sp/>n}};<sp/></highlight><highlight class="comment">//<sp/>diagonal<sp/>blocks<sp/>of<sp/>the<sp/>block<sp/>tridiagonal<sp/>system</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1af2d639079f2a4177927e21ba1bc185e3" kindref="member">Solver::matrix&lt;&gt;</ref><sp/>K{{.rows<sp/>=<sp/>n,<sp/>.cols<sp/>=<sp/>n}};<sp/></highlight><highlight class="comment">//<sp/>subdiagonal<sp/>blocks</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1af2d639079f2a4177927e21ba1bc185e3" kindref="member">Solver::matrix&lt;&gt;</ref><sp/>b{{.rows<sp/>=<sp/>n,<sp/>.cols<sp/>=<sp/>1}};<sp/></highlight><highlight class="comment">//<sp/>right-hand<sp/>side</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Generate<sp/>random<sp/>block<sp/>tridiagonal<sp/>system</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/>std::mt19937<sp/>rng(12345);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/>std::uniform_real_distribution&lt;T&gt;<sp/>dist(-1,<sp/>1);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>std::ranges::generate(A,<sp/>[&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>dist(rng);<sp/>});</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/>std::ranges::generate(B,<sp/>[&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>dist(rng);<sp/>});</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/>std::ranges::generate(b,<sp/>[&amp;]<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>dist(rng);<sp/>});</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>M(i)<sp/>=<sp/>A(i)<sp/>A(i)ᵀ<sp/>+<sp/>B(i-1)<sp/>B(i-1)ᵀ<sp/>and<sp/>K(i)<sp/>=<sp/>B(i)<sp/>A(i)ᵀ</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga59ec2e76f7d857d495fcc518d19f2a77" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk</ref>(A,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M));</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga94668e960bcf7b6a7ffe8902d799079a" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syrk_add</ref>(B,<sp/><ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/><ref refid="namespacebatmat_1_1linalg_1acb94b9e005e461541acb9ed52f87e8b5" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_C&lt;1&gt;</ref>,<sp/><ref refid="namespacebatmat_1_1linalg_1a13b33813baa12b55f7746c6987d5f42e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">with_rotate_D&lt;1&gt;</ref>);</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga56b98ed114604544b0806d8b191b119e" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">gemm</ref>(B,<sp/>A.<ref refid="structbatmat_1_1matrix_1_1Matrix_1ae450ea40239ee9c2f8370928d76901e9" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">transposed</ref>(),<sp/>K);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/>M.<ref refid="structbatmat_1_1matrix_1_1Matrix_1a062d4739cab4e2bbca7439aa0354636a" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">add_to_diagonal</ref>(T(1e-4)<sp/>*<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">T</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(n<sp/>*<sp/>N));<sp/></highlight><highlight class="comment">//<sp/>ensure<sp/>positive<sp/>definiteness</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>PCR<sp/>factorization<sp/>and<sp/>solution</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structSolver" kindref="compound">Solver</ref><sp/>solver{.n<sp/>=<sp/>n};</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/>solver.factor_pcr(M,<sp/>K);</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1af2d639079f2a4177927e21ba1bc185e3" kindref="member">Solver::matrix&lt;&gt;</ref><sp/>x<sp/>=<sp/>b;</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/>solver.solve_pcr(x);</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Residual<sp/>M<sp/>x<sp/>-<sp/>b</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structcyqlone_1_1TricyqleSolver_1af2d639079f2a4177927e21ba1bc185e3" kindref="member">Solver::matrix&lt;&gt;</ref><sp/>r{{.rows<sp/>=<sp/>n,<sp/>.cols<sp/>=<sp/>1}};</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga8107de760e8af9ee6dddc4f9878c1339" kindref="member">cyqlone::linalg::negate</ref>(b,<sp/>r);</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga6be77cce642739acb04a594098a57ffe" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">symv_add</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(M),<sp/>x,<sp/>r);</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-linalg_1ga1c157567ed0f419c4136ec2a69dc8a59" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">syomv</ref>(<ref refid="group__topic-linalg_1gafc9f5555ed4639e0e5ad0e552f9717e4" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag">tril</ref>(K),<sp/>x,<sp/>r);</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>res_norm<sp/>=<sp/><ref refid="group__topic-linalg_1ga5b021d3e61d99e49576a574e7c919923" kindref="member">cyqlone::linalg::norms_all</ref>(r);</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\nResidual<sp/>norms:<sp/>ℓ₂<sp/>=<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="group__io_1gaad039ddbace5b0948cececedd1a7973c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::float_to_str</ref>(res_norm.norm_2())</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;,\tmax<sp/>=<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="group__io_1gaad039ddbace5b0948cececedd1a7973c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::float_to_str</ref>(res_norm.norm_inf())<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>ε<sp/>=<sp/>std::numeric_limits&lt;T&gt;::epsilon();</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>max_it<sp/>=<sp/>100<sp/>*<sp/>N<sp/>*<sp/>n;</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>[normM,<sp/>it]<sp/>=<sp/><ref refid="namespacecyqlone_1a00902118a90d14866e828aefd56f4bd3" kindref="member">λ_max_power</ref>(M,<sp/>K,<sp/>max_it,<sp/>ε);</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Spectral<sp/>norm<sp/>M:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="group__io_1gaad039ddbace5b0948cececedd1a7973c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::float_to_str</ref>(normM)<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>(&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>(it<sp/>&lt;=<sp/>max_it<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;approx.,<sp/>&quot;</highlight><highlight class="normal">)<sp/>&lt;&lt;<sp/>it<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>iter.)\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="group__topic-linalg_1gae11e8e17f4b74608291fe5b2d389869c" kindref="member">cyqlone::linalg::norm_2</ref>;</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>η<sp/>=<sp/>res_norm.norm_2()<sp/>/<sp/>(normM<sp/>*<sp/><ref refid="group__topic-linalg_1gae11e8e17f4b74608291fe5b2d389869c" kindref="member">norm_2</ref>(x)<sp/>+<sp/><ref refid="group__topic-linalg_1gae11e8e17f4b74608291fe5b2d389869c" kindref="member">norm_2</ref>(b));</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Backward<sp/>error:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="group__io_1gaad039ddbace5b0948cececedd1a7973c" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">guanaqo::float_to_str</ref>(η)<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>CYQLONE_WITH_MATIO</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Export<sp/>the<sp/>original<sp/>system<sp/>and<sp/>the<sp/>solution<sp/>as<sp/>a<sp/>.mat<sp/>file</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/>std::filesystem::path<sp/>filename<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;test-pcr.mat&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>matfile<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="group__topic-util-matio_1ga5b9bfdc6a8d4f53838511888e6724cb8" kindref="member">cyqlone::create_mat</ref>(filename);</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;A&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" kindref="member">unpacked</ref>(A));</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;B&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" kindref="member">unpacked</ref>(B));</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;M&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" kindref="member">unpacked</ref>(M));</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;K&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" kindref="member">unpacked</ref>(K));</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;b&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" kindref="member">unpacked</ref>(b));</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__topic-util-matio_1ga937f13ae7ced1e23973c106d256995a0" kindref="member">cyqlone::add_to_mat</ref>(matfile.get(),<sp/></highlight><highlight class="stringliteral">&quot;x&quot;</highlight><highlight class="normal">,<sp/><ref refid="namespacecyqlone_1aa29ae73cccae530f445e9ba571b6d949" kindref="member">unpacked</ref>(x));</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Saved<sp/>system<sp/>and<sp/>solution<sp/>to<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>filename<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;\n&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="199"><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>η<sp/>&lt;<sp/>ε<sp/>*<sp/>static_cast&lt;T&gt;(100<sp/>*<sp/>n<sp/>*<sp/>N)<sp/>?<sp/>0<sp/>:<sp/>1;</highlight></codeline>
+<codeline lineno="201"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="test/test-pcr.cpp"/>
+  </compounddef>
+</doxygen>

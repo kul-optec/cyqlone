@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="benchmarks_2cyqpalm_2README_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>CyQPALM<sp/>benchmarks</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>reproduce<sp/>the<sp/>results<sp/>from<sp/>the<sp/>paper,<sp/>you<sp/>will<sp/>need<sp/>the<sp/>[Conan](https://conan.io/)<sp/>package</highlight></codeline>
+<codeline><highlight class="normal">manager.<sp/>It<sp/>can<sp/>be<sp/>installed<sp/>via<sp/>`python3<sp/>-m<sp/>pip<sp/>install<sp/>conan`.<sp/>You&apos;ll<sp/>also<sp/>need<sp/>the<sp/>following</highlight></codeline>
+<codeline><highlight class="normal">standard<sp/>tools:<sp/>Git,<sp/>wget,<sp/>make,<sp/>GCC<sp/>and<sp/>libgfortran<sp/>(`apt<sp/>install<sp/>git<sp/>wget<sp/>gcc<sp/>g++<sp/>make<sp/>libgfortran5`).</highlight></codeline>
+<codeline><highlight class="normal">Currently,<sp/>only<sp/>Linux<sp/>is<sp/>supported<sp/>(tested<sp/>on<sp/>Ubuntu<sp/>22.04<sp/>and<sp/>24.04,<sp/>and<sp/>Rocky<sp/>Linux<sp/>9.7).</highlight></codeline>
+<codeline><highlight class="normal">Then<sp/>download,<sp/>build<sp/>and<sp/>install<sp/>the<sp/>dependencies:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>deps<sp/>--gcc</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>--<sp/>or<sp/>--</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>deps<sp/>--clang<sp/><sp/><sp/>#<sp/>or<sp/>use<sp/>e.g.<sp/>--clang-21<sp/>for<sp/>a<sp/>specific<sp/>version</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>--<sp/>or<sp/>--</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>deps<sp/>--icx</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">By<sp/>default,<sp/>compiler<sp/>flags<sp/>are<sp/>selected<sp/>automatically<sp/>depending<sp/>on<sp/>the<sp/>build<sp/>machine,<sp/>but<sp/>this<sp/>can</highlight></codeline>
+<codeline><highlight class="normal">be<sp/>overridden<sp/>by<sp/>setting<sp/>the<sp/>`DEV_ARCH`<sp/>variable.<sp/>For<sp/>example,<sp/>to<sp/>enable<sp/>AVX2<sp/>but<sp/>not<sp/>AVX-512,<sp/>set</highlight></codeline>
+<codeline><highlight class="normal">`DEV_ARCH=x86-64-v3`;<sp/>to<sp/>enable<sp/>both<sp/>AVX2<sp/>and<sp/>AVX-512,<sp/>set<sp/>`DEV_ARCH=x86-64-v4`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Next,<sp/>build<sp/>the<sp/>benchmark<sp/>project:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>build</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">By<sp/>default,<sp/>the<sp/>benchmarks<sp/>run<sp/>on<sp/>the<sp/>first<sp/>eight<sp/>CPUs<sp/>available<sp/>on<sp/>your<sp/>system.<sp/>To<sp/>change<sp/>this</highlight></codeline>
+<codeline><highlight class="normal">(e.g.<sp/>if<sp/>fewer<sp/>CPUs<sp/>are<sp/>available<sp/>or<sp/>if<sp/>the<sp/>first<sp/>eight<sp/>logical<sp/>CPUs<sp/>are<sp/>hyperthreads<sp/>on<sp/>four</highlight></codeline>
+<codeline><highlight class="normal">physical<sp/>cores),<sp/>configure<sp/>the<sp/>following<sp/>environment<sp/>variables:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">export<sp/>OMP_NUM_THREADS=4<sp/>#<sp/>number<sp/>of<sp/>CPUs<sp/>to<sp/>use<sp/>(p<sp/>parameter<sp/>in<sp/>the<sp/>paper)</highlight></codeline>
+<codeline><highlight class="normal">export<sp/>OMP_PLACES=&quot;0:4&quot;<sp/><sp/>#<sp/>which<sp/>CPUs<sp/>to<sp/>use<sp/>(here:<sp/>first<sp/>four)</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">Using<sp/>`OMP_PLACES`<sp/>to<sp/>pin<sp/>the<sp/>benchmark<sp/>processes<sp/>to<sp/>specific<sp/>CPUs<sp/>helps<sp/>reduce<sp/>variability<sp/>in<sp/>the</highlight></codeline>
+<codeline><highlight class="normal">results,<sp/>and<sp/>is<sp/>crucial<sp/>when<sp/>using<sp/>a<sp/>system<sp/>with<sp/>both<sp/>performance<sp/>and<sp/>efficiency<sp/>cores<sp/>(you<sp/>want</highlight></codeline>
+<codeline><highlight class="normal">to<sp/>select<sp/>the<sp/>performance<sp/>cores).<sp/>See<sp/>https://www.openmp.org/spec-html/5.0/openmpse53.html<sp/>for<sp/>more</highlight></codeline>
+<codeline><highlight class="normal">details<sp/>on<sp/>the<sp/>`OMP_PLACES`<sp/>syntax.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>can<sp/>now<sp/>run<sp/>the<sp/>benchmarks.<sp/>For<sp/>a<sp/>quick<sp/>sanity<sp/>check,<sp/>run:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>benchmark-quick</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">To<sp/>run<sp/>the<sp/>full<sp/>scaling<sp/>benchmark<sp/>(Figure<sp/>15<sp/>in<sp/>the<sp/>paper),<sp/>run:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>benchmark-scaling<sp/>#<sp/>takes<sp/>a<sp/>couple<sp/>of<sp/>minutes</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">To<sp/>run<sp/>the<sp/>full<sp/>grid<sp/>benchmark<sp/>(Tables<sp/>1-3,<sp/>Figures<sp/>13-14,<sp/>Tables<sp/>5-7<sp/>in<sp/>the<sp/>paper),<sp/>run:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>benchmark-grid<sp/>#<sp/>takes<sp/>a<sp/>couple<sp/>of<sp/>hours</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">To<sp/>visualize<sp/>the<sp/>results<sp/>of<sp/>the<sp/>scaling<sp/>benchmark,<sp/>run:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>plot-scaling</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">For<sp/>a<sp/>full<sp/>list<sp/>of<sp/>the<sp/>available<sp/>commands,<sp/>run:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>--help</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">For<sp/>more<sp/>details<sp/>on<sp/>the<sp/>available<sp/>benchmark<sp/>parameters,<sp/>run:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>benchmark<sp/>--help</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Docker</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>building<sp/>locally<sp/>is<sp/>not<sp/>an<sp/>option,<sp/>Docker<sp/>files<sp/>are<sp/>provided<sp/>for<sp/>both<sp/>GCC<sp/>and<sp/>Clang.</highlight></codeline>
+<codeline><highlight class="normal">To<sp/>build<sp/>the<sp/>Docker<sp/>image,<sp/>run:</highlight></codeline>
+<codeline><highlight class="normal">```sh</highlight></codeline>
+<codeline><highlight class="normal">rm<sp/>-rf<sp/>benchmarks/cyqpalm/build<sp/>#<sp/>Clean<sp/>up<sp/>any<sp/>previous<sp/>builds<sp/>just<sp/>in<sp/>case</highlight></codeline>
+<codeline><highlight class="normal">docker<sp/>build<sp/>-f<sp/>Dockerfile.gcc<sp/>-t<sp/>cyqlone-benchmarks:latest<sp/>.</highlight></codeline>
+<codeline><highlight class="normal">docker<sp/>run<sp/>-it<sp/>cyqlone-benchmarks:latest</highlight></codeline>
+<codeline><highlight class="normal">./benchmark.sh<sp/>benchmark-quick</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+    </programlisting>
+    <location file="benchmarks/cyqpalm/README.md"/>
+  </compounddef>
+</doxygen>

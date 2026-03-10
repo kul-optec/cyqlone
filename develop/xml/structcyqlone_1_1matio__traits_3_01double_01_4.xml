@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1matio__traits_3_01double_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::matio_traits&lt; double &gt;</compoundname>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1matio__traits_3_01double_01_4_1aa4776a663dc80c88f71b89f86983e459" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>auto</type>
+        <definition>auto cyqlone::matio_traits&lt; double &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>cyqlone::matio_traits&lt; double &gt;::type</qualifiedname>
+        <initializer>= MAT_T_DOUBLE</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="29" column="27" bodyfile="src/cyqlone/src/matio.cpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1matio__traits_3_01double_01_4_1a8a84bf60e7b2a7652a356fc42efe706b" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>auto</type>
+        <definition>auto cyqlone::matio_traits&lt; double &gt;::class_</definition>
+        <argsstring></argsstring>
+        <name>class_</name>
+        <qualifiedname>cyqlone::matio_traits&lt; double &gt;::class_</qualifiedname>
+        <initializer>= MAT_C_DOUBLE</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/src/matio.cpp" line="30" column="27" bodyfile="src/cyqlone/src/matio.cpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>cyqlone::matio_traits&lt; double &gt;</label>
+        <link refid="structcyqlone_1_1matio__traits_3_01double_01_4"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/cyqlone/src/matio.cpp" line="28" column="1" bodyfile="src/cyqlone/src/matio.cpp" bodystart="28" bodyend="31"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1matio__traits_3_01double_01_4_1a8a84bf60e7b2a7652a356fc42efe706b" prot="public" virt="non-virtual"><scope>cyqlone::matio_traits&lt; double &gt;</scope><name>class_</name></member>
+      <member refid="structcyqlone_1_1matio__traits_3_01double_01_4_1aa4776a663dc80c88f71b89f86983e459" prot="public" virt="non-virtual"><scope>cyqlone::matio_traits&lt; double &gt;</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

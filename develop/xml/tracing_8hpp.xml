@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="tracing_8hpp" kind="file" language="C++">
+    <compoundname>tracing.hpp</compoundname>
+    <includes local="no">guanaqo/trace.hpp</includes>
+    <includes local="no">cstdint</includes>
+    <includedby refid="benchmarks_2cyqpalm_2spring-mass_8cpp" local="no">benchmarks/cyqpalm/spring-mass.cpp</includedby>
+    <includedby refid="cr_8tpp" local="no">src/cyqlone/include/cyqlone/implementation/cr.tpp</includedby>
+    <includedby refid="schur_8tpp" local="no">src/cyqlone/include/cyqlone/implementation/schur.tpp</includedby>
+    <includedby refid="update_8tpp" local="no">src/cyqlone/include/cyqlone/implementation/update.tpp</includedby>
+    <includedby refid="tracing_8cpp" local="no">src/cyqlone/src/tracing.cpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/tracing.hpp</label>
+        <link refid="tracing_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>cstdint</label>
+      </node>
+      <node id="2">
+        <label>guanaqo/trace.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>benchmarks/cyqpalm/spring-mass.cpp</label>
+        <link refid="benchmarks_2cyqpalm_2spring-mass_8cpp"/>
+      </node>
+      <node id="3">
+        <label>src/cyqlone/include/cyqlone/implementation/cr.tpp</label>
+        <link refid="cr_8tpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>src/cyqlone/include/cyqlone/implementation/schur.tpp</label>
+        <link refid="schur_8tpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>src/cyqlone/include/cyqlone/implementation/update.tpp</label>
+        <link refid="update_8tpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/cyqlone/include/cyqlone/tracing.hpp</label>
+        <link refid="tracing_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>src/cyqlone/src/cyqlone.cpp</label>
+        <link refid="cyqlone_8cpp"/>
+      </node>
+      <node id="7">
+        <label>src/cyqlone/src/tracing.cpp</label>
+        <link refid="tracing_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="tracing_8hpp_1aa73a42b98ae9dc83b1ba49bbaa8b9f78" prot="public" static="no">
+        <name>CYQ_TRACE_WRITE</name>
+        <param><defname>...</defname></param>
+        <initializer><ref refid="group__macros_1ga45aca057bdfa461144e2f0c2b620fb96" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_NOOP</ref>()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/tracing.hpp" line="62" column="9" bodyfile="src/cyqlone/include/cyqlone/tracing.hpp" bodystart="62" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a9b8b4a799aa454f96739baa065067e09" compoundref="schur_8tpp" startline="31" endline="130">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::compute_schur</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1a2c0ffa018a7c2bb9d7ac6cfefbb5f98d" compoundref="cr_8tpp" startline="71" endline="153">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::factor_L</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1abbe1c2dcb3b966fc084268ec1676678e" compoundref="cr_8tpp" startline="23" endline="33">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::factor_U</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1afe6a4a4ca91d69efb43ade0ba4054841" compoundref="cr_8tpp" startline="37" endline="47">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::factor_Y</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1ae97f7140e58b083c1a36c7243e818a90" compoundref="cr_8tpp" startline="50" endline="68">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_K</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1a9cc9b6b3c1711803ca7105a75ac5f0cb" compoundref="update_8tpp" startline="23" endline="120">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_L</referencedby>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1aa0b477c2d5d1ed2eedb27b9f8e003e90" compoundref="update_8tpp" startline="352" endline="535">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_riccati_solve</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1af3ddcc1bfa5a4a52ef865f36b50d6d87" compoundref="update_8tpp" startline="123" endline="154">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_U</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1aebda48fc697452e5b8e28e4b1d0240b4" compoundref="update_8tpp" startline="157" endline="175">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_Y</referencedby>
+      </memberdef>
+      <memberdef kind="define" id="tracing_8hpp_1af06e8f0353c7efc7707c5d97747c4673" prot="public" static="no">
+        <name>CYQ_TRACE_READ</name>
+        <param><defname>...</defname></param>
+        <initializer><ref refid="group__macros_1ga45aca057bdfa461144e2f0c2b620fb96" kindref="member" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/guanaqo-1.0.0-alpha.25.tag">GUANAQO_NOOP</ref>()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/cyqlone/include/cyqlone/tracing.hpp" line="63" column="9" bodyfile="src/cyqlone/include/cyqlone/tracing.hpp" bodystart="63" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1CyqloneSolver_1a9b8b4a799aa454f96739baa065067e09" compoundref="schur_8tpp" startline="31" endline="130">cyqlone::CyqloneSolver&lt; VL, T, DefaultOrder, Ctx &gt;::compute_schur</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1a2c0ffa018a7c2bb9d7ac6cfefbb5f98d" compoundref="cr_8tpp" startline="71" endline="153">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::factor_L</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1abbe1c2dcb3b966fc084268ec1676678e" compoundref="cr_8tpp" startline="23" endline="33">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::factor_U</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1afe6a4a4ca91d69efb43ade0ba4054841" compoundref="cr_8tpp" startline="37" endline="47">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::factor_Y</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1ae97f7140e58b083c1a36c7243e818a90" compoundref="cr_8tpp" startline="50" endline="68">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_K</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1a9cc9b6b3c1711803ca7105a75ac5f0cb" compoundref="update_8tpp" startline="23" endline="120">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_L</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1af3ddcc1bfa5a4a52ef865f36b50d6d87" compoundref="update_8tpp" startline="123" endline="154">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_U</referencedby>
+        <referencedby refid="structcyqlone_1_1TricyqleSolver_1aebda48fc697452e5b8e28e4b1d0240b4" compoundref="update_8tpp" startline="157" endline="175">cyqlone::TricyqleSolver&lt; VL, T, DefaultOrder, Ctx &gt;::update_Y</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;guanaqo/trace.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdint&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>GUANAQO_WITH_TRACING</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;filesystem&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;span&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacecyqlone" kindref="compound">cyqlone</ref><sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">fs<sp/>=<sp/>std::filesystem;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">TracingOptions<sp/>{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>no_barrier<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;<sp/></highlight><highlight class="comment">///&lt;<sp/>Do<sp/>not<sp/>log<sp/>barrier<sp/>events.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>write_chrome_trace(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>fs::path<sp/>&amp;filename,<sp/>std::span&lt;const<sp/>guanaqo::TraceLogger::Log&gt;<sp/>logs,</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TracingOptions<sp/>&amp;opts<sp/>=<sp/>{});</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">enum<sp/>class</highlight><highlight class="normal"><sp/>TraceDataNames<sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>M,</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>L,</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>Y,</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>U,</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>Kf,</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>Kb,</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>Upf,</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>Upb,</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>Q,</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>T,</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>Sentinel,</highlight></codeline>
+<codeline lineno="33"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>uint32_t<sp/>tracing_data_ids[</highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="keywordtype">size_t</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(TraceDataNames::Sentinel)][256][8]{};</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cyqlone</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CYQ_TRACE_WRITE(name,<sp/>index,<sp/>lr)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="40"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>do<sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="41"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>using<sp/>::cyqlone::TraceDataNames;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="42"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint64_t<sp/>id<sp/>=<sp/>++tracing_data_ids[static_cast&lt;size_t&gt;(TraceDataNames::name)][index][lr];<sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="43"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>id<sp/>+=<sp/>static_cast&lt;uint64_t&gt;(TraceDataNames::name)<sp/>&lt;&lt;<sp/>32;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="44"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>id<sp/>+=<sp/>static_cast&lt;uint64_t&gt;(index)<sp/>&lt;&lt;<sp/>48;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="45"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>id<sp/>+=<sp/>static_cast&lt;uint64_t&gt;(lr)<sp/>&lt;&lt;<sp/>56;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="46"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>auto<sp/>s<sp/>=<sp/>::guanaqo::get_trace_logger().trace(&quot;w:&quot;<sp/>#name,<sp/>id);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="47"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>s.log<sp/><sp/>=<sp/>nullptr;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="48"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>}<sp/>while<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CYQ_TRACE_READ(name,<sp/>index,<sp/>lr)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="50"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>do<sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="51"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>using<sp/>::cyqlone::TraceDataNames;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="52"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint64_t<sp/>id<sp/>=<sp/>tracing_data_ids[static_cast&lt;size_t&gt;(TraceDataNames::name)][index][lr];<sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="53"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>id<sp/>+=<sp/>static_cast&lt;uint64_t&gt;(TraceDataNames::name)<sp/>&lt;&lt;<sp/>32;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="54"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>id<sp/>+=<sp/>static_cast&lt;uint64_t&gt;(index)<sp/>&lt;&lt;<sp/>48;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="55"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>id<sp/>+=<sp/>static_cast&lt;uint64_t&gt;(lr)<sp/>&lt;&lt;<sp/>56;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="56"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>auto<sp/>s<sp/>=<sp/>::guanaqo::get_trace_logger().trace(&quot;r:&quot;<sp/>#name,<sp/>id);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="57"><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>s.log<sp/><sp/>=<sp/>nullptr;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>\</highlight></codeline>
+<codeline lineno="58"><highlight class="preprocessor"><sp/><sp/><sp/><sp/>}<sp/>while<sp/>(false)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62" refid="tracing_8hpp_1aa73a42b98ae9dc83b1ba49bbaa8b9f78" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CYQ_TRACE_WRITE(...)<sp/>GUANAQO_NOOP()</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63" refid="tracing_8hpp_1af06e8f0353c7efc7707c5d97747c4673" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>CYQ_TRACE_READ(...)<sp/>GUANAQO_NOOP()</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="src/cyqlone/include/cyqlone/tracing.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structcyqlone_1_1qpalm_1_1SolverStats" kind="struct" language="C++" prot="public">
+    <compoundname>cyqlone::qpalm::SolverStats</compoundname>
+    <includes refid="solver_8hpp" local="no">cyqlone/qpalm/solver.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverStats_1adc75854df050f2e03ab9e518d99baade" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned cyqlone::qpalm::SolverStats::inner_iter</definition>
+        <argsstring></argsstring>
+        <name>inner_iter</name>
+        <qualifiedname>cyqlone::qpalm::SolverStats::inner_iter</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="43" column="14" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="43" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverStats_1ad44c570bc854d2d3e6dd8fc5f81e4791" prot="public" static="no" mutable="no">
+        <type>unsigned</type>
+        <definition>unsigned cyqlone::qpalm::SolverStats::outer_iter</definition>
+        <argsstring></argsstring>
+        <name>outer_iter</name>
+        <qualifiedname>cyqlone::qpalm::SolverStats::outer_iter</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="44" column="14" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="44" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverStats_1a211599a03a96d0763a347a5a2369f735" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::SolverStats::stationarity</definition>
+        <argsstring></argsstring>
+        <name>stationarity</name>
+        <qualifiedname>cyqlone::qpalm::SolverStats::stationarity</qualifiedname>
+        <initializer>= std::numeric_limits&lt;real_t&gt;::quiet_NaN()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="45" column="12" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="45" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverStats_1a7e0f4e611db03ea5ef10ec00c14bc118" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::SolverStats::primal_residual_norm</definition>
+        <argsstring></argsstring>
+        <name>primal_residual_norm</name>
+        <qualifiedname>cyqlone::qpalm::SolverStats::primal_residual_norm</qualifiedname>
+        <initializer>= std::numeric_limits&lt;real_t&gt;::quiet_NaN()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="46" column="12" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="46" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverStats_1ab6b5e84cd3ad52c8e1c1cad930e896ed" prot="public" static="no" mutable="no">
+        <type>real_t</type>
+        <definition>real_t cyqlone::qpalm::SolverStats::max_penalty</definition>
+        <argsstring></argsstring>
+        <name>max_penalty</name>
+        <qualifiedname>cyqlone::qpalm::SolverStats::max_penalty</qualifiedname>
+        <initializer>= std::numeric_limits&lt;real_t&gt;::quiet_NaN()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="47" column="12" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="47" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverStats_1a583afdaf6f7dea1a0bdb16f7827918dc" prot="public" static="no" mutable="no">
+        <type><ref refid="structcyqlone_1_1qpalm_1_1SolverTimings" kindref="compound">SolverTimings</ref></type>
+        <definition>SolverTimings cyqlone::qpalm::SolverStats::timings</definition>
+        <argsstring></argsstring>
+        <name>timings</name>
+        <qualifiedname>cyqlone::qpalm::SolverStats::timings</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="48" column="19" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="48" bodyend="48"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structcyqlone_1_1qpalm_1_1SolverStats_1a5d12e93e75443d9cee74c8f774bb0dd6" prot="public" static="no" mutable="no">
+        <type>std::optional&lt; <ref refid="structcyqlone_1_1qpalm_1_1DetailedStats" kindref="compound">DetailedStats</ref> &gt;</type>
+        <definition>std::optional&lt;DetailedStats&gt; cyqlone::qpalm::SolverStats::detail</definition>
+        <argsstring></argsstring>
+        <name>detail</name>
+        <qualifiedname>cyqlone::qpalm::SolverStats::detail</qualifiedname>
+        <initializer>= std::nullopt</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="49" column="19" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="49" bodyend="-1"/>
+        <referencedby refid="structcyqlone_1_1qpalm_1_1SolverImplementation_1acebb587f363542055ed61f0b8c1fb8f1" compoundref="solver_8tpp" startline="124" endline="499">cyqlone::qpalm::SolverImplementation&lt; Backend &gt;::do_main_loop</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>batmat::DefaultTimings</label>
+        <link refid="namespacebatmat" external="/home/runner/work/cyqlone/cyqlone/build/Debug/docs/batmat-0.0.18.tag"/>
+      </node>
+      <node id="1">
+        <label>cyqlone::qpalm::SolverStats</label>
+        <link refid="structcyqlone_1_1qpalm_1_1SolverStats"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+timings</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cyqlone::qpalm::SolverTimings</label>
+        <link refid="structcyqlone_1_1qpalm_1_1SolverTimings"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+active_set_change</edgelabel>
+          <edgelabel>+boost_regularization</edgelabel>
+          <edgelabel>+line_search</edgelabel>
+          <edgelabel>+mat_vec_A</edgelabel>
+          <edgelabel>+mat_vec_AT</edgelabel>
+          <edgelabel>+mat_vec_M</edgelabel>
+          <edgelabel>+mat_vec_MT</edgelabel>
+          <edgelabel>+mat_vec_Q</edgelabel>
+          <edgelabel>+recompute_inner</edgelabel>
+          <edgelabel>+recompute_outer</edgelabel>
+          <edgelabel>  ...</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+backend</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::map&lt; std::string, batmat::DefaultTimings &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+keys</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::string</label>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/qpalm/include/cyqlone/qpalm/solver.hpp" line="42" column="1" bodyfile="src/qpalm/include/cyqlone/qpalm/solver.hpp" bodystart="42" bodyend="50"/>
+    <listofallmembers>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverStats_1a5d12e93e75443d9cee74c8f774bb0dd6" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverStats</scope><name>detail</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverStats_1adc75854df050f2e03ab9e518d99baade" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverStats</scope><name>inner_iter</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverStats_1ab6b5e84cd3ad52c8e1c1cad930e896ed" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverStats</scope><name>max_penalty</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverStats_1ad44c570bc854d2d3e6dd8fc5f81e4791" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverStats</scope><name>outer_iter</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverStats_1a7e0f4e611db03ea5ef10ec00c14bc118" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverStats</scope><name>primal_residual_norm</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverStats_1a211599a03a96d0763a347a5a2369f735" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverStats</scope><name>stationarity</name></member>
+      <member refid="structcyqlone_1_1qpalm_1_1SolverStats_1a583afdaf6f7dea1a0bdb16f7827918dc" prot="public" virt="non-virtual"><scope>cyqlone::qpalm::SolverStats</scope><name>timings</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

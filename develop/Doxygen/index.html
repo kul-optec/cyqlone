@@ -1,0 +1,260 @@
+<!-- HTML header for doxygen 1.16.1-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>cyqlone: cyqlone</title>
+<link rel="icon" href="cyqlone-logo.svg" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {    Reals: "{\\mathrm{I\\!R}}",
+    Nats: "{\\mathrm{I\\!N}}",
+    Cplx: "{\\mathbb{C}}",
+    R: "{\\Reals}",
+    N: "{\\Nats}",
+    C: "{\\Cplx}",
+    Rn: "{\\Reals^n}",
+    Rm: "{\\Reals^m}",
+    gph: "{\\operatorname{\\mathbf{gph}}}",
+    zer: "{\\operatorname{\\mathbf{zer}}}",
+    fix: "{\\operatorname{\\mathbf{fix}}}",
+    minimize: "{\\operatorname*{\\mathbf{minimize}}}",
+    st: "{\\operatorname*{\\mathbf{s.\\!t.}}}",
+    argmin: "{\\operatorname*{\\mathbf{arg\\,min}}}",
+    argmax: "{\\operatorname*{\\mathbf{arg\\,max}}}",
+    subjto: "{\\operatorname*{\\mathbf{subject\\;to}}}",
+    prox: "{\\operatorname{\\mathbf{prox}}}",
+    Hilb: "{\\mathcal{H}}",
+    proj: ["{\\operatorname{\\mathbf{\\Pi}_\\mathnormal{#1}}}",1],
+    dist: "{\\operatorname{\\mathbf{dist}}}",
+    Id: "{\\mathrm{Id}}",
+    I: "{\\mathrm{I}}",
+    one: "{\\mathbf{1}}",
+    defeq: "{\\triangleq}",
+    inprod: ["{\\left\\langle {#1} \\,\\middle|\\, {#2} \\right\\rangle}",2],
+    norm: ["{\\left\\| {#1} \\vphantom{X} \\right\\|}",1],
+    normsq: ["{\\norm{#1}^2}",1],
+    defset: ["{\\left\\{ {#1} \\;\\middle|\\; {#2} \\right\\}}",2],
+    tp: ["{#1^\\top}",1],
+    ttp: ["{#1^{\\!\\top\\!}}",1],
+    herm: ["{#1^\\mathrm{H}}",1],
+    invherm: ["{#1^{-\\mathrm{H}}}",1],
+    inv: ["{#1^{-1}}",1],
+    pinv: ["{#1^\\dagger}",1],
+    lconj: "{\\overline}",
+    sconj: ["{#1^*}",1],
+    iddots: "{\\mathinner{\\kern1mu\\raise1pt{.}\\kern2mu\\raise4pt{.}\\kern2mu\\raise7pt{\\Rule{0pt}{7pt}{0pt}.}\\kern1mu}}",
+    imagfun: ["{\\left(#1\\right)\\left(#2\\right)}",2],
+    Lagr: "{\\mathcal{L}}",
+    jac: "{\\mathrm{J}}",
+    dft: "{\\operatorname{\\mathbf{dft}}}",
+    cbrt: ["{\\sqrt[3]{#1}}",1],
+    sgn: "{\\operatorname{\\mathbf{sgn}}}",
+    setmap: "{\\rightrightarrows}",
+    lammin: "{\\lambda_\\text{min}}",
+    lammax: "{\\lambda_\\text{max}}",
+    Sc: "{\\mathcal{S}}",
+    Scstar: "{\\mathcal{S}^*}",
+    diag: "{\\operatorname{\\mathbf{diag}}}",
+    blkdiag: "{\\operatorname{\\mathbf{blkdiag}}}",
+    posdef: "{\\succ}",
+    possdef: "{\\succeq}",
+    half: "{\\tfrac{1}{2}}",
+    hhbar: "{\\hbar}",
+    barxuk: "{\\bar x^k\\!, \\bar u^k}",
+    },
+    packages: ['base','configmacros','newcommand','ams']
+  }
+};
+window.MathJax.tex.tags = 'ams';
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="cyqlone-logo-text.svg"/></td>
+  <td id="projectalign">
+   <div id="projectname">cyqlone<span id="projectnumber">&#160;<code><a href="/cyqlone/index.html">develop</a></code></span>
+   </div>
+   <div id="projectbrief">Fast, parallel and vectorized solver for linear systems with optimal control structure.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('index.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">cyqlone </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p><a class="anchor" id="md_README"></a> <a href="https://arxiv.org/abs/2512.09058"><img src="https://img.shields.io/badge/arXiv-Preprint-b31b1b" alt="arXiv Preprint" class="inline"/></a> <a href="https://kul-optec.github.io/cyqlone/develop/Doxygen"><img src="https://img.shields.io/badge/Documentation-develop-blue" alt="Documentation" class="inline"/></a> <a href="https://github.com/kul-optec/cyqlone/actions/workflows/linux.yml"><img src="https://github.com/kul-optec/cyqlone/actions/workflows/linux.yml/badge.svg" alt="CI: Linux" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/kul-optec/alpaqa/blob/develop/LICENSE"><img src="https://img.shields.io/github/license/kul-optec/alpaqa?label=License&amp;logo=gnu" alt="GitHub License" class="inline"/></a></p>
+<p align="center"></p>
+<p><img src="docs/source/images/cyqlone-logo-text.svg" alt="" width="300" style="pointer-events: none;" class="inline"/> </p>
+<h1 class="doxsection"><a class="anchor" id="cyqlone"></a>
+Cyqlone</h1>
+<p>Fast, <b>parallel and vectorized solver</b> for linear systems with <b>optimal control structure</b>.</p>
+<p>Also includes an implementation of the <b>CyQPALM</b> solver that uses the Cyqlone linear solver as a backend, with parallel factorization update routines to handle active set changes and a parallel exact line search.</p>
+<h2 class="doxsection"><a class="anchor" id="preprint"></a>
+Preprint</h2>
+<p>The paper describing the algorithms in this repository can be found on arXiv: <a href="https://arxiv.org/abs/2512.09058"><b>arxiv.org/abs/2512.09058</b></a></p>
+<div class="fragment"><div class="line">@misc{pas_cyqlone_2025,</div>
+<div class="line">    title = {Cyqlone: {A} {Parallel}, {High}-{Performance} {Linear} {Solver} for {Optimal} {Control}},</div>
+<div class="line">    url = {http://arxiv.org/abs/2512.09058},</div>
+<div class="line">    doi = {10.48550/arXiv.2512.09058},</div>
+<div class="line">    publisher = {arXiv},</div>
+<div class="line">    author = {Pas, Pieter and Patrinos, Panagiotis},</div>
+<div class="line">    month = dec,</div>
+<div class="line">    year = {2025},</div>
+<div class="line">}</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="reproduction-of-benchmark-results-from-the-paper"></a>
+Reproduction of benchmark results from the paper</h2>
+<p>A script to reproduce the benchmark results from the paper can be found in <span class="tt">benchmarks/cyqpalm</span>. See <a class="el" href="md_benchmarks_2cyqpalm_2README.html" title="CyQPALM benchmarks"><span class="tt">benchmarks/cyqpalm/README.md</span></a> for instructions.</p>
+<h2 class="doxsection"><a class="anchor" id="documentation"></a>
+Documentation</h2>
+<ul>
+<li><a href="https://kul-optec.github.io/cyqlone/develop/Doxygen/algorithms.html">Detailed algorithm descriptions</a> (matching the pseudocode in the paper)</li>
+<li><a href="https://kul-optec.github.io/cyqlone/develop/Doxygen/examples.html">Examples</a></li>
+<li><a href="https://kul-optec.github.io/cyqlone/develop/Doxygen/topics.html">API documentation</a></li>
+</ul>
+<h2 class="doxsection"><a class="anchor" id="installation"></a>
+Installation</h2>
+<p>Requirements: Linux, CMake, Conan 2.</p>
+<div class="fragment"><div class="line"># Prepare environment and dependencies</div>
+<div class="line">python3 -m pip install -U conan</div>
+<div class="line">export CONAN_HOME=&quot;$PWD/.conan2&quot;  # Use a local directory for Conan data</div>
+<div class="line">conan profile detect --exist-ok</div>
+<div class="line">conan remote add tttapa-conan-recipes &quot;$PWD/scripts/ci/conan-recipes&quot;</div>
+<div class="line">conan config install scripts/ci/conan-profiles/settings_user.yml</div>
+</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="c-project"></a>
+C++ project</h3>
+<div class="fragment"><div class="line"># Install dependencies (including GCC) and build from source</div>
+<div class="line">conan build . --build=missing -pr:h scripts/dev/profiles/dev -o \&amp;:with_benchmarks=True -c tools.build:jobs=4</div>
+</div><!-- fragment --><p>To build using Clang instead of GCC, add <span class="tt">-pr:h scripts/ci/conan-profiles/profiles/toolchain/clang-linux.profile</span> to the command above (in addition to the <span class="tt">dev</span> profile). To use the Intel compiler, add <span class="tt">-pr:h scripts/ci/conan-profiles/profiles/toolchain/icx-linux.profile</span> instead.</p>
+<p>If you have sufficient RAM available, the number of parallel build jobs can be increased.</p>
+<p>To re-build after code changes, simply run <span class="tt">cmake --build --preset conan-release</span> (or rebuild the <span class="tt">conan-release</span> preset from your IDE).</p>
+<p>Manual installation using CMake (without the Conan package manager) is also supported, provided that the necessary dependencies are installed.</p>
+<h3 class="doxsection"><a class="anchor" id="python-bindings-development"></a>
+Python bindings (development)</h3>
+<p>To install the Python bindings for local development, use the <span class="tt">install-linux-dev.sh</span> script (without arguments).</p>
+<p>Requirements: Python 3.8+, uv, Conan 2 (as configured above).</p>
+<div class="fragment"><div class="line">./scripts/dev/install-linux-dev.sh</div>
+</div><!-- fragment --><p>By default, this script builds the package for both AVX2 and AVX-512 targets, which may be wasteful if you only need AVX2. You can remove <span class="tt">avx512</span> from the <span class="tt">archs</span> array in the script to only build for AVX2.</p>
+<p>To run the tests, use <span class="tt">pytest</span>.</p>
+<p>To re-build the AVX2 version after code changes, run <span class="tt">cmake --build --preset conan-cp312-abi3-linux_x86_64-1-release</span> (replace <span class="tt">cp312-abi3</span> with your Python version and ABI, and replace <span class="tt">-1-</span> with <span class="tt">-2-</span> to re-build the AVX-512 version). You will need to restart the Python interpreter to load the new version of the package.</p>
+<h3 class="doxsection"><a class="anchor" id="python-bindings-distribution"></a>
+Python bindings (distribution)</h3>
+<p>To build the Python package for distribution, use the scripts in <span class="tt">scripts/ci</span>.</p>
+<div class="fragment"><div class="line"># Build the wheel for distribution, and generate the stubs</div>
+<div class="line">./scripts/ci/build-linux-cross.sh 3.12 x86_64-bionic-linux-gnu . dist true</div>
+</div><!-- fragment --><p>If you are cross-compiling, you will need to generate the stubs using a native build first, since this requires running the built extension module.</p>
+<div class="fragment"><div class="line"># Native build to generate the stub files</div>
+<div class="line">./scripts/ci/build-linux-native.sh . dist python</div>
+<div class="line"># Build the wheel for distribution</div>
+<div class="line">./scripts/ci/build-linux-cross.sh 3.12 x86_64-bionic-linux-gnu . dist</div>
+</div><!-- fragment --><p>Either way, generated Wheel files will be placed in the <span class="tt">dist</span> directory.</p>
+<h2 class="doxsection"><a class="anchor" id="related-projects"></a>
+Related projects</h2>
+<ul>
+<li><a href="https://github.com/kul-optec/QPALM">QPALM</a>: general-purpose quadratic programming solver on which CyQPALM is based</li>
+<li><a href="https://github.com/tttapa/batmat">batmat</a>: high-performance batched linear algebra routines (used by cyqlone)</li>
+<li><a href="https://github.com/kul-optec/hyhound">hyhound</a>: low-rank Cholesky factorization up- and downdate routines based on hyperbolic Householder transformations (with applications to e.g. Riccati recursion)</li>
+<li><a href="https://github.com/kul-optec/alpaqa">alpaqa</a>: matrix-free, nonlinear programming solver </li>
+</ul>
+</div></div><!-- PageDoc -->
+<a href="doxygen_crawl.html"></a>
+</div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on <span class="timestamp"></span> for cyqlone by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
+  </ul>
+</div>
+</body>
+</html>
