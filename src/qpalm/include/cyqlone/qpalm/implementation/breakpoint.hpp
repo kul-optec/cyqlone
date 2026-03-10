@@ -91,7 +91,7 @@ struct compute_breakpoints_fn {
                     const vec_t<Backend> &Σ, const vec_t<Backend> &y, const vec_t<Backend> &Ad,
                     const vec_t<Backend> &Ax, const vec_t<Backend> &b_min,
                     const vec_t<Backend> &b_max) const {
-        ctx.arrive_and_Wait();
+        ctx.arrive_and_wait();
         return ctx.call_broadcast(
             [&] { return compute_breakpoints_default(breakpoints, Σ, y, Ad, Ax, b_min, b_max); });
     }
