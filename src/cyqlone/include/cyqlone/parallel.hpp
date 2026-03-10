@@ -56,38 +56,6 @@ struct SharedContext {
     }
 };
 
-/*
-
-  The following is not allowed when using barriers:
-
-        barrier.arrive_and_wait(t);
-        compute_local_sums(X);
-        tok_X = barrier.arrive(t);
-        compute_local_sums(Y);
-        tok_Y = barrier.arrive(t);         // We should have waited before arriving again
-        barrier.wait(tok_X);
-        barrier.wait(tok_Y);
-        compute_global_sum(X);
-        compute_global_sum(Y);
-
-  The following is optimal (?):
-
-        barrier.arrive_and_wait(t);
-    local sums X:
-        compute_local_sums(X);
-        tok_X = barrier.arrive(t);
-    local sums Y:
-        compute_local_sums(Y);
-        barrier.wait(tok_X);               // This needs to be taken care of by the context
-        tok_Y = barrier.arrive(t);
-    global sums X:
-        compute_global_sum(X);             // We need to detect that waiting is not needed
-    global sums Y:
-        barrier.wait(tok_Y);
-        compute_global_sum(Y);
-
-*/
-
 /// Thread context for parallel execution. Each thread has a unique thread index, and can
 /// synchronize and communicate with other threads in the same shared context.
 /// @see SharedContext
@@ -112,10 +80,15 @@ struct Context {
         return &a.shared == &b.shared && a.index == b.index;
     }
 
+    /// Check if this thread is the master thread (thread index 0).
+    /// Useful for determining which thread should perform operations like printing to the console,
+    /// which should be done by a single thread and does not require synchronization.
     [[nodiscard]] bool is_master() const { return index == 0; }
 
-    /// Low-level: token must be awaited before any other call to arrive.
-    arrival_token arrive() {
+    /// Arrive at the barrier and obtain a token that can be used to wait for completion of the
+    /// current barrier phase.
+    /// @note    Token must be awaited before any other call to arrive.
+    [[nodiscard]] arrival_token arrive() {
 #if GUANAQO_WITH_TRACING && !GUANAQO_WITH_PERFETTO
         auto trace = guanaqo::get_trace_logger().trace("barrier-arrive", index);
         return {shared.barrier.arrive(static_cast<uint32_t>(index)), std::move(trace)};
@@ -123,7 +96,7 @@ struct Context {
         return shared.barrier.arrive(static_cast<uint32_t>(index));
 #endif
     }
-    /// Low-level: await a token returned by arrive().
+    /// Await a token returned by @ref arrive(), waiting for the barrier phase to complete.
     void wait(arrival_token &&token) {
 #if GUANAQO_WITH_TRACING && !GUANAQO_WITH_PERFETTO
         auto trace = std::move(token.trace);
@@ -133,12 +106,19 @@ struct Context {
 #endif
     }
 
+    /// Arrive at the barrier and wait for the barrier phase to complete. This is a convenience
+    /// wrapper around @ref arrive() and @ref wait() for the common case where the thread does not
+    /// have other work to do while waiting.
     void arrive_and_wait() {
 #if !GUANAQO_WITH_PERFETTO
         GUANAQO_TRACE("barrier-arrive-and-wait", index);
 #endif
         shared.barrier.arrive_and_wait(static_cast<uint32_t>(index));
     }
+    /// Debug version of @ref arrive_and_wait() that performs a sanity check to ensure that all
+    /// threads are arriving at the same line of code. The @p line parameter should be the same
+    /// for all threads arriving at the same barrier. It is only verified in debug builds, and is
+    /// equivalent to @ref arrive_and_wait() in release builds.
     void arrive_and_wait(int line) {
 #if !GUANAQO_WITH_PERFETTO
         GUANAQO_TRACE("barrier-arrive-and-wait", index);
@@ -146,12 +126,15 @@ struct Context {
         shared.barrier.arrive_and_wait(static_cast<uint32_t>(index), line);
     }
 
+    /// Broadcast a value @p x from the thread with index @p src to all threads.
     template <class T>
     T broadcast(T x, index_t src = 0) {
         return shared.barrier.broadcast(static_cast<uint32_t>(index), std::move(x),
                                         static_cast<uint32_t>(src));
     }
 
+    /// Call a function @p f with the given @p args on a single thread and broadcast the return
+    /// value to all threads.
     template <class F, class... Args>
     auto call_broadcast(F &&f, Args &&...args) -> std::invoke_result_t<F, Args...> {
         using T = std::invoke_result_t<F, Args...>;
@@ -164,22 +147,31 @@ struct Context {
             return broadcast(T{}, 0);
     }
 
+    /// Perform a reduction of @p x across all threads using the given binary function @p func.
+    /// Returns a token that can be used to wait for the reduction to complete and obtain the
+    /// reduced value.
     template <class T, class F>
-    auto arrive_reduce(T x, F func) {
+    [[nodiscard]] auto arrive_reduce(T x, F func) {
         return shared.barrier.arrive_reduce(static_cast<uint32_t>(index), std::move(x),
                                             std::move(func));
     }
 
+    /// Wait for the reduction initiated by @ref arrive_reduce() to complete and obtain the reduced
+    /// value.
     template <class T>
     T wait_reduce(shared_context_type::barrier_type::template arrival_token_typed<T> &&token) {
         return shared.barrier.wait_reduce(std::move(token));
     }
 
+    /// Perform a reduction of @p x across all threads using the given binary function @p func, and
+    /// wait for the result.
     template <class T, class F>
     T reduce(T x, F func) {
         return shared.barrier.reduce(static_cast<uint32_t>(index), std::move(x), std::move(func));
     }
 
+    /// Reduction with `std::plus`, i.e., summation across all threads.
+    /// @see reduce(T,F)
     template <class T>
     T reduce(T x) {
         return reduce(std::move(x), std::plus<>{});
