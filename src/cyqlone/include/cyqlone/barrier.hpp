@@ -10,6 +10,7 @@
 #include <atomic>
 #include <cstdint>
 #include <cstring>
+#include <functional>
 #include <memory>
 #include <type_traits>
 
@@ -80,6 +81,9 @@ class TreeBarrier {
             std::memcpy(&t, payload.data(), sizeof(T));
             return t;
         }
+        template <class T>
+        static constexpr bool is_compatible =
+            sizeof(T) <= sizeof(payload) && std::is_trivially_copyable_v<T>;
     };
     /// Atomic counters for each level of the combining tree. Aligned to avoid false sharing.
     /// @todo figure out why the libstdc++ implementation does not reuse tickets across levels
@@ -203,7 +207,7 @@ class TreeBarrier {
         sanity_check_arrival(thread_id, cur_phase);
 #endif
         if (arrival(cur_phase, thread_id)) {
-            std::forward<C>(custom_completion)();
+            std::invoke(std::forward<C>(custom_completion));
             auto next_phase = static_cast<BarrierPhase>(static_cast<PhaseType>(cur_phase) + 1);
             phase.store(next_phase, std::memory_order_release);
             phase.notify_all();
@@ -319,8 +323,23 @@ class TreeBarrier {
     void arrive_and_wait(uint32_t thread_id, int line) { wait(arrive(thread_id, line)); }
     /// Convenience function to arrive and wait in a single call (with custom completion).
     template <class C>
+        requires std::is_void_v<std::invoke_result_t<C &&>>
     void arrive_and_wait_with_completion(uint32_t thread_id, C &&custom_completion) {
         wait(arrive_with_completion(thread_id, std::forward<C>(custom_completion)));
+    }
+    /// Convenience function to arrive and wait in a single call (with custom completion).
+    /// Broadcasts the return value of the custom completion function to all threads.
+    template <class C>
+        requires(!std::is_void_v<std::invoke_result_t<C &&>> &&
+                 !std::is_reference_v<std::invoke_result_t<C &&>> &&
+                 Storage::template is_compatible<std::invoke_result_t<C &&>>)
+    [[nodiscard]] auto arrive_and_wait_with_completion(uint32_t thread_id, C &&custom_completion) {
+        using ret_t = std::invoke_result_t<C &&>;
+        wait(arrive_with_completion(thread_id,
+                                    [this, c{std::forward<C>(custom_completion)}] mutable {
+                                        broadcast_storage.store(std::invoke(std::forward<C>(c)));
+                                    }));
+        return broadcast_storage.template load<ret_t>();
     }
 
     /// Combining tree reduction across all threads. Deterministic application order for a given
