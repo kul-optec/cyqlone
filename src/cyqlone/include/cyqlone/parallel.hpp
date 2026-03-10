@@ -108,6 +108,10 @@ struct Context {
     shared_context_type &shared;
     const index_t index, num_thr = shared.num_thr;
 
+    friend constexpr bool operator==(const Context &a, const Context &b) {
+        return &a.shared == &b.shared && a.index == b.index;
+    }
+
     [[nodiscard]] bool is_master() const { return index == 0; }
 
     /// Low-level: token must be awaited before any other call to arrive.
